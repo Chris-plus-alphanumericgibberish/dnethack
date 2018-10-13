@@ -3965,48 +3965,61 @@ register struct	monst	*mtmp;
 				mac = 0;
 				break;
 		    }
-
-		    if (mac < -1 && rn2(5))
-			mac += objects[PLATE_MAIL].a_ac + mongets(mtmp, PLATE_MAIL);
-		    else if (mac < 3 && rn2(5))
-			mac += objects[SPLINT_MAIL].a_ac + mongets(mtmp, (rn2(3)) ?
-					   SPLINT_MAIL : BANDED_MAIL);
-		    else if (rn2(5))
-			mac += objects[RING_MAIL].a_ac + mongets(mtmp, (rn2(3)) ?
-					   RING_MAIL : STUDDED_LEATHER_ARMOR);
-		    else
-			mac += objects[LEATHER_ARMOR].a_ac + mongets(mtmp, LEATHER_ARMOR);
-
-		    if (mac < 10 && rn2(3))
-			mac += objects[HELMET].a_ac + mongets(mtmp, HELMET);
-		    else if (mac < 10 && rn2(2))
-			mac += objects[LEATHER_HELM].a_ac + mongets(mtmp, LEATHER_HELM);
-		    else if (mac < 10 && !rn2(10))
-			mac += objects[WAR_HAT].a_ac + mongets(mtmp, WAR_HAT);
 			
-		    if (mac < 10 && rn2(3))
-			mac += objects[BUCKLER].a_ac + mongets(mtmp, BUCKLER);
-		    else if (mac < 10 && rn2(2))
-			mac += objects[KITE_SHIELD].a_ac + mongets(mtmp, KITE_SHIELD);
-		    else if (mac < 10 && rn2(2))
-			mac += objects[ROUNDSHIELD].a_ac + mongets(mtmp, ROUNDSHIELD);
-		
-		    if (mac < 10 && rn2(3))
-			mac += objects[LOW_BOOTS].a_ac + mongets(mtmp, LOW_BOOTS);
-		    else if (mac < 10 && rn2(2))
-			mac += objects[HIGH_BOOTS].a_ac + mongets(mtmp, HIGH_BOOTS);
-		    else if (mac < 10 && rn2(2))
-			mac += objects[ARMORED_BOOTS].a_ac + mongets(mtmp, ARMORED_BOOTS);
-		
-		    if (mac < 10 && rn2(3))
-			mac += objects[GLOVES].a_ac + mongets(mtmp, GLOVES);
-		    else if (mac < 10 && rn2(2))
-			mac += objects[GAUNTLETS].a_ac + mongets(mtmp, GAUNTLETS);
-		
-		    if (mac < 10 && rn2(2))
-			mac += objects[LEATHER_CLOAK].a_ac + mongets(mtmp, LEATHER_CLOAK);
+			if(In_law(&u.uz) && is_army_pm(monsndx(ptr))){
+				if(ptr == &mons[PM_CAPTAIN] || ptr == &mons[PM_LIEUTENANT]){
+					mongets(mtmp, HARMONIUM_PLATE);
+					mongets(mtmp, HARMONIUM_HELM);
+					mongets(mtmp, HARMONIUM_GAUNTLETS);
+					mongets(mtmp, HARMONIUM_BOOTS);
+				} else {
+					mongets(mtmp, HARMONIUM_SCALE_MAIL);
+					mongets(mtmp, HARMONIUM_HELM);
+					mongets(mtmp, HARMONIUM_GAUNTLETS);
+					mongets(mtmp, HARMONIUM_BOOTS);
+				}
+			} else {
+				if (mac < -1 && rn2(5))
+				mac += objects[PLATE_MAIL].a_ac + mongets(mtmp, PLATE_MAIL);
+				else if (mac < 3 && rn2(5))
+				mac += objects[SPLINT_MAIL].a_ac + mongets(mtmp, (rn2(3)) ?
+						   SPLINT_MAIL : BANDED_MAIL);
+				else if (rn2(5))
+				mac += objects[RING_MAIL].a_ac + mongets(mtmp, (rn2(3)) ?
+						   RING_MAIL : STUDDED_LEATHER_ARMOR);
+				else
+				mac += objects[LEATHER_ARMOR].a_ac + mongets(mtmp, LEATHER_ARMOR);
 
-		    if(ptr != &mons[PM_GUARD] &&
+				if (mac < 10 && rn2(3))
+				mac += objects[HELMET].a_ac + mongets(mtmp, HELMET);
+				else if (mac < 10 && rn2(2))
+				mac += objects[LEATHER_HELM].a_ac + mongets(mtmp, LEATHER_HELM);
+				else if (mac < 10 && !rn2(10))
+				mac += objects[WAR_HAT].a_ac + mongets(mtmp, WAR_HAT);
+				
+				if (mac < 10 && rn2(3))
+				mac += objects[BUCKLER].a_ac + mongets(mtmp, BUCKLER);
+				else if (mac < 10 && rn2(2))
+				mac += objects[KITE_SHIELD].a_ac + mongets(mtmp, KITE_SHIELD);
+				else if (mac < 10 && rn2(2))
+				mac += objects[ROUNDSHIELD].a_ac + mongets(mtmp, ROUNDSHIELD);
+			
+				if (mac < 10 && rn2(3))
+				mac += objects[LOW_BOOTS].a_ac + mongets(mtmp, LOW_BOOTS);
+				else if (mac < 10 && rn2(2))
+				mac += objects[HIGH_BOOTS].a_ac + mongets(mtmp, HIGH_BOOTS);
+				else if (mac < 10 && rn2(2))
+				mac += objects[ARMORED_BOOTS].a_ac + mongets(mtmp, ARMORED_BOOTS);
+			
+				if (mac < 10 && rn2(3))
+				mac += objects[GLOVES].a_ac + mongets(mtmp, GLOVES);
+				else if (mac < 10 && rn2(2))
+				mac += objects[GAUNTLETS].a_ac + mongets(mtmp, GAUNTLETS);
+			
+				if (mac < 10 && rn2(2))
+				mac += objects[LEATHER_CLOAK].a_ac + mongets(mtmp, LEATHER_CLOAK);
+			}
+			if(ptr != &mons[PM_GUARD] &&
 #ifdef CONVICT
 			ptr != &mons[PM_PRISON_GUARD] &&
 #endif /* CONVICT */
@@ -4018,7 +4031,7 @@ register struct	monst	*mtmp;
 			}
 			if (ptr != &mons[PM_SOLDIER] && !rn2(3))
 				(void) mongets(mtmp, BUGLE);
-		    } else
+			} else
 			   if (ptr == &mons[PM_WATCHMAN] && rn2(3))
 				(void) mongets(mtmp, TIN_WHISTLE);
 		} else if (ptr == &mons[PM_SHOPKEEPER]) {

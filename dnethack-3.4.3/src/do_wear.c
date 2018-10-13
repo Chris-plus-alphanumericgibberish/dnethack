@@ -2223,8 +2223,10 @@ find_dr()
 		udr += max( 1 + (uwep->spe+1)/2,0);
 	}
 	
-	if (uarm)	armdr += arm_dr_bonus(uarm)*2;//Note: extends to two slots
-	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+	if (uarm){
+		if(uarm->otyp == JUMPSUIT) udr += arm_dr_bonus(uarm);
+		else armdr += arm_dr_bonus(uarm)*2;//Note: extends to two slots
+	} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 		udr += max( 1 + uwep->spe,0);
 	}
 	if (uarmh)	armdr += arm_dr_bonus(uarmh);
@@ -2236,8 +2238,17 @@ find_dr()
 	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 		udr += max( 1 + (uwep->spe+1)/2,0);
 	}
-	if (uarmu)	armdr += arm_dr_bonus(uarmu);
+	if (uarmu){
+		if(uarmu->otyp == BODYGLOVE)
+			udr += arm_dr_bonus(uarmu);
+		else armdr += arm_dr_bonus(uarmu);
+	}
 	
+	if(u.ustdy && armdr>0){
+		armdr -= u.ustdy;
+		if(armdr<0)
+			armdr = 0;
+	}
 	armdr /= 5;
 	
 	udr += armdr;
@@ -2253,47 +2264,98 @@ find_dr()
 #ifdef OVLB
 
 int
-roll_udr()
+roll_udr(magr)
+struct monst *magr;
 {
 	int udr;
+	int agralign = 0;
+	int armdr = 0;
+	
+	if(magr)
+		agralign = sgn(magr->data->maligntyp);
 	
 	udr = base_udr();
 	
-	if (uarmc)	udr += arm_dr_bonus(uarmc);
-	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-		udr += max( 1 + (uwep->spe+1)/2,0);
+	if (uarmc){
+		armdr += arm_dr_bonus(uarmc);
+		if(magr && is_harmonium_armor(uarmc)){
+			if(agralign == 0) armdr += 1;
+			else if(agralign < 0) armdr += 2;
+		}
+	} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		armdr += max( 1 + (uwep->spe+1)/2,0);
 	}
 	
+	if(uarmu && uarmu->otyp == BODYGLOVE)
+		armdr += arm_dr_bonus(uarmu);
+	if(uarm && uarm->otyp == JUMPSUIT)
+		armdr += arm_dr_bonus(uarm);
 	
 	//Note: Bias this somehow?
 	switch(rn2(5)){
 		case 0:
 			//Note: upper body (shirt plus torso armor)
-			if (uarmu)	udr += arm_dr_bonus(uarmu);
+			if (uarmu){
+				if(uarmu->otyp != BODYGLOVE)	armdr += arm_dr_bonus(uarmu);
+				if(magr && is_harmonium_armor(uarmu)){
+					if(agralign == 0) armdr += 1;
+					else if(agralign < 0) armdr += 2;
+				}
+			}
 		case 1:
 			//Note: lower body (torso armor only)
-			if (uarm)	udr += arm_dr_bonus(uarm);
-			else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-				udr += max( 1 + (uwep->spe+1)/2,0);
+			if (uarm){
+				if(uarm->otyp != JUMPSUIT)
+					armdr += arm_dr_bonus(uarm);
+				if(magr && is_harmonium_armor(uarm)){
+					if(agralign == 0) armdr += 1;
+					else if(agralign < 0) armdr += 2;
+				}
+			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
 		break;
 		case 2:
-			if (uarmh)	udr += arm_dr_bonus(uarmh);
+			if (uarmh){
+				armdr += arm_dr_bonus(uarmh);
+				if(magr && is_harmonium_armor(uarmh)){
+					if(agralign == 0) armdr += 1;
+					else if(agralign < 0) armdr += 2;
+				}
+			}
 		break;
 		case 3:
-			if (uarmf)	udr += arm_dr_bonus(uarmf);
-			else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-				udr += max( 1 + (uwep->spe+1)/2,0);
+			if (uarmf){
+				armdr += arm_dr_bonus(uarmf);
+				if(magr && is_harmonium_armor(uarmf)){
+					if(agralign == 0) armdr += 1;
+					else if(agralign < 0) armdr += 2;
+				}
+			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
 		break;
 		case 4:
-			if (uarmg)	udr += arm_dr_bonus(uarmg);
-			else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-				udr += max( 1 + (uwep->spe+1)/2,0);
+			if (uarmg){
+				armdr += arm_dr_bonus(uarmg);
+				if(magr && is_harmonium_armor(uarmg)){
+					if(agralign == 0) armdr += 1;
+					else if(agralign < 0) armdr += 2;
+				}
+			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
 		break;
 	}
 	
+	
+	if(u.ustdy && armdr>0){
+		armdr -= u.ustdy;
+		if(armdr<0)
+			armdr = 0;
+	}
+	
+	udr += armdr;
 	
 	if (udr > 127) udr = 127;	/* u.uac is an schar */
 	

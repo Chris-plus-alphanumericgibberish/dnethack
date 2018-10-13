@@ -92,7 +92,7 @@ boolean burn;
 		return(0);
 	} else {
 		if(bypassDR) dam -= base_udr();
-		else dam -= roll_udr();
+		else dam -= roll_udr((struct monst *) 0);
 		
 		if(dam < 1) dam = 1;
 		
@@ -730,7 +730,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			default:
 			    dam = dmgval(singleobj, &youmonst, 0);
 				if(bypassDR) dam -= base_udr(); 
-				else dam -= roll_udr();
+				else dam -= roll_udr(mon);
 			    hitv = 3 - distmin(u.ux,u.uy, mon->mx,mon->my);
 			    if (hitv < -4) hitv = (hitv+4)/2-4;
 			    if (hitv < -8) hitv = (hitv+8)*2/3-8;

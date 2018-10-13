@@ -841,11 +841,15 @@ struct monst *mon;
 }
 
 int
-roll_mdr(mon)
+roll_mdr(mon, magr)
 struct monst *mon;
+struct monst *magr;
 {
 	struct obj *obj;
 	int base, armac = 0;
+	int agralign = 0;
+	if(magr)
+		agralign = (magr == &youmonst) ? sgn(u.ualign.type) : sgn(magr->data->maligntyp);
 	
 	base = base_mdr(mon);
 	
@@ -860,70 +864,154 @@ struct monst *mon;
 	
 	//armor AC
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
-		if (uarmc)	armac += arm_dr_bonus(uarmc);
-		else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		if (uarmc){
+			armac += arm_dr_bonus(uarmc);
+			if(magr && is_harmonium_armor(uarmc)){
+				if(agralign == 0) armac += 1;
+				else if(agralign < 0) armac += 2;
+			}
+		} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 			armac += max( 1 + (uwep->spe+1)/2,0);
 		}
+		
+		if(uarmu && uarmu->otyp == BODYGLOVE)
+			armac += arm_dr_bonus(uarmu);
+		if(uarm && uarm->otyp == JUMPSUIT)
+			armac += arm_dr_bonus(uarm);
 		
 		//Note: Bias this somehow?
 		switch(rn2(5)){
 			case 0:
 				//Note: upper body (shirt plus torso armor)
-				if (uarmu)	armac += arm_dr_bonus(uarmu);
+				if (uarmu){
+					if(uarmu->otyp != BODYGLOVE)	armac += arm_dr_bonus(uarmu);
+					if(magr && is_harmonium_armor(uarmu)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				}
 			case 1:
 				//Note: lower body (torso armor only)
-				if (uarm)	armac += arm_dr_bonus(uarm);
-				else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				if (uarm){
+					if(uarm->otyp != JUMPSUIT)
+						armac += arm_dr_bonus(uarm);
+					if(magr && is_harmonium_armor(uarm)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (uwep->spe+1)/2,0);
 				}
 			break;
 			case 2:
-				if (uarmh)	armac += arm_dr_bonus(uarmh);
+				if (uarmh){
+					armac += arm_dr_bonus(uarmh);
+					if(magr && is_harmonium_armor(uarmh)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				}
 			break;
 			case 3:
-				if (uarmf)	armac += arm_dr_bonus(uarmf);
-				else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				if (uarmf){
+					armac += arm_dr_bonus(uarmf);
+					if(magr && is_harmonium_armor(uarmf)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (uwep->spe+1)/2,0);
 				}
 			break;
 			case 4:
-				if (uarmg)	armac += arm_dr_bonus(uarmg);
-				else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+				if (uarmg){
+					armac += arm_dr_bonus(uarmg);
+					if(magr && is_harmonium_armor(uarmg)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (uwep->spe+1)/2,0);
 				}
 			break;
 		}
 		if(armac < 0) armac *= -1;
 	} else {
-		if (which_armor(mon, W_ARMC))	armac += arm_dr_bonus(which_armor(mon, W_ARMC));
-		else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+		struct obj *curarm;
+		
+		if (which_armor(mon, W_ARMC)){
+			curarm = which_armor(mon, W_ARMC);
+			armac += arm_dr_bonus(curarm);
+			if(magr && is_harmonium_armor(curarm)){
+				if(agralign == 0) armac += 1;
+				else if(agralign < 0) armac += 2;
+			}
+		} else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
 			armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
 		}
+		
+		if(which_armor(mon, W_ARMU) && which_armor(mon, W_ARMU)->otyp == BODYGLOVE)
+			armac += arm_dr_bonus(which_armor(mon, W_ARMU));
+		if(which_armor(mon, W_ARM) && which_armor(mon, W_ARM)->otyp == JUMPSUIT)
+			armac += arm_dr_bonus(which_armor(mon, W_ARM));
 		
 		//Note: Bias this somehow?
 		switch(rn2(5)){
 			case 0:
 				//Note: upper body (shirt plus torso armor)
-				if (which_armor(mon, W_ARMU))	armac += arm_dr_bonus(which_armor(mon, W_ARMU));
+				if (which_armor(mon, W_ARMU)){
+					curarm = which_armor(mon, W_ARMU);
+					if(curarm->otyp != BODYGLOVE)	armac += arm_dr_bonus(curarm);
+					if(magr && is_harmonium_armor(curarm)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				}
 			case 1:
 				//Note: lower body (torso armor only)
-				if (which_armor(mon, W_ARM))	armac += arm_dr_bonus(which_armor(mon, W_ARM));
-				else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+				if (which_armor(mon, W_ARM)){
+					curarm = which_armor(mon, W_ARM);
+					if(curarm->otyp != JUMPSUIT)
+						armac += arm_dr_bonus(curarm);
+					if(magr && is_harmonium_armor(curarm)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				} else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
 				}
 			break;
 			case 2:
-				if (which_armor(mon, W_ARMH))	armac += arm_dr_bonus(which_armor(mon, W_ARMH));
+				if (which_armor(mon, W_ARMH)){
+					curarm = which_armor(mon, W_ARMH);
+					armac += arm_dr_bonus(curarm);
+					if(magr && is_harmonium_armor(curarm)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				}
 			break;
 			case 3:
-				if (which_armor(mon, W_ARMF))	armac += arm_dr_bonus(which_armor(mon, W_ARMF));
-				else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+				if (which_armor(mon, W_ARMF)){
+					curarm = which_armor(mon, W_ARMF);
+					armac += arm_dr_bonus(curarm);
+					if(magr && is_harmonium_armor(curarm)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				} else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
 				}
 			break;
 			case 4:
-				if (which_armor(mon, W_ARMG))	armac += arm_dr_bonus(which_armor(mon, W_ARMG));
-				else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
+				if (which_armor(mon, W_ARMG)){
+					curarm = which_armor(mon, W_ARMG);
+					armac += arm_dr_bonus(curarm);
+					if(magr && is_harmonium_armor(curarm)){
+						if(agralign == 0) armac += 1;
+						else if(agralign < 0) armac += 2;
+					}
+				} else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
 				}
 			break;

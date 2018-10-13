@@ -2467,7 +2467,7 @@ physical:{
 	}
 	
 	if(tmp && mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
-		tmp -= roll_mdr(mdef);
+		tmp -= roll_mdr(mdef, magr);
 		if(tmp < 1) tmp = 1;
 	}
 	

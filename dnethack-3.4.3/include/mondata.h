@@ -347,6 +347,7 @@
 							  || (ptr) == &mons[PM_RAZORVINE]\
 							)
 #define is_mercenary(ptr)	(((ptr)->mflagsg & MG_MERC) != 0L)
+#define is_army_pm(pm)		(pm == PM_CAPTAIN || pm == PM_LIEUTENANT || pm == PM_SERGEANT || pm == PM_SOLDIER)
 #define is_bardmon(ptr)		((ptr) == &mons[PM_LILLEND] || (ptr) == &mons[PM_RHYMER] || (ptr) == &mons[PM_BARD])
 #define is_male(ptr)		(((ptr)->mflagsb & MB_MALE) != 0L)
 #define is_female(ptr)		(((ptr)->mflagsb & MB_FEMALE) != 0L)

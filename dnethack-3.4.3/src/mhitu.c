@@ -1829,14 +1829,14 @@ hitmu(mtmp, mattk)
 			}
 			//End artifact damage block:
 			if (!dmg) break;
-			if (u.mh > 1 && u.mh > (dmg-roll_udr()) &&
+			if (u.mh > 1 && u.mh > (dmg-roll_udr(mtmp)) &&
 				   uwep->obj_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
 			     * take the damage _before_ being cloned.
 			     */
-			    dmg -= roll_udr();
+			    dmg -= roll_udr(mtmp);
 			    if (dmg < 1) dmg = 1;
 			    if (dmg > 1) exercise(A_STR, FALSE);
 			    u.mh -= dmg;
@@ -1968,14 +1968,14 @@ hitmu(mtmp, mattk)
 				artifact_hit(mtmp, &youmonst, otmp, &dmg,dieroll)))
 			     hitmsg(mtmp, mattk);
 			if (!dmg) break;
-			if (u.mh > 1 && u.mh > (dmg-roll_udr()) &&
+			if (u.mh > 1 && u.mh > (dmg-roll_udr(mtmp)) &&
 				   otmp->obj_material == IRON &&
 					(u.umonnum==PM_BLACK_PUDDING
 					|| u.umonnum==PM_BROWN_PUDDING)) {
 			    /* This redundancy necessary because you have to
 			     * take the damage _before_ being cloned.
 			     */
-			    dmg -= roll_udr();
+			    dmg -= roll_udr(mtmp);
 			    if (dmg < 1) dmg = 1;
 			    if (dmg > 1) exercise(A_STR, FALSE);
 			    u.mh -= dmg;
@@ -3614,10 +3614,6 @@ dopois:
 			dmg += d(2,4); //Add segment damage
 	}
 	
-	if(dmg && u.ustdy){
-		dmg += u.ustdy;
-		u.ustdy -= 1;
-	}
 	
 	if(attacktype_fordmg(youracedata, AT_NONE, AD_STAR)){
 		if(otmp && otmp == MON_WEP(mtmp) && !otmp->oartifact && otmp->spe <= 0) dmg = 0;

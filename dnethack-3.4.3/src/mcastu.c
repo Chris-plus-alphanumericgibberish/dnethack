@@ -1303,7 +1303,7 @@ cold_spell:
 		dmg /= 2;
 		drain_en(dmg);
 		if(hates_silver(youracedata)) dmg += d(dmn,20);
-		dmg -= roll_udr();
+		dmg -= roll_udr(mtmp);
 		if(Half_physical_damage) dmg /= 2;
 		if(dmg < 1) dmg = 1;
 		stop_occupation();
@@ -1746,11 +1746,11 @@ int spellnum;
 		} else {
 			You("are pierced by %s of silver light!", rays);
 			dmg = 0;
-			dmg += rnd(20) - roll_udr();
+			dmg += rnd(20) - roll_udr(mtmp);
 			if(dmg < 1)
 				dmg = 1;
 			if(n == 2){
-				dmg += rnd(20) - roll_udr();
+				dmg += rnd(20) - roll_udr(mtmp);
 				if(dmg < 2)
 					dmg = 2;
 			}
@@ -1799,7 +1799,7 @@ int spellnum;
 		} else {
 			You("are slashed by golden light!");
 			dmg = 0;
-			dmg += d(2,12) - roll_udr();
+			dmg += d(2,12) - roll_udr(mtmp);
 			if(dmg < 1)
 				dmg = 1;
 		}
@@ -1808,7 +1808,7 @@ int spellnum;
 		int dx = 0, dy = 0;
 		dmg /= 10;
 		if(dmg > 7) dmg = 7;
-		for(dmg; dmg; dmg--){
+		for(; dmg; dmg--){
 			switch(rn2(7)){
 				case 0:
 					//Physical
@@ -2184,7 +2184,7 @@ summon_alien:
 				tdmg = 0;
 			} else tdmg = dmgval(otmp, &youmonst, 0);
 			if (tdmg){
-				tdmg -= roll_udr();
+				tdmg -= roll_udr(mtmp);
 				if (tdmg < 1) tdmg = 1;
 				
 			}

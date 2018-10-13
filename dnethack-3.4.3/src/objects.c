@@ -436,6 +436,8 @@ HELM("flack helmet", "green bowl", /*Needs encyc entry*/
 		0, 0,  0,	0, 0, 10,   50, 9, 1, 1, PLASTIC, CLR_GREEN),
 HELM("bronze helm", "helmet",
 		0, 0,  0,   0, 1, 30,  12, 9, 1, 0, COPPER, HI_COPPER),
+HELM("harmonium helm", "red-lacquered spined helm",
+		0, 0,  0,   0, 1, 45,   1, 9, 1, 0, METAL, CLR_RED),
 HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1,  2,   5, 9, 0, 0, WOOD, HI_WOOD),
 HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
@@ -526,6 +528,10 @@ ARMOR("bronze plate mail", (char *)0, /*Needs encyc entry*/
 ARMOR("bronze plate mail", (char *)0,
 	1, 0, 1, 0,	35, 5, 225, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
 #endif
+ARMOR("harmonium plate", "red-lacquered bladed armor",
+	0, 0, 1, 0,	 0, 5, 225,   1,  6, 4, 3, ARM_SUIT, METAL, CLR_RED),
+ARMOR("harmonium scale mail", "red-lacquered spiked scale mail",
+	0, 0, 1, 0,	 0, 5, 225,   1,  8, 2, 3, ARM_SUIT, METAL, CLR_RED),
 ARMOR("plasteel armor", "hard white armor", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, 0,	 0, 5, 100,  500, 7, 3, 3, ARM_SUIT, PLASTIC, CLR_WHITE),
 // ARMOR("force armor", "gemstone-adorned clothing",
@@ -668,6 +674,8 @@ GLOVES("gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   4, 2, 25, 10, 9, 1, 0, IRON, HI_METAL),
 GLOVES("bronze gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 1, 25, 10, 9, 1, 0, COPPER, HI_COPPER),
+GLOVES("harmonium gauntlets", "red-lacquered hooked gauntlets", /*Needs encyc entry*//*Needs tile*/
+		0, 0,  0,	   0, 1, 40,  1, 9, 1, 0, METAL, CLR_RED),
 GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2,  5, 50, 9, 1, 0, MITHRIL, HI_METAL),
 GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
@@ -690,6 +698,8 @@ BOOTS("iron shoes", "hard shoes",
 		0, 0,  0,	   7, 2, 50, 16,  9, 1, 0, IRON, HI_METAL),
 BOOTS("armored boots", "hard boots",
 		0, 0,  0,	   0, 1, 75, 16,  8, 1, 1, IRON, HI_COPPER),
+BOOTS("harmonium boots", "red-lacquered boots",
+		0, 0,  0,	   0, 1, 95,  1,  8, 1, 1, METAL, CLR_RED),
 BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 25, 32,  9, 1, 1, PLASTIC, CLR_WHITE),
 BOOTS("stilettos", "high-heeled shoes", /*Needs encyc entry*//*Needs tile*/

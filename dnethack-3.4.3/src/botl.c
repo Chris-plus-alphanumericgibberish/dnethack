@@ -290,7 +290,7 @@ bot2()
 #else
 		money_cnt(invent),
 #endif
-		hp, hpmax, u.uen, u.uenmax, u.divetimer, (u.uac + u.ustdy), (u.udr - u.ustdy));
+		hp, hpmax, u.uen, u.uenmax, u.divetimer, (u.uac + u.ustdy), (u.udr));
 
 	if (Upolyd)
 		Sprintf(nb = eos(nb), " HD:%d", mons[u.umonnum].mlevel);

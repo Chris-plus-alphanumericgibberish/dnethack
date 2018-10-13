@@ -2283,7 +2283,7 @@ defaultvalue:
 		if(phasearmor){
 			tmp -= base_mdr(mon);
 		} else {
-			tmp -= roll_mdr(mon);
+			tmp -= roll_mdr(mon, &youmonst);
 		}
 		if(tmp < 1) tmp = 1;
 	}
@@ -3660,7 +3660,7 @@ register struct attack *mattk;
 	
 	if(tmp){
 		if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
-			tmp -= roll_mdr(mdef);
+			tmp -= roll_mdr(mdef, &youmonst);
 		} else {
 			tmp -= base_mdr(mdef);
 		}
@@ -4634,7 +4634,7 @@ uchar aatyp, adtyp;
 		if(ptr == &mons[PM_RAZORVINE]) You("are hit by the springing vines!");
 		else You("are hit by %s barbs!", s_suffix(mon_nam(mon)));
 		if (tmp) {
-			tmp -= roll_udr();
+			tmp -= roll_udr(mon);
 			if (tmp < 1) tmp = 1;
 		}
 		mdamageu(mon, tmp);
