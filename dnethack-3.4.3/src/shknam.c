@@ -364,10 +364,10 @@ int sx, sy;
 			if(curobj){
 				curobj->shopOwned = TRUE;
 				if(curobj->otyp == FIGURINE){
-					curobj->corpsenm = rn2(100) < 70 ? PM_MYRMIDON_HOPLITE : 
-										rn2(30) < 20 ? PM_MYRMIDON_LOCHIAS :
-										rn2(10) < 7 ? PM_MYRMIDON_YPOLOCHAGOS : 
-										rn2(3) < 2 ? PM_MYRMIDON_LOCHAGOS :
+					curobj->corpsenm = rn2(100) < 40 ? PM_MYRMIDON_HOPLITE : 
+										rn2(60) < 30 ? PM_MYRMIDON_LOCHIAS :
+										rn2(30) < 10 ? PM_MYRMIDON_YPOLOCHAGOS : 
+										rn2(20) < 5 ? PM_MYRMIDON_LOCHAGOS :
 										PM_FORMIAN_CRUSHER;
 					bless(curobj);
 				}
