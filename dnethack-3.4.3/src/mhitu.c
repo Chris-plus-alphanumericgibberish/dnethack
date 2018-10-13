@@ -3628,7 +3628,7 @@ dopois:
  */
 	if (dmg){
 		if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
-			dmg -= roll_udr();
+			dmg -= roll_udr(mtmp);
 			if (dmg < 1) dmg = 1;
 		} else {
 			dmg -= base_udr();
