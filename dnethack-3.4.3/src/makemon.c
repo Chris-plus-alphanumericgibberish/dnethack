@@ -143,7 +143,7 @@ register int x, y, n;
 		 	/* if caller wants random locations, do one here */
 		if(x == 0 && y == 0) {
 			int tryct = 0;	/* careful with bigrooms */
-			struct monst fakemon;
+			struct monst fakemon = {0};
 
 			fakemon.data = mtmp->data;	/* set up for goodpos */
 			do {
@@ -173,7 +173,7 @@ register int x, y, n;
 		 	/* if caller wants random locations, do one here */
 		if(x == 0 && y == 0) {
 			int tryct = 0;	/* careful with bigrooms */
-			struct monst fakemon;
+			struct monst fakemon = {0};
 
 			fakemon.data = mtmp->data;	/* set up for goodpos */
 			do {
@@ -5328,7 +5328,7 @@ register int	mmflags;
 	/* if caller both a random creature and a random location, try both at once first */
 	if(!ptr && x == 0 && y == 0){
 		int tryct = 0;	/* careful with bigrooms */
-		struct monst fakemon;
+		struct monst fakemon = {0};
 		do{
 			x = rn1(COLNO-3,2);
 			y = rn2(ROWNO);
@@ -5354,7 +5354,7 @@ register int	mmflags;
 	/* if caller wants random location, do it here */
 	if(x == 0 && y == 0) {
 		int tryct = 0;	/* careful with bigrooms */
-		struct monst fakemon;
+		struct monst fakemon = {0};
 
 		fakemon.data = ptr;	/* set up for goodpos */
 		do {
@@ -5397,7 +5397,7 @@ register int	mmflags;
 	}
 	
 	if(ptr && mmflags & MM_CHECK_GOODPOS){
-	 struct monst fakemon;
+	 struct monst fakemon = {0};
 	 fakemon.data = ptr;	/* set up for goodpos */
 	 if(!goodpos(x, y, &fakemon, gpflags)){
 		if ((mmflags & MM_ADJACENTOK) != 0) {
@@ -5435,7 +5435,7 @@ register int	mmflags;
 		 * for instance.)
 		 */
 		int tryct = 0;	/* maybe there are no good choices */
-		struct monst fakemon;
+		struct monst fakemon = {0};
 		do {
 			if(!(ptr = rndmonst())) {
 #ifdef DEBUG

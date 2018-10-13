@@ -109,7 +109,7 @@ struct permonst *mdat;
     coord good[TARGET_GOOD], *good_ptr;
     int x, y, range, i;
     int xmin, xmax, ymin, ymax;
-    struct monst fakemon;	/* dummy monster */
+    struct monst fakemon = {0};	/* dummy monster */
 
     if (!mdat) {
 #ifdef DEBUG
@@ -184,7 +184,7 @@ struct permonst *mdat;
     int x, y, subx=-1, suby=-1, i, j, offset = rn2(8);
     int dx[8] = {0, 1,  0, -1, 1,  1, -1, -1};
     int dy[8] = {1, 0, -1,  0, 1, -1, -1,  1};
-    struct monst fakemon;	/* dummy monster */
+    struct monst fakemon = {0};	/* dummy monster */
 
     if (!mdat) {
 #ifdef DEBUG
@@ -254,7 +254,7 @@ unsigned entflags;
     coord good[MAX_GOOD], *good_ptr;
     int x, y, range, i;
     int xmin, xmax, ymin, ymax;
-    struct monst fakemon;	/* dummy monster */
+    struct monst fakemon = {0};	/* dummy monster */
 
     if (!mdat) {
 #ifdef DEBUG

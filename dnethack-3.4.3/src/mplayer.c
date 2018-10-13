@@ -436,7 +436,7 @@ register int num;
 boolean special;
 {
 	int pm, x, y;
-	struct monst fakemon;
+	struct monst fakemon = {0};
 
 	while(num) {
 		int tryct = 0;
