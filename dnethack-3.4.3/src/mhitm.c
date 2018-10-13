@@ -428,7 +428,7 @@ mattackm(magr, mdef)
 		case AT_MARI: /* weapon attacks */
 #define MAINHAND (mattk->aatyp != AT_XWEP && mattk->aatyp != AT_MARI)
 
-		if (!mattk->aatyp == AT_XWEP && magr->misc_worn_check & W_ARMS) {
+		if (mattk->aatyp == AT_XWEP && (magr->misc_worn_check & W_ARMS)) {
 			// Offhand attacks cannot be made while wearing a shield
 			break;
 		}
