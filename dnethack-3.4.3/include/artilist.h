@@ -1283,6 +1283,13 @@ A("Yorshka's Spear",			SPEAR, /*Needs encyc entry*/
 	0, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L,//Note: Drains energy/sets special ability cooldowns 
 	0,0,0),
 
+A("Dragon's Heart-Stone",			FLINT, /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN),0, //Can only behead creatures that don't know where you are.
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	NO_DFNS,	NO_CARY,//Note: Doubles dragon attributes when carried
+	0, A_NONE, PM_NOBLEMAN, NON_PM, 4000L, 
+	0,0,0),
+
 A("The Mitre of Holiness",	HELM_OF_BRILLIANCE,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR|SPFX_WARN|SPFX_INTEL), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_UNDEAD /*MA*/, 0 /*MV*/,

@@ -885,6 +885,8 @@ dobreathe(mdat)
 			type = flags.HDbreath;
 			if(type == AD_SLEE) multiplier = 4;
 		}
+		if(carrying_art(ART_DRAGON_S_HEART_STONE))
+			multiplier *= 2;
 		if(is_true_dragon(mdat) || (Race_if(PM_HALF_DRAGON) && u.ulevel >= 14)) flags.drgn_brth = 1;
 	    buzz((int) (20 + type-1), (int)mattk->damn + (u.ulevel/2),
 			u.ux, u.uy, u.dx, u.dy,0, mattk->damd ? (d((int)mattk->damn + (u.ulevel/2), (int)mattk->damd)*multiplier) : 0);

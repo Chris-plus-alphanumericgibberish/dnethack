@@ -2167,7 +2167,11 @@ find_ac()
 		if(uwep->oartifact == ART_TOBIUME || uwep->oartifact == ART_MASAMUNE)
 			uac -= max(uwep->spe,0);
 	}
-	if(Race_if(PM_HALF_DRAGON)) uac -= (u.ulevel+3)/6;
+	if(Race_if(PM_HALF_DRAGON)){
+		if(carrying_art(ART_DRAGON_S_HEART_STONE))
+			uac -= (u.ulevel+2)/3;
+		else uac -= (u.ulevel+3)/6;
+	}
 	if(u.specialSealsActive&SEAL_COSMOS) uac -= (spiritDsize()/2);
 	if(u.sealsActive&SEAL_ECHIDNA) uac -= max((ACURR(A_CON)-10)/2, 0);
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
@@ -2194,7 +2198,11 @@ int base_udr()
 		udr += u.ulevel/10;
 	}
 	
-	if(Race_if(PM_HALF_DRAGON)) udr += u.ulevel/6;
+	if(Race_if(PM_HALF_DRAGON)){
+		if(carrying_art(ART_DRAGON_S_HEART_STONE))
+			udr += (u.ulevel)/3;
+		else udr += (u.ulevel)/6;
+	}
 	if(u.specialSealsActive&SEAL_COSMOS) udr += (spiritDsize()+1)/2;
 	if(u.sealsActive&SEAL_ECHIDNA) udr += max((ACURR(A_CON)-9)/4, 0);
 	if(uclockwork) udr += (u.clockworkUpgrades&ARMOR_PLATING) ? 5 : 1; /*armor bonus for automata*/

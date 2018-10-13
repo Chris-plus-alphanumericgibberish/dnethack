@@ -278,7 +278,7 @@ const struct Role roles[] = {
 	PM_OLD_GYPSY_WOMAN, PM_SERVANT, PM_REBEL_RINGLEADER,
 	PM_SOLDIER, PM_PEASANT, S_HUMANOID, S_HUMAN,
 	ART_MANTLE_OF_HEAVEN,
-	MA_DWARF|MA_ELF|MA_HUMAN|MA_VAMPIRE, ROLE_MALE|ROLE_FEMALE |
+	MA_DWARF|MA_ELF|MA_HUMAN|MA_VAMPIRE|MA_DRAGON, ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{   10,10,  7, 10,  7,  7 },
@@ -2622,31 +2622,58 @@ role_init()
 		// urole.enemy2num = PM_MASTODON;
 		// urole.enemy1sym = S_QUADRUPED;
 		// urole.enemy2sym = S_LAW_ANGEL;
-	} else if (Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend) {
-		flags.racial_pantheon = PM_GNOME;
-		urole.filecode = "Hdf";
-		urole.petnum = PM_UNDEAD_KNIGHT;
-		
-		urole.homebase = "the forlorn settlement";
-		urole.intermed = "the Cathedral of Velka";
-		urole.questarti = ART_FRIEDE_S_SCYTHE;
-		
-		urole.ldrnum = NON_PM;//PM_CROW_WINGED_HALF_DRAGON;
-		urole.guardnum = PM_CORVIAN;
-		urole.neminum = PM_BASTARD_OF_THE_BOREAL_VALLEY;
-		
-		urole.lgod = Gwyngod;
-		urole.ngod = Gwyneveregoddess;
-		urole.cgod = Gwyndolingod;
-		
-		urole.enemy1num = PM_ZOMBIE;
-		urole.enemy2num = PM_CORVIAN_KNIGHT;
-		urole.enemy1sym = S_ZOMBIE;
-		urole.enemy2sym = S_GOLEM;
-		
-		urace.attrmax[A_STR] = STR19(20);
-		urace.attrmax[A_DEX] = 20;
-		urace.attrmax[A_CON] = 18;
+	} else if (Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN)) {
+		if(flags.initgend){
+			flags.racial_pantheon = PM_HALF_DRAGON;
+			urole.filecode = "Hdf";
+			urole.petnum = PM_UNDEAD_KNIGHT;
+			
+			urole.homebase = "the forlorn settlement";
+			urole.intermed = "the Cathedral of Velka";
+			urole.questarti = ART_FRIEDE_S_SCYTHE;
+			
+			urole.ldrnum = NON_PM;//PM_CROW_WINGED_HALF_DRAGON;
+			urole.guardnum = PM_CORVIAN;
+			urole.neminum = PM_BASTARD_OF_THE_BOREAL_VALLEY;
+			
+			urole.lgod = Gwyngod;
+			urole.ngod = Gwyneveregoddess;
+			urole.cgod = Gwyndolingod;
+			
+			urole.enemy1num = PM_ZOMBIE;
+			urole.enemy2num = PM_CORVIAN_KNIGHT;
+			urole.enemy1sym = S_ZOMBIE;
+			urole.enemy2sym = S_GOLEM;
+			
+			urace.attrmax[A_STR] = STR19(20);
+			urace.attrmax[A_DEX] = 20;
+			urace.attrmax[A_CON] = 18;
+		} else {
+			flags.racial_pantheon = PM_HALF_DRAGON;
+			urole.filecode = "Hdm";
+			urole.petnum = PM_UNDEAD_KNIGHT;
+			
+			urole.homebase = "the lost towertop";
+			urole.intermed = "the Archdragon Caves";
+			urole.questarti = ART_DRAGON_S_HEART_STONE;
+			
+			urole.ldrnum = PM_ADVENTURESS_ZARIA;
+			urole.guardnum = NON_PM;
+			urole.neminum = PM_VECHERNYAYA_THE_SUN_S_GRAVE_KEEPER;
+			
+			urole.lgod = Gwyngod;
+			urole.ngod = Gwyneveregoddess;
+			urole.cgod = Gwyndolingod;
+			
+			urole.enemy1num = PM_MAN_SERPENT_SOLDIER;
+			urole.enemy2num = PM_MAN_SERPENT_MAGE;
+			urole.enemy1sym = S_SNAKE;
+			urole.enemy2sym = S_LIZARD;
+			
+			urace.attrmax[A_STR] = STR19(20);
+			urace.attrmax[A_DEX] = 18;
+			urace.attrmax[A_CON] = 20;
+		}
 	} else if (!urole.lgod) {
 	    urole.lgod = roles[flags.pantheon].lgod;
 	    urole.ngod = roles[flags.pantheon].ngod;

@@ -257,6 +257,7 @@ static struct trobj Knight[] = {
 	{ CARROT, 0, FOOD_CLASS, 10, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+
 static struct trobj Monk[] = {
 	{ GLOVES, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ ROBE, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
@@ -319,14 +320,26 @@ static struct trobj DwarfNoble[] = {
 	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
-static struct trobj HDNoble[] = {
- 	{ SPEAR,  2, WEAPON_CLASS, 1, UNDEF_BLESS },
- 	{ SICKLE, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
+static struct trobj HDNobleF[] = {
+ 	{ SPEAR,  1, WEAPON_CLASS, 1, 1 },
+ 	{ BELL, 0, TOOL_CLASS, 1, 1 },
 	{ BUCKLER, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_ARMOR, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ LEATHER_HELM, 1, ARMOR_CLASS, 1, 1 },
+	{ CHAIN_MAIL, 1, ARMOR_CLASS, 1, 1 },
 	{ GLOVES, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ APPLE, 0, FOOD_CLASS, 3, 0 },
+	{ SPE_HEALING, 0, SPBOOK_CLASS, 1, 1 },
+	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
+	{ TORCH, 0, TOOL_CLASS, 3, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj HDNobleM[] = {
+	{ BROADSWORD, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
+	{ BRONZE_PLATE_MAIL, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ BRONZE_HELM, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ ROUNDSHIELD, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ HIGH_BOOTS, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
 	{ TORCH, 0, TOOL_CLASS, 3, 0 },
 	{ 0, 0, 0, 0, 0 }
@@ -1946,27 +1959,34 @@ u_init()
 		skill_init(Skill_Mon);
 		break;
 	case PM_NOBLEMAN:
-		if(flags.female && !Race_if(PM_DROW)){
-			Noble[NOB_SHIRT].trotyp = VICTORIAN_UNDERWEAR;
-			Noble[NOB_SHIRT].trspe = 1;
-			Noble[NOB_SUIT].trotyp = GENTLEWOMAN_S_DRESS;
-			Noble[NOB_SUIT].trspe = 1;
-			Noble[NOB_SHOES].trotyp = STILETTOS;
-			Noble[NOB_SHOES].trspe = 1;
-		} else if(!flags.female && Race_if(PM_DROW)){
-			Noble[NOB_SHOES].trotyp = STILETTOS;
-			Noble[NOB_SHOES].trspe = 1;
-		}
 		if(Race_if(PM_DWARF)) ini_inv(DwarfNoble);
-		else if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend){
-			ini_inv(HDNoble);
+		else if(Race_if(PM_HALF_DRAGON)){
+			if(flags.initgend){
+				ini_inv(HDNobleF);
+			} else {
+				ini_inv(HDNobleM);
+			}
 		}
 		else if(Race_if(PM_DROW) && flags.female){
 			DNoble[DNB_TWO_ARROWS].trquan = rn1(10, 50);
 			DNoble[DNB_ZERO_ARROWS].trquan = rn1(10, 30);
 			ini_inv(DNoble);
 			ini_inv(DarkWand);
-		} else ini_inv(Noble);
+		} else{
+			if(flags.female && !Race_if(PM_DROW)){
+				Noble[NOB_SHIRT].trotyp = VICTORIAN_UNDERWEAR;
+				Noble[NOB_SHIRT].trspe = 1;
+				Noble[NOB_SUIT].trotyp = GENTLEWOMAN_S_DRESS;
+				Noble[NOB_SUIT].trspe = 1;
+				Noble[NOB_SHOES].trotyp = STILETTOS;
+				Noble[NOB_SHOES].trspe = 1;
+			} else if(!flags.female && Race_if(PM_DROW)){
+				Noble[NOB_SHOES].trotyp = STILETTOS;
+				Noble[NOB_SHOES].trspe = 1;
+			}
+			ini_inv(Noble);
+		}
+		
 		if(Race_if(PM_ELF)){
 			ini_inv(Phial);
 		} else if(Race_if(PM_DROW) && !flags.female){
@@ -2582,8 +2602,10 @@ u_init()
 
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
 	dungeon_topology.alt_tower = !rn2(8);
-	if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN) && flags.initgend){
-		flags.HDbreath = AD_COLD;
+	if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN)){
+		if(flags.initgend)
+			flags.HDbreath = AD_COLD;
+		else flags.HDbreath = AD_FIRE;
 	} else switch(rnd(6)){
 		case 1:
 			flags.HDbreath = AD_COLD;
@@ -2888,7 +2910,6 @@ register struct trobj *trop;
 		if(obj->oclass == ARMOR_CLASS){
 			if (is_shield(obj) && !uarms) {
 				setworn(obj, W_ARMS);
-				if (uswapwep) setuswapwep((struct obj *) 0);
 			} else if (is_helmet(obj) && !uarmh)
 				setworn(obj, W_ARMH);
 			else if (is_gloves(obj) && !uarmg)
@@ -2906,11 +2927,13 @@ register struct trobj *trop;
 		}
 
 		if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
-			otyp == TIN_OPENER || otyp == FLINT || otyp == ROCK) {
+			otyp == TIN_OPENER || otyp == BELL || otyp == FLINT || otyp == ROCK) {
 		    if (is_ammo(obj) || is_missile(obj)) {
-			if (!uquiver) setuqwep(obj);
+				if (!uquiver) setuqwep(obj);
 		    } else if (!uwep) setuwep(obj);
-		    else if (!uswapwep) setuswapwep(obj);
+		    else if (!uswapwep){
+				setuswapwep(obj);
+			}
 		}
 		if (obj->oclass == SPBOOK_CLASS &&
 				obj->otyp != SPE_BLANK_PAPER){
