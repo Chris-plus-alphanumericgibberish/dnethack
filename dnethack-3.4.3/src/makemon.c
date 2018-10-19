@@ -6123,6 +6123,10 @@ register int	mmflags;
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
+			else if(mndx == PM_PLATINUM_DRAGON){
+				mtmp->mhpmax = 3*mtmp->mhpmax;
+				mtmp->mhp = mtmp->mhpmax;
+			}
 		break;
 		case S_PLANT:
 			if(mndx == PM_RAZORVINE){
