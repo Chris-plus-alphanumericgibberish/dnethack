@@ -48,12 +48,13 @@ doread()
 			&& !(scroll->oclass == SCROLL_CLASS)
 			&& !(scroll->oclass == SPBOOK_CLASS)
 			&& !arti_mandala(scroll)
+			&& scroll->oartifact != ART_ROD_OF_THE_ELVISH_LORDS
 		) || scroll->otyp==LIGHTSABER
 	){
 		if(scroll->oartifact == ART_ROD_OF_SEVEN_PARTS){
 			if (Blind) {
 				You_cant("see the writing!");
-				exercise(A_WIS, FALSE); //The rod is critial of such logical blunders.
+				exercise(A_WIS, FALSE); //The rod is critical of such logical blunders.
 				return 0;
 			}
 			else{//Ruat Coelum, Fiat Justitia.  Ecce!  Lex Rex!
