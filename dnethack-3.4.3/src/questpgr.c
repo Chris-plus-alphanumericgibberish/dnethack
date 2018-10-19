@@ -495,6 +495,45 @@ qt_montype()
 				else return &mons[PM_BLACK_FLOWER];
 			break;
 		}
+	} else if(Role_if(PM_CAVEMAN)){
+		switch(rnd(12)){
+			case 1:
+				return &mons[PM_SABER_TOOTHED_CAT];
+			break;
+			case 2:
+				return &mons[PM_TYRANNOSAURUS];
+			break;
+			case 3:
+				return &mons[PM_TRICERATOPS];
+			break;
+			case 4:
+				return &mons[PM_DIPLODOCUS];
+			break;
+			case 5:
+				return &mons[PM_TITANOTHERE];
+			break;
+			case 6:
+				return &mons[PM_BALUCHITHERIUM];
+			break;
+			case 7:
+				return &mons[PM_MASTODON];
+			break;
+			case 8:
+				return &mons[PM_RED_DRAGON];
+			break;
+			case 9:
+				return &mons[PM_GREEN_DRAGON];
+			break;
+			case 10:
+				return &mons[PM_BLUE_DRAGON];
+			break;
+			case 11:
+				return &mons[PM_WHITE_DRAGON];
+			break;
+			case 12:
+				return &mons[PM_BLACK_DRAGON];
+			break;
+		}
 	} else {
 		int qpm;
 		if(Race_if(PM_DROW) && !flags.initgend && Role_if(PM_NOBLEMAN) && on_level(&u.uz, &qstart_level)) return &mons[PM_LONG_WORM_TAIL];

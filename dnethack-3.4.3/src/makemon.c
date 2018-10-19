@@ -1459,8 +1459,35 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, !rn2(10) ? ELVEN_MITHRIL_COAT : ELVEN_TOGA);
 					(void)mongets(mtmp, LOW_BOOTS);
 				} else if (mm == PM_NEANDERTHAL){
-					(void)mongets(mtmp, CLUB);
-					(void)mongets(mtmp, LEATHER_ARMOR);
+					static int drgnprop[] = {
+						OPROP_FIREW,
+						OPROP_ACIDW,
+						OPROP_ELECW,
+						OPROP_COLDW
+					};
+					static int drgnscl1[] = {
+						RED_DRAGON_SCALE_MAIL,
+						GREEN_DRAGON_SCALE_MAIL,
+						BLUE_DRAGON_SCALE_MAIL,
+						WHITE_DRAGON_SCALE_MAIL,
+						BLACK_DRAGON_SCALE_MAIL
+					};
+					static int drgnscl2[] = {
+						RED_DRAGON_SCALE_SHIELD,
+						GREEN_DRAGON_SCALE_SHIELD,
+						BLUE_DRAGON_SCALE_SHIELD,
+						WHITE_DRAGON_SCALE_SHIELD,
+						BLACK_DRAGON_SCALE_SHIELD
+					};
+					otmp = mksobj(rn2(2) ? CLUB : AKLYS, FALSE, FALSE);
+					otmp->spe = rn2(4);
+					otmp->obj_material = DRAGON_HIDE;
+					otmp->oproperties = drgnprop[rn2(SIZE(drgnprop))];
+					(void) mpickobj(mtmp, otmp);
+					(void)mongets(mtmp, drgnscl1[rn2(SIZE(drgnscl1))]);
+					(void)mongets(mtmp, drgnscl2[rn2(SIZE(drgnscl2))]);
+					(void)mongets(mtmp, LEATHER_HELM);
+					(void)mongets(mtmp, LEATHER_CLOAK);
 // ifdef CONVICT
 				} else if (mm == PM_INMATE){
 					(void)mongets(mtmp, rn2(2) ? HEAVY_IRON_BALL : SPOON);
