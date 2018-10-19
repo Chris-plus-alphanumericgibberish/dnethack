@@ -292,6 +292,8 @@ struct obj *otmp;
 		
 		default: return Hallucination ? hcolor(0) : LightsaberColor[((int)otmp->cobj->otyp) - MAGICITE_CRYSTAL].colorText;
 	}
+	if(otmp->otyp == KAMEREL_VAJRA)
+		return "lightning bladed";
 	return Hallucination ? hcolor(0) : LightsaberColor[((int)otmp->cobj->otyp) - MAGICITE_CRYSTAL].colorText;
 }
 
