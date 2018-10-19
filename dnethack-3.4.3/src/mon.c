@@ -3977,10 +3977,12 @@ boolean was_swallowed;			/* digestion */
 		   || mdat == &mons[PM_VECNA]
 //		   || mdat == &mons[PM_UNICORN_OF_AMBER]
 		   || mdat == &mons[PM_NIGHTMARE]
+		   || mdat == &mons[PM_CHROMATIC_DRAGON]
+		   || mdat == &mons[PM_PLATINUM_DRAGON]
 //		   || mdat == &mons[PM_PINK_UNICORN]
 		   )
 		return TRUE;
-	
+		
 	if (LEVEL_SPECIFIC_NOCORPSE(mdat))
 		return FALSE;
 
