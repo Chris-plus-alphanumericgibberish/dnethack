@@ -949,7 +949,7 @@ mineralize()
 {
 	s_level *sp;
 	struct obj *otmp;
-	int goldprob, gemprob, silverprob, darkprob, x, y, cnt;
+	int goldprob, gemprob, silverprob, darkprob, fossilprob, x, y, cnt;
 
 
 	/* Place kelp, except on the plane of water */
@@ -975,6 +975,7 @@ mineralize()
 	goldprob = 20 + depth(&u.uz) / 3;
 	gemprob = goldprob / 4;
 	silverprob = gemprob * 2;
+	fossilprob = gemprob / 2;
 	darkprob = gemprob / 10;
 
 	/* mines have ***MORE*** goodies - otherwise why mine? */
@@ -1036,6 +1037,15 @@ mineralize()
 		}
 		if (depth(&u.uz) > 14 && rn2(1000) < darkprob) {
 			if ((otmp = mksobj(CHUNK_OF_FOSSIL_DARK, FALSE, FALSE)) != 0) {
+				otmp->quan = 1L;
+				otmp->owt = weight(otmp);
+				otmp->ox = x,  otmp->oy = y;
+				if (!rn2(3)) add_to_buried(otmp);
+				else place_object(otmp, x, y);
+		    }
+		}
+		if (depth(&u.uz) > 14 && rn2(1000) < fossilprob) {
+			if ((otmp = mksobj(FOSSIL, FALSE, FALSE)) != 0) {
 				otmp->quan = 1L;
 				otmp->owt = weight(otmp);
 				otmp->ox = x,  otmp->oy = y;

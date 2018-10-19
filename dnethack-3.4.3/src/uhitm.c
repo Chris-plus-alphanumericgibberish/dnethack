@@ -1697,6 +1697,7 @@ int thrown;
 			    switch(obj->otyp) {
 					case BOULDER:		/* 1d20 */
 					case STATUE:
+					case FOSSIL:
 						if(!is_boulder(obj)) goto defaultvalue;
 					case HEAVY_IRON_BALL:	/* 1d25 */
 					case IRON_CHAIN:		/* 1d4+1 */

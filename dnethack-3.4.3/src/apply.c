@@ -434,13 +434,13 @@ struct obj* tobj;
 	    *resp = 1;
 	    return TRUE;
 	} else if (Role_if(PM_HEALER) && ((otmp = sobj_at(CORPSE, rx, ry)) != 0 ||
-				    (otmp = sobj_at(STATUE, rx, ry)) != 0)) {
+				    (otmp = sobj_at(STATUE, rx, ry)) != 0 || (otmp = sobj_at(FOSSIL, rx, ry)) != 0)) {
 	    /* possibly should check uppermost {corpse,statue} in the pile
 	       if both types are present, but it's not worth the effort */
 	    if (vobj_at(rx, ry)->otyp == STATUE) otmp = vobj_at(rx, ry);
-	    if (otmp->otyp == CORPSE) {
-		You("determine that %s unfortunate being is dead.",
-		    (rx == u.ux && ry == u.uy) ? "this" : "that");
+	    if (otmp->otyp == CORPSE || otmp->otyp == FOSSIL) {
+		You("determine that %s unfortunate being is %sdead.",
+		    (rx == u.ux && ry == u.uy) ? "this" : "that", (otmp->otyp == FOSSIL) ? "very ":"");
 	    } else {
 		ttmp = t_at(rx, ry);
 		pline("%s appears to be in %s health for a statue.",

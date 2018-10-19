@@ -601,10 +601,11 @@ register struct obj *obj;
 	schar savetame = 0;
 	boolean recorporealization = FALSE;
 	boolean in_container = FALSE;
-	if(obj->otyp == CORPSE) {
+	if(obj->otyp == CORPSE || obj->otyp == FOSSIL) {
 		int montype = obj->corpsenm;
 		xchar x, y;
-
+		int wasfossil = (obj->otyp == FOSSIL);
+		
 		if (obj->where == OBJ_CONTAINED) {
 			/* deal with corpses in [possibly nested] containers */
 			struct monst *carrier;
@@ -749,6 +750,10 @@ register struct obj *obj;
 				break;
 			    default:
 				panic("revive");
+			}
+			if(wasfossil){
+				mtmp->mfaction = SKELIFIED;
+				newsym(mtmp->mx,mtmp->my);
 			}
 		}
 	}
@@ -1893,6 +1898,28 @@ makecorpse:			if (mons[obj->corpsenm].geno &
 				obj = poly_obj(obj, CORPSE);
 				break;
 			    }
+			} else if (obj->otyp == FOSSIL) {
+				int corpsetype = obj->corpsenm;
+			    xchar oox, ooy;
+
+			    (void) get_obj_location(obj, &oox, &ooy, 0);
+			    refresh_x = oox; refresh_y = ooy;
+			    if (vegetarian(&mons[obj->corpsenm])||
+					obj->corpsenm == PM_DJINNI) {
+					/* Don't corpsify monsters that aren't flesh */
+					obj = poly_obj(obj, MEATBALL);
+					if(obj){
+						obj->corpsenm = corpsetype;
+					}
+			    	goto smell;
+			    } else {
+					obj = poly_obj(obj, CORPSE);
+					if(obj){
+						obj->corpsenm = corpsetype;
+						fix_object(obj);
+					}
+			    	goto smell;
+				}
 			} else { /* new rock class object... */
 			    /* impossible? */
 			    res = 0;

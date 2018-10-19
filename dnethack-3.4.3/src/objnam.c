@@ -822,6 +822,10 @@ register struct obj *obj;
 			    (index(vowels,*(mons[obj->corpsenm].mname)) ?
 								"an " : "a "),
 			mons[obj->corpsenm].mname);
+		else if (typ == FOSSIL)
+		    Sprintf(eos(buf), "%s %s",
+			mons[obj->corpsenm].mname,
+			actualn);
 		else Strcat(buf, actualn);
 		break;
 	    case BALL_CLASS:
@@ -3870,6 +3874,8 @@ typfnd:
 			if (Has_contents(otmp) && verysmall(&mons[mntmp]))
 			    delete_contents(otmp);	/* no spellbook */
 			otmp->spe = ishistoric ? STATUE_HISTORIC : 0;
+			break;
+		case FOSSIL: otmp->corpsenm = mntmp;
 			break;
 		case SCALE_MAIL:
 			/* Dragon mail - depends on the order of objects */

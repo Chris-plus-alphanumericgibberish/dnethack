@@ -1083,6 +1083,40 @@ boolean artif;
 				rn2(level_difficulty()/2 + 10) > 10)
 			    (void) add_to_container(otmp,
 						    mkobj(SPBOOK_CLASS,FALSE));
+			break;
+			case FOSSIL:
+				switch(rnd(12)){
+					case 1:
+						otmp->corpsenm = PM_SABER_TOOTHED_CAT;
+					break;
+					case 2:
+						otmp->corpsenm = PM_TYRANNOSAURUS;
+					break;
+					case 3:
+						otmp->corpsenm = PM_TRICERATOPS;
+					break;
+					case 4:
+						otmp->corpsenm = PM_DIPLODOCUS;
+					break;
+					case 5:
+					case 6:
+					case 7:
+					case 8:
+						otmp->corpsenm = PM_TRILOBITE;
+					break;
+					case 9:
+						otmp->corpsenm = PM_TITANOTHERE;
+					break;
+					case 10:
+						otmp->corpsenm = PM_BALUCHITHERIUM;
+					break;
+					case 11:
+						otmp->corpsenm = PM_MASTODON;
+					break;
+					case 12:
+						otmp->corpsenm = PM_CENTIPEDE;
+					break;
+				}
 		}
 		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
@@ -1773,6 +1807,10 @@ register struct obj *obj;
 		if (obj->otyp == STATUE && obj->corpsenm >= LOW_PM)
 		    wt = (int)obj->quan *
 			 ((int)mons[obj->corpsenm].cwt * 3 / 2);
+
+		if (obj->otyp == FOSSIL && obj->corpsenm >= LOW_PM)
+		    wt = (int)obj->quan *
+			 ((int)mons[obj->corpsenm].cwt * 1 / 2);
 
 		for(contents=obj->cobj; contents; contents=contents->nobj)
 			cwt += weight(contents);
