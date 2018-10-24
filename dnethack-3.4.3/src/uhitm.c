@@ -1536,7 +1536,6 @@ int thrown;
 					tmp += (newdamage - basedamage);
 				}
 			} //artifact block
-			pline("damage = %d", tmp);
 			if((monwep = MON_WEP(mon)) != 0 && monwep->oartifact != ART_GLAMDRING &&
 				(arti_disarm(obj) || (obj->otyp == RANSEUR && 
 										(wtype = uwep_skill_type()) != P_NONE && 
