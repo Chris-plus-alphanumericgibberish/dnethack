@@ -71,7 +71,7 @@
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
 #define Drain_resistance	(HDrain_resistance || EDrain_resistance || \
-				 species_resists_drain(&youmonst) || \
+				 species_resists_drain(&youmonst) || is_undead(youracedata) || is_demon(youracedata) || is_were(youracedata) ||\
 				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) >= 4 && \
 					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \
 						(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && \
