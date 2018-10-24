@@ -3300,7 +3300,7 @@ then fill new spaces with our spawn!
 	MR_STONE|MR_POISON|MR_SICK, 0,
 	MM_BREATHLESS /*MM*/, MT_STALK|MT_COLLECT /*MT*/,
 	MB_HUMANOID /*MB*/, MG_VBLUNT /*MG*/,
-	MA_CLOCK /*MA*/,  MV_NORMAL /*MV*/, HI_COPPER),
+	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, HI_COPPER),
     MON("colossal clockwork war-machine", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
 	LVL(45, 12,-9, 0, 10), (G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_WEAP, AD_PHYS, 8, 8), ATTK(AT_XWEP, AD_PHYS, 8, 8),
