@@ -2449,11 +2449,6 @@ physical:{
    if(mdef->data == &mons[PM_GIANT_TURTLE] && mdef->mflee) tmp=tmp/2; 
 	if(!tmp) return(MM_MISS);
 	
-	if(mdef->mstdy){
-		tmp += mdef->mstdy;
-		if(mdef->mstdy > 0) mdef->mstdy -= 1;
-		else mdef->mstdy += 1;
-	}
 	
 	if(tmp && magr->mtame && !mdef->mtame){
 		tmp += beastmastery();
