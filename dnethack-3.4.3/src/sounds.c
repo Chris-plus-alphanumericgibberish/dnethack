@@ -4825,6 +4825,8 @@ int p_skill;
 	} else if(spiritSkill(p_skill)) maxskill = max(P_EXPERT,maxskill);
 	else if(u.specialSealsActive&SEAL_NUMINA) maxskill = max(P_SKILLED,maxskill);
 	
+	if(roleSkill(p_skill)) maxskill = min(maxskill + 1, P_EXPERT);
+	
 	if(p_skill >= FFORM_SHII_CHO && p_skill <= FFORM_JUYO){
 		if(uwep && is_lightsaber(uwep)) maxskill = min(maxskill, P_SKILL(weapon_type(uwep)));
 		else if(uswapwep && is_lightsaber(uswapwep)) maxskill = min(maxskill, P_SKILL(weapon_type(uswapwep)));
@@ -4853,11 +4855,12 @@ int p_skill;
 		} else if((u.sealsActive&SEAL_EURYNOME) || (u.sealsActive&SEAL_BUER)){
 			curskill += 1;
 		}
-	} else if(roleSkill(p_skill)){
-		curskill += 1;
-		maxskill += 1;
 	} else if(spiritSkill(p_skill)){
 		curskill += 1;
+	}
+	
+	if(roleSkill(p_skill)){
+		curskill = min(curskill+1, P_EXPERT);
 	}
 	
 	if(p_skill == FFORM_SHIEN){
@@ -4905,6 +4908,8 @@ boolean
 roleSkill(p_skill)
 int p_skill;
 {
+	if(p_skill == P_QUARTERSTAFF) 
+		return (Role_if(PM_EXILE) && uwep && uwep->otyp == SHEPHERD_S_CROOK);
 	return FALSE;
 }
 
