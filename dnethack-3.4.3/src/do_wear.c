@@ -2122,14 +2122,9 @@ int base_uac()
 		
 		if(dexbonus > 0 && uarm){
 			if(is_medium_armor(uarm))
-					dexbonus = max(
-							(int)(dexbonus/2), 
-							(int)((dexbonus - objects[(uarm)->otyp].a_ac) + 
-								(dexbonus - (dexbonus - objects[(uarm)->otyp].a_ac))/2
-							)
-						);
+					dexbonus = (int)(dexbonus/2);
 			else if(!is_light_armor(uarm))
-					dexbonus = max(0, dexbonus - objects[(uarm)->otyp].a_ac); /* not cumulative w/ bodyarmor */
+					dexbonus = 0;
 		}
 	}
 	uac -= dexbonus;
