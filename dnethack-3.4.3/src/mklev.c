@@ -1494,6 +1494,10 @@ struct mkroom *croom;
 		if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && Is_qstart(&u.uz)){
 			levl[x][y].typ = STAIRS;
 			levl[x][y].ladder = up ? LA_UP : LA_DOWN;
+			sstairs.sx = x;
+			sstairs.sy = y;
+			sstairs.up = up;
+			assign_level(&sstairs.tolev, &minetown_level);
 		}
 	    return;
 	}

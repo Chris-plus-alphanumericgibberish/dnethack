@@ -640,6 +640,23 @@ register const char *s;
 				}
 			}
 		}
+		if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && on_level(&u.uz, &minetown_level)){
+			int x, y, good = FALSE;
+			while(!good){
+				x = rn2(COLNO)+1;
+				y = rn2(ROWNO);
+				if(isok(x,y) && levl[x][y].typ == ROOM && !costly_spot(x, y))
+					good = TRUE;
+				else continue;
+				
+				levl[x][y].typ = STAIRS;
+				levl[x][y].ladder = LA_DOWN;
+				sstairs.sx = x;
+				sstairs.sy = y;
+				sstairs.up = 0;
+				assign_level(&sstairs.tolev, &qstart_level);
+			}
+		}
 		if(In_outlands(&u.uz)){
 			if(!(u.uz.dlevel == spire_level.dlevel || Is_gatetown(&u.uz) || Is_sumall(&u.uz)))
 				place_neutral_features();

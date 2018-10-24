@@ -926,27 +926,6 @@ doup()
 		You("are held back by your pet!");
 		return(0);
 	}
-	if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && Is_qstart(&u.uz) && levl[u.ux][u.uy].ladder == LA_UP){
-		if(!u.uevent.qcompleted){
-			pline("This staircase is partially collapsed.  It will be a tight squeeze.");
-			if (bigmonst(youracedata) && !(u.sealsActive&SEAL_ANDREALPHUS) && !amorphous(youracedata)) {
-				Your("body is too large to fit through.");
-				return 1;
-			}
-			if (!invent || (inv_weight() + weight_cap() > 600) 
-				|| (u.sealsActive&SEAL_ANDREALPHUS)
-				|| (uarmc && (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)) 
-				|| (uarm && uarm->greased) 
-				|| (uarmu && uarmu->greased) 
-			) {
-				You("find you can't fit you gear past the rubble in this staircase.");
-				return 1;
-			}
-			You("manage it, though.");
-		}
-		goto_level(&minetown_level,FALSE,FALSE,FALSE);
-		return 1;
-	}
 	at_ladder = (boolean) (levl[u.ux][u.uy].typ == LADDER);
 	prev_level(TRUE);
 	at_ladder = FALSE;
