@@ -1445,8 +1445,8 @@ int thrown;
 									mdat = mon->data; /* in case of a polymorph trap */
 									if (DEADMONSTER(mon)) already_killed = TRUE;
 								}
+								hittxt = TRUE;
 							}
-							hittxt = TRUE;
 						}
 					} else if(u.fightingForm == FFORM_JUYO && (!uarm || is_light_armor(uarm)) && 
 						rnd(50) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))
@@ -1479,19 +1479,44 @@ int thrown;
 						}
 					}
 				}
-				if ( (( (dieroll <= 2 || (Role_if(PM_BARBARIAN) && dieroll <= 4)) && 
-							  obj == uwep &&
-							  obj->oclass == WEAPON_CLASS &&
-							  (bimanual(obj,youracedata) ||
-								(Role_if(PM_SAMURAI) && obj->otyp == KATANA && !uarms) ||
-								(obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_BERITH)) &&
-							  ((wtype = uwep_skill_type()) != P_NONE &&
-							  P_SKILL(wtype) >= P_SKILLED)
-							 ) || arti_shattering(obj)
-							) &&
-							((monwep = MON_WEP(mon)) != 0 &&
-								!is_flimsy(monwep) &&
-								!obj_resists(monwep, 0, 100))
+				
+				if(uwep 
+					&& obj == uwep 
+					&& uwep->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD 
+				){
+					if((dieroll <= 2+P_SKILL(uwep_skill_type())) &&
+					((monwep = MON_WEP(mon)) != 0 &&
+						!is_flimsy(monwep) &&
+						!obj_resists(monwep, 0, 100))
+					){
+					}
+					if(rnd(20) < P_SKILL(weapon_type(uwep))){
+						if (canspotmon(mon))
+							pline("%s %s from your powerful blow!", Monnam(mon),
+							  makeplural(stagger(mon->data, "stagger")));
+						/* avoid migrating a dead monster */
+						if (mon->mhp > tmp) {
+							mhurtle(mon, sgn(mon->mx - u.ux), sgn(mon->my - u.uy), 1);
+							mon->mstun = TRUE;
+							mdat = mon->data; /* in case of a polymorph trap */
+							if (DEADMONSTER(mon)) already_killed = TRUE;
+						}
+					}
+				} else if ( (( (dieroll <= 2
+						|| (Role_if(PM_BARBARIAN) && dieroll <= 4)
+					) && 
+					  obj == uwep &&
+					  obj->oclass == WEAPON_CLASS &&
+					  (bimanual(obj,youracedata) ||
+						(Role_if(PM_SAMURAI) && obj->otyp == KATANA && !uarms) ||
+						(obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_BERITH)) &&
+					  ((wtype = uwep_skill_type()) != P_NONE &&
+					  P_SKILL(wtype) >= P_SKILLED)
+					 ) || arti_shattering(obj)
+					) &&
+					((monwep = MON_WEP(mon)) != 0 &&
+						!is_flimsy(monwep) &&
+						!obj_resists(monwep, 0, 100))
 				) {
 					/*
 					 * 5% chance of shattering defender's weapon when

@@ -1176,7 +1176,7 @@ static const struct def_skill Skill_S[] = {
     { P_LONG_SWORD, P_EXPERT },		{ P_TWO_HANDED_SWORD, P_EXPERT },
     { P_SCIMITAR, P_BASIC },		{ P_SABER, P_BASIC },
     { P_FLAIL, P_SKILLED },		{ P_QUARTERSTAFF, P_BASIC },
-    { P_POLEARMS, P_SKILLED },		{ P_SPEAR, P_BASIC },
+    { P_POLEARMS, P_EXPERT },		{ P_SPEAR, P_BASIC },
     { P_JAVELIN, P_BASIC },		{ P_LANCE, P_SKILLED },
     { P_BOW, P_EXPERT },		{ P_SHURIKEN, P_EXPERT },
     { P_DART, P_EXPERT },
@@ -2087,6 +2087,7 @@ u_init()
 		if(flags.female){
 			Samurai[S_WEAPON].trotyp = NAGINATA;
 			Samurai[S_SECOND].trotyp = KNIFE;
+			u.role_variant = NAGINATA;
 		}
 		ini_inv(Samurai);
 		ini_inv(Blindfold);

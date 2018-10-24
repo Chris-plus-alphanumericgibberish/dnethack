@@ -1851,6 +1851,8 @@ register struct obj *obj;
 		return (int)((obj->quan + 50L) / 100L);
 	else if (obj->otyp == HEAVY_IRON_BALL && obj->owt != 0)
 		return((int)(obj->owt));	/* kludge for "very" heavy iron ball */
+	else if (obj->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD && obj->owt != 0)
+		return((int)(obj->owt));	/* kludge for "very" heavy gdcb */
 	return(wt ? wt*(int)obj->quan : ((int)obj->quan + 1)>>1);
 }
 

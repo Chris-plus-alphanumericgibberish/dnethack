@@ -208,6 +208,8 @@ struct monst *mon;
 	   (holy_damage(mon))){
 		if(otmp->oartifact == ART_EXCALIBUR)
 			tmp += 7; //Quite holy
+		if(otmp->oartifact == ART_JINJA_NAGINATA)
+			tmp += 5; //Quite holy
 		else if(otmp->oartifact == ART_VAMPIRE_KILLER)
 			tmp += 7; //Quite holy
 		else if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && !otmp->lamplit)
@@ -1051,6 +1053,15 @@ lightsaber_form_sdie:
 	    }
 	}
 	
+	if(otmp && otmp->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD){
+	    int wt = (int)objects[NAGINATA].oc_weight;
+
+	    if ((int)otmp->owt > wt) {
+			wt = ((int)otmp->owt - wt)*3 / wt;
+			tmp += rnd(4 * wt);
+	    }
+	}
+	
 	if (Is_weapon || (otmp && (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM))) {
 		int multiplier;
 		if(is_lightsaber(otmp)) {
@@ -1147,6 +1158,8 @@ lightsaber_form_sdie:
 				dsize = 20;
 			
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
+			else if(otmp->oartifact == ART_JINJA_NAGINATA)
+				bonus += rnd(12); //Quite holy
 			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
 				bonus += d(3,7); //Quite holy
 			else if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && !otmp->lamplit)
@@ -1301,7 +1314,10 @@ lightsaber_form_sdie:
 				warnedptr = ptr;
 			}
 		} else {
-			if(is_bludgeon(otmp) || otmp->oartifact == ART_YORSHKA_S_SPEAR){
+			if(is_bludgeon(otmp) 
+				|| otmp->oartifact == ART_YORSHKA_S_SPEAR 
+				|| otmp->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD
+			){
 				weaponmask |= WHACK;
 			}
 			if(is_stabbing(otmp)){

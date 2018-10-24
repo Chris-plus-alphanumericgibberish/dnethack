@@ -162,12 +162,19 @@ hack_artifacts()
 	artilist[ART_CROWN_OF_THE_SAINT_KING].otyp = gcircletsa;
 	artilist[ART_HELM_OF_THE_DARK_LORD].otyp = find_vhelm();
 	
-	/* Remove Barbarian flag from the non-matching first gift */
+	/* Remove flag from the non-matching first gift */
 	if(Role_if(PM_BARBARIAN)){
 		if(u.role_variant == TWO_HANDED_SWORD){
 			artilist[ART_CLEAVER].role = NON_PM;
 		} else {
 			artilist[ART_ATLANTEAN_ROYAL_SWORD].role = NON_PM;
+		}
+	}
+	if(Role_if(PM_SAMURAI)){
+		if(u.role_variant == NAGINATA){
+			artilist[ART_KIKU_ICHIMONJI].role = NON_PM;
+		} else {
+			artilist[ART_KIKU_ICHIMONJI].role = NON_PM;
 		}
 	}
 	

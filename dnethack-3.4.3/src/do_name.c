@@ -584,6 +584,8 @@ const char *name;
 		
 		if(obj->oartifact == ART_WAR_MASK_OF_DURIN) obj->corpsenm = PM_DWARF;
 		
+		if(obj->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD) obj->owt = 150;
+		
 		if(obj->oartifact == ART_GARNET_ROD) obj->objsize = MZ_LARGE;
 		else if(obj->oartifact == ART_LIFEHUNT_SCYTHE) obj->objsize = MZ_LARGE;
 		else if(obj->oartifact == ART_PROFANED_GREATSCYTHE) obj->objsize = MZ_HUGE;

@@ -2161,6 +2161,12 @@ find_ac()
 				,0);
 		if(uwep->oartifact == ART_TOBIUME || uwep->oartifact == ART_MASAMUNE)
 			uac -= max(uwep->spe,0);
+		if(uwep->otyp == NAGINATA && !uarms){
+			if(uwep->oartifact == ART_JINJA_NAGINATA)
+				uac -= 2+uwep->spe;
+			else
+				uac -= 1+(uwep->spe)/2;
+		}
 	}
 	if(Race_if(PM_HALF_DRAGON)){
 		if(carrying_art(ART_DRAGON_S_HEART_STONE))
