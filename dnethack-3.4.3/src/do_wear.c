@@ -2209,9 +2209,9 @@ int base_udr()
 void
 find_dr()
 {
-	int udr, armdr=0;
+	int udr = 0, ubasedr, armdr=0;
 	
-	udr = base_udr();
+	ubasedr = base_udr();
 	//Note: Actual use is that only one armorslot applies at a time.  Average them for display purposes only
 	if (uarmc)	udr += arm_dr_bonus(uarmc);
 	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
@@ -2239,14 +2239,17 @@ find_dr()
 		else armdr += arm_dr_bonus(uarmu);
 	}
 	
-	if(u.ustdy && armdr>0){
-		armdr -= u.ustdy;
-		if(armdr<0)
-			armdr = 0;
-	}
 	armdr /= 5;
 	
 	udr += armdr;
+	
+	if(u.ustdy && udr>0){
+		udr -= u.ustdy;
+		if(udr<0)
+			udr = 0;
+	}
+	
+	udr += ubasedr;
 	
 	if (udr > 127) udr = 127;	/* u.uac is an schar */
 	if(udr != u.udr){
