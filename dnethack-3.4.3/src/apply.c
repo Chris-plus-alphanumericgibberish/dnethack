@@ -2919,13 +2919,13 @@ struct obj *hypo;
 			case POT_HEALING:
 				You_feel("better.");
 				healup(d(6 + 2 * bcsign(amp), 4),
-					   0, !!amp->blessed, !amp->cursed);
+					   (!amp->cursed ? 1 : 0), !!amp->blessed, !amp->cursed);
 				exercise(A_CON, TRUE);
 			break;
 			case POT_EXTRA_HEALING:
 				You_feel("much better.");
 				healup(d(6 + 2 * bcsign(amp), 8),
-					   0, !amp->cursed, TRUE);
+					   (amp->blessed ? 5 : !amp->cursed ? 2 : 0), !amp->cursed, TRUE);
 				(void) make_hallucinated(0L,TRUE,0L);
 				exercise(A_CON, TRUE);
 				exercise(A_STR, TRUE);
@@ -2955,7 +2955,7 @@ struct obj *hypo;
 			break;
 			case POT_FULL_HEALING:
 				You_feel("completely healed.");
-				healup(400, 0, !amp->cursed, TRUE);
+				healup(400, (4+4*bcsign(amp)), !amp->cursed, TRUE);
 				/* Restore one lost level if blessed */
 				if (amp->blessed && u.ulevel < u.ulevelmax) {
 					///* when multiple levels have been lost, drinking
