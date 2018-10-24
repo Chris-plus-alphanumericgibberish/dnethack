@@ -3770,6 +3770,7 @@ static const struct func_tab cmdlist[] = {
 	{'A', FALSE, doddoremarm},
 	{M('a'), TRUE, doorganize},
 /*	'b', 'B' : go sw */
+	{'B', FALSE, domonability},
 	{'c', FALSE, doclose},
 	{'C', TRUE, do_mname},
 	{M('c'), TRUE, dotalk},
