@@ -832,7 +832,7 @@ struct monst *mon;
 		base += 1;
 	}
 	if(is_true_dragon(mon->data)){
-		base += 4;
+		base += 5;
 	}
 	if(mon->mfaction == ZOMBIFIED) base += 2;
 	if(mon->mfaction == CRYSTALFIED) base += 8;
