@@ -2290,6 +2290,8 @@ struct monst *magr;
 		armdr += arm_dr_bonus(uarm);
 	
 	//Note: Bias this somehow?
+	if(magr && magr->data == &mons[PM_XAN])
+		goto boot_hit;
 	switch(rn2(5)){
 		case 0:
 			//Note: upper body (shirt plus torso armor)
@@ -2323,6 +2325,7 @@ struct monst *magr;
 			}
 		break;
 		case 3:
+boot_hit:
 			if (uarmf){
 				armdr += arm_dr_bonus(uarmf);
 				if(magr && is_harmonium_armor(uarmf)){
