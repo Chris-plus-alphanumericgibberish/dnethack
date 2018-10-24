@@ -811,6 +811,9 @@ boolean ranged;
 {
 	if(mtmp2->moccupation) return FALSE;
 	
+	if(mtmp->mtame && mtmp2->mpeaceful && !u.uevent.uaxus_foe && mtmp2->data == &mons[PM_AXUS])
+		return FALSE;
+	
     return !((!ranged &&
 #ifdef BARD
                 (int)mtmp2->m_lev >= (int)mtmp->m_lev+2 + (mtmp->encouraged)*2 &&
