@@ -4028,7 +4028,7 @@ int perturn;
 	char buf[BUFSZ], qbuf[QBUFSZ];
 	boolean pay;
 	
-	Sprintf(qbuf, "How many turns?");
+	Sprintf(qbuf, "How many turns? (80 turns = 1 food ration)");
 	getlin(qbuf, buf);
 	(void)mungspaces(buf);
 	if (buf[0] == '\033' || buf[0] == '\0') ret = 0;
