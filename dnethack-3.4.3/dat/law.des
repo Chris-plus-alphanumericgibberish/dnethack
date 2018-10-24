@@ -1305,25 +1305,25 @@ MAZEWALK:(04,10),east
 
 DRAWBRIDGE:(67,11),east,open
 
-MONSTER:'@',"soldier",(69,02)
+MONSTER:'@',"soldier",(69,02),hostile
 
-MONSTER:'@',"sergeant",(69,06)
-MONSTER:'@',"soldier",(69,06)
-MONSTER:'@',"soldier",(69,06)
-MONSTER:'@',"soldier",(69,06)
-MONSTER:'@',"soldier",(69,06)
-MONSTER:'@',"soldier",(69,06)
-MONSTER:'@',"soldier",(69,06)
+MONSTER:'@',"sergeant",(69,06),hostile
+MONSTER:'@',"soldier",(69,06),hostile
+MONSTER:'@',"soldier",(69,06),hostile
+MONSTER:'@',"soldier",(69,06),hostile
+MONSTER:'@',"soldier",(69,06),hostile
+MONSTER:'@',"soldier",(69,06),hostile
+MONSTER:'@',"soldier",(69,06),hostile
 
-MONSTER:'@',"sergeant",(69,16)
-MONSTER:'@',"soldier",(69,16)
-MONSTER:'@',"soldier",(69,16)
-MONSTER:'@',"soldier",(69,16)
-MONSTER:'@',"soldier",(69,16)
-MONSTER:'@',"soldier",(69,16)
-MONSTER:'@',"soldier",(69,16)
+MONSTER:'@',"sergeant",(69,16),hostile
+MONSTER:'@',"soldier",(69,16),hostile
+MONSTER:'@',"soldier",(69,16),hostile
+MONSTER:'@',"soldier",(69,16),hostile
+MONSTER:'@',"soldier",(69,16),hostile
+MONSTER:'@',"soldier",(69,16),hostile
+MONSTER:'@',"soldier",(69,16),hostile
 
-MONSTER:'@',"soldier",(69,20)
+MONSTER:'@',"soldier",(69,20),hostile
 
 ##Arcadian Fortress
 MAZE: "arcward",' '
