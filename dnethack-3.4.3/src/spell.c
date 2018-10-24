@@ -622,7 +622,7 @@ struct obj *spellbook;
 		}
 		if((spellbook->oward) && RoSbook == STUDY_WARD){
 			if( (u.wardsknown & spellbook->oward) ){
-				pline("The spellbook is warded with a %s.", wardDecode[decode_wardID(book->oward)]);
+				pline("The spellbook is warded with a %s.", wardDecode[decode_wardID(spellbook->oward)]);
 				You("are already familiar with this ward.");
 				delay = 0;
 				return 0;
