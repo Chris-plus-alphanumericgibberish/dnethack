@@ -2381,6 +2381,7 @@ defaultvalue:
 		const char *fmt;
 		char *whom = mon_nam(mon);
 		char silverobjbuf[BUFSZ];
+		int justeden = 0;
 
 		if (canspotmon(mon)) {
 		    if (barehand_silver_rings == 1)
@@ -2399,21 +2400,21 @@ defaultvalue:
 					"" : "silver ",
 				saved_oname, vtense(saved_oname, "sear"));
 		    	fmt = silverobjbuf;
-		    } else if(eden_silver) fmt = "Your %ssilver sears %s";
-			else fmt = "The %ssilver sears %s!";
+		    } else if(eden_silver){
+				fmt = "Your silver skin sears %s";
+				justeden = 1;
+			} else fmt = "The %ssilver sears %s!";
 		} else {
 		    *whom = highc(*whom);	/* "it" -> "It" */
 		    fmt = "%s is seared!";
-			if (!noncorporeal(mdat))
-				whom = strcat(s_suffix(whom), " flesh");
-			pline(fmt, whom);
 		}
 		/* note: s_suffix returns a modifiable buffer */
 		if (!noncorporeal(mdat))
 		    whom = strcat(s_suffix(whom), " flesh");
-		if(canspotmon(mon)) 
-			pline(fmt, eden_silver ? "silver skin and " : "", whom);
-		else pline(fmt, whom);
+		if(canspotmon(mon)){
+			if(justeden) pline(fmt, whom);
+			else pline(fmt, (eden_silver) ? "silver skin and " : "", whom);
+		} else pline(fmt, whom);
 	}
 	if (ironmsg) {
 		const char *fmt;
@@ -2436,9 +2437,6 @@ defaultvalue:
 		} else {
 		    *whom = highc(*whom);	/* "it" -> "It" */
 		    fmt = "%s is seared!";
-			if (!noncorporeal(mdat))
-				whom = strcat(s_suffix(whom), " flesh");
-			pline(fmt, whom);
 		}
 		/* note: s_suffix returns a modifiable buffer */
 		if (!noncorporeal(mdat))
@@ -2467,9 +2465,6 @@ defaultvalue:
 		} else {
 		    *whom = highc(*whom);	/* "it" -> "It" */
 		    fmt = "%s is seared!";
-			if (!noncorporeal(mdat))
-				whom = strcat(s_suffix(whom), " flesh");
-			pline(fmt, whom);
 		}
 		/* note: s_suffix returns a modifiable buffer */
 		if (!noncorporeal(mdat))
