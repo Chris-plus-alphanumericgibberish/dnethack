@@ -738,7 +738,7 @@ const char * haluWard[] =  {
 		"a circle surrounding a triangle of dots and another of triangles",
 	
 	"a silhouette of a bat", /* Batman */
-		"an 'S' in a diamond", /* Superman (fine, the House of El) */
+		"an 'S' in a diamond", /* Superman (the House of El) */
 	
 	"a symbol of pain", /* DnD */
 	/* Planescape */
