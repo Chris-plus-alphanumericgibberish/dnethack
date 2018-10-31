@@ -2721,6 +2721,9 @@ demonpet()
 	i = (!is_demon(youracedata) || !rn2(6)) 
 	     ? ndemon(u.ualign.type) : NON_PM;
 	pm = i != NON_PM ? &mons[i] : youracedata;
+	if(pm == &mons[PM_ANCIENT_OF_ICE] || pm == &mons[PM_ANCIENT_OF_DEATH]) {
+	    pm = rn2(4) ? &mons[PM_METAMORPHOSED_NUPPERIBO] : &mons[PM_ANCIENT_NUPPERIBO];
+	}
 	if ((dtmp = makemon(pm, u.ux, u.uy, NO_MM_FLAGS)) != 0)
 	    (void)tamedog(dtmp, (struct obj *)0);
 	exercise(A_WIS, TRUE);
