@@ -202,7 +202,7 @@ priestini(lvl, sroom, sx, sy, sanctum)
 d_level	*lvl;
 struct mkroom *sroom;
 int sx, sy;
-boolean sanctum;   /* is it the seat of the high priest? */
+int sanctum;   /* is it the seat of the high priest? */
 {
 	struct monst *priest;
 	struct obj *otmp;
@@ -560,7 +560,7 @@ register struct monst *priest;
 			summon_god_minion(align_gname_full(EPRI(priest)->shralign), EPRI(priest)->shralign, FALSE);
 			makemon(&mons[PM_DAAT_SEPHIRAH], u.ux, u.uy, MM_ADJACENTOK);
 			makemon(&mons[PM_DAAT_SEPHIRAH], u.ux, u.uy, MM_ADJACENTOK);
-		} else if(seenSeals == 6){
+		} else if(seenSeals >= 6){
 			coord mm;
 			verbalize("Foul heretic! The Lord's servants shall humble you!");
 			priest->mpeaceful=0;

@@ -480,7 +480,7 @@ prisoner_speaks(mtmp)
 	    /* Awaken the prisoner */
 	    if (canseemon(mtmp))
 	    	pline("%s speaks:", Monnam(mtmp));
-	    domonnoise(mtmp);
+	    domonnoise(mtmp, FALSE);
 	    mtmp->mstrategy &= ~STRAT_WAITMASK;
 	}
 	return;

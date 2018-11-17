@@ -679,6 +679,8 @@ litsaber(obj)
 {
 	if(obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
 		xchar x, y;
+		if(obj->where == OBJ_CONTAINED || obj->where == OBJ_MAGIC_CHEST)
+			return FALSE;
 		get_obj_location(obj, &x, &y, 0);
 		if(x == 0 && y == 0) return FALSE;
 		return !isdark(x, y);

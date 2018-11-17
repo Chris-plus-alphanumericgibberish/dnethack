@@ -1061,7 +1061,7 @@ struct obj *obj;
 void
 use_bell(optr, spiritseal)
 struct obj **optr;
-boolean spiritseal;
+int spiritseal;
 {
 	register struct obj *obj = *optr;
 	struct monst *mtmp;
@@ -3988,7 +3988,7 @@ do_break_wand(obj)
     case WAN_MAGIC_MISSILE:
     wanexpl:
 	explode(u.ux, u.uy,
-		(obj->otyp - WAN_MAGIC_MISSILE), dmg, WAND_CLASS, expltype);
+		(obj->otyp - WAN_MAGIC_MISSILE), dmg, WAND_CLASS, expltype, 1);
 	makeknown(obj->otyp);	/* explode described the effect */
 	/* make magic trap if you broke a wand of magic missile */
 	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
@@ -4011,6 +4011,7 @@ do_break_wand(obj)
 	/* we want this before the explosion instead of at the very end */
 	pline("A wall of force smashes down around you!");
 	dmg = d(1 + obj->spe,6);	/* normally 2d12 */
+	break;
     case WAN_TELEPORTATION:
 		/* WAC make tele trap if you broke a wand of teleport */
 		/* But make sure the spot is valid! */
@@ -4031,7 +4032,8 @@ do_break_wand(obj)
 			}
 		}
 	affects_objects = TRUE;
-    case WAN_POLYMORPH:
+	break;
+	case WAN_POLYMORPH:
 	/* make poly trap if you broke a wand of polymorph */
 	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
 	    !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
@@ -4049,7 +4051,8 @@ do_break_wand(obj)
 		    }
 	}
 	affects_objects = TRUE;
-    case WAN_SLEEP:
+	break;
+	case WAN_SLEEP:
 	/* make sleeping gas trap if you broke a wand of sleep */
 	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
 	    !On_stairs(u.ux, u.uy) && (!IS_FURNITURE(levl[u.ux][u.uy].typ) &&
@@ -4066,6 +4069,7 @@ do_break_wand(obj)
 			    }
 		    }
 	}
+	break;
     case WAN_CANCELLATION:
 	/* make anti-magic trap if you broke a wand of cancellation */
 	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
@@ -4084,6 +4088,7 @@ do_break_wand(obj)
 		    }
 	}
 	affects_objects = TRUE;
+	break;
     case WAN_UNDEAD_TURNING:
 	affects_objects = TRUE;
 	break;
@@ -4092,7 +4097,7 @@ do_break_wand(obj)
     }
 
     /* magical explosion and its visual effect occur before specific effects */
-    explode(obj->ox, obj->oy, 0, rnd(dmg), WAND_CLASS, EXPL_MAGICAL);
+    explode(obj->ox, obj->oy, 0, rnd(dmg), WAND_CLASS, EXPL_MAGICAL, 1);
 
     /* this makes it hit us last, so that we can see the action first */
     for (i = 0; i <= 8; i++) {
@@ -5101,23 +5106,6 @@ doapply()
 	case BAG_OF_TRICKS:
 		bagotricks(obj);
 		break;
-/*	case DISTRESSED_PRINCESS:{
-		struct obj *item;
-		struct monst *mon = 0;
-		mon=makemon(&mons[PM_PRINCESS], u.ux, u.uy, MM_ADJACENTOK);
-		if (obj->owornmask) remove_worn_item(obj, TRUE);
-		if (obj->onamelth) mon = christen_monst(mon, ONAME(obj));
-		while ((item = obj->cobj) != 0) {
-		    obj_extract_self(item);
-		    (void) add_to_minv(mon, item);
-		}
-		m_dowear(mon, TRUE);
-		init_mon_wield_item(mon);
-		obj_extract_self(obj);
-		dealloc_obj(obj);
-							 }
-	break;
-*/
 	case CAN_OF_GREASE:
 		use_grease(obj);
 		break;
@@ -5192,7 +5180,7 @@ doapply()
 	break;
 	case BELL:
 	case BELL_OF_OPENING:
-		use_bell(&obj, FALSE);
+		use_bell(&obj, TRUE);
 		break;
 	case CANDELABRUM_OF_INVOCATION:
 		use_candelabrum(obj);

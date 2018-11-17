@@ -317,9 +317,8 @@ found_ward:
 
 	/* can't write if we don't know it - unless we're lucky */
 	if(new_obj->otyp == SPE_SECRETS || new_obj->otyp == SPE_LIGHTNING_BOLT || 
-		new_obj->otyp == SPE_POISON_SPRAY || new_obj->otyp == SPE_ACID_BLAST ||
-		new_obj->otyp == SPE_LIGHTNING_STORM ||	new_obj->otyp == SPE_FIRE_STORM ||
-		new_obj->otyp == SPE_FROST_STORM ||	new_obj->otyp == SPE_ACID_STORM ||
+		new_obj->otyp == SPE_POISON_SPRAY ||
+		new_obj->otyp == SPE_LIGHTNING_STORM ||
 	  (!(objects[new_obj->otyp].oc_name_known) &&
 	   !(objects[new_obj->otyp].oc_uname) &&
 	   (rnl(100) >= (Role_if(PM_WIZARD) ? 33 : 7)))) {

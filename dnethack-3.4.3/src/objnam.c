@@ -2365,7 +2365,8 @@ const char *oldstr;
 			    !BSTRCMP(bp, p-6, "lenses") ||
 			    !BSTRCMP(bp, p-5, "shoes") ||
 				!BSTRCMPI(bp, p-13, "versus curses") ||
-			    !BSTRCMP(bp, p-6, "scales"))
+			    !BSTRCMP(bp, p-6, "scales") ||
+				!BSTRCMPI(bp, p-10, "Lost Names")) /* book */
 				return bp;
 
 		} else if (!BSTRCMPI(bp, p-5, "boots") ||
@@ -2377,6 +2378,10 @@ const char *oldstr;
 			   !BSTRCMPI(bp, p-14, "shape changers") ||
 			   !BSTRCMPI(bp, p-15, "detect monsters") ||
 			   !BSTRCMPI(bp, p-5, "Chaos") ||
+			   !BSTRCMPI(bp, p-13, "Wand of Orcus") || /* wand */
+			   !BSTRCMPI(bp, p-12, "Gear-spirits") || /* crossbow*/
+			   !BSTRCMPI(bp, p-10, "Rod of Dis") || /* mace */
+			   !BSTRCMPI(bp, p-6, "Caress") || /* whip */
 			   !BSTRCMPI(bp, p-7, "Proteus") || /* chest */
 			   !BSTRCMPI(bp, p-11, "Aesculapius") || /* staff */
 			   !BSTRCMPI(bp, p-7, "Orpheus") || /* lyre */
@@ -2388,8 +2393,7 @@ const char *oldstr;
 			   !BSTRCMPI(bp, p-14, "Dwarvish Lords") || /* axe */
 			   !BSTRCMPI(bp, p-12, "Elvish Lords") || /* mace */
 			   !BSTRCMPI(bp, p-11, "Seven Parts") || /* spear */
-			   !BSTRCMPI(bp, p-10, "Lost Names") || /* book */
-			   !BSTRCMPI(bp, p-10, "Infinite Spells") || /* book */
+			   !BSTRCMPI(bp, p-15, "Infinite Spells") || /* book */
 			   !BSTRCMPI(bp, p-10, "eucalyptus") ||
 #ifdef WIZARD
 			   !BSTRCMPI(bp, p-9, "iron bars") ||
@@ -3032,8 +3036,33 @@ boolean from_user;
 			mat = OBSIDIAN_MT;
 		} else if (!strncmpi(bp, "woolen ", l=7) || !strncmpi(bp, "wool-lined ", l=11)
 			) {
-			oproperties = OPROP_WOOL;
-		} else break;
+			oproperties |= OPROP_WOOL;
+		} else if (!strncmpi(bp, "flaming ", l=8)
+			) {
+			oproperties |= OPROP_FIREW;
+		} else if (!strncmpi(bp, "freezing ", l=9)
+			) {
+			oproperties |= OPROP_COLDW;
+		} else if (!strncmpi(bp, "shocking ", l=9)
+			) {
+			oproperties |= OPROP_ELECW;
+		} else if (!strncmpi(bp, "sizzling ", l=9)
+			) {
+			oproperties |= OPROP_ACIDW;
+		} else if (!strncmpi(bp, "sparkling ", l=10) && strncmpi(bp, "sparkling potion", 16)
+			) {
+			oproperties |= OPROP_MAGCW;
+		} else if (!strncmpi(bp, "anarchic ", l=9)
+			) {
+			oproperties |= OPROP_ANARW;
+		} else if (!strncmpi(bp, "concordant ", l=11)
+			) {
+			oproperties |= OPROP_CONCW;
+		} else if (!strncmpi(bp, "axiomatic ", l=9)
+			) {
+			oproperties |= OPROP_AXIOW;
+		} else
+			break;
 		bp += l;
 	}
 	if(!cnt) cnt = 1;		/* %% what with "gems" etc. ? */
@@ -3157,6 +3186,7 @@ boolean from_user;
 	if (strncmpi(bp, "wizard lock", 11)) /* not the "wizard" monster! */
 	if (strncmpi(bp, "vampire killer", 14)) /* not the "vampire" monster! */
 	if (strncmpi(bp, "ninja-to", 8)) /* not the "ninja" rank */
+	if (strncmpi(bp, "rogue gear-spirits", 18)) /* not the "rogue" monster */
 	if (strncmpi(bp, "master key", 10)) /* not the "master" rank */
 	if (strncmpi(bp, "scroll of stinking cloud", 10)) /* not the "stinking cloud" monster */
 	if (strncmpi(bp, "rod of lordly might", 19)) /* not the "lord" rank */
@@ -3187,7 +3217,7 @@ boolean from_user;
 			Strcpy(bp, sng);
 		}
 	}
-
+	
 	/* Alternate spellings (pick-ax, silver sabre, &c) */
     {
 	struct alt_spellings *as = spellings;
@@ -3286,7 +3316,8 @@ boolean from_user;
 	   strncmpi(bp, "black dress", 11) && 
 	   strncmpi(bp, "noble's dress", 13) &&
 	   strncmpi(bp, "sceptre of lolth", 16) && 
-	   strncmpi(bp, "atma weapon", 11)
+	   strncmpi(bp, "atma weapon", 11) &&
+	   strncmpi(bp, "wand of orcus", 13)
 	)
 	for (i = 0; i < (int)(sizeof wrpsym); i++) {
 		register int j = strlen(wrp[i]);
@@ -3708,11 +3739,7 @@ typfnd:
 
 	if((typ == SPE_LIGHTNING_BOLT ||
 		typ == SPE_POISON_SPRAY ||
-		typ == SPE_ACID_BLAST ||
 		typ == SPE_LIGHTNING_STORM ||
-		typ == SPE_FIRE_STORM ||
-		typ == SPE_FROST_STORM ||
-		typ == SPE_ACID_STORM ||
 		typ == SCR_CONSECRATION ||
 		(typ >= HANDGUN && typ <= HEAVY_GUN) ||
 		((
@@ -4051,10 +4078,11 @@ typfnd:
 		otmp->odiluted = 1;
 
 	/* set material */
-	if(mat)
-		if(wizard)
+	if(mat){
+		if(wizard) {
 			otmp->obj_material = mat;
-		else
+		}
+		else {
 			if(otmp->oclass == WEAPON_CLASS && !otmp->oartifact){
 				if(		// flexible materials
 						((otmp->obj_material == CLOTH
@@ -4076,9 +4104,12 @@ typfnd:
 						|| mat == OBSIDIAN_MT
 						|| mat == MINERAL)
 						)
-					)
+					){
 					set_material(otmp, mat);
+				}
 			}
+		}
+	}
 	
 	/* set object properties */
 	if (oproperties && wizard) // wishing for object properties is wizard-mode only
@@ -4086,18 +4117,25 @@ typfnd:
 		if (wizard)		// wizard mode will give you what you ask for, even if it breaks things
 			otmp->oproperties = oproperties;
 		else
-			if (otmp->oclass == ARMOR_CLASS)
+		{	// limit granted properties to what is realistic for the item class
+			switch (otmp->oclass)
 			{
-				switch (oproperties)
-				{
-				case OPROP_WOOL:
-					otmp->oproperties = oproperties;
+			case TOOL_CLASS:
+				if (is_weptool(otmp))
+					;	// fall through to weapon_class
+				else
 					break;
-				default:
-					otmp->oproperties = 0L;
-					break;
-				}
+			case WEAPON_CLASS:
+				oproperties &= (OPROP_FIREW | OPROP_COLDW | OPROP_ELECW | OPROP_ACIDW | OPROP_MAGCW | OPROP_ANARW | OPROP_CONCW | OPROP_AXIOW | OPROP_LESSW);
+				break;
+			case ARMOR_CLASS:
+				oproperties &= (OPROP_FIRE | OPROP_COLD | OPROP_ELEC | OPROP_ACID | OPROP_MAGC | OPROP_ANAR | OPROP_CONC | OPROP_AXIO);
+				break;
+			default:
+				oproperties = 0;
 			}
+			otmp->oproperties = oproperties;
+		}
 	}
 		
 

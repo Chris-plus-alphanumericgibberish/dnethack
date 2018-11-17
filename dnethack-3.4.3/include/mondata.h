@@ -68,7 +68,7 @@
 #define is_swimmer(ptr)		(((ptr)->mflagsm & MM_SWIM) != 0L)
 #define is_suicidal(ptr)	(is_fern_spore(ptr) || ptr == &mons[PM_FREEZING_SPHERE] || ptr == &mons[PM_FLAMING_SPHERE] || ptr == &mons[PM_SHOCKING_SPHERE])
 #define breathless(ptr)		(((ptr)->mflagsm & MM_BREATHLESS) != 0L)
-#define breathless_mon(mon)		(breathless((mon)->data) || is_derived_undead_mon(mon))
+#define breathless_mon(mon)		(breathless((mon)->data) || is_derived_undead_mon(mon) || m_wearing_white_DSA(mon))
 #define amphibious_mon(mon)		(m_wearing_white_DSA(mon) || amphibious((mon)->data))
 #define amphibious(ptr)		(((ptr)->mflagsm & (MM_AMPHIBIOUS | MM_BREATHLESS)) != 0L)
 #define passes_walls(ptr)	(((ptr)->mflagsm & MM_WALLWALK) != 0L)
@@ -80,6 +80,7 @@
 #define hides_under(ptr)	(((ptr)->mflagst & MT_CONCEAL) != 0L)
 #define is_hider(ptr)		(((ptr)->mflagst & MT_HIDE) != 0L)
 #define is_backstabber(ptr)		(((ptr)->mflagsg & MG_BACKSTAB) != 0L)
+#define is_commander(ptr)	(((ptr)->mflagsg & MG_COMMANDER) != 0L)
 /*#define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L) when did this get duplicated???*/
 #define haseyes(ptr)		(((ptr)->mflagsb & MB_NOEYES) == 0L)
 #define goodsmeller(ptr)	(((ptr)->mflagsv & MV_SCENT) != 0L)
@@ -186,6 +187,9 @@
 #define is_armed(ptr)		(attacktype(ptr, AT_WEAP) || attacktype(ptr, AT_XWEP) || attacktype(ptr, AT_MARI) || attacktype(ptr, AT_DEVA))
 #define crpsdanger(ptr)		(acidic(ptr) || poisonous(ptr) ||\
 							 freezing(ptr) || burning(ptr))
+#define hideablewidegaze(ptr)	(ptr == &mons[PM_MEDUSA] || ptr == &mons[PM_GREAT_CTHULHU] || ptr == &mons[PM_DAGON] ||\
+									ptr == &mons[PM_PALE_NIGHT] || ptr == &mons[PM_OBOX_OB] || ptr == &mons[PM_UVUUDAUM])
+#define controlledwidegaze(ptr)		(is_angel(ptr) || is_auton(ptr))
 #define acidic(ptr)			(((ptr)->mflagsb & MB_ACID) != 0L)
 #define poisonous(ptr)		(((ptr)->mflagsb & MB_POIS) != 0L)
 #define freezing(ptr)		(((ptr)->mflagsb & MB_CHILL) != 0L)

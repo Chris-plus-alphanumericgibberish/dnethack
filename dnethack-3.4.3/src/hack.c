@@ -1789,7 +1789,7 @@ stillinwater:;
 	            // pline_The("water burns your flesh!");
 		    // losehp(dam,"contact with water",KILLED_BY);
 		}
-		if (verysmall(youmonst.data)) water_damage(invent, FALSE,FALSE,FALSE,FALSE);
+		if (verysmall(youmonst.data)) water_damage(invent, FALSE,FALSE,FALSE,(struct monst *) 0);
 #ifdef STEED
 		if (!u.usteed)
 #endif

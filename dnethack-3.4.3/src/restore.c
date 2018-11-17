@@ -749,12 +749,10 @@ void
 trickery(reason)
 char *reason;
 {
-	int *c = (int *)0;
 	pline("Strange, this map is not as I remember it.");
 	pline("Somebody is trying some trickery here...");
 	pline("This game is void.");
 	killer = reason;
-	*c = 1;
 	done(TRICKED);
 }
 

@@ -635,13 +635,17 @@ boolean digest_meal;
 			}
 		}
 	}
-	if(mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
-	if(!nonliving_mon(mon)){
-		if (mon->mhp < mon->mhpmax){
-			//recover 1/30th hp per turn:
-			mon->mhp += (mon->m_lev + mon->mcon)/30;
-			//Now deal with any remainder
-			if(((moves)*((mon->m_lev + mon->mcon)%30))/30 > ((moves-1)*((mon->m_lev + mon->mcon)%30))/30) mon->mhp += 1;
+	if(mon->data == &mons[PM_UVUUDAUM]){
+		mon->mhp += 25; //Fast healing
+	} else {
+		if(mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
+		if(!nonliving_mon(mon)){
+			if (mon->mhp < mon->mhpmax){
+				//recover 1/30th hp per turn:
+				mon->mhp += (mon->m_lev + mon->mcon)/30;
+				//Now deal with any remainder
+				if(((moves)*((mon->m_lev + mon->mcon)%30))/30 > ((moves-1)*((mon->m_lev + mon->mcon)%30))/30) mon->mhp += 1;
+			}
 		}
 	}
 	if (mon->mhp > mon->mhpmax) mon->mhp = mon->mhpmax;
@@ -961,6 +965,9 @@ register struct monst *mtmp;
 			nearby=TRUE;
 		}
 	}
+
+	if (is_commander(mdat) && mfind_target(mtmp, FALSE))
+		m_command(mtmp);
 	
 	if ((mdat->msound == MS_SHRIEK && !um_dist(mtmp->mx, mtmp->my, 1)) || 
 		(mdat->msound == MS_SHOG && !rn2(8)) ||
@@ -981,16 +988,15 @@ register struct monst *mtmp;
 			&& clear_path(mtmp->mx, mtmp->my, gazemon->mx, gazemon->my)
 		){
 			int i;
-			if(gazemon->data == &mons[PM_MEDUSA] && (resists_ston(mtmp) || 
-				((rn2(3) < magic_negation(gazemon))))
+			if(gazemon->data == &mons[PM_MEDUSA] && resists_ston(mtmp)
 			) continue;
 			
-			if(gazemon->data == &mons[PM_UVUUDAUM] &&
+			if (hideablewidegaze(gazemon->data) &&
 				(rn2(3) < magic_negation(gazemon))
 			) continue;
 			
-			if((is_angel(gazemon->data) || is_auton(gazemon->data))
-			&& (gazemon->mpeaceful == mtmp->mpeaceful || gazemon->mtame == mtmp->mtame)
+			if (controlledwidegaze(gazemon->data)
+				&& !mm_aggression(gazemon, mtmp)
 			) continue;
 			
 			for(i = 0; i < NATTK; i++)
@@ -1000,10 +1006,11 @@ register struct monst *mtmp;
 					) && (dmgtype_fromattack(mtmp->data, AD_CONF, AT_WDGZ)
 						|| dmgtype_fromattack(mtmp->data, AD_WISD, AT_WDGZ)
 					)) continue;
+					/*
 					if(canseemon(mtmp) && canseemon(gazemon)){
 						Sprintf(buf,"%s can see", Monnam(mtmp));
 						pline("%s %s...", buf, mon_nam(gazemon));
-					}
+					}*/
 					(void) gazemm(gazemon, mtmp, &gazemon->data->mattk[i]);
 					break;
 				 }
@@ -1188,9 +1195,25 @@ register struct monst *mtmp;
 				dmg = (mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_LUGRIBOSSK] || mdat == &mons[PM_MAANZECORIAN]) ? d(5,15) : (mdat == &mons[PM_ELDER_BRAIN]) ? d(3,15) : rnd(15);
 				if (Half_spell_damage) dmg = (dmg+1) / 2;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
-				if(mdat == &mons[PM_ELDER_BRAIN]) u.ustdy = max(u.ustdy,dmg/3);
 				if(mdat == &mons[PM_SEMBLANCE]) make_hallucinated(HHallucination + dmg, FALSE, 0L);
 				if(mdat == &mons[PM_GREAT_CTHULHU]) make_stunned(HStun + dmg*10, TRUE);
+				if (mdat == &mons[PM_ELDER_BRAIN]) {
+					for (m2 = fmon; m2; m2 = nmon) {
+						nmon = m2->nmon;
+						if (!DEADMONSTER(m2) && (m2->mpeaceful == mtmp->mpeaceful) && telepathic(m2->data) && (m2!=mtmp))
+						{
+							m2->msleeping = 0;
+							if (!m2->mcanmove && !rn2(5)) {
+								m2->mfrozen = 0;
+								if (m2->data != &mons[PM_GIANT_TURTLE] || !(m2->mflee))
+									m2->mcanmove = 1;
+							}
+							m2->mux = u.ux;
+							m2->muy = u.uy;
+							m2->encouraged = max(m2->encouraged, dmg / 3);
+						}
+					}
+				}
 			}
 		}
 		for(m2=fmon; m2; m2 = nmon) {

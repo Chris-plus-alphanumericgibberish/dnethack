@@ -33,9 +33,9 @@ create_explode_region()
 }
 
 STATIC_DCL void
-add_location_to_explode_region(reg, x, y)
-ExplodeRegion *reg;
+add_location_to_explode_region(x, y, reg)
 xchar x, y;
+ExplodeRegion *reg;
 {
     int i;
     ExplodeLocation *new;
@@ -132,45 +132,7 @@ STATIC_DCL void FDECL(do_explode,
  * these disadvantages....
  */
 void
-explode(x, y, type, dam, olet, expltype)
-int x, y;
-int type; /* the same as in zap.c */
-int dam;
-char olet;
-int expltype;
-{
-    int i, j;
-    ExplodeRegion *area;
-    area = create_explode_region();
-    for(i = 0; i < 3; i++)
-	for(j = 0; j < 3; j++)
-	    if (isok(i+x-1,j+y-1))
-		add_location_to_explode_region(area, i+x-1, j+y-1);
-    do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
-    free_explode_region(area);
-}
-
-void
-explode2(x, y, type, dam, olet, expltype)
-int x, y;
-int type; /* the same as in zap.c */
-int dam;
-char olet;
-int expltype;
-{
-    int i, j;
-    ExplodeRegion *area;
-    area = create_explode_region();
-    for(i = 0; i < 5; i++)
-	for(j = 0; j < 5; j++)
-	    if (isok(i+x-2,j+y-2) && (ZAP_POS((&levl[i+x-2][j+y-2])->typ) || (i<4 && i>0 && j<4 && j>0)))
-		add_location_to_explode_region(area, i+x-2, j+y-2);
-    do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
-    free_explode_region(area);
-}
-
-void
-big_explode(x, y, type, dam, olet, expltype, radius)
+explode(x, y, type, dam, olet, expltype, radius)
 int x, y;
 int type; /* the same as in zap.c */
 int dam;
@@ -178,15 +140,63 @@ char olet;
 int expltype;
 int radius;
 {
-    int i, j;
-    ExplodeRegion *area;
-    area = create_explode_region();
-    for(i = 0; i < radius*2+1; i++)
-	for(j = 0; j < radius*2+1; j++)
-	    if (isok(i+x-radius,j+y-radius) && ZAP_POS((&levl[i+x-radius][j+y-radius])->typ))
-		add_location_to_explode_region(area, i+x-radius, j+y-radius);
-    do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
-    free_explode_region(area);
+	ExplodeRegion *area;
+	area = create_explode_region();
+	if (radius == 0)
+	{
+		if (isok(x, y))
+			add_location_to_explode_region(x, y, area);
+	}
+	else if (radius == 1)
+	{	// can use simple method of creating explosions
+		int i, j;
+		for (i = -1; i <= 1; i++)
+		for (j = -1; j <= 1; j++)
+			if (isok(x + i, y + j))
+				add_location_to_explode_region(x + i, y + j, area);
+	}
+	else
+	{	// use circles
+		do_clear_area(x, y, radius, add_location_to_explode_region, (genericptr_t)(area));
+	}
+
+	do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
+	free_explode_region(area);
+}
+
+void
+splash(x, y, dx, dy, type, dam, olet, expltype)
+int x, y, dx, dy;
+int type;
+int dam;
+char olet;
+int expltype;
+{
+	/*
+	Splash pattern:
+	.....  .....
+	...XX  .....
+	..@OX  ..@X.
+	...XX  ..XOX
+	.....  ...XX
+	O is located at (x,y)
+	@->O gives dx and dy
+	*/
+	ExplodeRegion *area;
+	int i, j;
+	boolean diag = ((!!dx + !!dy) / 2);
+	area = create_explode_region();
+
+	if (isok(x, y))
+		add_location_to_explode_region(x, y, area);
+
+	for (i = -1; i <= 1; i++)
+	for (j = -1; j <= 1; j++)
+	if (isok(x + i, y + j) && ((!i && dx) || (!j && dy) || ((!dx || i == dx) & (!dy || j == dy))) && ((ZAP_POS(levl[x][y].typ) || distmin(x - dx, y - dy, x + i, y + j) == 1) || ZAP_POS(levl[x - dx + i][y - dy + j].typ))) // it looks strange, but it works
+		add_location_to_explode_region(x + i, y + j, area);
+
+	do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
+	free_explode_region(area);
 }
 
 void
@@ -832,7 +842,7 @@ void
 splatter_burning_oil(x, y)
     int x, y;
 {
-    explode(x, y, ZT_SPELL(ZT_FIRE), d(4,4), BURNING_OIL, EXPL_FIERY);
+    explode(x, y, ZT_SPELL(ZT_FIRE), d(4,4), BURNING_OIL, EXPL_FIERY, 1);
 }
 
 #ifdef FIREARMS
@@ -880,7 +890,7 @@ int x, y;
     int is_accessible = ZAP_POS(levl[x][y].typ);
     struct grenade_callback *gc = (struct grenade_callback *)data;
     if (is_accessible) {
-	add_location_to_explode_region(gc->fiery_area, x, y);
+	add_location_to_explode_region(x, y, gc->fiery_area);
 	grenade_effects((struct obj *)0, x, y,
 		gc->fiery_area, gc->gas_area, gc->dig_area, gc->isyou);
     }
@@ -895,7 +905,7 @@ int x, y;
     int is_accessible = ZAP_POS(levl[x][y].typ);
     struct grenade_callback *gc = (struct grenade_callback *)data;
     if (is_accessible)
-	add_location_to_explode_region(gc->gas_area, x, y);
+	add_location_to_explode_region(x, y, gc->gas_area);
     return !is_accessible;
 }
 
@@ -906,7 +916,7 @@ int x, y;
 {
     struct grenade_callback *gc = (struct grenade_callback *)data;
     if (dig_check(BY_OBJECT, FALSE, x, y))
-	add_location_to_explode_region(gc->dig_area, x, y);
+	add_location_to_explode_region(x, y, gc->dig_area);
     return !ZAP_POS(levl[x][y].typ);
 }
 

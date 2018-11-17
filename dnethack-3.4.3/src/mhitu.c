@@ -36,11 +36,7 @@ STATIC_DCL void FDECL(wildmiss, (struct monst *,struct attack *));
 
 STATIC_DCL void FDECL(hurtarmor,(int));
 STATIC_DCL void FDECL(hitmsg,(struct monst *,struct attack *));
-
-static const int gazeattacks[] = {AD_DEAD, AD_CNCL, AD_PLYS, AD_DRLI, AD_ENCH, AD_STON, AD_LUCK,
-										AD_CONF, AD_SLOW, AD_STUN, AD_BLND, AD_FIRE, AD_FIRE,
-										AD_COLD, AD_COLD, AD_ELEC, AD_ELEC, AD_HALU, AD_SLEE };
-static const int elementalgaze[] = {AD_FIRE,AD_COLD,AD_ELEC};
+STATIC_DCL boolean FDECL(umetgaze, (struct monst *));
 
 /* See comment in mhitm.c.  If we use this a lot it probably should be */
 /* changed to a parameter to mhitu. */
@@ -430,7 +426,7 @@ mattacku(mtmp)
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
 	
-	if(!(u.uevent.udemigod) && is_weeping(mtmp->data)) mtmp->movement = 0; /*Only attack once per turn*/
+	if(!(u.uevent.invoked) && is_weeping(mtmp->data)) mtmp->movement = 0; /*Only attack once per turn*/
 	
 	/* If swallowed, can only be affected by u.ustuck */
 	if(u.uswallow) {
@@ -598,7 +594,7 @@ mattacku(mtmp)
 	}
 //ifdef BARD
 	tmp += mtmp->encouraged;
-	if (wizard && mtmp->encouraged)
+	if (wizard && mtmp->encouraged && ublindf && ublindf->otyp==LENSES)
 		pline("[%s +%d]", Monnam(mtmp), mtmp->encouraged);
 //endif
 	if(mtmp->data == &mons[PM_UVUUDAUM]){
@@ -1353,7 +1349,6 @@ mattacku(mtmp)
 		case AT_MMGC:{
 			int temp=0;
 			if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
-			if(nospellcooldowns(mdat)) mtmp->mspec_used = 0;
 			
 			if( mdat == &mons[PM_DEMOGORGON] && !range2 && !mtmp->mflee && rn2(6)) break; //cast spells more rarely if he's in melee range
 			if (range2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC && mattk->adtyp != AD_STAR)
@@ -2988,7 +2983,7 @@ dopois:
 	    case AD_WEEP: /*Weeping Angel's attack*/
 		hitmsg(mtmp, mattk);
 		if (uncancelled) {
-			if(!u.uevent.udemigod){
+			if(!u.uevent.invoked){
 				if (Teleport_control || Drain_resistance) {
 					if(flags.verbose) You("feel like you could have lost some potential.");
 				} else {
@@ -3570,7 +3565,7 @@ dopois:
 			for (i = rn2(3)+2; i > 0; i--) {
 				x = rn2(3)-1;
 				y = rn2(3)-1;
-				explode(mtmp->mx+x, mtmp->my+y, 8, dmg, -1, rn2(EXPL_MAX));		//-1 is unspecified source. 8 is physical
+				explode(mtmp->mx+x, mtmp->my+y, 8, dmg, -1, rn2(EXPL_MAX), 1);		//-1 is unspecified source. 8 is physical
 			}
 			if(DEADMONSTER(mtmp))
 				return 2;
@@ -4112,10 +4107,10 @@ boolean ufound;
 		case AD_FNEX:
 			mondead(mtmp);
 			if(mtmp->data==&mons[PM_SWAMP_FERN_SPORE]) 
-				explode(mtmp->mx, mtmp->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL);
+				explode(mtmp->mx, mtmp->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL, 1);
 			else if(mtmp->data==&mons[PM_BURNING_FERN_SPORE])
-				explode(mtmp->mx, mtmp->my, 8, tmp, MON_EXPLODE, EXPL_YELLOW);
-			else explode(mtmp->mx, mtmp->my, 7, tmp, MON_EXPLODE, EXPL_NOXIOUS);
+				explode(mtmp->mx, mtmp->my, 8, tmp, MON_EXPLODE, EXPL_YELLOW, 1);
+			else explode(mtmp->mx, mtmp->my, 7, tmp, MON_EXPLODE, EXPL_NOXIOUS, 1);
 			return 2;
 		break;
 		
@@ -4213,6 +4208,29 @@ common:
 }
 
 int
+randomgaze()
+{
+	static const int gazeattacks[] = { AD_DEAD, AD_CNCL, AD_PLYS, AD_DRLI, AD_ENCH, AD_STON, AD_LUCK,
+		AD_CONF, AD_SLOW, AD_STUN, AD_BLND, AD_FIRE, AD_FIRE,
+		AD_COLD, AD_COLD, AD_ELEC, AD_ELEC, AD_HALU, AD_SLEE };
+	return gazeattacks[rn2(SIZE(gazeattacks))];	//flat random member of gazeattacks
+}
+
+int
+elementalgaze()
+{
+	static const int gazeattacks[] = { AD_FIRE, AD_COLD, AD_ELEC };
+	return gazeattacks[rn2(SIZE(gazeattacks))];	//flat random member of gazeattacks
+}
+
+boolean
+umetgaze(mtmp)
+struct monst *mtmp;
+{
+	return (canseemon_eyes(mtmp) && couldsee(mtmp->mx, mtmp->my) && !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD));
+}
+
+int
 gazemu(mtmp, mattk)	/* monster gazes at you */
 	register struct monst *mtmp;
 	register struct attack  *mattk;
@@ -4221,14 +4239,15 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	int attack_type = mattk->adtyp;
 	struct	permonst *mdat = mtmp->data;
 	char buf[BUFSZ];
+
 	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
 	if(ward_at(u.ux,u.uy) == HAMSA) return 0;
-	if(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) return 0;
+	//if(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) return 0;
 	if(mattk->adtyp == AD_RGAZ){
-		attack_type = gazeattacks[rn2(SIZE(gazeattacks))];	//flat random member of gazeattacks
+		attack_type = randomgaze();
 	}
 	else if(mattk->adtyp == AD_RETR){
-		attack_type = elementalgaze[rn2(SIZE(elementalgaze))];	//flat random member of elementalgaze
+		attack_type = elementalgaze();
 	}
 	switch(attack_type) {
 //ifdef SEDUCE
@@ -4240,7 +4259,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			break;
 				if(could_seduce(mtmp, &youmonst, mattk) == 1
 					&& !mtmp->mcan
-					&& !Blind && !is_blind(mtmp) && canseemon(mtmp)
+					&& !is_blind(mtmp)
+					&&  umetgaze(mtmp)
 					&& 	distu(mtmp->mx,mtmp->my) == 1) 
 						if (doseduce(mtmp))
 								return 3;
@@ -4254,9 +4274,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				if(u.sealsActive&SEAL_ANDROMALIUS) break;
 				if(distu(mtmp->mx,mtmp->my) > 1 ||
 					mtmp->mcan ||
-					Blind ||
-					is_blind(mtmp) ||
-					!canseemon(mtmp) 
+					!umetgaze(mtmp) ||
+					is_blind(mtmp)
 				) return 0;//fail
 				//else
 				if(mdat == &mons[PM_DEMOGORGON]){
@@ -4317,8 +4336,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			}
 			break;
 			case AD_DEAD:
-			   if(!Blind && !is_blind(mtmp) && canseemon(mtmp)){
-				pline("Oh no, %s's using the gaze of death!", mhe(mtmp));
+			   if(!is_blind(mtmp) && umetgaze(mtmp)){
+				pline("Oh no, you meet %s's gaze of death!", s_suffix(mon_nam(mtmp)));
 				if (nonliving(youracedata) || is_demon(youracedata)) {
 				    You("seem no deader than before.");
 				} else if (!Antimagic && !(u.sealsActive&SEAL_OSE)) {
@@ -4337,15 +4356,22 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			   }
 			break;
 		case AD_CNCL:
-			if(!is_blind(mtmp) && couldsee(mtmp->mx, mtmp->my)){
-				pline("Your magic fades.");
-				(void) cancel_monst(&youmonst, mksobj(SPE_CANCELLATION, FALSE, FALSE), FALSE, TRUE, FALSE,!rn2(4) ? rnd(mtmp->m_lev) : 0);
+			if (!is_blind(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
+					cancel_monst(&youmonst, mksobj(SPE_CANCELLATION, FALSE, FALSE), FALSE, TRUE, FALSE, !rn2(4) ? rnd(mtmp->m_lev) : 0)){
+
+				if (!Blind && canseemon(mtmp))
+				{
+					pline("%s stares at you.", Monnam(mtmp));
+					pline("Your magic fades.");
+				}
+				else
+					You_feel("your magic fade.");
 				succeeded=1;
 			}
 		break;
 	    case AD_PLYS:
 		if(mtmp->data == &mons[PM_DEMOGORGON]){
-		  if(!Blind && !is_blind(mtmp) && canseemon(mtmp)){
+		  if(!is_blind(mtmp) && umetgaze(mtmp)){
 			if((!Free_action || rn2(2)) && (!Sleep_resistance || rn2(4))){
 				You("meet the gaze of Aameul, left head of Demogorgon!");
 				You("are mesmerized!");
@@ -4360,8 +4386,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		   }
 		 //else succeeded = 0
 		}
-		else if (!mtmp->mcan && multi >= 0 && !rn2(3) && !is_blind(mtmp) && canseemon(mtmp)) {
-		    if (Blind || Free_action ) {
+		else if (!mtmp->mcan && multi >= 0 && !rn2(3) && !is_blind(mtmp) && umetgaze(mtmp)) {
+		    if (Free_action) {
 				You("momentarily stiffen.");
 				succeeded=0;
 		    }
@@ -4376,7 +4402,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		break;
 		case AD_DRLI:
 			if(mtmp->data == &mons[PM_DEMOGORGON]){
-			  if(!Blind && !is_blind(mtmp) && canseemon(mtmp)){
+			  if(!is_blind(mtmp) && umetgaze(mtmp)){
 				if(!Drain_resistance || !rn2(3)){
 					You("meet the gaze of Hethradiah, right head of Demogorgon!");
 					You("feel a primal darkness fall upon your soul!");
@@ -4394,9 +4420,11 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			   }
 			  //else succeeded = 0
 			}
-			else if (!mtmp->mcan && !rn2(3) && !Drain_resistance 
-						&& !is_blind(mtmp) && canseemon(mtmp)) {
-				You("feel your life force whither before the gaze of %s!", mon_nam(mtmp));
+			else if (!mtmp->mcan && !rn2(3) && !Drain_resistance && !is_blind(mtmp)) {
+				if (!Blind && canseemon(mtmp))
+					You("feel your life force wither before the gaze of %s!", mon_nam(mtmp));
+				else
+					You("feel your life force wither!");
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 //				forget(10);
 				succeeded=1;
@@ -4404,9 +4432,10 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		break;
 		case AD_ENCH:
 			if(mtmp->data == &mons[PM_DEMOGORGON]){
-			 if(!Blind && !is_blind(mtmp) && canseemon(mtmp)){
+			 if(!is_blind(mtmp) && umetgaze(mtmp)){
 				struct obj *obj = some_armor(&youmonst);
 			    if (drain_item(obj)) {
+					You("meet Demogorgon's gaze!");
 					Your("%s less effective.", aobjnam(obj, "seem"));
 			    }
 				succeeded=1;
@@ -4414,6 +4443,10 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			} else if (!mtmp->mcan && !rn2(4) && !is_blind(mtmp) && couldsee(mtmp->mx, mtmp->my)) {
 				struct obj *obj = some_armor(&youmonst);
 			    if (drain_item(obj)) {
+					if (!Blind && canseemon(mtmp))
+						pline("%s stares at you.", Monnam(mtmp));
+					else
+						You_feel("watched.");
 					Your("%s less effective.", aobjnam(obj, "seem"));
 			    }
 				succeeded=1;
@@ -4451,9 +4484,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				if (mtmp->mhp > 0) break;
 				return 2;
 			}
-			if (canseemon_eyes(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
-				!Stone_resistance
-			) {
+			if (umetgaze(mtmp) && !Stone_resistance) {
 				You("see %s.", mon_nam(mtmp));
 				stop_occupation();
 				if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
@@ -4495,6 +4526,10 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			}
 			if (couldsee(mtmp->mx, mtmp->my) &&
 				!Stone_resistance) {
+				if (ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) {
+					Your("lenses block out your sight!");
+					break;
+				}
 				You("see the truth behind the veil!");
 				stop_occupation();
 				if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM))
@@ -4507,9 +4542,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			return 0;
 		}
 		else if (mtmp->data == &mons[PM_BEHOLDER]){
-			if(canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
-				!Stone_resistance
-			) {
+			if(umetgaze(mtmp) && !Stone_resistance) {
 				You("meet %s gaze.", s_suffix(mon_nam(mtmp)));
 				stop_occupation();
 				if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
@@ -4518,9 +4551,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				killer_format = KILLED_BY;
 			}
 		} else {
-			if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) &&
-				!Stone_resistance
-			) {
+			if (umetgaze(mtmp) && !Stone_resistance) {
 				You("meet %s gaze.", s_suffix(mon_nam(mtmp)));
 				stop_occupation();
 				if(poly_when_stoned(youracedata) && polymon(PM_STONE_GOLEM)) break;
@@ -4532,8 +4563,21 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_CONF:
-		if(!mtmp->mcan && canseemon(mtmp) &&
-		   couldsee(mtmp->mx, mtmp->my) &&
+		if(mtmp->data == &mons[PM_UVUUDAUM]){
+			if(!mtmp->mcan && umetgaze(mtmp) && rn2(5)){
+				int conf;
+				if((int)mattk->damn == 0 || (int)mattk->damd == 0) 
+					conf = d(3,4);
+				else conf = d((int)mattk->damn, (int)mattk->damd);
+
+				if(!Confusion)
+				pline("%s from confuses you!", s_suffix(Monnam(mtmp)));
+				else You("are getting more and more confused.");
+				make_confused(HConfusion + conf, FALSE);
+				stop_occupation();
+				succeeded=1;
+			}
+		} else if(!mtmp->mcan && umetgaze(mtmp) &&
 		   !is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
 		    int conf;
 			if((int)mattk->damn == 0 || (int)mattk->damd == 0) 
@@ -4552,8 +4596,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 		case AD_SLOW:
-		if(!mtmp->mcan && canseemon(mtmp) &&
-		   couldsee(mtmp->mx, mtmp->my) &&
+		if(!mtmp->mcan && umetgaze(mtmp) &&
 		   !is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
 			pline("%s stares piercingly at you!", Monnam(mtmp));
 			u_slow_down();
@@ -4563,8 +4606,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_STUN:
-		if(!mtmp->mcan && canseemon(mtmp) &&
-		   couldsee(mtmp->mx, mtmp->my) &&
+		if(!mtmp->mcan && umetgaze(mtmp) &&
 		   !is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
 		    int stun = d(2,6);
 
@@ -4576,21 +4618,27 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_BLND:
-		if (!mtmp->mcan && canseemon(mtmp) && !resists_blnd(&youmonst)
-			&& distu(mtmp->mx,mtmp->my) <= BOLT_LIM*BOLT_LIM) {
-		    int blnd = d((int)mattk->damn, (int)mattk->damd);
+		if (!mtmp->mcan && canseemon(mtmp) && !resists_blnd(&youmonst)) {
+			// assumes that angels with AD_BLND have a blinding radiance
+			if (is_angel(mtmp->data) && distu(mtmp->mx, mtmp->my) <= BOLT_LIM*BOLT_LIM)
+			{
+				int blnd = d((int)mattk->damn, (int)mattk->damd);
 
-		    You("are blinded by %s radiance!",
-			              s_suffix(mon_nam(mtmp)));
-		    make_blinded((long)blnd,FALSE);
-		    stop_occupation();
-		    /* not blind at this point implies you're wearing
-		       the Eyes of the Overworld; make them block this
-		       particular stun attack too */
-		    if (!Blind) Your1(vision_clears);
-		    else make_stunned((long)d(1,3),TRUE);
-			succeeded=1;
+				You("are blinded by %s radiance!", s_suffix(mon_nam(mtmp)));
+				make_blinded((long)blnd, FALSE);
+				stop_occupation();
+				make_stunned((long)d(1, 3), TRUE);
+				succeeded = 1;
+			} else if (umetgaze(mtmp))	// any others are a blinding gaze attack
+			{
+				int blnd = d((int)mattk->damn, (int)mattk->damd);
+
+				You("are blinded by %s gaze!", s_suffix(mon_nam(mtmp)));
+				make_blinded((long)blnd, FALSE);
+				stop_occupation();
+			}
 		}
+		    
 		break;
 	    case AD_SSUN:
 		if (!mtmp->mcan && couldsee(mtmp->mx, mtmp->my) &&
@@ -4631,7 +4679,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	    case AD_FIRE:
 		if (!mtmp->mcan && 
 			couldsee(mtmp->mx, mtmp->my) &&
-			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
+			!is_blind(mtmp) && rn2(5)) {
 //		    int dmg = d(2,6);
 			int dmg = d((int)mattk->damn, (int)mattk->damd);
 
@@ -4658,7 +4706,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		case AD_COLD:
 		if (!mtmp->mcan && 
 			couldsee(mtmp->mx, mtmp->my) &&
-			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
+			!is_blind(mtmp) && rn2(5)) {
 //		    int dmg = d(2,6);
 			int dmg = d((int)mattk->damn, (int)mattk->damd);
 
@@ -4680,7 +4728,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		case AD_ELEC:
 		if (!mtmp->mcan && 
 			couldsee(mtmp->mx, mtmp->my) &&
-			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
+			!is_blind(mtmp) && rn2(5)) {
 //		    int dmg = d(2,6);
 			int dmg = d((int)mattk->damn, (int)mattk->damd);
 
@@ -4702,8 +4750,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_BLNK:
-		if (!mtmp->mcan && canseemon(mtmp) &&
-			couldsee(mtmp->mx, mtmp->my) &&
+		if (!mtmp->mcan && umetgaze(mtmp) &&
 			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)
 		) {
 		    int dmg = d(1,4);
@@ -4734,9 +4781,8 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 		case AD_HALU:
-		if (!mtmp->mcan && canseemon(mtmp) &&
-			couldsee(mtmp->mx, mtmp->my) &&
-			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
+		if (!mtmp->mcan && umetgaze(mtmp) &&
+			!is_blind(mtmp) && rn2(5)) {
 			boolean not_affected=0;
 			//int tmp = rn2(12);
 			int tmp = d((int)mattk->damn, (int)mattk->damd);
@@ -4755,8 +4801,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_SLEE:
-			if(!mtmp->mcan && canseemon(mtmp) &&
-			   couldsee(mtmp->mx, mtmp->my) && !is_blind(mtmp) &&
+			if(!mtmp->mcan && umetgaze(mtmp) && !is_blind(mtmp) &&
 			   multi >= 0 && !rn2(5) && !Sleep_resistance) {
 	
 			    fall_asleep(-rnd(10), TRUE);
@@ -4811,8 +4856,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			}
 		break;
 	    case AD_LUCK:
-		if(!mtmp->mcan && canseemon(mtmp) && 
-			couldsee(mtmp->mx, mtmp->my) && 
+		if(!mtmp->mcan && umetgaze(mtmp) && 
 			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
 		    pline("%s glares ominously at you!", Monnam(mtmp));
 		    mtmp->mspec_used = mtmp->mspec_used + d(2,6);
@@ -4904,7 +4948,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		break;
 */
 		case AD_WISD:{ //Cthulhu's attack
-			if(canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my) && !mtmp->mspec_used) {
+			if(umetgaze(mtmp) && !mtmp->mspec_used) {
 				int dmg = d((int)mattk->damn, (int)mattk->damd);
 //				if(!couldsee(mtmp->mx, mtmp->my)) dmg /= 10;
 				if(!dmg) break;
@@ -4938,11 +4982,13 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				!is_blind(mtmp)
 			) {
 				int dmg = d((int)mattk->damn, (int)mattk->damd);
-				if(is_orc(mtmp->data)) pline("%s curses and urges %s followers on.", Monnam(mtmp), mhis(mtmp));
-				else if(mtmp->data == &mons[PM_LEGION] || mtmp->data == &mons[PM_LEGIONNAIRE]); //no message
-				else if(canseemon(mtmp)) pline("%s studies you with a level stare.", Monnam(mtmp));
-				//else no message
-				u.ustdy = max(dmg,u.ustdy);
+				if (dmg > u.ustdy){	// reduce message spam by only showing when study is actually increased
+					if (is_orc(mtmp->data)) pline("%s curses and urges %s followers on.", Monnam(mtmp), mhis(mtmp));
+					else if (mtmp->data == &mons[PM_LEGION] || mtmp->data == &mons[PM_LEGIONNAIRE]); //no message
+					else if (canseemon(mtmp)) pline("%s studies you with a level stare.", Monnam(mtmp));
+					//else no message
+					u.ustdy = max(dmg, u.ustdy);
+				}
 				dmg = 0;
 			}
 		break;

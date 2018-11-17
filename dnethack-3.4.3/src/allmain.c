@@ -378,9 +378,11 @@ moveloop()
 		/**************************************************/
 		for (mtmp = fmon; mtmp; mtmp = nxtmon){
 			nxtmon = mtmp->nmon;
-			if ((mtmp->data == &mons[PM_MEDUSA] || mtmp->data == &mons[PM_GREAT_CTHULHU])
+			if (!DEADMONSTER(mtmp)
+				&& attacktype(mtmp->data, AT_WDGZ)
+				&& !(controlledwidegaze(mtmp->data) && (mtmp->mpeaceful || mtmp->mtame))
+				&& !(hideablewidegaze(mtmp->data) && (rn2(3) < magic_negation(mtmp)))
 				&& couldsee(mtmp->mx, mtmp->my)
-				&& ((rn2(3) >= magic_negation(mtmp)))
 			) m_respond(mtmp);
 		}
 		
@@ -673,7 +675,7 @@ moveloop()
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
 				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH] || mtmp->data == &mons[PM_LEGION]) flags.walky_level=1;
 				if(mtmp->data == &mons[PM_ORCUS] || mtmp->data == &mons[PM_NAZGUL]) flags.shade_level=1;
-				if(mtmp->data == &mons[PM_DREAD_SERAPH] && (mtmp->mstrategy & STRAT_WAITMASK) && (u.uevent.udemigod || (Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)))){
+				if(mtmp->data == &mons[PM_DREAD_SERAPH] && (mtmp->mstrategy & STRAT_WAITMASK) && (u.uevent.invoked || (Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)))){
 					mtmp->mstrategy &= ~STRAT_WAITMASK;
 					pline_The("entire %s is shaking around you!",
 						   In_endgame(&u.uz) ? "plane" : "dungeon");
@@ -831,7 +833,7 @@ karemade:
 				(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !Is_qstart(&u.uz)) ? 35 :
 			    (depth(&u.uz) > depth(&stronghold_level)) ? 50 : 70)
 			){
-				if (u.uevent.udemigod && xupstair && rn2(10)) {
+				if (u.uevent.invoked && xupstair && rn2(10)) {
 					(void) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTOK);
 				} //TEAM ATTACKS
 				if(In_sokoban(&u.uz)){
@@ -1060,41 +1062,13 @@ karemade:
 			}
 			/* If the player has too many pets, untame them untill that is no longer the case */
 			{
-				struct monst *curmon, *weakdog;
-				int numdogs;
-				do {
-					numdogs = 0;
-					weakdog = (struct monst *)0;
-					for(curmon = fmon; curmon; curmon = curmon->nmon){
-						if(curmon->mtame && !(EDOG(curmon)->friend) && !(EDOG(curmon)->loyal) && 
-							!is_suicidal(curmon->data) && !curmon->mspiritual && curmon->mvanishes < 0
-						){
-							numdogs++;
-							if(!weakdog) weakdog = curmon;
-							if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
-							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-						}
-					}
-					if(weakdog && numdogs > (ACURR(A_CHA)/3) ) EDOG(weakdog)->friend = 1;
-				} while(weakdog && numdogs > (ACURR(A_CHA)/3));
+				// finds weakest pet, and if there's more than 6 pets that count towards your limit
+				// it sets the weakest one friendly - dog.c
+				enough_dogs(0);
 				
-				do {
-					weakdog = (struct monst *)0;
-					numdogs = 0;
-					for(curmon = fmon; curmon; curmon = curmon->nmon){
-						if(curmon->mspiritual && curmon->mvanishes < 0){
-							numdogs++;
-							if(!weakdog) weakdog = curmon;
-							if(weakdog->m_lev > curmon->m_lev) weakdog = curmon;
-							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-							else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
-						}
-					}
-					if(weakdog && numdogs > (ACURR(A_CHA)/3) ) weakdog->mvanishes = 5;
-				} while(weakdog && numdogs > (ACURR(A_CHA)/3));
+				// if there's a spiritual pet that isn't already marked for vanishing,
+				// give it 5 turns before it disappears. - dog.c
+				vanish_dogs();
 			}
 			
 			if(u.petattacked){

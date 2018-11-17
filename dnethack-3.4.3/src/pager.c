@@ -181,7 +181,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 				? "tail of " : "tail of a ") : "",
 		    (mtmp->mtame && accurate) ? 
 #ifdef BARD
-		    (EDOG(mtmp)->friend ? "friendly " : "tame ") :
+		    (EDOG(mtmp)->friend ? "friendly " : (EDOG(mtmp)->loyal) ? "loyal " : "tame ") :
 #else
 		    "tame " :
 #endif

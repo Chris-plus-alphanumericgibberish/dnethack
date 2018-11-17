@@ -185,15 +185,15 @@ int x,y;
 		}
 	} else if (obj->otyp == BLASTER_BOLT) {
 		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,6),
-		    0, EXPL_RED);
+		    0, EXPL_RED, 1);
 	} else if (obj->otyp == HEAVY_BLASTER_BOLT) {
 		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,10),
-		    0, EXPL_FIERY);
+		    0, EXPL_FIERY, 1);
 	} else if (objects[obj->otyp].oc_dir & EXPLOSION) {
 	    	if (cansee(bhitpos.x,bhitpos.y)) 
 	    		pline("%s explodes in a ball of fire!", Doname2(obj));
 		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -ZT_SPELL(ZT_FIRE) : ZT_SPELL(ZT_FIRE), d(3,8),
-		    WEAPON_CLASS, EXPL_FIERY);
+		    WEAPON_CLASS, EXPL_FIERY, 1);
 	}
 //#endif
 	// if (create && !((mtmp = m_at(x, y)) && (mtmp->mtrapped) &&
@@ -1220,7 +1220,7 @@ extern int monstr[];
 struct monst *
 mfind_target(mtmp, force_linedup)
 struct monst *mtmp;
-boolean force_linedup;
+int force_linedup;
 {
     int dir, origdir = -1;
     int x, y, dx, dy;
@@ -1262,9 +1262,10 @@ boolean force_linedup;
 			  ((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp == AD_OONA) )
 				&& mlined_up(mtmp, mtmp2, FALSE)
 			  )
-			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 6)
+			|| (is_commander(mtmp->data) && distmin(mtmp2->mx, mtmp2->my, mtmp->mx, mtmp->my) < BOLT_LIM)
+			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 5)
 			|| (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_SPEL) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
@@ -1303,9 +1304,10 @@ boolean force_linedup;
 			  ((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp == AD_OONA) )
 				&& lined_up(mtmp)
 			  )
-			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 6)
+			|| (is_commander(mtmp->data) && distmin(mtmp->mux, mtmp->muy, mtmp->mx, mtmp->my) < BOLT_LIM)
+			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 5)
 			|| (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_SPEL) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
@@ -1371,6 +1373,7 @@ boolean force_linedup;
 			  ((attacktype_fordmg(mtmp->data, AT_MMGC, AD_ANY))->adtyp == AD_OONA) )
 				&& lined_up(mtmp)
 			  )
+			|| (is_commander(mtmp->data) && distmin(mtmp->mux, mtmp->muy, mtmp->mx, mtmp->my) < BOLT_LIM)
 			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 2)
 			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 2)
 			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 6)
@@ -1464,7 +1467,8 @@ boolean force_linedup;
     	if ((!!mtmp->mtame != !!mtmp2->mtame || conflicted || (mm_aggression(mtmp, mtmp2) & ALLOW_M)) &&
 			!mlined_up(mtmp, mtmp2, FALSE) && //Note: must be something we don't want to hit in the way.
 			(
-			   (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 2)
+			   (is_commander(mtmp->data) && distmin(mtmp2->mx, mtmp2->my, mtmp->mx, mtmp->my) < BOLT_LIM)
+			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 2)
 			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 2)
 			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 6)
 			|| (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
@@ -1899,17 +1903,16 @@ register struct attack *mattk;
 				if(mattk->adtyp == AD_SHDW){
 					struct trap *ttmp2;
 					m_throw(mtmp, mdef->mx + (-sgn(tbx)) + xadj, mdef->my + (-sgn(tby)) + yadj, sgn(tbx), sgn(tby),
-						1, qvr,TRUE);
+						1, qvr,FALSE);
 					ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
 					if (ttmp2) mintrap(mdef);
 				} else if(mattk->adtyp == AD_PEST){
 					m_throw(mtmp, mdef->mx + (-sgn(tbx)) + xadj, mdef->my + (-sgn(tby)) + yadj, sgn(tbx), sgn(tby),
-						1, qvr,TRUE);
+						1, qvr, FALSE);
 				} else {
 					m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
-						BOLT_LIM + rngmod, qvr,TRUE);
+						BOLT_LIM + rngmod, qvr, FALSE);
 				}
-			    nomul(0, NULL);
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		}
 		bypassDR = 0;

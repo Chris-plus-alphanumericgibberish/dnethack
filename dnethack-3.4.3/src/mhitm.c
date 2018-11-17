@@ -290,7 +290,7 @@ mattackm(magr, mdef)
 	
 	tmp += magr->encouraged;
 	tchtmp += magr->encouraged;
-	if (wizard && magr->encouraged)
+	if (wizard && magr->encouraged && ublindf && ublindf->otyp == LENSES)
 		pline("[%s +%d]", Monnam(magr), magr->encouraged);
 	
     /* undetect monsters become un-hidden if they are attacked */
@@ -1094,6 +1094,14 @@ defaultmmhit:
 	return(mdamagem(magr, mdef, mattk));
 }
 
+boolean
+mmetgaze(looker, lookie)
+struct monst *looker;
+struct monst *lookie;
+{
+	return (mon_can_see_mon(looker, lookie) && !(is_blind(looker) || is_blind(lookie)) && !(looker->msleeping || lookie->msleeping));
+}
+
 /* Returns the same values as mdamagem(). */
 int
 gazemm(magr, mdef, mattk)
@@ -1104,24 +1112,35 @@ gazemm(magr, mdef, mattk)
 
 	if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) return MM_MISS;
 	
-	if(vis) {
+	if (magr->mcan) return MM_MISS;
+
+	if (vis) {
 		/* the gaze attack of weeping (arch)angels isn't active like others */
 		if (is_weeping(magr->data)) {
 			if (mon_reflects(mdef, (char *)0)) {
 				return (MM_MISS);
-			} else {
-				Sprintf(buf,"%s is staring at", Monnam(magr));
+			}
+			else {
+				Sprintf(buf, "%s is staring at", Monnam(magr));
 				pline("%s %s.", buf, mon_nam(mdef));
 			}
 		}
 	}
 
-	if (magr->mcan || 
-	    (magr->minvis && !perceives(mdef->data)) ||
-	    is_blind(mdef) || mdef->msleeping) {
-	    // if(vis && !is_weeping(magr->data)) pline("but nothing happens.");
-	    return(MM_MISS);
+	if (mattk->aatyp == AT_GAZE){
+		if ((mdef->minvis && !perceives(magr->data))
+			|| is_blind(magr))
+			return MM_MISS;
 	}
+	else if (mattk->aatyp == AT_WDGZ){
+		if ((magr->minvis && !perceives(mdef->data))
+			|| is_blind(mdef) || mdef->msleeping)
+			return MM_MISS;
+	}
+	else {
+		impossible("weird gaze attack type called in gazemm: %d", mattk->aatyp);
+	}
+
 	/* call mon_reflects 2x, first test, then, if visible, print message */
 	if (magr->data == &mons[PM_MEDUSA] && mon_reflects(mdef, (char *)0)) {
 	    if (canseemon(mdef))
@@ -1148,10 +1167,6 @@ gazemm(magr, mdef, mattk)
 			if (magr->mhp > 0) return (MM_MISS);
 			return (MM_AGR_DIED);
 	    }
-	}
-	if (magr->data != &mons[PM_MEDUSA] && is_blind(magr)) {
-	    // if(vis && !is_weeping(magr->data)) pline("but nothing happens.");
-	    return(MM_MISS);
 	}
 
 	return(mdamagem(magr, mdef, mattk));
@@ -1243,10 +1258,10 @@ explmm(magr, mdef, mattk)
 	if(!is_fern_spore(magr->data)) result = mdamagem(magr, mdef, mattk);
 	else{
 		mondead(magr);
-		if(magr->data==&mons[PM_SWAMP_FERN_SPORE]) explode(magr->mx, magr->my, 9, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_MAGICAL);
+		if(magr->data==&mons[PM_SWAMP_FERN_SPORE]) explode(magr->mx, magr->my, 9, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_MAGICAL, 1);
 		else if(magr->data==&mons[PM_BURNING_FERN_SPORE])
-			explode(magr->mx, magr->my, 8, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_YELLOW);
-		else explode(magr->mx, magr->my, 7, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_NOXIOUS);
+			explode(magr->mx, magr->my, 8, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_YELLOW, 1);
+		else explode(magr->mx, magr->my, 7, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_NOXIOUS, 1);
 		if (magr->mhp > 0) return result;
 		else return result | MM_AGR_DIED;
 	}
@@ -1279,6 +1294,7 @@ mdamagem(magr, mdef, mattk)
 	boolean phasearmor = FALSE;
 	boolean weaponhit = (mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_DEVA || mattk->aatyp == AT_MARI);
 	struct attack alt_attk;
+	int attack_type = (weaponhit) ? AD_PHYS : mattk->adtyp;
 	
 	if(weaponhit && mattk->adtyp != AD_PHYS) tmp = 0;
 	else if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
@@ -1324,7 +1340,14 @@ mdamagem(magr, mdef, mattk)
 	armpro = magic_negation(mdef);
 	cancelled = magr->mcan || !((rn2(3) >= armpro) || !rn2(50));
 
-	switch (weaponhit ? AD_PHYS : mattk->adtyp) {
+	if (attack_type == AD_RGAZ){
+		attack_type = randomgaze();
+	}
+	else if (attack_type == AD_RETR){
+		attack_type = elementalgaze();
+	}
+
+	switch (attack_type) {
 	    case AD_DGST:
 		/* eating a Rider or its corpse is fatal */
 		if (is_rider(mdef->data)) {
@@ -1373,17 +1396,21 @@ mdamagem(magr, mdef, mattk)
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_STUN:
-		if (magr->mcan) break;
-		if(mattk->aatyp == AT_GAZE){
-			if(canseemon(magr)){
-				Sprintf(buf,"%s gazes at", Monnam(magr));
-				pline("%s %s...", buf, mon_nam(mdef));
-			}
+		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
 			tmp = 0;
+		if (magr->mcan || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr,mdef)))
+			break;
+		if (canseemon(magr)){
+			if (mattk->aatyp == AT_GAZE)
+				Sprintf(buf, "from %s gaze", s_suffix(mon_nam(magr)));	// gaze stun is assumed to be eye-contact
+			else if (mattk->aatyp == AT_WDGZ)
+				Sprintf(buf, "under %s gaze", s_suffix(mon_nam(magr)));	// gaze stun is assumed to be eye-contact
 		}
+		else
+			Sprintf(buf, "for a moment");
 		if (canseemon(mdef))
-		    pline("%s %s for a moment.", Monnam(mdef),
-			  makeplural(stagger(mdef->data, "stagger")));
+		    pline("%s %s %s.", Monnam(mdef),
+			  makeplural(stagger(mdef->data, "stagger")), buf);
 		mdef->mstun = 1;
 		goto physical;
 	    case AD_LEGS:
@@ -1596,9 +1623,15 @@ physical:{
 		    tmp = 0;
 		    break;
 		}
-		if(canseemon(magr) && mattk->aatyp == AT_GAZE){
-			Sprintf(buf,"%s gazes at", Monnam(magr));
-			pline("%s %s...", buf, mon_nam(mdef));
+		if(vis){
+			if (mattk->aatyp == AT_GAZE){
+				Sprintf(buf, "%s", Monnam(magr));
+				pline("%s gazes at %s...", buf, mon_nam(mdef));
+			}
+			else if (mattk->aatyp == AT_WDGZ){
+				Sprintf(buf, "%s", Monnam(mdef));
+				pline("%s can see %s...", buf, mon_nam(magr));
+			}
 		}
 		if (vis)
 		    pline("%s is %s!", Monnam(mdef),
@@ -1637,14 +1670,19 @@ physical:{
 		break;
 /////////////////////////////////////////////////
 		case AD_STDY:
-			if(canseemon(magr) && mattk->aatyp == AT_GAZE){
-				Sprintf(buf,"%s studies", Monnam(magr));
+		if (magr->mcan || is_blind(magr)){
+			tmp = 0;
+			break;
+		}
+		if (tmp > mdef->mstdy){
+			mdef->mstdy = max(tmp, mdef->mstdy);
+
+			if (canseemon(magr) && (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)){
+				Sprintf(buf, "%s studies", Monnam(magr));
 				pline("%s %s intently.", buf, mon_nam(mdef));
 			}
-			if (!magr->mcan && !is_blind(magr)) {
-				mdef->mstdy = max(tmp,mdef->mstdy);
-			}
-			tmp = 0;
+		}
+		tmp = 0;
 		break;
 /////////////////////////////////////////////////
 	    case AD_COLD:
@@ -1653,9 +1691,15 @@ physical:{
 		    tmp = 0;
 		    break;
 		}
-		if(canseemon(magr) && mattk->aatyp == AT_GAZE){
-			Sprintf(buf,"%s gazes at", Monnam(magr));
-			pline("%s %s...", buf, mon_nam(mdef));
+		if (vis){
+			if (mattk->aatyp == AT_GAZE){
+				Sprintf(buf, "%s", Monnam(magr));
+				pline("%s gazes at %s...", buf, mon_nam(mdef));
+			}
+			else if (mattk->aatyp == AT_WDGZ){
+				Sprintf(buf, "%s", Monnam(mdef));
+				pline("%s can see %s...", buf, mon_nam(magr));
+			}
 		}
 		if (vis) pline("%s is covered in frost!", Monnam(mdef));
 		if (resists_cold(mdef)) {
@@ -1674,9 +1718,15 @@ physical:{
 		    tmp = 0;
 		    break;
 		}
-		if(canseemon(magr) && mattk->aatyp == AT_GAZE){
-			Sprintf(buf,"%s gazes at", Monnam(magr));
-			pline("%s %s...", buf, mon_nam(mdef));
+		if (vis){
+			if (mattk->aatyp == AT_GAZE){
+				Sprintf(buf, "%s", Monnam(magr));
+				pline("%s gazes at %s...", buf, mon_nam(mdef));
+			}
+			else if (mattk->aatyp == AT_WDGZ){
+				Sprintf(buf, "%s", Monnam(mdef));
+				pline("%s can see %s...", buf, mon_nam(magr));
+			}
 		}
 		if (vis) pline("%s gets zapped!", Monnam(mdef));
 		tmp += destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
@@ -1766,9 +1816,15 @@ physical:{
 		    tmp = 0;
 		    break;
 		}
-		if(canseemon(magr) && mattk->aatyp == AT_GAZE){
-			Sprintf(buf,"%s gazes at", Monnam(magr));
-			pline("%s %s...", buf, mon_nam(mdef));
+		if (vis){
+			if (mattk->aatyp == AT_GAZE){
+				Sprintf(buf, "%s", Monnam(magr));
+				pline("%s gazes at %s...", buf, mon_nam(mdef));
+			}
+			else if (mattk->aatyp == AT_WDGZ){
+				Sprintf(buf, "%s", Monnam(mdef));
+				pline("%s can see %s...", buf, mon_nam(magr));
+			}
 		}
 		if (resists_acid(mdef)) {
 		    if (vis)
@@ -1822,10 +1878,22 @@ physical:{
 		tmp = 0;
 		break;
 	    case AD_STON:
-		if (magr->mcan) break;
+		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
+			tmp = 0;
+		if (magr->mcan || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr,mdef)))
+			break;
+		if (canseemon(magr)){
+			if (mattk->aatyp == AT_GAZE){
+				Sprintf(buf, "%s", Monnam(magr));
+				pline("%s gazes at %s...", buf, mon_nam(mdef));
+			}
+			else if (mattk->aatyp == AT_WDGZ)
+				Sprintf(buf, "%s", Monnam(mdef));
+				pline("%s can see %s...", buf, mon_nam(magr));
+		}
  do_stone:
 		/* may die from the acid if it eats a stone-curing corpse */
-		if (munstone(mdef, FALSE)) goto post_stone;
+		if (!resists_ston(mdef) && munstone(mdef, FALSE)) goto post_stone;
 		if (poly_when_stoned(pd)) {
 			mon_to_stone(mdef);
 			tmp = 0;
@@ -1865,8 +1933,8 @@ physical:{
 		    char mdef_Monnam[BUFSZ];
 		    if (vis) Strcpy(mdef_Monnam, Monnam(mdef));
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
-		    if (u.uevent.udemigod) {
-		    /* Once the player kills Rodney or performs the Invocation, weeping angels will 
+		    if (u.uevent.invoked) {
+		    /* Once the player performs the Invocation, weeping angels will 
 		       be too interested in your potential to feed off the potential of monsters */
 			if (vis && canspotmon(magr) && flags.verbose)
 			    pline("%s is glancing at you with a hungry stare.", Monnam(magr));
@@ -1892,21 +1960,23 @@ physical:{
 		}
 		break;
 	    case AD_SLEE:
-		if (!cancelled && !mdef->msleeping &&
-			sleep_monst(mdef, rnd(10), -1)) {
-			if(mattk->aatyp == AT_GAZE){
-				if(canseemon(magr)){
-					Sprintf(buf,"%s gazes at", Monnam(magr));
-					pline("%s %s...", buf, mon_nam(mdef));
-				}
-				tmp = 0;
+		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
+			tmp = 0;
+		if (cancelled || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr, mdef)))
+			break;
+		if (sleep_monst(mdef, rnd(10), -1)) {
+			if (canseemon(magr)) {
+				if (mattk->aatyp == AT_GAZE)
+					Sprintf(buf, "is put to sleep by %s gaze.", s_suffix(mon_nam(magr)));
+				else if (mattk->aatyp == AT_WDGZ)
+					Sprintf(buf, "is put to sleep under %s gaze.", s_suffix(mon_nam(magr)));	// gaze sleep is assumed to be have an eye-contact component
+				else
+					Sprintf(buf, "is put to sleep by %s.", mon_nam(magr));
 			}
-			else if(mattk->aatyp == AT_WDGZ){
-				tmp = 0;
-			}
-		    if (vis) {
-			Strcpy(buf, Monnam(mdef));
-			pline("%s is put to sleep by %s.", buf, mon_nam(magr));
+			else
+				Sprintf(buf, "falls asleep!");
+		    if (canseemon(mdef)) {
+			pline("%s %s", Monnam(mdef), buf);
 		    }
 		    mdef->mstrategy &= ~STRAT_WAITFORU;
 		    slept_monst(mdef);
@@ -1917,25 +1987,28 @@ physical:{
 		    tmp = 0;
 		    break;
 		}
-		if(mattk->aatyp == AT_GAZE){
-			if(canseemon(magr)){
-				Sprintf(buf,"%s gazes at", Monnam(magr));
-				pline("%s %s...", buf, mon_nam(mdef));
-			}
+		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
 			tmp = 0;
+		if (cancelled || !mdef->mcanmove || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr, mdef)))
+			break;
+
+		if (canseemon(magr)) {
+			if (mattk->aatyp == AT_GAZE)
+				Sprintf(buf, "is frozen by %s gaze.", s_suffix(mon_nam(magr)));
+			else if (mattk->aatyp == AT_WDGZ)
+				Sprintf(buf, "is frozen under %s gaze.", s_suffix(mon_nam(magr)));	// gaze paralysis is assumed to be have an eye-contact component
+			else
+				Sprintf(buf, "is frozen by %s.", mon_nam(magr));
 		}
-		else if(mattk->aatyp == AT_WDGZ){
-			tmp = 0;
+		else
+			Sprintf(buf, "freezes!");
+
+		if (canseemon(mdef)) {
+			pline("%s %s", Monnam(mdef), buf);
 		}
-		if(!cancelled && mdef->mcanmove) {
-		    if (vis) {
-			Strcpy(buf, Monnam(mdef));
-			pline("%s is frozen by %s.", buf, mon_nam(magr));
-		    }
-		    mdef->mcanmove = 0;
-		    mdef->mfrozen = rnd(10);
-		    mdef->mstrategy &= ~STRAT_WAITFORU;
-		}
+		mdef->mcanmove = 0;
+		mdef->mfrozen = rnd(10);
+		mdef->mstrategy &= ~STRAT_WAITFORU;
 		break;
 	    case AD_TCKL:
 		if (is_weeping(mdef->data)) {
@@ -1957,24 +2030,28 @@ physical:{
 		    tmp = 0;
 		    break;
 		}
-		if(mattk->aatyp == AT_GAZE){
-			if(canseemon(magr)){
-				Sprintf(buf,"%s gazes at", Monnam(magr));
-				pline("%s %s...", buf, mon_nam(mdef));
-			}
+		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
 			tmp = 0;
-		}
-		else if(mattk->aatyp == AT_WDGZ){
-			tmp = 0;
-		}
-		if (!cancelled && mdef->mspeed != MSLOW) {
-		    unsigned int oldspeed = mdef->mspeed;
+		if (cancelled || mdef->mspeed == MSLOW || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr, mdef)))
+			break;
 
-		    mon_adjust_speed(mdef, -1, (struct obj *)0);
-		    mdef->mstrategy &= ~STRAT_WAITFORU;
-		    if (mdef->mspeed != oldspeed && vis)
-			pline("%s slows down.", Monnam(mdef));
+		if (canseemon(magr)) {
+			if (mattk->aatyp == AT_GAZE)
+				Sprintf(buf, "is slowed by %s gaze.", s_suffix(mon_nam(magr)));
+			else if (mattk->aatyp == AT_WDGZ)
+				Sprintf(buf, "is slowed under %s gaze.", s_suffix(mon_nam(magr)));	// gaze slow is assumed to be have an eye-contact component
+			else
+				Sprintf(buf, "is slowed by %s.", mon_nam(magr));
 		}
+		else
+			Sprintf(buf, "slows down.");
+
+		unsigned int oldspeed = mdef->mspeed;
+
+		mon_adjust_speed(mdef, -1, (struct obj *)0);
+		mdef->mstrategy &= ~STRAT_WAITFORU;
+		if (mdef->mspeed != oldspeed && canseemon(mdef))
+			pline("%s %s", Monnam(mdef), buf);
 		break;
 	    case AD_LUCK: 
 		/* Luck drain only makes sense for the player, so let's make 
@@ -1984,44 +2061,69 @@ physical:{
 		 * limit, setting spec_used would not really be right (though
 		 * we still should check for it).
 		 */
-		if(mattk->aatyp == AT_GAZE){
-			if(canseemon(magr)){
-				Sprintf(buf,"%s gazes at", Monnam(magr));
-				pline("%s %s...", buf, mon_nam(mdef));
-			}
+		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
 			tmp = 0;
+		if (magr->mcan || mdef->mconf || (magr->mspec_used && magr->data != &mons[PM_UVUUDAUM]) || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr, mdef)))
+			break;
+		
+		if (canseemon(magr)) {
+			if (mattk->aatyp == AT_GAZE)
+				Sprintf(buf, "is confused by %s gaze.", s_suffix(mon_nam(magr)));
+			else if (mattk->aatyp == AT_WDGZ)
+				Sprintf(buf, "is confused under %s gaze.", s_suffix(mon_nam(magr)));	// gaze confuse is assumed to be have an eye-contact component
+			else
+				Sprintf(buf, "looks confused.");
 		}
-		else if(mattk->aatyp == AT_WDGZ){
-			tmp = 0;
-		}
-		if (!magr->mcan && !mdef->mconf && !magr->mspec_used) {
-		    if (vis) pline("%s looks confused.", Monnam(mdef));
-		    mdef->mconf = 1;
-		    mdef->mstrategy &= ~STRAT_WAITFORU;
-		}
+		else
+			Sprintf(buf, "looks confused.");
+
+		if (canseemon(mdef))
+			pline("%s %s", Monnam(mdef), buf);
+
+		mdef->mconf = 1;
+		mdef->mstrategy &= ~STRAT_WAITFORU;
 		break;
 	    case AD_BLND:
-		if(mattk->aatyp == AT_GAZE){
-			if(canseemon(magr)){
-				Sprintf(buf,"%s gazes at", Monnam(magr));
-				pline("%s %s...", buf, mon_nam(mdef));
-			}
+		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
 			tmp = 0;
-		}
-		else if(mattk->aatyp == AT_WDGZ){
-			tmp = 0;
-		}
-		if (can_blnd(magr, mdef, mattk->aatyp, (struct obj*)0)) {
-		    register unsigned rnd_tmp;
+		if (!(can_blnd(magr, mdef, mattk->aatyp, (struct obj*)0)) || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !(mmetgaze(magr, mdef) || is_angel(magr->data))))
+			break;
 
-		    if (vis && !is_blind(mdef))
-			pline("%s is blinded.", Monnam(mdef));
-		    rnd_tmp = d((int)mattk->damn, (int)mattk->damd);
-		    if ((rnd_tmp += mdef->mblinded) > 127) rnd_tmp = 127;
-		    mdef->mblinded = rnd_tmp;
-		    mdef->mcansee = 0;
-		    mdef->mstrategy &= ~STRAT_WAITFORU;
+		if (is_angel(magr->data)){
+			if (canseemon(magr))
+				Sprintf(buf, "is blinded by %s radiance!", s_suffix(mon_nam(magr)));
+			else
+				Sprintf(buf, "is blinded!");
 		}
+		else{
+			if (canseemon(magr)) {
+				if (mattk->aatyp == AT_GAZE)
+					Sprintf(buf, "is blinded by %s gaze.", s_suffix(mon_nam(magr)));
+				else if (mattk->aatyp == AT_WDGZ)
+					Sprintf(buf, "is blinded under %s gaze.", s_suffix(mon_nam(magr))); // non-angelic gaze blind is assumed to be have an eye-contact component
+				else
+					Sprintf(buf, "is blinded by %s.", mon_nam(magr));
+			}
+			else
+				Sprintf(buf, "is blinded!");
+		}
+
+		if (canseemon(mdef) && !is_blind(mdef))
+			pline("%s %s", Monnam(mdef), buf);
+
+		register unsigned rnd_tmp;
+		rnd_tmp = d((int)mattk->damn, (int)mattk->damd);
+		if ((rnd_tmp += mdef->mblinded) > 127) rnd_tmp = 127;
+		mdef->mblinded = rnd_tmp;
+		mdef->mcansee = 0;
+		mdef->mstrategy &= ~STRAT_WAITFORU;
+
+		if (is_angel(magr->data) && !mdef->mstun){	// angelic blinding also stuns
+			if (canseemon(mdef))
+				pline("%s %s.", Monnam(mdef), makeplural(stagger(mdef->data, "stagger")));
+			mdef->mstun = 1;
+		}
+
 		tmp = 0;
 		break;
 	    case AD_BLNK:
@@ -2038,20 +2140,26 @@ physical:{
 		}
 		break;
 	    case AD_HALU:
-		if (!magr->mcan && haseyes(pd) && !is_blind(mdef)) {
-			if(mattk->aatyp == AT_GAZE){
-				if(canseemon(magr)){
-					Sprintf(buf,"%s gazes at", Monnam(magr));
-					pline("%s %s...", buf, mon_nam(mdef));
-				}
-				tmp = 0;
-			}
-		    if (vis) pline("%s looks %sconfused.",
-				    Monnam(mdef), mdef->mconf ? "more " : "");
-		    mdef->mconf = 1;
-		    mdef->mstrategy &= ~STRAT_WAITFORU;
-		}
 		tmp = 0;
+		if (magr->mcan || !haseyes(pd) || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr, mdef)))
+			break;
+
+		if (canseemon(magr)) {
+			if (mattk->aatyp == AT_GAZE)
+				Sprintf(buf, "looks %sconfused by %s gaze.", mdef->mconf ? "more " : "", s_suffix(mon_nam(magr)));
+			else if (mattk->aatyp == AT_WDGZ)
+				Sprintf(buf, "looks %sconfused under %s gaze.", mdef->mconf ? "more " : "", s_suffix(mon_nam(magr)));	// gaze halu is assumed to be have an eye-contact component
+			else
+				Sprintf(buf, "looks %sconfused.", mdef->mconf ? "more " : "");
+		}
+		else
+			Sprintf(buf, "looks %sconfused.", mdef->mconf ? "more " : "");
+
+		if (canseemon(mdef))
+			pline("%s %s", Monnam(mdef), buf);
+
+		mdef->mconf = 1;
+		mdef->mstrategy &= ~STRAT_WAITFORU;
 		break;
 	    case AD_CURS:
 		if (!night() && (pa == &mons[PM_GREMLIN])) break;
@@ -2402,7 +2510,7 @@ physical:{
 			for (i = rn2(3)+2; i > 0; i--) {
 				x = rn2(3)-1;
 				y = rn2(3)-1;
-				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(EXPL_MAX));		//-1 is unspecified source. 8 is physical
+				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(EXPL_MAX), 1);		//-1 is unspecified source. 8 is physical
 			}
 			if(DEADMONSTER(magr))
 				return MM_AGR_DIED;
@@ -2427,7 +2535,7 @@ physical:{
 		tmp *= 2;
 	}
 	
-	if ( is_backstabber(magr->data) &&
+	if ( tmp > 0 && is_backstabber(magr->data) &&
 		!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
 			((stationary(mdef->data) || sessile(mdef->data)) && (mdef->data->mlet == S_FUNGUS || mdef->data->mlet == S_PLANT))
 		 ) && (
@@ -2441,7 +2549,7 @@ physical:{
 	}
 	
 	
-	if(magr->data == &mons[PM_LONG_WORM] && magr->wormno && mattk->aatyp == AT_BITE){
+	if(tmp > 0 && magr->data == &mons[PM_LONG_WORM] && magr->wormno && mattk->aatyp == AT_BITE){
 		if(wormline(magr, mdef->mx, mdef->my))
 			tmp += d(2,4);//Adds segment damage
 	}

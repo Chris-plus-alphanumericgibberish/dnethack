@@ -1049,7 +1049,8 @@ bound_digging()
 
 void
 mkportal(x, y, todnum, todlevel)
-register xchar x, y, todnum, todlevel;
+register xchar x, y;
+register int todnum, todlevel;
 {
 	/* a portal "trap" must be matched by a */
 	/* portal in the destination dungeon/dlevel */

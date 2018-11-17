@@ -1063,7 +1063,7 @@ lightsaber_form_sdie:
 	}
 	
 	if (Is_weapon || (otmp && (otmp->otyp >= LUCKSTONE && otmp->otyp <= ROCK && otmp->ovar1 == -P_FIREARM))) {
-		int multiplier;
+		int multiplier = 0;
 		if(is_lightsaber(otmp)) {
 			if(otmp->oartifact == ART_ATMA_WEAPON){
 				if(otmp == uwep &&
@@ -1492,7 +1492,7 @@ int spot;
 			/* never offhand artifacts (unless you are the Bastard) */
 			(!otmp->oartifact || spot != W_SWAPWEP || mtmp->data == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY]) &&
 			/* never untouchable artifacts */
-		    (!otmp->oartifact || touch_artifact(otmp, mtmp, FALSE)) &&
+		    (!otmp->oartifact || touch_artifact(otmp, mtmp, 0)) &&
 			/* never unsuitable for mainhand wielding */
 			(spot!=W_WEP || (!bimanual(otmp, mtmp->data) || ((mtmp->misc_worn_check & W_ARMS) == 0 && !MON_SWEP(mtmp) && strongmonst(mtmp->data)))) &&
 			/* never unsuitable for offhand wielding */
@@ -1805,6 +1805,7 @@ static const NEARDATA short hwep[] = {
 	  DWARVISH_MATTOCK/*1d12/1d8*/, 
 	  ELVEN_BROADSWORD/*1d6+1d4/1d6+2*/, 
 	  KATANA/*1d10/1d12*/,
+	  HIGH_ELVEN_WARSWORD/*1d10/1d10*/,
 	  CRYSKNIFE/*1d10/1d10*/, 
 	  DROVEN_SHORT_SWORD/*1d9/1d9*/, 
 	  DWARVISH_SPEAR/*1d9/1d9*/, 
@@ -1867,6 +1868,8 @@ struct obj *otmp;
         if (wep == otmp) return TRUE;
     
         if (wep->oartifact) return FALSE;
+		
+        if (wep->oproperties) return FALSE;
 
         if (is_giant(mtmp->data) &&  wep->otyp == CLUB) return FALSE;
         if (is_giant(mtmp->data) && otmp->otyp == CLUB) return TRUE;
@@ -1903,15 +1906,15 @@ register struct monst *mtmp;
 			(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
 			|| otmp->otyp == IRON_CHAIN || otmp->otyp == HEAVY_IRON_BALL
 			) &&
-			/* an artifact */
-			otmp->oartifact &&
+			/* an artifact or other special weapon*/
+			(otmp->oartifact || otmp->oproperties) &&
 			/* never uncharged lightsabers */
             (!is_lightsaber(otmp) || otmp->age
 			 || otmp->oartifact == ART_INFINITY_S_MIRRORED_ARC
 			 || otmp->otyp == KAMEREL_VAJRA
             ) &&
 			/* never untouchable artifacts */
-			(touch_artifact(otmp, mtmp, FALSE)) &&
+			(touch_artifact(otmp, mtmp, 0)) &&
 			/* never too-large for available hands */
 			(!bimanual(otmp, mtmp->data) || ((mtmp->misc_worn_check & W_ARMS) == 0 && strongmonst(mtmp->data))) &&
 			/* never a hated weapon */
@@ -2882,10 +2885,10 @@ struct obj *obj;
 			else type = P_SPEAR;
 		}
 		else if(obj->otyp == DOUBLE_LIGHTSABER && !obj->altmode){
-			if(P_SKILL(P_BROAD_SWORD) > P_SKILL(P_QUARTERSTAFF))
-				type = P_BROAD_SWORD;
-			else if(P_MAX_SKILL(P_BROAD_SWORD) > P_MAX_SKILL(P_QUARTERSTAFF))
-				type = P_BROAD_SWORD;
+			if(P_SKILL(P_TWO_HANDED_SWORD) > P_SKILL(P_QUARTERSTAFF))
+				type = P_TWO_HANDED_SWORD;
+			else if(P_MAX_SKILL(P_TWO_HANDED_SWORD) > P_MAX_SKILL(P_QUARTERSTAFF))
+				type = P_TWO_HANDED_SWORD;
 			else type = P_QUARTERSTAFF;
 		}
 		else if(obj->oartifact == ART_TORCH_OF_ORIGINS){
@@ -3307,7 +3310,7 @@ struct obj *weapon;
 				case P_SKILLED:			bonus = +1; break;
 				case P_EXPERT:			bonus = +2; break;
 				case P_MASTER:			bonus = +3; break;
-				case P_GRAND_MASTER:	bonus = +4; break;
+				case P_GRAND_MASTER:	bonus = +5; break;
 			}
 		}
     }
@@ -3474,7 +3477,7 @@ int type;
 				case P_SKILLED:			bonus = +1; break;
 				case P_EXPERT:			bonus = +2; break;
 				case P_MASTER:			bonus = +3; break;
-				case P_GRAND_MASTER:	bonus = +4; break;
+				case P_GRAND_MASTER:	bonus = +5; break;
 			}
 		}
     }

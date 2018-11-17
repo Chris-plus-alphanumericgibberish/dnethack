@@ -533,8 +533,6 @@ getbones()
 		&& !wizard
 #endif
 		) return(0);
-
-	if (!iflags.bones) return(0);
 	if(no_bones_level(&u.uz)) return(0);
 	fd = open_bonesfile(&u.uz, &bonesid);
 	if (fd < 0) return(0);
@@ -594,7 +592,6 @@ getbones()
 			}
 			resetobjs(fobj,TRUE);
 			resetobjs(level.buriedobjlist,TRUE);
-			has_loaded_bones = 1;
 		}
 	}
 	(void) close(fd);

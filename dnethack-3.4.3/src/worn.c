@@ -857,6 +857,9 @@ struct monst *magr;
 		if(mon->mflee || rn2(2))
 			base += 5;
 	}
+	if(mon->data == &mons[PM_UVUUDAUM]){
+		base += 10;//stoneskin
+	}
 	
 	if(mon->mtame){
 		if(u.specialSealsActive&SEAL_COSMOS) base += rnd(spiritDsize());

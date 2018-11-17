@@ -32,6 +32,7 @@ static void FDECL(p_glow2,(struct obj *,const char *));
 static void FDECL(randomize,(int *, int));
 static void FDECL(forget_single_object, (int));
 static void FDECL(maybe_tame, (struct monst *,struct obj *));
+static void FDECL(ranged_set_lightsources, (int, int, genericptr_t));
 
 int
 doread()
@@ -195,6 +196,29 @@ doread()
 						spl_book[i].sp_know = 20000;
 						You("learn to cast Cone of Cold!");
 						break;
+					}
+				}
+				if (further_study(SPE_CONE_OF_COLD))
+				{
+					for (i = 0; i < MAXSPELL; i++)  {
+						if (spellid(i) == SPE_BLIZZARD)  {
+							if (spellknow(i) <= 1000) {
+								Your("knowledge of Blizzard is keener.");
+								spl_book[i].sp_know = 20000;
+								exercise(A_WIS, TRUE);       /* extra study */
+							}
+							else { /* 1000 < spellknow(i) <= MAX_SPELL_STUDY */
+								You("know Blizzard quite well already.");
+							}
+							break;
+						}
+						else if (spellid(i) == NO_SPELL)  {
+							spl_book[i].sp_id = SPE_BLIZZARD;
+							spl_book[i].sp_lev = objects[SPE_BLIZZARD].oc_level;
+							spl_book[i].sp_know = 20000;
+							You("learn to cast Frost Storm!");
+							break;
+						}
 					}
 				}
 				if (i == MAXSPELL) impossible("Too many spells memorized!");
@@ -1045,6 +1069,8 @@ forget_levels(percent)
  *
  * Other things are subject to flags:
  *
+ *	howmuch & ALL_MAP	= forget whole map
+ *	howmuch & ALL_SPELLS	= forget all spells
  */
 void
 forget(howmuch)
@@ -1098,7 +1124,7 @@ struct obj *sobj;
 			if(Spellboost) role_skill++;
 			if(role_skill < 1) role_skill = 1;
 			
-			for(role_skill; role_skill; role_skill--)
+			for(; role_skill; role_skill--)
 				if(!resist(mtmp, sobj->oclass, 0, NOTELL)){
 					(void) tamedog(mtmp, sobj);
 					return;
@@ -1509,6 +1535,7 @@ struct obj	*sobj;
 				       sobj->blessed ? rnd(3-uwep->spe/3) : 1);
 		break;
 	case SCR_TAMING:
+	case SPE_PACIFY_MONSTER:
 	case SPE_CHARM_MONSTER:
 		if (u.uswallow) {
 		    maybe_tame(u.ustuck, sobj);
@@ -1735,7 +1762,7 @@ struct obj	*sobj;
 		    burn_away_slime();
 		}
 		explode(u.ux, u.uy, 11, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_FIERY);
+							SCROLL_CLASS, EXPL_FIERY, 1);
 		return(1);
 	}
 	case SCR_EARTH:
@@ -2008,7 +2035,9 @@ struct obj	*sobj;
 						8+4*bcsign(sobj));
 		break;
 	}
+	case SPE_ANTIMAGIC_SHIELD:
 	case SCR_ANTIMAGIC:{
+		int amt = (sobj->otyp == SPE_ANTIMAGIC_SHIELD) ? 50 : 400;
 		if(confused && sobj->cursed){
 			//Confused
 			pline("Shimmering sparks shoot into your body!");
@@ -2034,8 +2063,8 @@ struct obj	*sobj;
 		}
 		if(!Nullmagic) pline("A shimmering film surrounds you!");
 		else pline("The shimmering film grows brighter!");
-		if( (HNullmagic & TIMEOUT) + 400L < TIMEOUT) {
-			long timer = (HNullmagic & TIMEOUT) + 400L;
+		if ((HNullmagic & TIMEOUT) + amt < TIMEOUT) {
+			long timer = (HNullmagic & TIMEOUT) + amt;
 			HNullmagic &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
 			HNullmagic |= timer; //set new timer
 		}
@@ -2056,7 +2085,7 @@ struct obj	*sobj;
 				sy = u.uy;
 			}
 			explode(sx, sy, 11, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_FIERY);
+							SCROLL_CLASS, EXPL_FIERY, 1);
 			sx = u.ux+rnd(3)-2; 
 			sy = u.uy+rnd(3)-2;
 			if (!isok(sx,sy) ||
@@ -2066,7 +2095,7 @@ struct obj	*sobj;
 				sy = u.uy;
 			}
 			explode(sx, sy, 12, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_FROSTY);
+							SCROLL_CLASS, EXPL_FROSTY, 1);
 			sx = u.ux+rnd(3)-2; 
 			sy = u.uy+rnd(3)-2;
 			if (!isok(sx,sy) ||
@@ -2076,7 +2105,7 @@ struct obj	*sobj;
 				sy = u.uy;
 			}
 			explode(sx, sy, 15, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_MAGICAL);
+							SCROLL_CLASS, EXPL_MAGICAL, 1);
 			sx = u.ux+rnd(3)-2; 
 			sy = u.uy+rnd(3)-2;
 			if (!isok(sx,sy) ||
@@ -2086,7 +2115,7 @@ struct obj	*sobj;
 				sy = u.uy;
 			}
 			explode(sx, sy, 17, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_NOXIOUS);
+							SCROLL_CLASS, EXPL_NOXIOUS, 1);
 	break;
 		}
 		long rturns = sobj->blessed ? 5000L : sobj->cursed ? 5L : 250L;

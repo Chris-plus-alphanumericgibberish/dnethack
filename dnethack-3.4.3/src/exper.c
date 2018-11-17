@@ -5,7 +5,6 @@
 #include "hack.h"
 
 STATIC_DCL void NDECL(binderdown);
-STATIC_DCL long FDECL(newuexp, (int));
 STATIC_DCL int FDECL(enermod, (int));
 
 static long expUps[] = {
@@ -41,7 +40,7 @@ static long expUps[] = {
 1000000	//30
 };
 
-STATIC_OVL long
+long
 newuexp(lev)
 int lev;
 {

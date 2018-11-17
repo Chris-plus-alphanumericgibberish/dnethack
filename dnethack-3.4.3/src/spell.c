@@ -9,13 +9,15 @@ static NEARDATA struct obj *book;	/* last/current book being xscribed */
 static NEARDATA int RoSbook;		/* Read spell or Study Wards?" */
 
 /* spellmenu arguments; 0 thru n-1 used as spl_book[] index when swapping */
+#define SPELLMENU_MAINTAIN (-4)
+#define SPELLMENU_DESCRIBE (-3)
 #define SPELLMENU_CAST (-2)
 #define SPELLMENU_VIEW (-1)
 
 #define KEEN 20000
 #define READ_SPELL 1
 #define STUDY_WARD 2
-#define MAINTAINED_SPELL_PW_MULTIPLIER 1
+#define MAINTAINED_SPELL_PW_MULTIPLIER 3
 #define MAINTAINED_SPELL_HUNGER_MULTIPLIER 1
 #define incrnknow(spell)        spl_book[spell].sp_know = KEEN
 #define ndecrnknow(spell, knw)        spl_book[spell].sp_know = max(0, spl_book[spell].sp_know - (KEEN*knw)/100)
@@ -33,11 +35,11 @@ STATIC_DCL boolean FDECL(cursed_book, (struct obj *bp));
 STATIC_DCL boolean FDECL(confused_book, (struct obj *));
 STATIC_DCL void FDECL(deadbook, (struct obj *));
 STATIC_PTR int NDECL(learn);
-STATIC_DCL boolean FDECL(getspell, (int *));
+STATIC_DCL boolean FDECL(getspell, (int *, int));
 STATIC_DCL boolean FDECL(getspirit, (int *));
-STATIC_DCL boolean FDECL(spiritLets, (char *, boolean));
-STATIC_DCL int FDECL(dospiritmenu, (const char *, int *, boolean));
-STATIC_DCL boolean FDECL(dospellmenu, (const char *,int,int *, boolean));
+STATIC_DCL boolean FDECL(spiritLets, (char *, int));
+STATIC_DCL int FDECL(dospiritmenu, (const char *, int *, int));
+STATIC_DCL boolean FDECL(dospellmenu, (int,int *));
 STATIC_DCL void FDECL(describe_spell, (int));
 STATIC_DCL int FDECL(percent_success, (int));
 STATIC_DCL int NDECL(throwspell);
@@ -49,6 +51,7 @@ STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
 STATIC_DCL int FDECL(spellhunger, (int));
 STATIC_DCL int FDECL(isqrt, (int));
 STATIC_DCL boolean FDECL(run_maintained_spell, (int));
+STATIC_DCL boolean FDECL(can_maintain_spell, (int));
 STATIC_DCL void NDECL(update_alternate_spells);
 
 long FDECL(doreadstudy, (const char *));
@@ -515,6 +518,35 @@ learn()
 			break;
 		}
 	}
+
+	if (booktype = further_study(book->otyp))
+	{
+		You("are able to apply the writings of the book to learn another spell.");
+		Sprintf(splname, objects[booktype].oc_name_known ?
+			"\"%s\"" : "the \"%s\" spell",
+			OBJ_NAME(objects[booktype]));
+		for (i = 0; i < MAXSPELL; i++)  {
+			if (spellid(i) == booktype)  {
+				if (spellknow(i) <= 1000) {
+					Your("knowledge of %s is keener.", splname);
+					incrnknow(i);
+					exercise(A_WIS, TRUE);       /* extra study */
+				}
+				else { /* 1000 < spellknow(i) <= MAX_SPELL_STUDY */
+					You("know %s quite well already.", splname);
+				}
+				break;
+			}
+			else if (spellid(i) == NO_SPELL)  {
+				spl_book[i].sp_id = booktype;
+				spl_book[i].sp_lev = objects[booktype].oc_level;
+				incrnknow(i);
+				You("add %s to your repertoire.", splname);
+				break;
+			}
+		}
+	}
+
 	if (i == MAXSPELL) impossible("Too many spells memorized!");
 
 	if (book->cursed) {	/* maybe a demon cursed it */
@@ -527,6 +559,42 @@ learn()
 	if (costly) check_unpaid(book);
 	book = 0;
 	return(0);
+}
+
+int
+further_study(booktype) /* if the player is skilled enough in the book's spell school, they can learn another spell from the orginial tome */
+int booktype;
+{
+	int skill = P_SKILL(spell_skilltype(booktype));
+	int related = 0;
+	int skillmin = 0;
+
+#define set_related(spell) if(!related) related = spell
+	switch (booktype)
+	{
+	case SPE_FINGER_OF_DEATH:	set_related(SPE_DRAIN_LIFE);
+		skillmin = P_BASIC;
+		break;
+	case SPE_FIREBALL:			set_related(SPE_FIRE_STORM);
+	case SPE_CONE_OF_COLD:		set_related(SPE_BLIZZARD);
+	case SPE_FIRE_STORM:		set_related(SPE_FIREBALL);
+	case SPE_BLIZZARD:		set_related(SPE_CONE_OF_COLD);
+	case SPE_LIGHTNING_STORM:	set_related(SPE_LIGHTNING_BOLT);
+	case SPE_EXTRA_HEALING:		set_related(SPE_HEALING);
+	case SPE_CHARM_MONSTER:		set_related(SPE_PACIFY_MONSTER);
+		skillmin = P_SKILLED;
+		break;
+	case SPE_LIGHTNING_BOLT:	set_related(SPE_LIGHTNING_STORM);
+	case SPE_HEALING:			set_related(SPE_EXTRA_HEALING);
+	case SPE_DRAIN_LIFE:		set_related(SPE_FINGER_OF_DEATH);
+	case SPE_CREATE_MONSTER:	set_related(SPE_CREATE_FAMILIAR);
+	case SPE_CREATE_FAMILIAR:	set_related(SPE_CREATE_MONSTER);
+	case SPE_PACIFY_MONSTER:	set_related(SPE_CHARM_MONSTER);
+		skillmin = P_EXPERT;
+		break;
+	}
+	return (related && skill >= skillmin) ? related : 0;
+#undef set_related
 }
 
 int
@@ -544,6 +612,7 @@ struct obj *spellbook;
 			return 1;					//which should never be reached, and only catches books of secrets anyway.
 		} else {
 			int i;
+			boolean read_book = FALSE;
 			Sprintf(splname, objects[spellbook->ovar1].oc_name_known ?
 					"\"%s\"" : "the \"%s\" spell",
 				OBJ_NAME(objects[spellbook->ovar1]));
@@ -553,11 +622,8 @@ struct obj *spellbook;
 					if (spellknow(i) <= 1000) {
 						Your("knowledge of %s is keener.", splname);
 						incrnknow(i);
+						read_book = TRUE;
 						exercise(A_WIS,TRUE);       /* extra study */
-						if(!rn2(20)){
-							spellbook->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
-							pline("The endless pages of the book turn themselves. They settle on a section describing %s.",OBJ_NAME(objects[spellbook->ovar1]));
-						}
 					} else { /* 1000 < spellknow(i) <= MAX_SPELL_STUDY */
 						You("know %s quite well already.", splname);
 					}
@@ -566,14 +632,44 @@ struct obj *spellbook;
 					spl_book[i].sp_id = spellbook->ovar1;
 					spl_book[i].sp_lev = objects[spellbook->ovar1].oc_level;
 					incrnknow(i);
+					read_book = TRUE;
 					pline("The endless pages of the book cover the material of a spellbook of %s in exhaustive detail.",OBJ_NAME(objects[spellbook->ovar1]));
 					pline("Using the instructions on the pages, you easily learn to cast the spell!");
-					if(!rn2(20)){
-						spellbook->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
-						pline("The endless pages of the book turn themselves. They settle on a section describing %s.",OBJ_NAME(objects[spellbook->ovar1]));
-					}
 					break;
 				}
+			}
+			int booktype;
+			if (booktype = further_study(spellbook->ovar1)){
+				You("understand the material thoroughly, and can see a way to cast another spell.");
+				Sprintf(splname, objects[booktype].oc_name_known ?
+					"\"%s\"" : "the \"%s\" spell",
+					OBJ_NAME(objects[booktype]));
+				for (i = 0; i < MAXSPELL; i++)  {
+					if (spellid(i) == booktype)  {
+						if (spellknow(i) <= 1000) {
+							Your("knowledge of %s is keener.", splname);
+							incrnknow(i);
+							exercise(A_WIS, TRUE);       /* extra study */
+							read_book = TRUE;
+						}
+						else { /* 1000 < spellknow(i) <= MAX_SPELL_STUDY */
+							You("know %s quite well already.", splname);
+						}
+						break;
+					}
+					else if (spellid(i) == NO_SPELL)  {
+						spl_book[i].sp_id = booktype;
+						spl_book[i].sp_lev = objects[booktype].oc_level;
+						incrnknow(i);
+						You("add %s to your repertoire.", splname);
+						read_book = TRUE;
+						break;
+					}
+				}
+			}
+			if (read_book && !rn2(20)){
+				spellbook->ovar1 = rn2(SPE_BLANK_PAPER - SPE_DIG) + SPE_DIG;
+				pline("The endless pages of the book turn themselves. They settle on a section describing %s.", OBJ_NAME(objects[spellbook->ovar1]));
 			}
 			if (i == MAXSPELL) impossible("Too many spells memorized!");
 			return 1;
@@ -795,6 +891,26 @@ run_maintained_spells()
 	}
 }
 
+STATIC_DCL boolean
+can_maintain_spell(spell)
+int spell;
+{
+	switch (spell)
+	{
+	case SPE_DETECT_MONSTERS:
+		if (P_SKILL(spell_skilltype(SPE_DETECT_MONSTERS)) < P_SKILLED)
+			break;
+	case SPE_HASTE_SELF:
+	case SPE_LEVITATION:
+	case SPE_INVISIBILITY:
+	case SPE_DETECT_UNSEEN:
+	case SPE_PROTECTION:
+	case SPE_ANTIMAGIC_SHIELD:
+		return TRUE;
+	}
+	return FALSE;
+}
+
 STATIC_OVL boolean
 run_maintained_spell(spell)
 int spell;
@@ -849,6 +965,12 @@ int spell;
 			cast = TRUE;
 		}
         break;
+	case SPE_ANTIMAGIC_SHIELD:
+		if ((HNullmagic&TIMEOUT) < 10) {
+			incr_itimeout(&HNullmagic, 100);
+			cast = TRUE;
+		}
+		break;
     default:
         impossible("player maintaining an unmaintainable spell? (%d)", spell);
         spell_unmaintain(spell);
@@ -898,8 +1020,9 @@ age_spells()
  * parameter.  Otherwise return FALSE.
  */
 STATIC_OVL boolean
-getspell(spell_no)
-	int *spell_no;
+getspell(spell_no, menutype)
+int *spell_no;
+int menutype;
 {
 	int nspells, idx;
 	char ilet, lets[BUFSZ], qbuf[QBUFSZ];
@@ -935,8 +1058,7 @@ getspell(spell_no)
 			You("don't know that spell.");
 		}
 	}
-	return dospellmenu("Choose which spell to cast",
-				SPELLMENU_CAST, spell_no, FALSE);
+	return dospellmenu(menutype, spell_no);
 }
 /*
  * Return TRUE if a spell was picked, with the spell index in the return
@@ -1137,7 +1259,7 @@ pick_gnosis_seal()
 STATIC_OVL boolean
 spiritLets(lets, respect_timeout)
 	char *lets;
-	boolean respect_timeout;
+	int respect_timeout;
 {
 	int i,s;
 	if(flags.timeoutOrder){
@@ -1167,35 +1289,27 @@ int
 docast()
 {
 	int spell_no;
-	if (getspell(&spell_no))
+	if (getspell(&spell_no, SPELLMENU_CAST))
 					return spelleffects(spell_no, FALSE, 0);
 	return 0;
 }
 
-/* allow the player to conditionally cast advanced spells like fire storm */
+/* allow the player to conditionally cast spells via equipped artifacts */
 void
 update_alternate_spells()
 {
-	int i, j, k;
-	int basespell[] = { SPE_LIGHTNING_BOLT,
-						SPE_CONE_OF_COLD,
-						SPE_FIREBALL,
-						SPE_ACID_BLAST };
-	int altspell[] = {  SPE_LIGHTNING_STORM,
-						SPE_FROST_STORM,
-						SPE_FIRE_STORM,
-						SPE_ACID_STORM };
+	int i;
 
 	// for artifacts
 	if (uarmh && uarmh->oartifact == ART_STORMHELM){
 		for (i = 0; i < MAXSPELL; i++) {
-			if (spellid(i) == SPE_LIGHTNING_BOLT) {
+			if (spellid(i) == SPE_LIGHTNING_STORM) {
 				if (spl_book[i].sp_know < 1) spl_book[i].sp_know = 1;
 				break;
 			}
 			if (spellid(i) == NO_SPELL)  {
-				spl_book[i].sp_id = SPE_LIGHTNING_BOLT;
-				spl_book[i].sp_lev = objects[SPE_LIGHTNING_BOLT].oc_level;
+				spl_book[i].sp_id = SPE_LIGHTNING_STORM;
+				spl_book[i].sp_lev = objects[SPE_LIGHTNING_STORM].oc_level;
 				spl_book[i].sp_know = 1;
 				break;
 			}
@@ -1227,30 +1341,6 @@ update_alternate_spells()
 			}
 		}
 	}
-
-	// for advanced offensive spells
-#define ADVANCED(x) (P_SKILL(x) + Spellboost >= P_SKILLED)
-	for (k = 0; k < 4; k++){
-		for (i = 0; i < MAXSPELL; i++) {
-			if (spellid(i) == basespell[k]) {
-				for (j = 0; j < MAXSPELL; j++) {
-					if (ADVANCED(spell_skilltype(basespell[k]))) {
-						if (spellid(j) == altspell[k]) {
-							spl_book[j].sp_know = max(spl_book[i].sp_know, spl_book[j].sp_know);
-							j = MAXSPELL;
-						}
-						if (spellid(j) == NO_SPELL) {
-							spl_book[j].sp_id = altspell[k];
-							spl_book[j].sp_lev = objects[altspell[k]].oc_level;
-							spl_book[j].sp_know = spl_book[i].sp_know;
-							j = MAXSPELL;
-						}
-					}
-				}
-			}
-		}
-	}
-#undef ADVANCED
 }
 
 /* the '^f' command -- fire a spirit power */
@@ -1804,8 +1894,7 @@ spiriteffects(power, atme)
 			sy = u.uy;
 			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
-				if(Double_spell_size) explode2(u.ux,u.uy,5/*Electrical*/, d(range,dsize)*1.5, WAND_CLASS, EXPL_MAGICAL);
-				else explode(u.ux,u.uy,5/*Electrical*/, d(range,dsize), WAND_CLASS, EXPL_MAGICAL);
+				explode(u.ux, u.uy, 5/*Electrical*/, d(range, dsize) * (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_MAGICAL, 1 + !!Double_spell_size);
 			} else {
 				while(--range >= 0){
 					lsx = sx; sx += u.dx;
@@ -1814,15 +1903,13 @@ spiriteffects(power, atme)
 						mon = m_at(sx, sy);
 						if(mon){
 							dmg = d(range+1,dsize); //Damage decreases with range
-							if(Double_spell_size) explode2(sx, sy, 5/*Electrical*/, dmg*1.5, WAND_CLASS, EXPL_MAGICAL);
-							else explode(sx, sy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
+							explode(sx, sy, 5/*Electrical*/, dmg * (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_MAGICAL, 1 + !!Double_spell_size);
 							break;//break loop
 						}
 					} else {
 						if(range < 4) range++;
 						dmg = d(range+1,dsize); //Damage decreases with range
-						if(Double_spell_size) explode2(lsx, lsy, 5/*Electrical*/, dmg*1.5, WAND_CLASS, EXPL_MAGICAL);
-						else explode(lsx, lsy, 5/*Electrical*/, dmg, WAND_CLASS, EXPL_MAGICAL);
+						explode(lsx, lsy, 5/*Electrical*/, dmg * (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_MAGICAL, 1 + !!Double_spell_size);
 						break;//break loop
 					}
 				}
@@ -2681,8 +2768,7 @@ spiriteffects(power, atme)
 				if (throwspell()) {
 					if(uwep->age < 500) uwep->age = 0;
 					else uwep->age -= 500;
-					if(Double_spell_size) explode2(u.dx,u.dy,1/*Fire*/, d(rnd(5),dsize)*1.5, WAND_CLASS, EXPL_FIERY);
-					explode(u.dx,u.dy,1/*Fire*/, d(rnd(5),dsize), WAND_CLASS, EXPL_FIERY);
+					explode(u.dx, u.dy, 1/*Fire*/, d(rnd(5), dsize)* (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_FIERY, 1 + !!Double_spell_size);
 					end_burn(uwep, TRUE);
 					begin_burn(uwep, FALSE);
 				} else return 0;
@@ -3206,7 +3292,7 @@ spiriteffects(power, atme)
 			}
 		break;
 		case PWR_HOOK_IN_THE_SKY:
-			if(!u.uevent.udemigod){
+			if(!u.uevent.invoked){
 				if((ledger_no(&u.uz) == 1 && u.uhave.amulet) ||
 					Can_rise_up(u.ux, u.uy, &u.uz)) {
 					const char *riseup ="are yanked up, through the %s!";
@@ -3479,8 +3565,8 @@ spiriteffects(power, atme)
 			//else
 			useup(umirror);
 			if(u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH,TRUE);
-			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
-			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER);
+			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER, 1);
+			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER, 1);
 			
 			while(sx != u.ux && sy != u.uy){
 				sx -= u.dx;
@@ -3706,15 +3792,14 @@ boolean atme;
 	boolean confused = (Confusion != 0);
 	struct obj *pseudo;
 	coord cc;
+	int expl_type = 0;
+	int inacc = 0;
+	boolean miss = FALSE;
+	int dam = 0;
+	int rad = 0;
 	
 
 	if(!spelltyp){
-		if (spell_maintained(spellid(spell))) {
-			spell_unmaintain(spellid(spell));
-			pline("Spell no longer maintained.");
-
-			return 0;
-		}
 		/*
 		 * Spell casting no longer affects knowledge of the spell. A
 		 * decrement of spell knowledge is done every turn.
@@ -3810,6 +3895,7 @@ boolean atme;
 	role_skill = P_SKILL(skill);
 	if(Spellboost) role_skill++;
 	
+	n = 0;
 	switch(pseudo->otyp)  {
 	/*
 	 * At first spells act as expected.  As the hero increases in skill
@@ -3817,63 +3903,80 @@ boolean atme;
 	 * effects, e.g. more damage, further distance, and so on, without
 	 * additional cost to the spellcaster.
 	 */
-	// split advanced spells from regular spells
-	case SPE_LIGHTNING_STORM:
-	case SPE_FROST_STORM:
-	case SPE_FIRE_STORM:
-	case SPE_ACID_STORM:
+	case SPE_LIGHTNING_STORM:	expl_type = EXPL_MAGICAL;
+								n = rnd(6) + 6;
+								dam = u.ulevel + spell_damage_bonus();
+								rad = 0;
+								inacc = 3;
+								goto dothrowspell;
+	case SPE_BLIZZARD:			expl_type = EXPL_FROSTY;
+								n = rnd(3) + 1;
+								dam = u.ulevel + spell_damage_bonus();
+								rad = 1;
+								inacc = 1;
+								goto dothrowspell;
+	case SPE_FIRE_STORM:		expl_type = EXPL_FIERY;
+								n = 1;
+								dam = rnd(u.ulevel) + rnd(u.ulevel) + u.ulevel + spell_damage_bonus();
+								rad = 2;
+								inacc = 1;
+								goto dothrowspell;
+dothrowspell:
+		if (Double_spell_size){
+			n = n * 3 / 2;
+			if (rad)
+				rad += 1;
+			else
+				n += 2;
+		}
+
 		if (throwspell()) {
 			cc.x = u.dx; cc.y = u.dy;
-			n = rnd(8) + 1;
-			if (Double_spell_size) n *= 1.5;
 			while (n--) {
-				if (!u.dx && !u.dy && !u.dz) {
-					if ((damage = zapyourself(pseudo, TRUE)) != 0) {
-						char buf[BUFSZ];
-						Sprintf(buf, "zapped %sself with a spell", uhim());
-						losehp(damage, buf, NO_KILLER_PREFIX);
-					}
-				}
-				else {
-					if (Double_spell_size) explode2(u.dx, u.dy,
-						pseudo->otyp - SPE_LIGHT + 10,
-						u.ulevel / 2 + 1 + spell_damage_bonus(), 0,
-						(pseudo->otyp == SPE_FROST_STORM) ?
-					EXPL_FROSTY :
-								(pseudo->otyp == SPE_LIGHTNING_STORM) ?
-							EXPL_MAGICAL :
-											(pseudo->otyp == SPE_ACID_STORM) ?
-										EXPL_NOXIOUS :
-													EXPL_FIERY);
-					else explode(u.dx, u.dy,
-						pseudo->otyp - SPE_LIGHT + 10,
-						u.ulevel / 2 + 1 + spell_damage_bonus(), 0,
-						(pseudo->otyp == SPE_FROST_STORM) ?
-					EXPL_FROSTY :
-								(pseudo->otyp == SPE_LIGHTNING_STORM) ?
-							EXPL_MAGICAL :
-											(pseudo->otyp == SPE_ACID_STORM) ?
-										EXPL_NOXIOUS :
-													EXPL_FIERY);
-				}
-				u.dx = cc.x + rnd(3) - 2; u.dy = cc.y + rnd(3) - 2;
-				if (!isok(u.dx, u.dy) || !cansee(u.dx, u.dy) ||
-					IS_STWALL(levl[u.dx][u.dy].typ) || u.uswallow) {
-					/* Spell is reflected back to center */
+				// aim
+				miss = FALSE;
+				if (u.uswallow){
 					u.dx = cc.x;
 					u.dy = cc.y;
+				}
+				else
+				{
+					boolean once = TRUE;
+					while (once || !isok(u.dx, u.dy) || !cansee(u.dx, u.dy) || IS_STWALL(levl[u.dx][u.dy].typ)) {
+						if (pseudo->otyp == SPE_LIGHTNING_STORM && !rn2(10))
+							miss = TRUE;	//lightning storm is more accurate out in the open
+						u.dx = cc.x + rnd(1 + inacc * 2) - inacc - 1; u.dy = cc.y + rnd(1 + inacc * 2) - inacc - 1;
+						once = FALSE;
+					}
+				}
+				if (pseudo->otyp == SPE_LIGHTNING_STORM && !miss && !(m_at(u.dx, u.dy) || (u.dx == u.ux && u.dy == u.uy && !(uarmh && uarmh->oartifact == ART_STORMHELM))) && rn2(250))
+				{ //lightning storm prefers to hit creatures (including you)
+					n++;
+				}
+				else
+				{
+					// fire
+					if (!u.dx && !u.dy && !u.dz) {
+						if ((damage = zapyourself(pseudo, TRUE)) != 0) {
+							char buf[BUFSZ];
+							Sprintf(buf, "zapped %sself with a spell", uhim());
+							losehp(damage, buf, NO_KILLER_PREFIX);
+						}
+					}
+					else {
+						explode(u.dx, u.dy,
+							pseudo->otyp - SPE_LIGHT + 10,
+							dam, 0, expl_type, rad);
+					}
 				}
 			}
 		}
 		break;
+	/* these spells are handled in zap.c */
 	case SPE_LIGHTNING_BOLT:
 	case SPE_CONE_OF_COLD:
 	case SPE_FIREBALL:
-	case SPE_ACID_BLAST:
-		if (role_skill >= P_SKILLED) //if you're skilled, you can do meteor storm version of spells
-			if (!spelltyp) u.uen += energy / 2;	//and for some reason that makes the basic versions cheaper to cast
-		// and fall through
-	/* these spells are all duplicates of wand effects */
+	case SPE_ACID_SPLASH:
 	case SPE_HASTE_SELF:
 	case SPE_FORCE_BOLT:
 	case SPE_SLEEP:
@@ -3921,10 +4024,12 @@ boolean atme;
 		/* high skill yields effect equivalent to blessed scroll */
 		if (role_skill >= P_SKILLED) pseudo->blessed = 1;
 		/* fall through */
+	case SPE_PACIFY_MONSTER:
 	case SPE_CHARM_MONSTER:
 	case SPE_MAGIC_MAPPING:
 	case SPE_CREATE_MONSTER:
 	case SPE_IDENTIFY:
+	case SPE_ANTIMAGIC_SHIELD:
 		(void) seffects(pseudo);
 		break;
 
@@ -3981,27 +4086,6 @@ boolean atme;
 		impossible("Unknown spell %d attempted.", spell);
 		obfree(pseudo, (struct obj *)0);
 		return(0);
-	}
-	
-	switch(pseudo->otyp){
-    /* These spells can be toggled for whether or not to maintain it */
-    case SPE_HASTE_SELF:
-    case SPE_DETECT_MONSTERS:
-    case SPE_LEVITATION:
-    case SPE_INVISIBILITY:
-    case SPE_DETECT_UNSEEN:
-    // case SPE_PHASE:
-    case SPE_PROTECTION:
-        /* Detect monsters isn't useful to maintain on a lower level */
-        if (pseudo->otyp == SPE_DETECT_MONSTERS && role_skill < P_SKILLED)
-            break;
-        if (yn("Maintain the spell?") == 'y')
-			spell_maintain(pseudo->otyp);
-		else
-			spell_unmaintain(pseudo->otyp);
-
-	default:
-	break;
 	}
 	
 	/* gain skill for successful cast */
@@ -4097,24 +4181,9 @@ losespells(howmuch)
 int
 dovspell()
 {
-	char qbuf[QBUFSZ];
-	int splnum, othnum;
-	struct spell spl_tmp;
-
-	if (spellid(0) == NO_SPELL)
-	    You("don't know any spells right now.");
-	else {
-	    while (dospellmenu("Currently known spells",
-			       SPELLMENU_VIEW, &splnum, FALSE)) {
-		Sprintf(qbuf, "Reordering spells; swap '%c' with",
-			spellet(splnum));
-		if (!dospellmenu(qbuf, splnum, &othnum, FALSE)) break;
-
-		spl_tmp = spl_book[splnum];
-		spl_book[splnum] = spl_book[othnum];
-		spl_book[othnum] = spl_tmp;
-	    }
-	}
+	int spell_no;
+	if (getspell(&spell_no, SPELLMENU_VIEW))
+		return spelleffects(spell_no, FALSE, 0);
 	return 0;
 }
 
@@ -4122,7 +4191,7 @@ int
 dospiritmenu(prompt, power_no, respect_timeout)
 const char *prompt;
 int *power_no;
-boolean respect_timeout;
+int respect_timeout;
 {
 	winid tmpwin;
 	int n, how;
@@ -4197,15 +4266,15 @@ boolean respect_timeout;
 }
 
 STATIC_OVL boolean
-dospellmenu(prompt, splaction, spell_no, describe)
-const char *prompt;
-int splaction;	/* SPELLMENU_CAST, SPELLMENU_VIEW, or spl_book[] index */
+dospellmenu(splaction, spell_no)
+int splaction;	/* SPELLMENU_CAST, SPELLMENU_VIEW, SPELLMENU_DESCRIBE, SPELLMENU_MAINTAIN, or spl_book[] index */
 int *spell_no;
-boolean describe;
 {
 	winid tmpwin;
 	int i, n, how;
+	int maintainable = 0;
 	char buf[BUFSZ];
+	char buf2[BUFSZ];
 	menu_item *selected;
 	anything any;
 
@@ -4230,9 +4299,18 @@ boolean describe;
 		Sprintf(buf, "Name\tLevel\tCategory\tFail\tMemory");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
+
+		if (can_maintain_spell(spellid(i))){
+			maintainable += 1;
+		}
+		else {
+			if (splaction == SPELLMENU_MAINTAIN)
+				continue;
+		}
+		Sprintf(buf2, "%s%s", spellname(i), spell_maintained(spellid(i)) ? " [M]" : "");
 		Sprintf(buf, iflags.menu_tab_sep ?
-			"%s\t%-d%s\t%s\t%-d%%\t%-d%%" : "%-20s  %2d%s   %-12s %3d%%     %3d%%",
-			spellname(i), spellev(i),
+			"%s\t%-d%s\t%s\t%-d%%\t%-d%%\t" : "%-20s  %2d%s   %-12s %3d%%     %3d%%",
+			buf2, spellev(i),
 			spellknow(i) ? " " : "*",
 			spelltypemnemonic(spell_skilltype(spellid(i))),
 			100 - percent_success(i),
@@ -4244,52 +4322,107 @@ boolean describe;
 			 spellet(i), 0, ATR_NONE, buf,
 			 (i == splaction) ? MENU_SELECTED : MENU_UNSELECTED);
 	}
-	if (!describe){
-		// Describe a spell
-		Sprintf(buf, "Describe a spell instead");
-		any.a_int = -1;					/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			'?', 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-	}
-	else {
-		Sprintf(buf, splaction == SPELLMENU_VIEW ? "Rearrange spells instead" : "Cast a spell instead");
-		any.a_int = -1;					/* must be non-zero */
+	if (splaction != SPELLMENU_CAST && splaction < 0) {
+		Sprintf(buf, "Cast a spell instead");
+		any.a_int = SPELLMENU_CAST;
 		add_menu(tmpwin, NO_GLYPH, &any,
 			'!', 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 	}
-		
-	end_menu(tmpwin, describe ? "Choose spell to describe:" : prompt);
+	if (splaction != SPELLMENU_MAINTAIN && splaction < 0 && maintainable){
+		// Maintain a spell
+		Sprintf(buf, "Maintain a spell instead");
+		any.a_int = SPELLMENU_MAINTAIN;
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'#', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if (splaction != SPELLMENU_DESCRIBE && splaction < 0){
+		// Describe a spell
+		Sprintf(buf, "Describe a spell instead");
+		any.a_int = SPELLMENU_DESCRIBE;
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'?', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if (splaction != SPELLMENU_VIEW && splaction < 0 && spellid(1) != NO_SPELL){
+		// Describe a spell
+		Sprintf(buf, "Rearrange spells instead");
+		any.a_int = SPELLMENU_VIEW;
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'+', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	switch (splaction)
+	{
+	case SPELLMENU_VIEW:
+		Sprintf(buf, "Choose which spell to reorder");
+		break;
+	case SPELLMENU_CAST:
+		Sprintf(buf, "Choose which spell to cast");
+		break;
+	case SPELLMENU_MAINTAIN:
+		Sprintf(buf, "Choose which spell to (un)maintain");
+		break;
+	case SPELLMENU_DESCRIBE:
+		Sprintf(buf, "Choose which spell to describe");
+		break;
+	default:
+		Sprintf(buf, "Reordering spells; swap '%c' with", spellet(splaction));
+		break;
+	}
+	end_menu(tmpwin, buf);
 
 	how = PICK_ONE;
 	if (splaction == SPELLMENU_VIEW && spellid(1) == NO_SPELL)
 	    how = PICK_NONE;	/* only one spell => nothing to swap with */
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
-	if (n > 0 && selected[0].item.a_int == -1){
-		return dospellmenu(prompt, splaction, spell_no, !describe);
-	}
-	if (n > 0 && describe){
-		describe_spell(selected[0].item.a_int - 1);
-		return dospellmenu(prompt, splaction, spell_no, describe);
-	}
-	if (n > 0) {
-		*spell_no = selected[0].item.a_int - 1;
-		/* menu selection for `PICK_ONE' does not
-		   de-select any preselected entry */
-		if (n > 1 && *spell_no == splaction)
-		    *spell_no = selected[1].item.a_int - 1;
-		free((genericptr_t)selected);
-		/* default selection of preselected spell means that
-		   user chose not to swap it with anything */
-		if (*spell_no == splaction) return FALSE;
-		return TRUE;
-	} else if (splaction >= 0) {
-	    /* explicit de-selection of preselected spell means that
-	       user is still swapping but not for the current spell */
-	    *spell_no = splaction;
-	    return TRUE;
+
+	if (n > 0){
+		int s_no = selected[0].item.a_int - 1;
+
+		if (selected[0].item.a_int < 0){
+			return dospellmenu(selected[0].item.a_int, spell_no);
+		}
+		else {
+			switch (splaction)
+			{
+			case SPELLMENU_VIEW:
+				*spell_no = s_no;
+				return dospellmenu(s_no, spell_no);
+
+			case SPELLMENU_CAST:
+				*spell_no = s_no;
+				return TRUE;
+
+			case SPELLMENU_MAINTAIN:
+				if (!spell_maintained(spellid(s_no)))
+				{
+					spell_maintain(spellid(s_no));
+					You("begin maintaining %s.", spellname(s_no));
+				}
+				else
+				{
+					spell_unmaintain(spellid(s_no));
+					You("stop maintaining %s.", spellname(s_no));
+				}
+				return FALSE;
+
+			case SPELLMENU_DESCRIBE:
+				describe_spell(s_no);
+				return dospellmenu(splaction, spell_no);
+
+			default:
+			{
+				struct spell spl_tmp;
+				spl_tmp = spl_book[*spell_no];
+				spl_book[*spell_no] = spl_book[s_no];
+				spl_book[s_no] = spl_tmp;
+				return dospellmenu(SPELLMENU_VIEW, spell_no);
+			}
+			}
+		}
 	}
 	return FALSE;
 }
@@ -4337,40 +4470,34 @@ int spellID;
 		strcat(desc3, "Deals no damage to fire-resistant creatures.");
 		strcat(desc4, "");
 		break;
-	case SPE_ACID_BLAST:
-		strcat(desc1, "Launches a directed blast of acid that explodes on hitting something.");
+	case SPE_ACID_SPLASH:
+		strcat(desc1, "Splashes acid in an area next to you.");
 		strcat(desc2, "The acid can boil potions and wet other items.");
 		strcat(desc3, "Deals no damage to acid-resistant creatures.");
 		strcat(desc4, "");
 		break;
 	case SPE_LIGHTNING_STORM:
-		strcat(desc1, "Creates a series of lightning explosions centered around a target.");
+		strcat(desc1, "Causes many lightning strikes in a large area around a target.");
 		strcat(desc2, "The electric shock can damage wands.");
-		strcat(desc3, "Deals no damage to shock-resistant creatures.");
-		strcat(desc4, "");
+		strcat(desc3, "Confined spaces are detrimental to the spell\'s accuracy.");
+		strcat(desc4, "Deals no damage to shock-resistant creatures.");
 		break;
-	case SPE_FROST_STORM:
+	case SPE_BLIZZARD:
 		strcat(desc1, "Creates a series of cold explosions centered around a target.");
 		strcat(desc2, "The chill can freeze potions, shattering them.");
 		strcat(desc3, "Deals no damage to cold-resistant creatures.");
 		strcat(desc4, "");
 		break;
 	case SPE_FIRE_STORM:
-		strcat(desc1, "Creates a series of fire explosions centered around a target.");
+		strcat(desc1, "Creates a large firey explosion nearby a target.");
 		strcat(desc2, "The fire can boil potions and burn other flammable items.");
 		strcat(desc3, "Worn armor is also damaged.");
 		strcat(desc4, "Deals no damage to fire-resistant creatures.");
 		break;
-	case SPE_ACID_STORM:
-		strcat(desc1, "Creates a series of acid explosions centered around a target.");
-		strcat(desc2, "The acid can boil potions and wet other items.");
-		strcat(desc3, "Deals no damage to acid-resistant creatures.");
-		strcat(desc4, "");
-		break;
 	case SPE_HASTE_SELF:
 		strcat(desc1, "You temporarily move very quickly.");
 		strcat(desc2, "Casting while already very fast increase the duration of your haste.");
-		strcat(desc3, "");
+		strcat(desc3, "Can be maintained.");
 		strcat(desc4, "");
 		break;
 	case SPE_FORCE_BOLT:
@@ -4461,7 +4588,7 @@ int spellID;
 		strcat(desc1, "Detects unseen things in an area around you.");
 		strcat(desc2, "The location of monsters are shown.");
 		strcat(desc3, "Traps and secret doors become visible.");
-		strcat(desc4, "");
+		strcat(desc4, "Can be maintained to grant see invisible.");
 		break;
 	case SPE_HEALING:
 		strcat(desc1, "Creates a directed ray of healing magic.");
@@ -4511,6 +4638,12 @@ int spellID;
 		strcat(desc3, "");
 		strcat(desc4, "");
 		break;
+	case SPE_PACIFY_MONSTER:
+		strcat(desc1, "Attempts to pacify an adjacent creature.");
+		strcat(desc2, "Creatures can roll to resist the effect.");
+		strcat(desc3, "");
+		strcat(desc4, "");
+		break;
 	case SPE_CHARM_MONSTER:
 		strcat(desc1, "Attempts to charm an adjacent creature.");
 		strcat(desc2, "Untamable creatures become peaceful.");
@@ -4544,13 +4677,13 @@ int spellID;
 	case SPE_DETECT_MONSTERS:
 		strcat(desc1, "Detects all monsters on the level.");
 		strcat(desc2, "At Skilled or better, you continue detecting monsters for a time.");
-		strcat(desc3, "");
+		strcat(desc3, "Can be maintained at Skilled or better.");
 		strcat(desc4, "");
 		break;
 	case SPE_LEVITATION:
 		strcat(desc1, "You start levitating for a time.");
 		strcat(desc2, "At Skilled or better, you can descend at will.");
-		strcat(desc3, "");
+		strcat(desc3, "Can be maintained.");
 		strcat(desc4, "");
 		break;
 	case SPE_RESTORE_ABILITY:
@@ -4561,7 +4694,7 @@ int spellID;
 		break;
 	case SPE_INVISIBILITY:
 		strcat(desc1, "You turn invisible for a time.");
-		strcat(desc2, "");
+		strcat(desc2, "Can be maintained.");
 		strcat(desc3, "");
 		strcat(desc4, "");
 		break;
@@ -4579,8 +4712,8 @@ int spellID;
 		break;
 	case SPE_CREATE_FAMILIAR:
 		strcat(desc1, "Creates a tame creature.");
-		strcat(desc2, "1/3 of the time, you summon a tame domestic pet.");
-		strcat(desc3, "2/3 of the time, you summon a tame random monster.");
+		strcat(desc2, "1/3 of the time, the summoned creature is a tame domestic pet.");
+		strcat(desc3, "2/3 of the time, the summoned creature is a tame random monster.");
 		strcat(desc4, "");
 		break;
 	case SPE_CLAIRVOYANCE:
@@ -4589,11 +4722,16 @@ int spellID;
 		strcat(desc3, "");
 		strcat(desc4, "");
 		break;
+	case SPE_ANTIMAGIC_SHIELD:
+		strcat(desc1, "Temporarily protects you from magic.");
+		strcat(desc2, "While active, you cannot cast any spell but this.");
+		strcat(desc3, "Recasting increases the duration of the effect.");
+		strcat(desc4, "Can be maintained.");
 	case SPE_PROTECTION:
 		strcat(desc1, "Temporarily improves your AC. AC from this spell is better than normal.");
-		strcat(desc2, "The effect decays over time and can be restored by recasting.");
+		strcat(desc2, "While active, it reduces your magic power recovery.");
 		strcat(desc3, "The strength and duration of the effect is improved with casting skill.");
-		strcat(desc4, "While active, reduces magic power recovery.");
+		strcat(desc4, "Can be maintained.");
 		break;
 	case SPE_JUMPING:
 		strcat(desc1, "You make a magically-boosted jump.");
@@ -4678,7 +4816,7 @@ int spell;
 	int difficulty;
 	int skill;
 	
-	if(Nullmagic) return 0;
+	if(Nullmagic && spellid(spell)!=SPE_ANTIMAGIC_SHIELD) return 0;
 	
 	if(
 		((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 
@@ -4704,22 +4842,6 @@ int spell;
 		else if(Role_if(PM_BARD) && spell_skilltype(spellid(spell)) == P_ENCHANTMENT_SPELL)
 			statused = ACURR(A_CHA);
 		else statused = ACURR(urole.spelstat);
-	}
-
-	if (uarm && (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE) ){
-	    splcaster += (uarmc && uarmc->otyp == ROBE) ?
-			uarmc->oartifact ? 0 : urole.spelarmr/2 : urole.spelarmr;
-	} else if (uarmc && uarmc->otyp == ROBE){
-		splcaster -= uarmc->oartifact ? 2*urole.spelarmr : urole.spelarmr;
-	}
-	
-	if(uarmc){
-		if(uarmc->otyp == WHITE_FACELESS_ROBE)
-			splcaster -= 1;
-		else if(uarmc->otyp == BLACK_FACELESS_ROBE)
-			splcaster -= 2;
-		else if(uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE)
-			splcaster -= 4;
 	}
 	
 	if(uwep){
@@ -4806,25 +4928,58 @@ int spell;
 				cast_bon *= 2;
 			splcaster -= urole.spelarmr * cast_bon / 3;
 		}
-	
+	}
+
+	if (uarm){
+		if (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE)
+			splcaster += urole.spelarmr;
+
+		if (uarm->otyp == DROVEN_CHAIN_MAIL)
+			splcaster -= urole.spelarmr;
 	}
 	
+	if (uarmc){
+		if (uarmc->otyp == WHITE_FACELESS_ROBE)
+			splcaster -= 1;
+		if (uarmc->otyp == BLACK_FACELESS_ROBE)
+			splcaster -= 2;
+		if (uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE)
+			splcaster -= 4;
+		if (uarmc->otyp == ROBE)
+			splcaster -= (urole.spelarmr
+			* ((uarmc->oartifact) ? 2 : 1)
+			/ ((uarm && (is_metallic(uarm) || uarm->oartifact == ART_DRAGON_PLATE)) ? 2 : 1));
+	}
+
+	if (uarmh) {
+		if (is_metallic(uarmh) && uarmh->otyp != HELM_OF_BRILLIANCE)
+			splcaster += uarmhbon;
+
+		if (uarmh->oartifact == ART_STORMHELM && spellid(spell) == SPE_LIGHTNING_STORM)
+			splcaster -= urole.spelarmr;
+	}
+
+	if (uarmg) {
+		if (is_metallic(uarmg))
+			splcaster += uarmgbon;
+	}
+
+	if (uarmf) {
+		if (is_metallic(uarmf))
+			splcaster += uarmfbon;
+	}
+
+	if (uarms) {
+		splcaster += urole.spelshld;
+	}
+
 	if(u.sealsActive&SEAL_PAIMON) splcaster -= urole.spelarmr;
 	
-	if(uarm && uarm->otyp == DROVEN_CHAIN_MAIL) splcaster -= urole.spelarmr/2;
-	
-	if(uarms) splcaster += urole.spelshld;
-
-	if(uarmh && is_metallic(uarmh) && uarmh->otyp != HELM_OF_BRILLIANCE)
-		splcaster += uarmhbon;
-	if(uarmg && is_metallic(uarmg)) splcaster += uarmgbon;
-	if(uarmf && is_metallic(uarmf)) splcaster += uarmfbon;
-
 	if(Race_if(PM_INCANTIFIER))
 		splcaster += max(-3*urole.spelarmr,urole.spelsbon);
+
 	if(spellid(spell) == urole.spelspec)
 		splcaster += urole.spelsbon;
-
 
 	/* `healing spell' bonus */
 	if(spellid(spell) == SPE_HEALING ||
@@ -4905,17 +5060,6 @@ int spell;
 		else if(u.uz.dlevel == spire_level.dlevel-4) chance -= 20*spellev(spell);
 		else if(u.uz.dlevel == spire_level.dlevel-5) chance -= 10*spellev(spell);
 	}
-	
-	// players are unable to cast 'advanced' spells if they are not Skilled+
-	int altspell[] = {  	SPE_LIGHTNING_STORM,
-				SPE_FROST_STORM,
-				SPE_FIRE_STORM,
-				SPE_ACID_STORM };
-	int i;
-
-	for (i = 0; i < 4; i++)
-		if (spellid(spell) == altspell[i] && (P_SKILL(spell_skilltype(spellid(spell))) + Spellboost) < P_SKILLED)
-			chance = 0;
 	
 	/* Clamp to percentile */
 	if (chance > 100) chance = 100;
@@ -5116,7 +5260,7 @@ reorder_spirit_powers()
 		}
 	} else {
 		int power_no;
-		if(dospiritmenu("Choose which power to reorder", &power_no, FALSE))
+		if(dospiritmenu("Choose which power to reorder", &power_no, TRUE))
 			for(power_indx = 0; power_indx < 52; power_indx++){
 				if(power_no == u.spiritPOrder[power_indx])
 					break;

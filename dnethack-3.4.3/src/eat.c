@@ -403,7 +403,7 @@ choke(food)	/* To a full belly all food is bad. (It.) */
 		killer = Hallucination ? "amateur-hour horseshit" : "absorbing too much energy and exploding"; //8-bit theater
 		You("die...");
 		done(DISINTEGRATED);
-		explode(u.ux, u.uy, 0, u.uhpmax/2, MON_EXPLODE, EXPL_MAGICAL);
+		explode(u.ux, u.uy, 0, u.uhpmax/2, MON_EXPLODE, EXPL_MAGICAL, 1);
 		u.uhp = u.uhpmax/2;
 		pline("You reform!");
 		morehungry(u.uenmax/2);	/* lifesaved */
@@ -668,7 +668,7 @@ boolean allowmsg;
 			change_luck(-rn1(4,2));		/* -5..-2 */
 		} else if (Role_if(PM_CAVEMAN)) {
 			adjalign(sgn(u.ualign.type));
-			You("honour the dead.");
+			You("honor the dead.");
 		} else {
 			adjalign(-sgn(u.ualign.type));
 			You_feel("evil and fiendish!");
@@ -3901,7 +3901,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	    if (near_capacity() > SLT_ENCUMBER) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	} else {		/* even turns */
 	    if (Hunger) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
-	    if (u.sealsActive&SEAL_AHAZU) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
+	    if (u.sealsActive&SEAL_AHAZU && moves%10) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	    /* Conflict uses up food too */
 	    if (HConflict || (EConflict & (~W_ARTI))) (Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);
 	    /* Alacrity uses up food too */

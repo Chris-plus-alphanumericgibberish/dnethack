@@ -792,7 +792,7 @@ have_lizard()
 	register struct obj *otmp;
 
 	for(otmp = invent; otmp; otmp = otmp->nobj)
-		if(otmp->otyp == CORPSE && (otmp->corpsenm == PM_LIZARD || otmp->corpsenm == PM_BABY_CAVE_LIZARD || PM_SMALL_CAVE_LIZARD || PM_CAVE_LIZARD || PM_LARGE_CAVE_LIZARD))
+		if(otmp->otyp == CORPSE && (otmp->corpsenm == PM_LIZARD || otmp->corpsenm == PM_BABY_CAVE_LIZARD ||  otmp->corpsenm == PM_SMALL_CAVE_LIZARD ||  otmp->corpsenm == PM_CAVE_LIZARD ||  otmp->corpsenm == PM_LARGE_CAVE_LIZARD))
 			return(TRUE);
 	return(FALSE);
 }

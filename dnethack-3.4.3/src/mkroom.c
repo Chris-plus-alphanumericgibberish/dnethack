@@ -31,7 +31,7 @@ STATIC_DCL void NDECL(mkkamereltowers);
 STATIC_DCL void NDECL(mkminorspire);
 STATIC_DCL void NDECL(mkfishingvillage);
 STATIC_DCL void NDECL(mkpluhomestead);
-STATIC_DCL void FDECL(mkfishinghut, (boolean));
+STATIC_DCL void FDECL(mkfishinghut, (int));
 STATIC_DCL void NDECL(mkpluvillage);
 STATIC_DCL void NDECL(mkferrufort);
 STATIC_DCL void NDECL(mkferrutower);
@@ -56,8 +56,8 @@ STATIC_DCL void FDECL(mkarmory, (struct mkroom *));
 STATIC_DCL void NDECL(mkisland);
 STATIC_DCL void NDECL(mkriver);
 STATIC_DCL void NDECL(mkneuriver);
-STATIC_DCL void FDECL(liquify, (xchar, xchar, boolean));
-STATIC_DCL void FDECL(neuliquify, (xchar, xchar, boolean));
+STATIC_DCL void FDECL(liquify, (int,int,int));
+STATIC_DCL void FDECL(neuliquify, (int, int, int));
 STATIC_DCL struct permonst * NDECL(morguemon);
 STATIC_DCL struct permonst * NDECL(antholemon);
 STATIC_DCL struct permonst * NDECL(squadmon);
@@ -1875,7 +1875,8 @@ mkfishingvillage()
 {
 	int x=0,y=0,tx, ty, tries=0;
 	int i,j, c, edge;
-	boolean left = rn2(2), good=FALSE, okspot;
+	int left = rn2(2);
+	boolean good=FALSE, okspot;
 	int slant = rn2(3);
 	int shelf = rn1(5, 5);
 	struct obj *otmp;
@@ -1930,7 +1931,7 @@ mkfishingvillage()
 STATIC_OVL
 void
 mkfishinghut(left)
-	boolean left;
+	int left;
 {
 	int x,y,tries=0, roomnumb;
 	int i,j, pathto = 0;
@@ -2002,8 +2003,8 @@ mkfishinghut(left)
 				}
 			}
 		}
-		i = 1+rn2(3);
-		for(i;i>0;i--){
+		
+		for(i = 1+rn2(3);i>0;i--){
 			makemon(&mons[PM_DEEP_ONE], x+rnd(2), y+rnd(2), MM_ADJACENTOK);
 		}
 		
@@ -4684,15 +4685,15 @@ mksea()	/* John Harris */
 	/*level.flags.has_river = 1;*/
 	for (x=1 ; x <= COLNO-1 ; x++) {
 		for (y=1 ; y <= ROWNO-1 ; y++) {
-			liquify(x,y, FALSE);
+			liquify(x,y,FALSE);
 		};
 	}
 }
 
 STATIC_OVL void
 liquify(x, y, edge)
-register xchar x, y;
-register boolean edge; /* Allows room walls to intrude slightly into river. */
+register int x, y;
+register int edge; /* Allows room walls to intrude slightly into river. */
 {
 	register int typ = levl[x][y].typ;
 	register int monster = PM_JELLYFISH;
@@ -4730,8 +4731,8 @@ register boolean edge; /* Allows room walls to intrude slightly into river. */
 
 STATIC_OVL void
 neuliquify(x, y, edge)
-register xchar x, y;
-register boolean edge; /* Allows room walls to intrude slightly into river. */
+register int x, y;
+register int edge; /* Allows room walls to intrude slightly into river. */
 {
 	register int typ = levl[x][y].typ;
 	register int monster = PM_JELLYFISH;
@@ -5564,7 +5565,9 @@ courtmon(kingnum)
 			else if (i > 15)	return(mkclass(S_GNOME, Inhell ? G_HELL : G_NOHELL));
 			else			return(mkclass(S_KOBOLD, Inhell ? G_HELL : G_NOHELL));
 		break;
+	
 	}
+	return &mons[PM_GNOME];
 }
 
 struct permonst *
@@ -5638,6 +5641,7 @@ mivaultmon()
 			return(&mons[PM_BALROG]);
 		break;
 	}
+	return &mons[PM_SHOGGOTH];
 }
 
 #define NSTYPES (PM_CAPTAIN - PM_SOLDIER + 1)

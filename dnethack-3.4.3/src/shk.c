@@ -3372,7 +3372,7 @@ boolean shk_buying;
 			else if(obj->obj_material == MITHRIL) tmp *= (MiV/AgV);
 			else /*treat it as if it's steel*/ tmp *= (FeV/AgV);
 		} else if(objects[obj->otyp].oc_material == GOLD){
-			if(obj->obj_material == SILVER) tmp = tmp *= (AgV/AuV);
+			if(obj->obj_material == SILVER) tmp *= (AgV/AuV);
 			else if(obj->obj_material == PLATINUM) tmp *= (PtV/AuV);
 			else if(obj->obj_material == MITHRIL) tmp *= (MiV/AuV);
 			else /*treat it as if it's steel*/ tmp *= (FeV/AuV);

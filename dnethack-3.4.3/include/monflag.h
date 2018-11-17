@@ -222,6 +222,7 @@
 #define MG_NOTAME	0x00400000L	/* Monster can't be tamed (replaces S_HUMAN as the check) */
 #define MG_NOWISH	0x00800000L	/* Monster can't be wished for in figurine/statue form */
 #define MG_BACKSTAB	0x01000000L	/* Monster does extra damage vs. incapacitated foes (as rogue) */
+#define MG_COMMANDER	0x02000000L /* Monster commands its underlings to fight better */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */
@@ -372,8 +373,12 @@
 #define GOLDEN_WAVE            SILVER_RAYS+1
 #define VULNERABILITY          GOLDEN_WAVE+1
 #define MASS_HASTE             VULNERABILITY+1
+#define MON_TIME_STOP          MASS_HASTE+1
+#define TIME_DUPLICATE         MON_TIME_STOP+1
+//70
+#define NAIL_TO_THE_SKY        TIME_DUPLICATE+1
 
-#define MON_LASTSPELL          MASS_HASTE
+#define MON_LASTSPELL          NAIL_TO_THE_SKY
 //Not yet implemented
 // #define MON_FIRE               STRANGLE+1
 // #define MON_BLIZZARD           MON_FIRAGA+1

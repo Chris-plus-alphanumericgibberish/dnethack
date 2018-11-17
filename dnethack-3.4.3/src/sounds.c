@@ -14,7 +14,6 @@
 
 static const char *FDECL(DantalionRace,(int));
 int FDECL(dobinding,(int, int));
-static int NDECL(dochat);
 
 static const char tools[] = { TOOL_CLASS, 0 };
 
@@ -96,8 +95,8 @@ static const char *alignmentThings[] = {
 	"Can a king be lawful?",
 	"Can God be lawful?",
 	"Is it chaotic to refuse to kill an innocent man?",
-	"Chaotic means stabbing a man, then giving him icecream!",
-	"Neutral means stabbing a man, then giving him icecream!",
+	"Chaotic means stabbing a man, then giving him ice cream!",
+	"Neutral means stabbing a man, then giving him ice cream!",
 	"Are you compelled to do evil, regardless of its utility?",
 	"Being nailed to things is good?",
 	"Storms are chaotic?",
@@ -630,7 +629,7 @@ register struct monst *mtmp;
 
     /* presumably nearness and soundok checks have already been made */
     if (!is_silent_mon(mtmp) && mtmp->data->msound <= MS_ANIMAL)
-	(void) domonnoise(mtmp);
+	(void) domonnoise(mtmp, FALSE);
     else if (mtmp->data->msound >= MS_HUMANOID) {
 	if (!canspotmon(mtmp))
 	    map_invisible(mtmp->mx, mtmp->my);
@@ -639,8 +638,9 @@ register struct monst *mtmp;
 }
 
 int
-domonnoise(mtmp)
-register struct monst *mtmp;
+domonnoise(mtmp, chatting)
+struct monst *mtmp;
+boolean chatting;
 {
 	register const char *pline_msg = 0,	/* Monnam(mtmp) will be prepended */
 			*verbl_msg = 0;	/* verbalize() */
@@ -650,7 +650,13 @@ register struct monst *mtmp;
 
     /* presumably nearness and sleep checks have already been made */
 	if (!flags.soundok) return(0);
-	if (is_silent_mon(mtmp)) return(0);
+	if (is_silent_mon(mtmp)){
+		if (chatting) {
+			pline("%s does not respond.", Monnam(mtmp));
+			return 1;
+		}
+		return(0);
+	}
 	
 	/* Make sure its your role's quest quardian; adjust if not */
 	if (ptr->msound == MS_GUARDIAN && ptr != &mons[urole.guardnum] && ptr != &mons[PM_CELEBORN]){
@@ -718,12 +724,6 @@ asGuardian:
 				pline1(Never_mind);
 				break;
 			}
-			// Sprintf(verbuf, "%s",
-			// if(yn(verbuf)=='y'){
-				
-			// } else {
-				// turns = ask_turns(mtmp, 0, 0);
-			// } if(!turns){
 			turns = ask_turns(mtmp, 0, 0);
 			if(!turns){
 				pline1(Never_mind);
@@ -868,9 +868,11 @@ asGuardian:
 	    	pline_msg = "squawks.";
 	    break;
 	case MS_HISS:
-	    if (!mtmp->mpeaceful)
-		pline_msg = "hisses!";
-	    else return 0;	/* no sound */
+	    if (!mtmp->mpeaceful) pline_msg = "hisses!";
+	    else {
+			if (chatting) pline_msg = "does not respond.";
+			else return 0;	/* no sound */
+		}
 	    break;
 	case MS_BUZZ:
 	    pline_msg = mtmp->mpeaceful ? "drones." : "buzzes angrily.";
@@ -1902,6 +1904,9 @@ humanoid_sound:
 		pline_msg = "is busy reading a copy of Sandman #8.";
 	    else verbl_msg = "Who do you think you are, War?";
     break;
+	default:
+		if (chatting) pline_msg = "does not respond.";
+	break;
     }
 
     if (pline_msg) pline("%s %s", Monnam(mtmp), pline_msg);
@@ -1909,6 +1914,199 @@ humanoid_sound:
     return(1);
 }
 
+static const short command_chain[][2] = {
+	{ PM_ORC, PM_ORC_CAPTAIN }, { PM_HILL_ORC, PM_ORC_CAPTAIN }, { PM_MORDOR_ORC, PM_ORC_CAPTAIN },
+	{ PM_ORC_CAPTAIN, PM_BOLG },
+	{ PM_URUK_HAI, PM_URUK_CAPTAIN },
+	{ PM_ORC_CAPTAIN, PM_NAZGUL }, { PM_URUK_CAPTAIN, PM_NAZGUL }, { PM_OLOG_HAI, PM_NAZGUL },
+	{ PM_NAZGUL, PM_NECROMANCER },
+
+	{ PM_ANGBAND_ORC, PM_ORC_OF_THE_AGES_OF_STARS},
+
+	{ PM_JUSTICE_ARCHON, PM_RAZIEL }, { PM_SWORD_ARCHON, PM_RAZIEL }, { PM_SHIELD_ARCHON, PM_RAZIEL },
+
+	{ PM_MIGO_WORKER, PM_MIGO_SOLDIER }, { PM_MIGO_SOLDIER, PM_MIGO_PHILOSOPHER }, { PM_MIGO_PHILOSOPHER, PM_MIGO_QUEEN },
+
+	{ PM_SOLDIER, PM_SERGEANT }, { PM_SERGEANT, PM_LIEUTENANT }, { PM_LIEUTENANT, PM_CAPTAIN },
+	{ PM_CAPTAIN, PM_CROESUS },
+
+	{ PM_LEGION_DEVIL_GRUNT, PM_LEGION_DEVIL_SOLDIER }, { PM_LEGION_DEVIL_SOLDIER, PM_LEGION_DEVIL_SERGEANT }, { PM_LEGION_DEVIL_SERGEANT, PM_LEGION_DEVIL_CAPTAIN },
+	{ PM_LEGION_DEVIL_CAPTAIN, PM_BAEL },
+
+	{ PM_MYRMIDON_HOPLITE, PM_MYRMIDON_LOCHIAS }, { PM_MYRMIDON_LOCHIAS, PM_MYRMIDON_YPOLOCHAGOS }, { PM_MYRMIDON_YPOLOCHAGOS, PM_MYRMIDON_LOCHAGOS },
+	{ PM_GIANT_ANT, PM_FORMIAN_TASKMASTER }, { PM_FIRE_ANT, PM_FORMIAN_TASKMASTER }, { PM_SOLDIER_ANT, PM_FORMIAN_TASKMASTER },
+	{ PM_FORMIAN_CRUSHER, PM_FORMIAN_TASKMASTER }, { PM_MYRMIDON_LOCHIAS, PM_FORMIAN_TASKMASTER },
+
+	{ PM_FERRUMACH_RILMANI, PM_STANNUMACH_RILMANI },
+
+	{ PM_WATCHMAN, PM_WATCH_CAPTAIN },
+
+	{ NON_PM, NON_PM }
+
+};
+
+boolean
+permon_in_command_chain(follower, commander)
+int follower;
+int commander;
+{
+	int i;
+
+	switch (commander)	// for special cases
+	{
+	case PM_LEGION:
+	case PM_LEGIONNAIRE:
+		impossible("permon_in_command_chain failed for legion(naire)");
+		return FALSE;
+
+	default:
+		for (i = 0; command_chain[i][0] >= LOW_PM; i++)
+		if (follower == command_chain[i][0])
+			if (commander == command_chain[i][1])
+				return TRUE;
+			else
+				return permon_in_command_chain(command_chain[i][1], commander);
+		break;
+	}
+	return FALSE;
+}
+
+boolean
+mon_in_command_chain(follower, commander)
+struct monst * follower;
+struct monst * commander;
+{
+	switch (monsndx(commander->data))	// for special cases
+	{
+	case PM_LEGION:
+	case PM_LEGIONNAIRE:
+		return (follower->mfaction == ZOMBIFIED);
+
+	default:
+		return permon_in_command_chain(monsndx(follower->data), monsndx(commander->data));
+	}
+	return FALSE;
+}
+
+// monster commands its followers to fight stronger
+void
+m_command(commander)
+struct monst * commander;
+{
+	struct monst * mtmp;
+	struct monst * nxtmon;
+	int tmp = 0;
+	int affected = 0;
+	int inrange = 0;
+
+	for (mtmp = fmon; mtmp; mtmp = nxtmon){
+		nxtmon = mtmp->nmon;
+		if (!clear_path(mtmp->mx, mtmp->my, commander->mx, commander->my)
+			|| (mtmp == commander)
+			|| !mon_in_command_chain(mtmp, commander)
+			|| !(mtmp->mpeaceful == commander->mpeaceful && mtmp->mtame == commander->mtame))
+			continue;
+
+		switch (monsndx(commander->data))
+		{
+		case PM_RAZIEL:
+			tmp = d(3, 7);
+			break;
+		case PM_BAEL:
+			tmp = d(2, 9);
+			break;
+		case PM_NECROMANCER:
+			tmp = d(2, 6);
+			break;
+		case PM_SERGEANT:
+		case PM_MYRMIDON_LOCHIAS:
+			tmp = rnd(3);
+			break;
+		default:
+			tmp = rnd(5 + min(30, commander->m_lev) / 6);
+			break;
+		}
+
+		inrange += 1;
+		if (tmp > mtmp->encouraged || mtmp->mflee){
+			mtmp->encouraged = max(tmp, mtmp->encouraged);
+			mtmp->mflee = 0;
+			mtmp->mfleetim = 0;
+			affected += 1;
+		}
+	}
+
+	if (affected && !(is_silent_mon(commander))) {
+		if (canseemon(commander)) {
+			switch (monsndx(commander->data))
+			{
+			case PM_RAZIEL:
+				// only messages for large groups
+				if (inrange > 4 && (affected > 4 || !rn2(5 - affected))){
+					if (affected == inrange)
+						pline("%s calls his %s to battle!", Monnam(commander), (inrange<10) ? "host" : "hosts");
+					else
+						pline("%s rallies his %s!", Monnam(commander), (inrange<10) ? "host" : "hosts");
+				}
+				break;
+			case PM_BAEL:
+				// only messages for large groups
+				if (inrange > 4 && (affected > 4 || !rn2(5 - affected))){
+					if (affected == inrange)
+						pline("%s calls his %s to battle!", Monnam(commander), (inrange < 10) ? "legion" : "legions");
+					else
+						pline("%s rallies his %s!", Monnam(commander), (inrange<10) ? "legion" : "legions");
+				}
+				break;
+			case PM_LEGION:
+			case PM_LEGIONNAIRE:
+				//silent
+				break;
+			default:
+				// hide message when few monsters are affected
+				if (affected > 4 || !rn2(5 - affected) || affected == inrange){
+					if (is_orc(commander->data) || is_demon(commander->data) || is_drow(commander->data))
+						pline("%s curses and urges %s follower%s on.", Monnam(commander), mhis(commander), (inrange > 1) ? "s" : "");
+					else if (is_mercenary(commander->data))
+						pline("%s orders %s %s forwards.", Monnam(commander), mhis(commander), (inrange < 20) ? (inrange < 4) ? "unit" : "forces" : "army");
+					else if (!(is_silent_mon(commander)))
+						pline("%s gives an order to attack.", Monnam(commander));
+				}
+				break;
+			}
+		} else {
+			switch (monsndx(commander->data))
+			{
+			case PM_RAZIEL:
+			case PM_BAEL:
+				// only messages for large groups
+				if (inrange > 4 && (affected > 4 || !rn2(5 - affected)) && distmin(commander->mx, commander->my, u.ux, u.uy) < BOLT_LIM){
+					if (affected == inrange)
+						You_hear((!Hallucination) ? "a call to battle!" : "a call to the table!");
+					else
+						You_hear((!Hallucination) ? "a rally cry!" : "a rally car!");
+				}
+				break;
+			case PM_LEGION:
+			case PM_LEGIONNAIRE:
+				//silent
+				break;
+			default:
+				// hide message when few monsters are affected
+				if ((affected > 4 || !rn2(5 - affected) || affected == inrange) && distmin(commander->mx, commander->my, u.ux, u.uy) < BOLT_LIM){
+					if (is_orc(commander->data) || is_demon(commander->data) || is_drow(commander->data))
+						You_hear((!Hallucination) ? "something cursing." : "mean words.");
+					else if (is_mercenary(commander->data))
+						You_hear((!Hallucination) ? "soldiers being ordered forwards." : "the Colonel shouting!");
+					else
+						You_hear((!Hallucination) ? "something give an order to attack." : "something gesture loudly!");
+				}
+				break;
+			}
+		}
+	}
+	return;
+}
 
 int
 dotalk()
@@ -1916,13 +2114,17 @@ dotalk()
     int result;
     boolean save_soundok = flags.soundok;
     flags.soundok = 1;	/* always allow sounds while chatting */
-    result = dochat();
+    result = dochat(TRUE, 0, 0, 0);
     flags.soundok = save_soundok;
     return result;
 }
 
-static int
-dochat()
+int
+dochat(ask_for_dir, dx, dy, dz)
+boolean ask_for_dir;
+int dx;
+int dy;
+int dz;
 {
     register struct monst *mtmp;
     register int tx,ty,bindresult;
@@ -1953,23 +2155,18 @@ dochat()
 //		return(1); //proceed with chat code (maybe you want to speak to the shopkeep about something else, maybe not. shouldn't block either way)
 	}
 
-    if (!getdir("Talk to whom? (in what direction)")) {
+	if (!ask_for_dir) {
+		u.dx = dx;
+		u.dy = dy;
+		u.dz = dz;
+	} else if (!getdir("Talk to whom? (in what direction)")) {
 		/* decided not to chat */
 		return(0);
 	}
 
 #ifdef STEED
-    if (u.usteed && u.dz > 0){
-		/* sleeping mounts won't talk, except priests (who wake up) */
-		if ((!u.usteed->mcanmove || u.usteed->msleeping) && !u.usteed->ispriest) {
-			/* If it is unseen, the player can't tell the difference between
-			   not noticing him and just not existing, so skip the message. */
-			if (canspotmon(u.usteed))
-				pline("%s seems not to notice you.", Monnam(u.usteed));
-			return(0);
-		}
-		return (domonnoise(u.usteed));
-	}
+    if (u.usteed && u.dz > 0)
+	return (domonnoise(u.usteed, FALSE));
 #endif
 	if (u.dz) {
 		struct engr *ep = get_head_engr();
@@ -2137,7 +2334,7 @@ dochat()
         return 0;
     }
 #endif /* CONVICT */
-    return domonnoise(mtmp);
+    return domonnoise(mtmp, FALSE);
 }
 
 //definition of externs in you.h
@@ -4117,9 +4314,9 @@ int tx,ty;
 		if(u.sealTimeout[BLACK_WEB-FIRST_SEAL] < moves){
 			struct trap *t = t_at(tx,ty);
 			if(t && t->ttyp == WEB && (
-				(levl[tx][ty].lit && !(viz_array[ty][tx]&TEMP_DRK3 && !viz_array[ty][tx]&TEMP_LIT1)) || 
+				(levl[tx][ty].lit && !(viz_array[ty][tx]&TEMP_DRK3 && !(viz_array[ty][tx]&TEMP_LIT1))) || 
 				(viz_array[ty][tx]&TEMP_LIT1 && !(viz_array[ty][tx]&TEMP_DRK3)) || 
-				(levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_DRK3 && !viz_array[u.uy][u.ux]&TEMP_LIT1)) || 
+				(levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))) || 
 				(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))
 				)
 			){

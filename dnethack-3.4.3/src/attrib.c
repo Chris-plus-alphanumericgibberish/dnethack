@@ -715,6 +715,9 @@ int oldlevel, newlevel;
 	register const struct innate *abil, *rabil;
 	long mask = FROMEXPER;
 
+	// set default values
+	abil = 0;
+	rabil = 0;
 
 	switch (Role_switch) {
 	case PM_ARCHEOLOGIST:   abil = arc_abil;	break;
@@ -732,14 +735,27 @@ int oldlevel, newlevel;
 	case PM_KNIGHT:         abil = kni_abil;	break;
 	case PM_MONK:           abil = mon_abil;	break;
 	case PM_NOBLEMAN:
-		if(Race_switch == PM_HALF_DRAGON)
+		switch (Race_switch)
+		{
+		case PM_HALF_DRAGON:
 			abil = kni_abil;
-		if(Race_switch == PM_DWARF)
+			break;
+		case PM_DWARF:
 			abil = kni_abil;
-		if(Race_switch == PM_DROW && flags.initgend)
-			abil = pir_abil;
-		if(Race_switch == PM_ELF)
+			break;
+		case PM_DROW:
+			if (flags.initgend)
+				abil = pir_abil;
+			else
+				abil = 0;
+			break;
+		case PM_ELF:
 			abil = elnob_abil;
+			break;
+		default:
+			abil = 0;
+			break;
+		}
 	break;
 	case PM_PIRATE:         abil = pir_abil;	break;
 	case PM_PRIEST:         abil = pri_abil;	break;

@@ -2164,7 +2164,7 @@ register struct monst *mtmp;
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
 				if(otmp->spe < 4) otmp->spe = 4;
-				otmp->oproperties = OPROP_CONC;
+				otmp->oproperties = OPROP_CONCW;
 				otmp->obj_material = GOLD;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
@@ -2172,7 +2172,7 @@ register struct monst *mtmp;
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
 				if(otmp->spe < 4) otmp->spe = 4;
-				otmp->oproperties = OPROP_CONC;
+				otmp->oproperties = OPROP_CONCW;
 				otmp->obj_material = GOLD;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
@@ -2831,26 +2831,27 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, SCIMITAR);
 			} else if(ptr == &mons[PM_OONA]){
 					//Note: Adjustments to how Oona's melee attacks were handled made her very weak without a weapon
-					otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+					//Also note: monster inventories are last-in-first-out, and oproperty weapons are favored, so the offhand weapon needs to be first
+					otmp = mksobj(STILETTO, FALSE, FALSE);
 					otmp->spe = 3;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oproperties = OPROP_AXIOW|OPROP_LESSW;
 					switch(u.oonaenergy){
 						case AD_COLD:
-							otmp->oproperties |= OPROP_ELECW; //superconducting?
+							otmp->oproperties |= OPROP_FIREW;
 						break;
 						case AD_FIRE:
-							otmp->oproperties |= OPROP_COLDW;
+							otmp->oproperties |= OPROP_ELECW;
 						break;
 						case AD_ELEC:
-							otmp->oproperties |= OPROP_FIREW;
+							otmp->oproperties |= OPROP_COLDW;
 						break;
 					}
 					otmp->obj_material = METAL;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
-					otmp = mksobj(STILETTO, FALSE, FALSE);
+					otmp = mksobj(LONG_SWORD, FALSE, FALSE);
 					otmp->spe = 3;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
@@ -5845,7 +5846,7 @@ register int	mmflags;
 				mtmp->mvar2 = 0;
 				mtmp->mvar3 = 0;
 				if (anymon){
-					if(u.uevent.udemigod) m_initlgrp(mtmp, 0, 0);
+					if(u.uevent.invoked) m_initlgrp(mtmp, 0, 0);
 					else mtmp->mvar3 = 1; //Set to 1 to initiallize
 				}
 			} else if(mtmp->data == &mons[PM_ARCADIAN_AVENGER]){
@@ -6074,8 +6075,11 @@ register int	mmflags;
 //			}
 		break;
 		case S_UMBER:
-			if (mndx == PM_UVUUDAUM){
-				mtmp->mhpmax = 3*mtmp->mhpmax;
+			if(mndx == PM_UVUUDAUM){
+				mtmp->m_lev = 38;
+				mtmp->mhpmax = d(38, 8);
+				if(mtmp->mhpmax < 38*4.5)
+					mtmp->mhpmax = (int)(38*4.5);
 				mtmp->mhp = mtmp->mhpmax;
 			}
 		break;
@@ -6225,7 +6229,27 @@ register int	mmflags;
 	} else if (mndx == PM_VLAD_THE_IMPALER) {
 		mitem = CANDELABRUM_OF_INVOCATION;
 	} else if (mndx == PM_CROESUS) {
-		mitem = TWO_HANDED_SWORD;
+		struct obj *otmp;
+		otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+		otmp->obj_material = GOLD;
+		fix_object(otmp);
+		(void) mpickobj(mtmp,otmp);
+		otmp = mksobj(PLATE_MAIL, TRUE, FALSE);
+		otmp->obj_material = GOLD;
+		fix_object(otmp);
+		(void) mpickobj(mtmp,otmp);
+		otmp = mksobj(GAUNTLETS, TRUE, FALSE);
+		otmp->obj_material = GOLD;
+		fix_object(otmp);
+		(void) mpickobj(mtmp,otmp);
+		otmp = mksobj(LOW_BOOTS, TRUE, FALSE);
+		otmp->obj_material = GOLD;
+		fix_object(otmp);
+		(void) mpickobj(mtmp,otmp);
+		otmp = mksobj(AMULET_OF_REFLECTION, TRUE, FALSE);
+		otmp->obj_material = GOLD;
+		fix_object(otmp);
+		(void) mpickobj(mtmp,otmp);
 	} else if (ptr->msound == MS_NEMESIS && !(Race_if(PM_DROW) && !Role_if(PM_NOBLEMAN)) ) {
 		flags.made_bell = TRUE;
 		mitem = BELL_OF_OPENING;
@@ -6336,7 +6360,7 @@ register int	mmflags;
 		curhouse = 0;
 		undeadfaction = 0;
 	}
-	if ((ptr->mflagst & MT_WAITMASK) && !(mmflags & MM_NOWAIT) && !u.uevent.udemigod) {
+	if ((ptr->mflagst & MT_WAITMASK) && !(mmflags & MM_NOWAIT) && !u.uevent.invoked) {
 		if (ptr->mflagst & MT_WAITFORU)
 			mtmp->mstrategy |= STRAT_WAITFORU;
 		if (ptr->mflagst & MT_CLOSE)
@@ -7511,7 +7535,7 @@ register struct permonst *ptr;
 	if (ptr->msound == MS_NEMESIS)	return FALSE;
 	
 	if (always_peaceful(ptr)) return TRUE;
-	if(!u.uevent.udemigod && mndx==PM_UVUUDAUM && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))) return TRUE;
+	if(!u.uevent.invoked && mndx==PM_UVUUDAUM && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))) return TRUE;
 	
 	if(ual == A_VOID) return FALSE;
 	

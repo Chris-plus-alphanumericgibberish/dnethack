@@ -2047,13 +2047,13 @@ int base_uac()
 			if(u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:
-						uac -=   (ACURR(A_DEX)+ACURR(A_INT))/5;
+						uac -=   max(0, (ACURR(A_DEX)+ACURR(A_INT) - 20)/5);
 					break;
 					case P_SKILLED:
-						uac -= 2*(ACURR(A_DEX)+ACURR(A_INT))/5;
+						uac -= max(0, (ACURR(A_DEX)+ACURR(A_INT) - 20)/3);
 					break;
 					case P_EXPERT:
-						uac -= 3*(ACURR(A_DEX)+ACURR(A_INT))/5;
+						uac -= max(0, (ACURR(A_DEX)+ACURR(A_INT) - 20)/2);
 					break;
 				}
 			} else if(u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){

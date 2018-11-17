@@ -197,6 +197,9 @@ register struct monst *mon;
 	boolean item1 = FALSE, item2 = FALSE;
 	boolean intelligent = TRUE;
 
+	if(on_level(&valley_level, &u.uz))
+		return (struct obj *)0; //The Dead hold on to their possessions (prevents the "drop whole inventory" bug
+	
 	rwep = attacktype(mon->data, AT_WEAP) ? propellor : &zeroobj;
 
 	if (is_animal(mon->data) || mindless_mon(mon)) {

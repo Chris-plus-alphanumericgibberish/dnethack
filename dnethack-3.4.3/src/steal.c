@@ -232,8 +232,8 @@ int
 steal(mtmp, objnambuf, artifact, monkey_business)
 struct monst *mtmp;
 char *objnambuf;
-boolean artifact;
-boolean monkey_business; /* true iff an animal is doing the thievery */
+int artifact;
+int monkey_business; /* true iff an animal is doing the thievery */
 {
 	struct obj *otmp;
 	int tmp, could_petrify, named = 0, armordelay;
