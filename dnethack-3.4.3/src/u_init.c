@@ -1604,6 +1604,8 @@ u_init()
 // ifdef ELBERETH
 	u.uevent.uhand_of_elbereth = 0;
 // endif
+	u.uevent.utook_castle = 0;
+	u.uevent.uunknowngod = 0;
 	u.uevent.uheard_tune = 0;
 	u.uevent.uopened_dbridge = 0;
 	u.uevent.udemigod = 0;		/* not a demi-god yet... */
@@ -2762,6 +2764,7 @@ register struct trobj *trop;
 			else obj = mkobj(trop->trclass, FALSE);
 			otyp = obj->otyp;
 			while (otyp == WAN_WISHING
+				|| otyp == RIN_WISHES
 				|| otyp == nocreate
 				|| otyp == nocreate2
 				|| otyp == nocreate3

@@ -167,6 +167,9 @@ struct engr {
 
 #define FOOTPRINT		43
 
+#define FIRST_PLANE_SYMBOL	44
+#define LAST_PLANE_SYMBOL	59
+
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 
 /*One type of ward per square

@@ -3064,7 +3064,7 @@ register struct obj *obj;
 
 	switch (chance) {
 	case 0 : verbalize("I am in your debt.  I will grant one wish!");
-		makewish();
+		makewish(allow_artwish()|WISH_VERBOSE);
 		mongone(mtmp);
 		break;
 	case 1 : verbalize("Thank you for freeing me!");

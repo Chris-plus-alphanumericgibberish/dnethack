@@ -2247,9 +2247,14 @@ int dz;
 				useup(optr);
 				u.regifted++;
 				mongone(mtmp);
-				if(Role_if(PM_EXILE) && u.regifted == 5){
-					pline("The image of an unknown and strange seal fills your mind!");
-					u.specialSealsKnown |= SEAL_UNKNOWN_GOD;
+				if(u.regifted == 5){
+					u.uevent.uunknowngod = 1;
+					You_feel("worthy.");
+					if (Role_if(PM_EXILE))
+					{
+						pline("The image of an unknown and strange seal fills your mind!");
+						u.specialSealsKnown |= SEAL_UNKNOWN_GOD;
+					}
 				}
 				return 1;
 			}

@@ -4015,13 +4015,24 @@ arti_invoke(obj)
 	struct permonst *pm;
 	struct monst *mtmp = 0;
 	int sring = find_sring();
-   if(!oart || !oart->inv_prop) {
-	if(obj->otyp == CRYSTAL_BALL)
-	    use_crystal_ball(obj);
-	else
-	    pline1(nothing_happens);
-	return 1;
-    }
+	if (!oart || !oart->inv_prop) {
+		switch (obj->otyp)
+		{
+		case CRYSTAL_BALL:
+			use_crystal_ball(obj);
+			break;
+		case RIN_WISHES:
+			(void) use_ring_of_wishes(obj);
+			break;
+		case CANDLE_OF_INVOCATION:
+			(void) use_candle_of_invocation(obj);
+			break;
+		default:
+			pline1(nothing_happens);
+			break;
+		}
+		return 1;
+	}
 
     if(oart->inv_prop > LAST_PROP) {
 	/* It's a special power, not "just" a property */

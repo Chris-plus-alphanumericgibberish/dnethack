@@ -6411,7 +6411,7 @@ struct permonst *mptr;		/* usually null; used for confused reading */
 	while (cnt--) {
 #ifdef WIZARD
 	    if (ask) {
-		if (create_particular()) {
+		if (create_particular(-1, -1, TRUE, 0, 0, 0)) {
 		    known = TRUE;
 		    continue;
 		}

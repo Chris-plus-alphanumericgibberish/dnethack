@@ -51,6 +51,8 @@ E void FDECL(use_bell, (struct obj **, int));
 E boolean FDECL(tinnable, (struct obj *));
 E void NDECL(reset_trapset);
 E void FDECL(fig_transform, (genericptr_t, long));
+E boolean FDECL(use_ring_of_wishes, (struct obj *));
+E boolean FDECL(use_candle_of_invocation, (struct obj *));
 E int FDECL(unfixable_trouble_count,(BOOLEAN_P));
 
 /* ### artifact.c ### */
@@ -1705,7 +1707,7 @@ E char *FDECL(ysimple_name, (struct obj *));
 E char *FDECL(Ysimple_name2, (struct obj *));
 E char *FDECL(makeplural, (const char *));
 E char *FDECL(makesingular, (const char *));
-E struct obj *FDECL(readobjnam, (char *,struct obj *,BOOLEAN_P));
+E struct obj *FDECL(readobjnam, (char *,int *,int));
 E int FDECL(rnd_class, (int,int));
 E const char *FDECL(cloak_simple_name, (struct obj *));
 E const char *FDECL(mimic_obj_name, (struct monst *));
@@ -2005,7 +2007,7 @@ E void FDECL(punish, (struct obj *));
 E void NDECL(unpunish);
 E boolean FDECL(cant_create, (int *, BOOLEAN_P));
 #ifdef WIZARD
-E boolean NDECL(create_particular);
+E struct monst * FDECL(create_particular, (unsigned long, int, boolean, unsigned long, unsigned long, unsigned short));
 #endif
 
 /* ### rect.c ### */
@@ -2819,9 +2821,10 @@ E boolean FDECL(break_crate, (struct obj *));
 E void FDECL(destroy_item, (int,int));
 E int FDECL(destroy_mitem, (struct monst *,int,int));
 E int FDECL(resist, (struct monst *,CHAR_P,int,int));
-E void NDECL(makewish);
+E void FDECL(makewish, (int));
 E void FDECL(costly_cancel, (struct obj *));
 E void FDECL(revive_egg, (struct obj *));
+E int NDECL(allow_artwish);
 
 #endif /* !MAKEDEFS_C && !LEV_LEX_C */
 

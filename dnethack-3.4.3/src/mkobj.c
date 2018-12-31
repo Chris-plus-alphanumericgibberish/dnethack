@@ -613,6 +613,7 @@ boolean artif;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 5);
 					break;
+		case CANDLE_OF_INVOCATION:
 		case MAGIC_LAMP:	otmp->spe = 1;
 					otmp->lamplit = 0;
 					blessorcurse(otmp, 2);
@@ -1027,7 +1028,10 @@ boolean artif;
 		otmp->spe = rn1(5,
 			(objects[otmp->otyp].oc_dir == NODIR) ? 11 : 4);
 		blessorcurse(otmp, 17);
-		otmp->recharged = 0; /* used to control recharging */
+		if (otmp->otyp == WAN_WISHING)
+			otmp->recharged = 1;
+		else
+			otmp->recharged = 0; /* used to control recharging */
 		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 	break;
@@ -1054,7 +1058,10 @@ boolean artif;
 			else if(!(rn2(4))) otmp->oward = rn2(LAST_HOUSE+1-FIRST_HOUSE)+FIRST_HOUSE;
 			else otmp->oward = rn2(LAST_FALLEN_HOUSE+1-FIRST_FALLEN_HOUSE)+FIRST_FALLEN_HOUSE;
 		}
-		if(objects[otmp->otyp].oc_charged) {
+		if(otmp->otyp == RIN_WISHES){
+			otmp->spe = rnd(3);
+		}
+		if(objects[otmp->otyp].oc_charged && otmp->otyp != RIN_WISHES) {
 		    blessorcurse(otmp, 3);
 		    if(rn2(10)) {
 			if(rn2(10) && bcsign(otmp))

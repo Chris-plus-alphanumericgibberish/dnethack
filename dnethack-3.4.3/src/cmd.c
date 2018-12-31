@@ -1147,7 +1147,7 @@ wiz_wish()	/* Unlimited wishes for debug mode by Paul Polderman */
 	    boolean save_verbose = flags.verbose;
 
 	    flags.verbose = FALSE;
-	    makewish();
+		makewish(WISH_WIZARD);
 	    flags.verbose = save_verbose;
 	    (void) encumber_msg();
 	} else
@@ -1199,7 +1199,7 @@ wiz_map()
 STATIC_PTR int
 wiz_genesis()
 {
-	if (wizard)	(void) create_particular();
+	if (wizard)	(void) create_particular(-1, -1, TRUE, 0, 0, 0);
 	else		pline("Unavailable command '^G'.");
 	return 0;
 }

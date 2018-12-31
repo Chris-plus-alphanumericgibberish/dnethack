@@ -294,6 +294,28 @@ register struct obj *obj;
 	You("drop %s down the drain.", doname(obj));
 	obj->in_use = TRUE;	/* block free identification via interrupt */
 	switch(obj->otyp) {	/* effects that can be noticed without eyes */
+		case RIN_WISHES:
+		if (obj->spe > 0)
+		{
+			struct monst * mtmp;
+			if (mtmp = makemon(&mons[PM_WERERAT], u.ux, u.uy, NO_MM_FLAGS))
+			{
+				if (!Blind)
+					You_hear("something from the pipes wish it was a real boy, and %s scuttles out of the sink!", a_monnam(mtmp));
+				else
+					You_hear("something from the pipes wish it was a real boy, and then scuttling noises!");
+				obj->spe--;
+				mtmp->mpeaceful = TRUE;
+				newsym(mtmp->mx, mtmp->my);
+				if (obj->spe > 0)
+				{
+					pline("It leaves the ring in the sink.");
+					goto giveback;
+				}
+			}
+		}
+		You("wish you hadn't done that.");
+		break;
 	    case RIN_SEARCHING:
 		You("thought your %s got lost in the sink, but there it is!",
 			xname(obj));

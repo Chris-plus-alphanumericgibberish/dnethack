@@ -191,8 +191,10 @@ shuffle_all()
 
 			if (oclass == POTION_CLASS)
 			    j -= 4;  /* water, starlight, amnesia, and blood have fixed descriptions */
+			if (oclass == RING_CLASS)
+				first += 1;	/* three wishes has a fixed description */
 			if (oclass == WAND_CLASS)
-			    first += 2;  /* light and darkness have fixed descriptions */
+			    first += 3;  /* light, darkness, and wishing have fixed descriptions */
 			else if (oclass == AMULET_CLASS ||
 				 oclass == SCROLL_CLASS ||
 				 oclass == SPBOOK_CLASS) {
@@ -1082,7 +1084,7 @@ find_hexagonal_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "hexagonal"))
 	    return i;
 
@@ -1096,7 +1098,7 @@ find_short_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "short"))
 	    return i;
 
@@ -1110,7 +1112,7 @@ find_runed_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "runed"))
 	    return i;
 
@@ -1124,7 +1126,7 @@ find_long_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "long"))
 	    return i;
 
@@ -1138,7 +1140,7 @@ find_curved_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "curved"))
 	    return i;
 
@@ -1152,7 +1154,7 @@ find_forked_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "forked"))
 	    return i;
 
@@ -1166,7 +1168,7 @@ find_spiked_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "spiked"))
 	    return i;
 
@@ -1180,7 +1182,7 @@ find_jeweled_wand()
     register int i;
     register const char *s;
 
-    for (i = WAN_WISHING; i <= WAN_LIGHTNING; i++)
+    for (i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++)
 	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "jeweled"))
 	    return i;
 
@@ -1209,8 +1211,8 @@ int mat;
 		matNeutralWands[6] = find_jeweled_wand();
 	}
 	
-	for(i = WAN_WISHING; i <= WAN_LIGHTNING; i++){
-		ctyp = WAN_WISHING + (((otyp+i)-WAN_WISHING)%(WAN_LIGHTNING-WAN_WISHING));
+	for(i = WAN_SECRET_DOOR_DETECTION; i <= WAN_LIGHTNING; i++){
+		ctyp = WAN_SECRET_DOOR_DETECTION + (((otyp+i)-WAN_SECRET_DOOR_DETECTION)%(WAN_LIGHTNING-WAN_SECRET_DOOR_DETECTION));
 		if(objects[ctyp].oc_material == mat)
 			return ctyp;
 		for(j = 0; j < 7; j++)

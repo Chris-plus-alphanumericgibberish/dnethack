@@ -133,9 +133,9 @@ OBJECT:object[3],random,(52,11)
 OBJECT:object[3],random,(53,11)
 OBJECT:object[3],random,(54,11)
 OBJECT:object[3],random,(55,11)
-# THE WAND OF WISHING in 1 of the 4 towers
+# THE RING OF THREE WISHES in 1 of the 4 towers
 CONTAINER:'(',"chest",place[0]
-OBJECT:'/',"wishing",contained
+OBJECT:'=',"wishes",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
 # A magic chest in another tower
@@ -379,9 +379,9 @@ OBJECT:object[3],random,(45,12)
 OBJECT:object[3],random,(43,12)
 OBJECT:object[3],random,(44,12)
 OBJECT:object[3],random,(45,12)
-# THE WAND OF WISHING in 1 of the 4 towers
+# THE RING OF THREE WISHES in 1 of the 4 towers
 CONTAINER:'(',"chest",place[0]
-OBJECT:'/',"wishing",contained
+OBJECT:'=',"wishes",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
 # A magic chest in another tower
@@ -598,9 +598,9 @@ DOOR:locked,(17,17)
 DOOR:locked,(26,17)
 DOOR:locked,(09,16)
 DOOR:locked,(05,13)
-# THE WAND OF WISHING in 1 of the 3 towers
+# THE RING OF THREE WISHES in 1 of the 3 towers
 CONTAINER:'(',"chest",place[0]
-OBJECT:'/',"wishing",contained
+OBJECT:'=',"wishes",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
 # A magic chest in another tower
@@ -912,9 +912,9 @@ OBJECT:object[3],random,(52,14)
 OBJECT:object[3],random,(53,14)
 OBJECT:object[3],random,(54,14)
 OBJECT:object[3],random,(55,14)
-# THE WAND OF WISHING in 1 of the 4 towers
+# THE RING OF THREE WISHES in 1 of the 4 towers
 CONTAINER:'(',"chest",place[0]
-OBJECT:'/',"wishing",contained
+OBJECT:'=',"wishes",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
 # A magic chest in another tower
@@ -1156,9 +1156,9 @@ OBJECT:object[3],random,(52,11)
 OBJECT:object[3],random,(53,11)
 OBJECT:object[3],random,(54,11)
 OBJECT:object[3],random,(55,11)
-# THE WAND OF WISHING in 1 of the 4 towers
+# THE RING OF THREE WISHES in 1 of the 4 towers
 CONTAINER:'(',"chest",place[0]
-OBJECT:'/',"wishing",contained
+OBJECT:'=',"wishes",contained
 # Prevent monsters from eating it.  (@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
 # A magic chest in another tower
@@ -1402,9 +1402,9 @@ OBJECT:object[3],random,(59,11)
 OBJECT:object[3],random,(60,11)
 OBJECT:object[3],random,(61,11)
 OBJECT:object[3],random,(62,11)
-# THE WAND OF WISHING in 1 of the 4 towers
+# THE RING OF THREE WISHES in 1 of the 4 towers
 CONTAINER:'(',"chest",place[0]
-OBJECT:'/',"wishing",contained
+OBJECT:'=',"wishes",contained
 # Prevent monsters from eating it.(@'s never eat objects)
 OBJECT:'?',"scare monster",place[0]
 # A magic chest in another tower

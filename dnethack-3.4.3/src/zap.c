@@ -1528,7 +1528,11 @@ poly_obj(obj, id)
 	switch (otmp->oclass) {
 
 	case TOOL_CLASS:
-	    if (otmp->otyp == MAGIC_LAMP) {
+		if (otmp->otyp == CANDLE_OF_INVOCATION) {
+		otmp->otyp = WAX_CANDLE;
+		otmp->age = 400L;
+		}
+	    else if (otmp->otyp == MAGIC_LAMP) {
 		otmp->otyp = OIL_LAMP;
 		otmp->age = 1500L;	/* "best" oil lamp possible */
 	    } else if (otmp->otyp == MAGIC_MARKER) {
@@ -1559,6 +1563,11 @@ poly_obj(obj, id)
 			otmp->otyp = SPE_BLANK_PAPER;
 	    else otmp->spestudied = obj->spestudied + 1;
 	    break;
+
+	case RING_CLASS:
+		while (otmp->otyp == RIN_WISHES)
+		otmp->otyp = rnd_class(RIN_WISHES, RIN_PROTECTION_FROM_SHAPE_CHAN);
+		break;
 
 	case GEM_CLASS:
 	    if (otmp->quan > (long) rnd(4) &&
@@ -2086,7 +2095,7 @@ register struct obj *obj;
 				pline("Unfortunately, nothing happens.");
 				break;
 			}
-			makewish();
+			makewish(0);	// does not allow artifact wishes
 		break;
 		case WAN_ENLIGHTENMENT:
 			known = TRUE;
@@ -4991,12 +5000,30 @@ int damage, tell;
 	return(resisted);
 }
 
+// returns WISH_ARTALLOW if the player is eligible to wish for an artifact at this time, otherwise 0
+int
+allow_artwish()
+{
+	int n = 0;
+	
+	n += u.uevent.qcalled;		// reaching the main dungeon branch of the quest
+	n += u.uevent.utook_castle;	// sitting on the castle throne
+	n += u.uevent.uunknowngod;	// sacrificing five artifacts to the priests of the unknown god
+
+	n -= u.uconduct.wisharti;	// how many artifacts the player has wished for
+
+	return ((n > 0) ? WISH_ARTALLOW : 0);
+}
+
 void
-makewish()
+makewish(wishflags)
+int wishflags;		// flags to change messages / effects
 {
 	char buf[BUFSZ];
+	char bufcpy[BUFSZ];
 	struct obj *otmp, nothing;
 	int tries = 0;
+	int wishreturn;
 
 	nothing = zeroobj;  /* lint suppression; only its address matters */
 	if (flags.verbose) You("may wish for an object.");
@@ -5009,17 +5036,49 @@ retry:
 	 *  has been denied.  Wishing for "nothing" requires a separate
 	 *  value to remain distinct.
 	 */
-	otmp = readobjnam(buf, &nothing, TRUE);
-	if (!otmp) {
-	    pline("Nothing fitting that description exists in the game.");
-	    if (++tries < 5) goto retry;
-	    pline1(thats_enough_tries);
-	    otmp = readobjnam((char *)0, (struct obj *)0, TRUE);
-	    if (!otmp) return;	/* for safety; should never happen */
-	} else if (otmp == &nothing) {
-	    /* explicitly wished for "nothing", presumeably attempting
-	       to retain wishless conduct */
-	    return;
+	strcpy(bufcpy, buf);
+	wishreturn = 0;
+	otmp = readobjnam(buf, &wishreturn, wishflags);
+
+	if (wishreturn & WISH_NOTHING)
+	{
+		/* explicitly wished for "nothing", presumeably attempting to retain wishless conduct */
+		if (wishflags & WISH_VERBOSE)
+			verbalize("As you wish.");
+		return;
+	}
+	if (wishreturn & WISH_FAILURE)
+	{
+		/* wish could not be read */
+		if (wishflags & WISH_VERBOSE)
+			verbalize("I do not know of that which you speak.");
+		else
+			pline("Nothing fitting that description exists in the game.");
+		if (++tries < 5)
+			goto retry;
+	}
+	if (wishreturn & WISH_DENIED)
+	{
+		/* wish was read as an object that cannot be wished for */
+		if (wishflags & WISH_VERBOSE)
+			verbalize("That is beyond my power.");
+		else
+			pline("You cannot wish for that.");
+		if (++tries < 5)
+			goto retry;
+	}
+	if (wishreturn & WISH_SUCCESS)
+	{
+		/* an allowable wish was read */
+		if (wishflags & WISH_VERBOSE)
+			verbalize("Done.");
+	}
+	if ((tries == 5) && (wishreturn & (WISH_DENIED | WISH_FAILURE)))
+	{
+		/* no more tries, give a random item */
+		pline1(thats_enough_tries);
+		otmp = readobjnam((char *)0, &wishreturn, wishflags);
+		if (!otmp) return;	/* for safety; should never happen */
 	}
 
 	/* KMH, conduct */

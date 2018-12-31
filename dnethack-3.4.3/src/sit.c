@@ -200,7 +200,22 @@ dosit()
 					levl[u.ux][u.uy].looted |= NOBLE_PETS;
 				}break;
 				case NOBLE_WISH:{
-					makewish();
+					struct monst *mtmp;
+					if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))){
+						pline("Nothing appears to your summon!");
+						break;
+					}
+					if (!Blind) {
+						pline("%s appears in a cloud of smoke!", Amonnam(mtmp));
+						pline("%s speaks.", Monnam(mtmp));
+					}
+					else {
+						You("smell acrid fumes.");
+						pline("%s speaks.", Something);
+					}
+					verbalize("You have summoned me.  I will grant one wish!");
+					makewish(allow_artwish() | WISH_VERBOSE);
+					mongone(mtmp);
 					levl[u.ux][u.uy].looted |= NOBLE_WISH;
 				}break;
 				default:
@@ -215,7 +230,7 @@ dosit()
 			}
 		} else {
 			You(sit_message, defsyms[S_throne].explanation);
-			if (rnd(6) > 4)  {
+			if ((Is_stronghold(&u.uz)) ? (u.uevent.utook_castle) : (rnd(6) > 4)) {
 			switch (rnd(13))  {
 				case 1:
 				(void) adjattrib(rn2(A_MAX), -rn1(4,3), FALSE);
@@ -251,7 +266,26 @@ dosit()
 				if(u.uluck + rn2(5) < 0) {
 					You_feel("your luck is changing.");
 					change_luck(1);
-				} else	    makewish();
+				}
+				else
+				{
+				struct monst *mtmp;
+				if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))){
+					pline1(nothing_happens);
+					break;
+				}
+				if (!Blind) {
+					pline("%s appears in a cloud of smoke!", Amonnam(mtmp));
+					pline("%s speaks.", Monnam(mtmp));
+				}
+				else {
+					You("smell acrid fumes.");
+					pline("%s speaks.", Something);
+				}
+				verbalize("You have summoned me.  I will grant one wish!");
+				makewish(allow_artwish() | WISH_VERBOSE);
+				mongone(mtmp);
+				}
 				break;
 				case 7:
 				{
@@ -319,7 +353,12 @@ dosit()
 					break;
 			}
 			} else {
-			if (is_prince(youracedata) || Role_if(PM_NOBLEMAN))
+			if (Is_stronghold(&u.uz) && !u.uevent.utook_castle)
+			{
+				u.uevent.utook_castle = 1;
+				You_feel("worthy.");
+			}
+			else if (is_prince(youracedata) || Role_if(PM_NOBLEMAN))
 				You_feel("very comfortable here.");
 			else
 				You_feel("somehow out of place...");

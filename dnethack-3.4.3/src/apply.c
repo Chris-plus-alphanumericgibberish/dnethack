@@ -1264,7 +1264,7 @@ struct obj **optr;
 	}
 
 	otmp = carrying(CANDELABRUM_OF_INVOCATION);
-	if(!otmp || obj->otyp==GNOMISH_POINTY_HAT || otmp->spe == 7) {
+	if(!otmp || obj->otyp==GNOMISH_POINTY_HAT || obj->otyp==CANDLE_OF_INVOCATION || otmp->spe == 7) {
 		use_lamp(obj);
 		return;
 	}
@@ -3889,6 +3889,238 @@ use_crook (obj)
 	return (1);
 }
 
+boolean
+use_ring_of_wishes(obj)
+struct obj *obj;
+{
+	struct monst * mtmp;
+	boolean madewish = FALSE;
+
+	if (obj->otyp != RIN_WISHES)
+	{
+		impossible("object other than ring of wishes passed to use_ring_of_wishes");
+		return FALSE;
+	}
+	if (obj->cursed || (Luck + rn2(5) < 0)){	// to be less cruel, it doesn't use up a charge
+		pline1(nothing_happens);
+		return FALSE;
+	}
+	if (obj->spe <= 0){
+		pline1(nothing_happens);
+		pline("The ring crumbles to dust!");
+		useupall(obj);
+		return FALSE;
+	}
+	if (!(obj->owornmask & W_RING)) {
+		if (objects[RIN_WISHES].oc_name_known)
+			You_feel("that you should be wearing %s.", the(xname(obj)));
+		else
+			pline1(nothing_happens);
+		return FALSE;
+	}
+
+	if (obj->spe > 0)
+	{
+		if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))){
+			pline1(nothing_happens);
+		}
+		else
+		{
+			if (!Blind) {
+				pline("%s appears in a cloud of smoke!", Amonnam(mtmp));
+				pline("%s speaks.", Monnam(mtmp));
+			}
+			else {
+				You("smell acrid fumes.");
+				pline("%s speaks.", Something);
+			}
+			verbalize("You have summoned me.  I will grant one wish!");
+			makewish(allow_artwish()|WISH_VERBOSE);
+			mongone(mtmp);
+			obj->spe--;
+			madewish = TRUE;
+			if (!objects[RIN_WISHES].oc_name_known) {
+				makeknown(RIN_WISHES);
+				more_experienced(0, 10);
+			}
+		}
+	}
+	else
+	{
+		pline1(nothing_happens);
+	}
+	if (obj->spe <= 0)
+	{
+		pline("The ring crumbles to dust!");
+		useupall(obj);
+	}
+	return madewish;
+}
+
+#define SUMMON_DJINNI		1
+#define SUMMON_SERVANT		2
+#define SUMMON_DEMON_LORD	3
+
+int
+do_candle_menu()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Summon Djinni");
+	any.a_int = SUMMON_DJINNI;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	incntlet = (incntlet != 'z') ? (incntlet + 1) : 'A';
+
+	Sprintf(buf, "Summon Servant");
+	any.a_int = SUMMON_SERVANT;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	incntlet = (incntlet != 'z') ? (incntlet + 1) : 'A';
+
+	Sprintf(buf, "Summon Demon Lord");
+	any.a_int = SUMMON_DEMON_LORD;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	incntlet = (incntlet != 'z') ? (incntlet + 1) : 'A';
+
+	end_menu(tmpwin, "What creature do you wish to summon?");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? selected[0].item.a_int : 0;
+}
+
+int
+do_demon_lord_summon_menu()
+{
+	winid tmpwin;
+	int n, how, i;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	for (i = 0; i >= LOW_PM && i<SPECIAL_PM; i++)
+	{
+		if (is_dlord(&mons[i]) && type_is_pname(&mons[i]) && !(mvitals[i].mvflags & G_EXTINCT))
+		{
+			Sprintf(buf, "%s", mons[i].mname);
+			any.a_int = i;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			incntlet = (incntlet != 'z') ? (incntlet + 1) : 'A';
+		}
+	}
+
+	end_menu(tmpwin, "Which demon do you wish to summon?");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? selected[0].item.a_int : 0;
+}
+
+boolean
+use_candle_of_invocation(obj)	// incomplete
+struct obj *obj;
+{
+	int choice = 0;
+	struct monst * mtmp = (struct monst *)0;
+
+	if (obj->otyp != CANDLE_OF_INVOCATION)
+	{
+		impossible("object other than candle of invocation passed to use_candle_of_invocation");
+		return FALSE;
+	}
+	if (!obj->lamplit) {
+		pline1(nothing_happens);
+		return FALSE;
+	}
+
+	pline("The %s flares, and a planar gate opens!", xname(obj));
+	choice = do_candle_menu();
+	
+	switch (choice)
+	{
+	case SUMMON_DJINNI:
+		if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))){
+			pline("Nothing appears, and the gate snaps shut.");
+			break;
+		}
+		if (!Blind) {
+			pline("%s passes through the gate in a cloud of smoke!", Amonnam(mtmp));
+			pline("%s speaks.", Monnam(mtmp));
+		}
+		else {
+			You("smell acrid fumes.");
+			pline("%s speaks.", Something);
+		}
+		verbalize("You have summoned me.  I will grant one wish!");
+		makewish(allow_artwish()|WISH_VERBOSE);
+		mongone(mtmp);
+		break;
+	case SUMMON_SERVANT:
+		mtmp = create_particular(MT_DOMESTIC, 0, FALSE, MA_MINION|MA_DEMON|MA_FEY|MA_PRIMORDIAL, MG_NOWISH|MG_NOTAME, G_UNIQ);
+		if (mtmp)
+			pline("The gate closes as %s passes through.", a_monnam(mtmp));
+		else
+			pline("The gate snaps shut!");
+		break;
+	case SUMMON_DEMON_LORD:
+		choice = do_demon_lord_summon_menu();
+		if (!choice){
+			// the player didn't choose an option
+			pline("The gate snaps shut!");
+			break;
+		}
+		if (!(mtmp = makemon(&mons[choice], u.ux, u.uy, NO_MM_FLAGS))){
+			// the demon was already generated
+			pline("Nothing appears, and the gate snaps shut.");
+			break;
+		}
+		if (!Blind) {
+			pline("%s passes through the gate.", Monnam(mtmp));
+		}
+		else {
+			You_feel("a hostile presence.");
+		}
+		mtmp->mpeaceful = 0;
+		break;
+	default:
+		pline("The gate snaps shut.");
+		break;
+	}
+	pline("The %s is consumed.", xname(obj));
+	useupall(obj);
+	if (!objects[CANDLE_OF_INVOCATION].oc_name_known) {
+		makeknown(CANDLE_OF_INVOCATION);
+		more_experienced(0, 10);
+	}
+	return TRUE;
+}
+
+#undef SUMMON_DJINNI
+#undef SUMMON_SERVANT
+#undef SUMMON_DEMON_LORD
 
 #define BY_OBJECT	((struct monst *)0)
 
@@ -5187,6 +5419,7 @@ doapply()
 		break;
 	case WAX_CANDLE:
 	case TALLOW_CANDLE:
+	case CANDLE_OF_INVOCATION:
 	case GNOMISH_POINTY_HAT:
 		use_candle(&obj);
 	break;

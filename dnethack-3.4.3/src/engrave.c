@@ -681,6 +681,24 @@ const char * haluWard[] =  {
 	/* Footprint */
 	"a footprint",
 	
+	/* Planar Symbols */
+	"a circle enclosing two curved colliding arrows",			/*44*/
+	"a pair of triangles, drawn tip to tip,",					/*45*/
+	"a stylized beast",											/*46*/
+	"a triangle crowned by a single line",						/*47*/
+	"a simple image of many mountains",							/*48*/
+	"a sketch of a shining diamond",							/*49*/
+	"a tree-rune",												/*50*/
+	"an eight-toothed gear",									/*51*/
+	"a random scribble",										/*52*/
+	"a square with two small handles on opposite sides",		/*53*/
+	"a square enclosing a spiral",								/*54*/
+	"an eye with three inverted crosses",						/*55*/
+	"an infinity symbol crossed by a burning downwards arrow",	/*56*/
+	"a set of four nested triangles",							/*57*/
+	"a watchful eye blocking an upward arrow",					/*58*/
+	"a pitchfork thrust into the ground",						/*59*/
+	
 	/* Not quite */
 	"a heptagenarian",
 	"an octogram",
@@ -744,23 +762,6 @@ const char * haluWard[] =  {
 	/* Planescape */
 	"a mimir",
 	"a symbol of torment",
-	"a circle enclosing two curved colliding arrows",
-	"a pair of triangles, drawn tip to tip,",
-	"a stylized beast",
-	"a triangle crowned by a single line",
-	"a simple image of many mountains",
-	"a sketch of a shining diamond",
-	"a tree-rune",
-	"an eight-toothed gear",
-	"a random scribble",
-	"a square with two small handles on opposite sides",
-	"a square enclosing a spiral",
-	"an eye with three inverted crosses",
-	"an infinity symbol crossed by a burning downwards arrow",
-	"a set of four nested triangles",
-	"a watchful eye blocking an upward arrow",
-	"a pitchfork thrust into the ground",
-	
 	
 	/* Zodiac */
 	"an Aries sign",

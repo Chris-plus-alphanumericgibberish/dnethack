@@ -1102,7 +1102,9 @@ register const char *let,*word;
 		|| (!strcmp(word, "invoke") &&
 		    (!otmp->oartifact && !objects[otyp].oc_unique &&
 		     (otyp != FAKE_AMULET_OF_YENDOR || otmp->known) &&
-		     otyp != CRYSTAL_BALL &&	/* #invoke synonym for apply */
+		     (otyp != CRYSTAL_BALL) &&	/* #invoke synonym for apply */
+			 (otyp != RIN_WISHES && (otmp->dknown && objects[RIN_WISHES].oc_name_known)) &&	/* grants a wish (if charged) */
+			 (otyp != CANDLE_OF_INVOCATION && (otmp->dknown && objects[CANDLE_OF_INVOCATION].oc_name_known)) && /* opens a gate or grants a wish */
 		   /* note: presenting the possibility of invoking non-artifact
 		      mirrors and/or lamps is a simply a cruel deception... */
 		     otyp != MIRROR && otyp != MAGIC_LAMP &&
@@ -1187,6 +1189,11 @@ register const char *let,*word;
 		}
 		//Make exceptions for rings that have been engraved
 		if(otmp->oclass == RING_CLASS && (isEngrRing((otmp)->otyp) || isSignetRing((otmp)->otyp)) && otmp->oward && (!strcmp(word, "read") || !strcmp(word, "use or apply"))){
+			bp[foo++] = otmp->invlet;
+			allowall = TRUE;
+		}
+		//Make exceptions for runed candles
+		if(otmp->otyp == CANDLE_OF_INVOCATION && !strcmp(word, "read")){
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;
 		}

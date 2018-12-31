@@ -257,6 +257,14 @@ doread()
         You("study the pages of %s, but you already can recognize that.", xname(scroll));
       }
       return 1;
+	} else if(scroll->otyp == CANDLE_OF_INVOCATION ){
+		if (Blind) {
+			You_cant("see the candle!");
+			return 0;
+		} else {
+			pline("The candel is carved with many pictograms, including %s", fetchHaluWard(FIRST_PLANE_SYMBOL+rn2(LAST_PLANE_SYMBOL-FIRST_PLANE_SYMBOL+1)));
+		}
+		return(1);
 	} else if(scroll->oclass == WEAPON_CLASS && (scroll)->obj_material == WOOD && scroll->oward != 0){
 		pline("A %s is carved into the wood.",wardDecode[decode_wardID(scroll->oward)]);
 		if(! (u.wardsknown & scroll->oward) ){
@@ -576,7 +584,7 @@ struct obj *obj;
 	/* known && !uname is possible after amnesia/mind flayer */
 	if (obj->oclass == RING_CLASS)
 	    return (boolean)(objects[obj->otyp].oc_charged &&
-			(obj->known || objects[obj->otyp].oc_uname));
+			(obj->known || objects[obj->otyp].oc_uname) && obj->otyp != RIN_WISHES);
 	if (is_lightsaber(obj) && obj->oartifact != ART_INFINITY_S_MIRRORED_ARC && obj->otyp != KAMEREL_VAJRA)
 	    return TRUE;
 //#ifdef FIREARMS
@@ -655,7 +663,7 @@ int curse_bless;
 	    }
 
 	} else if (obj->oclass == RING_CLASS &&
-					objects[obj->otyp].oc_charged) {
+					objects[obj->otyp].oc_charged && obj->otyp != RIN_WISHES) {
 	    /* charging does not affect ring's curse/bless status */
 	    int s = is_blessed ? rnd(3) : is_cursed ? -rnd(2) : 1;
 	    boolean is_on = (obj == uleft || obj == uright);
@@ -2851,13 +2859,20 @@ boolean revival;
  * "strange object" (']') symbol produces a random monster rather
  * than a mimic; this behavior quirk is useful so don't "fix" it...
  */
-boolean
-create_particular()
+struct monst *
+create_particular(specify_attitude, specify_derivation, allow_multi, ma_require, mg_restrict, gen_restrict)
+unsigned long specify_attitude;		// -1 -> true; 0 -> false; >0 -> as given
+int specify_derivation;				// -1 -> true; 0 -> false; >0 -> as given
+boolean allow_multi;
+unsigned long ma_require;
+unsigned long mg_restrict;
+unsigned short gen_restrict;
 {
-	char buf[BUFSZ], *bufp, monclass = MAXMCLASSES;
+	char buf[BUFSZ], *bufp, *p, monclass = MAXMCLASSES;
 	int which, tries, i;
+	int undeadtype = 0;
 	struct permonst *whichpm;
-	struct monst *mtmp;
+	struct monst *mtmp = (struct monst *)0;
 	boolean madeany = FALSE;
 	boolean maketame, makepeaceful, makehostile;
 
@@ -2868,38 +2883,136 @@ create_particular()
 	    getlin("Create what kind of monster? [type the name or symbol]",
 		   buf);
 	    bufp = mungspaces(buf);
-	    if (*bufp == '\033') return FALSE;
-	    /* allow the initial disposition to be specified */
-	    if (!strncmpi(bufp, "tame ", 5)) {
-		bufp += 5;
-		maketame = TRUE;
-	    } else if (!strncmpi(bufp, "peaceful ", 9)) {
-		bufp += 9;
-		makepeaceful = TRUE;
-	    } else if (!strncmpi(bufp, "hostile ", 8)) {
-		bufp += 8;
-		makehostile = TRUE;
-	    }
-	    /* decide whether a valid monster was chosen */
-	    if (strlen(bufp) == 1) {
-		monclass = def_char_to_monclass(*bufp);
-		if (monclass != MAXMCLASSES) break;	/* got one */
-	    } else {
-		which = name_to_mon(bufp);
-		if (which >= LOW_PM) break;		/* got one */
-	    }
-	    /* no good; try again... */
-	    pline("I've never heard of such monsters.");
+	    if (*bufp == '\033') return (struct monst *)0;
+	    /* possibly allow the initial disposition to be specified */
+		switch (specify_attitude)
+		{
+		case -1:
+			if (!strncmpi(bufp, "tame ", 5)) {
+				bufp += 5;
+				maketame = TRUE;
+			}
+			else if (!strncmpi(bufp, "peaceful ", 9)) {
+				bufp += 9;
+				makepeaceful = TRUE;
+			}
+			else if (!strncmpi(bufp, "hostile ", 8)) {
+				bufp += 8;
+				makehostile = TRUE;
+			}
+			break;
+		case MT_DOMESTIC:
+			maketame = TRUE;
+			break;
+		case MT_PEACEFUL:
+			makepeaceful = TRUE;
+			break;
+		case MT_HOSTILE:
+			makehostile = TRUE;
+			break;
+		}
+
+		switch (specify_derivation)
+		{
+		case -1:
+			if ((p = rindex(bufp, ' ')) != 0){
+				if (p > bufp && p[-1] == ' ') p[-1] = 0;
+				else *p = 0;
+				p++;
+				if (!strcmpi(p, "zombie"))
+					undeadtype = ZOMBIFIED;
+				else if (!strcmpi(p, "skeleton"))
+					undeadtype = SKELIFIED;
+				else if (!strcmpi(p, "vitrean"))
+					undeadtype = CRYSTALFIED;
+				else if (!strcmpi(p, "witness"))
+					undeadtype = FRACTURED;
+				else
+				{
+					// no undead suffix was used, undo the split
+					p--[-1] = ' ';
+				}
+			}
+			break;
+		case ZOMBIFIED:
+		case SKELIFIED:
+		case CRYSTALFIED:
+		case FRACTURED:
+			undeadtype = specify_derivation;
+			break;
+		}
+
+		/* decide whether a valid monster was chosen */
+		if (strlen(bufp) == 1) {
+			monclass = MAXMCLASSES;
+			monclass = def_char_to_monclass(*bufp);
+			if (monclass == MAXMCLASSES)
+			{
+				pline("I've never heard of such monsters.");
+				continue;	//try again
+			}
+			if (monclass == S_MIMIC_DEF && !(ma_require || mg_restrict || gen_restrict))	// bugfeature made feature
+			{
+				whichpm = mkclass(monclass, Inhell ? G_HELL : G_NOHELL);
+				goto createmon;	// skip past the section which needs whichpm to exist
+			}
+			if(!(whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES)))
+			{
+				pline("You ask too generally for creatures so uncommon.");
+				continue;
+			}
+		}
+		else {
+			which = name_to_mon(bufp);
+			if (which < LOW_PM)
+			{
+				pline("I've never heard of such monsters.");
+				continue;	//try again
+			}
+			(void)cant_create(&which, FALSE);
+			whichpm = &mons[which];
+		}
+		// validate that the creature falls within the restrictions placed on it
+		if (ma_require || mg_restrict || gen_restrict){
+			i = 0;
+			if (monclass != MAXMCLASSES)
+				while ((!(ma_require && (whichpm->mflagsa & ma_require)) ||
+						(whichpm->mflagsg & mg_restrict) ||
+						(whichpm->geno & gen_restrict)) && i < 100)
+					{
+					if (whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES))
+						i++;
+					else
+						i = 100;
+					}
+			else
+			{
+				if (!(ma_require && (whichpm->mflagsa & ma_require)) ||
+					(whichpm->mflagsg & mg_restrict) ||
+					(whichpm->geno & gen_restrict))
+				{
+					i = 100;
+				}
+			}
+			if (i == 100){
+				pline("%s %s%s cannot be summoned.",
+					(monclass == MAXMCLASSES) ? "That" : "Those",
+					(is_angel(whichpm)) ? "being" : "monster",
+					(monclass == MAXMCLASSES) ? "" : "s");
+				continue;	// try again
+			}
+		}
+		/* if it didn't hit a continue at this point, we're good */
+		break;
 	} while (++tries < 5);
 
 	if (tries == 5) {
 	    pline1(thats_enough_tries);
 	} else {
-	    (void) cant_create(&which, FALSE);
-	    whichpm = &mons[which];
-	    for (i = 0; i <= multi; i++) {
-		if (monclass != MAXMCLASSES)
-		    whichpm = mkclass(monclass, Inhell ? G_HELL : G_NOHELL);
+createmon:
+	    for (i = 0; i <= (allow_multi ? multi : 0); i++) {
+		if (monclass != MAXMCLASSES && !(ma_require || mg_restrict || gen_restrict))
+			whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES);
 		if (maketame) {
 		    mtmp = makemon(whichpm, u.ux, u.uy, MM_EDOG);
 		    if (mtmp) {
@@ -2914,10 +3027,21 @@ create_particular()
 			set_malign(mtmp);
 		    }
 		}
+		if (specify_derivation){
+			if (!mtmp->mfaction && (
+				undeadtype == ZOMBIFIED ? can_undead_mon(mtmp) :
+				undeadtype == SKELIFIED ? can_undead_mon(mtmp) :
+				undeadtype == CRYSTALFIED ? TRUE :
+				undeadtype == FRACTURED ? is_kamerel(mtmp->data) : 0
+				))
+			{
+				mtmp->mfaction = undeadtype;
+			}
+		}
 		if (mtmp) madeany = TRUE;
 	    }
 	}
-	return madeany;
+	return mtmp;
 }
 #endif /* WIZARD */
 

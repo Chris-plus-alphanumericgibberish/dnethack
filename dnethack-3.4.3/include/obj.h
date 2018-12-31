@@ -270,6 +270,20 @@ struct obj {
 #define SPEC_DESTRUCTOR	0x0000080L
 #define SPEC_MARIONETTE	0x0000100L
 
+// flags for use with readobjnam()
+#define WISH_QUIET      0x0000001L
+#define WISH_WIZARD     0x0000002L
+#define WISH_VERBOSE	0x0000004L
+#define WISH_ARTALLOW	0x0000008L
+
+#define WISH_NOTHING	0x0000100L
+#define WISH_SUCCESS	0x0000200L
+#define WISH_FAILURE	0x0000400L
+#define WISH_DENIED		0x0000800L
+
+
+
+
 #define newobj(xl)	(struct obj *)alloc((unsigned)(xl) + sizeof(struct obj))
 #define ONAME(otmp)	(((char *)(otmp)->oextra) + (otmp)->oxlth)
 
@@ -567,7 +581,8 @@ struct obj {
 
 /* Light sources */
 #define Is_candle(otmp) (otmp->otyp == TALLOW_CANDLE || \
-			 otmp->otyp == WAX_CANDLE)
+			 otmp->otyp == WAX_CANDLE || \
+			 otmp->otyp == CANDLE_OF_INVOCATION)
 #define MAX_OIL_IN_FLASK 400	/* maximum amount of oil in a potion of oil */
 #define Is_darklight_source(otmp) ((otmp)->otyp == SHADOWLANDER_S_TORCH || \
 			 (otmp)->otyp == CHUNK_OF_FOSSIL_DARK ||\

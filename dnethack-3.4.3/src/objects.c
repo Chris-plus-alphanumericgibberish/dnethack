@@ -735,6 +735,7 @@ BOOTS("flying boots", "snow boots",
 		OBJ(name,stone), \
 		BITS(0,0,spec,0,mgc,spec,0,0,0,HARDGEM(mohs),0,P_NONE,metal), \
 		power, RING_CLASS, 0, 0, 3, cost, 0, 0, 0, 0, 0, 15, color )
+RING("wishes", 0, "dragon-bone",            500, 1, 1, 4, BONE, CLR_WHITE),
 RING("adornment", ADORNED, "wooden",        100, 1, 1, 2, WOOD, HI_WOOD),
 RING("gain strength", 0, "granite",         150, 1, 1, 7, MINERAL, HI_MINERAL),
 RING("gain constitution", 0, "opal",        150, 1, 1, 7, MINERAL,  HI_MINERAL),
@@ -863,9 +864,11 @@ TOOL("lock pick", (char *)0,    1, 0, 0, 0,  75,  4,  20, IRON, HI_METAL),
 /* light sources */
 TOOL("tallow candle", "candle", 0, 1, 0, 0,  15,  2,  10, WAX, CLR_WHITE),
 TOOL("wax candle", "candle",    0, 1, 0, 0,   5,  2,  20, WAX, CLR_WHITE),
+TOOL("candle of invocation", "runed candle", 
+                                0, 0, 1, 0,   5,  2,  50, WAX, CLR_ORANGE),
 TOOL("brass lantern", (char *)0,1, 0, 0, 0,  20, 30,  12, COPPER, CLR_YELLOW),
 TOOL("oil lamp", "lamp",        0, 0, 0, 0,  30, 20,  10, COPPER, CLR_YELLOW),
-TOOL("magic lamp", "lamp",      0, 0, 1, 0,  15, 20,  50, COPPER, CLR_YELLOW),
+TOOL("magic lamp", "lamp",      0, 0, 1, 0,  10, 20,  50, COPPER, CLR_YELLOW),
 // TOOL("shadowlander's torch", "black torch",
 								// 0, 0, 1, 0,  10, 20,  50, WOOD, CLR_BLACK),
 /* other tools */
@@ -1200,14 +1203,15 @@ OBJECT(OBJ("secrets", "ragged leather"), BITS(0,0,1,0,1,0,1,1,0,0,0,P_NONE,PAPER
 		WAND_CLASS, prob, 0, 7, cost, 0, 0, 0, 0, 0, 30, color )
 WAND("light",          "glass",    90, 100, 1, NODIR,     GLASS,    CLR_WHITE),/*Needs tile?*/
 WAND("darkness",       "obsidian", 10, 100, 1, NODIR,     OBSIDIAN_MT,    CLR_BLACK),/*Needs tile*/
-WAND("wishing",        "pine",      5, 500, 1, NODIR,     WOOD,     HI_WOOD),
+WAND("wishing",        "dragon-bone",
+					0, 500, 1, NODIR,     BONE,     CLR_WHITE),	/* should not exist */
 WAND("secret door detection", "balsa",
 				   50, 150, 1, NODIR,	  WOOD,     HI_WOOD),
-WAND("enlightenment",  "crystal",  17, 150, 1, NODIR,     GLASS,    HI_GLASS),
+WAND("enlightenment",  "crystal",  18, 150, 1, NODIR,     GLASS,    HI_GLASS),
 WAND("create monster", "maple",    42, 200, 1, NODIR,     WOOD,     HI_WOOD),
 WAND("nothing",        "oak",      25, 100, 0, IMMEDIATE, WOOD,     HI_WOOD),
 WAND("striking",       "ebony",    75, 150, 1, IMMEDIATE, WOOD,     HI_WOOD),
-WAND("draining",       "ceramic",   3, 175, 1, IMMEDIATE, MINERAL,  HI_MINERAL),
+WAND("draining",       "ceramic",   5, 175, 1, IMMEDIATE, MINERAL,  HI_MINERAL),
 WAND("make invisible", "marble",   42, 150, 1, IMMEDIATE, MINERAL,  HI_MINERAL),
 WAND("slow monster",   "tin",      46, 150, 1, IMMEDIATE, METAL,    HI_METAL),
 WAND("speed monster",  "brass",    50, 150, 1, IMMEDIATE, COPPER,   HI_COPPER),
@@ -1223,8 +1227,9 @@ WAND("magic missile",  "steel",    50, 150, 1, RAY,       IRON,     HI_METAL),
 WAND("fire",           "hexagonal",40, 175, 1, RAY,       IRON,     HI_METAL),
 WAND("cold",           "short",    40, 175, 1, RAY,       IRON,     HI_METAL),
 WAND("sleep",          "runed",    50, 175, 1, RAY,       IRON,     HI_METAL),
-WAND("death",          "long",      3, 500, 1, RAY,       IRON,     HI_METAL),
+WAND("death",          "long",      5, 500, 1, RAY,       IRON,     HI_METAL),
 WAND("lightning",      "curved",   40, 175, 1, RAY,       IRON,     HI_METAL),
+WAND((char *)0,        "pine",      0, 150, 1, 0,         WOOD,     HI_WOOD),
 WAND((char *)0,        "forked",    0, 150, 1, 0,         WOOD,     HI_WOOD),
 WAND((char *)0,        "spiked",    0, 150, 1, 0,         IRON,     HI_METAL),
 WAND((char *)0,        "jeweled",   0, 150, 1, 0,         IRON,     HI_MINERAL),
