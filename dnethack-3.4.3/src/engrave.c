@@ -262,7 +262,9 @@ static const char *haluMesg[] = {
 		"I'm sorry you could never forgive me.",
 	"Reach heaven through violence.",/*Kill 6 Billion Demons*/
 		"Kindly ignore my first three answers.",
+		"I will see you in Samura.",
 	"ALL POWER TO THE OLD FLESH!!!!!!! A HOWLING VOID UPON DETRACTORS!!!", /*Awful Hospital*/
+		"You *must* see the IMMACULATE LAD!!",
 	"You are lost. You can never go home.", /* Gollum's Song */
 	"I am weak. Make... me... ideal.", /* Caress of Phyrexia */
 	"But now, we dance this grim fandango, and will for years until we rest.", /* Grim Fandango */
