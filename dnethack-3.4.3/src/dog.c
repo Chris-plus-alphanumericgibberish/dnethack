@@ -1189,7 +1189,7 @@ struct obj *obj;
 	if (mtmp->mtame || (!mtmp->mcanmove && !mtmp->moccupation) ||
 	    /* monsters with conflicting structures cannot be tamed */
 	    mtmp->isshk || mtmp->isgd || mtmp->ispriest || mtmp->isminion ||
-	    is_covetous(mtmp->data) || mtmp->data == &mons[urole.neminum] ||
+	    mtmp->data == &mons[urole.neminum] ||
 	    (is_demon(mtmp->data) && !is_demon(youracedata)) ||
 	    (obj && !is_instrument(obj) && obj->oclass != SCROLL_CLASS && obj->oclass != SPBOOK_CLASS && dogfood(mtmp, obj) >= MANFOOD)) return (struct monst *)0;
 
