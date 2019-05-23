@@ -4571,7 +4571,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				else conf = d((int)mattk->damn, (int)mattk->damd);
 
 				if(!Confusion)
-				pline("%s from confuses you!", s_suffix(Monnam(mtmp)));
+				pline("%s form confuses you!", s_suffix(Monnam(mtmp)));
 				else You("are getting more and more confused.");
 				make_confused(HConfusion + conf, FALSE);
 				stop_occupation();
