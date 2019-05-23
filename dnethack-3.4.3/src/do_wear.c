@@ -2300,6 +2300,7 @@ struct monst *magr;
 		goto boot_hit;
 	switch(rn2(5)){
 		case 0:
+uppertorso:
 			//Note: upper body (shirt plus torso armor)
 			if (uarmu){
 				if(uarmu->otyp != BODYGLOVE)	armdr += arm_dr_bonus(uarmu);
@@ -2309,6 +2310,7 @@ struct monst *magr;
 				}
 			}
 		case 1:
+lowertorso:
 			//Note: lower body (torso armor only)
 			if (uarm){
 				if(uarm->otyp != JUMPSUIT)
@@ -2322,6 +2324,7 @@ struct monst *magr;
 			}
 		break;
 		case 2:
+			if(!has_head(youracedata)) goto uppertorso;
 			if (uarmh){
 				armdr += arm_dr_bonus(uarmh);
 				if(magr && is_harmonium_armor(uarmh)){
@@ -2332,6 +2335,7 @@ struct monst *magr;
 		break;
 		case 3:
 boot_hit:
+			if(!can_wear_boots(youracedata)) goto lowertorso;
 			if (uarmf){
 				armdr += arm_dr_bonus(uarmf);
 				if(magr && is_harmonium_armor(uarmf)){
@@ -2343,6 +2347,7 @@ boot_hit:
 			}
 		break;
 		case 4:
+			if(!can_wear_gloves(youracedata)) goto uppertorso;
 			if (uarmg){
 				armdr += arm_dr_bonus(uarmg);
 				if(magr && is_harmonium_armor(uarmg)){
