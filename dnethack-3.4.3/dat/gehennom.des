@@ -2430,11 +2430,11 @@ MAP
 5IIIIPF  |     |  FPIIIIIIIIIIIII|                                          |
 6IIIIPF  S     S  FPIIIIIIIIIIIII|                                          |
 7IIIII--S-----S----FFFFFFFFFFFFFF|                                          |
-8IIIIIIF |     | F               |                                          |
-9IIFFFIF | - - | ----------------|                                          |
+8IIIII}F |     | F               |                                          |
+9IIFFF}F | - - | ----------------|                                          |
 0IIF F}| |     S +               +                                          |
-1.IFFFIF | - - | ----------------|                                          |
-2IIIIIIF |     | F               |                                          |
+1.IFFF}F | - - | ----------------|                                          |
+2IIIII}F |     | F               |                                          |
 3IIIII--S-----S----FFFFFFFFFFFFFF|                                          |
 4IIIIPF  S     S  FPIIIIIIIIIIIII|                                          |
 5IIIIPF  |FFFFF|  FPIIIIIIIIIIIII|                                          |
@@ -2660,11 +2660,11 @@ MAP
 5IIIIPFLL|FFFFF|LLFPIIIIIIIIIIIII|}F..............-.|}}|.|.-------------.|..|
 6IIIIPFL.S.....S.LFPIIIIIIIIIIIII|}|.-..............F}}|.|.|...........|.|..|
 7IIIII--S-----S----FFFFFFFFFFFFFF|}|....-PPPPPP-..-.|}}|.|.|...{L{L{L{.|.|..|
-8IIIIIIF.|.....|.FL.IIIIIIIIIIIII|}|.-..PPPPPPPP....|}}|.|.|...------L.|.|..|
-9IIFFFIF.|.-.-.|.----------------|}F....PP-..-PP..-.|}}|.|.|...PPPP\|{.|.-T.|
+8IIIII}F.|.....|.FL..............|}|.-..PPPPPPPP....|}}|.|.|...------L.|.|..|
+9IIFFF}F.|.-.-.|.----------------|}F....PP-..-PP..-.|}}|.|.|...PPPP\|{.|.-T.|
 0IIFIF}|.|..{..S.+...............+}|.-..PP.LL.PP....|}}|.|.|...PPP..|L.|....|
-1.IFFFIF.|.-.-.|.----------------|}F....PP-..-PP..-.|}}|.|.|...PPPP\|{.---T.|
-2IIIIIIF.|.....|.FL.IIIIIIIIIIIII|}|.-..PPPPPPPP....|}}|.|.|...------L...|..|
+1.IFFF}F.|.-.-.|.----------------|}F....PP-..-PP..-.|}}|.|.|...PPPP\|{.---T.|
+2IIIII}F.|.....|.FL..............|}|.-..PPPPPPPP....|}}|.|.|...------L...|..|
 3IIIII--S-----S----FFFFFFFFFFFFFF|}|....-PPPPPP-..-.|}}|.|.|...{L{L{L{.|.|..|
 4IIIIPFL.S.....S.LFPIIIIIIIIIIIII|}|.-..............F}}|.|.|...........|.|..|
 5IIIIPFLL|FFFFF|LLFPIIIIIIIIIIIII|}F..............-.|}}|.|.-------------.|..|
