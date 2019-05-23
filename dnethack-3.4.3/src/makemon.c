@@ -2858,7 +2858,7 @@ register struct monst *mtmp;
 					otmp->oproperties = OPROP_AXIOW|OPROP_LESSW;
 					switch(u.oonaenergy){
 						case AD_COLD:
-							otmp->oproperties |= OPROP_ELECW; //superconducting?
+							otmp->oproperties |= OPROP_ELECW;
 						break;
 						case AD_FIRE:
 							otmp->oproperties |= OPROP_COLDW;
