@@ -1688,28 +1688,28 @@ REGION:(70,08,73,10),unlit,"ordinary"
 STAIR:(73,04),down
 STAIR:(03,07),up 
 # Trolls
-MONSTER:'T',"troll",(24,02)
-MONSTER:'T',"troll",(26,02)
-MONSTER:'T',"troll",(24,05)
-MONSTER:'T',"troll",(26,05)
-MONSTER:'T',"troll",(32,02)
-MONSTER:'T',"troll",(34,02)
-MONSTER:'T',"troll",(32,05)
-MONSTER:'T',"troll",(34,05)
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER:'T',random,random
-MONSTER[50%]:'T',random,random
-MONSTER[50%]:'T',random,random
-MONSTER[50%]:'T',random,random
+MONSTER:'T',"troll",(24,02),asleep
+MONSTER:'T',"troll",(26,02),asleep
+MONSTER:'T',"troll",(24,05),asleep
+MONSTER:'T',"troll",(26,05),asleep
+MONSTER:'T',"troll",(32,02),asleep
+MONSTER:'T',"troll",(34,02),asleep
+MONSTER:'T',"troll",(32,05),asleep
+MONSTER:'T',"troll",(34,05),asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER:'T',random,random,asleep
+MONSTER[50%]:'T',random,random,asleep
+MONSTER[50%]:'T',random,random,asleep
+MONSTER[50%]:'T',random,random,asleep
 # Fishes in the river...
 MONSTER:';',random,(04,14) 
 MONSTER:';',random,(16,15) 
@@ -1808,45 +1808,44 @@ DOOR:locked,(03,01)
 DOOR:closed,(70,02)
 DOOR:locked,(63,16)
 DOOR:closed,(71,13)
-# Centaurs in the west 
-MONSTER:'C',random,(13,03)
-MONSTER:'C',random,(09,06)
-MONSTER:'C',random,(06,09)
-MONSTER:'C',random,(13,12)
-MONSTER[66%]:'C',random,(22,03)
-MONSTER[33%]:'C',random,(02,07)
-# Chief Centaur and hareem
-MONSTER:'C',"mountain centaur",(16,16)
+# Black Goat in the west 
+MONSTER:'q',"dark young",(13,03)
+MONSTER:'q',"dark young",(09,06)
+MONSTER:'q',"dark young",(06,09)
+MONSTER:'q',"dark young",(13,12)
+MONSTER[66%]:'q',"dark young",(22,03)
+MONSTER[33%]:'q',"dark young",(02,07)
+# Cult Chief and harem
+MONSTER:'n',"deminymph",(16,16)
 OBJECT:'(',"chest",(18,15)
-OBJECT:')',"bow",(16,16),blessed,+2
-MONSTER:'C',"mountain centaur",(04,17)
-MONSTER:'C',"mountain centaur",(05,18)
+MONSTER:'n',"oread",(04,17)
+MONSTER:'n',"oread",(05,18)
 OBJECT:'(',"chest",(03,18)
-# Elves in the east
-MONSTER:'@',"Green-elf",(58,03)
-MONSTER:'@',"Green-elf",(64,02)
-MONSTER:'@',"Green-elf",(65,04)
-MONSTER:'@',"Green-elf",(61,05)
-MONSTER[50%]:'@',"Green-elf",(61,01)
-MONSTER:'@',"Woodland-elf",(55,04)
-MONSTER:'@',"Woodland-elf",(53,05)
-MONSTER:'@',"Woodland-elf",(56,06)
-MONSTER:'@',"Woodland-elf",(57,08)
-MONSTER[50%]:'@',"Woodland-elf",(59,10)
-# Nymphs in the middle!
-MONSTER[50%]:'n',random,(39,10)
-MONSTER[50%]:'n',random,(48,13)
-MONSTER[50%]:'n',random,(48,16)
-MONSTER[50%]:'n',random,(44,16)
-MONSTER[50%]:'n',random,(40,14)
-MONSTER[50%]:'n',random,(41,17)
-MONSTER[50%]:'n',random,(34,10)
-MONSTER[50%]:'n',random,(48,12)
-MONSTER[50%]:'n',random,(54,16)
-MONSTER[50%]:'n',random,(45,10)
-# A couple of trolls guarding the door
-MONSTER:'T',"troll",(30,16)
-MONSTER:'T',"troll",(30,17)
+# Nyarlathotep in the east
+MONSTER:'v',"energy vortex",(58,03)
+MONSTER:'v',"energy vortex",(64,02)
+MONSTER:'v',"energy vortex",(65,04)
+MONSTER:'v',"energy vortex",(61,05)
+MONSTER[50%]:'v',"energy vortex",(61,01)
+MONSTER:'M',"giant mummy",(55,04)
+MONSTER:'M',"giant mummy",(53,05)
+MONSTER:'M',"giant mummy",(56,06)
+MONSTER:'M',"giant mummy",(57,08)
+MONSTER[50%]:'M',"giant mummy",(59,10)
+## Nymphs in the middle!
+#MONSTER[50%]:'n',random,(39,10)
+#MONSTER[50%]:'n',random,(48,13)
+#MONSTER[50%]:'n',random,(48,16)
+#MONSTER[50%]:'n',random,(44,16)
+#MONSTER[50%]:'n',random,(40,14)
+#MONSTER[50%]:'n',random,(41,17)
+#MONSTER[50%]:'n',random,(34,10)
+#MONSTER[50%]:'n',random,(48,12)
+#MONSTER[50%]:'n',random,(54,16)
+#MONSTER[50%]:'n',random,(45,10)
+## A couple of trolls guarding the door
+#MONSTER:'T',"troll",(30,16)
+#MONSTER:'T',"troll",(30,17)
 # A monster in the middle darkness...
 MONSTER:';',"kraken",(43,04)
 MONSTER:'p',random,(49,09)
@@ -1859,6 +1858,9 @@ MONSTER[50%]:random,random,random
 CONTAINER:'`',"statue",(05,04),"oread",1
 CONTAINER:'`',"statue",(07,04),"dryad",1
 CONTAINER:'`',"statue",(06,01),"god",1,"Shub-Niggurath, Black Goat of the woods with a thousand young"
+OBJECT:')',"viperwhip",contained,blessed,+3
+OBJECT:')',"viperwhip",contained,blessed,+3
+OBJECT:')',"viperwhip",contained,blessed,+3
 REGION:(04,01,08,02),lit,"temple"
 ALTAR:(06,01),noalign,altar
 
@@ -1868,6 +1870,8 @@ OBJECT:'/',"undead turning",contained
 
 CONTAINER:'`',"statue",(67,15),"god",1,"Father Dagon"
 OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'*',"star sapphire",contained
+OBJECT:'*',"star sapphire",contained
 
 OBJECT:'`',"statue",(38,10), "god", 1, "something long since forgotten"
 MONSTER:'&',"priest of an unknown god",(38,11)
@@ -2113,8 +2117,6 @@ OBJECT:'[',"flying boots",(73,12),cursed,0
 MONSTER:'t',random,(18,02)
 MONSTER:'t',random,(44,02)
 MONSTER:'t',random,(62,02)
-MONSTER:'g',random,(06,16)
-MONSTER:'g',random,(29,11)
 MONSTER:'B',random,(48,12)
 MONSTER:'B',random,(73,07)
 # A few fishies
