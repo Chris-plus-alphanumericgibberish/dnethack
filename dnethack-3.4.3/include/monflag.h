@@ -163,6 +163,7 @@
 #define MB_WINGS		0x00080000L	/* has wings */
 #define MB_LONGHEAD		0x00100000L	/* has 'long' (animal) head */
 #define MB_LONGNECK		0x00200000L	/* has 'long' (snakelike) head and neck */
+#define MB_NOFEET		0x00400000L	/* no feet to wear boots */
 
 #define MB_SNAKELEG	(MB_HUMANOID|MB_SLITHY)
 #define MB_CENTAUR	(MB_HUMANOID|MB_ANIMAL)
