@@ -75,18 +75,18 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 # Monsters on siege duty (in the outer caves).
-MONSTER: 'h',"bugbear",(47,02),hostile
-MONSTER: 'h',"bugbear",(48,03),hostile
-MONSTER: 'h',"bugbear",(49,04),hostile
-MONSTER: 'h',"bugbear",(67,03),hostile
-MONSTER: 'h',"bugbear",(69,04),hostile
-MONSTER: 'h',"bugbear",(51,13),hostile
-MONSTER: 'h',"bugbear",(53,14),hostile
-MONSTER: 'h',"bugbear",(55,15),hostile
-MONSTER: 'h',"bugbear",(63,10),hostile
-MONSTER: 'h',"bugbear",(65,09),hostile
-MONSTER: 'h',"bugbear",(67,10),hostile
-MONSTER: 'h',"bugbear",(69,11),hostile
+MONSTER: 'q',"titanothere",(47,02),hostile
+MONSTER: 'q',"titanothere",(48,03),hostile
+MONSTER: 'q',"titanothere",(49,04),hostile
+MONSTER: 'q',"titanothere",(67,03),hostile
+MONSTER: 'q',"titanothere",(69,04),hostile
+MONSTER: 'q',"titanothere",(51,13),hostile
+MONSTER: 'q',"baluchitherium",(53,14),hostile
+MONSTER: 'q',"baluchitherium",(55,15),hostile
+MONSTER: 'q',"baluchitherium",(63,10),hostile
+MONSTER: 'q',"baluchitherium",(65,09),hostile
+MONSTER: 'q',"mastodon",(67,10),hostile
+MONSTER: 'q',"mastodon",(69,11),hostile
 WALLIFY
 
 #
@@ -157,33 +157,37 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 # Random monsters.
-MONSTER:'h',"bugbear",(02,10),hostile
-MONSTER:'h',"bugbear",(03,11),hostile
-MONSTER:'h',"bugbear",(04,12),hostile
-MONSTER:'h',"bugbear",(02,11),hostile
-MONSTER:'h',"bugbear",(16,16),hostile
-MONSTER:'h',"bugbear",(17,17),hostile
-MONSTER:'h',"bugbear",(18,18),hostile
-MONSTER:'h',"bugbear",(19,16),hostile
-MONSTER:'h',"bugbear",(30,06),hostile
-MONSTER:'h',"bugbear",(31,07),hostile
-MONSTER:'h',"bugbear",(32,08),hostile
-MONSTER:'h',"bugbear",(33,06),hostile
-MONSTER:'h',"bugbear",(34,07),hostile
-MONSTER:'h',"bugbear",random,hostile
-MONSTER:'h',"bugbear",random,hostile
-MONSTER:'h',"bugbear",random,hostile
-MONSTER:'h',"bugbear",random,hostile
-MONSTER:'h',random,random,hostile
-MONSTER:'H',random,random,hostile
-MONSTER:'H',"hill giant",(03,12),hostile
-MONSTER:'H',"hill giant",(20,17),hostile
-MONSTER:'H',"hill giant",(35,08),hostile
-MONSTER:'H',"hill giant",random,hostile
-MONSTER:'H',"hill giant",random,hostile
-MONSTER:'H',"hill giant",random,hostile
-MONSTER:'H',"hill giant",random,hostile
-MONSTER:'H',random,random,hostile
+MONSTER:'q',"titanothere",(02,10),hostile
+MONSTER:'q',"titanothere",(03,11),hostile
+MONSTER:'q',"titanothere",(04,12),hostile
+MONSTER:'q',"titanothere",(02,11),hostile
+MONSTER:'q',"titanothere",(16,16),hostile
+MONSTER:'q',"titanothere",(17,17),hostile
+MONSTER:'q',"titanothere",(18,18),hostile
+MONSTER:'q',"baluchitherium",(19,16),hostile
+MONSTER:'q',"baluchitherium",(30,06),hostile
+MONSTER:'q',"baluchitherium",(31,07),hostile
+MONSTER:'q',"baluchitherium",(32,08),hostile
+MONSTER:'q',"baluchitherium",(33,06),hostile
+MONSTER:'q',"mastodon",(34,07),hostile
+MONSTER:'q',"mastodon",random,hostile
+MONSTER:'q',"mastodon",random,hostile
+MONSTER:'D',"mastodon",random,hostile
+MONSTER:'D',"triceratops",(03,12)
+MONSTER:'D',"triceratops",(20,17)
+MONSTER:'D',"triceratops",(35,08)
+MONSTER:'D',"triceratops",random
+MONSTER:'D',"triceratops",random
+MONSTER:'D',"triceratops",random
+MONSTER:'D',"triceratops",random
+MONSTER:'D',"triceratops",random
+MONSTER:'D',"triceratops",random
+MONSTER:'D',"diplodocus",random
+MONSTER:'D',"diplodocus",random
+MONSTER:'D',"diplodocus",random
+MONSTER:'D',"diplodocus",random
+MONSTER:'D',"tyrannosaurus",random,hostile
+MONSTER:'D',"tyrannosaurus",random,hostile
 WALLIFY
 
 #
@@ -276,13 +280,13 @@ TRAP: random, random
 TRAP: random, random
 TRAP: random, random
 #
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', random, random, hostile
-MONSTER: 'H', "hill giant", random, hostile
+MONSTER: 'q', "titanothere", random, hostile
+MONSTER: 'q', "titanothere", random, hostile
+MONSTER: 'q', "titanothere", random, hostile
+MONSTER: 'q', "titanothere", random, hostile
+MONSTER: 'q', "titanothere", random, hostile
+MONSTER: 'q', "mastodon", random, hostile
+MONSTER: 'f', "saber-toothed cat", random, hostile
 
 MAZE: "Cav-filb" , ' '
 INIT_MAP: '.' , ' ' , true , true , random , true
@@ -309,11 +313,22 @@ TRAP: random, random
 TRAP: random, random
 TRAP: random, random
 #
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', "bugbear", random, hostile
-MONSTER: 'h', random, random, hostile
-MONSTER: 'h', random, random, hostile
-MONSTER: 'H', "hill giant", random, hostile
-MONSTER: 'H', "hill giant", random, hostile
+MONSTER: 'D', "red dragon", random, hostile
+MONSTER: 'D', "white dragon", random, hostile
+MONSTER: 'D', "black dragon", random, hostile
+MONSTER: 'D', "blue dragon", random, hostile
+MONSTER: 'D', "green dragon", random, hostile
+MONSTER: 'D', "yellow dragon", random, hostile
+MONSTER: 'D', "diplodocus", random, hostile
+MONSTER: 'D', "diplodocus", random, hostile
+MONSTER: 'D', "diplodocus", random, hostile
+MONSTER: 'D', "tyrannosaurus", random, hostile
+MONSTER: 'D', "tyrannosaurus", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
+MONSTER: 'a', "trilobite", random, hostile
