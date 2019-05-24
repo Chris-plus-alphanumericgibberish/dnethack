@@ -187,6 +187,10 @@ struct obj {
 #define OPROP_CONCW		0x0000000000004000
 #define OPROP_AXIOW		0x0000000000008000
 #define OPROP_LESSW		0x0000000000010000
+#define OPROP_HOLYW		0x0000000000020000
+#define OPROP_UNHYW		0x0000000000040000
+#define OPROP_HOLY		0x0000000000080000
+#define OPROP_UNHY		0x0000000000100000
 
 	unsigned oeaten;	/* nutrition left in food, if partly eaten */
 	long age;		/* creation date */
