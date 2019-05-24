@@ -3180,8 +3180,24 @@ signs_enlightenment()
 		putstr(en_win, 0, "You feel like something is behind you, but you can't see anything.");
 		message = TRUE;
 	}
-	if(u.specialSealsActive&SEAL_MISKA){
-		putstr(en_win, 0, "You have 4 arms, and a wolf head grows from each hip.");
+	if(u.specialSealsActive&SEAL_MISKA && u.ulevel >= 10){
+		static char mbuf[BUFSZ] = {'\0'};
+		if(u.ulevel >= 26){
+			int howManyArms = (youracedata == &mons[PM_VALAVI]) ? 6 : 
+						  (youracedata == &mons[PM_MAN_SERPENT_MAGE]) ? 6 : 
+						  (youracedata == &mons[PM_PHALANX]) ? 6 : 
+						  (youracedata == &mons[PM_MARILITH]) ? 8 : 
+						  (youracedata == &mons[PM_KARY__THE_FIEND_OF_FIRE]) ? 8 : 
+						  (youracedata == &mons[PM_CATHEZAR]) ? 8 : 
+						  (youracedata == &mons[PM_SHAKTARI]) ? 8 : 
+						  4;
+			Sprintf(mbuf, "You have %d arms, and a wolf head grows from each hip.", howManyArms);
+			putstr(en_win, 0, mbuf);
+		} else if(u.ulevel >= 18) {
+			putstr(en_win, 0, "You have a wolf head growing from each hip.");
+		} else {
+			putstr(en_win, 0, "You have a wolf head growing from your lower stomach.");
+		}
 		message = TRUE;
 	}
 	// if(u.specialSealsActive&SEAL_NUDZIRATH){
