@@ -32,6 +32,8 @@
 
 #define resists_poly(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
 
+#define resists_confusion(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
+
 #define is_blind(mon)		(!((mon)->mcansee) || (darksight((mon)->data) && !(\
 													(!levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))\
 													|| (levl[u.ux][u.uy].lit &&  (viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))))))
