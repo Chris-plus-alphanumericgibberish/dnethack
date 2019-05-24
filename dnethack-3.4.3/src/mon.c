@@ -1781,7 +1781,7 @@ movemon()
 				mtmp->mpeaceful = 0;
 				set_malign(mtmp);
 			}
-		} else if(!mtmp->mpeaceful && mtmp->mhp == mtmp->mhpmax && mtmp->m_lev >= 15){
+		} else if(!mtmp->mpeaceful && mtmp->mhp == mtmp->mhpmax && mtmp->m_lev >= 30 && mtmp->mspec_used == 0){
 			pline("%s resumes its meditation...", Amonnam(mtmp));
 			mtmp->mpeaceful = 1;
 			set_malign(mtmp);
