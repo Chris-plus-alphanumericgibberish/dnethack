@@ -294,6 +294,7 @@ struct monst *mon;
 		mon->data == &mons[PM_QUEEN_OF_STARS] ||
 		mon->data == &mons[PM_ETERNAL_LIGHT] ||
 		mon->data == &mons[PM_CROW_WINGED_HALF_DRAGON] ||
+		mon->data == &mons[PM_UVUUDAUM] ||
 		mon->data == &mons[PM_DARUTH_XAXOX]
 	) return TRUE;
 	
