@@ -495,7 +495,9 @@
 						 (uwep && is_lightsaber(uwep) && uwep->lamplit && ((u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))) || (u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))))) || \
 				 (youracedata == &mons[PM_SILVER_DRAGON]))
 
-#define Free_action		(u.uprops[FREE_ACTION].extrinsic || u.sealsActive&SEAL_EURYNOME) /* [Tom] */
+#define EFree_action		u.uprops[FREE_ACTION].extrinsic
+
+#define Free_action		(EFree_action || u.sealsActive&SEAL_EURYNOME) /* [Tom] */
 
 #define Fixed_abil		(u.uprops[FIXED_ABIL].extrinsic || u.specialSealsActive&SEAL_DAHLVER_NAR)	/* KMH */
 

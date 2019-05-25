@@ -1056,7 +1056,7 @@ A("The Iron Ball of Levitation", HEAVY_IRON_BALL, /*Needs encyc entry*/
 A("The Iron Spoon of Liberation", SPOON, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_LUCK|SPFX_INTEL), (SPFX_SEARCH|SPFX_SEEK),
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	PHYS(5,0),	NO_DFNS,	CARY(AD_MAGM),
+	PHYS(5,0),	NO_DFNS,	CARY(AD_PLYS),
 	PHASING,	A_CHAOTIC, PM_CONVICT, NON_PM, 5000L,
 	SPFX2_STLTH|SPFX2_DIG,SPFX3_ENGRV,0), /*Note: it had caried stealth before*/
 #endif	/* CONVICT */

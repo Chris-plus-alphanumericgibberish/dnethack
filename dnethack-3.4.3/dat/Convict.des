@@ -101,10 +101,10 @@ MAP
 0                    #      |........|      ######            |-------------|
 1    #################      |........|      #    H                           
 2    #                      |........+#######    #                           
-3    #                      |----S---|           #            |----------|   
-4 |--+-------|                   #               #####        |..........|   
-5 |..........|                   #               #   #        |..........|   
-6 |..........|                   #     |------|  #   #########+..........|   
+3    #                      |----S---|---|----|  #            |----------|   
+4 |--+-------|                   #   |...|....|  #####        |..........|   
+5 |..........|                   #   |...+...K|  #   #        |..........|   
+6 |..........|                   #   |-|+-+---|  #   #########+..........|   
 7 |..........|                   ######S......+###            |..........|   
 8 |----------|                         |......|               |----------|   
 9                                      |------|                              
@@ -127,7 +127,10 @@ DOOR:locked,(04,14)
 DOOR:locked,(06,04)
 DOOR:open,(14,02)
 DOOR:closed,(61,16)
-DOOR:closed,(45,17)
+DOOR:locked,(45,17)
+DOOR:closed,(41,16)
+DOOR:closed,(40,15)
+DOOR:closed,(39,16)
 DOOR:locked,(36,12)
 DOOR:closed,(61,02)
 # Police station
@@ -233,7 +236,7 @@ OBJECT: '_', "iron chain", (11,17)
 MAZE:"Con-goal",' '
 FLAGS:hardfloor
 GEOMETRY:left,top
-#123456789012345678901234567890123456789012345678901234567890123456789012345
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
 0---------------------------------------------------------
 1|...|        |............................|             |
@@ -261,6 +264,10 @@ ENDMAP
 REGION:(00,00,56,19),lit,"ordinary"
 # Stairs
 STAIR:(02,02),up
+OBJECT:')',"rapier",(02,03),blessed,2,"Mistlight"
+OBJECT:'[',"stilettos",(02,04),blessed,2
+OBJECT:'[',"gentlewoman's dress",(02,06),blessed,2
+OBJECT:'[',"victorian underwear",(04,11),blessed,2
 # Non diggable walls
 NON_DIGGABLE:(00,00,56,19)
 # Random traps
@@ -282,7 +289,23 @@ MONSTER: ''',"iron golem",(04,13),hostile
 OBJECT:'(',"spoon",(31,10),blessed,0,"The Iron Spoon of Liberation"
 # OBJECT:'0',"heavy iron ball",(31,10),blessed,0,"The Iron Ball of Levitation"
 # OBJECT:'0',"heavy iron ball",(31,10),blessed,0,"The Iron Ball of Liberation"
-OBJECT:'(',"chest",(55,18),blessed,2
+CONTAINER:'(',"chest",(55,18),blessed,2
+OBJECT:'[',"helmet",contained,blessed,2,"Mask of Waterdeep"
+OBJECT:'[',"cloak of magic resistance",contained,blessed,2,"Masked Lord's Cope"
+OBJECT:'[',"gentleman's suit",contained,blessed,2
+OBJECT:'[',"high boots",contained,blessed,2
+OBJECT:'[',"gloves",contained,blessed,2
+OBJECT: '%', "corpse", random, "inmate", 0
+OBJECT: '%', "corpse", random, "inmate", 0
+OBJECT: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
+OBJECT[75%]: '%', "corpse", random, "inmate", 0
 # Magic Chest
 OBJECT:'(',"magic chest",(55,15)
 # Warden Arianna
@@ -404,7 +427,7 @@ OBJECT[50%]: '0', "heavy iron ball", random
 
 MAZE:"Con-filb",' '
 FLAGS:hardfloor
-INIT_MAP: '#' , ' ', true, true, unlit, true
+INIT_MAP: '.' , ' ', true, true, unlit, true
 MESSAGE: "This appears to be a prison level that is still under construction"
 NOMAP
 #

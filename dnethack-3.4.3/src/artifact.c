@@ -770,6 +770,8 @@ long wp_mask;
 			mask = &EAcid_resistance;
 		else if (dtyp == AD_MAGM)
 			mask = &EAntimagic;
+		else if (dtyp == AD_PLYS)
+			mask = &EFree_action;
 		else if (dtyp == AD_DISN)
 			mask = &EDisint_resistance;
 		else if (dtyp == AD_DRST)
@@ -1139,7 +1141,7 @@ touch_artifact(obj, mon, hypothetical)
 		/* special monsters trying to take the Amulet, invocation tools or
 		   quest item can touch anything except for `spec_applies' artifacts */
 		if(mon->data == &mons[PM_WARDEN_ARIANNA] && obj->oartifact == ART_IRON_SPOON_OF_LIBERATION)
-			badclass = badalign = TRUE;
+			badclass = badalign = forceEvade = TRUE;
 		else badclass = badalign = FALSE;
     }
     /* weapons which attack specific categories of monsters are
@@ -2518,6 +2520,62 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
 			else *dmgptr += basedmg;
 			if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+		}
+	}
+	if(otmp->oproperties&OPROP_WATRW){
+		water_damage(youdefend ? invent : mdef->minvent, FALSE, FALSE, FALSE, mdef);
+		if(youdefend){
+			if(!((uarmc
+				&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
+				&& (!uarmc->cursed || rn2(3))
+			   ) || (
+				ublindf
+				&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+				&& (!ublindf->cursed || rn2(3))
+			   ) || (
+				uarm
+				&& (uarm->otyp == WHITE_DRAGON_SCALES || uarm->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!uarm->cursed || rn2(3))
+			   ) || (
+				uarms
+				&& uarms->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!uarms->cursed || rn2(3))
+			   ) || u.sealsActive&SEAL_ENKI)
+			) {
+				int mult = (flaming(youracedata) || youracedata == &mons[PM_EARTH_ELEMENTAL] || youracedata == &mons[PM_IRON_GOLEM] || youracedata == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
+				if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8)*mult;
+				else *dmgptr += basedmg*mult;
+				if(youracedata == &mons[PM_GREMLIN] && rn2(3)){
+					(void)split_mon(&youmonst, (struct monst *)0);
+				}
+			}
+		} else{ //Monster
+			struct obj *cloak = which_armor(mdef, W_ARMC);
+			struct obj *armor = which_armor(mdef, W_ARM);
+			struct obj *shield = which_armor(mdef, W_ARMS);
+			// struct obj *blindfold = which_armor(mdef, W_ARMC);
+			if(!((cloak
+				&& (cloak->otyp == OILSKIN_CLOAK || cloak->greased)
+				&& (!cloak->cursed || rn2(3))
+				) || (armor
+				&& (armor->otyp == WHITE_DRAGON_SCALES || armor->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!armor->cursed || rn2(3))
+				) || (shield
+				&& shield->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!shield->cursed || rn2(3))
+			   // ) || (
+				// ublindf
+				// && ublindf->otyp == R_LYEHIAN_FACEPLATE
+				// && (!ublindf->cursed || rn2(3))
+			   ))
+			) {
+				int mult = (flaming(mdef->data) || mdef->data == &mons[PM_EARTH_ELEMENTAL] || mdef->data == &mons[PM_IRON_GOLEM] || mdef->data == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
+				if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8)*mult;
+				else *dmgptr += basedmg*mult;
+				if(mdef->data == &mons[PM_GREMLIN] && rn2(3)){
+					(void)split_mon(mdef, (struct monst *)0);
+				}
+			}
 		}
 	}
 	if(otmp->oproperties&OPROP_ELECW){
@@ -8362,4 +8420,42 @@ int distance;
 	}
 }
 
+//For use with the level editor and elsewhere
+struct obj *
+minor_artifact(otmp, name)
+struct obj *otmp;	/* existing object; ignored if alignment specified */
+char *name;	/* target alignment, or A_NONE */
+{
+	if(!strcmp(name,  "Mistlight")){
+		if(!rn2(4)) otmp->otyp = LONG_SWORD;
+		
+		if(rn2(2)) otmp->obj_material = SILVER;
+		else otmp->obj_material = GOLD;
+		
+		switch(rnd(4)){
+			case 1:
+				otmp->oproperties = OPROP_HOLYW;
+			break;
+			case 2:
+				otmp->oproperties = OPROP_AXIOW;
+			break;
+			case 3:
+				otmp->oproperties = OPROP_MAGCW;
+			break;
+			case 4:
+				otmp->oproperties = OPROP_WATRW;
+			break;
+		}
+	}
+	if(!strcmp(name, "Mask of Waterdeep")){
+		otmp->otyp = find_vhelm();
+		otmp->obj_material = IRON;
+		otmp->oproperties = OPROP_MAGC;
+	}
+	if(!strcmp(name, "Masked Lord's Cope")){
+		otmp->otyp = find_cope();
+	}
+	fix_object(otmp);
+	return otmp;
+}
 /*artifact.c*/

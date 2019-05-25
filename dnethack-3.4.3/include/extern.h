@@ -117,6 +117,7 @@ E long FDECL(spec_s, (struct obj *));
 E boolean FDECL(artifact_has_invprop, (struct obj *,UCHAR_P));
 E long FDECL(arti_cost, (struct obj *));
 E void FDECL(arti_poly_contents, (struct obj *));
+E struct obj * FDECL(minor_artifact, (struct obj *, char *));
 
 /* ### attrib.c ### */
 

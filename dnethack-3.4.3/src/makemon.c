@@ -1917,6 +1917,23 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				}
 // #ifdef CONVICT
+			} else if (mm == PM_WARDEN_ARIANNA) {
+				otmp = mksobj(IRON_CHAIN, FALSE, FALSE);
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				otmp->spe = -6;
+				(void) mpickobj(mtmp,otmp);
+				otmp = mksobj(IRON_CHAIN, FALSE, FALSE);
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				otmp->spe = -6;
+				(void) mpickobj(mtmp,otmp);
+				otmp = mksobj(IRON_CHAIN, FALSE, FALSE);
+				otmp->blessed = FALSE;
+				otmp->cursed = TRUE;
+				otmp->spe = -6;
+				(void) mpickobj(mtmp,otmp);
+				(void)mongets(mtmp, HEAVY_IRON_BALL);
 			} else if (mm == PM_MINER) {
 				(void)mongets(mtmp, PICK_AXE);
 				otmp = mksobj(BRASS_LANTERN, TRUE, FALSE);

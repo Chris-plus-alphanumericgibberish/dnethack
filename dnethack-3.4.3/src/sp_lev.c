@@ -1004,8 +1004,11 @@ struct mkroom	*croom;
 		attach_egg_hatch_timeout(otmp);	/* attach new hatch timeout */
 	}
 
-	if (named)
+	if (named){
 	    otmp = oname(otmp, o->name.str);
+		//Catch and spiffyfy any non-artifact special items from the level editor (anything to avoid touching the lexer I guess)
+		otmp = minor_artifact(otmp, o->name.str);
+	}
 
 	switch(o->containment) {
 	    static struct obj *container = 0;

@@ -535,6 +535,18 @@ qt_montype()
 				return &mons[PM_BLACK_DRAGON];
 			break;
 		}
+	} else if(Role_if(PM_CONVICT) && ((Is_qlocate(&u.uz) && rn2(2)) || (u.uz.dlevel > qlocate_level.dlevel))){
+		int qpm;
+		if(rn2(5)){
+			qpm = PM_QUASIT;
+			if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD && !In_quest(&u.uz)))
+				return (&mons[qpm]);
+			return (mkclass(S_IMP, G_HELL));
+		}
+		qpm = PM_DAUGHTER_OF_BEDLAM;
+		if (qpm != NON_PM && rn2(5) && !(mvitals[qpm].mvflags & G_GENOD && !In_quest(&u.uz)))
+			return (&mons[qpm]);
+		return (mkclass(S_DEMON, G_HELL));
 	} else {
 		int qpm;
 		if(Race_if(PM_DROW) && !flags.initgend && Role_if(PM_NOBLEMAN) && on_level(&u.uz, &qstart_level)) return &mons[PM_LONG_WORM_TAIL];
