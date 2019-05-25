@@ -3032,13 +3032,19 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 //	pline("D20 role was %d", dieroll);
 //	pline("%d", otmp->oeaten);
 	if (otmp->oartifact == ART_ROD_OF_SEVEN_PARTS ) {
-		if(--u.RoSPkills < 1){ 
-			if(otmp->spe < 7 && u.ulevel/3 > otmp->spe){
-				otmp->spe++;
-				pline("Your weapon has become more perfect!");
-				u.RoSPkills = 7;
+		if(--u.RoSPkills < 1){
+			if(youattack){
+				if(otmp->spe < 7 && u.ulevel/3 > otmp->spe){
+					otmp->spe++;
+					pline("Your weapon has become more perfect!");
+					u.RoSPkills = 7;
+				} else u.RoSPkills=1;
+			} else {
+				if(otmp->spe < 7 && (magr->m_lev)/3 > otmp->spe){
+					otmp->spe++;
+					u.RoSPkills = 7;
+				} else u.RoSPkills=1;
 			}
-			else u.RoSPkills=1;
 		}
 		if(sgn(mdef->data->maligntyp) < 0){
 			*dmgptr += 7 + otmp->spe;
