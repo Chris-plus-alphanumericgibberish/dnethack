@@ -1931,7 +1931,15 @@ static const short command_chain[][2] = {
 	{ PM_CAPTAIN, PM_CROESUS },
 
 	{ PM_LEGION_DEVIL_GRUNT, PM_LEGION_DEVIL_SOLDIER }, { PM_LEGION_DEVIL_SOLDIER, PM_LEGION_DEVIL_SERGEANT }, { PM_LEGION_DEVIL_SERGEANT, PM_LEGION_DEVIL_CAPTAIN },
-	{ PM_LEGION_DEVIL_CAPTAIN, PM_BAEL },
+	{ PM_LEGION_DEVIL_CAPTAIN, PM_PIT_FIEND }, { PM_LEGION_DEVIL_CAPTAIN, PM_NESSIAN_PIT_FIEND },
+	{ PM_LEMURE, PM_PIT_FIEND }, { PM_IMP, PM_PIT_FIEND }, 
+	{ PM_HORNED_DEVIL, PM_PIT_FIEND }, { PM_ERINYS, PM_PIT_FIEND }, { PM_BARBED_DEVIL, PM_PIT_FIEND }, { PM_BONE_DEVIL, PM_PIT_FIEND }, { PM_ICE_DEVIL, PM_PIT_FIEND }, 
+	{ PM_LEMURE, PM_NESSIAN_PIT_FIEND }, { PM_IMP, PM_NESSIAN_PIT_FIEND },
+	{ PM_HORNED_DEVIL, PM_NESSIAN_PIT_FIEND }, { PM_ERINYS, PM_NESSIAN_PIT_FIEND }, { PM_BARBED_DEVIL, PM_NESSIAN_PIT_FIEND }, { PM_BONE_DEVIL, PM_NESSIAN_PIT_FIEND }, { PM_ICE_DEVIL, PM_NESSIAN_PIT_FIEND }, 
+	{ PM_PIT_FIEND, PM_BAEL },
+	{ PM_PIT_FIEND, PM_ASMODEUS }, { PM_NESSIAN_PIT_FIEND, PM_ASMODEUS },
+	
+	{ PM_MANES, PM_MARILITH }, { PM_QUASIT, PM_MARILITH }, { PM_VROCK, PM_MARILITH }, { PM_HEZROU, PM_MARILITH }, { PM_MARILITH, PM_SHAKTARI }, 
 
 	{ PM_MYRMIDON_HOPLITE, PM_MYRMIDON_LOCHIAS }, { PM_MYRMIDON_LOCHIAS, PM_MYRMIDON_YPOLOCHAGOS }, { PM_MYRMIDON_YPOLOCHAGOS, PM_MYRMIDON_LOCHAGOS },
 	{ PM_GIANT_ANT, PM_FORMIAN_TASKMASTER }, { PM_FIRE_ANT, PM_FORMIAN_TASKMASTER }, { PM_SOLDIER_ANT, PM_FORMIAN_TASKMASTER },
@@ -2015,12 +2023,25 @@ struct monst * commander;
 		case PM_BAEL:
 			tmp = d(2, 9);
 			break;
+		case PM_ASMODEUS:
+			tmp = 9;
+			break;
 		case PM_NECROMANCER:
 			tmp = d(2, 6);
 			break;
 		case PM_SERGEANT:
 		case PM_MYRMIDON_LOCHIAS:
 			tmp = rnd(3);
+			break;
+		case PM_PIT_FIEND:
+		case PM_NESSIAN_PIT_FIEND:
+			tmp = d(1, 9);
+			break;
+		case PM_MARILITH:
+			tmp = d(1, 6);
+			break;
+		case PM_SHAKTARI:
+			tmp = 6;
 			break;
 		default:
 			tmp = rnd(5 + min(30, commander->m_lev) / 6);
@@ -2056,6 +2077,15 @@ struct monst * commander;
 						pline("%s calls his %s to battle!", Monnam(commander), (inrange < 10) ? "legion" : "legions");
 					else
 						pline("%s rallies his %s!", Monnam(commander), (inrange<10) ? "legion" : "legions");
+				}
+				break;
+			case PM_ASMODEUS:
+				// only messages for large groups
+				if (inrange > 4 && (affected > 4 || !rn2(5 - affected))){
+					if (affected == inrange)
+						pline("%s calls his %s to battle!", Monnam(commander), (inrange < 10) ? "subjects" : "infernal hosts");
+					else
+						pline("%s rallies his %s!", Monnam(commander), (inrange<10) ? "subjects" : "infernal hosts");
 				}
 				break;
 			case PM_LEGION:
