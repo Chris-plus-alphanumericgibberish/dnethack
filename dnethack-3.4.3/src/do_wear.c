@@ -106,6 +106,7 @@ Boots_on()
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
+	case HARMONIUM_BOOTS:
 	case STILETTOS:
 		break;
 	case WATER_WALKING_BOOTS:
@@ -198,6 +199,7 @@ Boots_off()
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
 	case KICKING_BOOTS:
+	case HARMONIUM_BOOTS:
 	case STILETTOS:
 		break;
 	default: impossible(unknown_type, c_boots, otyp);
@@ -369,6 +371,7 @@ Helmet_on()
 	case ORCISH_HELM:
 	case HELM_OF_TELEPATHY:
 	case HELM_OF_DRAIN_RESISTANCE:
+	case HARMONIUM_HELM:
 		if(uarmh->otyp == gcircletsa) adj_abon(uarmh, uarmh->spe);
 		break;
 	case HELM_OF_BRILLIANCE:
@@ -444,6 +447,7 @@ Helmet_off()
 	case DWARVISH_HELM:
 	case GNOMISH_POINTY_HAT:
 	case ORCISH_HELM:
+	case HARMONIUM_HELM:
 		if(uarmh->otyp == gcircletsa && !cancelled_don) adj_abon(uarmh, -uarmh->spe);
 	    break;
 	case DUNCE_CAP:
@@ -494,6 +498,7 @@ Gloves_on()
 	case GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
 	case GAUNTLETS:
+	case HARMONIUM_GAUNTLETS:
 	case BRONZE_GAUNTLETS:
 	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:
@@ -527,6 +532,7 @@ Gloves_off()
 	case GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
 	case GAUNTLETS:
+	case HARMONIUM_GAUNTLETS:
 	case BRONZE_GAUNTLETS:
 	case CRYSTAL_GAUNTLETS:
 	case PLASTEEL_GAUNTLETS:
