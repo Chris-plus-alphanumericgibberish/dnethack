@@ -640,6 +640,16 @@ register const char *s;
 				}
 			}
 		}
+		if(on_level(&valley_level, &u.uz)){
+			int x, y;
+			for(x = 0; x<COLNO; x++){
+				for(y = 0; y<ROWNO; y++){
+					if(isok(x,y) && levl[x][y].typ == ALTAR){
+						mksobj_at(CANDLE_OF_INVOCATION, x, y, FALSE, FALSE);
+					}
+				}
+			}
+		}
 		if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && on_level(&u.uz, &minetown_level)){
 			int x, y, good = FALSE;
 			while(!good){
