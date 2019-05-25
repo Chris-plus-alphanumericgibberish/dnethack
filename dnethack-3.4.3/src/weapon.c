@@ -1210,11 +1210,11 @@ lightsaber_form_sdie:
 			if(otmp->obj_material == GOLD)
 				bdm = 2;
 			
-			if(otmp->oartifact == ART_STORMBRINGER) 
-				bonus += d(2*bdm,9); //Extra unholy (2d9 vs excal's 3d7)
+			if(otmp->oartifact == ART_STORMBRINGER)
+				bonus += d(4*bdm,9); //Extra unholy (4d9 vs excal's 3d7)
 			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
 				bonus += d(3*bdm,9); //Quite unholy
-			else if(otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) 
+			else if(otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO)
 				bonus += 8*bdm; //Extra unholy
 			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
 				bonus += d(bdm, 20); //Tyranny
