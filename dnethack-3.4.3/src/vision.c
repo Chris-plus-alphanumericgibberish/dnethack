@@ -532,159 +532,159 @@ vision_recalc(control)
 
     /* You see nothing, nothing can see you --- if swallowed or refreshing. */
     if (u.uswallow || control == 2) {
-	/* do nothing -- get_unused_cs() nulls out the new work area */
+		/* do nothing -- get_unused_cs() nulls out the new work area */
 
     } else if (Blind) {
-	/*
-	 * Calculate the could_see array even when blind so that monsters
-	 * can see you, even if you can't see them.  Note that the current
-	 * setup allows:
-	 *
-	 *	+ Monsters to see with the "new" vision, even on the rogue
-	 *	  level.
-	 *
-	 *	+ Monsters can see you even when you're in a pit.
-	 *
-	 *	Also do light sources
-	 */
-	view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
-		0, (void FDECL((*),(int,int,genericptr_t)))0, (genericptr_t)0);
+		/*
+		 * Calculate the could_see array even when blind so that monsters
+		 * can see you, even if you can't see them.  Note that the current
+		 * setup allows:
+		 *
+		 *	+ Monsters to see with the "new" vision, even on the rogue
+		 *	  level.
+		 *
+		 *	+ Monsters can see you even when you're in a pit.
+		 *
+		 *	Also do light sources
+		 */
+		view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
+			0, (void FDECL((*),(int,int,genericptr_t)))0, (genericptr_t)0);
 
-    do_light_sources(next_array);
-	/*
-	 * Our own version of the update loop below.  We know we can't see
-	 * anything, so we only need update positions we used to be able
-	 * to see.
-	 */
-	
-	temp_array = viz_array;	/* set viz_array so newsym() will work */
-	viz_array = next_array;
-	catsightdark = (!levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))
-				 || (levl[u.ux][u.uy].lit &&  (viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)));
+		do_light_sources(next_array);
+		/*
+		 * Our own version of the update loop below.  We know we can't see
+		 * anything, so we only need update positions we used to be able
+		 * to see.
+		 */
+		
+		temp_array = viz_array;	/* set viz_array so newsym() will work */
+		viz_array = next_array;
+		catsightdark = (!levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))
+					 || (levl[u.ux][u.uy].lit &&  (viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)));
 
-	for (row = 0; row < ROWNO; row++) {
-	    old_row = temp_array[row];
+		for (row = 0; row < ROWNO; row++) {
+			old_row = temp_array[row];
 
-	    /* Find the min and max positions on the row. */
-	    start = min(viz_rmin[row], next_rmin[row]);
-	    stop  = max(viz_rmax[row], next_rmax[row]);
+			/* Find the min and max positions on the row. */
+			start = min(viz_rmin[row], next_rmin[row]);
+			stop  = max(viz_rmax[row], next_rmax[row]);
 
-	    for (col = start; col <= stop; col++)
-		if (old_row[col] & IN_SIGHT) newsym(col,row);
-	}
+			for (col = start; col <= stop; col++)
+			if (old_row[col] & IN_SIGHT) newsym(col,row);
+		}
 
-	/* skip the normal update loop */
-	goto skip;
+		/* skip the normal update loop */
+		goto skip;
     }
 #ifdef REINCARNATION
     else if (Is_rogue_level(&u.uz)) {
-	rogue_vision(next_array,next_rmin,next_rmax);
+		rogue_vision(next_array,next_rmin,next_rmax);
     }
 #endif
     else {
-	// int has_night_vision = u.nv_range || (Race_if(PM_DROW) && LightBlind && !Role_if(PM_ANACHRONONAUT));	/* hero has night vision */
-	int nv_range;
-	if(Elfsight) nv_range = 3;
-	else if(Lowlightsight) nv_range = 2;
-	else if(Darksight && LightBlind) nv_range = 0;
-	else if(Normalvision) nv_range = 1;
-	else nv_range = 0;
-	
+		// int has_night_vision = u.nv_range || (Race_if(PM_DROW) && LightBlind && !Role_if(PM_ANACHRONONAUT));	/* hero has night vision */
+		int nv_range;
+		if(Elfsight) nv_range = 3;
+		else if(Lowlightsight) nv_range = 2;
+		else if(Darksight && LightBlind) nv_range = 0;
+		else if(Normalvision) nv_range = 1;
+		else nv_range = 0;
+		
 
-	if (Underwater && !Is_waterlevel(&u.uz)) {
-	    /*
-	     * The hero is under water.  Only see surrounding locations if
-	     * they are also underwater.  This overrides night vision but
-	     * does not override x-ray vision.
-	     */
-	    nv_range = 0;
+		if (Underwater && !Is_waterlevel(&u.uz)) {
+			/*
+			 * The hero is under water.  Only see surrounding locations if
+			 * they are also underwater.  This overrides night vision but
+			 * does not override x-ray vision.
+			 */
+			nv_range = 0;
 
-	    for (row = u.uy-1; row <= u.uy+1; row++)
-		for (col = u.ux-1; col <= u.ux+1; col++) {
-		    if (!isok(col,row) || !is_pool(col,row, TRUE)) continue;
+			for (row = u.uy-1; row <= u.uy+1; row++)
+			for (col = u.ux-1; col <= u.ux+1; col++) {
+				if (!isok(col,row) || !is_pool(col,row, TRUE)) continue;
 
-		    next_rmin[row] = min(next_rmin[row], col);
-		    next_rmax[row] = max(next_rmax[row], col);
-		    next_array[row][col] = IN_SIGHT | COULD_SEE;
-		}
-	}
-
-	/* if in a pit, just update for immediate locations */
-	else if (u.utrap && u.utraptype == TT_PIT) {
-	    for (row = u.uy-1; row <= u.uy+1; row++) {
-		if (row < 0) continue;	if (row >= ROWNO) break;
-
-		next_rmin[row] = max(      0, u.ux - 1);
-		next_rmax[row] = min(COLNO-1, u.ux + 1);
-		next_row = next_array[row];
-
-		for(col=next_rmin[row]; col <= next_rmax[row]; col++)
-		    next_row[col] = IN_SIGHT | COULD_SEE;
-	    }
-	} else
-	    view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
-		0, (void FDECL((*),(int,int,genericptr_t)))0, (genericptr_t)0);
-	
-	
-	/*
-	 * Set the IN_SIGHT bit for xray and night vision.
-	 */
-	
-	if(u.sealsActive&SEAL_ORTHOS){
-		oldxray = u.xray_range;
-		u.xray_range += spiritDsize()+1;
-	}
-	if (u.xray_range >= 0) {
-	    if (u.xray_range) {
-		ranges = circle_ptr(u.xray_range);
-
-		for (row = u.uy-u.xray_range; row <= u.uy+u.xray_range; row++) {
-		    if (row < 0) continue;	if (row >= ROWNO) break;
-		    dy = v_abs(u.uy-row);	next_row = next_array[row];
-
-		    start = max(      0, u.ux - ranges[dy]);
-		    stop  = min(COLNO-1, u.ux + ranges[dy]);
-
-		    for (col = start; col <= stop; col++) {
-			char old_row_val = next_row[col];
-			next_row[col] |= IN_SIGHT;
-			oldseenv = levl[col][row].seenv;
-			levl[col][row].seenv = SVALL;	/* see all! */
-			/* Update if previously not in sight or new angle. */
-			if (!(old_row_val & IN_SIGHT) || oldseenv != SVALL)
-			    newsym(col,row);
-		    }
-
-		    next_rmin[row] = min(start, next_rmin[row]);
-		    next_rmax[row] = max(stop, next_rmax[row]);
+				next_rmin[row] = min(next_rmin[row], col);
+				next_rmax[row] = max(next_rmax[row], col);
+				next_array[row][col] = IN_SIGHT | COULD_SEE;
+			}
 		}
 
-	    } else {	/* range is 0 */
-			next_array[u.uy][u.ux] |= IN_SIGHT;
-			levl[u.ux][u.uy].seenv = SVALL;
-			next_rmin[u.uy] = min(u.ux, next_rmin[u.uy]);
-			next_rmax[u.uy] = max(u.ux, next_rmax[u.uy]);
+		/* if in a pit, just update for immediate locations */
+		else if (u.utrap && u.utraptype == TT_PIT) {
+			for (row = u.uy-1; row <= u.uy+1; row++) {
+			if (row < 0) continue;	if (row >= ROWNO) break;
+
+			next_rmin[row] = max(      0, u.ux - 1);
+			next_rmax[row] = min(COLNO-1, u.ux + 1);
+			next_row = next_array[row];
+
+			for(col=next_rmin[row]; col <= next_rmax[row]; col++)
+				next_row[col] = IN_SIGHT | COULD_SEE;
+			}
+		} else
+			view_from(u.uy, u.ux, next_array, next_rmin, next_rmax,
+			0, (void FDECL((*),(int,int,genericptr_t)))0, (genericptr_t)0);
+		
+		
+		/*
+		 * Set the IN_SIGHT bit for xray and night vision.
+		 */
+		
+		if(u.sealsActive&SEAL_ORTHOS){
+			oldxray = u.xray_range;
+			u.xray_range += spiritDsize()+1;
 		}
-	}
-	
-	if (nv_range && u.xray_range < nv_range) {
-		ranges = circle_ptr(nv_range);
+		if (u.xray_range >= 0) {
+			if (u.xray_range) {
+			ranges = circle_ptr(u.xray_range);
 
-		for (row = u.uy-nv_range; row <= u.uy+nv_range; row++) {
-		    if (row < 0) continue;	if (row >= ROWNO) break;
-		    dy = v_abs(u.uy-row);	next_row = next_array[row];
+			for (row = u.uy-u.xray_range; row <= u.uy+u.xray_range; row++) {
+				if (row < 0) continue;	if (row >= ROWNO) break;
+				dy = v_abs(u.uy-row);	next_row = next_array[row];
 
-		    start = max(      0, u.ux - ranges[dy]);
-		    stop  = min(COLNO-1, u.ux + ranges[dy]);
+				start = max(      0, u.ux - ranges[dy]);
+				stop  = min(COLNO-1, u.ux + ranges[dy]);
 
-		    for (col = start; col <= stop; col++)
-			if (next_row[col]) next_row[col] |= IN_SIGHT;
+				for (col = start; col <= stop; col++) {
+				char old_row_val = next_row[col];
+				next_row[col] |= IN_SIGHT;
+				oldseenv = levl[col][row].seenv;
+				levl[col][row].seenv = SVALL;	/* see all! */
+				/* Update if previously not in sight or new angle. */
+				if (!(old_row_val & IN_SIGHT) || oldseenv != SVALL)
+					newsym(col,row);
+				}
 
-		    next_rmin[row] = min(start, next_rmin[row]);
-		    next_rmax[row] = max(stop, next_rmax[row]);
+				next_rmin[row] = min(start, next_rmin[row]);
+				next_rmax[row] = max(stop, next_rmax[row]);
+			}
+
+			} else {	/* range is 0 */
+				next_array[u.uy][u.ux] |= IN_SIGHT;
+				levl[u.ux][u.uy].seenv = SVALL;
+				next_rmin[u.uy] = min(u.ux, next_rmin[u.uy]);
+				next_rmax[u.uy] = max(u.ux, next_rmax[u.uy]);
+			}
 		}
-	}
-	if(u.sealsActive&SEAL_ORTHOS) u.xray_range=oldxray;
+		
+		if (nv_range && u.xray_range < nv_range) {
+			ranges = circle_ptr(nv_range);
+
+			for (row = u.uy-nv_range; row <= u.uy+nv_range; row++) {
+				if (row < 0) continue;	if (row >= ROWNO) break;
+				dy = v_abs(u.uy-row);	next_row = next_array[row];
+
+				start = max(      0, u.ux - ranges[dy]);
+				stop  = min(COLNO-1, u.ux + ranges[dy]);
+
+				for (col = start; col <= stop; col++)
+				if (next_row[col]) next_row[col] |= IN_SIGHT;
+
+				next_rmin[row] = min(start, next_rmin[row]);
+				next_rmax[row] = max(stop, next_rmax[row]);
+			}
+		}
+		if(u.sealsActive&SEAL_ORTHOS) u.xray_range=oldxray;
     }
 
     /* Set the correct bits for all light sources. */

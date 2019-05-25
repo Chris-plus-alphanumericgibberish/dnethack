@@ -177,8 +177,9 @@ static const char *haluMesg[] = {
 	"And if you're the kind of person who parties with a bathtub full of pasta, I suspect you don't care much about cholesterol anyway.",
 	"I AM A SEXY SHOELESS GOD OF WAR!!!",
 	"Jesus was here 2/15/57 B.C.", /* Family Guy */
-	"If you have time to read this, you should get to the down stairs immediately!" /* Zelda 3 */
-	"Gary was here! Ash is a loser!" /* Pokemon */
+	"If you have time to read this, you should get to the down stairs immediately!", /* Zelda 3 */
+	"Gary was here! Ash is a loser!", /* Pokemon */
+	"Oh, I get it. The real treasure was the people I had executed along the way!", /* A Practical Guide To Evil  */
 	
 	"I see you...",
 		"...do you see me?",
@@ -685,7 +686,7 @@ const char * haluWard[] =  {
 	
 	/* Planar Symbols */
 	"a circle enclosing two curved colliding arrows",			/*44*/
-	"a pair of triangles, drawn tip to tip,",					/*45*/
+	"a pair of triangles, drawn tip to tip",					/*45*/
 	"a stylized beast",											/*46*/
 	"a triangle crowned by a single line",						/*47*/
 	"a simple image of many mountains",							/*48*/

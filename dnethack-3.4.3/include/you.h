@@ -496,7 +496,7 @@ struct you {
 	long	uexp, urexp;
 	long	ucleansed;	/* to record moves when player was cleansed */
 	long	usleep;		/* sleeping; monstermove you last started */
-	int 	ustdy;		/* to record extra damage to be delt due to having been studied */
+	int 	ustdy;		/* to record extra damage to be dealt due to having been studied */
 	uchar 	wimage;		/* to record if you have the image of a Weeping Angel in your mind */
 	int uinvault;
 	struct monst *ustuck;
@@ -517,7 +517,7 @@ struct you {
 	struct skills weapon_skills[P_NUM_SKILLS];
 	boolean twoweap;		/* KMH -- Using two-weapon combat */
 	int divetimer;			/* how long you can stay under water */
-
+	
 	int role_variant;	/*Records what variant of your role you are.*/
 
 	long	wardsknown;	/* known wards */

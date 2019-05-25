@@ -262,7 +262,7 @@ doread()
 			You_cant("see the candle!");
 			return 0;
 		} else {
-			pline("The candel is carved with many pictograms, including %s", fetchHaluWard(FIRST_PLANE_SYMBOL+rn2(LAST_PLANE_SYMBOL-FIRST_PLANE_SYMBOL+1)));
+			pline("The candle is carved with many pictographs, including %s.", fetchHaluWard(FIRST_PLANE_SYMBOL+rn2(LAST_PLANE_SYMBOL-FIRST_PLANE_SYMBOL+1)));
 		}
 		return(1);
 	} else if(scroll->oclass == WEAPON_CLASS && (scroll)->obj_material == WOOD && scroll->oward != 0){
