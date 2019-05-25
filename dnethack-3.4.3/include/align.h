@@ -32,6 +32,7 @@ typedef struct	align {		/* alignment & record */
 #define AM_NEUTRAL	 2
 #define AM_LAWFUL	 4
 #define AM_VOID		 8
+//AM_SHRINE			16 //Note: this is in another .h file, but must be kept in sync
 
 #define GA_NONE		 0
 #define GA_CHAOTIC	 1
