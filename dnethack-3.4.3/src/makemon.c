@@ -3548,6 +3548,383 @@ register struct monst *mtmp;
 				case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
 				}
 				(void)mongets(mtmp, (rn2(2) ? WOODEN_FLUTE : WOODEN_HARP));
+			} else if(ptr == &mons[PM_DEMINYMPH]){
+				if(In_lost_cities(&u.uz)){
+					//Cultist of the Black Goat
+					otmp = mksobj(VIPERWHIP, FALSE, FALSE);
+					otmp->spe = 6;
+					otmp->ovar1 = 4;
+					otmp->obj_material = BONE;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(WAR_HAT, TRUE, FALSE);
+					otmp->spe = 2;
+					otmp->obj_material = BONE;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(PLATE_MAIL, TRUE, FALSE);
+					otmp->spe = 2;
+					otmp->obj_material = BONE;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(GAUNTLETS, TRUE, FALSE);
+					otmp->spe = 2;
+					otmp->obj_material = BONE;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(ARMORED_BOOTS, TRUE, FALSE);
+					otmp->spe = 2;
+					otmp->obj_material = BONE;
+					fix_object(otmp);
+					otmp = mksobj(ROUNDSHIELD, TRUE, FALSE);
+					otmp->spe = 2;
+					otmp->obj_material = BONE;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				} else switch(rn2(15)){
+					//Archeologist
+					case 0:
+						otmp = mksobj(BULLWHIP, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(DWARVISH_MATTOCK, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LEATHER_JACKET, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(FEDORA, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Barbarian
+					case 1:
+						if(rn2(2)){
+							otmp = mksobj(TWO_HANDED_SWORD, TRUE, TRUE);
+							otmp->spe = 0+rnd(3)+rn2(3);
+							(void) mpickobj(mtmp, otmp);
+							otmp = mksobj(AXE, TRUE, TRUE);
+							otmp->spe = 0+rn2(4);
+							(void) mpickobj(mtmp, otmp);
+						} else {
+							otmp = mksobj(BATTLE_AXE, TRUE, TRUE);
+							otmp->spe = 0+rnd(3)+rn2(3);
+							(void) mpickobj(mtmp, otmp);
+							otmp = mksobj(SHORT_SWORD, TRUE, TRUE);
+							otmp->spe = 0+rn2(4);
+							(void) mpickobj(mtmp, otmp);
+						}
+						otmp = mksobj(RING_MAIL, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Bard
+					case 2:
+						otmp = mksobj(RAPIER, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LEATHER_CLOAK, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						mongets(mtmp, WOODEN_HARP);
+						mongets(mtmp, POT_BOOZE);
+						mongets(mtmp, POT_BOOZE);
+						mongets(mtmp, POT_BOOZE);
+					break;
+					//Caveman
+					case 3:
+						otmp = mksobj(CLUB, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LEATHER_ARMOR, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(SLING, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(FLINT, TRUE, TRUE);
+						otmp->quan = rnd(5)+rnd(5)+rnd(5)+rnd(5)+rnd(5);
+						otmp->owt = weight(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Healer
+					case 4:
+						otmp = mksobj(SCALPEL, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(QUARTERSTAFF, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(GLOVES, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HEALER_UNIFORM, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LOW_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						mongets(mtmp, STETHOSCOPE);
+						mongets(mtmp, POT_EXTRA_HEALING);
+						mongets(mtmp, POT_EXTRA_HEALING);
+						mongets(mtmp, POT_EXTRA_HEALING);
+						mongets(mtmp, POT_EXTRA_HEALING);
+						mongets(mtmp, POT_HEALING);
+						mongets(mtmp, POT_HEALING);
+						mongets(mtmp, POT_HEALING);
+						mongets(mtmp, POT_HEALING);
+						mongets(mtmp, WAN_SLEEP);
+					break;
+					//Knight
+					case 5:
+						otmp = mksobj(LONG_SWORD, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(CHAIN_MAIL, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HELMET, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(KITE_SHIELD, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(GLOVES, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Monk
+					case 6:
+						otmp = mksobj(GLOVES, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(ROBE, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(SEDGE_HAT, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						mongets(mtmp, POT_HEALING);
+						mongets(mtmp, POT_HEALING);
+						mongets(mtmp, POT_HEALING);
+						mongets(mtmp, WAN_SLEEP);
+					break;
+					//Noble
+					case 7:
+						otmp = mksobj(RAPIER, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(VICTORIAN_UNDERWEAR, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(GENTLEWOMAN_S_DRESS, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LEATHER_CLOAK, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(GLOVES, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(BUCKLER, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(find_gcirclet(), TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Pirate
+					case 8:
+						otmp = mksobj(SCIMITAR, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(FLINTLOCK, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LEATHER_JACKET, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(RUFFLED_SHIRT, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(BUCKLER, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(BULLET, TRUE, TRUE);
+						otmp->quan = rnd(5)+rnd(5)+rnd(5)+rnd(5);
+						otmp->owt = weight(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Priest
+					case 9:
+						otmp = mksobj(MACE, TRUE, TRUE);
+						bless(otmp);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(ROBE, TRUE, TRUE);
+						bless(otmp);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(BUCKLER, TRUE, TRUE);
+						bless(otmp);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(POT_WATER, TRUE, TRUE);
+						bless(otmp);
+						otmp->quan = rnd(4);
+						otmp->owt = weight(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Ranger
+					case 10:
+						otmp = mksobj(SHORT_SWORD, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(BOW, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(ARROW, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						otmp->quan = rnd(19)+rnd(19)+rnd(19)+rnd(19)+rnd(19);
+						otmp->owt = weight(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(CLOAK_OF_DISPLACEMENT, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Rogue
+					case 11:
+						otmp = mksobj(SHORT_SWORD, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						otmp->opoisoned = OPOISON_BASIC;
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(DAGGER, TRUE, FALSE);
+						otmp->spe = 0+rn2(4);
+						otmp->quan = rnd(4)+rnd(4)+rnd(4)+rnd(4);
+						otmp->opoisoned = OPOISON_BASIC;
+						otmp->owt = weight(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LEATHER_ARMOR, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LOW_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						mongets(mtmp, LOCK_PICK);
+					break;
+					//Samurai
+					case 12:
+						otmp = mksobj(NAGINATA, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(STILETTO, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(YUMI, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(YA, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						otmp->quan = rnd(9)+rnd(9)+rnd(9)+rnd(9)+rnd(9);
+						otmp->owt = weight(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(GENTLEWOMAN_S_DRESS, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						bless(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(ROBE, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						bless(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LOW_BOOTS, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						bless(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					//Tourist
+					case 13:
+						otmp = mksobj(DART, TRUE, TRUE);
+						otmp->spe = 2+rn2(3);
+						otmp->quan = rnd(9)+rnd(9)+rnd(9)+rnd(9)+rnd(9);
+						otmp->owt = weight(otmp);
+						otmp->opoisoned = OPOISON_SLEEP;
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(STILETTO, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(STILETTO, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(HAWAIIAN_SHIRT, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LOW_BOOTS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						mongets(mtmp, POT_EXTRA_HEALING);
+						mongets(mtmp, POT_EXTRA_HEALING);
+						mongets(mtmp, SCR_MAGIC_MAPPING);
+						mongets(mtmp, SCR_MAGIC_MAPPING);
+						mongets(mtmp, SCR_MAGIC_MAPPING);
+						mongets(mtmp, SCR_MAGIC_MAPPING);
+						mongets(mtmp, EXPENSIVE_CAMERA);
+						mongets(mtmp, CREDIT_CARD);
+					break;
+					//Wizard
+					case 14:
+						otmp = mksobj(QUARTERSTAFF, TRUE, TRUE);
+						otmp->spe = 1+rn2(3);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(ATHAME, TRUE, TRUE);
+						otmp->spe = -1+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(CLOAK_OF_MAGIC_RESISTANCE, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(ARMOR_CLASS, TRUE, TRUE);
+						otmp->spe = 0+rn2(4);
+						(void) mpickobj(mtmp, otmp);
+						mongets(mtmp, WAN_STRIKING);
+						switch(rn2(5)){
+							case 0:
+								mongets(mtmp, WAN_FIRE);
+							break;
+							case 1:
+								mongets(mtmp, WAN_COLD);
+							break;
+							case 2:
+								mongets(mtmp, WAN_SLEEP);
+							break;
+							case 3:
+								mongets(mtmp, WAN_LIGHTNING);
+							break;
+							case 4:
+								mongets(mtmp, WAN_CREATE_MONSTER);
+							break;
+						}
+					break;
+				}
 			}
 		break;
 	    case S_CENTAUR:
