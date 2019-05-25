@@ -978,7 +978,7 @@ MONSTER: '@', "hedrow warrior", (13,19)
 MONSTER: '@', "elf-lord", (11,19)
 MONSTER: '@', "Elvenking", (09,19)
 MONSTER: '@', "drow matron", (07,19)
-MONSTER: '&', "water demon", (05,19)
+MONSTER: '&', "marid", (05,19)
 MONSTER: '&', "incubus", (03,19)
 
 MONSTER: '@', "unearthly drow", (01,19)

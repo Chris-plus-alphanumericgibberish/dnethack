@@ -1554,7 +1554,7 @@ asGuardian:
 	    } else if (mtmp->mtame) {
 			verbl_msg = "Sorry, I'm all out of wishes.";
 	    } else if (mtmp->mpeaceful) {
-			if (ptr == &mons[PM_WATER_DEMON])
+			if (ptr == &mons[PM_MARID])
 				pline_msg = "gurgles.";
 			else
 				verbl_msg = "I'm free!";

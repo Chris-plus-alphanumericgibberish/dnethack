@@ -5006,7 +5006,8 @@ allow_artwish()
 {
 	int n = 0;
 	
-	n += u.uevent.qcalled;		// reaching the main dungeon branch of the quest
+	// n += u.uevent.qcalled;		// reaching the main dungeon branch of the quest
+	if(u.ulevel >= 7) n++;		// enough levels to be intimidating to marids/djinni
 	n += u.uevent.utook_castle;	// sitting on the castle throne
 	n += u.uevent.uunknowngod;	// sacrificing five artifacts to the priests of the unknown god
 

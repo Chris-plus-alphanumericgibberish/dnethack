@@ -45,8 +45,8 @@ dowaterdemon() /* Water demon */
 {
     register struct monst *mtmp;
 
-    if(!(mvitals[PM_WATER_DEMON].mvflags & G_GONE && !In_quest(&u.uz))) {
-	if((mtmp = makemon(&mons[PM_WATER_DEMON],u.ux,u.uy, NO_MM_FLAGS))) {
+    if(!(mvitals[PM_MARID].mvflags & G_GONE && !In_quest(&u.uz))) {
+	if((mtmp = makemon(&mons[PM_MARID],u.ux,u.uy, NO_MM_FLAGS))) {
 	    if (!Blind)
 		You("unleash %s!", a_monnam(mtmp));
 	    else
@@ -56,7 +56,7 @@ dowaterdemon() /* Water demon */
 	    if (rnd(100) > (80 + level_difficulty())) {
 		pline("Grateful for %s release, %s grants you a wish!",
 		      mhis(mtmp), mhe(mtmp));
-		makewish(WISH_VERBOSE);	// water demons can never grant an artifact wish
+		makewish(allow_artwish() | WISH_VERBOSE);
 		mongone(mtmp);
 	    } else if (t_at(mtmp->mx, mtmp->my))
 		(void) mintrap(mtmp);

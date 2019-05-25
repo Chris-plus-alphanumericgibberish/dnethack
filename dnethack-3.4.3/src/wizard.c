@@ -52,7 +52,7 @@ static NEARDATA const int nasties[] = {
 	};
 
 static NEARDATA const unsigned wizapp[] = {
-	PM_HUMAN, PM_WATER_DEMON, PM_VAMPIRE,
+	PM_HUMAN, PM_MARID, PM_VAMPIRE,
 	PM_RED_DRAGON, PM_TROLL, PM_UMBER_HULK,
 	PM_XORN, PM_XAN, PM_COCKATRICE,
 	PM_FLOATING_EYE,
@@ -740,7 +740,7 @@ genericptr_t poolcnt;
 			case 2:(void) makemon(&mons[PM_KRAKEN], cx, cy, NO_MM_FLAGS);
 			case 3:(void) makemon(&mons[PM_WATER_ELEMENTAL], cx, cy, NO_MM_FLAGS);
 			case 4:(void) makemon(&mons[PM_DEEPER_ONE], cx, cy, NO_MM_FLAGS);
-			case 5:(void) makemon(&mons[PM_WATER_DEMON], cx, cy, NO_MM_FLAGS);
+			case 5:(void) makemon(&mons[PM_MARID], cx, cy, NO_MM_FLAGS);
 			case 6:(void) makemon(&mons[PM_UMBER_HULK], cx, cy, NO_MM_FLAGS);
 			default:(void) makemon(mkclass(S_EEL, G_NOHELL|G_HELL), cx, cy, NO_MM_FLAGS);
 		}

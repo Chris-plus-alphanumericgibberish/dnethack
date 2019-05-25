@@ -1473,7 +1473,7 @@ static const char * const bogusmons[] = {
 	"lemming with a suicide vest", /* They have to be more than just a lemming. Because jumping to your death is not enough.. */
 	"giant cockroach", "giant slug", "maggot", 
 	"pterodactyl", "tyrannosaurus rex", "basilisk",
-	"efreeti", "marid", "dao",/* dnd genies */
+	"efreeti", "dao",/* dnd genies */
 	"rot grub", "bookworm", 
 	"Euryale", "Stheno", /* Medusa's elder sisters. Oddly enough "The X" works for them,
 							as their names can be interpreted as titles. */
