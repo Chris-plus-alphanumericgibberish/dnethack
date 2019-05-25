@@ -2091,15 +2091,35 @@ register boolean newlev;
 			wake = TRUE;
 	    break;
 		case BARRACKS:
-		    if(monstinroom(&mons[PM_SOLDIER], roomno) ||
-			monstinroom(&mons[PM_SERGEANT], roomno) ||
-			monstinroom(&mons[PM_LIEUTENANT], roomno) ||
-			monstinroom(&mons[PM_CAPTAIN], roomno))
-			You("enter a military barracks!");
-			else if(Is_lolth_level(&u.uz) && monstinroom(&mons[PM_GNOLL], roomno))
-			You("enter a gnoll barracks.");
-		    else
-			You("enter an abandoned barracks.");
+			if (Is_lolth_level(&u.uz))
+				if (monstinroom(&mons[PM_GNOLL], roomno))
+					You("enter a gnoll barracks.");
+				else
+					You("enter an abandoned barracks.");
+			else if (In_outlands(&u.uz))
+				if (monstinroom(&mons[PM_FERRUMACH_RILMANI], roomno) ||
+					monstinroom(&mons[PM_IRON_GOLEM], roomno) ||
+					monstinroom(&mons[PM_ARGENTUM_GOLEM], roomno) ||
+					monstinroom(&mons[PM_CUPRILACH_RILMANI], roomno))
+					You("enter a rilmani barracks!");
+				else
+					You("enter an abandoned barracks.");
+			else if (In_hell(&u.uz))
+				if (monstinroom(&mons[PM_LEGION_DEVIL_GRUNT], roomno) ||
+					monstinroom(&mons[PM_LEGION_DEVIL_SOLDIER], roomno) ||
+					monstinroom(&mons[PM_LEGION_DEVIL_SERGEANT], roomno) ||
+					monstinroom(&mons[PM_LEGION_DEVIL_CAPTAIN], roomno))
+					You("enter a legion barracks!");
+				else
+					You("enter an abandoned barracks.");
+			else
+				if(monstinroom(&mons[PM_SOLDIER], roomno) ||
+				monstinroom(&mons[PM_SERGEANT], roomno) ||
+				monstinroom(&mons[PM_LIEUTENANT], roomno) ||
+				monstinroom(&mons[PM_CAPTAIN], roomno))
+					You("enter a military barracks!");
+				else
+					You("enter an abandoned barracks.");
 			rt = 0;
 	    break;
 		case ARMORY:
