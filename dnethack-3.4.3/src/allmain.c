@@ -2055,7 +2055,7 @@ printDPR(){
 	struct attack *attk;
 	rfile = fopen_datafile("MonDPR.tab", "w", SCOREPREFIX);
 	if (rfile) {
-		Sprintf(pbuf,"Name\taverage\tmax\tspeed\n");
+		Sprintf(pbuf,"Number\tName\tclass\taverage\tmax\tspeed\talignment\tunique?\n");
 		fprintf(rfile, pbuf);
 		for(j=0;j<NUMMONS;j++){
 			ptr = &mons[j];
@@ -2074,7 +2074,7 @@ printDPR(){
 					mdm += attk->damn * attk->damd;
 				}
 			}
-			Sprintf(pbuf,"%s\t%d\t%d\t%d\n", mons[j].mname, avdm, mdm, mons[j].mmove);
+			Sprintf(pbuf,"%d\t%s\t%d\t%d\t%d\t%d\t%d\t%s\n", j, mons[j].mname, mons[j].mlet,avdm, mdm, mons[j].mmove,ptr->maligntyp,(mons[j].geno&G_UNIQ) ? "unique":"");
 			fprintf(rfile, pbuf);
 		}
 	}
