@@ -4576,6 +4576,34 @@ register struct	monst	*mtmp;
 			if (otmp->spe < 2) otmp->spe = rnd(3);
 			if (!rn2(4)) otmp->oerodeproof = 1;
 			(void) mpickobj(mtmp, otmp);
+		} else if(ptr == &mons[PM_PHARAOH]){
+			otmp = mksobj(FLAIL, TRUE, FALSE);
+			if (otmp->spe < 2) otmp->spe = rnd(3);
+			otmp->obj_material = GOLD;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(SHEPHERD_S_CROOK, TRUE, FALSE);
+			if (otmp->spe < 2) otmp->spe = rnd(3);
+			otmp->obj_material = GOLD;
+			otmp->objsize = MZ_SMALL;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(MASK, TRUE, FALSE);
+			otmp->corpsenm = PM_PHARAOH;
+			otmp->obj_material = GOLD;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(rnd_good_amulet(), TRUE, FALSE);
+			otmp->obj_material = GOLD;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
 		} else if(ptr == &mons[PM_ALHOON]){
 			struct obj *otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
 			otmp = oname(otmp, artiname(ART_SECOND_KEY_OF_NEUTRALITY));

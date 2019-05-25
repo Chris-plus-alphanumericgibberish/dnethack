@@ -3729,7 +3729,7 @@ struct permonst _mons2[] = {
 	MA_UNDEAD|MA_GIANT /*MA*/,  MV_NORMAL|MV_INFRAVISION /*MV*/, CLR_CYAN),
     MON("pharaoh", S_MUMMY,//10 /*Needs encyc entry*//*Needs tile*/
 	LVL(25, 12, -4, 99, 20), (G_HELL|G_GENO|G_NOCORPSE|1),
-	A(ATTK(AT_CLAW, AD_PHYS, 4, 4), ATTK(AT_CLAW, AD_PHYS, 4, 4), 
+	A(ATTK(AT_WEAP, AD_PHYS, 4, 4), ATTK(AT_XWEP, AD_PHYS, 4, 4), 
 	  ATTK(AT_MAGC, AD_SPEL, 0, 0),
 	  NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(1200, 100, 0, MS_SILENT, MZ_HUMAN),

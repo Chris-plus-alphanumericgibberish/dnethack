@@ -908,6 +908,24 @@ mon_tele:
 #undef m_flee
 }
 
+const int good_amulets[] = {
+	AMULET_OF_DRAIN_RESISTANCE,
+	AMULET_OF_ESP,
+	AMULET_OF_LIFE_SAVING,
+	AMULET_VERSUS_POISON,
+	AMULET_VERSUS_CURSES,
+	AMULET_OF_UNCHANGING,
+	AMULET_OF_NULLIFY_MAGIC,
+	AMULET_OF_REFLECTION,
+	AMULET_OF_MAGICAL_BREATHING
+};
+
+int
+rnd_good_amulet()
+{
+	return good_amulets[rn2(SIZE(good_amulets))];
+}
+
 int
 rnd_defensive_item(mtmp)
 struct monst *mtmp;
