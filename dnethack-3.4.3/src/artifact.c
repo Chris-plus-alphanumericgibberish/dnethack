@@ -2641,6 +2641,18 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			else *dmgptr += basedmg;
 		}
 	}
+	if(otmp->oproperties&OPROP_HOLYW){
+		if(youdefend ? (hates_holy(youracedata)) : (hates_holy_mon(mdef))){
+			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
+			else *dmgptr += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_UNHYW){
+		if(youdefend ? (hates_unholy(youracedata)) : (hates_unholy(mdef->data))){
+			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
+			else *dmgptr += basedmg;
+		}
+	}
 	return FALSE;
 }
   
