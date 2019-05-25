@@ -4025,12 +4025,12 @@ int spellnum;
 						if ((mpet = makemon(&mons[makeindex], 
 									  bypos.x, bypos.y, 
 						  (yours || mattk->mtame) ? MM_EDOG :
-													NO_MM_FLAGS)) != 0
+													MM_NOCOUNTBIRTH|NO_MINVENT)) != 0
 						);
 						else /* GENOD? */
 							mpet = makemon((struct permonst *)0,
 														bypos.x, bypos.y, (yours || mattk->mtame) ? MM_EDOG :
-													NO_MM_FLAGS);
+													MM_NOCOUNTBIRTH|NO_MINVENT);
 						mpet->msleeping = 0;
 						if (yours || mattk->mtame) initedog(mpet);
 						else if (mattk->mpeaceful) mpet->mpeaceful = 1;
