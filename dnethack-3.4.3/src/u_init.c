@@ -43,11 +43,11 @@ static struct trobj Anachrononaut_Hu[] = {
 	{ FORCE_PIKE,  0, WEAPON_CLASS, 1, 0 },
 	{ ARM_BLASTER, 0, WEAPON_CLASS, 1, 0 },
 	{ HAND_BLASTER, 0, WEAPON_CLASS, 1, 0 },
-	{ PLASTEEL_ARMOR, 1, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_ARMOR, 0, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
-	{ PLASTEEL_HELM, 1, ARMOR_CLASS, 1, 0 },
-	{ PLASTEEL_GAUNTLETS, 1, ARMOR_CLASS, 1, 0 },
-	{ PLASTEEL_BOOTS, 1, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_HELM, 0, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_GAUNTLETS, 0, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ CLOAK_OF_MAGIC_RESISTANCE, 0, ARMOR_CLASS, 1, 0 },
 	{ POWER_PACK, 0, TOOL_CLASS, 5, 0 },
 	{ PROTEIN_PILL, 0, FOOD_CLASS, 10, 0 },
@@ -131,9 +131,9 @@ static struct trobj Anachrononaut_Dro[] = {
 	{ SNIPER_RIFLE, 4, WEAPON_CLASS, 1, 0 },
 	{ VIBROBLADE,  0, WEAPON_CLASS, 1, 0 },
 	{ CUTTING_LASER,  0, WEAPON_CLASS, 1, 0 },
-	{ PLASTEEL_ARMOR, 1, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_ARMOR, 0, ARMOR_CLASS, 1, 0 },
 	{ BODYGLOVE, 0, ARMOR_CLASS, 1, 0 },
-	{ PLASTEEL_HELM, 1, ARMOR_CLASS, 1, 0 },
+	{ PLASTEEL_HELM, 0, ARMOR_CLASS, 1, 0 },
 	{ ORIHALCYON_GAUNTLETS, 1, ARMOR_CLASS, 1, 0 },
 	{ CLOAK_OF_INVISIBILITY, 0, ARMOR_CLASS, 1, 0 },
 	{ ELVEN_BOOTS, 1, ARMOR_CLASS, 1, 0 },
@@ -261,7 +261,8 @@ static struct trobj Knight[] = {
 static struct trobj Monk[] = {
 	{ GLOVES, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ ROBE, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
-#define M_BOOK		2
+	{ SEDGE_HAT, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+#define M_BOOK		3
 	{ UNDEF_TYP, UNDEF_SPE, SPBOOK_CLASS, 1, 1 },
 	{ UNDEF_TYP, UNDEF_SPE, SCROLL_CLASS, 1, UNDEF_BLESS },
 	{ POT_HEALING, 0, POTION_CLASS, 3, UNDEF_BLESS },
@@ -424,8 +425,10 @@ static struct trobj Samurai[] = {
 	{ YUMI, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ YA, 0, WEAPON_CLASS, 25, UNDEF_BLESS }, /* variable quan */
 	{ SPLINT_MAIL, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ SEDGE_HAT, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ ARMORED_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ GAUNTLETS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ HELMET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ MASK, 0, TOOL_CLASS, 1, UNDEF_BLESS },
 	{ 0, 0, 0, 0, 0 }
 };
 #ifdef TOURIST
@@ -797,7 +800,7 @@ static struct def_skill Skill_Bard[] = {
     { P_JAVELIN, P_SKILLED },		{ P_SPEAR, P_BASIC },
     { P_SLING, P_SKILLED },		{ P_DART, P_EXPERT },
     { P_UNICORN_HORN, P_BASIC },	{ P_CROSSBOW, P_SKILLED },
-    { P_ENCHANTMENT_SPELL, P_SKILLED },	{ P_ESCAPE_SPELL, P_BASIC },
+    { P_ENCHANTMENT_SPELL, P_EXPERT },	{ P_ESCAPE_SPELL, P_BASIC },
     { P_BARE_HANDED_COMBAT, P_EXPERT }, { P_MUSICALIZE, P_EXPERT },
 	{ P_BEAST_MASTERY, P_EXPERT },
     { P_NONE, 0 }
@@ -2087,6 +2090,7 @@ u_init()
 	case PM_SAMURAI:
 		u.umartial = TRUE;
 		Samurai[S_ARROWS].trquan = rn1(20, 26);
+		u.role_variant = KATANA;
 		if(flags.female){
 			Samurai[S_WEAPON].trotyp = NAGINATA;
 			Samurai[S_SECOND].trotyp = KNIFE;
@@ -2735,6 +2739,7 @@ register struct trobj *trop;
 				obj->obj_material = MITHRIL;
 				fix_object(obj);
 			}
+			
 			/* Don't start with +0 or negative rings */
 			if (objects[obj->otyp].oc_charged && obj->spe <= 0)
 				obj->spe = rne(3);
@@ -2804,6 +2809,8 @@ register struct trobj *trop;
 				|| (obj->oclass == SPBOOK_CLASS &&
 				    (objects[otyp].oc_level > 3 ||
 				    restricted_spell_discipline(otyp)))
+				|| (hates_silver(youracedata) && obj->obj_material == SILVER)
+				|| (hates_iron(youracedata) && obj->obj_material == IRON)
 							) {
 				dealloc_obj(obj);
 				obj = mkobj(trop->trclass, FALSE);
@@ -2864,6 +2871,12 @@ register struct trobj *trop;
 				obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
 				if (objects[otyp].oc_uses_known) obj->known = 1;
 				if(Role_if(PM_PIRATE) && obj->obj_material == IRON) obj->oerodeproof = 1;
+				if(Role_if(PM_SAMURAI) && obj->oclass == ARMOR_CLASS && obj->obj_material == IRON) obj->oerodeproof = 1;
+				if(Role_if(PM_SAMURAI) && obj->otyp == MASK){
+					obj->obj_material = IRON;
+//					obj->oerodeproof = 1;
+					obj->corpsenm = PM_HUMAN;
+				}
 			}
 			obj->cursed = 0;
 			if(obj->otyp == DROVEN_PLATE_MAIL  ||
@@ -2895,6 +2908,25 @@ register struct trobj *trop;
 			    obj->spe = trop->trspe;
 			if (trop->trbless != UNDEF_BLESS)
 			    obj->blessed = trop->trbless;
+			
+			if(hates_holy(youracedata)){
+				if(obj->blessed){
+					obj->blessed = 0;
+					obj->cursed = 1;
+				}
+			}
+			if(hates_silver(youracedata)){
+				if(obj->obj_material == SILVER){
+					obj->obj_material = GOLD;
+					fix_object(obj);
+				}
+			}
+			if(hates_iron(youracedata)){
+				if(obj->obj_material == IRON){
+					obj->obj_material = MITHRIL;
+					fix_object(obj);
+				}
+			}
 #ifdef GOLDOBJ
 		}
 #endif
