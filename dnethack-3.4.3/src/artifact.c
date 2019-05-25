@@ -163,18 +163,34 @@ hack_artifacts()
 	artilist[ART_HELM_OF_THE_DARK_LORD].otyp = find_vhelm();
 	
 	/* Remove flag from the non-matching first gift */
-	if(Role_if(PM_BARBARIAN)){
+	if(Pantheon_if(PM_BARBARIAN)){
 		if(u.role_variant == TWO_HANDED_SWORD){
 			artilist[ART_CLEAVER].role = NON_PM;
-		} else {
+		} else if(u.role_variant == BATTLE_AXE){
 			artilist[ART_ATLANTEAN_ROYAL_SWORD].role = NON_PM;
+		} else {
+			if(rn2(2)){
+				u.role_variant = TWO_HANDED_SWORD;
+				artilist[ART_CLEAVER].role = NON_PM;
+			} else { //Priest with this pantheon
+				u.role_variant = BATTLE_AXE;
+				artilist[ART_ATLANTEAN_ROYAL_SWORD].role = NON_PM;
+			}
 		}
 	}
-	if(Role_if(PM_SAMURAI)){
+	if(Pantheon_if(PM_SAMURAI)){
 		if(u.role_variant == NAGINATA){
 			artilist[ART_KIKU_ICHIMONJI].role = NON_PM;
-		} else {
+		} else if(u.role_variant == KATANA){
 			artilist[ART_JINJA_NAGINATA].role = NON_PM;
+		} else { //Priest with this pantheon
+			if(rn2(2)){
+				u.role_variant = NAGINATA;
+				artilist[ART_KIKU_ICHIMONJI].role = NON_PM;
+			} else {
+				u.role_variant = KATANA;
+				artilist[ART_JINJA_NAGINATA].role = NON_PM;
+			}
 		}
 	}
 	
