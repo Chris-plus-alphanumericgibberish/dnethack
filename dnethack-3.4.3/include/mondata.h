@@ -218,7 +218,6 @@
 #define is_weldproof(ptr)		(is_undead(ptr) || is_demon(ptr) || is_were(ptr))
 #define is_weldproof_mon(mon)		(is_weldproof((mon)->data) || is_derived_undead_mon(mon))
 #define is_were(ptr)		(((ptr)->mflagsa & MA_WERE) != 0L)
-#define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
 #define is_heladrin(ptr)		(\
 							 (ptr) == &mons[PM_COURE_ELADRIN] || \
 							 (ptr) == &mons[PM_NOVIERE_ELADRIN] || \
@@ -331,6 +330,17 @@
 #define is_primordial(ptr)	(((ptr)->mflagsa & MA_PRIMORDIAL) != 0L)
 #define is_keter(ptr)		((ptr)->mlet == S_KETER)
 #define is_angel(ptr)		((((ptr)->mflagsa & MA_MINION) != 0L) && ((ptr)->mlet == S_LAW_ANGEL || (ptr)->mlet == S_NEU_ANGEL || (ptr)->mlet == S_CHA_ANGEL))
+#define is_eladrin(ptr)		(is_heladrin(ptr) || is_eeladrin(ptr))
+#define is_archon(ptr)		((ptr)->mlet == S_LAW_ANGEL &&\
+							 !((ptr) == &mons[PM_COUATL] ||\
+							   (ptr) == &mons[PM_ALEAX] ||\
+							   (ptr) == &mons[PM_KI_RIN] ||\
+							   (ptr) == &mons[PM_GIANT_EAGLE] ||\
+							   (ptr) == &mons[PM_GOD] ||\
+							   (ptr) == &mons[PM_DAMAGED_ARCADIAN_AVENGER] ||\
+							   (ptr) == &mons[PM_ARCADIAN_AVENGER] ||\
+							   (ptr) == &mons[PM_APOLLYON] ||\
+							   (ptr) == &mons[PM_ANGEL]))
 #define is_auton(ptr)		(	(ptr) == &mons[PM_MONOTON] ||\
 								(ptr) == &mons[PM_DUTON] ||\
 								(ptr) == &mons[PM_TRITON] ||\
@@ -343,6 +353,17 @@
 								(ptr) == &mons[PM_SHARAB_KAMEREL] ||\
 								(ptr) == &mons[PM_ARA_KAMEREL]\
 							)
+#define is_rilmani(ptr)		(	(ptr) == &mons[PM_PLUMACH_RILMANI] ||\
+								(ptr) == &mons[PM_FERRUMACH_RILMANI] ||\
+								(ptr) == &mons[PM_CUPRILACH_RILMANI] ||\
+								(ptr) == &mons[PM_STANNUMACH_RILMANI] ||\
+								(ptr) == &mons[PM_ARGENACH_RILMANI] ||\
+								(ptr) == &mons[PM_MERCURIAL_ESSENCE] ||\
+								(ptr) == &mons[PM_BRIMSTONE_ESSENCE] ||\
+								(ptr) == &mons[PM_HYDRARGYRUMACH_RILMANI] ||\
+								(ptr) == &mons[PM_AURUMACH_RILMANI]\
+							)
+#define is_deva(ptr)		((ptr)->mlet == S_NEU_ANGEL)
 #define is_divider(ptr)		( (ptr) == &mons[PM_BLACK_PUDDING]\
 							  || (ptr) == &mons[PM_BROWN_PUDDING]\
 							  || (ptr) == &mons[PM_DARKNESS_GIVEN_HUNGER]\
