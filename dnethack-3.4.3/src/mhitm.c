@@ -2534,6 +2534,16 @@ physical:{
 	if(magr->mfaction == ZOMBIFIED){
 		tmp *= 2;
 	}
+	if(magr->data == &mons[PM_UVUUDAUM] && !weaponhit){
+		if(hates_unholy(mdef->data)){
+			if (vis) pline("%s's glory sears %s!", Monnam(magr), mon_nam(mdef));
+			tmp += d(3,7);
+		} else if(hates_holy(mdef->data)){
+			if (vis) pline("%s's glory sears %s!", Monnam(magr), mon_nam(mdef));
+			tmp += d(4,9);
+		}
+	}
+	
 	
 	if ( tmp > 0 && is_backstabber(magr->data) &&
 		!(noncorporeal(mdef->data) || amorphous(mdef->data) || 

@@ -3592,6 +3592,15 @@ dopois:
 	if(mtmp->mfaction == ZOMBIFIED){
 		dmg *= 2;
 	}
+	if(mtmp->data == &mons[PM_UVUUDAUM] && !weaponhit){
+		if(hates_unholy(youracedata)){
+			pline("%s's glory sears you!", Monnam(mtmp));
+			dmg += d(3,7);
+		} else if(hates_holy(youracedata)){
+			pline("%s's glory sears you!", Monnam(mtmp));
+			dmg += d(4,9);
+		}
+	}
 	
 	if(is_backstabber(mtmp->data) && (
 		u.ustuck || u.utrap || 
