@@ -3581,33 +3581,35 @@ place_lolth_vaults()
 void
 place_neutral_features()
 {
-	if(!rn2(40)){
+	if(!rn2(30)){
 		mkkamereltowers();
-		if(!rn2(20))
+		if(!rn2(16))
 			mkfishingvillage();
-	} else if(!rn2(20)){
+	} else if(!rn2(16)){
 		mkminorspire();
-	} else if(!rn2(20)){
+	} else if(!rn2(16)){
 		mkfishingvillage();
 	}
 
-	if(!rn2(10)){
+	if(!rn2(8)){
 		mkneuriver();
 	}
 	
-	if(!rn2(10)){
+	// mkferrufort();
+	
+	if(!rn2(8)){
 		mkpluvillage();
 	// } else if(){
 		// mkferrufort();
 	}
 	
-	if(!rn2(20))
+	if(!rn2(16))
 		mkinvertzigg();
 	
-	if(!rn2(10))
+	if(!rn2(8))
 		mkferrutower();
 	
-	if(!rn2(4)){
+	if(!rn2(3)){
 		int n = rnd(4) + rn2(4);
 		for(; n > 0; n--)
 			mkpluhomestead();
