@@ -1549,7 +1549,7 @@ struct obj	*sobj;
 		    maybe_tame(u.ustuck, sobj);
 		} else {
 		    struct monst *mtmp;
-			if(confused){
+			if(confused && sobj->otyp == SCR_TAMING){
 				int i, j, bd = 5;
 				for (i = -bd; i <= bd; i++) for(j = -bd; j <= bd; j++) {
 					if (!isok(u.ux + i, u.uy + j)) continue;

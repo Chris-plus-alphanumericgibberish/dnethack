@@ -1118,8 +1118,10 @@ struct obj *obj;
 	}
 
 	/* pacify monster cannot tame */
-	if (obj && obj->otyp == SPE_PACIFY_MONSTER)
+	if (obj && obj->otyp == SPE_PACIFY_MONSTER){
+		mtmp->mpeacetime = max(mtmp->mpeacetime, ACURR(A_CHA));
 		return((struct monst *)0);
+	}
 
 	if(flags.moonphase == FULL_MOON && night() && rn2(6) && obj && !is_instrument(obj)
 		&& obj->oclass != SPBOOK_CLASS && obj->oclass != SCROLL_CLASS
@@ -1131,7 +1133,7 @@ struct obj *obj;
         /* Domestic animals are wary of the Convict */
         pline("%s still looks wary of you.", Monnam(mtmp));
         return((struct monst *)0);
-        }
+    }
 #endif
 	/* If we cannot tame it, at least it's no longer afraid. */
 	mtmp->mflee = 0;
@@ -1197,7 +1199,7 @@ struct obj *obj;
 	    return((struct monst *)0);
 
 	/* before officially taming the target, check how many pets there are and untame one if there are too many */
-	if(!(obj && obj->oclass == SCROLL_CLASS && obj->oclass == SPBOOK_CLASS && Confusion)){
+	if(!(obj && obj->oclass == SCROLL_CLASS && Confusion)){
 		enough_dogs(1);
 	}
 	
@@ -1207,6 +1209,11 @@ struct obj *obj;
 	mtmp2->mxlth = sizeof(struct edog);
 	if (mtmp->mnamelth) Strcpy(NAME(mtmp2), NAME(mtmp));
 	initedog(mtmp2);
+	if(obj && obj->otyp == SPE_CHARM_MONSTER){
+		// EDOG(mtmp2)->friend = TRUE;
+		// EDOG(mtmp2)->mtame = ACURR(A_CHA)*2;
+		mtmp2->mpeacetime = 1;
+	}
 	replmon(mtmp, mtmp2);
 	/* `mtmp' is now obsolete */
 
