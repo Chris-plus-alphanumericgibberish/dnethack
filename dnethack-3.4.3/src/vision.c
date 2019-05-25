@@ -745,7 +745,7 @@ vision_recalc(control)
 	    else if (
 			((u.sealsActive&SEAL_AMON) && (next_row[col] & COULD_SEE)) ||
 			(Is_waterlevel(&u.uz) && (next_row[col] & COULD_SEE)) ||
-			((normalvision(youracedata) || (Catsight && !catsightdark)) && (next_row[col] & COULD_SEE) && (
+			((Normalvision || (Catsight && !catsightdark)) && (next_row[col] & COULD_SEE) && (
 				(lev->lit &&
 					!(next_row[col]&TEMP_DRK1 && !(next_row[col]&TEMP_LIT1)) &&
 					!(next_row[col]&TEMP_DRK2) 
