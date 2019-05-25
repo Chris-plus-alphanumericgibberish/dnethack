@@ -5412,7 +5412,7 @@ doapply()
 	break;
 	case BELL:
 	case BELL_OF_OPENING:
-		use_bell(&obj, TRUE);
+		use_bell(&obj, FALSE);
 		break;
 	case CANDELABRUM_OF_INVOCATION:
 		use_candelabrum(obj);
