@@ -548,8 +548,8 @@ RANDOM_OBJECTS:'[',')','*','%'
 RANDOM_PLACES:(10,14),(10,18),(27,16),(28,19)
 RANDOM_MONSTERS:'L','N','E','H','M','O','R','T','X','Z'
 
-TELEPORT_REGION:(00,00,06,03),(07,00,68,19),down
-TELEPORT_REGION:(69,01,73,03),(00,04,74,19),up
+TELEPORT_REGION:(00,00,06,03),(0,0,0,0),down
+TELEPORT_REGION:(69,01,73,03),(0,0,0,0),up
 # Regions
 # Entry Caves
 REGION:(00,01,05,03),unlit,"ordinary"
