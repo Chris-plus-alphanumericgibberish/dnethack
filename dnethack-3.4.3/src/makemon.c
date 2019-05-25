@@ -443,13 +443,10 @@ register struct monst *mtmp;
 			case PM_TENGU:
 				if((Role_if(PM_SAMURAI) && In_quest(&u.uz)) || !rn2(20)){
 					if(mtmp->female){
-						otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
-						otmp = oname(otmp, artiname(ART_SOL_VALTIVA));
-						otmp->oerodeproof = TRUE;
-						otmp->blessed = FALSE;
-						otmp->cursed = FALSE;
-						(void) mpickobj(mtmp,otmp);
+						(void)mongets(mtmp, NAGINATA);
 						(void)mongets(mtmp, KNIFE);
+						(void)mongets(mtmp, YUMI);
+						m_initthrow(mtmp, YA, 10);
 					} else {
 						(void)mongets(mtmp, KATANA);
 						(void)mongets(mtmp, SHORT_SWORD);
