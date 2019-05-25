@@ -1880,7 +1880,11 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 				&& (!uarms->cursed || rn2(3))
 			   ) || u.sealsActive&SEAL_ENKI)
 			) {
-				*dmgptr += d(dnum,4);
+				int mult = (flaming(youracedata) || youracedata == &mons[PM_EARTH_ELEMENTAL] || youracedata == &mons[PM_IRON_GOLEM] || youracedata == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
+				*dmgptr += d(dnum,4)*mult;
+				if(youracedata == &mons[PM_GREMLIN] && rn2(3)){
+					(void)split_mon(&youmonst, (struct monst *)0);
+				}
 			}
 		} else{ //Monster
 			struct obj *cloak = which_armor(mdef, W_ARMC);
@@ -1902,7 +1906,11 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 				// && (!ublindf->cursed || rn2(3))
 			   ))
 			) {
-				*dmgptr += d(dnum,4);
+				int mult = (flaming(mdef->data) || mdef->data == &mons[PM_EARTH_ELEMENTAL] || mdef->data == &mons[PM_IRON_GOLEM] || mdef->data == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
+				*dmgptr += d(dnum,4)*mult;
+				if(mdef->data == &mons[PM_GREMLIN] && rn2(3)){
+					(void)split_mon(mdef, (struct monst *)0);
+				}
 			}
 		}
 	}

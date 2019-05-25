@@ -2489,7 +2489,10 @@ spiriteffects(power, atme)
 							water_damage(mon->minvent, FALSE, FALSE, FALSE, mon);
 						}
 					}
-					if(flaming(mon->data) || mon->data == &mons[PM_EARTH_ELEMENTAL]) dmg *= 2;
+					if(flaming(mon->data) || mon->data == &mons[PM_EARTH_ELEMENTAL] || mon->data == &mons[PM_IRON_GOLEM] || mon->data == &mons[PM_CHAIN_GOLEM]) dmg *= 2;
+					if(mon->data == &mons[PM_GREMLIN] && rn2(3)){
+						(void)split_mon(mon, (struct monst *)0);
+					}
 					mon->mhp -= dmg;
 					if (mon->mhp <= 0){
 						mon->mhp = 0;
