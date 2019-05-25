@@ -5759,7 +5759,7 @@ register struct permonst *ptr;
 register int	x, y;
 register int	mmflags;
 {
-	register struct monst *mtmp;
+	register struct monst *mtmp, *tmpm;
 	int mndx, mcham, ct, mitem, xlth, num;
 	boolean anymon = (!ptr);
 	boolean byyou = (x == u.ux && y == u.uy);
@@ -6217,7 +6217,8 @@ register int	mmflags;
 				if(anymon){
 					makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 					for(num = rnd(6); num >= 0; num--) makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
-					m_initlgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+					tmpm = makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
 				}
 				makemon(&mons[PM_QUATON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			} else if (mndx == PM_QUATON){
@@ -6228,16 +6229,25 @@ register int	mmflags;
 				makemon(&mons[PM_TRITON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			} else if (mndx == PM_TRITON){
 				mtmp->movement = d(1,8);
-				if(anymon) m_initlgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+				if(anymon){
+					tmpm = makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
+				}
 				makemon(&mons[PM_DUTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			} else if (mndx == PM_DUTON){
 				mtmp->movement = d(1,9);
-				if(anymon && rn2(2)) m_initsgrp(makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+				if(anymon && rn2(2)){
+					tmpm = makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					if(tmpm) m_initsgrp(tmpm, mtmp->mx, mtmp->my);
+				}
 				else makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 			} else if (mndx == PM_MONOTON){
 				mtmp->movement = d(1,10);
 			} else if (mndx == PM_BEHOLDER){
-				if(anymon) m_initsgrp(makemon(&mons[PM_GAS_SPORE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+				if(anymon){
+					tmpm = makemon(&mons[PM_GAS_SPORE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					if(tmpm) m_initsgrp(tmpm, mtmp->mx, mtmp->my);
+				}
 			}
 			}
 /*			if(mndx == PM_VORLON_MISSILE){
@@ -6269,7 +6279,10 @@ register int	mmflags;
 					else mtmp->mvar3 = 1; //Set to 1 to initiallize
 				}
 			} else if(mtmp->data == &mons[PM_ARCADIAN_AVENGER]){
-				if(anymon) m_initsgrp(makemon(&mons[PM_ARCADIAN_AVENGER], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH), mtmp->mx, mtmp->my);
+				if(anymon){
+					tmpm = makemon(&mons[PM_ARCADIAN_AVENGER], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					if(tmpm) m_initsgrp(tmpm, mtmp->mx, mtmp->my);
+				}
 			} else if(mndx == PM_KETO){ 
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
@@ -6277,30 +6290,37 @@ register int	mmflags;
 		break;
 	    case S_GIANT:
 			if(!(mmflags & MM_EDOG)){
-			if (anymon && mndx == PM_DEEPEST_ONE){
-				for(num = rn1(3,3); num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				for(num = rn1(10,10); num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-			}
+				if (anymon && mndx == PM_DEEPEST_ONE){
+					for(num = rn1(3,3); num >= 0; num--) makemon(&mons[PM_DEEPER_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					for(num = rn1(10,10); num >= 0; num--) makemon(&mons[PM_DEEP_ONE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+				}
 			}
 		break;
 		case S_HUMAN:
 			if(!(mmflags & MM_EDOG)){
-			if(anymon){
-				if (mndx == PM_DROW_MATRON){
-					m_initlgrp(makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-				} else if (mndx == PM_DOKKALFAR_ETERNAL_MATRIARCH){
-					m_initsgrp(makemon(&mons[PM_DROW_MATRON], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-					m_initlgrp(makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-					m_initlgrp(makemon(&mons[PM_DROW_MUMMY], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-					m_initlgrp(makemon(&mons[PM_HEDROW_ZOMBIE], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-				} else if (mndx == PM_ELVENKING || mndx == PM_ELVENQUEEN){
-					for(num = rnd(2); num >= 0; num--) makemon(&mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-					for(num = rn1(6,3); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
-				} else if (mndx == PM_CHIROPTERAN){
-					if(!rn2(3)) m_initlgrp(makemon(&mons[PM_WARBAT], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
-					m_initlgrp(makemon(&mons[PM_BATTLE_BAT], mtmp->mx, mtmp->my, MM_ADJACENTOK), mtmp->mx, mtmp->my);
+				if(anymon){
+					if (mndx == PM_DROW_MATRON){
+						tmpm = makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
+					} else if (mndx == PM_DOKKALFAR_ETERNAL_MATRIARCH){
+						tmpm = makemon(&mons[PM_DROW_MATRON], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm) m_initsgrp(tmpm, mtmp->mx, mtmp->my);
+						tmpm = makemon(&mons[PM_HEDROW_WARRIOR], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
+						tmpm = makemon(&mons[PM_DROW_MUMMY], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
+						tmpm = makemon(&mons[PM_HEDROW_ZOMBIE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
+					} else if (mndx == PM_ELVENKING || mndx == PM_ELVENQUEEN){
+						for(num = rnd(2); num >= 0; num--) makemon(&mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						for(num = rn1(6,3); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					} else if (mndx == PM_CHIROPTERAN){
+						tmpm = makemon(&mons[PM_WARBAT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm && !rn2(3)) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
+						tmpm = makemon(&mons[PM_BATTLE_BAT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
+					}
 				}
-			}
 			}
 		break;
 		case S_HUMANOID:
