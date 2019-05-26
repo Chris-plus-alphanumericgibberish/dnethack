@@ -1988,7 +1988,12 @@ struct obj * otmp;
 	// visored helm
 	static int vhelm = 0;
 	if (!vhelm) vhelm = find_vhelm();
-	if (otmp->otyp == vhelm) def -= 1;
+	if (otmp->otyp == vhelm) def += 1;
+	// combat boots
+	static int cbootsd = 0;
+	if (!cbootsd) cbootsd = find_cboots();
+	if (otmp->otyp == cbootsd) def += 1;
+
 
 	// add enchantment
 	// crystal armor bonus enchantment
