@@ -5529,3 +5529,9 @@ boolean *druggedmon;
 	}
 	return FALSE;//didn't do anything special
 }
+
+void
+reset_udieroll()
+{
+	dieroll = 10;
+}

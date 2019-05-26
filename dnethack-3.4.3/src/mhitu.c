@@ -8396,6 +8396,12 @@ cloneu()
 	return(mon);
 }
 
+void
+reset_mvudieroll()
+{
+	dieroll = 10;
+}
+
 #endif /* OVLB */
 
 /*mhitu.c*/

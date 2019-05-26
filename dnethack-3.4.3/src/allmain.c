@@ -396,6 +396,8 @@ moveloop()
 			 /*once-per-monster-moving things go here*/
 			/****************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////
+			reset_mvmdieroll();
+			reset_mvudieroll();
 			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
 				if(mtmp->data == &mons[PM_HELLCAT]){
 					if(!isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
@@ -1433,6 +1435,8 @@ karemade:
 	      /******************************************/
 	     /* once-per-hero-took-time things go here */
 	    /******************************************/
+		reset_udieroll();
+		
 		if(u.ustdy > 0) u.ustdy -= 1;
 		
 		if(Echolocation){

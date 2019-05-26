@@ -1139,6 +1139,7 @@ E void FDECL(slept_monst, (struct monst *));
 E long FDECL(attk_protection, (int));
 E int FDECL(thrwmm, (struct monst *, struct monst *));
 E int FDECL(gazemm, (struct monst *,struct monst *,struct attack *));
+E void NDECL(reset_mvmdieroll);
 
 /* ### mhitu.c ### */
 
@@ -1165,6 +1166,7 @@ E int FDECL(dosflseduce, (struct monst *));
 E int FDECL(dopaleseduce, (struct monst *));
 E int FDECL(dotent, (struct monst *, int));
 #endif
+E void NDECL(reset_mvudieroll);
 
 /* ### minion.c ### */
 
@@ -2475,6 +2477,7 @@ E void FDECL(stumble_onto_mimic, (struct monst *));
 E int FDECL(flash_hits_mon, (struct monst *,struct obj *));
 E boolean FDECL(hmonas, (struct monst *,struct permonst *,int,int,int));
 E boolean FDECL(hmonwith, (struct monst *, int, int, int, struct attack *, int));
+E void NDECL(reset_udieroll);
 
 /* ### unixmain.c ### */
 

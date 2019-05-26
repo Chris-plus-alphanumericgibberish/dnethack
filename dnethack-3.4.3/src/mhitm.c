@@ -3072,6 +3072,11 @@ mountedCombat()
 	return bm;
 }
 
+void
+reset_mvmdieroll()
+{
+	dieroll = 10;
+}
 
 #endif /* OVLB */
 
