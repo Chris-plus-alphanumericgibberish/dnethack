@@ -1122,7 +1122,7 @@ register struct monst *mtmp;
 	/* the watch will look around and see if you are up to no good :-) */
 	if (mdat == &mons[PM_WATCHMAN] || mdat == &mons[PM_WATCH_CAPTAIN])
 		watch_on_duty(mtmp);
-	else if(mdat == &mons[PM_TOVE] && !rn2(20)){
+	if(mdat == &mons[PM_TOVE] && !rn2(20)){
 		struct trap *ttmp = t_at(mtmp->mx, mtmp->my);
 		struct rm *lev = &levl[mtmp->mx][mtmp->my];
 		schar typ;
@@ -1168,7 +1168,8 @@ register struct monst *mtmp;
 			else
 				digactualhole(mtmp->mx, mtmp->my, mtmp, HOLE, FALSE, TRUE);
 		}
-	} else if (has_mind_blast(mdat) && !u.uinvulnerable && !rn2(mdat == &mons[PM_ELDER_BRAIN] ? 10 : 20)) {
+	}
+	if (has_mind_blast(mdat) && !u.uinvulnerable && !rn2(mdat == &mons[PM_ELDER_BRAIN] ? 10 : 20)) {
 		boolean reducedFlayerMessages = (((Role_if(PM_NOBLEMAN) && Race_if(PM_DROW) && flags.initgend) || Role_if(PM_ANACHRONONAUT)) && In_quest(&u.uz));
 		struct monst *m2, *nmon = (struct monst *)0;
 		
