@@ -979,7 +979,7 @@ register struct monst	*mtmp;
 		int t = rn2(SIZE(random_angeldiction));
 		if(t == 0) //Contains %s for god
 			verbalize(random_angeldiction[t], align_gname(u.ualign.type));
-		if(t == 1) //Contains %s for cleansed/purged
+		else if(t == 1) //Contains %s for cleansed/purged
 			verbalize(random_angeldiction[t], 
 				(sgn(u.ualign.type) == sgn(mtmp->data->maligntyp) &&  u.ualign.type != A_VOID) ? 
 					"cleansed" : "purged"
