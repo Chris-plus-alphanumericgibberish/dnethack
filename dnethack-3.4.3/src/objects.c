@@ -857,18 +857,18 @@ TOOL("skeleton key", "key",     0, 0, 0, 0,  80,  3,  10, IRON, HI_METAL),
 TOOL("universal key", "key",     0, 0, 0, 0,  0,  3,  10, SILVER, HI_SILVER),
 #ifdef TOURIST
 TOOL("lock pick", (char *)0,    1, 0, 0, 0,  60,  4,  20, IRON, HI_METAL),
-TOOL("credit card", (char *)0,  1, 0, 0, 0,  15,  1,  10, PLASTIC, CLR_WHITE),
+TOOL("credit card", (char *)0,  1, 0, 0, 0,   0,  1,  10, PLASTIC, CLR_WHITE),
 #else
-TOOL("lock pick", (char *)0,    1, 0, 0, 0,  75,  4,  20, IRON, HI_METAL),
+TOOL("lock pick", (char *)0,    1, 0, 0, 0,  60,  4,  20, IRON, HI_METAL),
 #endif
 /* light sources */
 TOOL("tallow candle", "candle", 0, 1, 0, 0,  15,  2,  10, WAX, CLR_WHITE),
 TOOL("wax candle", "candle",    0, 1, 0, 0,   5,  2,  20, WAX, CLR_WHITE),
 TOOL("candle of invocation", "runed candle", 
-                                0, 0, 1, 0,   5,  2,  50, WAX, CLR_ORANGE),
+                                0, 0, 1, 0,  15,  2,  50, WAX, CLR_ORANGE),
 TOOL("brass lantern", (char *)0,1, 0, 0, 0,  20, 30,  12, COPPER, CLR_YELLOW),
 TOOL("oil lamp", "lamp",        0, 0, 0, 0,  30, 20,  10, COPPER, CLR_YELLOW),
-TOOL("magic lamp", "lamp",      0, 0, 1, 0,  10, 20,  50, COPPER, CLR_YELLOW),
+TOOL("magic lamp", "lamp",      0, 0, 1, 0,  15, 20,  50, COPPER, CLR_YELLOW),
 // TOOL("shadowlander's torch", "black torch",
 								// 0, 0, 1, 0,  10, 20,  50, WOOD, CLR_BLACK),
 /* other tools */
