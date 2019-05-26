@@ -7784,8 +7784,15 @@ struct monst *mtmp, *victim;
 	|| ptr == &mons[PM_CROW_WINGED_HALF_DRAGON] || ptr == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY]
 	|| ptr == &mons[PM_UNDEAD_KNIGHT] || ptr == &mons[PM_WARRIOR_OF_SUNLIGHT]
 	|| ptr == &mons[PM_FORMIAN_CRUSHER]
+	|| ptr == &mons[PM_DRIDER] || ptr == &mons[PM_SPROW]
+	|| ptr == &mons[PM_DROW_MATRON] || ptr == &mons[PM_DROW_MATRON_MOTHER]
+	|| ptr == &mons[PM_ELVENKING] || ptr == &mons[PM_ELVENKING]
+	|| ptr == &mons[PM_CUPRILACH_RILMANI] || ptr == &mons[PM_STANNUMACH_RILMANI]
+	|| ptr == &mons[PM_ARGENACH_RILMANI] || ptr == &mons[PM_AURUMACH_RILMANI]
 	) lev_limit = 30;	/* same as player */
+	else if (ptr == &mons[PM_PLUMACH_RILMANI] || ptr == &mons[PM_FERRUMACH_RILMANI]) lev_limit = 20;
 	else if (is_eladrin(ptr) && ptr->mlevel <= 20) lev_limit = 30;
+	else if (ptr == &mons[PM_OONA]) lev_limit = 60;
 	else if (ptr == &mons[PM_ANCIENT_OF_ICE] || ptr == &mons[PM_ANCIENT_OF_DEATH]) lev_limit = 45;
 	else if (lev_limit < 5) lev_limit = 5;	/* arbitrary */
 	else if (lev_limit > 49) lev_limit = (ptr->mlevel > 49 ? ptr->mlevel : 49);
