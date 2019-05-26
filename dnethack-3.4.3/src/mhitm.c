@@ -1538,6 +1538,9 @@ physical:{
 					}
 					if(otmp->oproperties){
 						(void)oproperty_hit(magr,mdef, otmp, &newdamage, dieroll);
+						if (mdef->mhp <= 0 || migrating_mons == mdef)
+						return (MM_DEF_DIED |
+							(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
 						tmp += (newdamage - basedamage);
 					}
 				}

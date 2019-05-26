@@ -94,6 +94,7 @@ E void FDECL(set_artifact_intrinsic, (struct obj *,BOOLEAN_P,long));
 E int FDECL(touch_artifact, (struct obj *,struct monst *, int));
 E int FDECL(spec_abon, (struct obj *,struct monst *));
 E int FDECL(spec_dbon, (struct obj *,struct monst *,int));
+E int FDECL(oproperty_dbon, (struct monst *,struct obj *,int));
 E int FDECL(narrow_spec_applies, (struct obj *,struct monst *));
 E void FDECL(discover_artifact, (int));
 E boolean FDECL(undiscovered_artifact, (int));
@@ -118,6 +119,7 @@ E boolean FDECL(artifact_has_invprop, (struct obj *,UCHAR_P));
 E long FDECL(arti_cost, (struct obj *));
 E void FDECL(arti_poly_contents, (struct obj *));
 E struct obj * FDECL(minor_artifact, (struct obj *, char *));
+E void NDECL(mind_blast_items);
 
 /* ### attrib.c ### */
 

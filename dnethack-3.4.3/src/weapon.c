@@ -1304,8 +1304,16 @@ lightsaber_form_sdie:
 
 	    /* if the weapon is going to get a double damage bonus, adjust
 	       this bonus so that effectively it's added after the doubling */
-	    if (bonus > 1 && otmp->oartifact && spec_dbon(otmp, mon, 100) >= 100)
-		bonus = (bonus + 1) / 2;
+	    if (bonus > 1){
+			if(otmp->oartifact){
+				int dbonus = spec_dbon(otmp, mon, 100);
+				if(dbonus >= 100) bonus = (bonus + 1) / (1+dbonus/100);
+			}
+			if(otmp->oproperties){
+				int dbonus = oproperty_dbon(mon, otmp, 100);
+				if(dbonus >= 100) bonus = (bonus + 1) / (1+dbonus/100);
+			}
+		}
 		
 		if(mon && (((resists_all(ptr) && !narrow_spec_applies(otmp, mon))) || resist_attacks(ptr))){
 			tmp /= 4;

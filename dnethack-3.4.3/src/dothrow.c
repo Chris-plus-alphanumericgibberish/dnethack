@@ -1320,7 +1320,7 @@ boolean hitsroof;
 		newdamage = basedamage;
 	}
 	if(obj->oproperties){
-		(void)oproperty_hit((struct monst *)0, &youmonst, obj, &newdamage, dieroll);
+		artimsg |= oproperty_hit((struct monst *)0, &youmonst, obj, &newdamage, dieroll);
 		dmg += (newdamage - basedamage);
 	}
 	

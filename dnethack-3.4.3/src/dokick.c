@@ -112,6 +112,9 @@ register boolean clumsy;
 				}
 				if(uarmf->oproperties){
 					(void)oproperty_hit(&youmonst, mon, uarmf, &newdamage, roll);
+					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+						return;
+					if (newdamage == 0) return;
 					dmg += (newdamage - basedamage);
 				}
 			}

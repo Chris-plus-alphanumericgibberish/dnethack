@@ -1557,7 +1557,10 @@ int thrown;
 					newdamage = basedamage;
 				}
 				if(obj->oproperties){
-					(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+					hittxt |= oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+						return FALSE;
+					if (newdamage == 0) return TRUE;
 					tmp += (newdamage - basedamage);
 				}
 			} //artifact block
@@ -1665,7 +1668,10 @@ int thrown;
 						newdamage = basedamage;
 					}
 					if(uwep->oproperties){
-						(void)oproperty_hit(&youmonst, mon, uwep, &newdamage, dieroll);
+						hittxt |= oproperty_hit(&youmonst, mon, uwep, &newdamage, dieroll);
+						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
+						if (newdamage == 0) return TRUE; /* NOTE: ditto */
 						tmp += (newdamage - basedamage);
 						newdamage = basedamage;
 					}
@@ -1678,7 +1684,10 @@ int thrown;
 						newdamage = basedamage;
 					}
 					if(obj->oproperties){
-						(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+						hittxt |= oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
+						if (newdamage == 0) return TRUE; /* NOTE: ditto */
 						tmp += (newdamage - basedamage);
 						newdamage = basedamage;
 					}
@@ -1693,7 +1702,10 @@ int thrown;
 					if(uarmh && uarmh->oartifact 
 					&& uarmh->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER && uarmh->oproperties
 					){
-						(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+						hittxt |= oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
+						if (newdamage == 0) return TRUE; /* NOTE: ditto */
 						tmp += (newdamage - basedamage);
 					}
 					}//Artifact block
@@ -1965,7 +1977,10 @@ defaultvalue:
 					newdamage = basedamage;
 				}
 				if(obj->oproperties){
-					(void)oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+					hittxt |= oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
+					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+						return FALSE;
+					if (newdamage == 0) return TRUE;
 					tmp += (newdamage - basedamage);
 				}
 				if(u.sealsActive&SEAL_PAIMON && mon && !DEADMONSTER(mon) && 

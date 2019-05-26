@@ -31,6 +31,8 @@ STATIC_DCL void NDECL(cast_protection);
 STATIC_DCL int NDECL(throweffect);
 STATIC_DCL void FDECL(awaken_monsters,(int));
 
+STATIC_DCL void FDECL(do_item_blast, (int));
+
 int FDECL(donecromenu, (const char *,struct obj *));
 int FDECL(dopetmenu, (const char *,struct obj *));
 int FDECL(dolordsmenu, (const char *,struct obj *));
@@ -2512,6 +2514,146 @@ char *type;			/* blade, staff, etc */
 }
 
 
+//Just do bonus damage, don't make any modifications to the defender
+int
+oproperty_dbon(mdef, otmp, basedmg)
+struct monst *mdef;
+struct obj *otmp;
+int basedmg;
+{
+	boolean youdefend = (mdef == &youmonst);
+	int bonus = 0;
+	
+	if(otmp->oproperties&OPROP_FIREW){
+		if(youdefend ? (!Fire_resistance) : (!resists_fire(mdef))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_COLDW){
+		if(youdefend ? (!Cold_resistance) : (!resists_cold(mdef))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_WATRW){
+		if(youdefend){
+			if(!((uarmc
+				&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
+				&& (!uarmc->cursed || rn2(3))
+			   ) || (
+				ublindf
+				&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+				&& (!ublindf->cursed || rn2(3))
+			   ) || (
+				uarm
+				&& (uarm->otyp == WHITE_DRAGON_SCALES || uarm->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!uarm->cursed || rn2(3))
+			   ) || (
+				uarms
+				&& uarms->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!uarms->cursed || rn2(3))
+			   ) || u.sealsActive&SEAL_ENKI)
+			) {
+				int mult = (flaming(youracedata) || youracedata == &mons[PM_EARTH_ELEMENTAL] || youracedata == &mons[PM_IRON_GOLEM] || youracedata == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
+				if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8)*mult;
+				else bonus += basedmg*mult;
+			}
+		} else{ //Monster
+			struct obj *cloak = which_armor(mdef, W_ARMC);
+			struct obj *armor = which_armor(mdef, W_ARM);
+			struct obj *shield = which_armor(mdef, W_ARMS);
+			// struct obj *blindfold = which_armor(mdef, W_ARMC);
+			if(!((cloak
+				&& (cloak->otyp == OILSKIN_CLOAK || cloak->greased)
+				&& (!cloak->cursed || rn2(3))
+				) || (armor
+				&& (armor->otyp == WHITE_DRAGON_SCALES || armor->otyp == WHITE_DRAGON_SCALE_MAIL)
+				&& (!armor->cursed || rn2(3))
+				) || (shield
+				&& shield->otyp == WHITE_DRAGON_SCALE_SHIELD
+				&& (!shield->cursed || rn2(3))
+			   // ) || (
+				// ublindf
+				// && ublindf->otyp == R_LYEHIAN_FACEPLATE
+				// && (!ublindf->cursed || rn2(3))
+			   ))
+			) {
+				int mult = (flaming(mdef->data) || mdef->data == &mons[PM_EARTH_ELEMENTAL] || mdef->data == &mons[PM_IRON_GOLEM] || mdef->data == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
+				if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8)*mult;
+				else bonus += basedmg*mult;
+			}
+		}
+	}
+	if(otmp->oproperties&OPROP_ELECW){
+		if(youdefend ? (!Shock_resistance) : (!resists_elec(mdef))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_ACIDW){
+		if(youdefend ? (!Acid_resistance) : (!resists_acid(mdef))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_MAGCW){
+		if(youdefend ? (!Antimagic) : (!resists_magm(mdef))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_PSIOW){
+		if(youdefend && (Blind_telepat || !rn2(5))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+		else if(!youdefend && !mindless_mon(mdef) && (telepathic(mdef->data) || !rn2(5))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_DEEPW){
+		if(otmp->spe < 8){
+		if(youdefend && (Blind_telepat || !rn2(5)))
+			bonus += d(1,15-(otmp->spe)*2);
+		else if(!youdefend && !mindless_mon(mdef) && (telepathic(mdef->data) || !rn2(5)))
+			bonus += d(1,15-(otmp->spe)*2);
+		}
+	}
+	if(otmp->oproperties&OPROP_ANARW){
+		if(youdefend ? (u.ualign.type != A_CHAOTIC) : (sgn(mdef->data->maligntyp) >= 0)){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_CONCW){
+		if(youdefend ? (u.ualign.type != A_NEUTRAL) : (sgn(mdef->data->maligntyp) != 0)){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_AXIOW){
+		if(youdefend ? (u.ualign.type != A_LAWFUL) : (sgn(mdef->data->maligntyp) <= 0)){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_HOLYW){
+		if(youdefend ? (hates_holy(youracedata)) : (hates_holy_mon(mdef))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	if(otmp->oproperties&OPROP_UNHYW){
+		if(youdefend ? (hates_unholy(youracedata)) : (hates_unholy(mdef->data))){
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
+			else bonus += basedmg;
+		}
+	}
+	return bonus;
+}
+
 boolean
 oproperty_hit(magr, mdef, otmp, dmgptr, dieroll)
 struct monst *magr, *mdef;
@@ -2524,16 +2666,18 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	boolean vis = (!youattack && magr && cansee(magr->mx, magr->my))
 	    || (!youdefend && cansee(mdef->mx, mdef->my))
 	    || (youattack && u.uswallow && mdef == u.ustuck && !Blind);
+	boolean messaged=FALSE;
 	static const char you[] = "you";
 	char hittee[BUFSZ];
 	int basedmg = *dmgptr;
 	
 	Strcpy(hittee, youdefend ? you : mon_nam(mdef));
 	
+	//Add the bonus damage
+	*dmgptr += oproperty_dbon(mdef, otmp, *dmgptr);
+	
 	if(otmp->oproperties&OPROP_FIREW){
 		if(youdefend ? (!Fire_resistance) : (!resists_fire(mdef))){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
 			if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 			if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
 			if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
@@ -2541,8 +2685,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	}
 	if(otmp->oproperties&OPROP_COLDW){
 		if(youdefend ? (!Cold_resistance) : (!resists_cold(mdef))){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
 			if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
 		}
 	}
@@ -2566,9 +2708,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				&& (!uarms->cursed || rn2(3))
 			   ) || u.sealsActive&SEAL_ENKI)
 			) {
-				int mult = (flaming(youracedata) || youracedata == &mons[PM_EARTH_ELEMENTAL] || youracedata == &mons[PM_IRON_GOLEM] || youracedata == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
-				if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8)*mult;
-				else *dmgptr += basedmg*mult;
 				if(youracedata == &mons[PM_GREMLIN] && rn2(3)){
 					(void)split_mon(&youmonst, (struct monst *)0);
 				}
@@ -2593,9 +2732,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				// && (!ublindf->cursed || rn2(3))
 			   ))
 			) {
-				int mult = (flaming(mdef->data) || mdef->data == &mons[PM_EARTH_ELEMENTAL] || mdef->data == &mons[PM_IRON_GOLEM] || mdef->data == &mons[PM_CHAIN_GOLEM]) ? 2 : 1;
-				if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8)*mult;
-				else *dmgptr += basedmg*mult;
 				if(mdef->data == &mons[PM_GREMLIN] && rn2(3)){
 					(void)split_mon(mdef, (struct monst *)0);
 				}
@@ -2604,56 +2740,73 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	}
 	if(otmp->oproperties&OPROP_ELECW){
 		if(youdefend ? (!Shock_resistance) : (!resists_elec(mdef))){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
 			if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
 			if (!rn2(5)) (void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
 		}
 	}
 	if(otmp->oproperties&OPROP_ACIDW){
 		if(youdefend ? (!Acid_resistance) : (!resists_acid(mdef))){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
 			if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		}
 	}
-	if(otmp->oproperties&OPROP_MAGCW){
-		if(youdefend ? (!Antimagic) : (!resists_magm(mdef))){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
+	
+	if (otmp->oproperties&OPROP_VORPW &&
+		(dieroll == 1 || mdef->data == &mons[PM_JABBERWOCK])
+	){
+		static const char * const behead_msg[2] = {
+			 "%s beheads %s!",
+			 "%s decapitates %s!"
+		};
+		if (youattack && u.uswallow && mdef == u.ustuck)
+			messaged = FALSE;
+
+		if (!youdefend) {
+			if (!has_head(mdef->data) || notonhead || u.uswallow) {
+				if (youattack)
+					pline("Somehow, you miss %s wildly.",
+						mon_nam(mdef));
+				else if (vis)
+					pline("Somehow, %s misses wildly.",
+						mon_nam(magr));
+				*dmgptr = 0;
+				messaged = ((boolean)(youattack || vis));
+			} else if (noncorporeal(mdef->data) || amorphous(mdef->data)) {
+				pline("%s slices through %s %s.", The(doname(otmp)),
+					  s_suffix(mon_nam(mdef)),
+					  mbodypart(mdef,NECK));
+				messaged = TRUE;
+			} else {
+				pline(behead_msg[rn2(SIZE(behead_msg))],
+					  The(doname(otmp)), mon_nam(mdef));
+				otmp->dknown = TRUE;
+				if(youattack) killed(mdef);
+				else monkilled(mdef, (const char *)0, AD_PHYS);
+				
+				if(mdef->mhp <= 0) return TRUE; //otherwise lifesaved
+				messaged = TRUE;
+			}
+		} else {
+			if (!has_head(youracedata)) {
+				pline("Somehow, %s misses you wildly.",
+					  magr ? mon_nam(magr) : The(doname(otmp)));
+				*dmgptr = 0;
+				messaged = TRUE;
+			} else if (noncorporeal(youracedata) || amorphous(youracedata)) {
+				pline("%s slices through your %s.",
+					  The(doname(otmp)), body_part(NECK));
+				messaged = TRUE;
+			} else {
+				pline(behead_msg[rn2(SIZE(behead_msg))],
+					  The(doname(otmp)), "you");
+				otmp->dknown = TRUE;
+				losehp((Upolyd ? u.mh : u.uhp) + 1, The(doname(otmp)), KILLED_BY);
+				/* Should amulets fall off? */
+				messaged = TRUE;
+			}
 		}
 	}
-	if(otmp->oproperties&OPROP_ANARW){
-		if(youdefend ? (u.ualign.type != A_CHAOTIC) : (sgn(mdef->data->maligntyp) >= 0)){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
-		}
-	}
-	if(otmp->oproperties&OPROP_CONCW){
-		if(youdefend ? (u.ualign.type != A_NEUTRAL) : (sgn(mdef->data->maligntyp) != 0)){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
-		}
-	}
-	if(otmp->oproperties&OPROP_AXIOW){
-		if(youdefend ? (u.ualign.type != A_LAWFUL) : (sgn(mdef->data->maligntyp) <= 0)){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
-		}
-	}
-	if(otmp->oproperties&OPROP_HOLYW){
-		if(youdefend ? (hates_holy(youracedata)) : (hates_holy_mon(mdef))){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
-		}
-	}
-	if(otmp->oproperties&OPROP_UNHYW){
-		if(youdefend ? (hates_unholy(youracedata)) : (hates_unholy(mdef->data))){
-			if (otmp->oproperties&OPROP_LESSW) *dmgptr += d(1, 8);
-			else *dmgptr += basedmg;
-		}
-	}
-	return FALSE;
+	
+	return messaged;
 }
   
 /* Function used when someone attacks someone else with an artifact
@@ -8497,7 +8650,175 @@ char *name;	/* target alignment, or A_NONE */
 	if(!strcmp(name, "Masked Lord's Cope")){
 		otmp->otyp = find_cope();
 	}
+	if(!strcmp(name,  "The Sword of the Deeps")){
+		otmp->oproperties = OPROP_DEEPW;
+	}
 	fix_object(otmp);
 	return otmp;
+}
+
+struct blast_element {
+	int spe;
+	struct blast_element *nblast;
+};
+
+void
+mind_blast_items()
+{
+	struct monst *mtmp, *nmon = (struct monst *)0;
+	struct obj *obj;
+	struct blast_element *blast_list = 0, *nblast = 0;
+	if(u.uinvulnerable)
+		return;
+	
+	//collect all the blasting items into a list so that they can blast away without worrying about changing the state of the dungeon.
+	for(obj = invent; obj; obj = obj->nobj) 
+	 if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
+		nblast = (struct blast_element *)malloc(sizeof(struct blast_element));
+		nblast->nblast = blast_list;
+		nblast->spe = obj->spe;
+		blast_list = nblast;
+	}
+	for (obj = fobj; obj; obj = obj->nobj) {
+		if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
+			nblast = (struct blast_element *)malloc(sizeof(struct blast_element));
+			nblast->nblast = blast_list;
+			nblast->spe = obj->spe;
+			blast_list = nblast;
+		}
+	}
+	for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
+		if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
+			nblast = (struct blast_element *)malloc(sizeof(struct blast_element));
+			nblast->nblast = blast_list;
+			nblast->spe = obj->spe;
+			blast_list = nblast;
+		}
+	}
+	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+	if (DEADMONSTER(mtmp)) continue;
+		for (obj = mtmp->minvent; obj; obj = obj->nobj) {
+			if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
+				nblast = (struct blast_element *)malloc(sizeof(struct blast_element));
+				nblast->nblast = blast_list;
+				nblast->spe = obj->spe;
+				blast_list = nblast;
+			}
+		}
+	}
+	
+	for(nblast = blast_list; nblast; nblast = nblast->nblast){
+		do_item_blast(nblast->spe);
+	}
+	
+	//free the list
+	while(blast_list){
+		nblast = blast_list;
+		blast_list = blast_list->nblast;
+		free(nblast);
+	}
+
+}
+
+STATIC_OVL void
+do_item_blast(spe)
+int spe;
+{
+	struct monst *m2, *nmon2 = (struct monst *)0;
+	int dsize = 15 - spe*2;
+	int dnum = 1;
+	int dmg;
+		
+	if(dsize >= 15)
+		dnum = 5;
+	else if(dsize > 10)
+		dnum = 3;
+	else if(dsize > 5)
+		dnum = 2;
+	
+	if(dnum >= 5){
+		if(rn2(20))
+			return;
+	} else {
+		if(rn2(40))
+			return;
+	}
+	
+	switch(rn2(10)){
+		case 0:
+		pline("You hear grumbling in the deeps.");
+		break;
+		case 1:
+		pline("You hear muttering in the dark.");
+		break;
+		case 2:
+		pline("You hear singing in the depths.");
+		break;
+		case 3:
+		pline("You hear chattering among the stars.");
+		break;
+		case 4:
+		pline("You hear ringing in your %s.", makeplural(body_part(EAR)));
+		break;
+		case 5:
+		pline("You hear silence in heaven.");
+		break;
+		case 6:
+		pline("You hear sighing in the wind.");
+		break;
+		case 7:
+		pline("You hear teardrops on the sea.");
+		break;
+		case 8:
+		pline("You hear the wind in the abyss.");
+		break;
+		case 9:
+		pline("You hear a creaking in the sky.");
+		break;
+	}
+	if ((Blind_telepat && rn2(2)) || !rn2(10)) {
+		pline("It locks on to your %s!",
+			Unblind_telepat ? "telepathy" :
+			Blind_telepat ? "latent telepathy" : "mind");
+		dmg = d(dnum, dsize);
+		if (Half_spell_damage) dmg = (dmg+1) / 2;
+		losehp(dmg, "psychic blast", KILLED_BY_AN);
+		if(dnum >= 3){
+			for (m2 = fmon; m2; m2 = nmon2) {
+				nmon2 = m2->nmon;
+				if (!DEADMONSTER(m2) && !m2->mpeaceful && (telepathic(m2->data) || rn2(2)))
+				{
+					m2->msleeping = 0;
+					if (!m2->mcanmove && !rn2(5)) {
+						m2->mfrozen = 0;
+						if (m2->data != &mons[PM_GIANT_TURTLE] || !(m2->mflee))
+							m2->mcanmove = 1;
+					}
+					m2->mux = u.ux;
+					m2->muy = u.uy;
+					m2->encouraged = max(m2->encouraged, dmg / dnum);
+				}
+			}
+		}
+		if(dnum >= 5) make_stunned(HStun + dmg*10, TRUE);
+	}
+	for(m2=fmon; m2; m2 = nmon2) {
+		nmon2 = m2->nmon;
+		if (DEADMONSTER(m2)) continue;
+		if (mindless_mon(m2)) continue;
+		if ((telepathic(m2->data) &&
+			(rn2(2) || m2->mblinded)) || !rn2(10)) {
+			if (cansee(m2->mx, m2->my))
+				pline("It locks on to %s.", mon_nam(m2));
+			dmg = d(dnum, dsize);
+			m2->mhp -= dmg;
+			if(dnum >= 3) m2->mstdy = max(m2->mstdy, dmg);
+			if(dnum >= 5) m2->mconf=TRUE;
+			if (m2->mhp <= 0)
+				monkilled(m2, "", AD_DRIN);
+			else
+				m2->msleeping = 0;
+		}
+	}
 }
 /*artifact.c*/

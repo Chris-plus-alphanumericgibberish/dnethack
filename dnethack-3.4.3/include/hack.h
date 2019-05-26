@@ -308,8 +308,9 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define BODY_FLESH 21
 #define BEAT 22
 #define BONES 23
-#define CREAK 24
-#define CRACK 25
+#define EAR 24
+#define CREAK 25
+#define CRACK 26
 
 /* Flags to control menus */
 #define MENUTYPELEN sizeof("traditional ")
