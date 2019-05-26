@@ -4988,7 +4988,7 @@ int  typ, fatal, opoistype;
 	if(opoistype & OPOISON_SLEEP){
 		if(Sleep_resistance) {
 			pline_The("drug doesn't seem to affect you.");
-		} else if(!rn2(20*thrown_weapon)){
+		} else if(!rn2((fatal/3) + 20*thrown_weapon)){
 			You("suddenly fall asleep!");
 			fall_asleep(-rn1(2, 6), TRUE);
 		}
@@ -4996,7 +4996,7 @@ int  typ, fatal, opoistype;
 	if(opoistype & OPOISON_BLIND){
 		if(Poison_resistance) {
 			pline_The("poison doesn't seem to affect you.");
-		} else if(!rn2(20*thrown_weapon)){
+		} else if(!rn2((fatal/3) + 20*thrown_weapon)){
 			i = thrown_weapon ? 3 : 8;
 			if(Half_physical_damage) i = (i+1) / 2;
 			losehp(i, pname, kprefix);
@@ -5011,7 +5011,7 @@ int  typ, fatal, opoistype;
 	if(opoistype & OPOISON_PARAL){
 		if(Free_action) {
 			pline_The("poison doesn't seem to affect you.");
-		} else if(!rn2(20*thrown_weapon)){
+		} else if(!rn2((fatal) + 20*thrown_weapon)){
 			i = thrown_weapon ? 6 : 16;
 			if(Half_physical_damage) i = (i+1) / 2;
 			losehp(i, pname, kprefix);
@@ -5031,7 +5031,7 @@ int  typ, fatal, opoistype;
 		}
 	}
 	if(opoistype & OPOISON_ACID){
-		if(Poison_resistance) {
+		if(Acid_resistance) {
 			pline_The("acidic coating doesn't seem to affect you.");
 		} else {
 			/* suppress killer prefix if it already has one */

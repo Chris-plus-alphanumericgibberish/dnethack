@@ -2109,27 +2109,27 @@ defaultvalue:
 			if(rn2(2)) u.hod++;
 	    }
 		for(viperheads = ((obj && obj->otyp == VIPERWHIP) ? (1+obj->ostriking) : 1); viperheads; viperheads--){
-			if(obj && (obj->opoisoned & OPOISON_BASIC || arti_poisoned(obj))){
+			if(ispoisoned & OPOISON_BASIC || (obj && arti_poisoned(obj))){
 				if (resists_poison(mon))
 					needpoismsg = TRUE;
 				else if (rn2(10))
 					tmp += rnd(6);
 				else poiskilled = TRUE;
 			}
-			if(obj && (obj->opoisoned & OPOISON_FILTH || obj->oartifact == ART_SUNBEAM)){
+			if(ispoisoned & OPOISON_FILTH || (obj && obj->oartifact == ART_SUNBEAM)){
 				if (resists_sickness(mon))
 					needfilthmsg = TRUE;
 				else if (rn2(10))
 					tmp += rnd(12);
 				else filthkilled = TRUE;
 			}
-			if(obj && (obj->opoisoned & OPOISON_SLEEP || obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM)){
+			if(ispoisoned & OPOISON_SLEEP || (obj && (obj->oartifact == ART_WEBWEAVER_S_CROOK || obj->oartifact == ART_MOONBEAM))){
 				if (resists_sleep(mon))
 					needdrugmsg = TRUE;
-				else if((obj->oartifact == ART_MOONBEAM || !rn2(5)) && 
+				else if(((obj && obj->oartifact == ART_MOONBEAM) || !rn2(5)) && 
 					sleep_monst(mon, rnd(12), POTION_CLASS)) druggedmon = TRUE;
 			}
-			if(obj && (obj->opoisoned & OPOISON_BLIND || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
+			if(ispoisoned & OPOISON_BLIND || (obj && obj->oartifact == ART_WEBWEAVER_S_CROOK)){
 				if (resists_poison(mon))
 					needpoismsg = TRUE;
 				else if (rn2(10))
@@ -2139,7 +2139,7 @@ defaultvalue:
 					poisblindmon = TRUE;
 				}
 			}
-			if(obj && (obj->opoisoned & OPOISON_PARAL || obj->oartifact == ART_WEBWEAVER_S_CROOK)){
+			if(ispoisoned & OPOISON_PARAL || (obj && obj->oartifact == ART_WEBWEAVER_S_CROOK)){
 				if (rn2(8))
 					tmp += rnd(6);
 				else {
@@ -2150,20 +2150,20 @@ defaultvalue:
 					}
 				}
 			}
-			if(obj && obj->opoisoned & OPOISON_AMNES){
+			if(ispoisoned & OPOISON_AMNES){
 				if(mindless_mon(mon)) needsamnesiamsg = TRUE;
 				else if(!rn2(10)) amnesiamon = TRUE;
 			}
-			if(obj && (obj->opoisoned & OPOISON_ACID)){
+			if(ispoisoned & OPOISON_ACID){
 				if (resists_acid(mon))
 					needacidmsg = TRUE;
 				else tmp += rnd(10);
 			}
 			
-			if (obj && !rn2(20) && obj->opoisoned) {
+			if (obj && !rn2(20) && ispoisoned) {
 				if(obj->quan > 1){
 					struct obj *unpoisd = splitobj(obj, 1L);
-					unpoisd->opoisoned = FALSE;
+					unpoisd->opoisoned = 0;
 					pline("The coating on your %s has worn off.", xname(unpoisd));
 					obj_extract_self(unpoisd);	/* free from inv */
 					/* shouldn't merge */
@@ -2174,7 +2174,7 @@ defaultvalue:
 						obj->opoisonchrgs--;
 						pline("Poison from the internal reservoir coats the fangs of your %s.", xname(obj));
 					} else {
-						obj->opoisoned = FALSE;
+						obj->opoisoned = 0;
 						pline("The coating on your %s has worn off.", xname(obj));
 					}
 				}
