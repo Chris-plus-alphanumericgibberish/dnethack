@@ -1446,6 +1446,8 @@ charges:
 		add_erosion_words(obj, prefix);
 ring:
 		if(obj->oward && (isEngrRing(obj->otyp))) Strcat(prefix, "engraved ");
+		if(obj->otyp == RIN_WISHES && obj->known) Sprintf(eos(bp), " (%d remaining)", obj->spe);
+		if(obj->otyp == RIN_WISHES && !obj->known && obj->spe > 0) Sprintf(eos(bp), " with %d stars", obj->spe);
 		if(obj->owornmask & W_RINGR) Strcat(bp, " (on right ");
 		if(obj->owornmask & W_RINGL) Strcat(bp, " (on left ");
 		if(obj->owornmask & W_RING) {

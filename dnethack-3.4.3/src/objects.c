@@ -735,7 +735,7 @@ BOOTS("flying boots", "snow boots",
 		OBJ(name,stone), \
 		BITS(0,0,spec,0,mgc,spec,0,0,0,HARDGEM(mohs),0,P_NONE,metal), \
 		power, RING_CLASS, 0, 0, 3, cost, 0, 0, 0, 0, 0, 15, color )
-RING("wishes", 0, "dragon-bone",            500, 1, 1, 4, BONE, CLR_WHITE),
+RING("wishes", 0, "black",            500, 1, 1, 4, PLATINUM, CLR_BLACK),
 RING("adornment", ADORNED, "wooden",        100, 1, 1, 2, WOOD, HI_WOOD),
 RING("gain strength", 0, "granite",         150, 1, 1, 7, MINERAL, HI_MINERAL),
 RING("gain constitution", 0, "opal",        150, 1, 1, 7, MINERAL,  HI_MINERAL),
