@@ -2408,7 +2408,7 @@ struct obj *otmp;
 		)){
 			bonus/=2; /*Half strength bonus/penalty*/
 			
-			if(ACURR(A_DEX)) bonus += 8;
+			if(ACURR(A_DEX) == 25) bonus += 8;
 			else bonus += (ACURR(A_DEX)-10)/2;
 		}
 		
