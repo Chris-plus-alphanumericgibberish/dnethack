@@ -5308,7 +5308,7 @@ register struct	monst	*mtmp;
 ///////////////////////////////
 			case PM_BAEL:
 				otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_GENOCIDE));		
+				otmp = oname(otmp, artiname(ART_GENOCIDE));
 				otmp->spe = 9;
 				curse(otmp);
 				otmp->oerodeproof = TRUE;
@@ -5458,7 +5458,7 @@ register struct	monst	*mtmp;
 			break;
 			case PM_MEPHISTOPHELES:
 				otmp = mksobj(RANSEUR, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_COLD_SOUL));		
+				otmp = oname(otmp, artiname(ART_COLD_SOUL));
 				otmp->blessed = FALSE;
 				otmp->cursed = TRUE;
 				otmp->spe = 8;
