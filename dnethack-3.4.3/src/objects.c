@@ -316,7 +316,7 @@ WEAPON("flail", (char *)0,
 WEAPON("bullwhip", (char *)0,
 	1, 0, 0,  5, 20,  4,  2,  1, 0, B,   P_WHIP, LEATHER, CLR_BROWN),
 WEAPON("viperwhip", (char *)0,
-	1, 0, 0,  2,  3, 40,  4,  3, 2, P,   P_WHIP, LEATHER, CLR_BROWN),
+	1, 0, 0,  2,  3, 40,  4,  3, 2, P,   P_WHIP, LEATHER, HI_SILVER),
 
 
 /* Firearms */
@@ -431,28 +431,28 @@ HELM("cornuthaum", "conical hat",
 HELM("dunce cap", "conical hat",
 		0, 1,  0,	3, 1,  4,   1, 10, 0, 0, CLOTH, CLR_BLUE),
 HELM("war hat", "wide helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	2, 0, 100,  30, 9, 1, 2, IRON, HI_METAL),
+		0, 0,  0,	2, 0, 100,  30, 8, 2, 2, IRON, HI_METAL),
 HELM("flack helmet", "green bowl", /*Needs encyc entry*/
-		0, 0,  0,	0, 0, 10,   50, 9, 1, 1, PLASTIC, CLR_GREEN),
+		0, 0,  0,	0, 0, 10,   50, 9, 2, 1, PLASTIC, CLR_GREEN),
 HELM("bronze helm", "helmet",
-		0, 0,  0,   0, 1, 30,  12, 9, 1, 0, COPPER, HI_COPPER),
+		0, 0,  0,   0, 1, 30,  12, 9, 2, 0, COPPER, HI_COPPER),
 HELM("harmonium helm", "red-lacquered spined helm",
-		0, 0,  0,   0, 1, 45,   1, 9, 1, 0, METAL, CLR_RED),
+		0, 0,  0,   0, 1, 45,   1, 9, 2, 0, METAL, CLR_RED),
 HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	0, 1,  2,   5, 9, 0, 0, WOOD, HI_WOOD),
+		0, 0,  0,	0, 1,  2,   5, 9, 1, 0, WOOD, HI_WOOD),
 HELM("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	0, 1,  3,   5, 9, 1, 0, MITHRIL, HI_METAL),
+		0, 0,  0,	0, 1,  3,   5, 9, 2, 0, MITHRIL, HI_METAL),
 HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	0, 1, 50,   5, 8, 1, 0, MINERAL, CLR_BLACK),
+		0, 0,  0,	0, 1, 50,   5, 8, 2, 0, MINERAL, CLR_BLACK),
 HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
-		0, 1,  INFRAVISION,   0, 2, 25,  50, 8, 1, 2, PLASTIC, CLR_WHITE),
+		0, 1,  INFRAVISION,   0, 2, 25,  50, 8, 2, 2, PLASTIC, CLR_WHITE),
 HELM("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2,150, 300, 9, 0, 0, GLASS, CLR_CYAN),
 HELM("pontiff's crown", "filigreed faceless helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2,150, 300, 8, 3, 0, METAL, HI_GOLD),
 /* With shuffled appearances... */
 HELM("helmet", "plumed helmet", /* circlet */
-		0, 0,  0,      8, 1, 30,  10, 9, 1, 0, IRON, CLR_RED),
+		0, 0,  0,      8, 1, 30,  10, 9, 2, 0, IRON, CLR_RED),
 HELM("helm of brilliance", "etched helmet", /* crown of cognizance */
 		0, 1,  0,	6, 1, 50,  50, 9, 1, 0, IRON, CLR_BRIGHT_GREEN),
 HELM("helm of opposite alignment", "crested helmet", /* tiara of treachery */
@@ -670,16 +670,16 @@ DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, 0, CLR_YELLOW),
  */
 GLOVES("crystal gauntlets", "glass gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2, 50, 400,  9, 0, 0, GLASS, CLR_CYAN),
-GLOVES("gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   4, 2, 25, 10, 9, 1, 0, IRON, HI_METAL),
+GLOVES("gauntlets", (char *)0, /*Needs encyc entry*//*Needs tile*/
+		1, 0,  0,	   4, 2, 25, 10, 8, 2, 0, IRON, HI_METAL),
 GLOVES("bronze gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 1, 25, 10, 9, 1, 0, COPPER, HI_COPPER),
+		0, 0,  0,	   0, 1, 25, 10, 8, 2, 0, COPPER, HI_COPPER),
 GLOVES("harmonium gauntlets", "red-lacquered hooked gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 1, 40,  1, 9, 1, 0, METAL, CLR_RED),
+		0, 0,  0,	   0, 1, 40,  1, 9, 2, 0, METAL, CLR_RED),
 GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 2,  5, 50, 9, 1, 0, MITHRIL, HI_METAL),
+		0, 0,  0,	   0, 2,  5, 50, 8, 2, 0, MITHRIL, HI_METAL),
 GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 2, 15, 50,  9, 1, 0, PLASTIC, CLR_WHITE),
+		0, 0,  0,	   0, 2, 15, 50,  8, 2, 0, PLASTIC, CLR_WHITE),
 GLOVES("gloves", "old gloves",
 		0, 0,  0,	   8, 1, 10,  8, 10, 1, 0, CLOTH, HI_LEATHER),
 GLOVES("gauntlets of fumbling", "padded gloves", /*"padded" should give +1 DR*/
@@ -687,9 +687,9 @@ GLOVES("gauntlets of fumbling", "padded gloves", /*"padded" should give +1 DR*/
 GLOVES("gauntlets of power", "riding gloves",
 		0, 1,  0,	   7, 1, 30, 50,  9, 1, 0, IRON, CLR_BROWN),
 GLOVES("orihalcyon gauntlets", "fighting gloves",/*Needs tile*/
-		0, 1,  ANTIMAGIC,  7, 1, 50, 50,  9, 1, 0, METAL, CLR_BROWN),
+		0, 1,  ANTIMAGIC,  7, 1, 50, 50,  8, 2, 0, METAL, CLR_BROWN),
 GLOVES("gauntlets of dexterity", "fencing gloves",
-		0, 1,  0,	   7, 1, 10, 50, 10, 1, 0, LEATHER, HI_LEATHER),
+		0, 1,  0,	   7, 1, 10, 50,  8, 0, 0, LEATHER, HI_LEATHER),
 
 /* boots */
 BOOTS("low boots", "walking shoes",
@@ -697,11 +697,11 @@ BOOTS("low boots", "walking shoes",
 BOOTS("iron shoes", "hard shoes",
 		0, 0,  0,	   7, 2, 50, 16,  9, 1, 0, IRON, HI_METAL),
 BOOTS("armored boots", "hard boots",
-		0, 0,  0,	   0, 1, 75, 16,  8, 1, 1, IRON, HI_COPPER),
+		0, 0,  0,	   0, 1, 75, 16,  8, 2, 1, IRON, HI_COPPER),
 BOOTS("harmonium boots", "red-lacquered boots",
-		0, 0,  0,	   0, 1, 95,  1,  8, 1, 1, METAL, CLR_RED),
+		0, 0,  0,	   0, 1, 95,  1,  8, 2, 1, METAL, CLR_RED),
 BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 2, 25, 32,  9, 1, 1, PLASTIC, CLR_WHITE),
+		0, 0,  0,	   0, 2, 25, 32,  8, 2, 1, PLASTIC, CLR_WHITE),
 BOOTS("stilettos", "high-heeled shoes", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 1, 10, 60, 10, 0, 0, IRON, HI_METAL),
 BOOTS("high boots", "jackboots",
@@ -710,19 +710,19 @@ BOOTS("crystal boots", "glass boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2,150,300,   9, 0, 0, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
 BOOTS("speed boots", "combat boots",
-		0, 1,  FAST,	  12, 2, 20, 50, 10, 1, 0, LEATHER, HI_LEATHER),
+		0, 1,  FAST,	  12, 2, 20, 50,  9, 0, 0, LEATHER, HI_LEATHER),
 BOOTS("water walking boots", "jungle boots",
 		0, 1,  WWALKING,  12, 2, 20, 50, 10, 1, 0, LEATHER, HI_LEATHER),
 BOOTS("jumping boots", "hiking boots",
-		0, 1,  JUMPING,   12, 2, 20, 50, 10, 1, 0, LEATHER, HI_LEATHER),
+		0, 1,  JUMPING,   12, 2, 20, 50,  9, 1, 0, LEATHER, HI_LEATHER),
 BOOTS("elven boots", "mud boots",
-		0, 1,  STEALTH,   12, 2,  1,  8, 10, 1, 0, WOOD, CLR_BROWN),
+		0, 1,  STEALTH,   12, 2,  1,  8,  9, 0, 0, WOOD, CLR_BROWN),
 BOOTS("kicking boots", "buckled boots",
-		0, 1,  0,         12, 2, 15,  8, 10, 1, 0, IRON, CLR_BROWN),
+		0, 1,  0,         12, 2, 15,  8,  9, 2, 0, IRON, CLR_BROWN),
 BOOTS("fumble boots", "riding boots",
 		0, 1,  FUMBLING,  12, 2, 20, 30, 10, 1, 0, LEATHER, HI_LEATHER),
 BOOTS("flying boots", "snow boots",
-		0, 1,  FLYING,12, 2, 15, 30, 10, 1, 0, LEATHER, HI_LEATHER),
+		0, 1,  FLYING,12, 2, 15, 30,  9, 1, 0, LEATHER, HI_LEATHER),
 #undef HELM
 #undef CLOAK
 #undef SHIELD
