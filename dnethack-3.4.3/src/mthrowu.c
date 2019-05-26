@@ -1915,6 +1915,7 @@ register struct attack *mattk;
 					m_throw(mtmp, mtmp->mx + xadj, mtmp->my + yadj, sgn(tbx), sgn(tby),
 						BOLT_LIM + rngmod, qvr, FALSE);
 				}
+			    nomul(0, NULL);
 			destroy_thrown = 0;  //state variable referenced in drop_throw
 		}
 		bypassDR = 0;
