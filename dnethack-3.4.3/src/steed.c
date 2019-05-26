@@ -66,6 +66,9 @@ use_saddle(otmp)
 	if (nohands(youracedata)) {
 		You("have no hands!");	/* not `body_part(HAND)' */
 		return 0;
+	} else if (nolimbs(youracedata)) {
+		You("have no limbs!");	/* not `body_part(HAND)' */
+		return 0;
 	} else if (!freehand()) {
 		You("have no free %s.", body_part(HAND));
 		return 0;

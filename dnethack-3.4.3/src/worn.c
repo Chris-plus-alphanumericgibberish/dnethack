@@ -1092,7 +1092,7 @@ boolean creation;
 	m_dowear_type(mon, W_AMUL, creation, FALSE);
 #ifdef TOURIST
 	/* can't put on shirt if already wearing suit */
-	if ((mon->misc_worn_check & W_ARM))
+	if (!(mon->misc_worn_check & W_ARM) || creation)
 	    m_dowear_type(mon, W_ARMU, creation, FALSE);
 #endif
 	/* treating small as a special case allows
@@ -1325,7 +1325,7 @@ boolean polyspot;
 	register struct obj *otmp;
 	struct permonst *mdat = mon->data;
 	boolean vis = cansee(mon->mx, mon->my);
-	boolean handless_or_tiny = (nohands(mdat) || verysmall(mdat));
+	boolean handless_or_tiny = (nohands(mdat) || nolimbs(mdat) || verysmall(mdat));
 	const char *pronoun = mhim(mon),
 			*ppronoun = mhis(mon);
 
@@ -1392,7 +1392,7 @@ boolean polyspot;
 		}
 	}
 	if ((otmp = which_armor(mon, W_ARMG)) != 0) {
-		if(nohands(mon->data) || otmp->objsize != mon->data->msize || is_whirly(mon->data) || noncorporeal(mon->data)){
+		if(nohands(mon->data) || nolimbs(mon->data) || otmp->objsize != mon->data->msize || is_whirly(mon->data) || noncorporeal(mon->data)){
 			if (vis)
 				pline("%s drops %s gloves!", Monnam(mon), ppronoun);
 			if (polyspot) bypass_obj(otmp);
@@ -1400,10 +1400,9 @@ boolean polyspot;
 		}
 	}
 	if ((otmp = which_armor(mon, W_ARMS)) != 0) {
-		if(nohands(mon->data) || bimanual(MON_WEP(mon),mon->data) || is_whirly(mon->data) || noncorporeal(mon->data)){
+		if(nohands(mon->data) || nolimbs(mon->data) || bimanual(MON_WEP(mon),mon->data) || is_whirly(mon->data) || noncorporeal(mon->data)){
 			if (vis)
-				pline("%s can no longer hold %s shield!", Monnam(mon),
-									ppronoun);
+				pline("%s can no longer hold %s shield!", Monnam(mon), ppronoun);
 			else
 				You_hear("a clank.");
 			if (polyspot) bypass_obj(otmp);

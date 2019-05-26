@@ -529,7 +529,7 @@ int	mntmp;
 		flags.botl = 1;
 	    }
 	}
-	if (nohands(youmonst.data)) Glib = 0;
+	if (nohands(youmonst.data) || nolimbs(youmonst.data)) Glib = 0;
 
 	/*
 	mlvl = adj_lev(&mons[mntmp]);
@@ -762,7 +762,7 @@ break_armor()
 		}
     }
 	if ((otmp = uarmg) != 0) {
-		if(nohands(youracedata) || otmp->objsize != youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)){
+		if(nohands(youracedata) || nolimbs(youracedata) || otmp->objsize != youracedata->msize || is_whirly(youracedata) || noncorporeal(youracedata)){
 			if (donning(otmp)) cancel_don();
 			/* Drop weapon along with gloves */
 			You("drop your gloves%s!", uwep ? " and weapon" : "");
@@ -772,7 +772,7 @@ break_armor()
 		}
 	}
 	if ((otmp = uarms) != 0) {
-		if(nohands(youracedata) || bimanual(uwep,youracedata) || is_whirly(youracedata) || noncorporeal(youracedata)){
+		if(nohands(youracedata) || nolimbs(youracedata) || bimanual(uwep,youracedata) || is_whirly(youracedata) || noncorporeal(youracedata)){
 			if (donning(otmp)) cancel_don();
 			You("can no longer hold your shield!");
 			(void) Shield_off();
@@ -780,7 +780,7 @@ break_armor()
 		}
 	}
 	if ((otmp = uarmf) != 0) {
-		if(slithy(youracedata) || !humanoid(youracedata) || youracedata->msize != otmp->objsize || is_whirly(youracedata) || noncorporeal(youracedata)){
+		if(noboots(youracedata) || !humanoid(youracedata) || youracedata->msize != otmp->objsize || is_whirly(youracedata) || noncorporeal(youracedata)){
 			if (donning(otmp)) cancel_don();
 			if (is_whirly(youracedata))
 				Your("boots fall away!");
