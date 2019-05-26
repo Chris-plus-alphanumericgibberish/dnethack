@@ -15,7 +15,7 @@
    Incremented to 3.11 with the introduction Anachrononauts.
    Incremented to 3.12 with the introduction Magic chests, scrolls of antimagic, resistance, and consecration, YARevison to chaos quest, beter resistance-from-diet, and lightsaber forms.
 */
-#define VERSION_MINOR	16
+#define VERSION_MINOR	17
 /*
  * PATCHLEVEL is updated for each release.
  *
@@ -38,6 +38,7 @@
  * 3.15.0: Begin edging away from WtW again.  Added another round of pet improvements, including #wait and #come commands.
  * 3.15.1: Added derived undead, spell maintainance, a couple of neutral artifacts.
  * 3.16.0: Reworked neutral quest, minor bug fixes.  Added shallow water, rilmani.  Layed groundwork for Half Dragon Noble quests and more neutral quest additions, but these should not be accessable in this version
+ * 3.17.0: AC/DR split, wishing revamp (Nero), maze improvements (Nero), Law quest inclusions, Weapon properties, Convict Quest changes, Uvuudaum spiffyfication, more groundwork for Half Dragon Noble quests, 
  */
 #define PATCHLEVEL	0
 /*
