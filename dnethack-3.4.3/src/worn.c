@@ -1031,11 +1031,11 @@ mon_lowertorso:
 		}
 	}
 	
-	if(armac && mon->mstdy){
-		armac -= mon->mstdy;
-		if(armac<0)
-			armac = 0;
-	}
+	// if(armac && mon->mstdy){
+		// armac -= mon->mstdy;
+		// if(armac<0)
+			// armac = 0;
+	// }
 	
 	if(armac > 11) armac = rnd(armac-10) + 10; /* high armor dr values act like player ac values */
 

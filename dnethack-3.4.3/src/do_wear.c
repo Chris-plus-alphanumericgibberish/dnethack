@@ -2295,11 +2295,11 @@ find_dr()
 	
 	udr += armdr;
 	
-	if(u.ustdy && udr>0){
-		udr -= u.ustdy;
-		if(udr<0)
-			udr = 0;
-	}
+	// if(u.ustdy && udr>0){
+		// udr -= u.ustdy;
+		// if(udr<0)
+			// udr = 0;
+	// }
 	
 	udr += ubasedr;
 	
