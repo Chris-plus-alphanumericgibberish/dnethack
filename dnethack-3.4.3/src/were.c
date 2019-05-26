@@ -142,11 +142,12 @@ struct monst *mon;
 	if(canseemon(mon) && !Hallucination) {
 		if(mon->data != &mons[PM_ANUBITE] && mon->data != &mons[PM_ANUBAN_JACKAL] &&
 		  !is_eladrin(mon->data) && !is_yochlol(mon->data)
-		) pline("%s changes into a %s.", Monnam(mon),
-			is_human(&mons[pm]) ? "human" :
-			mons[pm].mname+4);
-		else pline("%s changes into a %s.", Monnam(mon),
-			mons[pm].mname);
+		  && !(mon->data == &mons[PM_INCUBUS] || mon->data == &mons[PM_SUCCUBUS])
+		) pline("%s changes into %s.", Monnam(mon),
+			is_human(&mons[pm]) ? "a human" :
+			an(mons[pm].mname+4));
+		else pline("%s changes into %s.", Monnam(mon),
+			an(mons[pm].mname));
 	}
 
 	set_mon_data(mon, &mons[pm], 0);
