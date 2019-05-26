@@ -3364,7 +3364,7 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 		case AD_VORP:
 		hitmsg(mtmp, mattk);
-		if(!rn2(20) && mtmp->data != &mons[PM_LUCIFER]){//Lucifer nerf.
+		if(!rn2(20)){
 			if (!has_head(youracedata)) {
 				pline("Somehow, %s misses you wildly.",
 				      mon_nam(mtmp));
