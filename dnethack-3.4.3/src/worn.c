@@ -1159,17 +1159,17 @@ boolean racialexception;
 		    if (cantwield(mon->data) || !is_shield(obj)) continue;
 		    break;
 		case W_ARMG:
-			if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
+			if((mon->data == &mons[PM_CATHEZAR] || mon->data == &mons[PM_WARDEN_ARIANNA]) && obj->otyp == IRON_CHAIN)
 				break;
 		    if (!is_gloves(obj) || obj->objsize != mon->data->msize || !can_wear_gloves(mon->data)) continue;
 		    break;
 		case W_ARMF:
-			// if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
-				// break;
+			if((mon->data == &mons[PM_WARDEN_ARIANNA]) && obj->otyp == IRON_CHAIN)
+				break;
 		    if (!is_boots(obj) || obj->objsize != mon->data->msize || !can_wear_boots(mon->data)) continue;
 		    break;
 		case W_ARM:
-			if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == IRON_CHAIN)
+			if((mon->data == &mons[PM_CATHEZAR] || mon->data == &mons[PM_WARDEN_ARIANNA]) && obj->otyp == IRON_CHAIN)
 				break;
 		    if (!is_suit(obj) || (!Is_dragon_scales(obj) && (!arm_match(mon->data, obj) || (obj->objsize != mon->data->msize &&
 				!(is_elven_armor(obj) && abs(obj->objsize - mon->data->msize) <= 1))))
