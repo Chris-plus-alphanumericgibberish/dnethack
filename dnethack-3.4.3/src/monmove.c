@@ -1704,7 +1704,10 @@ not_special:
 			(mtoo->msleeping || mtoo->mundetected ||
 			 (mtoo->mappearance && !mtoo->iswiz) ||
 			 !mtoo->data->mmove)) continue;
-
+			//Don't approach artifacts you can't touch
+			if(otmp->oartifact && !touch_artifact(otmp, mtmp, TRUE))
+				continue;
+			
 		    if(((likegold && otmp->oclass == COIN_CLASS) ||
 		       (likeobjs && index(practical, otmp->oclass) &&
 			(otmp->otyp != CORPSE || (ptr->mlet == S_NYMPH
