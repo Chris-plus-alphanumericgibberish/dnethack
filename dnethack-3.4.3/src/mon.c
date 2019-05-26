@@ -1373,6 +1373,7 @@ mcalcdistress()
 				if(tmpm->mtame && tmpm->mtame != mtmp->mtame)
 					tmpm->mtame = 0;
 				tmpm->mfaction = CRYSTALFIED;
+				newsym(tmpm->mx, tmpm->my);
 				mtmp->mhp += tmpm->mhp;
 			}
 			else{

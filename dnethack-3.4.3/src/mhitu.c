@@ -5720,7 +5720,7 @@ LolthAttacks:
 			switch (rn2(4)) {
 			case 0: 
 				verbalize("Tell me your greatest desire!");
-				makewish();
+				makewish(WISH_VERBOSE);	// can not grant artifacts
 			break;
 			case 1:
 					verbalize("Go forth and slay thy enemies with my blessing!");
@@ -6880,7 +6880,7 @@ register struct monst *mon;
 		else switch (rn2(6)) {
 		case 0: 
 			verbalize("Tell me your greatest desire!");
-			makewish();
+			makewish(WISH_VERBOSE);	// can not grant artifacts
 		break;
 		case 1:
 			verbalize("Tell me, whom shall I kill?");
