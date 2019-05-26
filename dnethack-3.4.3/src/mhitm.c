@@ -1295,6 +1295,7 @@ mdamagem(magr, mdef, mattk)
 	boolean weaponhit = (mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_DEVA || mattk->aatyp == AT_MARI);
 	struct attack alt_attk;
 	int attack_type = (weaponhit) ? AD_PHYS : mattk->adtyp;
+	int ispoisoned = 0;
 	
 	if(weaponhit && mattk->adtyp != AD_PHYS) tmp = 0;
 	else if(magr->mflee && pa == &mons[PM_BANDERSNATCH]) tmp = d((int)mattk->damn, 2*(int)mattk->damd);
@@ -1451,6 +1452,7 @@ physical:{
 		    tmp = 0;
 		} else if(weaponhit) {
 		    if(otmp) {
+				ispoisoned = otmp->opoisoned;
 				if (otmp->otyp == CORPSE &&
 					touch_petrifies(&mons[otmp->corpsenm]))
 					goto do_stone;
@@ -2352,7 +2354,8 @@ physical:{
 			if (rn2(10)) tmp += rn1(10,6);
 			else {
 			    if (vis) pline_The("poison was deadly...");
-			    tmp = mdef->mhp;
+			    tmp = 500;
+				mdef->mhp = 1;
 			}
 		    }
 		}
@@ -2547,6 +2550,72 @@ physical:{
 		}
 	}
 	
+	if(weaponhit && otmp && (otmp->opoisoned || arti_poisoned(otmp) || otmp->oartifact == ART_WEBWEAVER_S_CROOK || otmp->oartifact == ART_MOONBEAM)){
+		int viperheads;
+		for(viperheads = ((otmp && otmp->otyp == VIPERWHIP) ? (1+otmp->ostriking) : 1); viperheads; viperheads--){
+			if(ispoisoned & OPOISON_BASIC || (otmp && arti_poisoned(otmp))){
+				if (resists_poison(mdef));
+				else if (rn2(10))
+					tmp += rnd(6);
+				else {
+					tmp = mdef->mhp+500;
+					mdef->mhp = 1;
+				}
+			}
+			if(ispoisoned & OPOISON_FILTH || (otmp && otmp->oartifact == ART_SUNBEAM)){
+				if (resists_sickness(mdef));
+				else if (rn2(10))
+					tmp += rnd(12);
+				else {
+					tmp = mdef->mhp+500;
+					mdef->mhp = 1;
+				}
+			}
+			if(ispoisoned & OPOISON_SLEEP || (otmp && (otmp->oartifact == ART_WEBWEAVER_S_CROOK || otmp->oartifact == ART_MOONBEAM))){
+				if (resists_sleep(mdef));
+				else if(((otmp && otmp->oartifact == ART_MOONBEAM) || !rn2(5)) && 
+					sleep_monst(mdef, rnd(12), POTION_CLASS)){
+						slept_monst(mdef);
+					}
+			}
+			if(ispoisoned & OPOISON_BLIND || (otmp && otmp->oartifact == ART_WEBWEAVER_S_CROOK)){
+				if (resists_poison(mdef));
+				else if (rn2(10))
+					tmp += rnd(3);
+				 else {
+					tmp += 3;
+					if(haseyes(mdef->data)) {
+						int btmp = 64 + rn2(32) +
+							rn2(32) * !resist(mdef, POTION_CLASS, 0, NOTELL);
+						btmp += mdef->mblinded;
+						mdef->mblinded = min(btmp,127);
+						mdef->mcansee = 0;
+					}
+				}
+			}
+			if(ispoisoned & OPOISON_PARAL || (otmp && otmp->oartifact == ART_WEBWEAVER_S_CROOK)){
+				if (rn2(8))
+					tmp += rnd(6);
+				else {
+					tmp += 6;
+					if (mdef->mcanmove) {
+						mdef->mcanmove = 0;
+						mdef->mfrozen = rnd(25);
+					}
+				}
+			}
+			if(ispoisoned & OPOISON_AMNES){
+				if(!mindless_mon(mdef) && !rn2(10)){
+					mdef->mtame = FALSE;
+					mdef->mpeaceful = TRUE;
+				}
+			}
+			if(ispoisoned & OPOISON_ACID){
+				if (!resists_acid(mdef))
+					tmp += rnd(10);
+			}
+		}
+	}
 	
 	if ( tmp > 0 && is_backstabber(magr->data) &&
 		!(noncorporeal(mdef->data) || amorphous(mdef->data) || 
