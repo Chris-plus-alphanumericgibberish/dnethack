@@ -1949,9 +1949,16 @@ register struct monst *mtmp;
 					(void) mongets(mtmp, PLATE_MAIL);
 				break;
 				case PM_REBEL_RINGLEADER:
-					(void) mongets(mtmp, SABER);
+					otmp = mksobj(LONG_SWORD, TRUE, FALSE);
+					otmp->cursed = 0;
+					otmp->blessed = 1;
+					if(otmp->spe < 3) otmp->spe = 3;
+					otmp->oproperties = OPROP_HOLYW;
+					otmp->obj_material = SILVER;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
 					(void) mongets(mtmp, GRAY_DRAGON_SCALE_MAIL);
-					(void) mongets(mtmp, BUCKLER);
+					(void) mongets(mtmp, KITE_SHIELD);
 					(void) mongets(mtmp, HIGH_BOOTS);
 				break;
 				case PM_ADVENTURING_WIZARD:
@@ -2194,6 +2201,7 @@ register struct monst *mtmp;
 					otmp = mksobj(PLATE_MAIL, TRUE, FALSE);
 					otmp->cursed = 0;
 					otmp->blessed = 0;
+					otmp->oproperties = OPROP_CONC;
 					if(otmp->spe < 4) otmp->spe = 4;
 					otmp->obj_material = GOLD;
 					fix_object(otmp);
@@ -3375,12 +3383,43 @@ register struct monst *mtmp;
 				else if(mm == PM_MIND_FLAYER && !rn2(20)) mongets(mtmp, R_LYEHIAN_FACEPLATE);
 			}
 		} else if(mm == PM_GITHYANKI_PIRATE){
-			otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
-			otmp->obj_material = SILVER;
-			(void) mpickobj(mtmp, otmp);
-			(void)mongets(mtmp, BRONZE_PLATE_MAIL);
-			(void)mongets(mtmp, BRONZE_GAUNTLETS);
-			(void)mongets(mtmp, ARMORED_BOOTS);
+			if(!rn2(40)){
+				otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+				otmp->obj_material = SILVER;
+				otmp->oproperties = OPROP_PSIOW;
+				otmp->oproperties = OPROP_VORPW;
+				otmp->spe = 5;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(HELMET, FALSE, FALSE);
+				otmp->obj_material = COPPER;
+				otmp->spe = 3;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+				otmp->spe = 3;
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(BRONZE_GAUNTLETS, FALSE, FALSE);
+				otmp->spe = 3;
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
+				otmp->spe = 3;
+				(void) mpickobj(mtmp, otmp);
+			} else {
+				otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+				otmp->obj_material = SILVER;
+				otmp->oproperties = OPROP_PSIOW;
+				otmp->oproperties = OPROP_LESSW;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(HELMET, TRUE, FALSE);
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
+				(void)mongets(mtmp, BRONZE_GAUNTLETS);
+				(void)mongets(mtmp, ARMORED_BOOTS);
+			}
 		} else if (is_dwarf(ptr)) { //slightly rearanged code so more dwarves get helms -D_E
 		    if (rn2(7)) (void)mongets(mtmp, DWARVISH_CLOAK);
 		    if (rn2(7)) (void)mongets(mtmp, IRON_SHOES);
