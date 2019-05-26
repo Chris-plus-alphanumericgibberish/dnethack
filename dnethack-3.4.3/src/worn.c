@@ -1427,7 +1427,7 @@ boolean polyspot;
 		}
 	}
 	if ((otmp = which_armor(mon, W_ARMF)) != 0) {
-		if(slithy(mon->data) || !humanoid(mon->data) || mon->data->msize != otmp->objsize || is_whirly(mon->data) || noncorporeal(mon->data)){
+		if(noboots(mon->data) || !humanoid(mon->data) || mon->data->msize != otmp->objsize || is_whirly(mon->data) || noncorporeal(mon->data)){
 			if (vis) {
 				if (is_whirly(mon->data) || noncorporeal(mon->data))
 					pline("%s %s falls, unsupported!",

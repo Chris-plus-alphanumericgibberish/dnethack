@@ -1584,7 +1584,7 @@ boolean noisy;
 		if (uarmf) {
 			if (noisy) already_wearing(c_boots);
 			err++;
-		} else if (slithy(youracedata)) {
+		} else if (noboots(youracedata)) {
 			if (noisy) You("have no feet...");	/* not body_part(FOOT) */
 			err++;
 		} else if (!humanoid(youracedata)) {
