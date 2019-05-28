@@ -1567,6 +1567,7 @@ E int FDECL(rnd_attack_wand, (struct monst *));
 E int FDECL(rnd_attack_potion, (struct monst *));
 E int FDECL(rnd_utility_wand, (struct monst *));
 E int FDECL(rnd_utility_potion, (struct monst *));
+E int NDECL(rnd_good_amulet);
 E boolean FDECL(find_misc, (struct monst *));
 E int FDECL(use_misc, (struct monst *));
 E int FDECL(rnd_misc_item, (struct monst *));
