@@ -3501,7 +3501,7 @@ int typ;
 			good = TRUE;
 		else continue;
 		
-		switch(rn2(2)){
+		switch(rn2(3)){
 			case 0:
 				mkobj_at(WEAPON_CLASS, x, y, TRUE);
 			break;
