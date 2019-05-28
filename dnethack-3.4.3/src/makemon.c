@@ -7728,7 +7728,6 @@ struct monst *mtmp, *victim;
 			ptr == &mons[PM_DURIN_S_BANE] ||
 			ptr == &mons[PM_CHROMATIC_DRAGON] ||
 			ptr == &mons[PM_BOLG] ||
-			ptr == &mons[PM_UVUUDAUM] ||
 			ptr == &mons[PM_PRIEST_OF_GHAUNADAUR] ||
 			ptr == &mons[PM_SHOGGOTH]
 		) hp_threshold *= 3;
