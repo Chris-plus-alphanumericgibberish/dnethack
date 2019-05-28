@@ -936,7 +936,7 @@ TOOL("drum of earthquake", "drum",
 /* tools useful as weapons */
 WEPTOOL("pick-axe", (char *)0,
 	1, 0, 0, 0, 20, 80,   50,  6,  3, 0, PIERCE,  P_PICK_AXE, IRON, HI_METAL),
-WEPTOOL("seismic hammer", "dull metalic hammer",
+WEPTOOL("seismic hammer", "dull metallic hammer",
 	0, 1, 1, 1,  0,150,  250, 12, 10,-5, WHACK,  P_HAMMER,  METAL, HI_METAL),
 /*
  * Torches work as clubs
