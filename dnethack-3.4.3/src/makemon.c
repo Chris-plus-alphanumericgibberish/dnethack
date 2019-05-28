@@ -7785,7 +7785,7 @@ struct monst *mtmp, *victim;
 	|| ptr == &mons[PM_FORMIAN_CRUSHER]
 	|| ptr == &mons[PM_DRIDER] || ptr == &mons[PM_SPROW]
 	|| ptr == &mons[PM_DROW_MATRON] || ptr == &mons[PM_DROW_MATRON_MOTHER]
-	|| ptr == &mons[PM_ELVENKING] || ptr == &mons[PM_ELVENKING]
+	|| ptr == &mons[PM_ELVENKING] || ptr == &mons[PM_ELVENQUEEN]
 	|| ptr == &mons[PM_CUPRILACH_RILMANI] || ptr == &mons[PM_STANNUMACH_RILMANI]
 	|| ptr == &mons[PM_ARGENACH_RILMANI] || ptr == &mons[PM_AURUMACH_RILMANI]
 	) lev_limit = 30;	/* same as player */
