@@ -226,6 +226,7 @@ static const char *haluMesg[] = {
 		"Sculpt not the Watchers.",
 		"Sing not the Watchers.",
 		"Call not the Watchers' name.",
+	"Glory to Mankind.", /* Nier Automata */
 	"Should you encounter God on your quest, God will be cut.", /*Kill Bill*/
 	"Generally, when one is conducting an experiment, it is worth noting that the observers went insane, killed each other, and then rose from the dead.", 
 		/*Pyro627, regarding an experiment in creating undead bacon in Dwarf Fortress. An "accident" with an axe led to a zombified army, 
@@ -238,6 +239,7 @@ static const char *haluMesg[] = {
 	"For the world's more full of weeping than you can understand.", /*The Stolen Child*/
 	"No matter where you go, there you are.",
 	"You noticed them, and they noticed that you noticed them.", /*The Mothman Prophecies*/
+	"Our bodies and our minds will be fragmented into their smallest parts, until not one part remains.  Annihilation.", /* Annihilation */
 	"Well, how did I get here?", /*Once In A Lifetime*/
 	"You can be me when I'm gone.", /*Sandman*/
 		"You can stop being anything.",
