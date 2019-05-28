@@ -60,6 +60,7 @@ E int FDECL(unfixable_trouble_count,(BOOLEAN_P));
 
 E boolean FDECL(CountsAgainstGifts, (int));
 E void NDECL(init_artifacts);
+E void NDECL(hack_artifacts);
 E void FDECL(save_artifacts, (int));
 E void FDECL(restore_artifacts, (int));
 E const char *FDECL(artiname, (int));

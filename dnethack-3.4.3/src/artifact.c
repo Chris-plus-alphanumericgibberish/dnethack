@@ -87,7 +87,6 @@ static boolean artiexist[1+NROFARTIFACTS+1];
 /* and a discovery list for them (no dummy first entry here) */
 STATIC_OVL int artidisco[NROFARTIFACTS];
 
-STATIC_DCL void NDECL(hack_artifacts);
 STATIC_DCL boolean FDECL(attacks, (int,struct obj *));
 
 
@@ -118,7 +117,7 @@ int x;
 
 /* handle some special cases; must be called after u_init() 
 	Uh, it isn't, it's called BEFORE u_init. See allmain */
-STATIC_OVL void
+void
 hack_artifacts()
 {
 	struct artifact *art;

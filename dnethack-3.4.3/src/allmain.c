@@ -1844,6 +1844,8 @@ newgame()
 	init_artifacts();	/* before u_init() in case $WIZKIT specifies
 				 * any artifacts */
 	u_init();
+	
+	hack_artifacts();	/* recall after u_init() to fix up role specific artifacts */
 
 #ifndef NO_SIGNAL
 	(void) signal(SIGINT, (SIG_RET_TYPE) done1);
