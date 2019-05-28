@@ -3158,7 +3158,7 @@ dopois:
 	    case AD_EACD:
 		hitmsg(mtmp, mattk);
 		if (Acid_resistance) {
-			pline("You're covered in acid, but it seems harmless.");
+			pline("You're covered in acid, but it only stings.");
 			dmg /= 2;
 		} else {
 			pline("You're covered in acid! It burns!");
