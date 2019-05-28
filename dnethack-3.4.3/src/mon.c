@@ -1784,7 +1784,12 @@ movemon()
 		mtmp->mpeaceful = 0;
 	}
 	if(mtmp->data == &mons[PM_UVUUDAUM]){
-		if(u.uevent.invoked || (Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))){ 
+		if(u.uevent.invoked 
+		|| (Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz))
+		|| mtmp->mhp < mtmp->mhpmax
+		|| mtmp->m_lev < 30
+		|| mtmp->mspec_used > 0
+		){ 
 			if(mtmp->mpeaceful){
 				pline("%s ceases its meditation...", Amonnam(mtmp));
 				mtmp->mpeaceful = 0;
