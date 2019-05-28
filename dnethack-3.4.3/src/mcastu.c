@@ -3394,6 +3394,7 @@ int spellnum;
 								!mtmp->mcansee || !mtmp->mcanmove || 
 								!mtmp->msleeping || mtmp->mstun || 
 								mtmp->mconf || mtmp->permspeed == MSLOW))
+			return TRUE;
 	/* don't summon monsters if it doesn't think you're around */
 #ifndef TAME_SUMMONING
         if (spellnum == SUMMON_MONS)
