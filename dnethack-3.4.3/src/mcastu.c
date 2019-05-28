@@ -3322,10 +3322,11 @@ cold_mm:
 	    /*aggravation is a special case;*/
 		/*it's undirected but should still target the*/
 		/*victim so as to aggravate you*/
-	        if (is_undirected_spell(spellnum)
-		&& (spellnum != AGGRAVATION &&
-		      spellnum != SUMMON_MONS))
-		    cast_spell(mtmp, dmg, spellnum);
+		if (is_undirected_spell(spellnum)
+			&& (spellnum != AGGRAVATION &&
+		      spellnum != SUMMON_MONS)
+		)
+		   cast_spell(mtmp, dmg, spellnum);
 		else
 		    ucast_spell(mtmp, mdef, dmg, spellnum);
 		dmg = 0; /* done by the spell casting functions */
