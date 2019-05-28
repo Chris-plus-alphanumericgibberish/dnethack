@@ -22,7 +22,6 @@ STATIC_DCL int FDECL(use_towel, (struct obj *));
 STATIC_DCL boolean FDECL(its_dead, (int,int,int *,struct obj*));
 STATIC_DCL int FDECL(use_stethoscope, (struct obj *));
 STATIC_DCL void FDECL(use_whistle, (struct obj *));
-STATIC_DCL void FDECL(use_magic_whistle, (struct obj *));
 STATIC_DCL void FDECL(use_leash, (struct obj *));
 STATIC_DCL int FDECL(use_mirror, (struct obj *));
 STATIC_DCL void FDECL(use_candelabrum, (struct obj *));
@@ -604,7 +603,7 @@ struct obj *obj;
 	}
 }
 
-STATIC_OVL void
+void
 use_magic_whistle(obj)
 struct obj *obj;
 {
@@ -1125,6 +1124,9 @@ int spiritseal;
 	    /* charged Bell of Opening */
 	    consume_obj_charge(obj, TRUE);
 		
+		if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+			uwep->ovar1 |= OHEARD_OPEN;
+		}
 		
 	    if (u.uswallow) {
 		if (!obj->cursed)

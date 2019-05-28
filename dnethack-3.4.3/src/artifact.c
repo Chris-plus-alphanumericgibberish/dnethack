@@ -35,6 +35,7 @@ STATIC_DCL void FDECL(do_item_blast, (int));
 
 int FDECL(donecromenu, (const char *,struct obj *));
 int FDECL(dopetmenu, (const char *,struct obj *));
+int FDECL(dosongmenu, (const char *,struct obj *));
 int FDECL(dolordsmenu, (const char *,struct obj *));
 int FDECL(doannulmenu, (const char *,struct obj *));
 int FDECL(doselfpoisonmenu, (const char *,struct obj *));
@@ -1108,7 +1109,7 @@ touch_artifact(obj, mon, hypothetical)
 				badalign = FALSE;
 			}
 		} else {
-			badclass = self_willed && 
+			if(!Role_if(PM_BARD)) badclass = self_willed && 
 			   (((oart->role != NON_PM && !Role_if(oart->role)) &&
 				 (oart->role != NON_PM && !Pantheon_if(oart->role))) ||
 			    (oart->race != NON_PM && !Race_if(oart->race)));
@@ -2830,6 +2831,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	    || (!youdefend && cansee(mdef->mx, mdef->my))
 	    || (youattack && u.uswallow && mdef == u.ustuck && !Blind);
 	boolean realizes_damage, messaged=FALSE;
+	int basedmg;
 	const char *wepdesc;
 	static const char you[] = "you";
 	char hittee[BUFSZ];
@@ -2839,6 +2841,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	 * the exception being for level draining, which is specially
 	 * handled.  Messages are done in this function, however.
 	 */
+	basedmg = *dmgptr;
 	*dmgptr += spec_dbon(otmp, mdef, *dmgptr);
 	
 	//If there is no attacker (ie. you threw the artifact at yourself), make yourself the attacker
@@ -3087,6 +3090,63 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			}
 		}
 	}
+	if(youattack && otmp->oartifact == ART_SINGING_SWORD){
+		if(otmp->osinging == OSING_RALLY)
+			use_magic_whistle(otmp);
+		else if(otmp->osinging == OSING_QUAKE && !rn2(10))
+			do_earthquake(mdef->mx, mdef->my, 7, max(abs(otmp->spe),1), otmp->cursed, (struct monst *)0);
+		else if(otmp->osinging == OSING_OPEN && !unsolid(mdef->data) && !skeleton_innards(mdef->data) && !rn2(20)){
+			pline("The Singing Sword cuts %s wide open!", mon_nam(mdef));
+			if(undiffed_innards(mdef->data)){
+				pline("Some of %s insides leak out.", hisherits(mdef));
+				*dmgptr += basedmg+1;
+			} else if (removed_innards(mdef->data)) {
+				pline("%s organs have already been removed!", HisHerIts(mdef));
+				shieldeff(mdef->mx, mdef->my);
+			} else if (no_innards(mdef->data)) {
+				pline("The inside of %s is much like the outside.",mon_nam(mdef));
+				shieldeff(mdef->mx, mdef->my);
+			} else {
+				pline("%s vital organs fall out!", HisHerIts(mdef));
+				mdef->mhp = 1;
+				*dmgptr += 10;
+			}
+			findit();//detect secret doors in range
+		}
+		else if(!mindless_mon(mdef) && !is_deaf(mdef)){
+			if(otmp->osinging == OSING_CONFUSE)
+				mdef->mconf = 1;
+			else if(otmp->osinging == OSING_CANCEL)
+				mdef->mspec_used = max(0, mdef->mspec_used+otmp->spe);
+			else if(otmp->osinging == OSING_INSANE){
+				mdef->mconf = 1;
+				mdef->mstun = 1;
+				mdef->mberserk = 1;
+			}
+			
+			//May be interesting here?
+			else if(otmp->osinging == OSING_FIRE && !resists_fire(mdef))
+				*dmgptr += basedmg+1;
+			else if(otmp->osinging == OSING_FROST && !resists_cold(mdef))
+				*dmgptr += basedmg+1;
+			else if(otmp->osinging == OSING_ELECT && !resists_elec(mdef))
+				*dmgptr += basedmg+1;
+			else if(otmp->osinging == OSING_DEATH && !rn2(4)){
+				if(!resists_death(mdef)){
+					if(!(nonliving_mon(mdef) || is_demon(mdef->data) || is_angel(mdef->data))){
+						pline("%s withers under the touch of %s.", The(Monnam(mdef)), The(xname(otmp)));
+						mdef->mhp = 1;
+						*dmgptr += 10;
+					} else {
+						pline("%s seems no deader than before.", The(Monnam(mdef)));
+					}
+				} else {
+					pline("%s resists.", the(Monnam(mdef)));
+				}
+			}
+		}
+	}
+
 	if(youattack && otmp->oartifact == ART_SHADOWLOCK && u.specialSealsActive&SEAL_NUDZIRATH && !rn2(4)){
 		int dsize = spiritDsize();
 		explode(mdef->mx, mdef->my,8/*Phys*/, d(5,dsize), WEAPON_CLASS, EXPL_DARK, 1); //Obsidian Glass
@@ -6729,6 +6789,12 @@ arti_invoke(obj)
 				else if((mtmp = m_at(u.ux+u.dx,u.uy+u.dy)) != 0) unturn_dead(mtmp);
 			}
 		break;
+		case SINGING:{
+			int song = dosongmenu("Select song?", obj);
+			if(song == 0);//canceled
+			else obj->osinging = song;
+			obj->age = 0;
+		}break;
 		default: pline("Program in dissorder.  Artifact invoke property not recognized");
 		break;
 	} //end of first case:  Artifact Specials!!!!
@@ -7091,6 +7157,7 @@ struct obj *obj;
 
 	Sprintf(buf, "What will you take out?");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
 	Sprintf(buf, "Magic whistle");
 	any.a_int = SELECT_WHISTLE;	/* must be non-zero */
 	add_menu(tmpwin, NO_GLYPH, &any,
@@ -7630,6 +7697,156 @@ struct obj *obj;
           'Y', 0, ATR_NONE, buf,
           MENU_UNSELECTED);
     }
+	end_menu(tmpwin, prompt);
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? selected[0].item.a_int : 0;
+}
+
+int
+dosongmenu(prompt, obj)
+const char *prompt;
+struct obj *obj;
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "What will have me sing?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	Sprintf(buf, "Nothing in particular");
+	any.a_int = SELECT_NOTHING;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		'n', 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	if(obj->ovar1&OHEARD_FEAR){
+		Sprintf(buf, "Chant ominously.");
+		any.a_int = OSING_FEAR;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'o', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_HEALING){
+		Sprintf(buf, "Hum soothingly.");
+		any.a_int = OSING_HEALING;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			's', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_RALLY){
+		Sprintf(buf, "Rally my forces.");
+		any.a_int = OSING_RALLY;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'r', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_CONFUSE){
+		Sprintf(buf, "Confuse my foes.");
+		any.a_int = OSING_CONFUSE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'c', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_CANCEL){
+		Sprintf(buf, "Disrupt spellcasting.");
+		any.a_int = OSING_CANCEL;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'd', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_HASTE){
+		Sprintf(buf, "A marching song.");
+		any.a_int = OSING_HASTE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'm', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_LETHARGY){
+		Sprintf(buf, "A lethargic song.");
+		any.a_int = OSING_LETHARGY;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'l', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_COURAGE){
+		Sprintf(buf, "An inspiring song.");
+		any.a_int = OSING_COURAGE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'i', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_DIRGE){
+		Sprintf(buf, "A dismal dirge.");
+		any.a_int = OSING_DIRGE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'D', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_FIRE){
+		Sprintf(buf, "A fiery song.");
+		any.a_int = OSING_FIRE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'F', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_FROST){
+		Sprintf(buf, "A chilling song.");
+		any.a_int = OSING_FROST;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'C', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_ELECT){
+		Sprintf(buf, "An electrifying song.");
+		any.a_int = OSING_ELECT;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'E', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_QUAKE){
+		Sprintf(buf, "An earthshaking chant.");
+		any.a_int = OSING_QUAKE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'Q', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_OPEN){
+		Sprintf(buf, "A tune of opening.");
+		any.a_int = OSING_OPEN;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'O', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_DEATH){
+		Sprintf(buf, "Of the passing of life.");
+		any.a_int = OSING_DEATH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'P', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_LIFE){
+		Sprintf(buf, "Beat to the Cadence.");
+		any.a_int = OSING_LIFE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'L', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(obj->ovar1&OHEARD_INSANE){
+		Sprintf(buf, "A hymn to the creator.");
+		any.a_int = OSING_INSANE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'I', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
 	end_menu(tmpwin, prompt);
 
 	how = PICK_ONE;

@@ -991,11 +991,19 @@ struct monst *mon;
 		mmove *= 2;
 	}
 	
-	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH])
-		mmove += u.chokhmah;
 	if(mon->data == &mons[PM_PYTHON] && 
 		dist2(mon->mx, mon->my, mon->mux, mon->muy) <= 8)
 		mmove *= 4;
+	
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD && !mindless_mon(mon) && !is_deaf(mon)){
+		if(uwep->osinging == OSING_HASTE && mon->mtame)
+			mmove += 2;
+		else if(uwep->osinging == OSING_LETHARGY && !mon->mtame)
+			mmove -= 2;
+	}
+	
+	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH])
+		mmove += u.chokhmah;
 	if(mon->data == &mons[PM_BANDERSNATCH] && mon->mflee)
 		mmove += 12;
 	if(mon->data == &mons[PM_UVUUDAUM] && mon->mpeaceful)
@@ -4014,6 +4022,7 @@ boolean was_swallowed;			/* digestion */
 	if (is_golem(mdat)
 		   || is_mplayer(mdat)
 		   || is_rider(mdat)
+		   || (uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_LIFE && mon->mtame)
 		   || mdat == &mons[PM_UNDEAD_KNIGHT]
 		   || mdat == &mons[PM_WARRIOR_OF_SUNLIGHT]
 		   || mdat == &mons[PM_CROW_WINGED_HALF_DRAGON]
@@ -5081,7 +5090,7 @@ register struct monst *mtmp;
 		mtmp->data->msound == MS_JUBJUB || mtmp->data->msound == MS_DREAD || 
 		mtmp->data->msound == MS_SONG || mtmp->data->msound == MS_OONA ||
 		mtmp->data->msound == MS_INTONE || mtmp->data->msound == MS_FLOWER ||
-		mtmp->data->msound == MS_TRUMPET
+		mtmp->data->msound == MS_TRUMPET || mtmp->data == &mons[PM_RHYMER]
 		)
 	) {
 		domonnoise(mtmp, FALSE);

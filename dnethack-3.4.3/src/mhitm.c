@@ -288,6 +288,16 @@ mattackm(magr, mdef)
 		}
 	}
 	
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD && !mindless_mon(magr) && !is_deaf(magr)){
+		if(uwep->osinging == OSING_COURAGE && magr->mtame){
+			tmp += uwep->spe+1;
+			tchtmp += uwep->spe+1;
+		} else if(uwep->osinging == OSING_DIRGE && !magr->mtame){
+			tmp -= uwep->spe+1;
+			tchtmp -= uwep->spe+1;
+		}
+	}
+	
 	tmp += magr->encouraged;
 	tchtmp += magr->encouraged;
 	if (wizard && magr->encouraged && ublindf && ublindf->otyp == LENSES)
@@ -1304,10 +1314,14 @@ mdamagem(magr, mdef, mattk)
 //ifdef BARD
 	if(tmp > 0){
 		tmp += magr->encouraged;
+		if(uwep && uwep->oartifact == ART_SINGING_SWORD && !mindless_mon(magr) && !is_deaf(magr)){
+			if(uwep->osinging == OSING_COURAGE && magr->mtame){
+				tmp += uwep->spe;
+			} else if(uwep->osinging == OSING_DIRGE && !magr->mtame){
+				tmp -= uwep->spe;
+			}
+		}
 		if(tmp < 0) tmp = 0;
-	} else {
-		tmp -= magr->encouraged;
-		if(tmp > 0) tmp = 0;
 	}
 //endif
 

@@ -39,8 +39,9 @@
  * 3.15.1: Added derived undead, spell maintainance, a couple of neutral artifacts.
  * 3.16.0: Reworked neutral quest, minor bug fixes.  Added shallow water, rilmani.  Layed groundwork for Half Dragon Noble quests and more neutral quest additions, but these should not be accessable in this version
  * 3.17.0: AC/DR split, wishing revamp (Nero), maze improvements (Nero), Law quest inclusions, Weapon properties, Convict Quest changes, Uvuudaum spiffyfication, more groundwork for Half Dragon Noble quests, 
+ * 3.17.1: Bard first gift, singing quest guardians, and monster music affects the player 
  */
-#define PATCHLEVEL	0
+#define PATCHLEVEL	1
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.

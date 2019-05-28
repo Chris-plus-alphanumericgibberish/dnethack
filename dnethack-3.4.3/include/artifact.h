@@ -336,6 +336,7 @@ struct artifact {
 #define ALTMODE         (LAST_PROP+67)
 #define AEGIS           (LAST_PROP+68)
 #define WATER           (LAST_PROP+69)
+#define SINGING         (LAST_PROP+70)
 
 
 #define MASTERY_ARTIFACT_LEVEL 20

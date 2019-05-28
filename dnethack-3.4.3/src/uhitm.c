@@ -283,6 +283,21 @@ find_to_hit_rolls(mtmp,ptmp,pweptmp,ptchtmp)
 	weptmp = find_roll_to_hit(mtmp, (uwep && arti_shining(uwep)) || u.sealsActive&SEAL_CHUPOCLOPS);
 	tchtmp = find_roll_to_hit(mtmp, TRUE);
 	
+	tmp += u.uencouraged;
+	weptmp += u.uencouraged;
+	tchtmp += u.uencouraged;
+	
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		if(uwep->osinging == OSING_LIFE){
+			tmp += uwep->spe;
+			weptmp += uwep->spe+1;
+			tchtmp += uwep->spe+1;
+		}
+	}
+	
+	if (wizard && u.uencouraged && ublindf && ublindf->otyp == LENSES)
+		pline("[You +%d]", u.uencouraged);
+	
 	if(mtmp->mstdy){
 		tmp += mtmp->mstdy;
 		weptmp += mtmp->mstdy;
@@ -810,7 +825,10 @@ struct attack *uattk;
 		}
 	    if (malive) {
 		/* monster still alive */
-		if(((!rn2(25) && mon->mhp < mon->mhpmax/2) || mon->data == &mons[PM_QUIVERING_BLOB])
+		if(((!rn2(25) && mon->mhp < mon->mhpmax/2) 
+			|| mon->data == &mons[PM_QUIVERING_BLOB]
+			|| (uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_FEAR && !mindless_mon(mon) && !is_deaf(mon) && !rn2(4))
+			)
 			    && !(u.uswallow && mon == u.ustuck)
 			    && !mindless_mon(mon)
 		) {
@@ -878,7 +896,10 @@ int i;
 	    malive = hmon(mon, marweap, 0);
 	    if (malive) {
 		/* monster still alive */
-		if(((!rn2(25) && mon->mhp < mon->mhpmax/2) || mon->data == &mons[PM_QUIVERING_BLOB])
+		if(((!rn2(25) && mon->mhp < mon->mhpmax/2)
+			|| mon->data == &mons[PM_QUIVERING_BLOB]
+			|| (uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_FEAR && !rn2(4))
+			)
 			    && !(u.uswallow && mon == u.ustuck)
 			    && !mindless_mon(mon)
 		) {
@@ -2096,6 +2117,18 @@ defaultvalue:
 		valid_weapon_attack = 0;
 	}
 	
+	if(tmp > 0){
+		tmp += u.uencouraged;
+		if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+			if(uwep->osinging == OSING_LIFE){
+				tmp += uwep->spe+1;
+			}
+		}
+		if(tmp < 0){
+			tmp = 0;
+			valid_weapon_attack = 0;
+		}
+	}
 	/****** NOTE: perhaps obj is undefined!! (if !thrown && BOOMERANG)
 	 *      *OR* if attacking bare-handed!! */
 

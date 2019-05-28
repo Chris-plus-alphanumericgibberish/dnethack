@@ -1227,7 +1227,9 @@ start_corpse_timeout(body)
 		when = when/10 + 1;
 	}
 
-	if (is_rider(&mons[body->corpsenm])) {
+	if (is_rider(&mons[body->corpsenm])
+		|| (uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_LIFE && attchmon && attchmon->mtame)
+		) {
 		/*
 		 * Riders always revive.  They have a 1/3 chance per turn
 		 * of reviving after 12 turns.  Always revive by 500.

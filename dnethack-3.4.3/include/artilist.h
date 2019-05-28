@@ -305,6 +305,13 @@ A("The Rod of Lordly Might", MACE, /*Needs encyc entry*/
 	LORDLY,	A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, 
 	0,SPFX3_ENGRV,0), 
 
+A("The Singing Sword",	LONG_SWORD,
+	(SPFX_RESTR|SPFX_INTEL),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(1,1),	NO_DFNS,	NO_CARY,
+	SINGING,		A_CHAOTIC, PM_BARD, NON_PM, 5000L,
+	0,0,0),
+
 /*
  *	Magicbane is a bit different!  Its magic fanfare
  *	unbalances victims in addition to doing some damage.

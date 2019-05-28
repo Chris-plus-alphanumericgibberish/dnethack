@@ -1268,6 +1268,64 @@ plus:
             if(COMMAND_LIFE == obj->ovar1) Sprintf(eos(bp), " (life)");
             if(COMMAND_DEATH  == obj->ovar1) Sprintf(eos(bp), " (death)");
         }
+		if(obj->oartifact == ART_SINGING_SWORD && uwep == obj){
+			switch(obj->osinging){
+				default:
+					Sprintf(eos(bp), " (tuneless song)");
+				break;
+				case OSING_FEAR:
+					Sprintf(eos(bp), " (ominous chanting)");
+				break;
+				case OSING_HEALING:
+					Sprintf(eos(bp), " (soothing humming)");
+				break;
+				case OSING_RALLY:
+					Sprintf(eos(bp), " (soft whistling)");
+				break;
+				case OSING_CONFUSE:
+					Sprintf(eos(bp), " (horrid cacophony)");
+				break;
+				case OSING_HASTE:
+					Sprintf(eos(bp), " (marching song)");
+				break;
+				case OSING_LETHARGY:
+					Sprintf(eos(bp), " (lethargic song)");
+				break;
+				case OSING_COURAGE:
+					Sprintf(eos(bp), " (inspiring song)");
+				break;
+				case OSING_DIRGE:
+					Sprintf(eos(bp), " (dismal dirge)");
+				break;
+				case OSING_FIRE:
+					Sprintf(eos(bp), " (fiery song)");
+				break;
+				case OSING_FROST:
+					Sprintf(eos(bp), " (chilling song)");
+				break;
+				case OSING_ELECT:
+					Sprintf(eos(bp), " (electrifying song)");
+				break;
+				case OSING_QUAKE:
+					Sprintf(eos(bp), " (earthshaking chant)");
+				break;
+				case OSING_OPEN:
+					Sprintf(eos(bp), " (high ringing)");
+				break;
+				case OSING_DEATH:
+					Sprintf(eos(bp), " (vast rushing)");
+				break;
+				case OSING_LIFE:
+					Sprintf(eos(bp), " (heartbeat cadence)");
+				break;
+				case OSING_INSANE:
+					Sprintf(eos(bp), " (monotonous whining)");
+				break;
+				case OSING_CANCEL:
+					Sprintf(eos(bp), " (discordant notes)");
+				break;
+			}
+		}
 //#ifdef FIREARMS
 	if(obj->otyp == STICK_OF_DYNAMITE) {
 	    if (obj->lamplit) Strcat(bp, " (lit)");

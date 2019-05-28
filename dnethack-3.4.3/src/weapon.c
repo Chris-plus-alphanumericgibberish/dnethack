@@ -242,7 +242,11 @@ struct monst *mon;
 #endif
 
 	/* Check specially named weapon "to hit" bonuses */
-	if (otmp->oartifact) tmp += spec_abon(otmp, mon);
+	if (otmp->oartifact){
+		tmp += spec_abon(otmp, mon);
+		if(Role_if(PM_BARD)) //legend lore
+			tmp += 5;
+	}
 
 	return tmp;
 }
@@ -2901,6 +2905,9 @@ struct obj *obj;
 		else if(obj->oartifact == ART_TORCH_OF_ORIGINS){
 			type = P_CLUB;
 		}
+		else if(obj->oartifact == ART_SINGING_SWORD){
+			type = P_MUSICALIZE;
+		}
 		else if(obj->otyp >= LUCKSTONE && obj->otyp <= ROCK && obj->ovar1){
 			type = (int)obj->ovar1;
 		}
@@ -3004,7 +3011,19 @@ struct obj *weapon;
 				case P_GRAND_MASTER:	bonus = +5; break;
 			}
 		}
-    }
+    } else { //fallback for weapons that use non-weapon skills (like Singing Sword)
+		switch (P_SKILL(type)) {
+			default: impossible(bad_skill, P_SKILL(type)); /* fall through */
+			case P_ISRESTRICTED:
+			case P_UNSKILLED:   bonus = -4; break;
+			case P_BASIC:       bonus =  0; break;
+			case P_SKILLED:     bonus =  2; break;
+			case P_EXPERT:      bonus =  5; break;
+			//For use with martial-arts, should the need arise
+			case P_MASTER:		bonus =  7; break;
+			case P_GRAND_MASTER: bonus = 9; break;
+		}
+	}
 	
 	if(type == P_TWO_WEAPON_COMBAT){
 		/* Sporkhack:
@@ -3325,6 +3344,19 @@ struct obj *weapon;
 				case P_MASTER:			bonus = +3; break;
 				case P_GRAND_MASTER:	bonus = +5; break;
 			}
+		}
+    } else { //fallback for weapons that use non-weapon skills (like Singing Sword)
+		switch (P_SKILL(type)) {
+			default: impossible("weapon_dam_bonus: bad skill %d",P_SKILL(type));
+				 /* fall through */
+			case P_ISRESTRICTED:	bonus = -5; break;
+			case P_UNSKILLED:	bonus = -2; break;
+			case P_BASIC:	bonus =  0; break;
+			case P_SKILLED:	bonus =  2; break;
+			case P_EXPERT:	bonus =  5; break;
+			//For use with martial-arts
+			case P_MASTER:		bonus =  7; break;
+			case P_GRAND_MASTER: bonus = 9; break;
 		}
     }
 	

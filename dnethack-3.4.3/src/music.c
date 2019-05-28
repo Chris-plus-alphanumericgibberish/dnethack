@@ -581,6 +581,8 @@ struct obj * instr;
 	int showmsg;
 	char *msg;
 	
+	if(is_deaf(mtmp)) return -100;
+	
 	showmsg = (song_delay == songs[song_played].level + 3) && canseemon(mtmp);
 	msg = (void *)0;
 
@@ -848,6 +850,9 @@ int distance;
 			*/
 		}
 	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_FEAR;
+	}
 }
 
 
@@ -887,6 +892,9 @@ int distance;
 		}
 	    mtmp = mtmp->nmon;
 	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_LETHARGY;
+	}
 }
 
 
@@ -906,6 +914,9 @@ int distance;
 				pline("%s moves quickly to attack.", Monnam(mtmp));
 		}
 	    mtmp = mtmp->nmon;
+	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_HASTE;
 	}
 }
 
@@ -933,6 +944,9 @@ int distance;
 			if(mtmp->mhp > mtmp->mhpmax) mtmp->mhp = mtmp->mhpmax;
 		}
 	    mtmp = mtmp->nmon;
+	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_HEALING;
 	}
 }
 
@@ -976,6 +990,9 @@ int distance;
 		}
 		mtmp = mtmp->nmon;
 	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_COURAGE;
+	}
 }
 
 STATIC_OVL void
@@ -993,6 +1010,9 @@ int distance;
 			mtmp->mconf = 1;
 		}
 		mtmp = mtmp->nmon;
+	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_CONFUSE;
 	}
 }
 
@@ -1012,6 +1032,9 @@ int distance;
 			// if(wizard) pline("mspec cooldown: %d", (int)mtmp->mspec_used);
 		}
 		mtmp = mtmp->nmon;
+	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_CANCEL;
 	}
 }
 
@@ -1067,6 +1090,9 @@ int distance;
 			if (mintrap(mtmp) == 2) change_luck(-1);
 		}
 		mtmp = nextmon;
+	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_RALLY;
 	}
 }
 #endif  /* BARD */
@@ -1187,6 +1213,9 @@ int distance;
 			slept_monst(mtmp);
 		}
 		mtmp = mtmp->nmon;
+	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+		uwep->ovar1 |= OHEARD_LETHARGY;
 	}
 }
 #endif /* BARD */
@@ -1670,6 +1699,9 @@ struct obj *instr;
 		You("produce soft music.");
 		put_monsters_to_sleep(u.ulevel * 5);
 		exercise(A_DEX, TRUE);
+		if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+			uwep->ovar1 |= OHEARD_LETHARGY;
+		}
 		break;
 	    } /* else FALLTHRU */
 	case WOODEN_FLUTE:		/* May charm snakes */
@@ -1698,6 +1730,10 @@ struct obj *instr;
 			 rn1(6,6), u.ux, u.uy, u.dx, u.dy,0,0);
 		}
 		makeknown(instr->otyp);
+		if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+			if(instr->otyp == FROST_HORN) uwep->ovar1 |= OHEARD_FROST;
+			if(instr->otyp == FIRE_HORN) uwep->ovar1 |= OHEARD_FIRE;
+		}
 		break;
 	    } /* else FALLTHRU */
 	case TOOLED_HORN:		/* Awaken or scare monsters */
@@ -1738,6 +1774,9 @@ struct obj *instr;
 		/* shake up monsters in a much larger radius... */
 		awaken_monsters(ROWNO * COLNO);
 		makeknown(DRUM_OF_EARTHQUAKE);
+		if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+			uwep->ovar1 |= OHEARD_QUAKE;
+		}
 		break;
 	    } /* else FALLTHRU */
 	case LEATHER_DRUM:		/* Awaken monsters */

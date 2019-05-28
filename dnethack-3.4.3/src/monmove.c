@@ -648,6 +648,7 @@ boolean digest_meal;
 			}
 		}
 	}
+	if(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_HEALING && !mindless_mon(mon) && !is_deaf(mon) && mon->mtame) mon->mhp += 1;
 	if (mon->mhp > mon->mhpmax) mon->mhp = mon->mhpmax;
 	if (mon->mspec_used) mon->mspec_used--;
 	if (digest_meal) {
@@ -976,6 +977,7 @@ register struct monst *mtmp;
 		(mdat->msound == MS_DREAD && !rn2(4)) ||
 		(mdat->msound == MS_OONA && (nearby || !rn2(6))) ||
 		(mdat->msound == MS_SONG && !rn2(6)) ||
+		(mdat == &mons[PM_RHYMER] && !mtmp->mspec_used && !rn2(6)) ||
 		(mdat->msound == MS_INTONE && !rn2(6)) ||
 		(mdat->msound == MS_FLOWER && !rn2(6)) ||
 		(mdat == &mons[PM_LAMASHTU] && !rn2(7))

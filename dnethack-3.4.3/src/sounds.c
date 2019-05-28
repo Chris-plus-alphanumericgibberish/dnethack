@@ -699,6 +699,7 @@ boolean chatting;
 		is_silent_mon(mtmp) ? MS_SILENT : 
 		mtmp->ispriest ? MS_PRIEST : 
 		mtmp->isshk ? MS_SELL : 
+		(mtmp->data == &mons[PM_RHYMER] && !mtmp->mspec_used) ? MS_SONG : 
 		ptr->msound
 	) {
 	case MS_ORACLE:
@@ -933,6 +934,9 @@ asGuardian:
 				make_stunned(HStun + mtmp->mhp/10, TRUE);
 				cast_spell(mtmp, 0, !rn2(4) ? SUMMON_ANGEL : SUMMON_MONS);
 			}
+			if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+				uwep->ovar1 |= OHEARD_RALLY;
+			}
 		}
 	}break;
 	case MS_DREAD:{
@@ -1002,6 +1006,9 @@ asGuardian:
 					losehp(rnd(mtmp->m_lev), "song of death", KILLED_BY_AN);
 				} else shieldeff(u.ux, u.uy);
 				stop_occupation();
+				if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+					uwep->ovar1 |= OHEARD_DEATH;
+				}
 				}break;
 				case 2:{
 				// pline("unturn dead\n");
@@ -1010,6 +1017,9 @@ asGuardian:
 					for(iy = 0; iy < ROWNO; iy++){
 						bhitpile(ispe, bhito, ix, iy);
 					}
+				}
+				if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+					uwep->ovar1 |= OHEARD_LIFE;
 				}
 				}break;
 				case 3:
@@ -1029,6 +1039,9 @@ asGuardian:
 				make_stunned(HStun + ix*5, FALSE);
 				make_hallucinated(HHallucination + ix*15, FALSE, 0L);
 				stop_occupation();
+				if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+					uwep->ovar1 |= OHEARD_INSANE;
+				}
 				break;
 				case 4:
 				// pline("earthquake\n");
@@ -1036,6 +1049,9 @@ asGuardian:
 				aggravate(); /* wake up without scaring */
 				stop_occupation();
 				doredraw();
+				if(uwep && uwep->oartifact == ART_SINGING_SWORD){
+					uwep->ovar1 |= OHEARD_QUAKE;
+				}
 				break;
 				case 5:{
 				// pline("locking\n");
@@ -1230,7 +1246,9 @@ asGuardian:
 		} else if(!(mtmp->mspec_used) || mtmp->data == &mons[PM_INTONER]){
 			switch(rnd(3)){
 				case 1:
-					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && !u.uinvulnerable){
+						inrange=TRUE;
+					} else for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if(!mindless_mon(tmpm)){
 								if ( mtmp->mpeaceful == tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
@@ -1268,9 +1286,18 @@ asGuardian:
 							}
 						}
 					}
+					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && !u.uinvulnerable){
+						u.uencouraged = min_ints(BASE_DOG_ENCOURAGED_MAX, u.uencouraged + rnd(mtmp->m_lev/3+1));
+						You_feel("%s!", u.uencouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" : "wild");
+					}
+					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+						uwep->ovar1 |= OHEARD_COURAGE;
+					}
 				break;
 				case 2:
-					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && !u.uinvulnerable){
+						inrange=TRUE;
+					} else for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if(!mindless_mon(tmpm)){
 								if ( mtmp->mpeaceful == tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
@@ -1319,9 +1346,18 @@ asGuardian:
 							}
 						}
 					}
+					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && !u.uinvulnerable){
+						healup(u.ulevel, 0, FALSE, FALSE);
+						use_unicorn_horn((struct obj *)0);
+					}
+					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+						uwep->ovar1 |= OHEARD_HEALING;
+					}
 				break;
 				case 3:
-					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && u.uhp < u.uhpmax && !u.uinvulnerable){
+						inrange=TRUE;
+					} else for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if(!mindless_mon(tmpm) && tmpm->data->mmove){
 								if ( mtmp->mpeaceful == tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 5) {
@@ -1332,11 +1368,11 @@ asGuardian:
 					}
 					
 					if(!inrange) break;
-					if (!canspotmon(mtmp) && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) < 5)
+					if (!canspotmon(mtmp) && distmin(u.ux,u.uy,mtmp->mx,mtmp->my) < 5 && !u.uinvulnerable)
 						map_invisible(mtmp->mx, mtmp->my);
 					pline("%s sings a song of haste.", Monnam(mtmp));
 					if(mtmp->data != &mons[PM_INTONER]) mtmp->mspec_used = rn1(10,10);
-
+					
 					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if(!mindless_mon(tmpm) && tmpm->data->mmove){
@@ -1349,6 +1385,20 @@ asGuardian:
 							}
 						}
 					}
+					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && !u.uinvulnerable){
+						pline("That puts a spring in your step.");
+						youmonst.movement += 12;
+						if(Wounded_legs)
+							heal_legs();
+						if (!(HFast & INTRINSIC)) {
+							if (!Fast) You("speed up.");
+							else Your("quickness feels more natural.");
+							HFast |= FROMOUTSIDE;
+						}
+					}
+					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+						uwep->ovar1 |= OHEARD_HASTE;
+					}
 				break;
 			}
 		} else goto humanoid_sound;
@@ -1360,7 +1410,9 @@ asGuardian:
 		if(!(mtmp->mspec_used)){
 			switch(rnd(3)){
 				case 1:
-					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
+						inrange=TRUE;
+					} else for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if ( mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 4) {
 								inrange=TRUE;
@@ -1379,12 +1431,21 @@ asGuardian:
 					switch(u.oonaenergy){
 						case AD_FIRE:
 							pline("%s sings the lament of flames.", Monnam(mtmp));
+							if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+								uwep->ovar1 |= OHEARD_FIRE;
+							}
 						break;
 						case AD_COLD:
 							pline("%s sings the lament of ice.", Monnam(mtmp));
+							if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+								uwep->ovar1 |= OHEARD_FROST;
+							}
 						break;
 						case AD_ELEC:
 							pline("%s sings the lament of storms.", Monnam(mtmp));
+							if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+								uwep->ovar1 |= OHEARD_ELECT;
+							}
 						break;
 					}
 
@@ -1411,7 +1472,7 @@ asGuardian:
 							}
 						}
 					}
-					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4){
+					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
 						dmg = 0;
 						switch(u.oonaenergy){
 							case AD_FIRE:
@@ -1434,7 +1495,9 @@ asGuardian:
 					}
 				break;
 				case 2:
-					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
+						inrange=TRUE;
+					} else for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if(!mindless_mon(tmpm)){
 								if ( mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 4) {
@@ -1472,9 +1535,18 @@ asGuardian:
 							}
 						}
 					}
+					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
+						u.uencouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, tmpm->encouraged - rnd(mtmp->m_lev/3+1));
+						You_feel("%s!", u.uencouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" : "depressed");
+					}
+					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+						uwep->ovar1 |= OHEARD_DIRGE;
+					}
 				break;
 				case 3:
-					for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
+						inrange=TRUE;
+					} else for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
 						if(tmpm != mtmp && !DEADMONSTER(tmpm)){
 							if(!mindless_mon(tmpm) && tmpm->data->mmove){
 								if ( mtmp->mpeaceful != tmpm->mpeaceful && distmin(mtmp->mx,mtmp->my,tmpm->mx,tmpm->my) < 4) {
@@ -1501,6 +1573,18 @@ asGuardian:
 								}
 							}
 						}
+					}
+					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
+						pline("Your body feels leaden!");
+						youmonst.movement -= 12;
+						if ((HFast & FROMOUTSIDE)) {
+							HFast &= ~FROMOUTSIDE;
+							if (!Fast) You("slow down.");
+							else Your("quickness feels less natural.");
+						}
+					}
+					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
+						uwep->ovar1 |= OHEARD_LETHARGY;
 					}
 				break;
 			}

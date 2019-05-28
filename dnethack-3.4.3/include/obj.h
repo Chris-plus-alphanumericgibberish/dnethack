@@ -155,6 +155,26 @@ struct obj {
 #ifdef RECORD_ACHIEVE
 #define record_achieve_special corpsenm
 #endif
+#define osinging corpsenm	/* song that the Singing Sword is singing */
+#define OSING_FEAR		1
+#define OSING_HEALING	2
+#define OSING_RALLY		3
+#define OSING_CONFUSE	4
+#define OSING_HASTE		5
+#define OSING_LETHARGY	6
+#define OSING_COURAGE	7
+#define OSING_DIRGE		8
+#define OSING_FIRE		9
+#define OSING_FROST		10
+#define OSING_ELECT		11
+#define OSING_QUAKE		12
+#define OSING_OPEN		13
+#define OSING_DEATH		14
+#define OSING_LIFE		15
+#define OSING_INSANE	16
+#define OSING_CANCEL	17
+#define SELECT_NOTHING	18	/* must be non-zero */
+
 	
 	int opoisoned; /* poisons smeared on the weapon*/
 #define OPOISON_NONE	0x00
@@ -216,16 +236,34 @@ struct obj {
 			/*Records the cracked level of masks. */
 			/*Records special features for weapons. */
 			/* 	Records moon phase for moon axes */
-			/* 	Records theft type for stealing artifacts (reaver (scimitar) and avarice (shortsword) */
-			/* 	Records remaining ammo for blasters and force pikes */
-			/* 	Records the hilt-type for lightsabers */
-			/* 	Records the ema of damage taken for gloves of the berserker */
-			
 #define ECLIPSE_MOON	0
 #define CRESCENT_MOON	1
 #define HALF_MOON		2
 #define GIBBOUS_MOON	3
 #define FULL_MOON	 	4
+			/* 	Records theft type for stealing artifacts (reaver (scimitar) and avarice (shortsword) */
+			/* 	Records remaining ammo for blasters and force pikes */
+			/* 	Records the hilt-type for lightsabers */
+			/*  Records songs that the Singing Sword has heard */
+#define OHEARD_FEAR		0x0000000000000001L
+#define OHEARD_HEALING	0x0000000000000002L
+#define OHEARD_RALLY	0x0000000000000004L
+#define OHEARD_CONFUSE	0x0000000000000008L
+#define OHEARD_HASTE	0x0000000000000010L
+#define OHEARD_LETHARGY	0x0000000000000020L
+#define OHEARD_COURAGE	0x0000000000000040L
+#define OHEARD_DIRGE	0x0000000000000080L
+#define OHEARD_FIRE		0x0000000000000100L
+#define OHEARD_FROST	0x0000000000000200L
+#define OHEARD_ELECT	0x0000000000000400L
+#define OHEARD_QUAKE	0x0000000000000800L
+#define OHEARD_OPEN		0x0000000000001000L
+#define OHEARD_DEATH	0x0000000000002000L
+#define OHEARD_LIFE		0x0000000000004000L
+#define OHEARD_INSANE	0x0000000000008000L
+#define OHEARD_CANCEL	0x0000000000010000L
+			/* Gloves: special features */
+			/* 	Records the ema of damage taken for gloves of the berserker */
 			/* Rings: specifies engraving on certain rings */
 			/* Cloaks: Droven: Tattered level.  */
 			/* Acid venom: nonstandard damage amount */
@@ -233,7 +271,8 @@ struct obj {
 			/* Rocks: rummor */
 			/* Masks: fracturing level */
 
-	schar gifted; /*gifted is of type aligntyp.  For some reson aligntyp isn't being seen at compile*/
+
+	schar gifted; /*gifted is of type aligntyp.  For some reason aligntyp isn't being seen at compile*/
 	
 	struct mask_properties *mp;
 

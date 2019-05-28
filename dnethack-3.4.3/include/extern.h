@@ -53,6 +53,7 @@ E void NDECL(reset_trapset);
 E void FDECL(fig_transform, (genericptr_t, long));
 E boolean FDECL(use_ring_of_wishes, (struct obj *));
 E boolean FDECL(use_candle_of_invocation, (struct obj *));
+E void FDECL(use_magic_whistle, (struct obj *));
 E int FDECL(unfixable_trouble_count,(BOOLEAN_P));
 
 /* ### artifact.c ### */

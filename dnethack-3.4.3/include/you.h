@@ -497,6 +497,7 @@ struct you {
 	long	ucleansed;	/* to record moves when player was cleansed */
 	long	usleep;		/* sleeping; monstermove you last started */
 	int 	ustdy;		/* to record extra damage to be dealt due to having been studied */
+	int 	uencouraged;/* to record the buff from tame encouragement songs */
 	uchar 	wimage;		/* to record if you have the image of a Weeping Angel in your mind */
 	int uinvault;
 	struct monst *ustuck;

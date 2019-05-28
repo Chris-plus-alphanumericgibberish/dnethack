@@ -2138,6 +2138,9 @@ donull()
 				u.uhp += rnd(10);
 				flags.botl = 1;
 			}
+			if(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_HEALING){
+				u.uhp++;
+			}
 			if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 			lastreped = monstermoves;
 			if(u.uhp == u.uhpmax){
@@ -2152,6 +2155,9 @@ donull()
 				u.mh += rnd(10);
 				flags.botl = 1;
 			}
+			if(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_HEALING){
+				u.mh++;
+			}
 			if(u.mh > u.mhmax) u.mh = u.mhmax;
 			lastreped = monstermoves;
 			if(u.mh == u.mhmax){
@@ -2161,7 +2167,18 @@ donull()
 				occupation = 0; /*redundant failsafe? why doesn't stop_occupation work?*/
 			}
 		} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
-	} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
+	} else {
+		if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
+		if(Upolyd && u.uhp<u.uhpmax){
+			if(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_HEALING){
+				u.mh++;
+			}
+		} else if(!Upolyd && u.uhp<u.uhpmax){
+			if(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_HEALING){
+				u.uhp++;
+			}
+		}
+	}
 	return(1);	/* Do nothing, but let other things happen */
 }
 
