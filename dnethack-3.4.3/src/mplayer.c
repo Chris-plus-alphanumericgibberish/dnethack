@@ -346,8 +346,14 @@ register boolean special;
 				otmp->spe = 10;
 			if (!rn2(3)) otmp->oerodeproof = 1;
 			else if (!rn2(2)) otmp->greased = 1;
-			if (special && rn2(2))
-				otmp = mk_artifact(otmp, A_NONE);
+			if (special){
+				if(rn2(2)) otmp = mk_artifact(otmp, A_NONE);
+				
+				if(!otmp->oartifact){//mk_artifact can fail, esp for odd base items
+					if(rn2(2)) otmp = mk_special(otmp);
+					else if(rn2(4)) otmp = mk_minor_special(otmp);
+				}
+			}
 			/* mplayers knew better than to overenchant Magicbane */
 			if (otmp->oartifact == ART_MAGICBANE)
 				otmp->spe = rnd(4);

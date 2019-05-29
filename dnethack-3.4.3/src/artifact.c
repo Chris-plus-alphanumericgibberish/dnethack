@@ -352,6 +352,88 @@ make_artif:
 }
 
 /*
+ * Make a special-but-non-artifact weapon based on otmp
+ */
+
+struct obj *
+mk_special(otmp)
+struct obj *otmp;	/* existing object */
+{
+	int prop = rnd(13);
+	
+	if(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)){
+		if(!(--prop))
+			otmp->oproperties |= OPROP_FIREW; //1
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_COLDW; //2
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_ELECW; //3
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_ACIDW; //4
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_MAGCW; //5
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_ANARW; //6
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_CONCW; //7
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_AXIOW; //8
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_HOLYW; //9
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_UNHYW; //10
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_WATRW; //11
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_DEEPW; //12
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_PSIOW; //13
+	}
+	
+	return otmp;
+}
+
+/*
+ * Make a low-damage special-but-non-artifact weapon based on otmp
+ */
+
+struct obj *
+mk_minor_special(otmp)
+struct obj *otmp;	/* existing object */
+{
+	int prop = rnd(12);
+	
+	if(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)){
+		otmp->oproperties |= OPROP_LESSW;
+		if(!(--prop))
+			otmp->oproperties |= OPROP_FIREW; //1
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_COLDW; //2
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_ELECW; //3
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_ACIDW; //4
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_MAGCW; //5
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_ANARW; //6
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_CONCW; //7
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_AXIOW; //8
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_HOLYW; //9
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_UNHYW; //10
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_WATRW; //11
+		else if(!(--prop))
+			otmp->oproperties |= OPROP_PSIOW; //12
+	}
+	
+	return otmp;
+}
+/*
  * Returns the full name (with articles and correct capitalization) of an
  * artifact named "name" if one exists, or NULL, it not.
  * The given name must be rather close to the real name for it to match.
