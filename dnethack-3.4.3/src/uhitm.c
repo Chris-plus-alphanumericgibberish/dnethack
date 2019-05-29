@@ -2161,8 +2161,13 @@ defaultvalue:
 			/* If you throw using a propellor, you don't get a strength
 			 * bonus but you do get an increase-damage bonus.
 			 */
-			if(!thrown || !obj || !uwep || !ammo_and_launcher(obj, uwep) || objects[uwep->otyp].oc_skill == P_SLING){
-				tmp += dbon(uwep);
+			if(!thrown) tmp += dbon(obj);
+			else{ //thrown
+				if(!uwep || !ammo_and_launcher(obj, uwep))
+					tmp += dbon(obj); //thrown by hand, use bonus for thrown item.
+				else if(objects[uwep->otyp].oc_skill == P_SLING)
+					tmp += dbon(uwep); //thrown by a sling, use weapon bonus.
+				//else no bonus
 			}
 		}
 	}
