@@ -3397,7 +3397,9 @@ struct obj *weapon;
 			case P_MASTER:		 maxweight = 50; break;	 /* war hammer */
 			case P_GRAND_MASTER: maxweight = 60; break;	 /* axe */
 		}
-		if (uswapwep && uswapwep->owt > maxweight && uswapwep->oartifact != ART_FRIEDE_S_SCYTHE) {
+		if (uswapwep && !(uwep && (uwep->otyp == STILETTOS)) && uswapwep->owt > maxweight
+		&& uswapwep->oartifact != ART_BLADE_DANCER_S_DAGGER && uswapwep->oartifact != ART_FRIEDE_S_SCYTHE
+		) {
 			bonus += max(-20, -5 * (uswapwep->owt-maxweight)/maxweight);
 		}
 	}
@@ -3565,7 +3567,9 @@ int type;
 			case P_MASTER:		 maxweight = 50; break;	 /* war hammer */
 			case P_GRAND_MASTER: maxweight = 60; break;	 /* axe */
 		}
-		if (uswapwep && uswapwep->owt > maxweight && uswapwep->oartifact != ART_FRIEDE_S_SCYTHE) {
+		if (uswapwep && !(uwep && (uwep->otyp == STILETTOS)) && uswapwep->owt > maxweight
+		&& uswapwep->oartifact != ART_BLADE_DANCER_S_DAGGER && uswapwep->oartifact != ART_FRIEDE_S_SCYTHE
+		) {
 			bonus += max(-20, -5 * (uswapwep->owt-maxweight)/maxweight);
 		}
 	}
