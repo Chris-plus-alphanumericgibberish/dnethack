@@ -532,7 +532,7 @@ test_twoweapon()
 	} else if ((!uwep || !uswapwep) && !u.umartial && !((u.specialSealsActive&SEAL_BLACK_WEB) && !uswapwep))
 		Your("%s%s%s empty.", uwep ? "off " : uswapwep ? "main " : "",
 			body_part(HAND), (!uwep && !uswapwep) ? "s are" : " is");
-	else if ((NOT_WEAPON(uwep) || NOT_WEAPON(uswapwep)) && !(uwep && uwep->otyp == STILETTOS)) {
+	else if ((NOT_WEAPON(uwep) || NOT_WEAPON(uswapwep)) && !(uwep && (uwep->otyp == STILETTOS))) {
 		otmp = NOT_WEAPON(uwep) ? uwep : uswapwep;
 		pline("%s %s.", Yname2(otmp),
 		    is_plural(otmp) ? "aren't weapons" : "isn't a weapon");
@@ -804,7 +804,9 @@ register int amount;
 	    return(1);
 	}
 	/* there is a (soft) upper and lower limit to uwep->spe */
-	safelim = 5;
+	if(uwep->otyp == RAKUYO)
+		safelim = 9;
+	else safelim = 5;
 	if(((uwep->spe > safelim && amount >= 0) || (uwep->spe < -safelim && amount < 0))
 								&& rn2(3) && uwep->oartifact != ART_ROD_OF_SEVEN_PARTS
 								&& uwep->oartifact != ART_PEN_OF_THE_VOID
