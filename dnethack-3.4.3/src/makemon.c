@@ -1507,7 +1507,7 @@ register struct monst *mtmp;
 					(void) mongets(mtmp, LEATHER_CLOAK);
 				} else if (mm == PM_SERVANT){
 					if(mtmp->female){
-						(void) mongets(mtmp, VICTORIAN_UNDERWEAR);
+						(void) mongets(mtmp, BLACK_DRESS);
 						(void) mongets(mtmp, STILETTOS);
 					} else{
 						(void) mongets(mtmp, RUFFLED_SHIRT);
@@ -1723,7 +1723,7 @@ register struct monst *mtmp;
 					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
 					
-					otmp = mksobj(BLACK_DRESS, FALSE, FALSE);
+					otmp = mksobj(ROBE, FALSE, FALSE);
 					bless(otmp);
 					otmp->spe = 5;
 					(void) mpickobj(mtmp, otmp);
