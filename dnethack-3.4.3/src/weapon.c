@@ -676,6 +676,11 @@ lightsaber_form_ldie:
 			&& !(noncorporeal(ptr) || amorphous(ptr) 
 				|| ((stationary(ptr) || sessile(ptr)) && (ptr->mlet == S_FUNGUS || ptr->mlet == S_PLANT))
 			)) tmp += d(2,4+2*dmod); break;
+		break;
+		case RAKUYO:
+			if((otmp == uwep && !u.twoweap) || (mcarried(otmp) && otmp->owornmask&W_WEP))
+				tmp += rnd(3+2*dmod) + otmp->spe;
+		break;
 	    }
 	} else {
 		if(otmp->oartifact == ART_VORPAL_BLADE || otmp->oartifact == ART_SNICKERSNEE) tmp = exploding_d(2,sdie,1);
@@ -1054,6 +1059,11 @@ lightsaber_form_sdie:
 			&& !(noncorporeal(ptr) || amorphous(ptr) 
 				|| ((stationary(ptr) || sessile(ptr)) && (ptr->mlet == S_FUNGUS || ptr->mlet == S_PLANT))
 			)) tmp += d(1,6+2*dmod)+d(1,4+2*dmod); break;
+		break;
+		case RAKUYO:
+			if((carried(otmp) && otmp->owornmask&W_WEP && !u.twoweap) || (mcarried(otmp) && otmp->owornmask&W_WEP))
+				tmp += rnd(4+2*dmod) + otmp->spe;
+		break;
 	    }
 	}
 	
@@ -1815,6 +1825,7 @@ static const NEARDATA short hwep[] = {
 	  DROVEN_SPEAR/*1d12/1d12*/,
 	  UNICORN_HORN/*1d12/1d12*/,
 	  DWARVISH_MATTOCK/*1d12/1d8*/, 
+	  RAKUYO/*1d8+1d4/1d8+1d3*/, 
 	  ELVEN_BROADSWORD/*1d6+1d4/1d6+2*/, 
 	  KATANA/*1d10/1d12*/,
 	  HIGH_ELVEN_WARSWORD/*1d10/1d10*/,
@@ -1825,6 +1836,7 @@ static const NEARDATA short hwep[] = {
 	  SCYTHE/*2d4*/, 
 	  BROADSWORD/*2d4/1d6+1*/, 
 	  MORNING_STAR/*2d4/1d6+1*/, 
+	  RAKUYO_SABER/*1d8/1d8*/,
 	  SABER/*1d8/1d8*/,
 	  TRIDENT/*1d6+1/3d4*/, 
 	  LONG_SWORD/*1d8/1d12*/,
@@ -1859,6 +1871,7 @@ static const NEARDATA short hwep[] = {
 	  STILETTO/*1d6/1d2*/, 
 	  ELVEN_DAGGER/*1d5/1d3*/, 
 	  ATHAME/*1d4/1d4*/, 
+	  RAKUYO_DAGGER/*1d4/1d3*/, 
 	  DAGGER/*1d4/1d3*/, 
 	  SICKLE/*1d4/1d1*/, 
 	  ORCISH_DAGGER/*1d3/1d5*/,
@@ -2405,15 +2418,20 @@ struct obj *otmp;
 			bonus *= 1.5;
 		
 		if(otmp==uwep 
-		&& (otmp->otyp==RAPIER 
+		&& (is_rapier(otmp)
 			|| (otmp->otyp == LIGHTSABER && otmp->oartifact != ART_ANNULUS && otmp->ovar1 == 0)
 			|| otmp->oartifact == ART_LIFEHUNT_SCYTHE
 			|| otmp->oartifact == ART_FRIEDE_S_SCYTHE
 		)){
-			bonus/=2; /*Half strength bonus/penalty*/
+			if(is_rakuyo(otmp))
+				bonus = 0;
+			else bonus /= 2; /*Half strength bonus/penalty*/
 			
 			if(ACURR(A_DEX) == 25) bonus += 8;
 			else bonus += (ACURR(A_DEX)-10)/2;
+			
+			if(is_rakuyo(otmp))
+				bonus *= 2;
 		}
 		
 		if(otmp->oartifact == ART_YORSHKA_S_SPEAR){
@@ -3044,7 +3062,7 @@ struct obj *weapon;
 			case P_MASTER:			maxweight = 50; break;
 			case P_GRAND_MASTER:	maxweight = 60; break;
 		}
-		if (uswapwep && !(uwep && uwep->otyp == STILETTOS) && uswapwep->owt > maxweight
+		if (uswapwep && !(uwep && (uwep->otyp == STILETTOS)) && uswapwep->owt > maxweight
 		&& uswapwep->oartifact != ART_BLADE_DANCER_S_DAGGER && uswapwep->oartifact != ART_FRIEDE_S_SCYTHE
 		) {
 			if(twowepwarn) pline("Your %s seem%s very unwieldy.",xname(uswapwep),uswapwep->quan == 1 ? "s" : "");

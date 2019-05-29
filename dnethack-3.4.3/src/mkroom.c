@@ -31,6 +31,7 @@ STATIC_DCL void NDECL(mkkamereltowers);
 STATIC_DCL void NDECL(mkminorspire);
 STATIC_DCL void NDECL(mkfishingvillage);
 STATIC_DCL void NDECL(mkpluhomestead);
+STATIC_DCL void FDECL(mkwell, (int));
 STATIC_DCL void FDECL(mkfishinghut, (int));
 STATIC_DCL void NDECL(mkpluvillage);
 STATIC_DCL void NDECL(mkferrufort);
@@ -1926,6 +1927,7 @@ mkfishingvillage()
 	for(; n > 0; n--)
 		mkfishinghut(left);
 	}
+	mkwell(left);
 }
 
 STATIC_OVL
@@ -2030,6 +2032,58 @@ mkfishinghut(left)
 			if(isok(x+2,y+4) && levl[x+2][y+4].typ == PUDDLE && !(pathto--)) 
 				levl[x+2][y+3].typ = DOOR, levl[x+2][y+3].doormask = rn2(3) ? D_LOCKED : D_CLOSED;
 		}
+	}
+}
+
+STATIC_OVL
+void
+mkwell(left)
+	int left;
+{
+	int x,y,tries=0, roomnumb;
+	int i,j, pathto = 0;
+	boolean good=FALSE, okspot, accessible;
+	struct obj *otmp;
+	while(!good && tries < 500){
+		x = rn2(COLNO/2)+1;
+		if(!left)
+			x += COLNO/2;
+		y = rn2(ROWNO-5);
+		tries++;
+		okspot = TRUE;
+		accessible = FALSE;
+		for(i=-1;i<2;i++)
+			for(j=-1;j<2;j++){
+				if(!isok(x+i,y+j) || t_at(x+i, y+j) || 
+					!(levl[x+i][y+j].typ == TREE || levl[x+i][y+j].typ == PUDDLE 
+						|| levl[x+i][y+j].typ == ROOM
+					 )
+				) okspot = FALSE;
+			}
+		pathto = 0;
+		if(isok(x,y-2) && (levl[x][y-2].typ == PUDDLE || levl[x][y-2].typ == ROOM))
+			pathto++;
+		if(isok(x,y+2) && (levl[x][y+2].typ == PUDDLE || levl[x][y+2].typ == ROOM))
+			pathto++;
+		if(isok(x-2,y) && (levl[x-2][y].typ == PUDDLE || levl[x-2][y].typ == ROOM))
+			pathto++;
+		if(isok(x+2,y) && (levl[x+2][y].typ == PUDDLE || levl[x+2][y].typ == ROOM))
+			pathto++;
+		if(pathto) accessible = TRUE;
+		if(okspot && accessible){
+			good = TRUE;
+		} else continue;
+		
+		for(i=-1;i<2;i++){
+			for(j=-1;j<2;j++){
+				levl[x+i][y+j].typ = CORR;
+				if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
+				levl[x+i][y+j].lit = 1;
+			}
+		}
+		
+		levl[x][y].typ = POOL;
+		mksobj_at(RAKUYO, x, y, TRUE, FALSE);
 	}
 }
 

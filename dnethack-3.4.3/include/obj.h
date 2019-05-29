@@ -224,6 +224,21 @@ struct obj {
 	/* in order to prevent alignment problems oextra should
 	   be (or follow) a long int */
 	long owornmask;
+	/* Weapons and artifacts */
+//define W_WEP	    0x00000100L /* Wielded weapon */
+//define W_QUIVER     0x00000200L /* Quiver for (f)iring ammo */
+//define W_SWAPWEP    0x00000400L /* Secondary weapon */
+//define W_ART	    0x00001000L /* Carrying artifact (not really worn) */
+//define W_ARTI	    0x00002000L /* Invoked artifact  (not really worn) */
+	/* Amulets, rings, tools, and other items */
+//define W_AMUL	    0x00010000L /* Amulet */
+//define W_RINGL	    0x00020000L /* Left ring */
+//define W_RINGR	    0x00040000L /* Right ring */
+//define W_RING	    (W_RINGL | W_RINGR)
+//define W_TOOL	    0x00080000L /* Eyewear */
+//define W_SADDLE     0x00100000L	/* KMH -- For riding monsters */
+//define W_BALL	    0x00200000L /* Punishment ball */
+//define W_CHAIN	    0x00400000L /* Punishment chain */
 	long oward;
 			/*Records the warding sign of spellbooks. */
 			/*Records the warding sign of scrolls of ward. */
@@ -366,6 +381,14 @@ struct obj {
 #define is_sword(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= P_SHORT_SWORD && \
 			 objects[otmp->otyp].oc_skill <= P_SABER)
+#define is_rapier(otmp)	(otmp->oclass == WEAPON_CLASS && (\
+			 otmp->otyp == RAPIER || \
+			 is_rakuyo(otmp) || \
+			 otmp->otyp == RAKUYO_SABER || \
+			 otmp->otyp == CROW_QUILL))
+#define is_rakuyo(otmp)	(otmp->otyp == RAKUYO || \
+			 otmp->otyp == RAKUYO_SABER || \
+			 otmp->otyp == RAKUYO_DAGGER)
 #define is_pole(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			otmp->oclass == TOOL_CLASS) && \
 			 (objects[otmp->otyp].oc_skill == P_POLEARMS || \

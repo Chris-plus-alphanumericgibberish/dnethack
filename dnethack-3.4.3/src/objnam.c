@@ -1592,13 +1592,13 @@ ring:
 
 			if ((bimanual(obj,youracedata) 
 				&& !(u.twoweap && (obj->oartifact == ART_PROFANED_GREATSCYTHE || obj->oartifact == ART_LIFEHUNT_SCYTHE)))
-			|| (u.twoweap && obj->otyp == STILETTOS))
+			|| (u.twoweap && (obj->otyp == STILETTOS)))
 				hand_s = makeplural(hand_s);
 			Sprintf(eos(bp), " (weapon in %s)", hand_s);
 		}
 	}
 	if(obj->owornmask & W_SWAPWEP) {
-		if (mcarried(obj) || (u.twoweap && !(uwep && uwep->otyp == STILETTOS)))	// Monsters twoweaponing stilettos would give a bad message, but they can't even wield stilettos right now...
+		if (mcarried(obj) || (u.twoweap && !(uwep && (uwep->otyp == STILETTOS))))	// Monsters twoweaponing stilettos would give a bad message, but they can't even wield stilettos right now...
 			Sprintf(eos(bp), " (wielded in other %s)",
 				body_part(HAND));
 		else

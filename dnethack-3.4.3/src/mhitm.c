@@ -1515,6 +1515,9 @@ physical:{
 						tmp += rnd(9);
 				} else {
 					tmp += dmgval(otmp, mdef, 0);
+					if(otmp && otmp->owornmask&W_WEP && otmp->otyp == RAKUYO){
+						magr->movement -= NORMAL_SPEED/4;
+					}
 					if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))) phasearmor = TRUE;
 				}
 				

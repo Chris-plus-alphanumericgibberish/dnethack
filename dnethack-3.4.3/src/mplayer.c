@@ -261,13 +261,13 @@ register boolean special;
 		    if (rn2(2)) shield = STRANGE_OBJECT;
 		break;
 		case PM_NOBLEMAN:
-		    weapon = RAPIER;
+		    weapon = special ? LONG_SWORD : RAPIER;
 		    armor = special ? NOBLE_S_DRESS : GENTLEWOMAN_S_DRESS;
 		    cloak = special ? find_opera_cloak() : LEATHER_CLOAK;
 		    shield = STRANGE_OBJECT;
 		break;
 		case PM_NOBLEWOMAN:
-		    weapon = RAPIER;
+		    weapon = special ? RAKUYO : RAPIER;
 		    armor = special ? CRYSTAL_PLATE_MAIL : GENTLEMAN_S_SUIT;
 		    cloak = special ? find_opera_cloak() : LEATHER_CLOAK;
 		    shield = STRANGE_OBJECT;
@@ -342,6 +342,8 @@ register boolean special;
 	    if (weapon != STRANGE_OBJECT) {
 			otmp = mksobj(weapon, TRUE, FALSE);
 			otmp->spe = (special ? rn1(5,4) : rn2(4));
+			if(otmp->otyp == RAKUYO && special)
+				otmp->spe = 10;
 			if (!rn2(3)) otmp->oerodeproof = 1;
 			else if (!rn2(2)) otmp->greased = 1;
 			if (special && rn2(2))

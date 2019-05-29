@@ -818,8 +818,10 @@ struct attack *uattk;
 	    notonhead = (mon->mx != x || mon->my != y);
 	    malive = hmon(mon, uwep, 0);
 	    /* this assumes that Stormbringer was uwep not uswapwep */ 
-	    if (malive && (u.twoweap && !(uwep && uwep->otyp == STILETTOS)) && !override_confirmation &&
-		    m_at(x, y) == mon
+	    if (malive && (u.twoweap 
+			&& !(uwep && (uwep->otyp == STILETTOS))) 
+			&& !override_confirmation 
+			&& m_at(x, y) == mon
 		) {
 			malive = hmon(mon, uswapwep, 0);
 		}
@@ -1581,6 +1583,14 @@ int thrown;
 							hittxt = TRUE;
 						}
 					}
+				}
+				
+				if(uwep 
+					&& obj == uwep 
+					&& uwep->otyp == RAKUYO
+					&& !u.twoweap
+				){
+					youmonst.movement -= NORMAL_SPEED/4;
 				}
 				
 				if(uwep 

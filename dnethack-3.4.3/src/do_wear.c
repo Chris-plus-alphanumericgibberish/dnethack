@@ -2075,7 +2075,7 @@ int base_uac()
 	int uac = mons[u.umonnum].ac;
 
 	if(uwep){
-		if((uwep->otyp == RAPIER && arti_shining(uwep)) || 
+		if((is_rapier(uwep) && arti_shining(uwep)) || 
 			(uwep->otyp == LIGHTSABER && litsaber(uwep) && uwep->oartifact != ART_ANNULUS && uwep->ovar1 == 0)
 				) uac -= max(
 					min(
@@ -2198,7 +2198,7 @@ find_ac()
 	if (uarmu)	uac -= arm_ac_bonus(uarmu);
 	
 	if(uwep){
-		if((uwep->otyp == RAPIER && !arti_shining(uwep))
+		if((is_rapier(uwep) == RAPIER && !arti_shining(uwep))
 				) uac -= max(
 					min(
 					(ACURR(A_DEX)-13)/4,

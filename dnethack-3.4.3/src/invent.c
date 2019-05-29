@@ -2615,6 +2615,21 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	/* coins of the same kind will always merge */
 	if (obj->oclass == COIN_CLASS) return TRUE;
 #endif
+	if(!mergable_traits(otmp, obj))
+		return FALSE;
+	
+	if(obj->sknown || otmp->sknown) obj->sknown = otmp->sknown = 1;
+	
+	if(obj->known == otmp->known ||
+		!objects[otmp->otyp].oc_uses_known) {
+		return((boolean)(objects[obj->otyp].oc_merge));
+	} else return(FALSE);
+}
+
+boolean
+mergable_traits(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
+	register struct obj *otmp, *obj;
+{
 	if (obj->unpaid != otmp->unpaid ||
 		obj->ostolen != otmp->ostolen ||
 		(obj->ostolen && obj->sknown != otmp->sknown) ||
@@ -2637,8 +2652,6 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	    obj->obj_material != otmp->obj_material ||
 	    obj->bypass != otmp->bypass)
 	    return(FALSE);
-	
-	if(obj->sknown || otmp->sknown) obj->sknown = otmp->sknown = 1;
 	
 	if ((obj->oclass==WEAPON_CLASS || obj->oclass==ARMOR_CLASS) &&
 	    (obj->oerodeproof!=otmp->oerodeproof || obj->rknown!=otmp->rknown))
@@ -2688,11 +2701,10 @@ mergable(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	if (obj->oxlth || otmp->oxlth) return FALSE;
 
 	if(obj->oartifact != otmp->oartifact) return FALSE;
-
-	if(obj->known == otmp->known ||
-		!objects[otmp->otyp].oc_uses_known) {
-		return((boolean)(objects[obj->otyp].oc_merge));
-	} else return(FALSE);
+	
+	if(obj->oproperties != otmp->oproperties) return FALSE;
+	
+	return TRUE;
 }
 
 int

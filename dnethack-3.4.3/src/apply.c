@@ -28,6 +28,7 @@ STATIC_DCL void FDECL(use_candelabrum, (struct obj *));
 STATIC_DCL void FDECL(use_candle, (struct obj **));
 STATIC_DCL void FDECL(use_lamp, (struct obj *));
 STATIC_DCL int FDECL(swap_aegis, (struct obj *));
+STATIC_DCL int FDECL(use_rakuyo, (struct obj *));
 STATIC_DCL void FDECL(light_cocktail, (struct obj *));
 STATIC_DCL void FDECL(light_torch, (struct obj *));
 STATIC_DCL void FDECL(use_tinning_kit, (struct obj *));
@@ -1418,6 +1419,60 @@ struct obj *obj;
 		pline("Aegis in unexpected state?");
 		return 0;
 	}
+}
+
+STATIC_OVL int
+use_rakuyo(obj)
+struct obj *obj;
+{
+	struct obj *dagger;
+	if(obj != uwep){
+		if(obj->otyp == RAKUYO) You("must wield %s to unlatch it.", the(xname(obj)));
+		else You("must wield %s to latch it.", the(xname(obj)));
+		return 0;
+	}
+	
+	if(obj->unpaid 
+	|| (obj->otyp == RAKUYO_SABER && uswapwep && uswapwep->otyp == RAKUYO_DAGGER && uswapwep->unpaid)
+	){
+		You("need to buy it.");
+		return 0;
+	}
+	
+	if(obj->otyp == RAKUYO){
+		You("unlatch %s.",the(xname(obj)));
+		obj->otyp = RAKUYO_SABER;
+		fix_object(obj);
+		obj->quan += 1;
+	    dagger = splitobj(obj, 1L);
+		obj_extract_self(dagger);
+		dagger->otyp = RAKUYO_DAGGER;
+		fix_object(obj);
+		dagger = hold_another_object(dagger, "You drop %s!",
+				      doname(obj), (const char *)0); /*shouldn't merge, but may drop*/
+		if(dagger && !uswapwep && carried(dagger)){
+			setuswapwep(dagger);
+			dotwoweapon();
+		}
+	} else {
+		if(!uswapwep || uswapwep->otyp != RAKUYO_DAGGER){
+			You("need the matching dagger.");
+			return 0;
+		}
+		if(!mergable_traits(obj, uswapwep)){
+			pline("They don't fit together!");
+			return 0;
+		}
+		if (u.twoweap) {
+			u.twoweap = 0;
+			update_inventory();
+		}
+		useupall(uswapwep);
+		obj->otyp = RAKUYO;
+		fix_object(obj);
+		You("latch %s.",the(xname(obj)));
+	}
+	return 0;
 }
 
 STATIC_OVL void
@@ -5301,6 +5356,11 @@ doapply()
 	if(obj->oartifact == ART_SILVER_STARLIGHT) res = do_play_instrument(obj);
 	else if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) use_lamp(obj);
 	else if(obj->oartifact == ART_AEGIS) res = swap_aegis(obj);
+	
+	if(obj->otyp == RAKUYO || obj->otyp == RAKUYO_SABER){
+		return use_rakuyo(obj);
+	}
+	
 	else switch(obj->otyp){
 	case BLINDFOLD:
 	case LENSES:
