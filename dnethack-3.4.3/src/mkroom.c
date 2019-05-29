@@ -1981,6 +1981,7 @@ mkfishinghut(left)
 		for(i=1;i<3;i++){
 			for(j=1;j<3;j++){
 				levl[x+i][y+j].typ = CORR;
+				levl[x+i][y+j].lit = 0;
 				if(!rn2(9)) mksobj_at(SPEAR, x+1, y+1, TRUE, FALSE);
 				if(!rn2(9)){
 					otmp = mksobj(SLIME_MOLD, TRUE,FALSE);
