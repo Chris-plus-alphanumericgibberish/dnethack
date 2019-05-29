@@ -1602,6 +1602,18 @@ int thrown;
 						!is_flimsy(monwep) &&
 						!obj_resists(monwep, 0, 100))
 					){
+						setmnotwielded(mon,monwep);
+						MON_NOWEP(mon);
+						mon->weapon_check = NEED_WEAPON;
+						pline("%s %s %s from the force of your blow!",
+							  s_suffix(Monnam(mon)), xname(monwep),
+							  otense(monwep, "shatter"));
+						m_useup(mon, monwep);
+						/* If someone just shattered MY weapon, I'd flee! */
+						if (rn2(4) && !mindless_mon(mon)) {
+							monflee(mon, d(2,3), TRUE, TRUE);
+						}
+						hittxt = TRUE;
 					}
 					if(rnd(20) < P_SKILL(weapon_type(uwep))){
 						if (canspotmon(mon))
