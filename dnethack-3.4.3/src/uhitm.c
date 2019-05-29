@@ -1661,7 +1661,7 @@ int thrown;
 						  otense(monwep, "shatter"));
 					m_useup(mon, monwep);
 					/* If someone just shattered MY weapon, I'd flee! */
-					if (rn2(4)) {
+					if (rn2(4) && !mindless_mon(mon)) {
 						monflee(mon, d(2,3), TRUE, TRUE);
 					}
 					hittxt = TRUE;
