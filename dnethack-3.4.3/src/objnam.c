@@ -628,6 +628,8 @@ register struct obj *obj;
 				Strcat(buf, "unholy ");
 			if(obj->oproperties&OPROP_VORPW && obj->known)
 				Strcat(buf, "vorpal ");
+			if(obj->oproperties&OPROP_MORGW && obj->known)
+				Strcat(buf, "morgul ");
 		}
 	}
 	if(is_lightsaber(obj) && litsaber(obj)){
@@ -1250,8 +1252,8 @@ plus:
 					Strcat(prefix, "holy ");
 				if(obj->oproperties&OPROP_UNHYW && obj->known)
 					Strcat(prefix, "unholy ");
-				if(obj->oproperties&OPROP_VORPW && obj->known)
-					Strcat(prefix, "vorpal ");
+				if(obj->oproperties&OPROP_MORGW && obj->known)
+					Strcat(prefix, "morgul ");
 			}
 		}
 		add_erosion_words(obj, prefix);
@@ -2922,11 +2924,9 @@ int wishflags;
 			bodytype = (MB_ANIMAL|MB_SLITHY);
 		} else if(!strncmpi(bp, "snakeneck ", l=10)){
 			bodytype = MB_LONGNECK;
-		} else if (!strncmpi(bp, "blessed ", l=8) ||
-			   (!strncmpi(bp, "holy ", l=5) && strncmpi(bp, "holy moonlight sword", l=20))) {
+		} else if (!strncmpi(bp, "blessed ", l=8)){
 			blessed = 1;
-		} else if (!strncmpi(bp, "cursed ", l=7) ||
-			   !strncmpi(bp, "unholy ", l=7)) {
+		} else if (!strncmpi(bp, "cursed ", l=7)){
 			iscursed = 1;
 		} else if (!strncmpi(bp, "uncursed ", l=9)) {
 			uncursed = 1;
@@ -3188,7 +3188,7 @@ int wishflags;
 		} else if (!strncmpi(bp, "axiomatic ", l=10)
 			) {
 			oproperties |= OPROP_AXIOW;
-		} else if (!strncmpi(bp, "holy ", l=5)
+		} else if (!strncmpi(bp, "holy ", l=5) && strncmpi(bp, "holy moonlight sword", 20)
 			) {
 			oproperties |= OPROP_HOLYW;
 		} else if (!strncmpi(bp, "unholy ", l=7)
@@ -3197,6 +3197,9 @@ int wishflags;
 		} else if (!strncmpi(bp, "vorpal ", l=7) && strncmpi(bp, "Vorpal Blade", 12)
 			) {
 			oproperties |= OPROP_VORPW;
+		} else if (!strncmpi(bp, "morgul ", l=7)
+			) {
+			oproperties |= OPROP_MORGW;
 		} else
 			break;
 		bp += l;
@@ -4217,7 +4220,7 @@ typfnd:
 					break;
 			case WEAPON_CLASS:
 				oproperties &= (OPROP_FIREW | OPROP_COLDW | OPROP_PSIOW | OPROP_DEEPW | OPROP_WATRW | OPROP_ELECW | OPROP_ACIDW | OPROP_MAGCW 
-								| OPROP_ANARW | OPROP_CONCW | OPROP_AXIOW | OPROP_HOLYW | OPROP_UNHYW | OPROP_VORPW | OPROP_LESSW);
+								| OPROP_ANARW | OPROP_CONCW | OPROP_AXIOW | OPROP_HOLYW | OPROP_UNHYW | OPROP_VORPW | OPROP_MORGW | OPROP_LESSW);
 				break;
 			case ARMOR_CLASS:
 				oproperties &= (OPROP_FIRE | OPROP_COLD | OPROP_ELEC | OPROP_ACID | OPROP_MAGC | OPROP_ANAR | OPROP_CONC | OPROP_AXIO);

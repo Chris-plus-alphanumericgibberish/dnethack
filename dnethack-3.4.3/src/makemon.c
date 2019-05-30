@@ -4052,8 +4052,34 @@ register struct monst *mtmp;
 		}
 		break;
 	    case S_WRAITH:
-		(void)mongets(mtmp, KNIFE);
-		(void)mongets(mtmp, LONG_SWORD);
+		if(mm == PM_NAZGUL){
+			otmp = mksobj(STILETTO, TRUE, FALSE);
+			otmp->oproperties = OPROP_MORGW;
+			otmp->obj_material = METAL;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			otmp = mksobj(LONG_SWORD, TRUE, FALSE);
+			otmp->oproperties = OPROP_UNHYW;
+			otmp->oeroded = 1;
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+		} else if(mm == PM_BARROW_WIGHT) {
+			otmp = mksobj(STILETTO, TRUE, FALSE);
+			if(!rn2(5)) otmp->obj_material = SILVER;
+			else if(!rn2(4)) otmp->obj_material = GOLD;
+			fix_object(otmp);
+			if(!rn2(20)) otmp->oproperties = OPROP_HOLYW;
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			otmp = mksobj(LONG_SWORD, TRUE, FALSE);
+			if(!rn2(5)) otmp->obj_material = SILVER;
+			else if(!rn2(4)) otmp->obj_material = GOLD;
+			fix_object(otmp);
+			if(!rn2(20)) otmp->oproperties = OPROP_HOLYW;
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+		}
 		break;
 	    case S_ZOMBIE:
 		if(mm == PM_UNDEAD_KNIGHT || mm == PM_WARRIOR_OF_SUNLIGHT){
@@ -6807,7 +6833,7 @@ register int	mmflags;
 			if(mndx != PM_MALKUTH_SEPHIRAH){ /* Malkuths are tough, but are generated in large numbers by shopkeeper code */
 				if(rn2(3))  m_initlgrp(mtmp, mtmp->mx, mtmp->my);
 				else	    m_initsgrp(mtmp, mtmp->mx, mtmp->my);
-			}else{
+			} else {
 				if(!rn2(3)) m_initsgrp(mtmp, mtmp->mx, mtmp->my);
 			}
 	    }

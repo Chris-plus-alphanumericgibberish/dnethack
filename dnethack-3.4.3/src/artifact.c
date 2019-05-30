@@ -2887,6 +2887,22 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			}
 		}
 	}
+	if(otmp->oproperties&OPROP_MORGW){
+		int bonus = 0;
+		if(youdefend){
+			if(!(otmp->oproperties&OPROP_LESSW))
+				u.umorgul++;
+			else u.umorgul = max(1, u.umorgul);
+			bonus = u.umorgul;
+		} else {
+			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 4);
+			else bonus += d(4,4);
+			mdef->mhpmax -= bonus;
+			if(mdef->mhpmax < 1) mdef->mhpmax = 1;
+			mdef->mhp = min(mdef->mhp, mdef->mhpmax);
+		}
+		*dmgptr += bonus;
+	}
 	
 	return messaged;
 }

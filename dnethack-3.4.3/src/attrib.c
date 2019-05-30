@@ -195,19 +195,32 @@ adjattrib(ndx, incr, msgflg)
 	    }
 	} else {
 	    if (ABASE(ndx) <= ATTRMIN(ndx)) {
-		if(ndx == A_WIS && u.wimage >= 10){
-			int temparise = u.ugrave_arise;
-			pline("The image of the weeping angel is taking over your body!");
-			u.ugrave_arise = PM_WEEPING_ANGEL;
-			done(WEEPING);
-			u.ugrave_arise = temparise;
-		} else {
-			if (msgflg == 0 && flags.verbose)
-				pline("You're already as %s as you can get.",
-				  minusattr[ndx]);
-		}
-		ABASE(ndx) = ATTRMIN(ndx); /* just in case */
-		return FALSE;
+			if(ndx == A_WIS && u.wimage >= 10){
+				int temparise = u.ugrave_arise;
+				pline("The image of the weeping angel is taking over your body!");
+				u.ugrave_arise = PM_WEEPING_ANGEL;
+				done(WEEPING);
+				u.ugrave_arise = temparise;
+			} else if(u.umorgul
+				&& (ndx == A_WIS || ndx == A_CON || ndx == A_CHA)
+				&& ABASE(A_WIS) <= ATTRMIN(A_WIS)
+				&& ABASE(A_CON) <= ATTRMIN(A_CON)
+				&& ABASE(A_CHA) <= ATTRMIN(A_CHA)
+			){
+				int temparise = u.ugrave_arise;
+				You_feel("something cold pierce your %s!", body_part(HEART));
+				u.ugrave_arise = PM_WRAITH;
+				killer_format = KILLED_BY;
+				killer = "a shard of a morgul-blade";
+				done(DIED);
+				u.ugrave_arise = temparise;
+			} else {
+				if (msgflg == 0 && flags.verbose)
+					pline("You're already as %s as you can get.",
+					  minusattr[ndx]);
+			}
+			ABASE(ndx) = ATTRMIN(ndx); /* just in case */
+			return FALSE;
 	    }
 
 	    ABASE(ndx) += incr;
@@ -487,7 +500,7 @@ exerchk()
 #endif
 
 		if(ABASE(i) >= 18 || (!AEXE(i) && ABASE(i) >= AMAX(i))) continue;
-		if(i == A_CHA) continue;/* can't exercise cha */
+		// if(i == A_CHA) continue;/* can't exercise cha */
 
 #ifdef DEBUG
 		pline("passed");
@@ -529,7 +542,8 @@ exerchk()
 			break;
 		    case A_CON: You((mod_val >0) ?
 				    "must be leading a healthy life-style." :
-				    "haven't been watching your health.");
+					u.umorgul ? "have the chill of death about you."
+				    : "haven't been watching your health.");
 				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    case A_INT: You((mod_val >0) ?
@@ -539,7 +553,15 @@ exerchk()
 			break;
 		    case A_WIS: You((mod_val >0) ?
 				    "must have been very observant." :
-				    u.wimage >= 10 ? "are being consumed by the image of the weeping angel!" : "haven't been paying attention.");
+				    u.wimage >= 10 ? "are being consumed by the image of the weeping angel!" 
+					: u.umorgul ? "have the chill of death about you."
+					: "haven't been paying attention.");
+				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
+			break;
+		    case A_CHA: You((mod_val >0) ?
+				    "must have been very charming lately." :
+					u.umorgul ? "have the chill of death about you."
+				    : "haven't been watching behavior.");
 				if(mod_val < 0)	AMAX(i) += mod_val; /* permanent drain */
 			break;
 		    }

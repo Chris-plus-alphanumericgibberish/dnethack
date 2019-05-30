@@ -1875,6 +1875,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 			enl_msg("The image of a weeping angel ", "lurks","lurked",buf);
 		}
 	}
+	if (u.umorgul) enl_msg("You ", "feel", "felt", " deathly cold");
 
 	/*** Vision and senses ***/
 	if (See_invisible(u.ux,u.uy)) enl_msg(You_, "see", "saw", " invisible");
@@ -2757,6 +2758,10 @@ resistances_enlightenment()
 		else if(ACURR(A_WIS) < 9) Sprintf(buf, "The image of a weeping angel is ever on your mind");
 		else if(ACURR(A_WIS) < 12) Sprintf(buf, "You can't seem to shake the image of a weeping angel from your mind");
 		else Sprintf(buf, "The image of a weeping angel lurks in the back of your mind");
+		putstr(en_win, 0, buf);
+	}
+	if (u.umorgul){
+		Sprintf(buf, "You feel deathly cold");
 		putstr(en_win, 0, buf);
 	}
 	

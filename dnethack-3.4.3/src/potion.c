@@ -444,6 +444,14 @@ peffects(otmp)
 		    //   multiple potions will only get half of them back */
 		    // u.ulevelmax -= 1;
 		    pluslvl(FALSE);
+			/* Dissolve one morgul blade shard if blessed*/
+			if(u.umorgul>0){
+				u.umorgul--;
+				if(u.umorgul)
+					You_feel("the chill of death lessen.");
+				else
+					You_feel("the chill of death fade away.");
+			}
 		}
 	case SPE_RESTORE_ABILITY:
 		unkn++;
@@ -932,6 +940,14 @@ as_extra_healing:
 		    //   multiple potions will only get half of them back */
 		    // u.ulevelmax -= 1;
 		    pluslvl(FALSE);
+		}
+		/* Dissolve one morgul blade shard if blessed*/
+		if(u.umorgul>0){
+			u.umorgul--;
+			if(u.umorgul)
+				You_feel("the chill of death lessen.");
+			else
+				You_feel("the chill of death fade away.");
 		}
 		(void) make_hallucinated(0L,TRUE,0L);
 		exercise(A_STR, TRUE);

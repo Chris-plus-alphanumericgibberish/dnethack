@@ -996,6 +996,17 @@ karemade:
 						exercise(A_WIS, FALSE);
 					} else if(!(moves%10)) u.wimage--;
 				}
+				if(u.umorgul){
+					int i = A_CON;
+					int n = u.umorgul;
+					if(ACURR(A_WIS)>=ACURR(i))
+						i = A_WIS;
+					if(ACURR(A_CHA)>=ACURR(i))
+						i = A_CHA;
+					while(n-- > 0){
+						exercise(i, FALSE);
+					}
+				}
 			}
 			
 			if(u.sealsActive&SEAL_ASTAROTH && u.uinwater){

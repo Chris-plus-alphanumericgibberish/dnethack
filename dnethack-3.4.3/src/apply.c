@@ -5732,11 +5732,29 @@ doapply()
 			makemon(&mons[PM_WEEPING_ANGEL], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
 			if(Blind) pline("The effigy grows and turns to stone!");
 			else pline("The effigy becomes a weeping angel!");
+		} else if(u.umorgul){
+			int i = rnd(u.umorgul);
+			struct obj *frags;
+			u.umorgul -= i;
+			frags = mksobj(SHURIKEN, FALSE, FALSE);
+			if(frags){
+				frags->quan = i;
+				frags->oproperties = OPROP_MORGW|OPROP_LESSW;
+				frags->obj_material = METAL;
+				curse(frags);
+				fix_object(frags);
+				pline("The effigy is pierced by %s!", 
+					i==1 ? "a blade" : "blades");
+				frags = hold_another_object(frags, "You drop %s!",
+							  doname(frags), (const char *)0); /*shouldn't merge, but may drop*/
+				if(Blind) pline("The effigy bursts into flames!");
+				else pline("The effigy burns with sickly flames!");
+			}
 		} else {
-			u.wimage = 0; //Sub-critical images are removed anyway.
 			if(Blind) pline("The effigy bursts into flames!");
 			else pline("The effigy burns with sickly flames!");
 		}
+		u.wimage = 0; //Sub-critical images are removed anyway.
 		if(obj->quan>1)
 			useup(obj);
 		else{
