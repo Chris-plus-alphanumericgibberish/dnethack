@@ -1825,13 +1825,16 @@ hitmu(mtmp, mattk)
 			{
 				int basedamage = dmg;
 				int newdamage = dmg;
-				if(otmp->oproperties){
-					(void)oproperty_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
+				int hmessage = 0;
+				if(uwep->oproperties){
+					hmessage |= oproperty_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
 				}
 				dmg += (newdamage - basedamage);
 				newdamage = basedamage;
-				if (!(uwep->oartifact &&
-					artifact_hit(mtmp, &youmonst, uwep, &newdamage,dieroll)))
+				if (uwep->oartifact){
+					hmessage |= artifact_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
+				}
+				if(!hmessage)
 					 hitmsg(mtmp, mattk);
 				dmg += (newdamage - basedamage);
 			}
@@ -1975,9 +1978,24 @@ hitmu(mtmp, mattk)
 				}
 			}
 			if (dmg <= 0) dmg = 1;
-			if (!(otmp->oartifact &&
-				artifact_hit(mtmp, &youmonst, otmp, &dmg,dieroll)))
-			     hitmsg(mtmp, mattk);
+			//Artifact damage block:
+			{
+				int basedamage = dmg;
+				int newdamage = dmg;
+				int hmessage = 0;
+				if(otmp->oproperties){
+					hmessage |= oproperty_hit(mtmp, &youmonst, otmp, &newdamage,dieroll);
+				}
+				dmg += (newdamage - basedamage);
+				newdamage = basedamage;
+				if (otmp->oartifact){
+					hmessage |= artifact_hit(mtmp, &youmonst, otmp, &newdamage,dieroll);
+				}
+				if(!hmessage)
+					 hitmsg(mtmp, mattk);
+				dmg += (newdamage - basedamage);
+			}
+			//End artifact damage block:
 			if (!dmg) break;
 			if (u.mh > 1 && u.mh > (dmg-roll_udr(mtmp)) &&
 				   otmp->obj_material == IRON &&
