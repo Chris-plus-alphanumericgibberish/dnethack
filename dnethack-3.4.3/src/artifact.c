@@ -2895,8 +2895,8 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			else u.umorgul = max(1, u.umorgul);
 			bonus = u.umorgul;
 		} else {
-			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 4);
-			else bonus += d(4,4);
+			if (otmp->oproperties&OPROP_LESSW) bonus += 1;
+			else bonus += d(1,4);
 			mdef->mhpmax -= bonus;
 			if(mdef->mhpmax < 1) mdef->mhpmax = 1;
 			mdef->mhp = min(mdef->mhp, mdef->mhpmax);
