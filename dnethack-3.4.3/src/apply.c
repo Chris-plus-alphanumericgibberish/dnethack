@@ -5747,9 +5747,9 @@ doapply()
 					i==1 ? "a blade" : "blades");
 				frags = hold_another_object(frags, "You drop %s!",
 							  doname(frags), (const char *)0); /*shouldn't merge, but may drop*/
-				if(Blind) pline("The effigy bursts into flames!");
-				else pline("The effigy burns with sickly flames!");
 			}
+			if(Blind) pline("The effigy bursts into flames!");
+			else pline("The effigy burns with sickly flames!");
 		} else {
 			if(Blind) pline("The effigy bursts into flames!");
 			else pline("The effigy burns with sickly flames!");
