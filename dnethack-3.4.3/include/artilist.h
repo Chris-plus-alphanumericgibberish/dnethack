@@ -309,7 +309,7 @@ A("The Singing Sword",	LONG_SWORD,
 	(SPFX_RESTR|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(1,1),	NO_DFNS,	NO_CARY,
-	SINGING,		A_CHAOTIC, PM_BARD, NON_PM, 5000L,
+	SINGING,		A_NONE, PM_BARD, NON_PM, 5000L,
 	0,0,0),
 
 /*
