@@ -1746,7 +1746,7 @@ boolean *prev_loot;
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
 		    return (0);
 		}
-		if (otmp->cursed && otmp->owornmask) {
+		if (otmp->cursed && otmp->owornmask && !is_weldproof_mon(mtmp)) {
 		    You("can't. It seems to be stuck to %s.",
 			x_monnam(mtmp, ARTICLE_THE, (char *)0,
 				SUPPRESS_SADDLE, FALSE));
