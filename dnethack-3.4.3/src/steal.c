@@ -593,7 +593,14 @@ boolean verbosely;
 	    mon->misc_worn_check &= ~obj->owornmask;
 	    update_mon_intrinsics(mon, obj, FALSE, TRUE);
 	 /* obj_no_longer_held(obj); -- done by place_object */
-	    if (obj->owornmask & W_WEP) setmnotwielded(mon, obj);
+		if (obj->owornmask & W_WEP){
+			setmnotwielded(mon,obj);
+			MON_NOWEP(mon);
+		}
+		if (obj->owornmask & W_SWAPWEP){
+			setmnotwielded(mon,obj);
+			MON_NOSWEP(mon);
+		}
 #ifdef STEED
 	/* don't charge for an owned saddle on dead steed */
 	} else if (mon->mtame && (obj->owornmask & W_SADDLE) && 

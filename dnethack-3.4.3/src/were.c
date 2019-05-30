@@ -171,6 +171,7 @@ struct monst *mon;
 	newsym(mon->mx,mon->my);
 	if(is_eeladrin(mon->data)){
 		struct obj *mw_tmp = MON_WEP(mon);
+		struct obj *msw_tmp = MON_SWEP(mon);
 		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
 			mon->misc_worn_check &= ~otmp->owornmask;
 			if (otmp->owornmask)
@@ -180,6 +181,13 @@ struct monst *mon;
 				if (!attacktype(mon->data, AT_WEAP)) {
 					setmnotwielded(mon, mw_tmp);
 					MON_NOWEP(mon);
+					mon->weapon_check = NO_WEAPON_WANTED;
+				}
+			}
+			if (otmp == msw_tmp){
+				if (!attacktype(mon->data, AT_XWEP)) {
+					setmnotwielded(mon, msw_tmp);
+					MON_NOSWEP(mon);
 					mon->weapon_check = NO_WEAPON_WANTED;
 				}
 			}

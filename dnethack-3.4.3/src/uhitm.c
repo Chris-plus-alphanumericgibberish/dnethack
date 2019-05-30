@@ -2947,6 +2947,10 @@ struct attack *mattk;
 		    setmnotwielded(mdef,otmp);
 		    MON_NOWEP(mdef);
 		}
+		if (otmp->owornmask & W_SWAPWEP){
+			setmnotwielded(mdef,otmp);
+			MON_NOSWEP(mdef);
+		}
 		otmp->owornmask = 0L;
 		update_mon_intrinsics(mdef, otmp, FALSE, FALSE);
 
@@ -3707,6 +3711,10 @@ register struct attack *mattk;
 						if (otmp2->owornmask & W_WEP) {
 							setmnotwielded(mdef,otmp2);
 							MON_NOWEP(mdef);
+						}
+						if (otmp2->owornmask & W_SWAPWEP){
+							setmnotwielded(mdef,otmp2);
+							MON_NOSWEP(mdef);
 						}
 						otmp2->owornmask = 0L;
 						update_mon_intrinsics(mdef, otmp2, FALSE, FALSE);

@@ -1670,6 +1670,19 @@ long timeout;
 				m_useup(obj->ocarry, obj);
 			}
 		}
+	    else if (obj == MON_SWEP(obj->ocarry)) {
+			setmnotwielded(obj->ocarry,obj);
+			MON_NOSWEP(obj->ocarry);
+			if(obj->otyp == NOBLE_S_DRESS){
+				obj = poly_obj(obj, BLACK_DRESS);
+				obj->oeroded = 0;
+				place_object(obj, mtmp->mx, mtmp->my);
+				/* call stackobj() if we ever drop anything that can merge */
+				newsym(mtmp->mx, mtmp->my);
+			} else {
+				m_useup(obj->ocarry, obj);
+			}
+		}
 		else if((unwornmask = obj->owornmask) != 0L){
 			mtmp = obj->ocarry;
 			obj_extract_self(obj);

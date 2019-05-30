@@ -651,6 +651,17 @@ moveloop()
 						continue;
 					}
 				}
+				/* check for bad swap weapons */
+				if (mtmp->msw) {
+					struct obj *obj;
+
+					for(obj = mtmp->minvent; obj; obj = obj->nobj)
+						if (obj->owornmask & W_SWAPWEP) break;
+					if (!obj || mtmp->msw != obj){
+						MON_NOSWEP(mtmp);
+						impossible("bad monster swap weapon detected (and fixed)");
+					}
+				}
 				/* Possibly become hostile */
 				if(mtmp->mpeacetime && !mtmp->mtame){
 					mtmp->mpeacetime--;
