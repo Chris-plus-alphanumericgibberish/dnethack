@@ -2837,7 +2837,6 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, ROUNDSHIELD);
 				(void)mongets(mtmp, ARMORED_BOOTS);
 				(void)mongets(mtmp, BRONZE_HELM);
-				(void)mongets(mtmp, LONG_SWORD);
 				otmp = mksobj(LONG_SWORD, TRUE, FALSE);
 				otmp->obj_material = COPPER;
 			    (void) mpickobj(mtmp, otmp);
