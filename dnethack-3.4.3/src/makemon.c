@@ -4056,6 +4056,7 @@ register struct monst *mtmp;
 		if(mm == PM_NAZGUL){
 			otmp = mksobj(STILETTO, TRUE, FALSE);
 			otmp->oproperties = OPROP_MORGW;
+			otmp->opoisoned = OPOISON_BASIC;
 			otmp->obj_material = METAL;
 			fix_object(otmp);
 			curse(otmp);
@@ -4065,19 +4066,26 @@ register struct monst *mtmp;
 			otmp->oeroded = 1;
 			curse(otmp);
 			(void) mpickobj(mtmp, otmp);
+		} else if(mm == PM_NECROMANCER) {
+			otmp = mksobj(LONG_SWORD, TRUE, FALSE);
+			otmp->oproperties = OPROP_UNHYW|OPROP_MORGW;
+			otmp->opoisoned = OPOISON_BASIC;
+			otmp->oerodeproof = TRUE;
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
 		} else if(mm == PM_BARROW_WIGHT) {
 			otmp = mksobj(STILETTO, TRUE, FALSE);
 			if(!rn2(5)) otmp->obj_material = SILVER;
 			else if(!rn2(4)) otmp->obj_material = GOLD;
 			fix_object(otmp);
-			if(!rn2(20)) otmp->oproperties = OPROP_HOLYW;
+			if(!rn2(20)) otmp->oproperties = OPROP_HOLYW|OPROP_LESSW;
 			curse(otmp);
 			(void) mpickobj(mtmp, otmp);
 			otmp = mksobj(LONG_SWORD, TRUE, FALSE);
 			if(!rn2(5)) otmp->obj_material = SILVER;
 			else if(!rn2(4)) otmp->obj_material = GOLD;
 			fix_object(otmp);
-			if(!rn2(20)) otmp->oproperties = OPROP_HOLYW;
+			if(!rn2(20)) otmp->oproperties = OPROP_HOLYW|OPROP_LESSW;
 			curse(otmp);
 			(void) mpickobj(mtmp, otmp);
 		}
