@@ -584,7 +584,11 @@ register struct obj *obj;
 			Strcat(buf, "wool-lined ");
 	}
 	if(obj->oproperties && obj->oartifact == 0){
-		if(obj->oproperties&OPROP_LESSW && obj->known){
+		if(obj->oproperties&OPROP_LESSW 
+			&& obj->oproperties&OPROP_AXIOW 
+			&& obj->oproperties&(OPROP_FIREW|OPROP_COLDW|OPROP_ELECW)
+			&& obj->known
+		){
 			//Arabic (hopefully) Alternatives (nouns): nar, thalaj, bariq
 			//Arabic (hopefully) Alternatives (adjectives (hopefully)): multahib, tajamad, bariq
 			//	Fire-March, Crystal-Frost, Lightning-Path
@@ -595,6 +599,8 @@ register struct obj *obj;
 			if(obj->oproperties&OPROP_ELECW)
 				Strcat(buf, "arcing ");
 		} else {
+			if(obj->oproperties&OPROP_LESSW)
+				Strcat(buf, "lesser ");
 			if(obj->oproperties&OPROP_PSIOW){
 				if(obj->known) Strcat(buf, "psionic ");
 				else if(Blind_telepat) Strcat(buf, "whispering ");
@@ -1215,7 +1221,11 @@ plus:
 			if(obj->otyp == VIPERWHIP && obj->opoisonchrgs) Sprintf(eos(prefix), "(%d coatings) ", (int)(obj->opoisonchrgs+1));
 		}
 		if(obj->oproperties && obj->oartifact){
-			if(obj->oproperties&OPROP_LESSW && obj->known){
+			if(obj->oproperties&OPROP_LESSW 
+				&& obj->oproperties&OPROP_AXIOW 
+				&& obj->oproperties&(OPROP_FIREW|OPROP_COLDW|OPROP_ELECW)
+				&& obj->known
+			){
 				if(obj->oproperties&OPROP_FIREW)
 					Strcat(prefix, "forge-hot ");
 				if(obj->oproperties&OPROP_COLDW)
@@ -1223,6 +1233,8 @@ plus:
 				if(obj->oproperties&OPROP_ELECW)
 					Strcat(prefix, "arcing ");
 			} else {
+				if(obj->oproperties&OPROP_LESSW)
+					Strcat(prefix, "lesser ");
 				if(obj->oproperties&OPROP_PSIOW){
 					if(obj->known) Strcat(prefix, "psionic ");
 					else if(Blind_telepat) Strcat(prefix, "whispering ");
@@ -3155,6 +3167,9 @@ int wishflags;
 		} else if (!strncmpi(bp, "woolen ", l=7) || !strncmpi(bp, "wool-lined ", l=11)
 			) {
 			oproperties |= OPROP_WOOL;
+		} else if (!strncmpi(bp, "lesser ", l=7)
+			) {
+			oproperties |= OPROP_LESSW;
 		} else if (!strncmpi(bp, "flaming ", l=8)
 			) {
 			oproperties |= OPROP_FIREW;
