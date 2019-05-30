@@ -1518,7 +1518,7 @@ int spot;
 			/* never unsuitable for mainhand wielding */
 			(spot!=W_WEP || (!bimanual(otmp, mtmp->data) || ((mtmp->misc_worn_check & W_ARMS) == 0 && !MON_SWEP(mtmp) && strongmonst(mtmp->data)))) &&
 			/* never unsuitable for offhand wielding */
-			(spot!=W_SWAPWEP || (!(otmp->owornmask & (W_WEP)) && !otmp->cursed && !bimanual(otmp, mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0 && 
+			(spot!=W_SWAPWEP || (!(otmp->owornmask & (W_WEP)) && (!otmp->cursed || is_weldproof_mon(mtmp)) && !bimanual(otmp, mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0 && 
 				( (otmp->owt <= (30 + (mtmp->m_lev/5)*5)) 
 				|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR]) 
 				|| (mtmp->data == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY])
