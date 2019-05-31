@@ -345,7 +345,7 @@ boolean domsg;
 			else if (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN])
 				pline("%s caws and croaks in opposition to your song!", Monnam(mtmp));
 			else if (mtmp->data == &mons[PM_PARROT])
-				pline("%s squaks in opposition to your song!", Monnam(mtmp));
+				pline("%s squawks in opposition to your song!", Monnam(mtmp));
 			else if (mtmp->data->mlet == S_NYMPH)
 				pline("%s's charming voice sings in opposition to your song!", Monnam(mtmp));
 			else if (mtmp->data->mlet == S_CENTAUR)
