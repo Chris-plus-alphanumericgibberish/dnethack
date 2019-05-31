@@ -628,13 +628,13 @@ register struct obj *obj;
 				Strcat(buf, "concordant ");
 			if(obj->oproperties&OPROP_AXIOW && obj->known)
 				Strcat(buf, "axiomatic ");
-			if(obj->oproperties&OPROP_HOLYW && obj->known)
+			if(obj->oproperties&OPROP_HOLYW && obj->known && obj->blessed)
 				Strcat(buf, "holy ");
-			if(obj->oproperties&OPROP_UNHYW && obj->known)
+			if(obj->oproperties&OPROP_UNHYW && obj->known && obj->cursed)
 				Strcat(buf, "unholy ");
 			if(obj->oproperties&OPROP_VORPW && obj->known)
 				Strcat(buf, "vorpal ");
-			if(obj->oproperties&OPROP_MORGW && obj->known)
+			if(obj->oproperties&OPROP_MORGW && obj->known && obj->cursed)
 				Strcat(buf, "morgul ");
 		}
 	}
@@ -1141,9 +1141,9 @@ register struct obj *obj;
 	    /* allow 'blessed clear potion' if we don't know it's holy water;
 	     * always allow "uncursed potion of water"
 	     */
-	    if (obj->cursed)
+	    if (obj->cursed && !(obj->oproperties&OPROP_UNHYW))
 		Strcat(prefix, "cursed ");
-	    else if (obj->blessed)
+	    else if (obj->blessed && !(obj->oproperties&OPROP_HOLYW))
 		Strcat(prefix, "blessed ");
 	    else if ((!obj->known || !objects[obj->otyp].oc_charged ||
 		      (obj->oclass == ARMOR_CLASS ||
@@ -1260,11 +1260,11 @@ plus:
 					Strcat(prefix, "concordant ");
 				if(obj->oproperties&OPROP_AXIOW && obj->known)
 					Strcat(prefix, "axiomatic ");
-				if(obj->oproperties&OPROP_HOLYW && obj->known)
+				if(obj->oproperties&OPROP_HOLYW && obj->known && obj->blessed)
 					Strcat(prefix, "holy ");
-				if(obj->oproperties&OPROP_UNHYW && obj->known)
+				if(obj->oproperties&OPROP_UNHYW && obj->known && obj->cursed)
 					Strcat(prefix, "unholy ");
-				if(obj->oproperties&OPROP_MORGW && obj->known)
+				if(obj->oproperties&OPROP_MORGW && obj->known && obj->cursed)
 					Strcat(prefix, "morgul ");
 			}
 		}
@@ -3205,9 +3205,11 @@ int wishflags;
 			oproperties |= OPROP_AXIOW;
 		} else if (!strncmpi(bp, "holy ", l=5) && strncmpi(bp, "holy moonlight sword", 20)
 			) {
+			blessed = !(uncursed + iscursed);
 			oproperties |= OPROP_HOLYW;
 		} else if (!strncmpi(bp, "unholy ", l=7)
 			) {
+			iscursed = !(uncursed + blessed);
 			oproperties |= OPROP_UNHYW;
 		} else if (!strncmpi(bp, "vorpal ", l=7) && strncmpi(bp, "Vorpal Blade", 12)
 			) {
