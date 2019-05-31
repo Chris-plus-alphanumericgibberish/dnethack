@@ -194,6 +194,8 @@ in_trouble()
 		    ((otmp = unchanger()) != 0 && otmp->cursed)))
 		return TROUBLE_UNUSEABLE_HANDS;
 	}
+	if(Role_if(PM_BARD) && welded(uwep))
+		return TROUBLE_UNUSEABLE_HANDS;
 	if(Blindfolded && ublindf->cursed) return(TROUBLE_CURSED_BLINDFOLD);
 
 	/*
