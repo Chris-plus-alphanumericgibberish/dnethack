@@ -1185,6 +1185,7 @@ boolean at_stairs, falling, portal;
 	(void) memset((genericptr_t) &dndest, 0, sizeof dndest);
 
 	if (!(level_info[new_ledger].flags & LFILE_EXISTS)) {
+remake:
 		/* entering this level for first time; make it now */
 		if (level_info[new_ledger].flags & (FORGOTTEN|VISITED)) {
 		    impossible("goto_level: returning to discarded level?");
@@ -1211,6 +1212,7 @@ boolean at_stairs, falling, portal;
 		if (fd < 0) {
 			pline("%s", whynot);
 			pline("Probably someone removed it.");
+			goto remake; //Try remaking missing levels
 			killer = whynot;
 			done(TRICKED);
 			/* we'll reach here if running in wizard mode */
