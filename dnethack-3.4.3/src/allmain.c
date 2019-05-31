@@ -662,6 +662,11 @@ moveloop()
 						impossible("bad monster swap weapon detected (and fixed)");
 					}
 				}
+				/* Some bugs cause mtame and mpeaceful to diverge, fix w/ a warning */
+				if(mtmp->mtame && !mtmp->mpeaceful){
+					impossible("Hostile+tame monster state detected (and fixed)");
+					mtmp->mpeaceful = TRUE;
+				}
 				/* Possibly become hostile */
 				if(mtmp->mpeacetime && !mtmp->mtame){
 					mtmp->mpeacetime--;
