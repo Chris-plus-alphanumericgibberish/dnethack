@@ -132,7 +132,7 @@ hack_artifacts()
 	
 	/* Fix up the alignments of "gift" artifacts */
 	for (art = artilist+1; art->otyp; art++)
-	    if ((art->role == Role_switch || Pantheon_if(art->role)) && art->alignment != A_NONE)
+	    if ((art->role == Role_switch || Pantheon_if(art->role)) && (art->alignment != A_NONE || Role_if(PM_BARD)))
 			art->alignment = alignmnt;
 
 	if(Race_if(PM_HALF_DRAGON) && flags.initgend){
@@ -168,30 +168,38 @@ hack_artifacts()
 	if(Pantheon_if(PM_BARBARIAN)){
 		if(u.role_variant == TWO_HANDED_SWORD){
 			artilist[ART_CLEAVER].role = NON_PM;
+			artilist[ART_ATLANTEAN_ROYAL_SWORD].role = PM_BARBARIAN;
 		} else if(u.role_variant == BATTLE_AXE){
 			artilist[ART_ATLANTEAN_ROYAL_SWORD].role = NON_PM;
+			artilist[ART_CLEAVER].role = PM_BARBARIAN;
 		} else {
 			if(rn2(2)){
 				u.role_variant = TWO_HANDED_SWORD;
 				artilist[ART_CLEAVER].role = NON_PM;
+				artilist[ART_ATLANTEAN_ROYAL_SWORD].role = PM_BARBARIAN;
 			} else { //Priest with this pantheon
 				u.role_variant = BATTLE_AXE;
 				artilist[ART_ATLANTEAN_ROYAL_SWORD].role = NON_PM;
+				artilist[ART_CLEAVER].role = PM_BARBARIAN;
 			}
 		}
 	}
 	if(Pantheon_if(PM_SAMURAI)){
 		if(u.role_variant == NAGINATA){
 			artilist[ART_KIKU_ICHIMONJI].role = NON_PM;
+			artilist[ART_JINJA_NAGINATA].role = PM_SAMURAI;
 		} else if(u.role_variant == KATANA){
 			artilist[ART_JINJA_NAGINATA].role = NON_PM;
+			artilist[ART_KIKU_ICHIMONJI].role = PM_SAMURAI;
 		} else { //Priest with this pantheon
 			if(rn2(2)){
 				u.role_variant = NAGINATA;
 				artilist[ART_KIKU_ICHIMONJI].role = NON_PM;
+				artilist[ART_JINJA_NAGINATA].role = PM_SAMURAI;
 			} else {
 				u.role_variant = KATANA;
 				artilist[ART_JINJA_NAGINATA].role = NON_PM;
+				artilist[ART_KIKU_ICHIMONJI].role = PM_SAMURAI;
 			}
 		}
 	}
