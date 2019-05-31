@@ -3256,8 +3256,12 @@ signs_mirror()
 	}
 	if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis){
 		if((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))))
-			putstr(en_win, 0, "Your features have taken on the rigidity of a cheap disguise.");
-		else putstr(en_win, 0, "Your rigid features can't be seen in the dark.");
+			putstr(en_win, 0, "Your rigid features can't be seen in the dark.");
+		else if((ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE)) //face-covering mask
+			 || (uarmh && (uarmh->otyp==PLASTEEL_HELM || uarmh->otyp==PONTIFF_S_CROWN)) //face-covering helm
+			 || (uarmc && (uarmc->otyp==WHITE_FACELESS_ROBE || uarmc->otyp==BLACK_FACELESS_ROBE || uarmc->otyp==SMOKY_VIOLET_FACELESS_ROBE))//face-covering robe
+		) putstr(en_win, 0, "Your rigid features can't be seen through your disguise.");
+		else putstr(en_win, 0, "Your features have taken on the rigidity of a cheap disguise.");
 		message = TRUE;
 	}
 	if(u.sealsActive&SEAL_ASTAROTH && !Invis){

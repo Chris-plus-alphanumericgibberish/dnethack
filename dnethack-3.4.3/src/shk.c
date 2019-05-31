@@ -5694,7 +5694,13 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_AHAZU && !(ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE))) count++;
 		// if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
 		if(u.sealsActive&SEAL_ANDREALPHUS && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
-		if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
+		if(u.sealsActive&SEAL_ANDROMALIUS && !NoBInvis 
+		  && !((levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))) //dark square
+			 || (ublindf && (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE)) //face-covering mask
+			 || (uarmh && (uarmh->otyp==PLASTEEL_HELM || uarmh->otyp==PONTIFF_S_CROWN)) //face-covering helm
+			 || (uarmc && (uarmc->otyp==WHITE_FACELESS_ROBE || uarmc->otyp==BLACK_FACELESS_ROBE || uarmc->otyp==SMOKY_VIOLET_FACELESS_ROBE))//face-covering robe
+		  )
+		) count++;
 		// if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES)) count++;
 		if(u.sealsActive&SEAL_BALAM && !Invis && (uarmc || uarm) && !(uarmg && uarmf)) count++;
 		// if(u.sealsActive&SEAL_BERITH && !Invis && (u.usteed || !(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))) count++;
