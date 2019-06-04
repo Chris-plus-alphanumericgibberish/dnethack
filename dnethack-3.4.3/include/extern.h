@@ -392,6 +392,7 @@ E int NDECL(docome);
 
 /* ### do_name.c ### */
 
+E void FDECL(do_oname, (struct obj *));
 E int FDECL(getpos, (coord *,BOOLEAN_P,const char *));
 E struct monst *FDECL(christen_monst, (struct monst *,const char *));
 E int NDECL(do_mname);
@@ -505,9 +506,11 @@ E void FDECL(keepdogs, (BOOLEAN_P));
 E void FDECL(migrate_to_level, (struct monst *,int,XCHAR_P,coord *));
 E int FDECL(dogfood, (struct monst *,struct obj *));
 E struct monst *FDECL(tamedog, (struct monst *,struct obj *));
-E struct monst *FDECL(make_pet_minion, (int,aligntyp));
+E struct monst *FDECL(make_pet_minion, (int,ALIGNTYP_P));
 E void FDECL(abuse_dog, (struct monst *));
 E void FDECL(wary_dog, (struct monst *, BOOLEAN_P));
+E void FDECL(enough_dogs, (int));
+E void NDECL(vanish_dogs);
 
 /* ### dogmove.c ### */
 
@@ -741,8 +744,8 @@ E long FDECL(rndexp, (BOOLEAN_P));
 
 /* ### explode.c ### */
 
-E void FDECL(explode, (int,int,int,int,CHAR_P,int,int));
-E void FDECL(splash, (int,int,int,int,int,int,CHAR_P,int));
+E void FDECL(explode, (int,int,int,int,int,int,int));
+E void FDECL(splash, (int,int,int,int,int,int,int,int));
 E long FDECL(scatter, (int, int, int, unsigned int, struct obj *));
 E void FDECL(splatter_burning_oil, (int, int));
 //#ifdef FIREARMS
@@ -987,6 +990,10 @@ E int FDECL(count_buc, (struct obj *,int));
 E void FDECL(carry_obj_effects, (struct obj *));
 E const char *FDECL(currency, (long));
 E void FDECL(silly_thing, (const char *,struct obj *));
+E struct obj *NDECL(getnextgetobj);
+#ifdef SORTLOOT
+E int FDECL(sortloot_cmp, (struct obj *, struct obj *));
+#endif
 E int NDECL(u_healing_penalty);
 
 /* ### ioctl.c ### */
@@ -1201,6 +1208,7 @@ E void FDECL(add_subroom, (struct mkroom *,int,int,int,int,
 			   BOOLEAN_P,SCHAR_P,BOOLEAN_P));
 E void NDECL(makecorridors);
 E int FDECL(add_door, (int,int,struct mkroom *));
+E int NDECL(random_special_room);
 E void NDECL(mkpoolroom);
 E void NDECL(mklev);
 #ifdef SPECIALIZATION
@@ -1213,18 +1221,21 @@ E boolean FDECL(occupied, (XCHAR_P,XCHAR_P));
 E int FDECL(okdoor, (XCHAR_P,XCHAR_P));
 E void FDECL(dodoor, (int,int,struct mkroom *));
 E void FDECL(mktrap, (int,int,struct mkroom *,coord*));
+E struct mkroom *FDECL(room_at, (XCHAR_P, XCHAR_P));
 E void FDECL(mkstairs, (XCHAR_P,XCHAR_P,CHAR_P,struct mkroom *));
+E boolean FDECL(mkfeature, (int, boolean, struct mkroom *));
 E void NDECL(mkinvokearea);
 
 /* ### mkmap.c ### */
 
 void FDECL(flood_fill_rm, (int,int,int,BOOLEAN_P,BOOLEAN_P));
 void FDECL(remove_rooms, (int,int,int,int));
+void FDECL(remove_room, (unsigned));
 
 /* ### mkmaze.c ### */
 
 E void FDECL(wallification, (int,int,int,int));
-E void FDECL(walkfrom, (int,int));
+E void FDECL(walkfrom, (int,int,int));
 E void FDECL(makemaz, (const char *));
 E void FDECL(mazexy, (coord *));
 E void NDECL(bound_digging);
@@ -1233,6 +1244,12 @@ E boolean FDECL(bad_location, (XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P))
 E void FDECL(place_lregion, (XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,
 			     XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,
 			     XCHAR_P,d_level *));
+E void FDECL(maze_add_rooms, (int, int));
+E void FDECL(maze_add_openings, (int));
+E void FDECL(maze_remove_deadends, (int, boolean));
+E void FDECL(maze_damage_rooms, (int));
+E void FDECL(maze_touchup_rooms, (int));
+E void FDECL(maze_remove_room, (int));
 E void NDECL(movebubbles);
 E void NDECL(water_friction);
 E void FDECL(save_waterlevel, (int,int));
@@ -1291,13 +1308,15 @@ E void NDECL(obj_sanity_check);
 
 /* ### mkroom.c ### */
 
+E boolean FDECL(isspacious, (struct mkroom *));
 E void NDECL(mksepulcher);
 E void NDECL(mkmivault);
 E void FDECL(mkmivaultitem,(struct obj *));
 E void NDECL(place_lolth_vaults);
 E void NDECL(place_law_features);
 E void NDECL(place_neutral_features);
-E struct mkroom * FDECL(pick_room,(BOOLEAN_P));
+E struct mkroom * FDECL(pick_room,(BOOLEAN_P, BOOLEAN_P));
+E boolean FDECL(special_room_requires_full_walls, (int));
 E void FDECL(mkroom, (int));
 E void FDECL(fill_zoo, (struct mkroom *));
 E boolean FDECL(nexttodoor, (int,int));
@@ -1699,9 +1718,13 @@ E char *FDECL(xname, (struct obj *));
 E char *FDECL(mshot_xname, (struct obj *));
 E boolean FDECL(the_unique_obj, (struct obj *obj));
 E char *FDECL(doname, (struct obj *));
+E char *FDECL(doname_with_price, (struct obj *));
 E boolean FDECL(not_fully_identified, (struct obj *));
 E char *FDECL(corpse_xname, (struct obj *,BOOLEAN_P));
 E char *FDECL(cxname, (struct obj *));
+#ifdef SORTLOOT
+E char *FDECL(cxname2, (struct obj *));
+#endif
 E char *FDECL(killer_xname, (struct obj *));
 E const char *FDECL(singular, (struct obj *,char *(*)(OBJ_P)));
 E char *FDECL(an, (const char *));
@@ -2182,6 +2205,7 @@ E void FDECL(home_shk, (struct monst *,BOOLEAN_P));
 E void FDECL(make_happy_shk, (struct monst *,BOOLEAN_P));
 E void FDECL(hot_pursuit, (struct monst *));
 E void FDECL(make_angry_shk, (struct monst *,XCHAR_P,XCHAR_P));
+E long FDECL(get_cost_of_shop_item, (struct obj *));
 E int NDECL(dopay);
 E boolean FDECL(paybill, (int));
 E void NDECL(finish_paybill);
@@ -2293,6 +2317,8 @@ E int NDECL(docast);
 E boolean FDECL(tt_findadjacent, (coord *, struct monst *));
 E int NDECL(spiritDsize);
 E int NDECL(dospirit);
+E int FDECL(spell_skill_from_adtype, (int));
+E int FDECL(spell_adtype, (int));
 E int FDECL(spell_skilltype, (int));
 E int FDECL(spiriteffects, (int,BOOLEAN_P));
 E int FDECL(spelleffects, (int,BOOLEAN_P,int));
@@ -2792,6 +2818,9 @@ E int FDECL(dowrite, (struct obj *));
 
 /* ### zap.c ### */
 
+E char * FDECL(flash_type, (int,int));
+E int FDECL(zap_glyph_color, (int));
+E int FDECL(wand_adtype, (int));
 E int FDECL(zap_hit, (struct monst *,int, BOOLEAN_P));
 E int FDECL(bhitm, (struct monst *,struct obj *));
 E void FDECL(probe_monster, (struct monst *));
@@ -2825,9 +2854,9 @@ E struct monst *FDECL(bhit, (int,int,int,int,int (*)(MONST_P,OBJ_P),
 			     int (*)(OBJ_P,OBJ_P),struct obj *, boolean *));
 E struct monst *FDECL(boomhit, (struct obj *,int,int));
 E int FDECL(burn_floor_paper, (int,int,BOOLEAN_P,BOOLEAN_P));
-E void FDECL(buzz, (int,int,XCHAR_P,XCHAR_P,int,int,int,int));
+E void FDECL(buzz, (int,int,boolean,int,XCHAR_P,XCHAR_P,int,int,int,int));
 E void FDECL(melt_ice, (XCHAR_P,XCHAR_P));
-E int FDECL(zap_over_floor, (XCHAR_P,XCHAR_P,int,boolean *));
+E int FDECL(zap_over_floor, (XCHAR_P,XCHAR_P,int,int,boolean,boolean *));
 E void FDECL(fracture_rock, (struct obj *));
 E boolean FDECL(break_statue, (struct obj *));
 E boolean FDECL(break_crate, (struct obj *));

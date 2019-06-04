@@ -349,9 +349,9 @@ int shots, shotlimit;
 	int cost;
 	boolean clicky = FALSE;
 	
-	if(raygun->altmode == ZT_LIGHTNING) cost = 15;
-	else if(raygun->altmode == ZT_DEATH) cost = 10;
-	else if(raygun->altmode == ZT_FIRE) cost = 2;
+	if(raygun->altmode == AD_DISN) cost = 15;
+	else if(raygun->altmode == AD_DEAD) cost = 10;
+	else if(raygun->altmode == AD_FIRE) cost = 2;
 	else cost = 1;
 	
 	if(raygun->ovar1 < shots*cost){
@@ -363,7 +363,7 @@ int shots, shotlimit;
 		shotlimit = 1;
 		if(u.dz > 0){
 			raygun->ovar1 -= cost;
-			if(raygun->altmode == ZT_LIGHTNING){
+			if(raygun->altmode == AD_DISN){
 				if (dighole(FALSE)){
 					Your("raygun disintegrated the floor!");
 					if(!Blind && !resists_blnd(&youmonst)) {
@@ -388,11 +388,11 @@ int shots, shotlimit;
 					oep->ward_type = BURN;
 					oep->complete_wards = 1;
 				}
-			} else if(raygun->altmode == ZT_DEATH){
+			} else if(raygun->altmode == AD_DEAD){
 				if (!Blind) {
 				   pline("The bugs on the %s stop moving!", surface(u.ux, u.uy));
 				}
-			} else if(raygun->altmode == ZT_FIRE){
+			} else if(raygun->altmode == AD_FIRE){
 					struct engr *oep;
 					if(!Blind){
 						pline("A heat ray shoots from the raygun and melts into the %s!",surface(u.ux, u.uy));
@@ -417,7 +417,7 @@ int shots, shotlimit;
 		} else {
 			if(Hallucination) pline1(Ronnie_ray_gun[rn2(SIZE(Ronnie_ray_gun))]);
 			raygun->ovar1 -= cost;
-			buzz(raygun->altmode+40, 6, u.ux, u.uy, u.dx, u.dy, 1,0);
+			buzz(raygun->altmode, WEAPON_CLASS, TRUE, 6, u.ux, u.uy, u.dx, u.dy, 1,0);
 			return 1;
 		}
 	}
@@ -431,7 +431,7 @@ int shots, shotlimit;
 	while(shots){
 		if(Hallucination) pline1(Ronnie_ray_gun[rn2(SIZE(Ronnie_ray_gun))]);
 		raygun->ovar1 -= cost;
-		buzz(raygun->altmode+40, 6, u.ux, u.uy, u.dx, u.dy, objects[(raygun->otyp)].oc_range,0);
+		buzz(raygun->altmode, WEAPON_CLASS, TRUE, 6, u.ux, u.uy, u.dx, u.dy, objects[(raygun->otyp)].oc_range, 0);
 		shots--;
 	}
 	
@@ -758,7 +758,7 @@ dofire()
 		domove();
 		flags.forcefight = 0;
 		if(u.uswallow){
-			explode(u.ux,u.uy,0/*Magical*/, (d(2,12)+2*uwep->spe) * ((Double_spell_size) ? 3 : 2) / 2, WAND_CLASS, EXPL_CYAN, 1 + !!Double_spell_size);
+			explode(u.ux,u.uy,AD_MAGM, WAND_CLASS, (d(2,12)+2*uwep->spe) * ((Double_spell_size) ? 3 : 2) / 2, EXPL_CYAN, 1 + !!Double_spell_size);
 		} else {
 			while(--range >= 0){
 				lsx = sx; sx += u.dx;
@@ -767,7 +767,7 @@ dofire()
 					mon = m_at(sx, sy);
 					if(mon){
 						dmg = d(2,12)+2*uwep->spe;
-						explode(sx, sy, 0/*Nagical*/, dmg * ((Double_spell_size) ? 3 : 2) / 2, WAND_CLASS, EXPL_CYAN, 1 + !!Double_spell_size);
+						explode(sx, sy, AD_MAGM, WAND_CLASS, dmg * ((Double_spell_size) ? 3 : 2) / 2, EXPL_CYAN, 1 + !!Double_spell_size);
 						break;//break loop
 					} else {
 						tmp_at(DISP_BEAM, cmap_to_glyph(S_digbeam));
@@ -777,7 +777,7 @@ dofire()
 					}
 				} else {
 					dmg = d(2,12)+2*uwep->spe;
-					explode(lsx, lsy, 0/*Nagical*/, dmg * ((Double_spell_size) ? 3 : 2) / 2, WAND_CLASS, EXPL_CYAN, 1 + !!Double_spell_size);
+					explode(lsx, lsy, AD_MAGM, WAND_CLASS, dmg * ((Double_spell_size) ? 3 : 2) / 2, EXPL_CYAN, 1 + !!Double_spell_size);
 					break;//break loop
 				}
 			}
@@ -1503,8 +1503,7 @@ int thrown;
 				pline("%s hit%s the %s and explodes in a ball of fire!",
 					Doname2(obj), (obj->quan == 1L) ? "s" : "",
 					u.dz < 0 ? ceiling(u.ux, u.uy) : surface(u.ux, u.uy));
-				explode(u.ux, u.uy, ZT_SPELL(ZT_FIRE), d(3, 8),
-					WEAPON_CLASS, EXPL_FIERY, 1);
+				explode(u.ux, u.uy, AD_FIRE, WEAPON_CLASS, d(3, 8), EXPL_FIERY, 1);
 			}
 			check_shop_obj(obj, u.ux, u.uy, TRUE);
 			obfree(obj, (struct obj *)0);
@@ -1631,8 +1630,8 @@ int thrown;
 	    if (cansee(bhitpos.x,bhitpos.y)) 
 		pline("%s explodes in a ball of fire!", Doname2(obj));
 	    else You_hear("an explosion");
-	    explode(bhitpos.x, bhitpos.y, ZT_SPELL(ZT_FIRE),
-		    d(3,8), WEAPON_CLASS, EXPL_FIERY, 1);
+	    explode(bhitpos.x, bhitpos.y, AD_FIRE, WEAPON_CLASS,
+		    d(3,8), EXPL_FIERY, 1);
 	}
 	if (is_bullet(obj) && (ammo_and_launcher(obj, launcher) &&
 		!is_grenade(obj))
@@ -1754,8 +1753,8 @@ int thrown;
 				if(obj->otyp == MIRROR){
 					if(u.spiritPColdowns[PWR_MIRROR_SHATTER] < monstermoves && !u.uswallow && uwep && uwep->otyp == MIRROR && !(uwep->oartifact)){
 						useup(uwep);
-						explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER, 1);
-						explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER, 1);
+						explode(u.ux,u.uy,AD_PHYS, TOOL_CLASS, d(5,dsize), HI_SILVER, 1);
+						explode(sx,sy, AD_PHYS, TOOL_CLASS, d(5,dsize), HI_SILVER, 1);
 						
 						while(sx != u.ux && sy != u.uy){
 							sx -= u.dx;
@@ -1791,8 +1790,8 @@ int thrown;
 							}
 						}
 						u.spiritPColdowns[PWR_MIRROR_SHATTER] = monstermoves + 25;
-					} else explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), TOOL_CLASS, HI_SILVER, 1);
-				} else if(obj->obj_material == OBSIDIAN_MT) explode(sx,sy,8/*Phys*/, d(rnd(5),dsize), WEAPON_CLASS, EXPL_DARK, 1);
+					} else explode(sx,sy, AD_PHYS, TOOL_CLASS, d(rnd(5),dsize), HI_SILVER, 1);
+				} else if(obj->obj_material == OBSIDIAN_MT) explode(sx,sy, AD_PHYS, WEAPON_CLASS, d(rnd(5),dsize), EXPL_DARK, 1);
 			}
 		    tmp_at(DISP_FLASH, obj_to_glyph(obj));
 		    tmp_at(bhitpos.x, bhitpos.y);
@@ -2288,8 +2287,8 @@ int thrown;
 				pline("%s explodes in a ball of fire!",
 					Doname2(obj));
 			    else You_hear("an explosion");
-			    explode(bhitpos.x, bhitpos.y, ZT_SPELL(ZT_FIRE),
-				    d(3,8), WEAPON_CLASS, EXPL_FIERY, 1);
+			    explode(bhitpos.x, bhitpos.y, AD_FIRE, WEAPON_CLASS,
+				    d(3,8), EXPL_FIERY, 1);
 			    obfree(obj, (struct obj *)0);
 			} else
 //#endif

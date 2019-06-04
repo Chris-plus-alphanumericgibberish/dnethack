@@ -1433,7 +1433,7 @@ struct monst *mtmp;
 		otmp->spe--;
 		if (oseen) makeknown(otmp->otyp);
 		m_using = TRUE;
-		buzz((int)(-30 - (otmp->otyp - WAN_MAGIC_MISSILE)),
+		buzz(wand_adtype(otmp->otyp), WAND_CLASS, FALSE,
 			(otmp->otyp == WAN_MAGIC_MISSILE) ? 2 : 6,
 			mtmp->mx, mtmp->my,
 			sgn(tbx), sgn(tby),0,0);
@@ -1451,7 +1451,7 @@ struct monst *mtmp;
 			You_hear("a horn being played.");
 		otmp->spe--;
 		m_using = TRUE;
-		buzz(-30 - ((otmp->otyp==FROST_HORN) ? AD_COLD-1 : AD_FIRE-1),
+		buzz(((otmp->otyp==FROST_HORN) ? AD_COLD : AD_FIRE), WAND_CLASS, FALSE,
 			rn1(6,6), mtmp->mx, mtmp->my,
 			sgn(tbx), sgn(tby),0,0);
 		m_using = FALSE;
@@ -2583,36 +2583,42 @@ const char *str;
 		if(str) 
 		pline(str, s_suffix(mon_nam(mon)), "fractured surface");
 		return TRUE;
-	} else if (mon->data == &mons[PM_SILVER_DRAGON] ||
-		mon->data == &mons[PM_CHROMATIC_DRAGON]) {
-	    /* Silver dragons only reflect when mature; babies do not */
+	} else if (species_reflects(mon)){
 	    if (str)
+		{
+			switch (monsndx(mon->data))
+			{
+			case PM_SILVER_DRAGON:
+			case PM_PLATINUM_DRAGON:
 		pline(str, s_suffix(mon_nam(mon)), "scales");
-	    return TRUE;
-	} else if(mon->data == &mons[PM_AOA] || mon->data == &mons[PM_AOA_DROPLET] 
-			|| mon->data == &mons[PM_ARGENTUM_GOLEM] || mon->data == &mons[PM_CENTER_OF_ALL]){
-		if(str) 
+				break;
+			case PM_AOA:
+			case PM_AOA_DROPLET:
+			case PM_ARGENTUM_GOLEM:
+			case PM_CENTER_OF_ALL:
 		pline(str, s_suffix(mon_nam(mon)), "surface");
-		return TRUE;
-	} else if(mon->data == &mons[PM_BAALPHEGOR] || mon->data == &mons[PM_HOD_SEPHIRAH]){
-		if(str) 
+				break;
+			case PM_BAALPHEGOR:
+			case PM_HOD_SEPHIRAH:
 		pline(str, s_suffix(mon_nam(mon)), "armor");
-		return TRUE;
-	} else if(mon->data == &mons[PM_AMM_KAMEREL]){
-		if(str) 
+				break;
+			case PM_AMM_KAMEREL:
 		pline(str, s_suffix(mon_nam(mon)), "glassy skin");
-		return TRUE;
-	} else if(mon->data == &mons[PM_HUDOR_KAMEREL]){
-		if(str) 
+				break;
+			case PM_HUDOR_KAMEREL:
 		pline(str, s_suffix(mon_nam(mon)), "watery skin");
-		return TRUE;
-	} else if(mon->data == &mons[PM_SHARAB_KAMEREL]){
-		if(str) 
+				break;
+			case PM_SHARAB_KAMEREL:
 		pline(str, s_suffix(mon_nam(mon)), "shimmering aura");
-		return TRUE;
-	} else if(mon->data == &mons[PM_ARA_KAMEREL]){
-		if(str) 
+				break;
+			case PM_ARA_KAMEREL:
 		pline(str, s_suffix(mon_nam(mon)), "gold mirrored arcs");
+				break;
+			default:
+				impossible("Reflecting monster not listed in mon_reflects(): %s", mon_nam(mon));
+				break;
+			}
+		}
 		return TRUE;
 	}
 	return FALSE;

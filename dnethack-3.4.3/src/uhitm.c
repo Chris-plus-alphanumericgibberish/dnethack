@@ -3813,7 +3813,7 @@ register struct attack *mattk;
 			for(i = rn2(3)+2; i > 0; i--){
 				x = rn2(3)-1;
 				y = rn2(3)-1;
-				explode(u.ux+x, u.uy+y, 8, tmp, -1, rn2(7), 1);		//-1 is unspecified source. 8 is physical
+				explode(u.ux+x, u.uy+y, AD_PHYS, -1, tmp, rn2(7), 1);		//-1 is unspecified source. 8 is physical
 			}
 			tmp=0;
 		} break;

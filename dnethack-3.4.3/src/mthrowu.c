@@ -6,32 +6,11 @@
 #include "mfndpos.h" /* ALLOW_M */
 
 STATIC_DCL int FDECL(drop_throw,(struct monst *, struct obj *,BOOLEAN_P,int,int));
+STATIC_DCL char* FDECL(breathwep, (int));
 
 #define URETREATING(x,y) (distmin(u.ux,u.uy,x,y) > distmin(u.ux0,u.uy0,x,y))
 
 #define POLE_LIM 5	/* How far monsters can use pole-weapons */
-
-#ifndef OVLB
-
-STATIC_DCL const char *breathwep[];
-
-#else /* OVLB */
-
-/*
- * Keep consistent with breath weapons in zap.c, and AD_* in monattk.h.
- */
-STATIC_OVL NEARDATA const char *breathwep[] = {
-				"fragments",
-				"fire",
-				"frost",
-				"sleep gas",
-				"a disintegration blast",
-				"lightning",
-				"poison gas",
-				"acid",
-				"strange breath #8",
-				"strange breath #9"
-};
 
 static const int dirx[8] = {0, 1, 1,  1,  0, -1, -1, -1},
 				 diry[8] = {1, 1, 0, -1, -1, -1,  0,  1};
@@ -39,7 +18,32 @@ static const int dirx[8] = {0, 1, 1,  1,  0, -1, -1, -1},
 int destroy_thrown = 0; /*state variable, if nonzero drop_throw always destroys object.  This is necessary 
 						 because the throw code doesn't report the identity of the thrown object, so it can only
 						 be destroyed in the throw code itself */
-int bypassDR=0;
+int bypassDR = 0;
+
+/* 
+ * replace the old char*breathwep[] array
+ * not dependent on order anymore
+ */
+char *
+breathwep(atype)
+int atype;
+{
+	switch (atype)
+	{
+	case AD_MAGM: return "fragments";
+	case AD_FIRE: return "fire";
+	case AD_COLD: return "frost";
+	case AD_SLEE: return "sleep gas";
+	case AD_DISN: return "a disintegration blast";
+	case AD_ELEC: return "lightning";
+	case AD_DRST: return "poison gas";
+	case AD_ACID: return "acid";
+	case AD_GOLD: return "gold";
+	default:
+		impossible("unaccounted-for breath type in breathwep: %d", atype);
+		return "404 BREATH NOT FOUND";
+	}
+}
 
 /* hero is hit by something other than a monster */
 int
@@ -186,16 +190,13 @@ int x,y;
 			obj = (struct obj *)0;
 		}
 	} else if (obj->otyp == BLASTER_BOLT) {
-		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,6),
-		    0, EXPL_RED, 1);
+		explode(bhitpos.x, bhitpos.y, AD_PHYS, 0, d(3,6), EXPL_RED, 1);
 	} else if (obj->otyp == HEAVY_BLASTER_BOLT) {
-		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -8 : 8, d(3,10),
-		    0, EXPL_FIERY, 1);
+		explode(bhitpos.x, bhitpos.y, AD_PHYS, 0, d(3,10), EXPL_FIERY, 1);
 	} else if (objects[obj->otyp].oc_dir & EXPLOSION) {
 	    	if (cansee(bhitpos.x,bhitpos.y)) 
 	    		pline("%s explodes in a ball of fire!", Doname2(obj));
-		explode(bhitpos.x, bhitpos.y, flags.mon_moving ? -ZT_SPELL(ZT_FIRE) : ZT_SPELL(ZT_FIRE), d(3,8),
-		    WEAPON_CLASS, EXPL_FIERY, 1);
+		explode(bhitpos.x, bhitpos.y, AD_FIRE, WEAPON_CLASS, d(3,8), EXPL_FIERY, 1);
 	}
 //#endif
 	// if (create && !((mtmp = m_at(x, y)) && (mtmp->mtrapped) &&
@@ -226,7 +227,6 @@ int x,y;
 	return retvalu;
 }
 
-#endif /* OVLB */
 #ifdef OVL1
 
 /* an object launched by someone/thing other than player attacks a monster;
@@ -1994,12 +1994,12 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	    }
 	    if(!mtmp->mspec_used && rn2(3)) {
 
-		if((typ >= AD_MAGM) && (typ <= AD_ACID)) {
+		if((typ >= AD_MAGM) && (typ <= AD_ACID) || typ == AD_GOLD) {
 
 		    if(canseemon(mtmp))
 			pline("%s breathes %s!", Monnam(mtmp),
-			      breathwep[typ-1]);
-		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + min(MAX_BONUS_DICE, (mtmp->m_lev/3)),
+					breathwep(typ));
+		    buzz(typ, FOOD_CLASS, FALSE, (int)mattk->damn + min(MAX_BONUS_DICE, (mtmp->m_lev/3)),
 			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + min(MAX_BONUS_DICE, (mtmp->m_lev/3)), (int)mattk->damd)*mult) : 0);
 			if(mtmp->mux != u.ux || mtmp->muy != u.uy){
 				//figures out you aren't where it thought you were
@@ -2091,15 +2091,15 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	    }
 	    if(!mtmp->mspec_used && rn2(3)) {
 
-		if((typ >= AD_MAGM) && (typ <= AD_ACID)) {
+		if((typ >= AD_MAGM) && (typ <= AD_ACID) || typ == AD_GOLD) {
 
 		    if(canseemon(mtmp))
 		    {
 			pline("%s breathes %s!", Monnam(mtmp),
-			      breathwep[typ-1]);
+				breathwep(typ));
 		    nomul(0, NULL);
 	            }
-		    buzz((int) (-20 - (typ-1)), (int)mattk->damn + (min(MAX_BONUS_DICE, mtmp->m_lev/3)),
+		    buzz(typ, FOOD_CLASS, FALSE, (int)mattk->damn + (min(MAX_BONUS_DICE, mtmp->m_lev/3)),
 			 mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,mattk->damd ? (d((int)mattk->damn + (min(MAX_BONUS_DICE, mtmp->m_lev/3)), (int)mattk->damd)*mult) : 0);
 		    /* breath runs out sometimes. Also, give monster some
 		     * cunning; don't breath if the player fell asleep.

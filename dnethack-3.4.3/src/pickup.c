@@ -699,6 +699,7 @@ menu_item **pick_list;	/* list of objects and counts to pick up */
  *	USE_INVLET	  - Use object's invlet.
  *	INVORDER_SORT	  - Use hero's pack order.
  *	SIGNAL_NOMENU	  - Return -1 rather than 0 if nothing passes "allow".
+ *	SIGNAL_ESCAPE	  - Return -2 if menu was escaped.
  */
 int
 query_objlist(qstr, olist, qflags, pick_list, how, allow)
@@ -709,9 +710,15 @@ menu_item **pick_list;		/* return list of items picked */
 int how;			/* type of query */
 boolean FDECL((*allow), (OBJ_P));/* allow function */
 {
+#ifdef SORTLOOT
+	int i, j;
+#endif
 	int n;
 	winid win;
 	struct obj *curr, *last;
+#ifdef SORTLOOT
+	struct obj **oarray;
+#endif
 	char *pack;
 	anything any;
 	boolean printed_type_name;
@@ -736,6 +743,33 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 	    return 1;
 	}
 
+#ifdef SORTLOOT
+	/* Make a temporary array to store the objects sorted */
+	oarray = (struct obj **)alloc(n*sizeof(struct obj*));
+
+	/* Add objects to the array */
+	i = 0;
+	for (curr = olist; curr; curr = FOLLOW(curr, qflags)) {
+	  if ((*allow)(curr)) {
+	    if (iflags.sortloot == 'f' ||
+		(iflags.sortloot == 'l' && !(qflags & USE_INVLET)))
+	      {
+		/* Insert object at correct index */
+		for (j = i; j; j--)
+		  {
+		    if (sortloot_cmp(curr, oarray[j-1])>0) break;
+		    oarray[j] = oarray[j-1];
+		  }
+		oarray[j] = curr;
+		i++;
+	      } else {
+		/* Just add it to the array */
+		oarray[i++] = curr;
+	      }
+	  }
+	}
+#endif /* SORTLOOT */
+
 	win = create_nhwindow(NHW_MENU);
 	start_menu(win);
 	any.a_obj = (struct obj *) 0;
@@ -749,7 +783,12 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 	pack = flags.inv_order;
 	do {
 	    printed_type_name = FALSE;
+#ifdef SORTLOOT
+	    for (i = 0; i < n; i++) {
+		curr = oarray[i];
+#else /* SORTLOOT */
 	    for (curr = olist; curr; curr = FOLLOW(curr, qflags)) {
+#endif /* SORTLOOT */
 		if ((qflags & FEEL_COCKATRICE) && curr->otyp == CORPSE &&
 		     will_feel_cockatrice(curr, FALSE)) {
 			destroy_nhwindow(win);	/* stop the menu and revert */
@@ -763,7 +802,7 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 		    if (qflags & INVORDER_SORT && !printed_type_name) {
 				any.a_obj = (struct obj *) 0;
 				add_menu(win, NO_GLYPH, &any, 0, 0, iflags.menu_headings,
-						Hallucination ? rand_class_name() : let_to_name(*pack, FALSE), MENU_UNSELECTED);
+						Hallucination ? rand_class_name() : let_to_name(*pack, FALSE, iflags.show_obj_sym), MENU_UNSELECTED);
 				printed_type_name = TRUE;
 		    }
 
@@ -771,12 +810,15 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 		    add_menu(win, obj_to_glyph(curr), &any,
 			    qflags & USE_INVLET ? curr->invlet : 0,
 			    def_oc_syms[(int)objects[curr->otyp].oc_class],
-			    ATR_NONE, Hallucination ? an(rndobjnam()) : doname(curr), MENU_UNSELECTED);
+			    ATR_NONE, Hallucination ? an(rndobjnam()) : doname_with_price(curr), MENU_UNSELECTED);
 		}
 	    }
 	    pack++;
 	} while (qflags & INVORDER_SORT && *pack);
 
+#ifdef SORTLOOT
+	free(oarray);
+#endif
 	end_menu(win, qstr);
 	n = select_menu(win, how, pick_list);
 	destroy_nhwindow(win);
@@ -790,7 +832,7 @@ boolean FDECL((*allow), (OBJ_P));/* allow function */
 		if (mi->count == -1L || mi->count > mi->item.a_obj->quan)
 		    mi->count = mi->item.a_obj->quan;
 	} else if (n < 0) {
-	    n = 0;	/* caller's don't expect -1 */
+	    n = (qflags & SIGNAL_ESCAPE) ? -2 : 0;
 	}
 	return n;
 }
@@ -887,7 +929,7 @@ int how;			/* type of query */
 			any.a_int = curr->oclass;
 			add_menu(win, NO_GLYPH, &any, invlet++,
 				def_oc_syms[(int)objects[curr->otyp].oc_class],
-				ATR_NONE, let_to_name(*pack, FALSE),
+				 ATR_NONE, let_to_name(*pack, FALSE, iflags.show_obj_sym),
 				MENU_UNSELECTED);
 			collected_type_name = TRUE;
 		   }
@@ -1305,12 +1347,11 @@ boolean telekinesis;	/* not picking it up directly by hand */
 		    gold_capacity == 1L ? "one" : "some", obj->quan, where);
 		pline("%s %ld gold piece%s.",
 		    nearloadmsg, gold_capacity, plur(gold_capacity));
+		costly_gold(obj->ox, obj->oy, gold_capacity);
 		u.ugold += gold_capacity;
 		obj->quan -= gold_capacity;
-		costly_gold(obj->ox, obj->oy, gold_capacity);
 	    } else {
-		u.ugold += count;
-		if ((nearload = near_capacity()) != 0)
+		if ((nearload = calc_capacity(GOLD_WT(count))) != 0)
 		    pline("%s %ld gold piece%s.",
 			  nearload < MOD_ENCUMBER ?
 			  moderateloadmsg : nearloadmsg,
@@ -1318,6 +1359,7 @@ boolean telekinesis;	/* not picking it up directly by hand */
 		else
 		    prinv((char *) 0, obj, count);
 		costly_gold(obj->ox, obj->oy, count);
+		u.ugold += count;
 		if (count == obj->quan)
 		    delobj(obj);
 		else
@@ -1409,7 +1451,6 @@ struct obj *otmp;
 	    fakeshop[1] = '\0';
 	    Strcpy(u.ushops, fakeshop);
 	    /* sets obj->unpaid if necessary */
-		otmp->unpaid = 0;
 	    addtobill(otmp, TRUE, FALSE, FALSE);
 		if(otmp->shopOwned && !(otmp->unpaid)){ /* shop stock is outside shop */
 			if(otmp->sknown && !(otmp->ostolen) ) otmp->sknown = FALSE; /*don't automatically know that you found a stolen item.*/
@@ -1417,10 +1458,9 @@ struct obj *otmp;
 		}
 	    Strcpy(u.ushops, saveushops);
 	    /* if you're outside the shop, make shk notice */
-	    if (!index(u.ushops, *fakeshop)){
+	    if (!index(u.ushops, *fakeshop))
 			remote_burglary(otmp->ox, otmp->oy);
 		}
-	}
 	if (otmp->no_charge)	/* only applies to objects outside invent */
 	    otmp->no_charge = 0;
 	newsym(otmp->ox, otmp->oy);
@@ -1537,6 +1577,40 @@ int x, y;
 }
 
 int
+do_loot_cont(cobj, noit)
+struct obj *cobj;
+boolean noit;
+{
+    if (!cobj) return 0;
+
+	if(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS && cobj->oartifact != ART_INFINITY_S_MIRRORED_ARC && cobj->otyp != KAMEREL_VAJRA){
+		You("carefully open %s...",the(xname(cobj)));
+		return use_lightsaber(cobj);
+	} else if(cobj->otyp == MASS_SHADOW_PISTOL){
+		You("carefully open %s...",the(xname(cobj)));
+		return use_massblaster(cobj);
+	}
+    if (cobj->olocked) {
+	pline("Hmmm, %s seems to be locked.", noit ? the(xname(cobj)) : "it");
+	return 0;
+    }
+    if (cobj->otyp == BAG_OF_TRICKS) {
+	int tmp;
+	You("carefully open the bag...");
+	pline("It develops a huge set of teeth and bites you!");
+	tmp = rnd(10);
+	if (Half_physical_damage) tmp = (tmp+1) / 2;
+	losehp(tmp, "carnivorous bag", KILLED_BY_AN);
+	makeknown(BAG_OF_TRICKS);
+	return 1;
+    }
+
+    You("carefully open %s...", the(xname(cobj)));
+    return use_container(cobj, 0);
+}
+
+
+int
 doloot()	/* loot a container on the floor or loot saddle from mon. */
 {
     register struct obj *cobj, *nobj;
@@ -1549,6 +1623,8 @@ doloot()	/* loot a container on the floor or loot saddle from mon. */
     char qbuf[BUFSZ];
     int prev_inquiry = 0;
     boolean prev_loot = FALSE;
+	boolean any = FALSE;
+    int num_cont = 0;
 
     if (check_capacity((char *)0)) {
 	/* "Can't do that while carrying so much stuff." */
@@ -1563,9 +1639,54 @@ doloot()	/* loot a container on the floor or loot saddle from mon. */
 lootcont:
 
     if (container_at(cc.x, cc.y, FALSE)) {
-	boolean any = FALSE;
 
 	if (!able_to_loot(cc.x, cc.y)) return 0;
+
+		for (cobj = level.objects[cc.x][cc.y]; cobj; cobj = cobj->nexthere) {
+			if (Is_container(cobj) || cobj->otyp == MASS_SHADOW_PISTOL || (is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS && cobj->oartifact != ART_INFINITY_S_MIRRORED_ARC && cobj->otyp != KAMEREL_VAJRA)) num_cont++;
+		}
+
+		if (num_cont > 1) {
+			/* use a menu to loot many containers */
+			int n, i;
+
+			winid win;
+			anything any;
+			menu_item *pick_list;
+
+			timepassed = 0;
+
+			any.a_void = 0;
+			win = create_nhwindow(NHW_MENU);
+			start_menu(win);
+
+			for (cobj = level.objects[cc.x][cc.y]; cobj; cobj = cobj->nexthere) {
+			if (Is_container(cobj) || 
+				cobj->otyp == MASS_SHADOW_PISTOL ||
+				(is_lightsaber(cobj) && cobj->oartifact != ART_ANNULUS && cobj->oartifact != ART_INFINITY_S_MIRRORED_ARC && cobj->otyp != KAMEREL_VAJRA)
+			) {
+				any.a_obj = cobj;
+				add_menu(win, NO_GLYPH, &any, 0, 0, ATR_NONE, doname(cobj),
+					 MENU_UNSELECTED);
+			}
+			}
+			end_menu(win, "Loot which containers?");
+			n = select_menu(win, PICK_ANY, &pick_list);
+			destroy_nhwindow(win);
+
+			if (n > 0) {
+			for (i = 0; i < n; i++) {
+				timepassed |= do_loot_cont(pick_list[i].item.a_obj, TRUE);
+				if (multi < 0) {/* chest trap, stop looting */
+				free((genericptr_t) pick_list);
+				return 1;
+				}
+			}
+			}
+			if (pick_list)
+			free((genericptr_t) pick_list);
+			if (n != 0) c = 'y';
+		} else {
 	for (cobj = level.objects[cc.x][cc.y]; cobj; cobj = nobj) {
 	    nobj = cobj->nexthere;
 
@@ -1614,8 +1735,10 @@ lootcont:
 			if(timepassed) underfoot = TRUE;
 		}
 	}
+		}
+	}
 	if (any) c = 'y';
-    } else if (Confusion) {
+    else if (Confusion) {
 #ifndef GOLDOBJ
 	if (u.ugold){
 	    long contribution = rnd((int)min(LARGEST_INT,u.ugold));
@@ -1740,7 +1863,7 @@ boolean *prev_loot;
     /* 	*passed_info is set to TRUE if a loot query was given.               */
     /*	*prev_loot is set to TRUE if something was actually acquired in here. */
 	if(mtmp && mtmp != u.usteed && mtmp->mtame){
-	if(otmp = pick_creatures_armor(mtmp, passed_info)){
+	if((otmp = pick_creatures_armor(mtmp, passed_info))){
 	long unwornmask;
 		if (nolimbs(youracedata)) {
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
@@ -1818,7 +1941,7 @@ dopetequip()
 	/* Get a copy of monster's name before altering its visibility */
 	Strcpy(nambuf, See_invisible(mtmp->mx,mtmp->my) ? Monnam(mtmp) : mon_nam(mtmp));
 	
-	if(otmp = pick_armor_for_creature(mtmp)){
+	if((otmp = pick_armor_for_creature(mtmp))){
 		if (nolimbs(youracedata)) {
 		    You_cant("do that without limbs."); /* not body_part(HAND) */
 		    return (0);

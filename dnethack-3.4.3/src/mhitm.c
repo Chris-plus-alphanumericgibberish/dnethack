@@ -652,10 +652,8 @@ meleeattack:
 				|| (is_half_dragon(magr->data) && magr->m_lev >= 14)
 				|| (magr->data == &mons[PM_CERBERUS])
 			) flags.drgn_brth = 1;
-			if(magr->data == &mons[PM_MAMMON]) flags.mamn_brth = 1;
 	        breamm(magr, mdef, mattk);
 			flags.drgn_brth = 0;
-			flags.mamn_brth = 0;
 		if (tmphp > mdef->mhp){
 			res[i] = MM_HIT;
 			if(magr->mtame && canseemon(magr)) u.petattacked = TRUE;
@@ -1268,10 +1266,10 @@ explmm(magr, mdef, mattk)
 	if(!is_fern_spore(magr->data)) result = mdamagem(magr, mdef, mattk);
 	else{
 		mondead(magr);
-		if(magr->data==&mons[PM_SWAMP_FERN_SPORE]) explode(magr->mx, magr->my, 9, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_MAGICAL, 1);
+		if(magr->data==&mons[PM_SWAMP_FERN_SPORE]) explode(magr->mx, magr->my, AD_DISE, MON_EXPLODE, d((int)mattk->damn, (int)mattk->damd), EXPL_MAGICAL, 1);
 		else if(magr->data==&mons[PM_BURNING_FERN_SPORE])
-			explode(magr->mx, magr->my, 8, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_YELLOW, 1);
-		else explode(magr->mx, magr->my, 7, d((int)mattk->damn, (int)mattk->damd), MON_EXPLODE, EXPL_NOXIOUS, 1);
+			explode(magr->mx, magr->my, AD_PHYS, MON_EXPLODE, d((int)mattk->damn, (int)mattk->damd), EXPL_YELLOW, 1);
+		else explode(magr->mx, magr->my, AD_ACID, MON_EXPLODE, d((int)mattk->damn, (int)mattk->damd), EXPL_NOXIOUS, 1);
 		if (magr->mhp > 0) return result;
 		else return result | MM_AGR_DIED;
 	}
@@ -2535,7 +2533,7 @@ physical:{
 			for (i = rn2(3)+2; i > 0; i--) {
 				x = rn2(3)-1;
 				y = rn2(3)-1;
-				explode(magr->mx+x, magr->my+y, 8, tmp, -1, rn2(EXPL_MAX), 1);		//-1 is unspecified source. 8 is physical
+				explode(magr->mx+x, magr->my+y, AD_PHYS, -1,tmp, rn2(EXPL_MAX), 1);		//-1 is unspecified source
 			}
 			if(DEADMONSTER(magr))
 				return MM_AGR_DIED;
@@ -2544,9 +2542,9 @@ physical:{
 /*		case AD_VMSL:	//vorlon missile.  triple damage
 			magr->mhp = -1;
 			mondead(magr);
-			explode(magr->mx, magr->my, 5, tmp, -1, EXPL_WET);		//-1 is unspecified source. 5 is electrical
-			explode(magr->mx, magr->my, 4, tmp, -1, EXPL_MAGICAL);	//-1 is unspecified source. 4 is disintegration
-			explode(magr->mx, magr->my, 8, tmp, -1, EXPL_DARK);		//-1 is unspecified source. 8 is physical
+			explode(magr->mx, magr->my, AD_ELEC, -1, tmp, EXPL_WET, 1);		//-1 is unspecified source. 5 is electrical
+			explode(magr->mx, magr->my, AD_DISN, -1, tmp, EXPL_MAGICAL, 1);	//-1 is unspecified source. 4 is disintegration
+			explode(magr->mx, magr->my, AD_PHYS, -1, tmp, EXPL_DARK, 1);	//-1 is unspecified source. 8 is physical
 			tmp=0;		//damage was done by explode
 
 //			if (magr->mhp > 0) return(0);

@@ -6,7 +6,7 @@
 
 LEVEL: "oracle"
 
-ROOM: "ordinary" , lit, (3,3), (center,center), (11,9)
+ROOM: "ordinary" , lit, (40,10), (center,center), (11,9)
 NAME: "central"
 OBJECT:'`',"statue",(0,0),"forest centaur",1
 OBJECT:'`',"statue",(0,8),"mountain centaur",1

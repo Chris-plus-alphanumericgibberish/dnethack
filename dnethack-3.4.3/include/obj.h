@@ -711,6 +711,8 @@ struct obj {
 							 (otmp)->obj_material == SILVER || \
 							 (otmp)->obj_material == IRON)
 
+#define id_for_material(otmp) ((otmp)->otyp >= GLOVES && (otmp)->otyp <= GAUNTLETS_OF_DEXTERITY)
+
 /* misc */
 #define is_boulder(otmp)		((otmp)->otyp == BOULDER || (otmp)->otyp == MASSIVE_STONE_CRATE || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))
 

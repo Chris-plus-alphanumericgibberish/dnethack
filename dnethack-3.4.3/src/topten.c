@@ -937,7 +937,7 @@ encodeachieve(void)
    *  8   ascended (not "escaped in celestial disgrace!")
    *  9   obtained the luckstone from the Mines
    *  10  obtained the sokoban prize
-   *  11  killed medusa
+   *  11  killed the challenge boss
    *  DEPRICATED: 12  killed lucifer
    *  DEPRICATED: 13  killed asmodeus
    *  DEPRICATED: 14  killed demogorgon

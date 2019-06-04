@@ -167,11 +167,12 @@
 #define AD_NPDC		117	/* drains constitution (not poison) */
 #define AD_GLSS		118	/* silver mirror shards */
 #define AD_MERC		119	/* mercury blade */
+#define AD_GOLD     120 /* goldify (only implemented for mammon's breath attack!) */
 
 //#define AD_AHAZU	116 /*  */
 //Amon is a headbutt (AT_BUTT/AD_PHYS)
 //Chupoclops is a poisonous bite (AT_BITE/AD_DRST)
-#define AD_DUNSTAN	120
+#define AD_DUNSTAN	121
 #define AD_IRIS		AD_DUNSTAN+1
 #define AD_NABERIUS	AD_DUNSTAN+2
 #define AD_OTIAX	AD_DUNSTAN+3

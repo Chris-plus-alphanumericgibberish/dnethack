@@ -21,8 +21,6 @@ STATIC_DCL void FDECL(ucast_spell,(struct monst *,struct monst *,int,int));
 
 #ifdef OVL0
 
-extern const char * const flash_types[];	/* from zap.c */
-
 /* feedback when frustrated monster couldn't cast a spell */
 STATIC_OVL
 void
@@ -1824,31 +1822,31 @@ int spellnum;
 			switch(rn2(7)){
 				case 0:
 					//Physical
-					explode(mtmp->mux+dx, mtmp->muy+dy, 8, d(6,6), MON_EXPLODE, EXPL_RED, 2); //explode(x, y, type, dam, olet, expltype, radius)
+					explode(mtmp->mux+dx, mtmp->muy+dy, AD_PHYS, MON_EXPLODE, d(6,6), EXPL_RED, 2); //explode(x, y, type, dam, olet, expltype, radius)
 				break;
 				case 1:
 					//Fire
-					explode(mtmp->mux+dx, mtmp->muy+dy, 1, d(6,6), MON_EXPLODE, EXPL_FIERY, 2); //explode(x, y, type, dam, olet, expltype, radius)
+					explode(mtmp->mux+dx, mtmp->muy+dy, AD_FIRE, MON_EXPLODE, d(6,6), EXPL_FIERY, 2); //explode(x, y, type, dam, olet, expltype, radius)
 				break;
 				case 2:
 					//Poison
-					explode(mtmp->mux+dx, mtmp->muy+dy, 6, d(6,6), MON_EXPLODE, EXPL_YELLOW, 2); //explode(x, y, type, dam, olet, expltype, radius)
+					explode(mtmp->mux+dx, mtmp->muy+dy, AD_DRST, MON_EXPLODE, d(6,6),  EXPL_YELLOW, 2); //explode(x, y, type, dam, olet, expltype, radius)
 				break;
 				case 3:
 					//Acid
-					explode(mtmp->mux+dx, mtmp->muy+dy, 7, d(6,6), MON_EXPLODE, EXPL_LIME, 2); //explode(x, y, type, dam, olet, expltype, radius)
+					explode(mtmp->mux+dx, mtmp->muy+dy, AD_ACID, MON_EXPLODE, d(6,6), EXPL_LIME, 2); //explode(x, y, type, dam, olet, expltype, radius)
 				break;
 				case 4:
 					//Cold
-					explode(mtmp->mux+dx, mtmp->muy+dy, 2, d(6,6), MON_EXPLODE, EXPL_BBLUE, 2); //explode(x, y, type, dam, olet, expltype, radius)
+					explode(mtmp->mux+dx, mtmp->muy+dy, AD_COLD, MON_EXPLODE, d(6,6), EXPL_BBLUE, 2); //explode(x, y, type, dam, olet, expltype, radius)
 				break;
 				case 5:
 					//Electricity
-					explode(mtmp->mux+dx, mtmp->muy+dy, 5, d(6,6), MON_EXPLODE, EXPL_MAGENTA, 2); //explode(x, y, type, dam, olet, expltype, radius)
+					explode(mtmp->mux+dx, mtmp->muy+dy, AD_ELEC, MON_EXPLODE, d(6,6), EXPL_MAGENTA, 2); //explode(x, y, type, dam, olet, expltype, radius)
 				break;
 				case 6:
 					//Disintegration
-					explode(mtmp->mux+dx, mtmp->muy+dy, 4, d(6,6), MON_EXPLODE, EXPL_MAGICAL, 2); //explode(x, y, type, dam, olet, expltype, radius)
+					explode(mtmp->mux+dx, mtmp->muy+dy, AD_DISN, MON_EXPLODE, d(6,6), EXPL_MAGICAL, 2); //explode(x, y, type, dam, olet, expltype, radius)
 				break;
 			}
 				dx = rnd(3) - 2; 
@@ -1866,58 +1864,58 @@ int spellnum;
 	}break;
 	case ACID_BLAST:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux, mtmp->muy, 7, dmg, MON_EXPLODE, EXPL_NOXIOUS, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux, mtmp->muy, AD_ACID, MON_EXPLODE, dmg, EXPL_NOXIOUS, 1);
 		dmg = 0;
 		stop_occupation();
 	break;
 	case MON_FIRA:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux, mtmp->muy, 1, dmg, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux, mtmp->muy, AD_FIRE, MON_EXPLODE, dmg, EXPL_FIERY, 1);
 		dmg = 0;
 		stop_occupation();
 	break;
 	case MON_FIRAGA:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_FIRE, MON_EXPLODE, dmg/2, EXPL_FIERY, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_FIRE, MON_EXPLODE, dmg/2, EXPL_FIERY, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_FIRE, MON_EXPLODE, dmg/2, EXPL_FIERY, 1);
 		dmg = 0;
 		stop_occupation();
 	break;
 	case MON_BLIZZARA:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux, mtmp->muy, 2, dmg, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux, mtmp->muy, AD_COLD, MON_EXPLODE, dmg, EXPL_FROSTY, 1);
 		dmg = 0;
 		stop_occupation();
 	break;
 	case MON_BLIZZAGA:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_COLD, MON_EXPLODE, dmg/2, EXPL_FROSTY, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_COLD, MON_EXPLODE, dmg/2, EXPL_FROSTY, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_COLD, MON_EXPLODE, dmg/2, EXPL_FROSTY, 1);
 		dmg = 0;
 		stop_occupation();
 	break;
 	case MON_THUNDARA:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux, mtmp->muy, 5, dmg, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux, mtmp->muy, AD_ELEC, MON_EXPLODE, dmg, EXPL_MAGICAL, 1);
 		dmg = 0;
 		stop_occupation();
 	break;
 	case MON_THUNDAGA:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_ELEC, MON_EXPLODE, dmg/2, EXPL_MAGICAL, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_ELEC, MON_EXPLODE, dmg/2, EXPL_MAGICAL, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_ELEC, MON_EXPLODE, dmg/2, EXPL_MAGICAL, 1);
 		dmg = 0;
 		stop_occupation();
 	break;
 	case MON_FLARE:
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_MUDDY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mux, mtmp->muy, 8, dmg, MON_EXPLODE, EXPL_FROSTY, 2);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_PHYS, MON_EXPLODE, dmg/3, EXPL_FROSTY, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_PHYS, MON_EXPLODE, dmg/3, EXPL_FIERY, 1);
+		explode(mtmp->mux+rn2(3)-1, mtmp->muy+rn2(3)-1, AD_PHYS, MON_EXPLODE, dmg/3, EXPL_MUDDY, 1);
+		explode(mtmp->mux, mtmp->muy, AD_PHYS, MON_EXPLODE, dmg, EXPL_FROSTY, 2);
 		dmg = 0;
 		stop_occupation();
 	break;
@@ -2568,8 +2566,8 @@ ray:
        nomul(0, NULL);
        if(canspotmon(mtmp))
            pline("%s zaps you with a %s!", Monnam(mtmp),
-                     flash_types[10+zap-1]);
-       buzz(-(10+zap-1),min(MAX_BONUS_DICE, (mtmp->m_lev/3)+1), mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
+                     flash_type(zap, SPBOOK_CLASS));
+       buzz(zap, SPBOOK_CLASS, FALSE, min(MAX_BONUS_DICE, (mtmp->m_lev/3)+1), mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
        dmg = 0;
 	   stop_occupation();
        break;
@@ -3515,8 +3513,8 @@ buzzmu(mtmp, mattk, ml)		/* monster uses spell (ranged) */
 	    if(type && (type < 11)) { /* no cf unsigned >0 */
 		if(canseemon(mtmp))
 		    pline("%s zaps you with a %s!", Monnam(mtmp),
-			  flash_types[ad_to_typ(type)]);
-		buzz(-ad_to_typ(type), dmn,
+			  flash_type(type, SPBOOK_CLASS));
+		buzz(type, SPBOOK_CLASS, FALSE, dmn,
 		     mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),0,0);
 	    } else impossible("Monster spell %d cast", type-1);
 	}
@@ -3569,9 +3567,9 @@ buzzmm(magr, mdef, mattk, ml)		/* monster uses spell (ranged) */
 	    if(type && (type < 11)) { /* no cf unsigned >0 */
 		Sprintf(buf,"%s zaps ",Monnam(magr));
 		Sprintf(buf,"%s%s with a ",buf,mon_nam(mdef));
-		Sprintf(buf,"%s%s!",buf,flash_types[ad_to_typ(type)]);
+		Sprintf(buf,"%s%s!",buf,flash_type(type, SPBOOK_CLASS));
 		if(canseemon(magr)) pline1(buf);
-		buzz(-ad_to_typ(type), dmn,
+		buzz(type, SPBOOK_CLASS, FALSE, dmn,
 		     magr->mx, magr->my, sgn(mdef->mx - magr->mx), sgn(mdef->my - magr->my),0,0);
 	    } else impossible("Monster spell %d cast", type-1);
 	}
@@ -4608,36 +4606,19 @@ uspsibolt:
 		dmg /= 10;
 		if(dmg > 7) dmg = 7;
 		for(; dmg; dmg--){
-			switch(rn2(7)){
-				case 0:
-					//Physical
-					explode(mtmp->mx+dx, mtmp->my+dy, 8, d(6,6), MON_EXPLODE, EXPL_RED, 2); //explode(x, y, type, dam, olet, expltype)
-				break;
-				case 1:
-					//Fire
-					explode(mtmp->mx+dx, mtmp->my+dy, 1, d(6,6), MON_EXPLODE, EXPL_FIERY, 2); //explode(x, y, type, dam, olet, expltype)
-				break;
-				case 2:
-					//Poison
-					explode(mtmp->mx+dx, mtmp->my+dy, 6, d(6,6), MON_EXPLODE, EXPL_YELLOW, 2); //explode(x, y, type, dam, olet, expltype)
-				break;
-				case 3:
-					//Acid
-					explode(mtmp->mx+dx, mtmp->my+dy, 7, d(6,6), MON_EXPLODE, EXPL_LIME, 2); //explode(x, y, type, dam, olet, expltype)
-				break;
-				case 4:
-					//Cold
-					explode(mtmp->mx+dx, mtmp->my+dy, 2, d(6,6), MON_EXPLODE, EXPL_BBLUE, 2); //explode(x, y, type, dam, olet, expltype)
-				break;
-				case 5:
-					//Electricity
-					explode(mtmp->mx+dx, mtmp->my+dy, 5, d(6,6), MON_EXPLODE, EXPL_MAGENTA, 2); //explode(x, y, type, dam, olet, expltype)
-				break;
-				case 6:
-					//Disintegration
-					explode(mtmp->mx+dx, mtmp->my+dy, 4, d(6,6), MON_EXPLODE, EXPL_MAGICAL, 2); //explode(x, y, type, dam, olet, expltype)
-				break;
+			int adtyp = 0;
+			int color = 0;
+			switch (rn2(7))
+			{
+				case 0: adtyp = AD_PHYS; color = EXPL_RED; break;
+				case 1: adtyp = AD_FIRE; color = EXPL_FIERY; break;
+				case 2: adtyp = AD_DRST; color = EXPL_YELLOW; break;
+				case 3: adtyp = AD_ACID; color = EXPL_LIME; break;
+				case 4: adtyp = AD_COLD; color = EXPL_BBLUE; break;
+				case 5: adtyp = AD_ELEC; color = EXPL_MAGENTA; break;
+				case 6: adtyp = AD_DISN; color = EXPL_MAGICAL; break;
 			}
+			explode(mtmp->mx + dx, mtmp->my + dy, adtyp, MON_EXPLODE, d(6, 6), color, 2);
 				dx = rnd(3) - 2;
 				dy = rnd(3) - 2;
 				if (!isok(mtmp->mx + dx, mtmp->my + dy) ||
@@ -4656,7 +4637,7 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx, mtmp->my, 7, dmg, MON_EXPLODE, EXPL_NOXIOUS, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx, mtmp->my, AD_ACID, MON_EXPLODE, dmg, EXPL_NOXIOUS, 1);
 		dmg = 0;
 	break;
 	case MON_FIRA:
@@ -4665,7 +4646,7 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx, mtmp->my, 1, dmg, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx, mtmp->my, AD_FIRE, MON_EXPLODE, dmg, EXPL_FIERY, 1);
 		dmg = 0;
 	break;
 	case MON_FIRAGA:
@@ -4674,9 +4655,9 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 1, dmg/2, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_FIRE, MON_EXPLODE, dmg/2, EXPL_FIERY, 1);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_FIRE, MON_EXPLODE, dmg/2, EXPL_FIERY, 1);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_FIRE, MON_EXPLODE, dmg/2, EXPL_FIERY, 1);
 		dmg = 0;
 	break;
 	case MON_BLIZZARA:
@@ -4685,7 +4666,7 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx, mtmp->my, 2, dmg, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx, mtmp->my, AD_COLD, MON_EXPLODE, dmg, EXPL_FROSTY, 1);
 		dmg = 0;
 	break;
 	case MON_BLIZZAGA:
@@ -4694,9 +4675,9 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 2, dmg/2, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_COLD, MON_EXPLODE, dmg/2,EXPL_FROSTY, 1);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_COLD, MON_EXPLODE, dmg/2,EXPL_FROSTY, 1);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_COLD, MON_EXPLODE, dmg/2,EXPL_FROSTY, 1);
 		dmg = 0;
 	break;
 	case MON_THUNDARA:
@@ -4705,7 +4686,7 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx, mtmp->my, 5, dmg, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx, mtmp->my, AD_ELEC, MON_EXPLODE, dmg, EXPL_MAGICAL, 1);
 		dmg = 0;
 	break;
 	case MON_THUNDAGA:
@@ -4714,9 +4695,9 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 5, dmg/2, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_ELEC, MON_EXPLODE, dmg/2, EXPL_MAGICAL, 1);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_ELEC, MON_EXPLODE, dmg/2, EXPL_MAGICAL, 1);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_ELEC, MON_EXPLODE, dmg/2, EXPL_MAGICAL, 1);
 		dmg = 0;
 	break;
 	case MON_FLARE:
@@ -4725,10 +4706,10 @@ uspsibolt:
 			return;
 		}
 		if(dmg > 60) dmg = 60;
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FROSTY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, 8, dmg/3, MON_EXPLODE, EXPL_MUDDY, 1); //explode(x, y, type, dam, olet, expltype)
-		explode(mtmp->mx, mtmp->my, 8, dmg, MON_EXPLODE, EXPL_FROSTY, 2);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_PHYS, MON_EXPLODE, dmg/3, EXPL_FROSTY, 1);
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_PHYS, MON_EXPLODE, dmg/3, EXPL_FIERY, 1); 
+		explode(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, AD_PHYS, MON_EXPLODE, dmg/3, EXPL_MUDDY, 1); 
+		explode(mtmp->mx, mtmp->my, AD_PHYS, MON_EXPLODE, dmg, EXPL_FROSTY, 2);
 		dmg = 0;
 	break;
 	case MON_WARP:

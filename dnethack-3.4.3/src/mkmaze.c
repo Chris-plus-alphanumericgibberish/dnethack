@@ -15,11 +15,12 @@ STATIC_DCL boolean FDECL(iswall,(int,int));
 STATIC_DCL boolean FDECL(iswall_or_stone,(int,int));
 STATIC_DCL boolean FDECL(is_solid,(int,int));
 STATIC_DCL int FDECL(extend_spine, (int [3][3], int, int, int));
-STATIC_DCL boolean FDECL(okay,(int,int,int));
+STATIC_DCL boolean FDECL(okay,(int,int,int,int));
 STATIC_DCL void FDECL(maze0xy,(coord *));
 STATIC_DCL boolean FDECL(put_lregion_here,(XCHAR_P,XCHAR_P,XCHAR_P,
 	XCHAR_P,XCHAR_P,XCHAR_P,XCHAR_P,BOOLEAN_P,d_level *));
 STATIC_DCL void NDECL(fixup_special);
+STATIC_DCL boolean FDECL(maze_inbounds, (XCHAR_P, XCHAR_P));
 STATIC_DCL void FDECL(move, (int *,int *,int));
 STATIC_DCL void NDECL(setup_waterlevel);
 STATIC_DCL void NDECL(unsetup_waterlevel);
@@ -195,13 +196,18 @@ int x1, y1, x2, y2;
 }
 
 STATIC_OVL boolean
-okay(x,y,dir)
+okay(x,y,dir,depth)
 int x,y;
 register int dir;
+int depth;
 {
 	move(&x,&y,dir);
 	move(&x,&y,dir);
-	if(x<3 || y<3 || x>x_maze_max || y>y_maze_max || levl[x][y].typ != 0)
+	if(!maze_inbounds(x, y))
+		return(FALSE);
+	if((depth < 3) && (levl[x][y].roomno - ROOMOFFSET >= level.flags.sp_lev_nroom))	/* if we're early, we can bust through randomly-placed rooms */
+		return(TRUE);
+	if(levl[x][y].typ != 0)
 		return(FALSE);
 	return(TRUE);
 }
@@ -210,8 +216,13 @@ STATIC_OVL void
 maze0xy(cc)	/* find random starting point for maze generation */
 	coord	*cc;
 {
-	cc->x = 3 + 2*rn2((x_maze_max>>1) - 1);
-	cc->y = 3 + 2*rn2((y_maze_max>>1) - 1);
+	int tryct = 200;
+	do{
+		cc->x = 3 + 2 * rn2((x_maze_max >> 1) - 1);
+		cc->y = 3 + 2 * rn2((y_maze_max >> 1) - 1);
+	} while (levl[cc->x][cc->y].roomno != NO_ROOM && tryct-->0);
+	if (tryct == 0)
+		impossible("Could not place starting point for maze generation");
 	return;
 }
 
@@ -319,7 +330,7 @@ d_level *lev;
 	break;
     case LR_DOWNSTAIR:
     case LR_UPSTAIR:
-	mkstairs(x, y, (char)rtype, (struct mkroom *)0);
+	mkstairs(x, y, (char)rtype, room_at(x,y));
 	break;
     case LR_BRANCH:
 	place_branch(Is_branchlev(&u.uz), x, y);
@@ -329,6 +340,14 @@ d_level *lev;
 }
 
 static boolean was_waterlevel; /* ugh... this shouldn't be needed */
+
+static const int angelnums[] = {PM_JUSTICE_ARCHON, PM_SWORD_ARCHON, PM_SHIELD_ARCHON, PM_TRUMPET_ARCHON, PM_WARDEN_ARCHON, PM_THRONE_ARCHON, PM_LIGHT_ARCHON, 
+						  PM_MOVANIC_DEVA, PM_MONADIC_DEVA, PM_ASTRAL_DEVA, PM_GRAHA_DEVA, PM_SURYA_DEVA, PM_MAHADEVA, 
+						  PM_LILLEND,
+						  PM_NOVIERE_ELADRIN, PM_BRALANI_ELADRIN, PM_SHIERE_ELADRIN, PM_GHAELE_ELADRIN, PM_TULANI_ELADRIN, 
+						  PM_DAUGHTER_OF_BEDLAM, PM_MARILITH,
+						  PM_ERINYS, PM_FALLEN_ANGEL, PM_ANCIENT_OF_ICE, PM_ANCIENT_OF_DEATH
+						 };
 
 /* this is special stuff that the level compiler cannot (yet) handle */
 STATIC_OVL void
@@ -407,15 +426,30 @@ fixup_special()
 	place_lregion(0,0,0,0,0,0,0,0,LR_BRANCH,(d_level *)0);
     }
 
+	/* MAIN AREAS */
 	/* KMH -- Sokoban levels */
 	if(In_sokoban(&u.uz))
 		sokoban_detect();
 
-    /* Still need to add some stuff to level file */
+	/* FORT KNOX: fill vault */
+	if (Is_knox(&u.uz)) {
+		/* using an unfilled morgue for rm id */
+		croom = search_special(MORGUE);
+		/* avoid inappropriate morgue-related messages */
+		level.flags.graveyard = level.flags.has_morgue = 0;
+		croom->rtype = OROOM;	/* perhaps it should be set to VAULT? */
+		/* stock the main vault */
+		for (x = croom->lx; x <= croom->hx; x++)
+		for (y = croom->ly; y <= croom->hy; y++) {
+			(void)mkgold((long)rn1(300, 600), x, y);
+			if (!rn2(3) && !is_pool(x, y, TRUE))
+				(void)maketrap(x, y, rn2(3) ? LANDMINE : SPIKED_PIT);
+		}
+	}
+    /* MEDUSA'S FLOOR: add statues */
     if (Is_medusa_level(&u.uz)) {
 	struct obj *otmp;
 	int tryct;
-
 	croom = &rooms[0]; /* only one room on the medusa level */
 	for (tryct = rnd(4); tryct; tryct--) {
 	    x = somex(croom); y = somey(croom);
@@ -428,7 +462,6 @@ fixup_special()
 		}
 	    }
 	}
-
 	if (rn2(2))
 	    otmp = mk_tt_object(STATUE, somex(croom), somey(croom));
 	else /* Medusa statues don't contain books */
@@ -441,24 +474,102 @@ fixup_special()
 		otmp->owt = weight(otmp);
 	    }
 	}
-    } else if(Is_wiz1_level(&u.uz)) {
+    }
+	/* CASTLE: make graveyard */
+	if (Is_stronghold(&u.uz)) {
+		level.flags.graveyard = 1;
+	}
+	/* WIZARD'S TOWER: add secret door */
+	if(Is_wiz1_level(&u.uz)) {
 	croom = search_special(MORGUE);
-
 	create_secret_door(croom, W_SOUTH|W_EAST|W_WEST);
-    } else if(Is_knox(&u.uz)) {
-	/* using an unfilled morgue for rm id */
-	croom = search_special(MORGUE);
-	/* avoid inappropriate morgue-related messages */
-	level.flags.graveyard = level.flags.has_morgue = 0;
-	croom->rtype = OROOM;	/* perhaps it should be set to VAULT? */
-	/* stock the main vault */
-	for(x = croom->lx; x <= croom->hx; x++)
-	    for(y = croom->ly; y <= croom->hy; y++) {
-		(void) mkgold((long) rn1(300, 600), x, y);
-		if (!rn2(3) && !is_pool(x,y, TRUE))
-		    (void)maketrap(x, y, rn2(3) ? LANDMINE : SPIKED_PIT);
 	    }
-    } else if(urole.neminum == PM_BOLG && In_quest(&u.uz) && Is_qlocate(&u.uz)) {
+	/* SANCTUM: add sdoor to temple*/
+	if (Is_sanctum(&u.uz)) {
+		croom = search_special(TEMPLE);
+
+		create_secret_door(croom, W_ANY);
+	}
+	/* ALIGNMENT QUESTS */
+	/* LAW QUEST: features */
+	if (In_law(&u.uz)){
+		place_law_features();
+	}
+	/* NEUTRAL QUEST: various features */
+	if (In_outlands(&u.uz)){
+		if (!(u.uz.dlevel == spire_level.dlevel || Is_gatetown(&u.uz) || Is_sumall(&u.uz)))
+			place_neutral_features();
+		if (u.uz.dlevel < gatetown_level.dlevel + 4){
+			for (x = 0; x<COLNO; x++){
+				for (y = 0; y<ROWNO; y++){
+					if (levl[x][y].typ == TREE) levl[x][y].lit = TRUE;
+				}
+			}
+		}
+		if (u.uz.dlevel == spire_level.dlevel){
+			for (x = 2; x <= x_maze_max; x++)
+			for (y = 2; y <= y_maze_max; y++){
+				if (m_at(x, y) && !ACCESSIBLE(levl[x][y].typ))
+					rloc(m_at(x, y), FALSE);
+			}
+		}
+		if (Is_sumall(&u.uz)){
+			for (x = 2; x <= x_maze_max; x++)
+			for (y = 2; y <= y_maze_max; y++){
+				if (levl[x][y].typ == STONE) levl[x][y].typ = HWALL;
+				if (levl[x][y].typ == ROOM) levl[x][y].lit = TRUE;
+				if (m_at(x, y)) rloc(m_at(x, y), FALSE);
+			}
+			wallification(1, 1, COLNO - 1, ROWNO - 1);
+		}
+	}
+	/* DEMON LAIRS */
+	/* ORCUS'S FLOOR: remove shopkeepers*/
+	if (on_level(&u.uz, &orcus_level)) {
+		register struct monst *mtmp, *mtmp2;
+
+		/* it's a ghost town, get rid of shopkeepers */
+		for (mtmp = fmon; mtmp; mtmp = mtmp2) {
+			mtmp2 = mtmp->nmon;
+			if (mtmp->isshk) mongone(mtmp);
+		}
+	}
+	/* LOLTH'S FLOOR: vaults and webs */
+	if (Is_lolth_level(&u.uz)){
+		int x, y;
+		place_lolth_vaults();
+		for (x = 0; x<COLNO; x++){
+			for (y = 0; y<ROWNO; y++){
+				if (levl[x][y].typ == ROOM) maketrap(x, y, WEB);
+			}
+		}
+	}
+	/* DISPATER'S FLOOR: place crazed angel statues in the iron bar walls*/
+	if (Is_dis_level(&u.uz)){
+		for (x = 0; x<COLNO; x++){
+			for (y = 0; y<ROWNO; y++){
+				if (levl[x][y].typ == IRONBARS){
+					struct monst *angel;
+					angel = makemon(&mons[angelnums[rn2(SIZE(angelnums))]], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+					if (angel){
+						initedog(angel);
+						angel->m_lev = min(30, 3 * (int)(angel->data->mlevel / 2));
+						angel->mhpmax = (angel->m_lev * 8) - 4;
+						angel->mhp = angel->mhpmax;
+						angel->female = TRUE;
+						angel->mtame = 10;
+						angel->mpeaceful = 1;
+						angel->mcrazed = 1;
+					}
+					mkcorpstat(STATUE, angel, (struct permonst *)0, x, y, FALSE);
+					mongone(angel);
+				}
+			}
+		}
+	}
+	/* PLAYER QUESTS */
+	/* DWARF KNIGHT QUEST: add stuff to the locate level */
+	if (urole.neminum == PM_BOLG && In_quest(&u.uz) && Is_qlocate(&u.uz)) {
 	int rmn, piled, disty, distx;
 	/* using an unfilled morgue for rm id */
 	croom = search_special(MORGUE);
@@ -469,45 +580,74 @@ fixup_special()
 	level.flags.graveyard = level.flags.has_morgue = 0;
 	croom->rtype = OROOM;	/* perhaps it should be set to VAULT? */
 	/* stock the main vault */
-	for(x = croom->lx; x <= croom->hx; x++)
-	    for(y = croom->ly; y <= croom->hy; y++) {
+		for (x = croom->lx; x <= croom->hx; x++)
+		for (y = croom->ly; y <= croom->hy; y++) {
 		    if (!levl[x][y].edge &&
-			    (int) levl[x][y].roomno == rmn){
+				(int)levl[x][y].roomno == rmn){
 				piled = 1;
-				if(y < croom->ly+disty*1/3 && x > croom->lx+distx*1/5 && x < croom->lx+distx*4/5) piled++;
-				if(y < croom->ly+disty*2/3 && x > croom->lx+distx*2/5 && x < croom->lx+distx*3/5) piled++;
-				for(; piled > 0; piled--){
-					if(rn2(2)) mkobj_at(WEAPON_CLASS, x, y, FALSE);
-					if(rn2(2)) mkobj_at(ARMOR_CLASS, x, y, FALSE);
-					if(rn2(6)) mkobj_at(RING_CLASS, x, y, FALSE);
-					if(!rn2(3))mkobj_at(TOOL_CLASS, x, y, FALSE);
-					if(rn2(6)) mkobj_at(SCROLL_CLASS, x, y, FALSE);
-					if(!rn2(4))mkobj_at(GEM_CLASS, x, y, FALSE);
-					if(!rn2(3))mkobj_at(GEM_CLASS, x, y, FALSE);
-					if(!rn2(2))mkobj_at(GEM_CLASS, x, y, FALSE);
-					if(!rn2(4))mksobj_at(SILVER_SLINGSTONE, x, y, TRUE, FALSE);
-					if(rn2(3)) mkobj_at(GEM_CLASS, x, y, FALSE);
-					if(rn2(4)) mkobj_at(GEM_CLASS, x, y, FALSE);
+				if (y < croom->ly + disty * 1 / 3 && x > croom->lx + distx * 1 / 5 && x < croom->lx + distx * 4 / 5) piled++;
+				if (y < croom->ly + disty * 2 / 3 && x > croom->lx + distx * 2 / 5 && x < croom->lx + distx * 3 / 5) piled++;
+				for (; piled > 0; piled--){
+					if (rn2(2)) mkobj_at(WEAPON_CLASS, x, y, FALSE);
+					if (rn2(2)) mkobj_at(ARMOR_CLASS, x, y, FALSE);
+					if (rn2(6)) mkobj_at(RING_CLASS, x, y, FALSE);
+					if (!rn2(3))mkobj_at(TOOL_CLASS, x, y, FALSE);
+					if (rn2(6)) mkobj_at(SCROLL_CLASS, x, y, FALSE);
+					if (!rn2(4))mkobj_at(GEM_CLASS, x, y, FALSE);
+					if (!rn2(3))mkobj_at(GEM_CLASS, x, y, FALSE);
+					if (!rn2(2))mkobj_at(GEM_CLASS, x, y, FALSE);
+					if (!rn2(4))mksobj_at(SILVER_SLINGSTONE, x, y, TRUE, FALSE);
+					if (rn2(3)) mkobj_at(GEM_CLASS, x, y, FALSE);
+					if (rn2(4)) mkobj_at(GEM_CLASS, x, y, FALSE);
 				}
-				(void) mkgold((long) rn1(1000, 100), x, y);
+				(void)mkgold((long)rn1(1000, 100), x, y);
 			}
 		}
-	} else if (Role_if(PM_PRIEST) && In_quest(&u.uz)) {
+	}
+	/* PRIEST QUEST: make graveyard */
+	if (Role_if(PM_PRIEST) && In_quest(&u.uz)) {
 	/* less chance for undead corpses (lured from lower morgues) */
 	level.flags.graveyard = 1;
-    } else if (Is_stronghold(&u.uz)) {
-	level.flags.graveyard = 1;
-    } else if(Is_sanctum(&u.uz)) {
-	croom = search_special(TEMPLE);
+	}
+	/* KNIGHT QUEST: convert half the swamp to a forest on the knight locate level*/
+	if (Role_if(PM_KNIGHT) &&
+		In_quest(&u.uz) &&
+		Is_qlocate(&u.uz)
+		){
+		int x, y;
+		for (x = 0; x<COLNO / 2; x++){
+			for (y = 0; y<ROWNO; y++){
+				if (levl[x][y].typ == POOL) levl[x][y].typ = TREE;
+			}
+		}
+	}
+	/* GNOME RANGER QUEST: add ladder to quest*/
+	if (Role_if(PM_RANGER) && Race_if(PM_GNOME) && on_level(&u.uz, &minetown_level)){
+		int x, y, good = FALSE;
+		while (!good){
+			x = rn2(COLNO) + 1;
+			y = rn2(ROWNO);
+			if (isok(x, y) && levl[x][y].typ == ROOM && !costly_spot(x, y))
+				good = TRUE;
+			else continue;
 
-	create_secret_door(croom, W_ANY);
-    } else if(on_level(&u.uz, &orcus_level)) {
-	   register struct monst *mtmp, *mtmp2;
-
-	   /* it's a ghost town, get rid of shopkeepers */
-	    for(mtmp = fmon; mtmp; mtmp = mtmp2) {
-		    mtmp2 = mtmp->nmon;
-		    if(mtmp->isshk) mongone(mtmp);
+			levl[x][y].typ = STAIRS;
+			levl[x][y].ladder = LA_DOWN;
+			sstairs.sx = x;
+			sstairs.sy = y;
+			sstairs.up = 0;
+			assign_level(&sstairs.tolev, &qstart_level);
+		}
+	}
+	/* WISHING REVAMP: Place candle of wishing on valley altar (TBD: only do so if the ring will grant only a single wish)*/
+	if(on_level(&valley_level, &u.uz)){
+		int x, y;
+		for(x = 0; x<COLNO; x++){
+			for(y = 0; y<ROWNO; y++){
+				if(isok(x,y) && levl[x][y].typ == ALTAR){
+					mksobj_at(CANDLE_OF_INVOCATION, x, y, FALSE, FALSE);
+				}
+			}
 	    }
     }
 
@@ -528,13 +668,540 @@ fixup_special()
     num_lregions = 0;
 }
 
-static const int angelnums[] = {PM_JUSTICE_ARCHON, PM_SWORD_ARCHON, PM_SHIELD_ARCHON, PM_TRUMPET_ARCHON, PM_WARDEN_ARCHON, PM_THRONE_ARCHON, PM_LIGHT_ARCHON, 
-						  PM_MOVANIC_DEVA, PM_MONADIC_DEVA, PM_ASTRAL_DEVA, PM_GRAHA_DEVA, PM_SURYA_DEVA, PM_MAHADEVA, 
-						  PM_LILLEND,
-						  PM_NOVIERE_ELADRIN, PM_BRALANI_ELADRIN, PM_SHIERE_ELADRIN, PM_GHAELE_ELADRIN, PM_TULANI_ELADRIN, 
-						  PM_DAUGHTER_OF_BEDLAM, PM_MARILITH,
-						  PM_ERINYS, PM_FALLEN_ANGEL, PM_ANCIENT_OF_ICE, PM_ANCIENT_OF_DEATH
-						 };
+/* ROOMS IN MAZE FUNCTIONS
+ * Many thanks to aosdict's xnethack, which was consulted (read: copied) in making this
+ */
+
+/* 
+ * Returns true if the (x,y) location given falls withing the allowable bounds for mazes
+ */
+boolean
+maze_inbounds(x, y)
+xchar x, y;
+{
+	return (x >= 2 && y >= 2 && x < x_maze_max && y < y_maze_max && isok(x, y));
+}
+
+/* 
+ * Returns true if the entire rectangle defined by its top-left and bottom-right corners
+ * is overtop of a mazewalk-textured area.
+ */
+boolean
+rectangle_in_mazewalk_area(lx, ly, hx, hy)
+xchar lx, ly, hx, hy;
+{
+	int x, y;
+
+	for (x = lx; x <= hx; x++)
+	for (y = ly; y <= hy; y++)
+	{
+		if (levl[x][y].typ != (((x % 2) && (y % 2)) ? STONE : HWALL))
+			return FALSE;
+	}
+	return TRUE;
+}
+
+/* 
+ * The sophisticated and classy cousin of rectangle_in_mazewalk_area().
+ * Determines if a cutting out a rectangle would immediately separate sections of mazewalk from each other
+ */
+boolean
+maze_rectangle_border_is_okay(lx, ly, hx, hy)
+xchar lx, ly, hx, hy;
+{
+	int x = lx-1;	// we want to be on the [stone] part of the mazewalk fill
+	int y = ly-1;
+	int dx = 2;
+	int dy = 0;
+	boolean prev_okay = (maze_inbounds(x, y) && !levl[x][y].typ);
+	int changes = 0;
+
+	do{
+		/* record if whether or not */
+		if (prev_okay != (maze_inbounds(x, y) && !levl[x][y].typ)){
+			changes++;
+			prev_okay = (maze_inbounds(x, y) && !levl[x][y].typ);
+		}
+		/* move to next spot */
+		x += dx;
+		y += dy;
+
+		if (dx && (x - 1 == hx || x + 1 == lx))
+		{
+			dy = dx;
+			dx = 0;
+		}
+		else if (dy && (y - 1 == hy || y + 1 == ly))
+		{
+			dx = -dy;
+			dy = 0;
+		}
+	} while ((x != lx - 1) || (y != ly - 1));
+
+	if (changes > 2)
+	{
+		return FALSE;
+	}
+	else
+		return TRUE;
+}
+
+/*
+ * Sets the solidwall parameters for rand maze room walls for the given room
+ */
+void
+maze_room_set_destructible_flags(r)
+struct mkroom * r;
+{
+	xchar rlx, rly, rhx, rhy;	// rectangles to check for mazewalk-ness
+	
+	int i;
+	int side = 0;
+
+	for (i = 0; i < 4; i++)
+	{
+		side = 1 << i;
+		rlx = r->lx;
+		rly = r->ly;
+		rhx = r->hx;
+		rhy = r->hy;
+		switch (side)
+		{
+		case W_NORTH: rly -= 2; rhy = rly;	break;
+		case W_SOUTH: rhy += 2; rly = rhy;	break;
+		case W_EAST:  rhx += 2; rlx = rhx;	break;
+		case W_WEST:  rlx -= 2; rhx = rlx;	break;
+		}
+		if (!rectangle_in_mazewalk_area(rlx, rly, rhx, rhy))
+		{
+			r->solidwall |= side;
+		}
+	}
+	return;
+}
+
+/*
+ * Utility function to destroy a wall at the given spot.
+ */
+void
+destroy_wall(x, y)
+xchar x, y;
+{
+	/* don't destroy walls of the maze border */
+	if (   !maze_inbounds(x + 1, y + 0)
+		|| !maze_inbounds(x - 1, y - 0)
+		|| !maze_inbounds(x + 0, y + 1)
+		|| !maze_inbounds(x - 0, y - 1)
+		)
+		return;
+	if (IS_WALL(levl[x][y].typ) || IS_DOOR(levl[x][y].typ) || IS_SDOOR(levl[x][y].typ)) {
+		levl[x][y].typ = ROOM;
+		levl[x][y].flags = 0; /* clear door mask */
+	}
+	return;
+}
+
+/*
+ * Attempts to add rooms to the yet-unwalked mazewalk sections of a maze
+ */
+void
+maze_add_rooms(attempts, maxsize)
+int attempts;
+int maxsize;
+{
+	xchar x, y;
+
+	/* Ineligible maze levels for rooms */
+	if (Invocation_lev(&u.uz))
+		return;
+
+	for (; attempts > 0; attempts--) {
+		int roomidx;
+		coord roompos;
+		xchar lx, ly, hx, hy, width, height;
+		int door_attempts = 3;
+		int no_doors_made = 0;
+
+		/* room must fit nicely in the maze; that is, its corner spaces should
+		* all be valid maze0xy() locations. Thus, it should have odd
+		* dimensions. */
+		if (maxsize == -1)
+			maxsize = rn2(4);
+		width = 2 * rn2(maxsize+1) + 3;
+		height = 2 * rn2(maxsize+1) + 3;
+
+		/* Pick a corner location. Which directions the room points out from
+		* this corner are randomized so that we don't have a bias towards any
+		* edge of the map. */
+		maze0xy(&roompos);
+		if (rn2(2)) {
+			/* original roompos is a bottom corner */
+			roompos.y -= (height - 1);
+		}
+		if (rn2(2)) {
+			/* original roompos is a right corner */
+			roompos.x -= (width - 1);
+		}
+		/* these variables are the boundaries including walls */
+		lx = roompos.x - 1;
+		ly = roompos.y - 1;
+		hx = roompos.x + width;
+		hy = roompos.y + height;
+
+		/* validate location */
+		if (!rectangle_in_mazewalk_area(lx, ly, hx, hy))	{
+			/* can't place, out of bounds */
+			continue;
+		}
+		if (!maze_rectangle_border_is_okay(lx, ly, hx, hy))	{
+			/* can't place, the room would probably cut the map in two */
+			continue;
+		}
+
+		/* place the room into the the maze */
+		if (!create_room(roompos.x, roompos.y, width, height,
+			1, 1, OROOM, -1))
+			continue;
+		struct mkroom *r = &rooms[nroom - 1];
+
+		/* determine which walls border mazewalk area (so they are permeable at levelgen) */
+		maze_room_set_destructible_flags(r);
+
+
+		/* put in some doors */
+		/* more door attempts for large rooms */
+		for (; door_attempts < ((hx - lx)+(hy - ly))/4; door_attempts++);
+		/* try to add the doors */
+		for (; door_attempts > 0; door_attempts--) {
+			/* don't use finddpos - it'll bias doors towards the top left of
+			* the room */
+			xchar doorx, doory;
+			boolean horiz = rn2(2) ? TRUE : FALSE;
+			if (horiz) {
+				doorx = rn2(hx - lx) / 2 * 2 + 1 + lx;
+				doory = rn2(2) ? ly : hy;
+			}
+			else {
+				doorx = rn2(2) ? hx : lx;
+				doory = rn2(hy - ly) / 2 * 2 + 1 + ly;
+			}
+			/* Don't generate doors where the space outside of them is blocked.
+			 * Shouldn't need okdoor() - with previous location generation, doors can't be next to
+			 * each other and they should always be on walls
+			 */
+			if (   !maze_inbounds(doorx + !horiz, doory + horiz)	// cannot be on the maze edge
+				|| !maze_inbounds(doorx - !horiz, doory - horiz)	// cannot be on the maze edge
+				//|| IS_WALL(levl[doorx + !horiz][doory + horiz].typ)	// cannot be blocked by walls
+				//|| IS_WALL(levl[doorx - !horiz][doory - horiz].typ)	// cannot be blocked by walls
+				|| (r->solidwall & (((doory == ly)*W_NORTH) +
+									((doory == hy)*W_SOUTH) +
+									((doorx == lx)*W_WEST)  +
+									((doorx == hx)*W_EAST)))		// cannot be on a solid wall
+				)
+			{
+				if (door_attempts == 1) {
+					door_attempts++; /* try again */
+					no_doors_made++;
+					if (no_doors_made == 200) {
+						impossible("maze_add_rooms: can't place a door on rectangle (%d,%d ; %d,%d)", lx,ly,hx,hy);
+						break;
+					}
+				}
+				continue;
+			}
+			dodoor(doorx, doory, r);
+		}
+		/* set roomno so mazewalk and other maze generation ignore it */
+		topologize(r);
+	}
+	return;
+}
+
+/*
+* Attempts to add rooms to the yet-unwalked mazewalk sections of a maze
+*/
+void
+maze_add_openings(attempts)
+int attempts;
+{
+	xchar x, y;
+
+	/* Ineligible maze levels for rooms */
+	if (Invocation_lev(&u.uz))
+		return;
+
+	for (; attempts > 0; attempts--) {
+		coord roompos;
+		xchar lx, ly, hx, hy;
+		xchar x, y;
+
+		/* Pick the location. */
+		maze0xy(&roompos);
+
+		/* area around the center location */
+		lx = roompos.x - 1;
+		ly = roompos.y - 1;
+		hx = roompos.x + 1;
+		hy = roompos.y + 1;
+
+		/* validate location */
+		if (!rectangle_in_mazewalk_area(lx - 1, ly - 1, hx + 1, hy + 1))	{
+			/* can't place, close to out of bounds or actually out of bounds */
+			continue;
+		}
+		if (!maze_rectangle_border_is_okay(lx, ly, hx, hy))	{
+			/* can't place, the space would probably cut the map in two */
+			continue;
+		}
+		/* place the opening into the the maze */
+		for (x = lx; x <= hx; x++)
+		for (y = ly; y <= hy; y++)
+		{
+			if (!((x - roompos.x) && (y - roompos.y)))
+				levl[x][y].typ = ROOM;
+		}
+	}
+	return;
+}
+
+/*
+ * Attempts to make the maze more livable by remove simple dead ends from the maze
+ * If called with careful = TRUE, it will only remove dead ends into places it is certain are not part of sp_lev generation
+ */
+void
+maze_remove_deadends(floortyp, careful)
+int floortyp;
+boolean careful;
+{
+	char dirok[4];
+	int x, y, dir, idx, idx2, dx, dy, dx2, dy2;
+
+	dirok[0] = 0; /* lint suppression */
+	for (x = 2; x < x_maze_max; x++)
+	for (y = 2; y < y_maze_max; y++)
+	if ((levl[x][y].typ == floortyp) && (x % 2) && (y % 2)) {
+		idx = idx2 = 0;
+		for (dir = 0; dir < 4; dir++) {
+			dx = dx2 = x;
+			dy = dy2 = y;
+			move(&dx, &dy, dir);
+			if (!maze_inbounds(dx, dy)) {
+				idx2++;
+				continue;
+			}
+			move(&dx2, &dy2, dir);
+			move(&dx2, &dy2, dir);
+			if (!maze_inbounds(dx2, dy2)) {
+				idx2++;
+				continue;
+			}
+			if (IS_WALL(levl[dx][dy].typ)
+				&& (levl[dx2][dy2].typ == floortyp)) {
+				if (!careful)
+				{
+					dirok[idx++] = dir;
+				}
+				else
+				{// will only make paths into rooms that were randomly placed prior to mazewalking
+					if (levl[dx2][dy2].roomno - ROOMOFFSET >= level.flags.sp_lev_nroom)
+						dirok[idx++] = dir;
+				}
+				idx2++;
+				continue;
+			}
+			if (IS_WALL(levl[dx][dy].typ)) {
+				idx2++;
+				continue;
+			}
+		}
+		if (idx2 >= 3 && idx > 0) {
+			dx = dx2 = x;
+			dy = dy2 = y;
+			dir = dirok[rn2(idx)];
+			move(&dx, &dy, dir);
+			move(&dx2, &dy2, dir);
+			move(&dx2, &dy2, dir);
+			if (levl[dx2][dy2].roomno != NO_ROOM) {
+				dodoor(dx, dy, &rooms[levl[dx2][dy2].roomno]);
+			}
+			else {
+				levl[dx][dy].typ = floortyp;
+			}
+		}
+	}
+	return;
+}
+
+/*
+* Maybe destroy the walls of the room
+* walls can be destroyed if:
+* - it is not a special room that wants full walls
+* - the room is not lit
+* chance/100 probability
+*/
+void
+maze_damage_rooms(chance)
+int chance;
+{
+	xchar x, y;
+	xchar lx, ly, hx, hy;
+	int wallsgone;		// bitfield
+	int i;
+	struct mkroom * r;
+
+	for (r = &rooms[level.flags.sp_lev_nroom]; r != &rooms[nroom]; r++)
+	{
+		if (!special_room_requires_full_walls(r->rtype) && !r->rlit && (rn2(100) < chance))
+		{
+			wallsgone = 0x15;
+
+			lx = r->lx - 1;	// left wall
+			ly = r->ly - 1;	// top wall
+			hx = r->hx + 1;	// right wall
+			hy = r->hy + 1;	// bottom wall
+
+			/* large rooms are less likely to lose walls */
+			for (i = (hx - lx) / 4; i > 0; i--)
+				wallsgone &= (((rn2(16) | rn2(16)) & (W_NORTH | W_SOUTH)) | W_EAST | W_WEST);
+			for (i = (hy - ly) / 4; i > 0; i--)
+				wallsgone &= (((rn2(16) | rn2(16)) & (W_EAST | W_WEST)) | W_NORTH | W_SOUTH);
+
+			/* "solid" walls that don't border maze filler cannot be destroyed in this manner */
+			wallsgone &= ~r->solidwall;
+
+			/* do not remove walls bording the edge of the maze */
+			if (ly == 2)			wallsgone &= ~W_NORTH;
+			if (hy == y_maze_max)	wallsgone &= ~W_SOUTH;
+			if (hx == x_maze_max)	wallsgone &= ~W_EAST;
+			if (lx == 2)			wallsgone &= ~W_WEST;
+
+			/* actually destroy walls */
+			for (x = lx + 1; x <= hx - 1; ++x) {
+				if (wallsgone & W_NORTH) destroy_wall(x, ly);	// top
+				if (wallsgone & W_SOUTH) destroy_wall(x, hy);	// bottom
+			}
+			for (y = ly + 1; y <= hy - 1; ++y) {
+				if (wallsgone & W_EAST) destroy_wall(hx, y);	// right
+				if (wallsgone & W_WEST) destroy_wall(lx, y);	// left
+			}
+			/* corners and middles are destroyed if the wall sections they connected were destroyed */
+			if ((wallsgone & W_NORTH) && (wallsgone & W_WEST)) destroy_wall(lx, ly);
+			if ((wallsgone & W_NORTH) && (wallsgone & W_EAST)) destroy_wall(hx, ly);
+			if ((wallsgone & W_SOUTH) && (wallsgone & W_EAST)) destroy_wall(hx, hy);
+			if ((wallsgone & W_SOUTH) && (wallsgone & W_WEST)) destroy_wall(lx, hy);
+
+			/* re-draw walls*/
+			if (wallsgone)
+				wallification(lx, ly, hx, hy);
+
+			/* note that r is not quite ordinary anymore */
+			if (wallsgone && r->rtype == OROOM)
+				r->rtype = JOINEDROOM;
+		}
+	}
+}
+
+/* Postprocessing after most of the rest of the level has been created
+ * (including stairs), and some rooms exist.
+ * Select attempts rooms to be converted into special rooms, then possibly
+ * place some other furniture inside the room.
+ */
+void
+maze_touchup_rooms(attempts)
+int attempts;
+{
+	struct mkroom *r;
+	if (nroom == 0)
+		return;
+
+	int i;
+	for (; attempts > 0; attempts--) {
+		if (wizard && nh_getenv("SHOPTYPE")) {
+			/* full manual override */
+			mkroom(SHOPBASE);
+		}
+		else {
+			i = random_special_room();
+			if (i)
+				mkroom(i);
+		}
+	}
+	for (i = level.flags.sp_lev_nroom; i < nroom; ++i) {
+		/* set r */
+		r = &rooms[i];
+
+		/* add furniture to simple rooms */
+		if (r->rtype == OROOM || r->rtype == JOINEDROOM)
+		{
+			/* probabilities here are deflated from makelevel() */
+			if (!rn2(20))
+				mkfeature(FOUNTAIN, FALSE, r);
+			if (!rn2(80))
+				mkfeature(SINK, FALSE, r);
+			if (!rn2(100))
+				mkfeature(GRAVE, FALSE, r);
+			if (!rn2(100))
+				mkfeature(ALTAR, FALSE, r);
+		}
+	}
+}
+
+/*
+ * Removes the given room, replacing its contents with pre-wallwalk fill
+ */
+void
+maze_remove_room(room_index)
+int room_index;
+{
+	int x, y;
+	struct mkroom *troom = &rooms[room_index];
+
+	for (x = troom->lx - 1; x <= troom->hx + 1; x++)
+	for (y = troom->ly - 1; y <= troom->hy + 1; y++)
+	{
+		levl[x][y].typ = ((x % 2) && (y % 2)) ? STONE : HWALL;
+		levl[x][y].flags = 0;
+		levl[x][y].roomno = NO_ROOM;
+	}
+	remove_room(room_index);
+
+	return;
+}
+
+void
+create_maze()
+{
+	int x, y;
+	coord mm;
+
+	/* make maze base */
+	for (x = 2; x <= x_maze_max; x++)
+	for (y = 2; y <= y_maze_max; y++)
+		levl[x][y].typ = ((x % 2) && (y % 2)) ? STONE : HWALL;
+
+	/* add rooms */
+	maze_add_rooms( 5,-1);
+	maze_add_rooms(10, 3);
+	maze_add_rooms( 5, 0);
+
+	/* add maze openings */
+	maze_add_openings(5);
+
+	/* perform mazewalk */
+	maze0xy(&mm);
+	walkfrom((int)mm.x, (int)mm.y, 0);
+
+	/* remove dead ends */
+	maze_remove_deadends(ROOM, FALSE);
+
+	/* put a boulder at the maze center */
+	(void)mksobj_at(BOULDER, (int)mm.x, (int)mm.y, TRUE, FALSE);
+
+	wallification(2, 2, x_maze_max, y_maze_max);
+
+	return;
+}
+
 void
 makemaz(s)
 register const char *s;
@@ -628,106 +1295,6 @@ register const char *s;
 		/* some levels can end up with monsters
 		   on dead mon list, including light source monsters */
 		dmonsfree();
-		/*Post-level-loading modification, convert half the swamp to a forest on the knight locate level*/
-		if(Role_if(PM_KNIGHT) && 
-			In_quest(&u.uz) && 
-			Is_qlocate(&u.uz)
-		){
-			int x, y;
-			for(x = 0; x<COLNO/2; x++){
-				for(y = 0; y<ROWNO; y++){
-					if(levl[x][y].typ == POOL) levl[x][y].typ = TREE;
-				}
-			}
-		}
-		if(on_level(&valley_level, &u.uz)){
-			int x, y;
-			for(x = 0; x<COLNO; x++){
-				for(y = 0; y<ROWNO; y++){
-					if(isok(x,y) && levl[x][y].typ == ALTAR){
-						mksobj_at(CANDLE_OF_INVOCATION, x, y, FALSE, FALSE);
-					}
-				}
-			}
-		}
-		if(Role_if(PM_RANGER) && Race_if(PM_GNOME) && on_level(&u.uz, &minetown_level)){
-			int x, y, good = FALSE;
-			while(!good){
-				x = rn2(COLNO)+1;
-				y = rn2(ROWNO);
-				if(isok(x,y) && levl[x][y].typ == ROOM && !costly_spot(x, y))
-					good = TRUE;
-				else continue;
-				
-				levl[x][y].typ = STAIRS;
-				levl[x][y].ladder = LA_DOWN;
-				sstairs.sx = x;
-				sstairs.sy = y;
-				sstairs.up = 0;
-				assign_level(&sstairs.tolev, &qstart_level);
-			}
-		}
-		if(In_outlands(&u.uz)){
-			if(!(u.uz.dlevel == spire_level.dlevel || Is_gatetown(&u.uz) || Is_sumall(&u.uz)))
-				place_neutral_features();
-			if(u.uz.dlevel < gatetown_level.dlevel + 4){
-				for(x = 0; x<COLNO; x++){
-					for(y = 0; y<ROWNO; y++){
-						if(levl[x][y].typ == TREE) levl[x][y].lit = TRUE;
-					}
-				}
-			}
-			if(u.uz.dlevel == spire_level.dlevel){
-				for(x = 2; x <= x_maze_max; x++)
-					for(y = 2; y <= y_maze_max; y++){
-						if(m_at(x,y) && !ACCESSIBLE(levl[x][y].typ)) 
-							rloc(m_at(x,y), FALSE);
-					}
-			}
-			if(Is_sumall(&u.uz)){
-				for(x = 2; x <= x_maze_max; x++)
-					for(y = 2; y <= y_maze_max; y++){
-						if(levl[x][y].typ == STONE) levl[x][y].typ = HWALL;
-						if(levl[x][y].typ == ROOM) levl[x][y].lit = TRUE;
-						if(m_at(x,y)) rloc(m_at(x,y), FALSE);
-					}
-				wallification(1, 1, COLNO-1, ROWNO-1);
-			}
-		}
-		if(In_law(&u.uz)){
-			place_law_features();
-		}
-		if(Is_lolth_level(&u.uz)){
-			int x, y;
-			place_lolth_vaults();
-			for(x = 0; x<COLNO; x++){
-				for(y = 0; y<ROWNO; y++){
-					if(levl[x][y].typ == ROOM) maketrap(x,y,WEB);
-				}
-			}
-		}
-		if(Is_dis_level(&u.uz)){
-			for(x = 0; x<COLNO; x++){
-				for(y = 0; y<ROWNO; y++){
-					if(levl[x][y].typ == IRONBARS){
-						struct monst *angel;
-						angel = makemon(&mons[angelnums[rn2(SIZE(angelnums))]], x, y, MM_EDOG|MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
-						if(angel){
-							initedog(angel);
-							angel->m_lev = min(30, 3 * (int)(angel->data->mlevel / 2));
-							angel->mhpmax = (angel->m_lev * 8) - 4;
-							angel->mhp =  angel->mhpmax;
-							angel->female =  TRUE;
-							angel->mtame = 10;
-							angel->mpeaceful = 1;
-							angel->mcrazed = 1;
-						}
-						mkcorpstat(STATUE, angel, (struct permonst *)0, x, y, FALSE);
-						mongone(angel);
-					}
-				}
-			}
-		}
 		return;	/* no mazification right now */
 	    }
 	    impossible("Couldn't load \"%s\" - making a maze.", protofile);
@@ -735,29 +1302,14 @@ register const char *s;
 
 	level.flags.is_maze_lev = TRUE;
 
-#ifndef WALLIFIED_MAZE
-	for(x = 2; x < x_maze_max; x++)
-		for(y = 2; y < y_maze_max; y++)
-			levl[x][y].typ = STONE;
-#else
-	for(x = 2; x <= x_maze_max; x++)
-		for(y = 2; y <= y_maze_max; y++)
-			levl[x][y].typ = ((x % 2) && (y % 2)) ? STONE : HWALL;
-#endif
+	create_maze();
 
-	maze0xy(&mm);
-	walkfrom((int) mm.x, (int) mm.y);
-	/* put a boulder at the maze center */
-	(void) mksobj_at(BOULDER, (int) mm.x, (int) mm.y, TRUE, FALSE);
-
-#ifdef WALLIFIED_MAZE
-	wallification(2, 2, x_maze_max, y_maze_max);
-#endif
 	mazexy(&mm);
-	mkstairs(mm.x, mm.y, 1, (struct mkroom *)0);		/* up */
+	mkstairs(mm.x, mm.y, 1, room_at(mm.x,mm.y));		/* up */
+
 	if (!Invocation_lev(&u.uz)) {
 	    mazexy(&mm);
-	    mkstairs(mm.x, mm.y, 0, (struct mkroom *)0);	/* down */
+	    mkstairs(mm.x, mm.y, 0, room_at(mm.x,mm.y));	/* down */
 	} else {	/* choose "vibrating square" location */
 #define x_maze_min 2
 #define y_maze_min 2
@@ -805,6 +1357,11 @@ register const char *s;
 	/* place branch stair or portal */
 	place_branch(Is_branchlev(&u.uz), 0, 0);
 
+	/* add special rooms, dungeon features */
+	if (!In_quest(&u.uz))
+		maze_touchup_rooms(rnd(3));
+	maze_damage_rooms(85);
+
 	for(x = rn1(8,11); x; x--) {
 		mazexy(&mm);
 		(void) mkobj_at(rn2(2) ? GEM_CLASS : 0, mm.x, mm.y, TRUE);
@@ -836,8 +1393,8 @@ register const char *s;
  * that is totally safe.
  */
 void
-walkfrom(x,y)
-int x,y;
+walkfrom(x,y,depth)
+int x,y,depth;
 {
 #define CELLS (ROWNO * COLNO) / 4		/* a maze cell is 4 squares */
 	char mazex[CELLS + 1], mazey[CELLS + 1];	/* char's are OK */
@@ -861,7 +1418,7 @@ int x,y;
 		}
 		q = 0;
 		for (a = 0; a < 4; a++)
-			if(okay(x, y, a)) dirs[q++]= a;
+			if(okay(x, y, a, depth)) dirs[q++]= a;
 		if (!q)
 			pos--;
 		else {
@@ -873,6 +1430,8 @@ int x,y;
 			levl[x][y].typ = ROOM;
 #endif
 			move(&x, &y, dir);
+			if (levl[x][y].roomno - ROOMOFFSET >= level.flags.sp_lev_nroom)
+				maze_remove_room(levl[x][y].roomno - ROOMOFFSET);
 			pos++;
 			if (pos > CELLS)
 				panic("Overflow in walkfrom");
@@ -884,8 +1443,8 @@ int x,y;
 #else
 
 void
-walkfrom(x,y)
-int x,y;
+walkfrom(x,y,depth)
+int x,y,depth;
 {
 	register int q,a,dir;
 	int dirs[4];
@@ -903,17 +1462,20 @@ int x,y;
 	while(1) {
 		q = 0;
 		for(a = 0; a < 4; a++)
-			if(okay(x,y,a)) dirs[q++]= a;
+			if(okay(x,y,a,depth))
+				dirs[q++]= a;
 		if(!q) return;
 		dir = dirs[rn2(q)];
 		move(&x,&y,dir);
+		if (levl[x][y].roomno - ROOMOFFSET >= level.flags.sp_lev_nroom)
+			maze_remove_room(levl[x][y].roomno - ROOMOFFSET);
 #ifndef WALLIFIED_MAZE
 		levl[x][y].typ = CORR;
 #else
 		levl[x][y].typ = ROOM;
 #endif
 		move(&x,&y,dir);
-		walkfrom(x,y);
+		walkfrom(x,y,depth+1);
 	}
 }
 #endif /* MICRO */

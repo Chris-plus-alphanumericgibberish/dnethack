@@ -40,6 +40,7 @@ extern int NDECL(dowait); /**/
 extern int NDECL(dowipe); /**/
 extern int NDECL(do_mname); /**/
 extern int NDECL(ddocall); /**/
+extern void FDECL(do_oname, (struct obj *));
 extern int NDECL(dotakeoff); /**/
 extern int NDECL(doremring); /**/
 extern int NDECL(dowear); /**/

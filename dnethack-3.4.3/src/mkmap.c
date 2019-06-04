@@ -17,7 +17,6 @@ STATIC_DCL void FDECL(pass_three,(SCHAR_P,SCHAR_P));
 STATIC_DCL void NDECL(wallify_map);
 STATIC_DCL void FDECL(join_map,(SCHAR_P,SCHAR_P));
 STATIC_DCL void FDECL(finish_map,(SCHAR_P,SCHAR_P,XCHAR_P,XCHAR_P));
-STATIC_DCL void FDECL(remove_room,(unsigned));
 void FDECL(mkmap, (lev_init *));
 
 char *new_locations;
@@ -401,7 +400,7 @@ remove_rooms(lx, ly, hx, hy)
  * level structure contents corresponding to roomno have already been reset.
  * Currently handles only the removal of rooms that have no subrooms.
  */
-STATIC_OVL void
+void
 remove_room(roomno)
     unsigned roomno;
 {

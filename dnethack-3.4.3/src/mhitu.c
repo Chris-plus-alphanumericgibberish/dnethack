@@ -1004,13 +1004,11 @@ mattacku(mtmp)
 				|| (is_half_dragon(mdat) && mtmp->m_lev >= 14)
 				|| (mdat == &mons[PM_CERBERUS])
 			) flags.drgn_brth = 1;
-			if(mdat == &mons[PM_MAMMON]) flags.mamn_brth = 1;
 			if(range2){
 				sum[i] = breamu(mtmp, mattk);
 				mon_ranged_gazeonly = 0;
 			}
 			flags.drgn_brth = 0;
-			flags.mamn_brth = 0;
 			/* Note: breamu takes care of displacement */
 //			if( mdat == &mons[PM_UNMASKED_GOD_EMPEROR] ) mtmp->mspec_used = 0;
 			break;
@@ -3596,7 +3594,7 @@ dopois:
 			for (i = rn2(3)+2; i > 0; i--) {
 				x = rn2(3)-1;
 				y = rn2(3)-1;
-				explode(mtmp->mx+x, mtmp->my+y, 8, dmg, -1, rn2(EXPL_MAX), 1);		//-1 is unspecified source. 8 is physical
+				explode(mtmp->mx+x, mtmp->my+y, AD_PHYS, -1, dmg, rn2(EXPL_MAX), 1);		//-1 is unspecified source. 8 is physical
 			}
 			if(DEADMONSTER(mtmp))
 				return 2;
@@ -4151,10 +4149,10 @@ boolean ufound;
 		case AD_FNEX:
 			mondead(mtmp);
 			if(mtmp->data==&mons[PM_SWAMP_FERN_SPORE]) 
-				explode(mtmp->mx, mtmp->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL, 1);
+				explode(mtmp->mx, mtmp->my, AD_DISE, MON_EXPLODE, tmp, EXPL_MAGICAL, 1);
 			else if(mtmp->data==&mons[PM_BURNING_FERN_SPORE])
-				explode(mtmp->mx, mtmp->my, 8, tmp, MON_EXPLODE, EXPL_YELLOW, 1);
-			else explode(mtmp->mx, mtmp->my, 7, tmp, MON_EXPLODE, EXPL_NOXIOUS, 1);
+				explode(mtmp->mx, mtmp->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_YELLOW, 1);
+			else explode(mtmp->mx, mtmp->my, AD_ACID, MON_EXPLODE, tmp, EXPL_NOXIOUS, 1);
 			return 2;
 		break;
 		

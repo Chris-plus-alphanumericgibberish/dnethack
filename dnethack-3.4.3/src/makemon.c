@@ -5896,7 +5896,12 @@ register int	mmflags;
 		if(enexto_core(&bypos, u.ux, u.uy, ptr, gpflags)) {
 			x = bypos.x;
 			y = bypos.y;
-		} else
+		}
+		else if (enexto_core(&bypos, u.ux, u.uy, ptr, gpflags|MM_IGNOREWATER)) {
+			x = bypos.x;
+			y = bypos.y;
+		}
+		else
 			return((struct monst *)0);
 	}
 	/* Does monster already exist at the position? */

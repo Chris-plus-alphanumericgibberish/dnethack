@@ -2126,7 +2126,7 @@ do_storms()
 	    dirx = rn2(3) - 1;
 	    diry = rn2(3) - 1;
 	    if(dirx != 0 || diry != 0)
-		buzz(-15, /* "monster" LIGHTNING spell */
+		buzz(AD_ELEC, SPBOOK_CLASS, FALSE,/* "monster" LIGHTNING spell */
 		     8, x, y, dirx, diry,0,0);
 	}
     }

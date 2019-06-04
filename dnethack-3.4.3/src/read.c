@@ -1770,8 +1770,8 @@ struct obj	*sobj;
 		    pline_The("scroll erupts in a tower of flame!");
 		    burn_away_slime();
 		}
-		explode(u.ux, u.uy, 11, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_FIERY, 1);
+		explode(u.ux, u.uy, AD_FIRE, SCROLL_CLASS, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
+							EXPL_FIERY, 1);
 		return(1);
 	}
 	case SCR_EARTH:
@@ -2093,8 +2093,8 @@ struct obj	*sobj;
 				sx = u.ux; 
 				sy = u.uy;
 			}
-			explode(sx, sy, 11, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_FIERY, 1);
+			explode(sx, sy, AD_FIRE, SCROLL_CLASS, (2 * (rn1(damlevel, damlevel) - (damlevel - 1) * cval) + 1) / 3,
+							EXPL_FIERY, 1);
 			sx = u.ux+rnd(3)-2; 
 			sy = u.uy+rnd(3)-2;
 			if (!isok(sx,sy) ||
@@ -2103,8 +2103,8 @@ struct obj	*sobj;
 				sx = u.ux; 
 				sy = u.uy;
 			}
-			explode(sx, sy, 12, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_FROSTY, 1);
+			explode(sx, sy, AD_COLD, SCROLL_CLASS, (2 * (rn1(damlevel, damlevel) - (damlevel - 1) * cval) + 1) / 3,
+							EXPL_FROSTY, 1);
 			sx = u.ux+rnd(3)-2; 
 			sy = u.uy+rnd(3)-2;
 			if (!isok(sx,sy) ||
@@ -2113,8 +2113,8 @@ struct obj	*sobj;
 				sx = u.ux; 
 				sy = u.uy;
 			}
-			explode(sx, sy, 15, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_MAGICAL, 1);
+			explode(sx, sy, AD_ELEC, SCROLL_CLASS, (2 * (rn1(damlevel, damlevel) - (damlevel - 1) * cval) + 1) / 3,
+							EXPL_MAGICAL, 1);
 			sx = u.ux+rnd(3)-2; 
 			sy = u.uy+rnd(3)-2;
 			if (!isok(sx,sy) ||
@@ -2123,8 +2123,8 @@ struct obj	*sobj;
 				sx = u.ux; 
 				sy = u.uy;
 			}
-			explode(sx, sy, 17, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
-							SCROLL_CLASS, EXPL_NOXIOUS, 1);
+			explode(sx, sy, AD_ACID, SCROLL_CLASS, (2 * (rn1(damlevel, damlevel) - (damlevel - 1) * cval) + 1) / 3,
+							EXPL_NOXIOUS, 1);
 	break;
 		}
 		long rturns = sobj->blessed ? 5000L : sobj->cursed ? 5L : 250L;
@@ -3039,7 +3039,11 @@ createmon:
 				mtmp->mfaction = undeadtype;
 			}
 		}
-		if (mtmp) madeany = TRUE;
+		if (mtmp)
+		{
+			madeany = TRUE;
+			newsym(mtmp->mx, mtmp->my);
+		}
 	    }
 	}
 	return mtmp;

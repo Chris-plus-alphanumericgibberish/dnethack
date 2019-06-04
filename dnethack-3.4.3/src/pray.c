@@ -1752,6 +1752,26 @@ water_prayer(bless_water)
 	    changed += otmp->quan;
 	} else if(otmp->oclass == POTION_CLASS)
 	    other = TRUE;
+	else if (otmp->oproperties & ((bless_water) ? OPROP_HOLYW : OPROP_UNHYW) && (bless_water ? !otmp->blessed : !otmp->cursed))
+	{
+		otmp->blessed = bless_water;
+		otmp->cursed = !bless_water;
+		otmp->bknown = bc_known;
+		if (!Blind) {
+			if (strncmpi(The(xname(otmp)), "The ", 4))
+			{
+				pline("On the altar, %s glow%s %s for a moment.",
+					xname(otmp), (otmp->quan > 1L ? "" : "s"),
+					(bless_water ? hcolor(NH_LIGHT_BLUE) : hcolor(NH_BLACK)));
+			}
+			else
+			{
+				pline("%s on the altar glow%s %s for a moment.",
+					The(xname(otmp)), (otmp->quan > 1L ? "" : "s"),
+					(bless_water ? hcolor(NH_LIGHT_BLUE) : hcolor(NH_BLACK)));
+			}
+		}
+	}
     }
     if(!Blind && changed) {
 	pline("%s potion%s on the altar glow%s %s for a moment.",

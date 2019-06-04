@@ -1726,7 +1726,7 @@ struct obj *instr;
 			losehp(damage, buf, KILLED_BY);
 		    }
 		} else {
-		    buzz((instr->otyp == FROST_HORN) ? AD_COLD-1 : AD_FIRE-1,
+		    buzz((instr->otyp == FROST_HORN) ? AD_COLD : AD_FIRE, WAND_CLASS, TRUE,
 			 rn1(6,6), u.ux, u.uy, u.dx, u.dy,0,0);
 		}
 		makeknown(instr->otyp);

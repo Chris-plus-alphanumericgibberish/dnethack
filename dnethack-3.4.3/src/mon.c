@@ -80,7 +80,7 @@ double x;
 }
 
 void
-remove_monster(x,y)
+removeMonster(x,y)
 int x,y;
 {
     if (level.monsters[x][y] &&
@@ -892,7 +892,7 @@ register struct monst *mtmp;
 			return (1);
 		}
 	}
-	if(inpool) water_damage(which_armor(mtmp, W_ARMF), FALSE, FALSE, level.flags.lethe, mtmp);
+	if(inshallow) water_damage(which_armor(mtmp, W_ARMF), FALSE, FALSE, level.flags.lethe, mtmp);
 	else water_damage(mtmp->minvent, FALSE, FALSE, level.flags.lethe, mtmp);
 	return (0);
     }
@@ -940,7 +940,7 @@ register struct monst *mtmp;
 				int tx = mtmp->mx, ty = mtmp->my, dn = mtmp->m_lev;
 				pline("%s explodes.", Monnam(mtmp));
 				mondead(mtmp);
-				explode(tx, ty, 7, d(dn, 10), MON_EXPLODE, EXPL_NOXIOUS, 1);
+				explode(tx, ty, AD_ACID, MON_EXPLODE, d(dn, 10), EXPL_NOXIOUS, 1);
 			} else pline("%s drowns.", Monnam(mtmp));
 	    }
 	    if (u.ustuck && u.uswallow && u.ustuck == mtmp) {
@@ -960,9 +960,13 @@ register struct monst *mtmp;
     } else {
 	/* but eels have a difficult time outside */
 	if (mtmp->data->mlet == S_EEL && !Is_waterlevel(&u.uz)) {
-	    if(mtmp->mhp > 1) mtmp->mhp--;
+		/* Puddles can sustain a tiny sea creature, or lessen the burdens of a larger one */
+		if (!(inshallow && mtmp->data->msize == MZ_TINY))
+		{
+			if (mtmp->mhp > 1 && rn2(mtmp->data->msize)) mtmp->mhp--;
 	    monflee(mtmp, 2, FALSE, FALSE);
 	}
+    }
     }
     return (0);
 }
@@ -2550,7 +2554,7 @@ mfndpos(mon, poss, info, flag)
 	register int cnt = 0;
 	register uchar ntyp;
 	uchar nowtyp;
-	boolean wantpool,poolok,cubewaterok,lavaok,nodiag,quantumlock;
+	boolean wantpool,wantpuddle,poolok,cubewaterok,lavaok,nodiag,quantumlock;
 	boolean rockok = FALSE, treeok = FALSE, thrudoor;
 	int maxx, maxy;
 	
@@ -2574,6 +2578,7 @@ mfndpos(mon, poss, info, flag)
 
 	nodiag = (mdat == &mons[PM_GRID_BUG]) || (mdat == &mons[PM_BEBELITH]);
 	wantpool = mdat->mlet == S_EEL;
+	wantpuddle = wantpool && mdat->msize == MZ_TINY;
 	cubewaterok = (is_swimmer(mdat) || breathless_mon(mon) || amphibious_mon(mon));
 	poolok = is_flyer(mdat) || is_clinger(mdat) ||
 		 (is_swimmer(mdat) && !wantpool);
@@ -2665,7 +2670,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		//Weeping angels should avoid stepping into corredors, where they can be forced into a standoff.
 		if(quantumlock && IS_ROOM(levl[mon->mx][mon->my].typ) && !IS_ROOM(ntyp) ) continue;
 		
-		if((is_pool(nx,ny, FALSE) == wantpool || poolok) &&
+		if((is_pool(nx,ny, wantpuddle) == wantpool || poolok) &&
 			(cubewaterok || !is_3dwater(nx,ny)) && 
 			(lavaok || !is_lava(nx,ny))) {
 		int dispx, dispy;
@@ -2799,7 +2804,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 		cnt++;
 	    }
 	}
-	if(!cnt && wantpool && !is_pool(x,y, FALSE)) {
+	if(!cnt && wantpool && !is_pool(x,y, wantpuddle)) {
 		wantpool = FALSE;
 		goto nexttry;
 	}
@@ -3196,7 +3201,7 @@ register struct monst *mon;
 
 	if (fmon == (struct monst *)0)  panic ("relmon: no fmon available.");
 
-	remove_monster(mon->mx, mon->my);
+	removeMonster(mon->mx, mon->my);
 
 	if(mon == fmon) fmon = fmon->nmon;
 	else {
@@ -3499,16 +3504,31 @@ boolean was_swallowed;			/* digestion */
 		oep->ward_type = BURN;
 		oep->complete_wards = 1;
 	}
-	if ((mdat->mlet == S_VAMPIRE && mdat->geno & G_UNIQ) || 
-		(mdat->mlet == S_LICH && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH])) {
+	if (mdat == &mons[PM_VLAD_THE_IMPALER]) {
+	    if (cansee(mon->mx, mon->my) && !was_swallowed)
+		pline("%s body crumbles into dust.", s_suffix(Monnam(mon)));
+	    return FALSE;
+	}
+	else if(mdat->mlet == S_VAMPIRE && mdat->geno & G_UNIQ){
+		pline("%s body crumbles into dust.", s_suffix(Monnam(mon)));
+	    return FALSE;
+	}
+	else if (mdat->mlet == S_LICH && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH]) {
 	    if (cansee(mon->mx, mon->my) && !was_swallowed)
 			pline("%s body crumbles into dust.", s_suffix(Monnam(mon)));
 	    if(mdat != &mons[PM_VECNA] && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH]) return FALSE; /*Vecna leaves his hand or eye*/
 	}
-	if(mdat == &mons[PM_CHOKHMAH_SEPHIRAH]){
+	else if(mdat == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		u.chokhmah++;
 		u.keter++;
 		return FALSE;
+	}
+	else if (mdat == &mons[PM_CHAOS] && mvitals[PM_CHAOS].died == 1) {
+	} else if(mdat->geno & G_UNIQ && mvitals[monsndx(mdat)].died == 1){
+		char buf[BUFSZ];
+		buf[0]='\0';
+		if(nonliving(mdat)) Sprintf(buf,"destroyed %s",noit_nohalu_mon_nam(mon));
+		else Sprintf(buf,"killed %s",noit_nohalu_mon_nam(mon));
 	}
 	if(Role_if(PM_ANACHRONONAUT) && mon->mpeaceful && In_quest(&u.uz) && Is_qstart(&u.uz)){
 		if(mdat == &mons[PM_TROOPER]){
@@ -3618,23 +3638,23 @@ boolean was_swallowed;			/* digestion */
 	    	killer = killer_buf;
 	    	killer_format = KILLED_BY_AN;
 			if(mdat==&mons[PM_GAS_SPORE] || mdat==&mons[PM_DUNGEON_FERN_SPORE]){
-	    	  explode(mon->mx, mon->my, 7, tmp, MON_EXPLODE, EXPL_NOXIOUS, 1); //explode(x, y, type, dam, olet, expltype)
+	    	  explode(mon->mx, mon->my, AD_ACID, MON_EXPLODE, tmp, EXPL_NOXIOUS, 1);
 			}
 			else if(mdat==&mons[PM_SWAMP_FERN_SPORE]){
-	    	  explode(mon->mx, mon->my, 9, tmp, MON_EXPLODE, EXPL_MAGICAL, 1); //explode(x, y, type, dam, olet, expltype)
+	    	  explode(mon->mx, mon->my, AD_DISE, MON_EXPLODE, tmp, EXPL_MAGICAL, 1);
 			}
 			else if(mdat==&mons[PM_BURNING_FERN_SPORE]){
-	    	  explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_FIERY, 1); //explode(x, y, type, dam, olet, expltype)
+	    	  explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_FIERY, 1);
 			}
 			else if(mdat->mattk[i].adtyp == AD_PHYS){
-				if(mdat == &mons[PM_FABERGE_SPHERE]) explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, rn2(7), 1);
-				else explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_MUDDY, 1);
+				if(mdat == &mons[PM_FABERGE_SPHERE]) explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, rn2(7), 1);
+				else explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
 			} else if(mdat->mattk[i].adtyp == AD_FIRE){
 				//mdat == &mons[PM_BALROG] || mdat == &mons[PM_MEPHISTOPHELES] || mdat == &mons[PM_FLAMING_SPHERE]){
-				explode(mon->mx, mon->my, 1, tmp, MON_EXPLODE, EXPL_FIERY, 1);
+				explode(mon->mx, mon->my, AD_FIRE, MON_EXPLODE, tmp, EXPL_FIERY, 1);
 			}
 			else if(mdat->mattk[i].adtyp == AD_JAILER){
-				explode(mon->mx, mon->my, 1, tmp, MON_EXPLODE, EXPL_FIERY, 1);
+				explode(mon->mx, mon->my, AD_FIRE, MON_EXPLODE, tmp, EXPL_FIERY, 1);
 				u.uevent.ukilled_apollyon = 1;
 			}
 			else if(mdat->mattk[i].adtyp == AD_GARO){
@@ -3643,7 +3663,7 @@ boolean was_swallowed;			/* digestion */
 				outrumor(rn2(2), BY_OTHER); //either true (3/4) or false (1/4), no mechanism specified.
 				pline("Belief or disbelief rests with you.");
 				pline("To die without leaving a corpse....\"");
-				explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_MUDDY, 1);
+				explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
 				pline("\"That is the way of us Garo.\"");
 			}
 			else if(mdat->mattk[i].adtyp == AD_GARO_MASTER){
@@ -3653,29 +3673,29 @@ boolean was_swallowed;			/* digestion */
 				outgmaster(); //Gives out a major consultation. Does not set the consultation flags.
 				pline("Do not forget these words...");
 				pline("Die I shall, leaving no corpse.\"");
-				explode(mon->mx, mon->my, 8, tmp, MON_EXPLODE, EXPL_MUDDY, 1);
+				explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
 				pline("\"That is the law of us Garo.\"");
 			}
 			else if(mdat->mattk[i].adtyp == AD_COLD){
 			//mdat == &mons[PM_BAALPHEGOR] || mdat == &mons[PM_ANCIENT_OF_ICE] || mdat == &mons[PM_FREEZING_SPHERE]){
-			  explode(mon->mx, mon->my, 2, tmp, MON_EXPLODE, EXPL_FROSTY, 1);
+			  explode(mon->mx, mon->my, AD_COLD, MON_EXPLODE, tmp, EXPL_FROSTY, 1);
 			}
 			else if(mdat->mattk[i].adtyp == AD_ELEC){//mdat == &mons[PM_SHOCKING_SPHERE]){
-				explode(mon->mx, mon->my, 5, tmp, MON_EXPLODE, EXPL_MAGICAL, 1);
+				explode(mon->mx, mon->my, AD_ELEC, MON_EXPLODE, tmp, EXPL_MAGICAL, 1);
 			}
 			else if(mdat->mattk[i].adtyp == AD_FRWK){
 				int x, y, i;
 				for(i = rn2(3)+2; i > 0; i--){
 					x = rn2(7)-3;
 					y = rn2(7)-3;
-					explode(mon->mx+x, mon->my+y, 8, tmp, -1, rn2(7), 1);		//-1 is unspecified source. 8 is physical
+					explode(mon->mx+x, mon->my+y, AD_PHYS, -1, tmp, rn2(7), 1);
 				}
 				tmp=0;
 			} else if(mdat->mattk[i].adtyp == AD_SPNL){
-				explode(mon->mx, mon->my, 2, tmp, MON_EXPLODE, EXPL_WET, 1);
+				explode(mon->mx, mon->my, AD_COLD, MON_EXPLODE, tmp, EXPL_WET, 1);
 				makemon(rn2(2) ? &mons[PM_LEVIATHAN] : &mons[PM_LEVISTUS], mon->mx, mon->my, MM_ADJACENTOK);
 			} else if(mdat == &mons[PM_ANCIENT_OF_DEATH]){
-				if(!(u.sealsActive&SEAL_OSE)) explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_DARK, 1);
+				if(!(u.sealsActive&SEAL_OSE)) explode(mon->mx, mon->my, AD_MAGM, MON_EXPLODE, tmp, EXPL_DARK, 1);
 			} else if(mdat->mattk[i].adtyp == AD_WTCH){
 				struct monst *mtmp, *mtmp2;
 				for (mtmp = fmon; mtmp; mtmp = mtmp2){
@@ -3717,7 +3737,7 @@ boolean was_swallowed;			/* digestion */
 				} else shieldeff(u.ux,u.uy);
 			}
 			else{
-			  explode(mon->mx, mon->my, 0, tmp, MON_EXPLODE, EXPL_MAGICAL, 1);
+			  explode(mon->mx, mon->my, AD_MAGM, MON_EXPLODE, tmp, EXPL_MAGICAL, 1);
 			}
 	    	if(mdat == &mons[PM_GARO_MASTER] || mdat == &mons[PM_GARO]) return (TRUE);
 			else return (FALSE);
@@ -3779,7 +3799,7 @@ boolean was_swallowed;			/* digestion */
 	    	Sprintf(killer_buf, "%s explosion", s_suffix(mdat->mname));
 	    	killer = killer_buf;
 	    	killer_format = KILLED_BY_AN;
-			explode(mon->mx, mon->my, -1, d(8,8), MON_EXPLODE, EXPL_NOXIOUS, 1);
+			explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, d(8,8), EXPL_NOXIOUS, 1);
 			if(mdat==&mons[PM_GREAT_CTHULHU]){
 				flags.cth_attk=TRUE;//state machine stuff.
 				create_gas_cloud(mon->mx, mon->my, 2, 30);

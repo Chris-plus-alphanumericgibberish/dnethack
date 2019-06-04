@@ -20,12 +20,11 @@ extern boolean notonhead;	/* for long worms */
 
 /* kludge to use mondied instead of killed */
 extern boolean m_using;
-
 STATIC_DCL void FDECL(polyuse, (struct obj*, int, int));
 STATIC_DCL void FDECL(create_polymon, (struct obj *, int));
 STATIC_DCL boolean FDECL(zap_updown, (struct obj *));
-STATIC_DCL int FDECL(zhitm, (struct monst *,int,int,int,struct obj **));
-STATIC_DCL void FDECL(zhitu, (int,int,int,const char *,XCHAR_P,XCHAR_P));
+STATIC_DCL int FDECL(zhitm, (struct monst *,int,int,boolean,int,int,struct obj **));
+STATIC_DCL void FDECL(zhitu, (int,int,int,int,const char *,XCHAR_P,XCHAR_P));
 #ifdef STEED
 STATIC_DCL boolean FDECL(zap_steed, (struct obj *));
 #endif
@@ -34,8 +33,6 @@ STATIC_DCL boolean FDECL(zap_steed, (struct obj *));
 STATIC_DCL void FDECL(backfire, (struct obj *));
 STATIC_DCL int FDECL(spell_hit_bonus, (int));
 #endif
-
-/* WAC -- ZT_foo #defines moved to spell.h, since explode uses these types */
 
 #define is_hero_spell(type)	((type) >= 10 && (type) < 20)
 #define wand_damage_die(skill)	(((skill) > 1) ? (2*(skill) + 4) : 6)
@@ -48,66 +45,132 @@ extern const char * const flash_types[];
 #else
 STATIC_VAR const char are_blinded_by_the_flash[] = "are blinded by the flash!";
 
-const char * const flash_types[] = {	/* also used in buzzmu(mcastu.c) */
-	"magic missile",	/* Wands must be 0-9 */
-	"bolt of fire",
-	"bolt of cold",
-	"sleep ray",
-	"death ray",
-	"bolt of lightning",
-	"",
-	"",
-	"",
-	"",
-
-	"magic missile",	/* Spell equivalents must be 10-19 */
-	"fireball",
-	"cone of cold",
-	"sleep ray",
-	"finger of death",
-	"bolt of lightning",	/* used for retribution */
-	"poison spray",
-	"acid blast",
-	"",
-	"",
-
-	"blast of missiles",	/* Dragon breath equivalents 20-29*/
-	"blast of fire",
-	"blast of frost",
-	"blast of sleep gas",
-	"blast of disintegration",
-	"blast of lightning",
-	"blast of poison gas",
-	"blast of acid",
-	"",
-	"",
-	
-	"mega magic?",	/* Mega? equivalents must be 30-39 */
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-	"",
-
-	"magic ray",	/* Spell equivalents must be 40-49 */
-	"heat ray",
-	"cold ray",
-	"stun ray",
-	"death ray",
-	"disintegration ray",
-	"",
-	"",
-	"",
-	""
-
-};
-
 static const int dirx[8] = {0, 1, 1,  1,  0, -1, -1, -1},
 				 diry[8] = {1, 1, 0, -1, -1, -1,  0,  1};
+
+/* returns the string formerly given in the flash_type char*[] array. Not exhaustive -- if new combinations are used, they must be added here as well */
+/* adtyp  -- AD_TYPE damage type, defined in monattk.h */
+/* olet  -- O_CLASS type -- wand, spell, corpse (breath attack), weapon (raygun) */
+char *
+flash_type(adtyp, olet)
+int adtyp, olet;
+{
+	switch (olet)
+	{
+	case WAND_CLASS:
+		switch (adtyp)
+		{
+		case AD_MAGM: return "magic missile";
+		case AD_FIRE: return "bolt of fire";
+		case AD_COLD: return "bolt of cold";
+		case AD_SLEE: return "sleep ray";
+		case AD_DEAD: return "death ray";
+		case AD_ELEC: return "lightning bolt";
+		default:      impossible("unknown wand damage type in flash_type: %d", adtyp);
+		}
+		break;
+	case SPBOOK_CLASS:
+		switch (adtyp)
+		{
+		case AD_MAGM: return "magic missile";
+		case AD_FIRE: return "fireball";
+		case AD_COLD: return "cone of cold";
+		case AD_SLEE: return "sleep ray";
+		case AD_DEAD: return "finger of death";
+		case AD_ELEC: return "bolt of lightning";
+		case AD_DRST: return "poison spray";
+		case AD_ACID: return "acid splash";
+		default:      impossible("unknown spell damage type in flash_type: %d", adtyp);
+		}
+		break;
+
+	case FOOD_CLASS:	//actually breath attacks
+		switch (adtyp)
+		{
+		case AD_MAGM: return "blast of missiles";
+		case AD_FIRE: return "blast of fire";
+		case AD_COLD: return "blast of frost";
+		case AD_SLEE: return "blast of sleep gas";
+		case AD_DISN: return "blast of disintegration";
+		case AD_ELEC: return "blast of lightning";
+		case AD_DRST: return "blast of poison gas";
+		case AD_ACID: return "blast of acid";
+		case AD_GOLD: return "blast of golden shards";
+		default:      impossible("unknown breath damage type in flash_type: %d", adtyp);
+		}
+	case WEAPON_CLASS:
+		switch (adtyp)
+		{
+		case AD_MAGM: return "magic ray";
+		case AD_FIRE: return "heat ray";
+		case AD_COLD: return "cold ray";
+		case AD_SLEE: return "stun ray";
+		case AD_DEAD: return "death ray";
+		case AD_DISN: return "disintegration ray";
+		default:      impossible("unknown raygun damage type in flash_type: %d", adtyp);
+		}
+	default:
+		impossible("unknown object class in flash_type: %d", olet);
+	}
+	return "404 BEAM NOT FOUND";
+}
+
+/* returns the colour each zap should be */
+int
+zap_glyph_color(adtyp)
+int adtyp;
+{
+	switch (adtyp)
+	{
+	case AD_DEAD:
+	case AD_DISN:
+		return CLR_BLACK;
+		//	return CLR_RED;
+	case AD_ACID:
+		return CLR_GREEN;
+		//	return CLR_BROWN;
+		//	return CLR_BLUE;
+		//	return CLR_MAGENTA;
+		//	return CLR_CYAN;
+		//	return CLR_GRAY;
+		//	return NO_COLOR;
+	case AD_FIRE:
+		return CLR_ORANGE;
+		//	return CLR_BRIGHT_GREEN;
+	case AD_DRST:
+	case AD_GOLD:
+		return CLR_YELLOW;
+	case AD_MAGM:
+	case AD_SLEE:
+		return CLR_BRIGHT_BLUE;
+		//	return CLR_BRIGHT_MAGENTA;
+		//	return CLR_BRIGHT_CYAN;
+	case AD_COLD:
+	case AD_ELEC:
+		return CLR_WHITE;
+	default:
+		impossible("unaccounted-for zap type in zap_glyph_color: %d", adtyp);
+		return CLR_WHITE;
+	}
+}
+
+int
+wand_adtype(wand)
+int wand;
+{
+	switch (wand)
+	{
+	case WAN_MAGIC_MISSILE: return AD_MAGM;
+	case WAN_FIRE:          return AD_FIRE;
+	case WAN_COLD:          return AD_COLD;
+	case WAN_SLEEP:         return AD_SLEE;
+	case WAN_DEATH:         return AD_DEAD;
+	case WAN_LIGHTNING:     return AD_ELEC;
+	default:
+		impossible("unaccounted-for wand passed to wand_adtype: %d", wand);
+		return -1;
+	}
+}
 
 /* Routines for IMMEDIATE wands and spells. */
 /* bhitm: monster mtmp was hit by the effect of wand or spell otmp */
@@ -340,7 +403,7 @@ struct obj *otmp;
 	case SPE_DRAIN_LIFE:
 	case WAN_DRAINING:	/* KMH */
 		reveal_invis = TRUE;
-		if(otyp == WAN_DRAINING) d((wand_damage_die(P_SKILL(P_WAND_POWER))-4)/2,8);
+		if(otyp == WAN_DRAINING) dmg = d((wand_damage_die(P_SKILL(P_WAND_POWER))-4)/2,8);
 		else dmg = rnd(8);
 		if(dbldam) dmg *= 2;
 		if(!flags.mon_moving && Double_spell_size) dmg *= 1.5;
@@ -2240,7 +2303,7 @@ boolean ordinary;
 		case SPE_FIREBALL:
 		case SPE_FIRE_STORM:
 		    You("explode a fireball on top of yourself!");
-		    explode(u.ux, u.uy, 11, d(6,6), WAND_CLASS, EXPL_FIERY, 1);
+		    explode(u.ux, u.uy, AD_FIRE, WAND_CLASS, d(6,6), EXPL_FIERY, 1);
 		    break;
 		case WAN_FIRE:
 		    makeknown(WAN_FIRE);
@@ -2281,7 +2344,7 @@ boolean ordinary;
 		    break;
 		case SPE_ACID_SPLASH:
 		    You("splash acid on top of yourself!");
-		    explode(u.ux, u.uy, 17, d(6,6), WAND_CLASS, EXPL_NOXIOUS, 1);
+		    explode(u.ux, u.uy, AD_ACID, WAND_CLASS, d(6,6), EXPL_NOXIOUS, 1);
 		    break;
 
 		case WAN_MAGIC_MISSILE:
@@ -2899,12 +2962,12 @@ register struct	obj	*obj;
 	    if (otyp == WAN_DIGGING || otyp == SPE_DIG)
 			zap_dig(-1,-1,-1);//-1-1-1 = "use defaults"
 	    else if (otyp >= SPE_MAGIC_MISSILE && otyp <= SPE_ACID_SPLASH){
-			buzz(otyp - SPE_MAGIC_MISSILE + 10,
+			buzz(spell_adtype(otyp), SPBOOK_CLASS, TRUE,
 				 u.ulevel / 2 + 1,
 				 u.ux, u.uy, u.dx, u.dy,0,0);
 	    } else if (otyp >= WAN_MAGIC_MISSILE && otyp <= WAN_LIGHTNING){
 			use_skill(P_WAND_POWER, wandlevel(otyp));
-			buzz(otyp - WAN_MAGIC_MISSILE,
+			buzz(wand_adtype(otyp), WAND_CLASS, TRUE,
 				 wand_damage_die(P_SKILL(P_WAND_POWER))/((otyp == WAN_MAGIC_MISSILE) ? 2 : 1),
 				 u.ux, u.uy, u.dx, u.dy,0,0);
 	    } else
@@ -2949,13 +3012,13 @@ spell_damage_bonus()
  * spell class and dexterity.
  */
 STATIC_OVL int
-spell_hit_bonus(skill)
-int skill;
+spell_hit_bonus(adtyp)
+int adtyp;
 {
     int hit_bon = 0;
     int dex = ACURR(A_DEX);
 
-    switch (P_SKILL(spell_skilltype(skill))) {
+	switch (P_SKILL(spell_skill_from_adtype(adtyp))) {
 	case P_ISRESTRICTED:
 	case P_UNSKILLED:   hit_bon = -4; break;
 	case P_BASIC:       hit_bon =  0; break;
@@ -3336,19 +3399,21 @@ int dx, dy;
 }
 
 STATIC_OVL int
-zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
-	struct monst *mon;
-	int type, nd, flat;
-	struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
+zhitm(mon, adtyp, olet, yours, nd, flat, ootmp)			/* returns damage to mon */
+struct monst *mon;
+int adtyp, olet;
+boolean yours;
+int nd, flat;
+struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 {
+	struct obj * otmp2;
 	register int tmp = 0;
-	register int abstype = abs(type) % 10;
 	boolean sho_shieldeff = FALSE;
-	boolean spellcaster = is_hero_spell(type); /* maybe get a bonus! */
-
+	boolean spellcaster = ((olet == SPBOOK_CLASS) && yours); /* maybe get a bonus! */
 	*ootmp = (struct obj *)0;
-	switch(abstype) {
-	case ZT_MAGIC_MISSILE:
+
+	switch(adtyp) {
+	case AD_MAGM:
 		if (resists_magm(mon)) {
 		    sho_shieldeff = TRUE;
 		    break;
@@ -3363,7 +3428,7 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 			spell_damage_bonus());
 #endif
 		break;
-	case ZT_FIRE:
+	case AD_FIRE:
 		if (resists_fire(mon)) {
 		    sho_shieldeff = TRUE;
 		    break;
@@ -3384,7 +3449,8 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 		    if (!rn2(5)) (void)destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
 		}
 		break;
-	case ZT_COLD:
+
+	case AD_COLD:
 		if (resists_cold(mon)) {
 		    sho_shieldeff = TRUE;
 		    break;
@@ -3401,18 +3467,18 @@ zhitm(mon, type, nd, flat, ootmp)			/* returns damage to mon */
 #endif
 		if (!rn2(3)) (void)destroy_mitem(mon, POTION_CLASS, AD_COLD);
 		break;
-	case ZT_SLEEP:
+
+	case AD_SLEE:
 		tmp = 0;
 		(void)sleep_monst(mon, flat ? flat : d(nd, 25),
-				type == ZT_WAND(ZT_SLEEP) ? WAND_CLASS : '\0');
-		if(abs(type) == ZT_RAYGUN(ZT_SLEEP)){
+				olet == WAND_CLASS ? WAND_CLASS : '\0');
+		if (olet == WEAPON_CLASS){	//raygun
 			mon->mstun = 1;
 			mon->mconf = 1;
 		}
 		break;
-	case ZT_DEATH:		/* death/disintegration */
-death_blast:
-		if(abs(type) != ZT_BREATH(ZT_DEATH)) {	/* death */
+
+	case AD_DEAD:		/* death*/
 			if(mon->data==&mons[PM_METROID]){
 				pline("The metroid is irradiated with pure energy!  It divides!");
 				makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
@@ -3435,22 +3501,24 @@ death_blast:
 				makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
 				break;
 			}
-		    if(mon->data == &mons[PM_DEATH]) {
-			mon->mhpmax += mon->mhpmax/2;
+		if (mon->data == &mons[PM_DEATH]) {
+			mon->mhpmax += mon->mhpmax / 2;
 			if (mon->mhpmax >= MAGIC_COOKIE)
 			    mon->mhpmax = MAGIC_COOKIE - 1;
 			mon->mhp = mon->mhpmax;
 			tmp = 0;
 			break;
 		    }
+
 		    if (resists_death(mon) || resists_magm(mon)) {	/* similar to player */
 				sho_shieldeff = TRUE;
 			break;
 		    }
-		    type = -1; /* so they don't get saving throws */
-		} else if(flags.mamn_brth){
-		    struct obj *otmp2;
+		adtyp = -1;			/* so they don't get saving throws */
+		tmp = mon->mhp + 1;	/* one-hit-kill */
+		break;
 
+	case AD_GOLD:
 		    if (resists_ston(mon)) {
 			sho_shieldeff = TRUE;
 		    } else if (mon->misc_worn_check & W_ARMS && (*ootmp = which_armor(mon, W_ARMS)) && (*ootmp)->obj_material != GOLD) {
@@ -3466,62 +3534,59 @@ death_blast:
 				   and shirt now in case target gets life-saved */
 				*ootmp = (struct obj *) 0;
 		    }
-		    type = -1;	/* no saving throw wanted */
+		adtyp = -1;	/* no saving throw wanted */
 		    break;	/* not ordinary damage */
-		} else {
-		    struct obj *otmp2;
 
+	case AD_DISN:
 		    if (resists_disint(mon)) {
 			sho_shieldeff = TRUE;
-		    } else if (mon->misc_worn_check & W_ARMS) {
+		}
+		else if (mon->misc_worn_check & W_ARMS) {
 				/* destroy shield; victim survives */
 				*ootmp = which_armor(mon, W_ARMS);
-				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
-		    } else if (mon->misc_worn_check & W_ARMC) {
+			if ((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
+		}
+		else if (mon->misc_worn_check & W_ARMC) {
 				/* destroy cloak */
 				*ootmp = which_armor(mon, W_ARMC);
-				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
-		    } else if (mon->misc_worn_check & W_ARM) {
+			if ((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
+		}
+		else if (mon->misc_worn_check & W_ARM) {
 				/* destroy body armor */
 				*ootmp = which_armor(mon, W_ARM);
-				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
-		    } else if (mon->misc_worn_check & W_ARMU) {
+			if ((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
+		}
+		else if (mon->misc_worn_check & W_ARMU) {
 				/* destroy underwear */
 				*ootmp = which_armor(mon, W_ARMU);
-				if((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
-		    } else {
+			if ((*ootmp)->oartifact) *ootmp = (struct obj *) 0;
+		}
+		else {
 				/* no body armor, victim dies; destroy cloak
 				   and shirt now in case target gets life-saved */
 				tmp = MAGIC_COOKIE;
 		    }
-		    type = -1;	/* no saving throw wanted */
+		adtyp = -1;	/* no saving throw wanted */
 		    break;	/* not ordinary damage */
-		}
-		tmp = mon->mhp+1;
-		break;
-	case ZT_LIGHTNING:
+
+	case AD_ELEC:
 		if (resists_elec(mon)) {
 		    sho_shieldeff = TRUE;
 		    tmp = 0;
 		    /* can still blind the monster */
 		} else{
-			if(abs(type) == ZT_RAYGUN(ZT_LIGHTNING)){
-				if(type < 0) type = -1*ZT_BREATH(ZT_DEATH);
-				else type = ZT_BREATH(ZT_DEATH);
-				goto death_blast;
-			}
 			if(!flat) tmp = d(nd,6);
 			else tmp = flat;
 		}
-		if (spellcaster)
+		if (spellcaster && tmp)
 		    tmp += spell_damage_bonus();
 #ifdef WIZ_PATCH_DEBUG
-		if (spellcaster)
+		if (spellcaster && tmp)
 		    pline("Damage = %d + %d", tmp-spell_damage_bonus(),
 			spell_damage_bonus());
 #endif
 		if (!resists_blnd(mon) &&
-				!(type > 0 && u.uswallow && mon == u.ustuck)) {
+				!(yours && u.uswallow && mon == u.ustuck)) {
 			register unsigned rnd_tmp = rnd(50);
 			mon->mcansee = 0;
 			if((mon->mblinded + rnd_tmp) > 127)
@@ -3532,12 +3597,13 @@ death_blast:
 		/* not actually possible yet */
 		if (!rn2(3)) (void)destroy_mitem(mon, RING_CLASS, AD_ELEC);
 	break;
-	case ZT_POISON_GAS:
+
+	case AD_DRST:
 		if (resists_poison(mon)) {
 		    sho_shieldeff = TRUE;
 		    break;
 		}
-		if(abs(type) == ZT_SPELL(ZT_POISON_GAS)){
+		if(olet == SPBOOK_CLASS){	// poison spray is a one-hit kill
 			tmp = mon->mhpmax;
 			mon->mhp = 1;
 		} else {
@@ -3545,7 +3611,8 @@ death_blast:
 			else tmp = flat;
 		}
 	break;
-	case ZT_ACID:
+
+	case AD_ACID:
 		if (resists_acid(mon)) {
 		    sho_shieldeff = TRUE;
 		    break;
@@ -3555,15 +3622,19 @@ death_blast:
 		if (!rn2(6)) erode_obj(MON_WEP(mon), TRUE, TRUE);
 		if (!rn2(6)) erode_armor(mon, TRUE);
 		break;
+
+	default:
+		impossible("unaccounted for damage type in zhitm: %d", adtyp);
 	}
+
 	if (sho_shieldeff) shieldeff(mon->mx, mon->my);
-	if (is_hero_spell(type) && (
+	if ((yours && (olet==SPBOOK_CLASS)) && (
 		(Role_if(PM_KNIGHT) && u.uhave.questart) || 
 		(uwep && uwep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS) || 
 		Spellboost)
 	) tmp *= 2;
-	if (tmp > 0 && type >= 0 &&
-		resist(mon, type < ZT_SPELL(0) ? WAND_CLASS : '\0', 0, NOTELL))
+	if (tmp > 0 && yours &&
+		resist(mon, (olet==WAND_CLASS) ? WAND_CLASS : '\0', 0, NOTELL))
 	    tmp /= 2;
 	if (tmp < 0) tmp = 0;		/* don't allow negative damage */
 #ifdef WIZ_PATCH_DEBUG
@@ -3574,15 +3645,16 @@ death_blast:
 }
 
 STATIC_OVL void
-zhitu(type, nd, flat, fltxt, sx, sy)
-int type, nd, flat;
+zhitu(adtyp, olet, nd, flat, fltxt, sx, sy)
+int adtyp, olet, nd, flat;
 const char *fltxt;
 xchar sx, sy;
 {
 	int dam = 0;
+	int i = 0;
 
-	switch (abs(type) % 10) {
-	case ZT_MAGIC_MISSILE:
+	switch (adtyp) {
+	case AD_MAGM:
 	    if (Antimagic) {
 		shieldeff(sx, sy);
 		pline_The("missiles bounce off!");
@@ -3592,7 +3664,7 @@ xchar sx, sy;
 		exercise(A_STR, FALSE);
 	    }
     break;
-	case ZT_FIRE:
+	case AD_FIRE:
 	    if (Fire_resistance) {
 			shieldeff(sx, sy);
 			You("don't feel hot!");
@@ -3610,7 +3682,7 @@ xchar sx, sy;
 		}
 	    burn_away_slime();
     break;
-	case ZT_COLD:
+	case AD_COLD:
 	    if (Cold_resistance) {
 			shieldeff(sx, sy);
 			You("don't feel cold.");
@@ -3625,7 +3697,7 @@ xchar sx, sy;
 			if (flags.drgn_brth) destroy_item(POTION_CLASS, AD_COLD);
 		}
     break;
-	case ZT_SLEEP:{
+	case AD_SLEE:{
 		int time = flat ? flat : d(nd,25);
 	    if (Sleep_resistance) {
 			shieldeff(u.ux, u.uy);
@@ -3635,10 +3707,23 @@ xchar sx, sy;
 	    }
 		if(flags.drgn_brth) make_hallucinated(HHallucination + time, TRUE, 0L);
 	}break;
-	case ZT_DEATH:
-	    if (abs(type) == ZT_BREATH(ZT_DEATH)) {
-			if(flags.mamn_brth){
-				int i;
+	case AD_DEAD:
+		if (resists_death(&youmonst) || u.sealsActive&SEAL_OSE) {
+		shieldeff(sx, sy);
+		You("seem unaffected.");
+		break;
+	    } else if (Antimagic) {
+		shieldeff(sx, sy);
+		You("aren't affected.");
+		break;
+	    }
+		/* you are dead */
+		killer_format = KILLED_BY_AN;
+		killer = fltxt;
+		u.ugrave_arise = -3;
+		done(DIED);
+		return; /* or, lifesaved */
+	case AD_GOLD:
 				if (uarms && uarms->obj_material != GOLD) {
 					set_material(uarms, GOLD);
 					break;
@@ -3670,8 +3755,7 @@ xchar sx, sy;
 				if(!flat) dam = d(nd,6);
 				else dam = flat;
 				break;
-			} else {
-				int i;
+	case AD_DISN:
 				if (Disint_resistance) {
 					You("are not disintegrated.");
 					break;
@@ -3728,23 +3812,14 @@ xchar sx, sy;
 					 }
 					break;
 				}
-			}
-	    } else if (resists_death(&youmonst) || u.sealsActive&SEAL_OSE) {
-		shieldeff(sx, sy);
-		You("seem unaffected.");
-		break;
-	    } else if (Antimagic) {
-		shieldeff(sx, sy);
-		You("aren't affected.");
-		break;
-	    }
+		/* you are dead */
 	    killer_format = KILLED_BY_AN;
 	    killer = fltxt;
 	    /* when killed by disintegration breath, don't leave corpse */
-	    u.ugrave_arise = (type == -ZT_BREATH(ZT_DEATH)) ? -3 : NON_PM;
-	    done((type== -ZT_BREATH(ZT_DEATH)) ? DISINTEGRATED : DIED);
-	    return; /* lifesaved */
-	case ZT_LIGHTNING:
+	    u.ugrave_arise = NON_PM;
+	    done(DISINTEGRATED);
+	    return; /* or, lifesaved */
+	case AD_ELEC:
 	    if (Shock_resistance) {
 		shieldeff(sx, sy);
 		You("aren't affected.");
@@ -3760,8 +3835,8 @@ xchar sx, sy;
 			if (flags.drgn_brth || !rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 		}
 	    break;
-	case ZT_POISON_GAS:
-		if(abs(type) == ZT_SPELL(ZT_POISON_GAS)){
+	case AD_DRST:
+		if (olet == SPBOOK_CLASS){	/* the lethal "poison spray" spell */
 			if(Poison_resistance) {
 				shieldeff(u.ux, u.uy);
 				pline_The("poison doesn't seem to affect you.");
@@ -3777,7 +3852,7 @@ xchar sx, sy;
 			poisoned("blast", A_DEX, "poisoned blast", 15, 0);
 		}
 	    break;
-	case ZT_ACID:
+	case AD_ACID:
 	    if (Acid_resistance) {
 			dam = 0;
 	    } else {
@@ -3796,7 +3871,7 @@ xchar sx, sy;
 	}
 
 	if (Half_spell_damage && dam &&
-	   type < 0 && (type > -20 || type < -29)) /* !Breath */
+	   (olet != FOOD_CLASS)) /* !Breath */
 	    dam = (dam + 1) / 2;
 	losehp(dam, fltxt, KILLED_BY_AN);
 	return;
@@ -3862,13 +3937,13 @@ boolean u_caused;
 
 /* will zap/spell/breath attack score a hit a creature */
 int
-zap_hit(defender, type, phase_armor)
+zap_hit(defender, adtyp, phase_armor)
 struct monst * defender;
-int type;	/* either hero cast spell type or 0 */
+int adtyp;	// either a hero-cast AD_TYPE spell, or 0
 boolean phase_armor;
 {
     int chance = rn2(20);
-    int spell_bonus = type ? spell_hit_bonus(type) : 0;
+    int spell_bonus = adtyp ? spell_hit_bonus(adtyp) : 0;
 	int ac;
 
 	if (defender == &youmonst){
@@ -3896,7 +3971,7 @@ boolean phase_armor;
 
     return (3 - chance) < ac+spell_bonus;
 }
-
+/* DEPRECIATED TYPES: */
 /* type ==   0 to   9 : you shooting a wand */
 /* type ==  10 to  19 : you casting a spell */
 /* type ==  20 to  29 : you breathing as a monster */
@@ -3908,13 +3983,23 @@ boolean phase_armor;
 /* called with dx = dy = 0 with vertical bolts */
 /* a range of 0 means "random range rn1(7,7), which is the default behavior */
 /* 0 flat damage means nd6 damage, nozero flat damage means that much damage only */
+/* NEW METHOD: */
+/* adtyp  -- AD_TYPE damage type, defined in monattk.h */
+/* olet   -- O_CLASS type -- wand, spell, corpse (breath attack), weapon (raygun) */
+/* yours  -- boolean -- true if you are the attacker */
+/* nd     -- number of dice to roll for damage */
+/* sx, sy -- x&y coords of the source of the buzz */
+/* dx, dy -- x&y direction of the buzz; when called with dx = dy = 0, vertical bolts */
+/* range  -- range of the buzz. range of 0 defaults to rn1(7,7 )*/
+/* flat   -- flat damage to deal; overrides nd. If == 0, damage dealt is nd6 */
 void
-buzz(type,nd,sx,sy,dx,dy,range,flat)
-	int type, nd, flat;
-	xchar sx,sy;
-	int dx,dy,range;
+buzz(adtyp, olet, yours, nd, sx, sy, dx, dy, range, flat)
+int adtyp, olet;
+int nd;
+boolean yours;
+xchar sx,sy;
+int dx, dy, range, flat;
 {
-    int abstype = abs(type) % 10;
     struct rm *lev;
     xchar lsx, lsy;
     struct monst *mon;
@@ -3945,15 +4030,16 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 		}
 	} else if(uwep && uwep->oartifact == ART_STAFF_OF_TWELVE_MIRRORS)
 			shienuse = TRUE;
-    /* if its a Hero Spell then get its SPE_TYPE */
-    spell_type = is_hero_spell(type) ? SPE_MAGIC_MISSILE + abstype : 0;
 
-    fltxt = flash_types[(type <= -30 && type > -40) ? abstype : abs(type)];
+
+	fltxt = flash_type(adtyp, olet);
     if(u.uswallow) {
 	register int tmp;
 
-	if(type < 0) return;
-	tmp = zhitm(u.ustuck, type, nd, flat, &otmp);
+	if(!yours)
+		return;
+
+	tmp = zhitm(u.ustuck, adtyp, olet, yours, nd, flat, &otmp);
 	if(!u.ustuck)	u.uswallow = 0;
 	else	pline("%s rips into %s%s",
 		      The(fltxt), mon_nam(u.ustuck), exclam(tmp));
@@ -3964,18 +4050,18 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 	    killed(u.ustuck);
 	return;
     }
-    if(type < 0) newsym(u.ux,u.uy);
+    if(!yours) newsym(u.ux,u.uy);
     if(!range) range = rn1(7,7);
 	if(!flags.mon_moving && Double_spell_size){
 		range *= 2;
 		flat *= 1.5;
 		nd *= 1.5;
 	}
-	if (type == ZT_SPELL(ZT_ACID)) range = 1;
+	if (olet == SPBOOK_CLASS && adtyp == AD_ACID) range = 1;	/* acid splash has 1 range, always. Thanks, Double_spell_size */
     if(dx == 0 && dy == 0) range = 1;
     save_bhitpos = bhitpos;
 
-    tmp_at(DISP_BEAM, zapdir_to_glyph(dx, dy, abstype));
+    tmp_at(DISP_BEAM, zapdir_to_glyph(dx, dy, zap_glyph_color(adtyp)));
 	////////////////////////////////////////////////////////////////////////////////////////
     while(range-- > 0) {
 		lsx = sx; sx += dx;
@@ -4000,20 +4086,19 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 
 		/* hit() and miss() need bhitpos to match the target */
 		bhitpos.x = sx,  bhitpos.y = sy;
-		/* Fireballs and Acid Blasts only damage when they explode */
-		if (type != ZT_SPELL(ZT_FIRE) && type != ZT_SPELL(ZT_ACID))
-			range += zap_over_floor(sx, sy, type, &shopdamage);
+		/* Fireballs and Acid Splashes only damage when they explode */
+		if (!(olet == SPBOOK_CLASS && (adtyp == AD_FIRE || adtyp == AD_ACID)))
+			range += zap_over_floor(sx, sy, adtyp, olet, yours, &shopdamage);
 
 		if (mon) {
-			if (type == ZT_SPELL(ZT_FIRE) || 
-				type == ZT_SPELL(ZT_ACID)
-			) break;
-			if (type >= 0) mon->mstrategy &= ~STRAT_WAITMASK;
+			if (olet == SPBOOK_CLASS && (adtyp == AD_FIRE || adtyp == AD_ACID))
+				break;
+			if (yours) mon->mstrategy &= ~STRAT_WAITMASK;
 #ifdef STEED
 			buzzmonst:
 #endif
-			if (zap_hit(mon, spell_type, FALSE) || (abs(type) >= 20 && abs(type) < 30)) {
-				if (mon_reflects(mon, (char *)0) && (abs(type) < 20 || abs(type) >= 30)) {
+			if (zap_hit(mon, (olet == SPBOOK_CLASS) ? adtyp : 0, FALSE) || (olet == FOOD_CLASS)) {
+				if (mon_reflects(mon, (char *)0) && (olet != FOOD_CLASS)) {
 					if(cansee(mon->mx,mon->my)) {
 						hit(fltxt, mon, exclam(0));
 						shieldeff(mon->mx, mon->my);
@@ -4029,9 +4114,9 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					}
 				} else {
 					boolean mon_could_move = mon->mcanmove;
-					int tmp = zhitm(mon, type, nd, flat, &otmp);
+					int tmp = zhitm(mon, adtyp, olet, yours, nd, flat, &otmp);
 
-					if ( is_rider(mon->data) && (abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING))) {
+					if ( is_rider(mon->data) && (adtyp == AD_DISN)) {
 						if (canseemon(mon)) {
 							hit(fltxt, mon, ".");
 							pline("%s disintegrates.", Monnam(mon));
@@ -4045,27 +4130,27 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 						break; /* Out of while loop */
 					}
 					if((mon->data == &mons[PM_DEMOGORGON] || mon->data == &mons[PM_LAMASHTU] || mon->data == &mons[PM_ASMODEUS]) && 
-						(abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING))
+						(adtyp == AD_DISN)
 					){
 						shieldeff(sx, sy);
 						break; /* Out of while loop */
 					}
-					if (mon->data == &mons[PM_DEATH] && abstype == ZT_DEATH) {
+					if (mon->data == &mons[PM_DEATH] && adtyp == AD_DEAD) {
 					if (canseemon(mon)) {
 						hit(fltxt, mon, ".");
 						pline("%s absorbs the deadly %s!", Monnam(mon),
-						  type == ZT_BREATH(ZT_DEATH) ?
+						  olet == FOOD_CLASS ?
 							"blast" : "ray");
 						pline("It seems even stronger than before.");
 					}
 					break; /* Out of while loop */
 					}
-					if(abstype == ZT_DEATH && type != ZT_BREATH(ZT_DEATH) && (mon->data == &mons[PM_METROID]
+					if(adtyp == AD_DEAD && (mon->data == &mons[PM_METROID]
 					 ||mon->data == &mons[PM_ALPHA_METROID]||mon->data == &mons[PM_GAMMA_METROID]
 					 ||mon->data == &mons[PM_ZETA_METROID]||mon->data == &mons[PM_OMEGA_METROID]
 					 ||mon->data == &mons[PM_METROID_QUEEN])
 					) range=0;//end while loop after this
-					if(flags.mamn_brth && abs(type) == ZT_BREATH(ZT_DEATH)){
+					if(adtyp == AD_GOLD){
 						if(otmp){
 							set_material(otmp, GOLD);
 						} else {
@@ -4103,12 +4188,12 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 							}
 						}
 
-						if (type < 0)
+						if (!yours)
 							monkilled(mon, (char *)0, -AD_RBRE);
 						else
 							xkilled(mon, 2);
 					} else if(mon->mhp < 1) {
-						if(type < 0)
+						if(!yours)
 							monkilled(mon, fltxt, AD_RBRE);
 						else
 							killed(mon);
@@ -4136,32 +4221,32 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 								}
 							 }
 						}
-						if (mon_could_move && !mon->mcanmove)	/* ZT_SLEEP */
+						if (mon_could_move && !mon->mcanmove)	/* AD_SLEE */
 							slept_monst(mon);
 					}
-					if(type == ZT_SPELL(ZT_MAGIC_MISSILE))
+					if(olet == SPBOOK_CLASS && adtyp == AD_MAGM)
 							break; //mm is single target
 				}
 				range -= 2;
 			} else {
-				if(type > 0 || cansee(mon->mx, mon->my)) miss(fltxt,mon);
+				if(yours || cansee(mon->mx, mon->my)) miss(fltxt,mon);
 			}
 		} else if (sx == u.ux && sy == u.uy && range >= 0) {
 	    nomul(0, NULL);
 #ifdef STEED
-			if (u.usteed && !rn2(3) && !(mon_reflects(u.usteed, (char *)0) && (abs(type) < 20 || abs(type) >= 30))) {
+			if (u.usteed && !rn2(3) && !(mon_reflects(u.usteed, (char *)0) && (olet != FOOD_CLASS))) {
 				mon = u.usteed;
 				goto buzzmonst;
 			} else
 #endif
-			if (zap_hit(&youmonst, 0, FALSE) || ((flags.drgn_brth && abs(type) != ZT_BREATH(ZT_DEATH))
-				|| flags.mamn_brth
-				|| abs(type) == ZT_BREATH(ZT_SLEEP))
+			if (zap_hit(&youmonst, 0, FALSE) || ((flags.drgn_brth && adtyp != AD_DISN)
+				|| adtyp == AD_GOLD
+				|| (adtyp == AD_SLEE && olet == FOOD_CLASS))
 			) {
 				range -= 2;
 				pline("%s hits you!", The(fltxt));
 				if (Reflecting && (
-						(!(flags.drgn_brth) && abs(type) != ZT_BREATH(ZT_SLEEP)) || 
+						(!(flags.drgn_brth) && adtyp != AD_SLEE) || 
 						(uwep && is_lightsaber(uwep) && litsaber(uwep) && 
 							((u.fightingForm == FFORM_SHIEN && (!uarm || is_light_armor(uarm))) || 
 							 (u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm)))
@@ -4180,19 +4265,19 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 						dx = u.dx;
 						dy = u.dy;
 						use_skill(FFORM_SHIEN,1);
-						tmp_at(DISP_CHANGE, zapdir_to_glyph(dx,dy,abstype));
+						tmp_at(DISP_CHANGE, zapdir_to_glyph(dx, dy, zap_glyph_color(adtyp)));
 					} else {
 						dx = -dx;
 						dy = -dy;
 					}
 					shieldeff(sx, sy);
 				} else {
-					zhitu(type, nd, flat, fltxt, sx, sy);
+					zhitu(adtyp, olet, nd, flat, fltxt, sx, sy);
 				}
 			} else {
 				pline("%s whizzes by you!", The(fltxt));
 			}
-			if (abstype == ZT_LIGHTNING && !resists_blnd(&youmonst)) {
+			if (adtyp == AD_ELEC && !resists_blnd(&youmonst)) {
 				You(are_blinded_by_the_flash);
 				make_blinded((long)d(nd,50),FALSE);
 				if (!Blind) Your1(vision_clears);
@@ -4201,7 +4286,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 		    nomul(0, NULL);
 		}
 	
-		if(lev->typ == TREE && abstype == ZT_DEATH && abs(type) != ZT_BREATH(ZT_DEATH)) {
+		if(lev->typ == TREE && adtyp == AD_DEAD) {
 		    lev->typ = DEADTREE;
 			lev->looted |= TREE_SWARM;
 		    if (cansee(sx,sy)) {
@@ -4209,7 +4294,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			newsym(sx,sy);
 		    }
 		    range = 0;
-			if(type<20 && !flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+			if(yours && !flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 		    break;
 		}
 
@@ -4218,16 +4303,16 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 			uchar rmn;
 
 	 make_bounce:
-			if((abs(type) == ZT_BREATH(ZT_DEATH) || abs(type) == ZT_RAYGUN(ZT_LIGHTNING)) && (!ZAP_POS(lev->typ) || !isok(sx,sy) || !lev->typ)){
+			if((adtyp == AD_DISN) && (!ZAP_POS(lev->typ) || !isok(sx,sy) || !lev->typ)){
 				struct rm *room;
 				boolean shopdoor, shopwall;
-				if (!isok(sx,sy) || flags.mamn_brth){
+				if (!isok(sx,sy) || adtyp == AD_GOLD){
 					if(closed_door(sx, sy)) pline_The("door glows then fades.");
 					pline("The wall glows then fades.");
 					break;
 				}
 				room = &levl[sx][sy];
-				if(closed_door(sx, sy) && !(levl[sx][sy].doormask&D_LOCKED) && type >=0 && u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX, TRUE);
+				if(closed_door(sx, sy) && !(levl[sx][sy].doormask&D_LOCKED) && yours && u.sealsActive&SEAL_OTIAX) unbind(SEAL_OTIAX, TRUE);
 				if (closed_door(sx, sy) || room->typ == SDOOR) {
 					/* ALI - Artifact doors from slash'em*/
 					if (artifact_door(sx, sy)) {
@@ -4235,7 +4320,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 						pline_The("door glows then fades.");
 						break;
 					}
-					if (type >=0 && *in_rooms(sx,sy,SHOPBASE)) {
+					if (yours && *in_rooms(sx,sy,SHOPBASE)) {
 						add_damage(sx, sy, 400L);
 						shopdoor = TRUE;
 					}
@@ -4244,7 +4329,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					} else if (cansee(sx, sy)){
 						pline_The("door is disintegrated!");
 					}
-					if(type >= 0) watch_dig((struct monst *)0, sx, sy, TRUE);
+					if(yours) watch_dig((struct monst *)0, sx, sy, TRUE);
 					room->doormask = D_NODOOR;
 					unblock_point(sx,sy); /* vision */
 					redrawneeded = TRUE;
@@ -4254,12 +4339,12 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 						break;
 					}
 					if (IS_WALL(room->typ) || room->typ == SDOOR) {
-						if(IS_WALL(room->typ) && type >=0 && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
-						if (type >=0 && *in_rooms(sx,sy,SHOPBASE)) {
+						if(IS_WALL(room->typ) && yours && u.sealsActive&SEAL_ANDREALPHUS) unbind(SEAL_ANDREALPHUS,TRUE);
+						if (yours && *in_rooms(sx,sy,SHOPBASE)) {
 							add_damage(sx, sy, 200L);
 							shopwall = TRUE;
 						}
-						if(type >=0) watch_dig((struct monst *)0, sx, sy, TRUE);
+						if(yours) watch_dig((struct monst *)0, sx, sy, TRUE);
 						if (level.flags.is_cavernous_lev && !in_town(sx, sy)) {
 							room->typ = CORR;
 							redrawneeded = TRUE;
@@ -4271,7 +4356,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 					} else if (IS_TREE(room->typ)) {
 						room->typ = ROOM;
 						redrawneeded = TRUE;
-						if(type >=0 && !flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
+						if(yours && !flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 					} else {	/* IS_ROCK but not IS_WALL or SDOOR */
 						room->typ = CORR;
 						redrawneeded = TRUE;
@@ -4280,12 +4365,12 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				}
 				if(shopdoor || shopwall) pay_for_damage(shopdoor ? "destroy" : "dig into", FALSE);
 			} else {
-				if (type == ZT_SPELL(ZT_FIRE) || type == ZT_SPELL(ZT_POISON_GAS)) {
+				if (olet == SPBOOK_CLASS && (adtyp == AD_FIRE || adtyp == AD_DRST)) {
 				sx = lsx;
 				sy = lsy;
 				break; /* fireballs explode before the wall */
 				}
-				if (type == ZT_SPELL(ZT_ACID)) {
+				if (olet == SPBOOK_CLASS && adtyp == AD_ACID) {
 					break;	/* acid splashes explode onto the wall */
 				}
 				bounce = 0;
@@ -4313,7 +4398,7 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
 				case 1: dy = -dy; break;
 				case 2: dx = -dx; break;
 				}
-				tmp_at(DISP_CHANGE, zapdir_to_glyph(dx,dy,abstype));
+				tmp_at(DISP_CHANGE, zapdir_to_glyph(dx, dy, zap_glyph_color(adtyp)));
 				}
 			}
 		}
@@ -4323,15 +4408,15 @@ buzz(type,nd,sx,sy,dx,dy,range,flat)
     tmp_at(DISP_END,0);
 	{
 		int bonus = (!flags.mon_moving && Double_spell_size);
-		if (type == ZT_SPELL(ZT_FIRE))
-			explode(sx, sy, type, flat ? flat : d(12 * (bonus + 2) / 2, 6), 0, EXPL_FIERY, 1 + !!bonus);
-		else if (type == ZT_SPELL(ZT_ACID))
-			splash(sx, sy, dx, dy, type, flat ? flat : d(8 * (bonus + 2) / 2, 6), 0, EXPL_NOXIOUS);
+		if (olet == SPBOOK_CLASS && adtyp == AD_FIRE)
+			explode(sx, sy, adtyp, 0, flat ? flat : d(12 * (bonus + 2) / 2, 6), EXPL_FIERY, 1 + !!bonus);
+		else if (olet == SPBOOK_CLASS && adtyp == AD_ACID)
+			splash(sx, sy, dx, dy, adtyp, 0, flat ? flat : d(8 * (bonus + 2) / 2, 6), EXPL_NOXIOUS);
 	}
     if (shopdamage)
-	pay_for_damage(abstype == ZT_FIRE ?  "burn away" :
-		       abstype == ZT_COLD ?  "shatter" :
-		       abstype == ZT_DEATH ? "disintegrate" : "destroy", FALSE);
+	pay_for_damage(adtyp == AD_FIRE ?  "burn away" :
+		       adtyp == AD_COLD ?  "shatter" :
+		       adtyp == AD_DEAD ? "disintegrate" : "destroy", FALSE);
     bhitpos = save_bhitpos;
 }
 #endif /*OVLB*/
@@ -4383,17 +4468,17 @@ xchar x, y;
  * amount by which range is reduced (the latter is just ignored by fireballs)
  */
 int
-zap_over_floor(x, y, type, shopdamage)
+zap_over_floor(x, y, adtyp, olet, yours, shopdamage)
 xchar x, y;
-int type;
+int adtyp, olet;
+boolean yours;
 boolean *shopdamage;
 {
 	struct monst *mon;
-	int abstype = abs(type) % 10;
 	struct rm *lev = &levl[x][y];
 	int rangemod = 0;
 
-	if(abstype == ZT_FIRE) {
+	if(adtyp == AD_FIRE) {
 	    struct trap *t = t_at(x, y);
 
 	    if (t && t->ttyp == WEB && !Is_lolth_level(&u.uz) && !(u.specialSealsActive&SEAL_BLACK_WEB)) {
@@ -4423,7 +4508,7 @@ boolean *shopdamage;
 		    if (cansee(x,y))
 			pline("Steam billows from the fountain.");
 		    rangemod -= 1;
-		    dryup(x, y, type > 0);
+		    dryup(x, y, yours);
 	    } else if (IS_PUDDLE(lev->typ)) {
 		    rangemod -= 3;
 		    lev->typ = ROOM;
@@ -4431,7 +4516,7 @@ boolean *shopdamage;
 		    else You_hear("hissing gas.");
 	    }
 	}
-	else if(abstype == ZT_COLD && (is_pool(x,y, TRUE) || is_lava(x,y))) {
+	else if(adtyp == AD_COLD && (is_pool(x,y, TRUE) || is_lava(x,y))) {
 		boolean lava = is_lava(x,y);
 		boolean moat = (!lava && (lev->typ != POOL) &&
 				(lev->typ != WATER) &&
@@ -4500,15 +4585,15 @@ boolean *shopdamage;
 		}
 		obj_ice_effects(x,y,TRUE);
 	}
-	else if (abstype == ZT_POISON_GAS) {
+	else if (adtyp == AD_DRST) {
 		if(flags.drgn_brth){
-			flags.cth_attk=type<0;//state machine stuff.
+			flags.cth_attk=!yours;//state machine stuff.
 			create_gas_cloud(x, y, 1, 8);
 			flags.cth_attk=FALSE;
 			// (void) create_gas_cloud(x, y, 1, 8, rn1(20, 5));
 		}
 	}
-	else if (abstype == ZT_ACID && levl[x][y].typ == IRONBARS && (flags.drgn_brth || !rn2(5))) {
+	else if (adtyp == AD_ACID && levl[x][y].typ == IRONBARS && (flags.drgn_brth || !rn2(5))) {
 	    if (cansee(x, y))
 		pline_The("iron bars are dissolved!");
 	    else
@@ -4522,26 +4607,23 @@ boolean *shopdamage;
 		/* ALI - Artifact doors */
 		if (artifact_door(x, y))
 		    goto def_case;
-		switch(abstype) {
-		case ZT_FIRE:
+		switch(adtyp) {
+		case AD_FIRE:
 		    new_doormask = D_NODOOR;
 		    see_txt = "The door is consumed in flames!";
 		    sense_txt = "smell smoke.";
 		    break;
-		case ZT_COLD:
+		case AD_COLD:
 		    new_doormask = D_NODOOR;
 		    see_txt = "The door freezes and shatters!";
 		    sense_txt = "feel cold.";
 		    break;
-		case ZT_DEATH:
-		    /* death spells/wands don't disintegrate */
-		    if(abs(type) != ZT_BREATH(ZT_DEATH))
-			goto def_case;
+		case AD_DISN:
 		    new_doormask = D_NODOOR;
 		    see_txt = "The door disintegrates!";
 		    hear_txt = "crashing wood.";
 		    break;
-		case ZT_LIGHTNING:
+		case AD_ELEC:
 		    new_doormask = D_BROKEN;
 		    see_txt = "The door splinters!";
 		    hear_txt = "crackling.";
@@ -4550,17 +4632,12 @@ boolean *shopdamage;
 		def_case:
 		    if(cansee(x,y)) {
 			pline_The("door absorbs the blast!");
-/*			pline_The("door absorbs %s %s!",
-			      (type < 0) ? "the" : "your",
-			      abs(type) < ZT_SPELL(0) ? "bolt" :
-			      abs(type) < ZT_BREATH(0) ? "spell" :
-			      "blast");
-*/		    } else You_feel("vibrations.");
+		    } else You_feel("vibrations.");
 		    break;
 		}
 		if (new_doormask >= 0) {	/* door gets broken */
 		    if (*in_rooms(x, y, SHOPBASE)) {
-			if (type >= 0) {
+			if (yours) {
 			    add_damage(x, y, 400L);
 			    *shopdamage = TRUE;
 			} else	/* caused by monster */
@@ -4583,8 +4660,8 @@ boolean *shopdamage;
 		}
 	}
 
-	if(OBJ_AT(x, y) && abstype == ZT_FIRE)
-		if (burn_floor_paper(x, y, FALSE, type > 0) && couldsee(x, y)) {
+	if(OBJ_AT(x, y) && adtyp == AD_FIRE)
+		if (burn_floor_paper(x, y, FALSE, yours) && couldsee(x, y)) {
 		    newsym(x,y);
 		    You("%s of smoke.",
 			!Blind ? "see a puff" : "smell a whiff");
@@ -4592,7 +4669,7 @@ boolean *shopdamage;
 	if ((mon = m_at(x,y)) != 0) {
 		wakeup(mon, FALSE);
 		if(mon->m_ap_type) seemimic(mon);
-		if(type >= 0 && !flags.mon_moving) {
+		if(yours && !flags.mon_moving) {
 		    setmangry(mon);
 		    if(mon->ispriest && *in_rooms(mon->mx, mon->my, TEMPLE))
 			ghod_hitsu(mon);

@@ -567,6 +567,10 @@ initoptions()
 	flags.warntypev = 0L;
 	flags.montype = (long long int)0;
 
+#ifdef SORTLOOT
+	iflags.sortloot = 'n';
+#endif
+
      /* assert( sizeof flags.inv_order == sizeof def_inv_order ); */
 	(void)memcpy((genericptr_t)flags.inv_order,
 		     (genericptr_t)def_inv_order, sizeof flags.inv_order);
@@ -2923,6 +2927,26 @@ boolean setinitial,setfromfile;
         }
 	destroy_nhwindow(tmpwin);
         retval = TRUE;
+#ifdef SORTLOOT
+    } else if (!strcmp("sortloot", optname)) {
+		const char *sortl_name;
+		menu_item *sortl_pick = (menu_item *)0;
+		tmpwin = create_nhwindow(NHW_MENU);
+		start_menu(tmpwin);
+		for (i = 0; i < SIZE(sortltype); i++) {
+			sortl_name = sortltype[i];
+			any.a_char = *sortl_name;
+			add_menu(tmpwin, NO_GLYPH, &any, *sortl_name, 0,
+				 ATR_NONE, sortl_name, MENU_UNSELECTED);
+		}
+		end_menu(tmpwin, "Select loot sorting type:");
+		if (select_menu(tmpwin, PICK_ONE, &sortl_pick) > 0) {
+			iflags.sortloot = sortl_pick->item.a_char;
+			free((genericptr_t)sortl_pick);
+		}
+		destroy_nhwindow(tmpwin);
+		retval = TRUE;
+#endif /* SORTLOOT */
     } else if (!strcmp("menu_headings", optname)) {
 	static const char *mhchoices[3] = {"bold", "inverse", "underline"};
 	const char *npletters = "biu";
@@ -3251,6 +3275,17 @@ char *buf;
 		if (iflags.wc_scroll_margin) Sprintf(buf, "%d",iflags.wc_scroll_margin);
 		else Strcpy(buf, defopt);
 	}
+#ifdef SORTLOOT
+	else if (!strcmp(optname, "sortloot")) {
+		char *sortname = (char *)NULL;
+		for (i=0; i < SIZE(sortltype) && sortname==(char *)NULL; i++) {
+		   if (iflags.sortloot == sortltype[i][0])
+		     sortname = (char *)sortltype[i];
+		}
+		if (sortname != (char *)NULL)
+		   Sprintf(buf, "%s", sortname);
+	}
+#endif /* SORTLOOT */
 	else if (!strcmp(optname, "player_selection"))
 		Sprintf(buf, "%s", iflags.wc_player_selection ? "prompts" : "dialog");
 #ifdef MSDOS

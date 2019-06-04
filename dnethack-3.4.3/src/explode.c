@@ -132,12 +132,12 @@ STATIC_DCL void FDECL(do_explode,
  * these disadvantages....
  */
 void
-explode(x, y, type, dam, olet, expltype, radius)
+explode(x, y, adtyp, olet, dam, color, radius)
 int x, y;
-int type; /* the same as in zap.c */
+int adtyp; /* the same as in zap.c */
+int olet;
 int dam;
-char olet;
-int expltype;
+int color;
 int radius;
 {
 	ExplodeRegion *area;
@@ -160,17 +160,17 @@ int radius;
 		do_clear_area(x, y, radius, add_location_to_explode_region, (genericptr_t)(area));
 	}
 
-	do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
+	do_explode(x, y, area, adtyp, olet, dam, color, 0, !flags.mon_moving);
 	free_explode_region(area);
 }
 
 void
-splash(x, y, dx, dy, type, dam, olet, expltype)
+splash(x, y, dx, dy, adtyp, olet, dam, color)
 int x, y, dx, dy;
-int type;
+int adtyp;
+int olet;
 int dam;
-char olet;
-int expltype;
+int color;
 {
 	/*
 	Splash pattern:
@@ -195,18 +195,18 @@ int expltype;
 	if (isok(x + i, y + j) && ((!i && dx) || (!j && dy) || ((!dx || i == dx) & (!dy || j == dy))) && ((ZAP_POS(levl[x][y].typ) || distmin(x - dx, y - dy, x + i, y + j) == 1) || ZAP_POS(levl[x - dx + i][y - dy + j].typ))) // it looks strange, but it works
 		add_location_to_explode_region(x + i, y + j, area);
 
-	do_explode(x, y, area, type, dam, olet, expltype, 0, !flags.mon_moving);
+	do_explode(x, y, area, adtyp, olet, dam, color, 0, !flags.mon_moving);
 	free_explode_region(area);
 }
 
 void
-do_explode(x, y, area, type, dam, olet, expltype, dest, yours)
+do_explode(x, y, area, adtyp, olet, dam, color, dest, yours)
 int x, y;
 ExplodeRegion *area;
-int type; /* the same as in zap.c */
+int adtyp; /* AD_TYPE and O_CLASS describing the cause of the explosion */
+int olet;
 int dam;
-char olet;
-int expltype;
+int color;
 int dest; /* 0 = normal, 1 = silent, 2 = silent/remote */	
 boolean yours; /* is it your fault (for killing monsters) */
 {
@@ -217,7 +217,6 @@ boolean yours; /* is it your fault (for killing monsters) */
 	const char *str;
 	int idamres, idamnonres;
 	struct monst *mtmp;
-	uchar adtyp;
 	boolean explmask;
 	boolean shopdamage = FALSE;
 	boolean generic = FALSE;
@@ -244,73 +243,31 @@ boolean yours; /* is it your fault (for killing monsters) */
 	    killer = 0;		/* set again later as needed */
 	    // adtyp = AD_PHYS;
 	}
-	else switch (abs(type) % 10) {
-		case 0:
-			str = "magical blast";
+	else switch (adtyp) {
+		case AD_MAGM: str = "magical blast";
 		break;
-		case 1:
-			str =   olet == BURNING_OIL ?	"burning oil" :
-				olet == SCROLL_CLASS ?	"tower of flame" :
-							"fireball";
+		case AD_FIRE: str = (olet != BURNING_OIL ? olet != SCROLL_CLASS ? "fireball" : "tower of flame" : "burning oil");
 		break;
-		case 2:
-			str = "ball of cold";
+		case AD_COLD: str = "ball of cold";
 		break;
-/* Assume that wands are death, others are disintegration */
-		case 4:
-			str =  (olet == WAND_CLASS) ? "death field" :
-							"disintegration field";
+		case AD_DEAD: str = "death field";
 		break;
-		case 5:
-			str = "ball of lightning";
+		case AD_DISN: str = "disintegration field";
 		break;
-		case 6:
-			str = "poison gas cloud";
+		case AD_ELEC: str = "ball of lightning";
 		break;
-		case 7:
-			str = "splash of acid";
+		case AD_DRST: str = "poison gas cloud";
 		break;
-		case 8:
-			if(olet == TOOL_CLASS) str = "flying shards of mirror";
-			else if(olet == WEAPON_CLASS) str = "flying shards of obsidian";
-			// else if(olet == ARMOR_CLASS) str = "flying shards of crystal";
-			else str = "blast";
+		case AD_ACID: str = "splash of acid";
 		break;
-		case 9:
-			str = "cloud of spores";
+		case AD_PHYS: str = (olet != TOOL_CLASS ? olet != WEAPON_CLASS ? "blast" : "flying shards of obsidian" : "flying shards of mirror");
 		break;
-		default: impossible("explosion base type %d?", type); return;
-	}
-	switch (abs(type) % 10) {
-		case 0:
-			adtyp = AD_MAGM;
+		case AD_DISE: str = "cloud of spores";
 		break;
-		case 1:
-			adtyp = AD_FIRE;
+		default:
+			impossible("unaccounted-for explosion damage type in do_explode: %d", adtyp);
+			str = "404 BLAST NOT FOUND";
 		break;
-		case 2:
-			adtyp = AD_COLD;
-		break;
-/* Assume that wands are death, others are disintegration */
-		case 4:
-			adtyp = AD_DISN;
-		break;
-		case 5:
-			adtyp = AD_ELEC;
-		break;
-		case 6:
-			adtyp = AD_DRST;
-		break;
-		case 7:
-			adtyp = AD_ACID;
-		break;
-		case 8:
-			adtyp = AD_PHYS;
-		break;
-		case 9:
-			adtyp = AD_DISE;
-		break;
-		default: impossible("explosion base type %d?", type); return;
 	}
 
 	any_shield = visible = FALSE;
@@ -332,9 +289,10 @@ boolean yours; /* is it your fault (for killing monsters) */
 				explmask = !!Cold_resistance;
 				break;
 			case AD_DISN:
-				explmask = (olet == WAND_CLASS) ?
-						!!(resists_death(&youmonst) || u.sealsActive&SEAL_OSE) :
-						!!Disint_resistance;
+				explmask = !!Disint_resistance;
+				break;
+			case AD_DEAD:
+				explmask = !!(resists_death(&youmonst) || u.sealsActive&SEAL_OSE);
 				break;
 			case AD_ELEC:
 				explmask = !!Shock_resistance;
@@ -380,9 +338,10 @@ boolean yours; /* is it your fault (for killing monsters) */
 				explmask |= resists_cold(mtmp);
 				break;
 			case AD_DISN:
-				explmask |= (olet == WAND_CLASS) ?
-					resists_death(mtmp) :
-					resists_disint(mtmp);
+				explmask |= resists_disint(mtmp);
+				break;
+			case AD_DEAD:
+				explmask |= resists_death(mtmp);
 				break;
 			case AD_ELEC:
 				explmask |= resists_elec(mtmp);
@@ -420,7 +379,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 		/* Start the explosion */
 		for(i = 0; i < area->nlocations; i++) {
 			tmp_at(starting ? DISP_BEAM : DISP_CHANGE,
-			    explosion_to_glyph(expltype,
+			    explosion_to_glyph(color,
 			    area->locations[i].blast));
 		    tmp_at(area->locations[i].x, area->locations[i].y);
 			starting = 0;
@@ -449,7 +408,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 			if (area->locations[i].shielded)
 			    show_glyph(area->locations[i].x,
 				    area->locations[i].y,
-				    explosion_to_glyph(expltype,
+				    explosion_to_glyph(color,
 				    area->locations[i].blast));
 		    }
 
@@ -475,8 +434,8 @@ boolean yours; /* is it your fault (for killing monsters) */
 		idamres = idamnonres = 0;
 
 		/* DS: Allow monster induced explosions also */
-		if (type >= 0 || type <= -10)
-		    (void)zap_over_floor((xchar)xi, (xchar)yi, type, &shopdamage);
+		//if (type >= 0 || type <= -10) //what was this supposed to correspond to? It isn't listed by buzz() in zap.c
+		(void)zap_over_floor((xchar)xi, (xchar)yi, adtyp, WAND_CLASS, FALSE, &shopdamage);
 
 		mtmp = m_at(xi, yi);
 #ifdef STEED
@@ -491,8 +450,8 @@ boolean yours; /* is it your fault (for killing monsters) */
 				      Monnam(u.ustuck),
 				      (adtyp == AD_FIRE) ? "heartburn" :
 				      (adtyp == AD_COLD) ? "chilly" :
-				      (adtyp == AD_DISN) ? ((olet == WAND_CLASS) ?
-				       "irradiated by pure energy" : "perforated") :
+				      (adtyp == AD_DISN) ? "perforated" :
+					  (adtyp == AD_DEAD) ? "irradiated by pure energy" :
 				      (adtyp == AD_ELEC) ? "shocked" :
 				      (adtyp == AD_DRST) ? "poisoned" :
 				      (adtyp == AD_DISE) ? "high-yield food poisoning" :
@@ -505,8 +464,8 @@ boolean yours; /* is it your fault (for killing monsters) */
 				      Monnam(u.ustuck),
 				      (adtyp == AD_FIRE) ? "toasted" :
 				      (adtyp == AD_COLD) ? "chilly" :
-				      (adtyp == AD_DISN) ? ((olet == WAND_CLASS) ?
-				       "overwhelmed by pure energy" : "perforated") :
+				      (adtyp == AD_DISN) ? "perforated" :
+					  (adtyp == AD_DEAD) ? "overwhelmed by pure energy" :
 				      (adtyp == AD_ELEC) ? "shocked" :
 				      (adtyp == AD_DRST) ? "intoxicated" :
 				      (adtyp == AD_DISE) ? "quesy" :
@@ -572,7 +531,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 	
 	if (uhurt) {
 		/* [ALI] Give message if it's a weapon (grenade) exploding */
-		if ((type >= 0 || adtyp == AD_PHYS || olet == WEAPON_CLASS) &&
+		if ((yours || adtyp == AD_PHYS || olet == WEAPON_CLASS) &&
 			/* gas spores */
 				flags.verbose && olet != SCROLL_CLASS)
 			You("are caught in the %s!", str);
@@ -615,7 +574,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 			    if (str != killer_buf && !generic)
 				Strcpy(killer_buf, str);
 			    killer_format = KILLED_BY_AN;
-			} else if (type >= 0 && olet != SCROLL_CLASS && yours) {
+			} else if (olet != SCROLL_CLASS && yours) {
 			    killer_format = NO_KILLER_PREFIX;
 			    Sprintf(killer_buf, "caught %sself in %s own %s",
 				    uhim(), uhis(), str);
@@ -842,7 +801,7 @@ void
 splatter_burning_oil(x, y)
     int x, y;
 {
-    explode(x, y, ZT_SPELL(ZT_FIRE), d(4,4), BURNING_OIL, EXPL_FIERY, 1);
+    explode(x, y, AD_FIRE, BURNING_OIL, d(4,4), EXPL_FIERY, 1);
 }
 
 #ifdef FIREARMS
@@ -1039,7 +998,7 @@ int x, y;
 boolean isyou;
 int dest;
 {
-    int i, ztype;
+    int i, adtyp;
     boolean shop_damage = FALSE;
     int ox, oy;
     ExplodeRegion *fiery_area, *gas_area, *dig_area;
@@ -1050,9 +1009,8 @@ int dest;
     dig_area = create_explode_region();
     grenade_effects(obj, x, y, fiery_area, gas_area, dig_area, isyou);
     if (fiery_area->nlocations) {
-	ztype = isyou ? ZT_SPELL(ZT_FIRE) : -ZT_SPELL(ZT_FIRE);
-	do_explode(x, y, fiery_area, ztype, d(3,6), WEAPON_CLASS,
-	  EXPL_FIERY, dest, isyou);
+	adtyp = AD_FIRE;
+	do_explode(x, y, fiery_area, adtyp, WEAPON_CLASS, d(3,6), EXPL_FIERY, dest, isyou);
     }
     wake_nearto(x, y, 400);
     /* Like cartoons - the explosion first, then
@@ -1076,8 +1034,8 @@ int dest;
     }
     free_explode_region(fiery_area);
     if (gas_area->nlocations) {
-	ztype = isyou ? ZT_SPELL(ZT_POISON_GAS) : -ZT_SPELL(ZT_POISON_GAS);
-	do_explode(x, y, gas_area, ztype, d(3,6), WEAPON_CLASS,
+	adtyp = AD_DRST;
+	do_explode(x, y, gas_area, adtyp, WEAPON_CLASS, d(3,6),
 	  EXPL_NOXIOUS, dest, isyou);
     }
     free_explode_region(gas_area);

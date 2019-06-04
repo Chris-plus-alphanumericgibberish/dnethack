@@ -27,10 +27,10 @@ struct WinDesc {
     int flags;			/* window flags */
     xchar type;			/* type of window */
     boolean active;		/* true if window is active */
-    unsigned long offx, offy;		/* offset from topleft of display */
-    unsigned long rows, cols;		/* dimensions */
-    unsigned long curx, cury;		/* current cursor position */
-    unsigned long maxrow, maxcol;	/* the maximum size used -- for MENU wins */
+    long offx, offy;		/* offset from topleft of display */
+    long rows, cols;		/* dimensions */
+    long curx, cury;		/* current cursor position */
+    long maxrow, maxcol;	/* the maximum size used -- for MENU wins */
 				/* maxcol is also used by WIN_MESSAGE for */
 				/* tracking the ^P command */
     short *datlen;		/* allocation size for *data */
@@ -51,8 +51,8 @@ struct WinDesc {
 
 /* descriptor for tty-based displays -- all the per-display data */
 struct DisplayDesc {
-    unsigned long rows, cols;		/* width and height of tty display */
-    unsigned long curx, cury;		/* current cursor position on the screen */
+    long rows, cols;		/* width and height of tty display */
+    long curx, cury;		/* current cursor position on the screen */
 #ifdef TEXTCOLOR
     int color;			/* current color */
 #endif

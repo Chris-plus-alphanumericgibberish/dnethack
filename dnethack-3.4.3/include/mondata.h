@@ -23,6 +23,8 @@
 #define species_resists_ston(mon)	(((mon)->data->mresists & MR_STONE) != 0)
 #define species_resists_drain(mon)	(((mon)->data->mresists & MR_DRAIN) != 0)
 #define species_resists_sickness(mon)	(((mon)->data->mresists & MR_SICK) != 0)
+#define species_resists_magic(mon)	(((mon)->data->mresists & MR_MAGIC) != 0)
+#define species_reflects(mon)		(((mon)->data->mresists & MR_REFLECT) != 0)
 
 #define	resist_attacks(ptr)	((((ptr)->mflagsg & MG_WRESIST) != 0L))
 #define	resist_blunt(ptr)	((((ptr)->mflagsg & MG_RBLUNT) != 0L))

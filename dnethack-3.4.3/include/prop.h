@@ -6,90 +6,92 @@
 #define PROP_H
 
 /*** What the properties are ***/
-#define FIRE_RES		 1
-#define COLD_RES		 2
-#define SLEEP_RES		 3
-#define DISINT_RES		 4
-#define SHOCK_RES		 5
-#define POISON_RES		 6
-#define ACID_RES		 7
-#define STONE_RES		 8
-#define DRAIN_RES		 9
-#define SICK_RES		10
-/* note: for the first ten properties, MR_xxx == (1 << (xxx_RES - 1)) */
-#define SEARCHING		11
-#define SEE_INVIS		12
-#define INVIS			13
-#define TELEPORT_CONTROL	14
-#define TELEPORT		15
-#define POLYMORPH		16
-#define POLYMORPH_CONTROL	17
-#define LEVITATION		18
-#define STEALTH			19
-#define AGGRAVATE_MONSTER	20
-#define CONFLICT		21
-#define PROTECTION		22
-#define PROT_FROM_SHAPE_CHANGERS 23
-#define WARNING			24
-#define TELEPAT			25
-#define FAST			26
-#define STUNNED			27
-#define CONFUSION		28
-#define SICK			29
-#define BLINDED			30
-#define SLEEPING		31
-#define WOUNDED_LEGS		32
-#define STONED			33
-#define GOLDED			34
-#define STRANGLED		35
-#define HALLUC			36
-#define HALLUC_RES		37
-#define FUMBLING		38
-#define JUMPING			39
-#define WWALKING		40
-#define HUNGER			41
-#define GLIB			42
-#define REFLECTING		43
-#define LIFESAVED		44
-#define ANTIMAGIC		45
-#define DISPLACED		46
-#define CLAIRVOYANT		47
-#define VOMITING		48
-#define ENERGY_REGENERATION	49
-#define MAGICAL_BREATHING	50
-#define HALF_SPDAM		51
-#define HALF_PHDAM		52
-#define ADORNED			53
-#define REGENERATION	54
-#define WARN_UNDEAD		55
-#define INVULNERABLE	56
-#define FREE_ACTION		57
-#define SWIMMING		58
-#define SLIMED			59
-#define FIXED_ABIL		60
-#define FLYING			61
-#define UNCHANGING		62
-#define PASSES_WALLS	63
-#define SLOW_DIGESTION	64
-#define INFRAVISION		65
-#define NORMALVISION	INFRAVISION+1
-#define LOWLIGHTSIGHT	NORMALVISION+1
-#define ELFSIGHT		LOWLIGHTSIGHT+1
-#define DARKSIGHT		ELFSIGHT+1
-#define CATSIGHT		DARKSIGHT+1
-#define EXTRAMISSION	CATSIGHT+1
-#define WARN_OF_MON		EXTRAMISSION+1
-#define DETECT_MONSTERS	WARN_OF_MON+1
-#define BLOODSENSE		DETECT_MONSTERS+1
-#define LIFESENSE		BLOODSENSE+1
-#define SENSEALL		LIFESENSE+1
-#define EARTHSENSE		SENSEALL+1
-#define ECHOLOCATION	EARTHSENSE+1
-#define SPELLBOOST		ECHOLOCATION+1
-#define NECROSPELLS		SPELLBOOST+1
-#define CARCAP			NECROSPELLS+1
-#define WELDPROOF		CARCAP+1
-#define NULLMAGIC		WELDPROOF+1
+#define NO_PROP						0
+#define FIRE_RES					1 + NO_PROP
+#define COLD_RES					1 + FIRE_RES
+#define SLEEP_RES					1 + COLD_RES
+#define DISINT_RES					1 + SLEEP_RES
+#define SHOCK_RES					1 + DISINT_RES
+#define POISON_RES					1 + SHOCK_RES
+#define ACID_RES					1 + POISON_RES
+#define STONE_RES					1 + ACID_RES
+#define DRAIN_RES					1 + STONE_RES
+#define SICK_RES					1 + DRAIN_RES
+#define ANTIMAGIC					1 + SICK_RES
+#define REFLECTING					1 + ANTIMAGIC
+/* note: for the first 12 properties, MR_xxx == (1 << (xxx_RES - 1)) */
+#define DISPLACED					1 + REFLECTING
+#define SEARCHING					1 + DISPLACED
+#define SEE_INVIS					1 + SEARCHING					
+#define INVIS						1 + SEE_INVIS					
+#define TELEPORT_CONTROL			1 + INVIS						
+#define TELEPORT					1 + TELEPORT_CONTROL			
+#define POLYMORPH					1 + TELEPORT					
+#define POLYMORPH_CONTROL			1 + POLYMORPH					
+#define LEVITATION					1 + POLYMORPH_CONTROL			
+#define STEALTH						1 + LEVITATION					
+#define AGGRAVATE_MONSTER			1 + STEALTH						
+#define CONFLICT					1 + AGGRAVATE_MONSTER			
+#define PROTECTION					1 + CONFLICT					
+#define PROT_FROM_SHAPE_CHANGERS	1 + PROTECTION					
+#define WARNING						1 + PROT_FROM_SHAPE_CHANGERS	
+#define TELEPAT						1 + WARNING						
+#define FAST						1 + TELEPAT						
+#define STUNNED						1 + FAST						
+#define CONFUSION					1 + STUNNED						
+#define SICK						1 + CONFUSION					
+#define BLINDED						1 + SICK						
+#define SLEEPING					1 + BLINDED						
+#define WOUNDED_LEGS				1 + SLEEPING					
+#define STONED						1 + WOUNDED_LEGS				
+#define GOLDED						1 + STONED						
+#define STRANGLED					1 + GOLDED						
+#define HALLUC						1 + STRANGLED					
+#define HALLUC_RES					1 + HALLUC						
+#define FUMBLING					1 + HALLUC_RES					
+#define JUMPING						1 + FUMBLING					
+#define WWALKING					1 + JUMPING						
+#define HUNGER						1 + WWALKING					
+#define GLIB						1 + HUNGER						
+#define LIFESAVED					1 + GLIB						
+#define CLAIRVOYANT					1 + LIFESAVED					
+#define VOMITING					1 + CLAIRVOYANT					
+#define ENERGY_REGENERATION			1 + VOMITING					
+#define MAGICAL_BREATHING			1 + ENERGY_REGENERATION			
+#define HALF_SPDAM					1 + MAGICAL_BREATHING			
+#define HALF_PHDAM					1 + HALF_SPDAM					
+#define ADORNED						1 + HALF_PHDAM					
+#define REGENERATION				1 + ADORNED						
+#define WARN_UNDEAD					1 + REGENERATION				
+#define INVULNERABLE				1 + WARN_UNDEAD					
+#define FREE_ACTION					1 + INVULNERABLE				
+#define SWIMMING					1 + FREE_ACTION					
+#define SLIMED						1 + SWIMMING					
+#define FIXED_ABIL					1 + SLIMED						
+#define FLYING						1 + FIXED_ABIL					
+#define UNCHANGING					1 + FLYING						
+#define PASSES_WALLS				1 + UNCHANGING					
+#define SLOW_DIGESTION				1 + PASSES_WALLS	
+/* vision */
+#define INFRAVISION					1 + SLOW_DIGESTION				
+#define NORMALVISION				1 + INFRAVISION
+#define LOWLIGHTSIGHT				1 + NORMALVISION
+#define ELFSIGHT					1 + LOWLIGHTSIGHT
+#define DARKSIGHT					1 + ELFSIGHT
+#define CATSIGHT					1 + DARKSIGHT
+#define EXTRAMISSION				1 + CATSIGHT
+#define WARN_OF_MON					1 + EXTRAMISSION
+#define DETECT_MONSTERS				1 + WARN_OF_MON
+#define BLOODSENSE					1 + DETECT_MONSTERS
+#define LIFESENSE					1 + BLOODSENSE
+#define SENSEALL					1 + LIFESENSE
+#define EARTHSENSE					1 + SENSEALL
+#define ECHOLOCATION				1 + EARTHSENSE
+#define SPELLBOOST					1 + ECHOLOCATION
+#define NECROSPELLS					1 + SPELLBOOST
+#define CARCAP						1 + NECROSPELLS
+#define WELDPROOF					1 + CARCAP
+#define NULLMAGIC					1 + WELDPROOF
 #define LAST_PROP		(NULLMAGIC)
 
 /*** Where the properties come from ***/

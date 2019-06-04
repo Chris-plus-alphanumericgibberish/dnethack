@@ -2450,7 +2450,7 @@ dodip()
 				case -1: break;
 				default:
 					zap_over_floor(u.ux, u.uy,
-					  (artifact_wet(obj,TRUE)-1), NULL);
+					  artifact_wet(obj,TRUE), WAND_CLASS, FALSE, NULL);
 					break;
 			}
 			if (get_wet(obj, FALSE))
@@ -2878,7 +2878,7 @@ dodip()
 		if(!obj->lamplit)
 			begin_burn(obj, FALSE);
 		useup(potion);
-		explode(u.ux, u.uy, 11, d(6,6), 0, EXPL_FIERY, 1);
+		explode(u.ux, u.uy, AD_FIRE, 0, d(6,6), EXPL_FIERY, 1);
 		exercise(A_WIS, FALSE);
 		return 1;
 	} else if((obj->otyp == SUNROD)
@@ -2915,7 +2915,7 @@ dodip()
 	    /* Turn off engine before fueling, turn off fuel too :-)  */
 	    if (obj->lamplit || potion->lamplit) {
 		useup(potion);
-		explode(u.ux, u.uy, 11, d(6,6), 0, EXPL_FIERY, 1);
+		explode(u.ux, u.uy, AD_FIRE, 0, d(6,6), EXPL_FIERY, 1);
 		exercise(A_WIS, FALSE);
 		return 1;
 	    }

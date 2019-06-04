@@ -58,18 +58,20 @@
 #define MS_TRUMPET	47	/* Archon's trumpet */
 
 
-#define MR_FIRE		0x001	/* 1 resists fire */
-#define MR_COLD		0x002	/* 2 resists cold */
-#define MR_SLEEP	0x004	/* 4 resists sleep */
-#define MR_DISINT	0x008	/* 8 resists disintegration */
-#define MR_ELEC		0x010	/* 16 resists electricity */
-#define MR_POISON	0x020	/* 32 resists poison */
-#define MR_ACID		0x040	/* 64 resists acid */
-#define MR_STONE	0x080	/* 128 resists petrification */
-#define MR_DRAIN	0x100	/* 256 resists level drain */
-#define MR_SICK		0x200	/* resists sickness */
+#define MR_FIRE			0x0001	/* 1 resists fire */
+#define MR_COLD			0x0002	/* 2 resists cold */
+#define MR_SLEEP		0x0004	/* 4 resists sleep */
+#define MR_DISINT		0x0008	/* 8 resists disintegration */
+#define MR_ELEC			0x0010	/* 16 resists electricity */
+#define MR_POISON		0x0020	/* 32 resists poison */
+#define MR_ACID			0x0040	/* 64 resists acid */
+#define MR_STONE		0x0080	/* 128 resists petrification */
+#define MR_DRAIN		0x0100	/* 256 resists level drain */
+#define MR_SICK			0x0200	/* resists sickness */
+#define MR_MAGIC		0x0400	/* has player-style magic resistance */
+#define MR_REFLECT		0x0800	/* reflects */
 #define MR_ALL		(MR_STONE|MR_ACID|MR_POISON|MR_ELEC|MR_DISINT|MR_SLEEP|MR_COLD|MR_FIRE|MR_DRAIN|MR_SICK)
-/* other resistances: magic, sickness */
+/* other resistances: sickness */
 /* other conveyances: teleport, teleport control, telepathy */
 
 /* individual resistances */

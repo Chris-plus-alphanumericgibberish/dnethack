@@ -174,17 +174,25 @@ NEARDATA struct obj *invent = (struct obj *)0,
 
 #ifdef TEXTCOLOR
 /*
- *  This must be the same order as used for buzz() in zap.c.
+ * zap_glyph_color in zap.c assumes that this is in the same order as defined in color.c
  */
 const int zapcolors[NUM_ZAP] = {
-    HI_ZAP,		/* 0 - missile */
-    CLR_ORANGE,		/* 1 - fire */
-    CLR_WHITE,		/* 2 - frost */
-    HI_ZAP,		/* 3 - sleep */
-    CLR_BLACK,		/* 4 - death */
-    CLR_WHITE,		/* 5 - lightning */
-    CLR_YELLOW,		/* 6 - poison gas */
-    CLR_GREEN,		/* 7 - acid */
+	CLR_BLACK,
+	CLR_RED,
+	CLR_GREEN,
+	CLR_BROWN,
+	CLR_BLUE,
+	CLR_MAGENTA,
+	CLR_CYAN,
+	CLR_GRAY,
+	NO_COLOR,
+	CLR_ORANGE,
+	CLR_BRIGHT_GREEN,
+	CLR_YELLOW,
+	CLR_BRIGHT_BLUE,
+	CLR_BRIGHT_MAGENTA,
+	CLR_BRIGHT_CYAN,
+	CLR_WHITE
 };
 #endif /* text color */
 

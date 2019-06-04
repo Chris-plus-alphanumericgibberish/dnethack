@@ -278,30 +278,9 @@ struct monst *mon;
 	
 	if(mon == u.usteed && u.sealsActive&SEAL_BERITH && Antimagic) return TRUE;
 	
-	if(mon->data == &mons[PM_THRONE_ARCHON] ||
-		mon->data == &mons[PM_LIGHT_ARCHON] ||
-		mon->data == &mons[PM_SURYA_DEVA] ||
-		mon->data == &mons[PM_DANCING_BLADE] ||
-		mon->data == &mons[PM_MAHADEVA] ||
-		mon->data == &mons[PM_TULANI_ELADRIN] ||
-		mon->data == &mons[PM_ARA_KAMEREL] ||
-		mon->data == &mons[PM_AURUMACH_RILMANI] ||
-		mon->data == &mons[PM_WATCHER_IN_THE_WATER] ||
-		mon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || 
-		mon->data == &mons[PM_LONG_SINUOUS_TENTACLE] ||
-		mon->data == &mons[PM_KETO] ||
-		mon->data == &mons[PM_WIDE_CLUBBED_TENTACLE] ||
-		mon->data == &mons[PM_QUEEN_OF_STARS] ||
-		mon->data == &mons[PM_ETERNAL_LIGHT] ||
-		mon->data == &mons[PM_CROW_WINGED_HALF_DRAGON] ||
-		mon->data == &mons[PM_UVUUDAUM] ||
-		mon->data == &mons[PM_DARUTH_XAXOX]
-	) return TRUE;
-	
-	/* as of 3.2.0:  gray dragons, Angels, Oracle, Yeenoghu */
-	if (dmgtype(ptr, AD_MAGM) || ptr == &mons[PM_BABY_GRAY_DRAGON] ||
-		(dmgtype(ptr, AD_RBRE) && ptr != &mons[PM_SHIMMERING_DRAGON]))	/* Chromatic Dragon, Platinum Dragon, mortai, flux slime, tulani */
+	if (species_resists_magic(mon))
 	    return TRUE;
+	
 	if (is_boreal_dragoon(ptr) && mon->mvar1 == AD_MAGM)
 	    return TRUE;
 	/* check for magic resistance granted by wielded weapon */

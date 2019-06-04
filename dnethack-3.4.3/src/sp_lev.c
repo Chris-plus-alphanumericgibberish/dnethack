@@ -314,8 +314,8 @@ boolean vault;
 	register struct rm *lev;
 	int xlim, ylim, ymax;
 
-	xlim = XLIM + (vault ? 1 : 0);
-	ylim = YLIM + (vault ? 1 : 0);
+	xlim = (flags.makelev_closerooms ? 0 : XLIM) + (vault ? 1 : 0);
+	ylim = (flags.makelev_closerooms ? 0 : YLIM) + (vault ? 1 : 0);
 
 	if (*lowx < 3)		*lowx = 3;
 	if (*lowy < 2)		*lowy = 2;
@@ -372,11 +372,14 @@ xchar	rtype, rlit;
 	NhRect	*r1 = 0, r2;
 	int	trycnt = 0;
 	boolean	vault = FALSE;
-	int	xlim = XLIM, ylim = YLIM;
+	int	xlim = flags.makelev_closerooms ? 0 : XLIM;
+	int ylim = flags.makelev_closerooms ? 0 : YLIM;
 
-	if (rtype == -1)	/* Is the type random ? */
+	/* If the type is random, set to OROOM; don't actually randomize */
+	if (rtype == -1)
 	    rtype = OROOM;
 
+	/* vaults apparently use an extra space of buffer */
 	if (rtype == VAULT) {
 		vault = TRUE;
 		xlim++;
@@ -388,23 +391,27 @@ xchar	rtype, rlit;
 
 	/* is light state random ? */
 	if (rlit == -1)
-	    rlit = (rnd(1+abs(depth(&u.uz))) < 11 && rn2(77)) ? TRUE : FALSE;
+		rlit = (rnd(1 + abs(depth(&u.uz))) < 11 && rn2(77)) ? TRUE : FALSE;
 
-	/*
-	 * Here we will try to create a room. If some parameters are
-	 * random we are willing to make several try before we give
-	 * it up.
-	 */
+	/* Here we try to create a semi-random or totally random room. Try 100
+	* times before giving up.
+	* FIXME: if there are no random parameters and the room cannot be created
+	* with those parameters, it tries 100 times anyway. */
 	do {
 		xchar xborder, yborder;
-		wtmp = w; htmp = h;
-		xtmp = x; ytmp = y;
-		xaltmp = xal; yaltmp = yal;
+		wtmp = w;
+		htmp = h;
+		xtmp = x;
+		ytmp = y;
+		xaltmp = xal;
+		yaltmp = yal;
 
-		/* First case : a totaly random room */
+		/* First case : a totally random room */
 
-		if((xtmp < 0 && ytmp <0 && wtmp < 0 && xaltmp < 0 &&
-		   yaltmp < 0) || vault) {
+		if ((xtmp < 0 && ytmp < 0 && wtmp < 0 && xaltmp < 0 && yaltmp < 0)
+			|| vault) {
+			/* hx, hy, lx, ly: regular rectangle bounds
+			* dx, dy: tentative room dimensions minus 1 */
 			xchar hx, hy, lx, ly, dx, dy;
 			r1 = rnd_rect(); /* Get a random rectangle */
 
@@ -414,50 +421,106 @@ xchar	rtype, rlit;
 #endif
 				return FALSE;
 			}
+			/* set our boundaries to the rectangle's boundaries */
 			hx = r1->hx;
 			hy = r1->hy;
 			lx = r1->lx;
 			ly = r1->ly;
-			if (vault)
+			if (vault) /* always 2x2 */
 			    dx = dy = 1;
 			else {
-				dx = 2 + rn2((hx-lx > 28) ? 12 : 8);
+				/* if in a very wide rectangle, allow room width to vary from
+				* 3 to 14, otherwise 3 to 10;
+				* vary room height from 3 to 6.
+				* Keeping in mind that dx and dy are the room dimensions
+				* minus 1. */
+				dx = 2 + rn2((hx - lx > 28) ? 12 : 8);
 				dy = 2 + rn2(4);
-				if(dx*dy > 50)
-				    dy = 50/dx;
+				/* force the room to be no more than size 50 */
+				if (dx * dy > 50)
+					dy = 50 / dx;
 			}
-			xborder = (lx > 0 && hx < COLNO -1) ? 2*xlim : xlim+1;
-			yborder = (ly > 0 && hy < ROWNO -1) ? 2*ylim : ylim+1;
-			if(hx-lx < dx + 3 + xborder ||
-			   hy-ly < dy + 3 + yborder) {
+
+			/* is r1 big enough to contain this room with enough buffer space?
+			* If it's touching one or more edges, we can have a looser bound
+			* on the border since there won't be other rooms on one side of
+			* the rectangle. */
+			xborder = (lx > 0 && hx < COLNO - 1) ? 2 * xlim : xlim + 1;
+			yborder = (ly > 0 && hy < ROWNO - 1) ? 2 * ylim : ylim + 1;
+
+			/* The rect must have enough width to fit:
+			*   1: the room width itself (dx + 1)
+			*   2: the room walls (+2)
+			*   3: the buffer space on one or both sides (xborder)
+			*
+			* Possible small bug? If the rectangle contains the hx column and
+			* the hy row inclusive, then hx - lx actually returns the width of
+			* the rectangle minus 1.
+			* For example, if lx = 40 and hx = 50, the rectangle is 11 squares
+			* wide. Say xborder is 4 and dx is 4 (room width 5). This rect
+			* should be able to fit this room like "  |.....|  " with no spare
+			* space. dx + 3 + xborder is the correct 11, but hx - lx is 10, so
+			* it won't let the room generate.
+			*/
+			if (hx - lx < dx + 3 + xborder || hy - ly < dy + 3 + yborder) {
 				r1 = 0;
 				continue;
 			}
+
+			/* Finalize the actual coordinates as (xabs, yabs), selecting them
+			* uniformly from all possible valid locations to place the room
+			* (respecting the xlim and extra wall space rules).
+			* There are lots of shims here to make sure we never go below x=3
+			* or y=2, why does the rectangle code even allow rectangles to
+			* generate like that? */
 			xabs = lx + (lx > 0 ? xlim : 3)
-			    + rn2(hx - (lx>0?lx : 3) - dx - xborder + 1);
+				+ rn2(hx - (lx > 0 ? lx : 3) - dx - xborder + 1);
 			yabs = ly + (ly > 0 ? ylim : 2)
-			    + rn2(hy - (ly>0?ly : 2) - dy - yborder + 1);
-			if (ly == 0 && hy >= (ROWNO-1) &&
-			    (!nroom || !rn2(nroom)) && (yabs+dy > ROWNO/2)) {
+				+ rn2(hy - (ly > 0 ? ly : 2) - dy - yborder + 1);
+
+			/* Some weird tweaks: if r1 spans the whole level vertically and
+			* the bottom of this room would be below the middle of the level
+			* vertically, with a 1/(existing rooms) chance, set yabs to a
+			* value from 2 to 4.
+			* Then, shrink the room width by 1 if we have less than 4 rooms
+			* already and the room height >= 3.
+			* These are probably to prevent a large vertically centered room
+			* from being placed first, which would force the remaining top and
+			* bottom rectangles to be fairly narrow and unlikely to generate
+			* rooms. The overall effect would be to create a level which is
+			* more or less just a horizontal string of rooms, which
+			* occasionally does happen under this algorithm.
+			*/
+			if (ly == 0 && hy >= (ROWNO - 1) && (!nroom || !rn2(nroom))
+				&& (yabs + dy > ROWNO / 2)) {
 			    yabs = rn1(3, 2);
-			    if(nroom < 4 && dy>1) dy--;
+				if (nroom < 4 && dy > 1)
+					dy--;
 		        }
+
+			/* If the room or part of the surrounding area are occupied by
+			* something else, and we can't shrink the room to fit, abort. */
 			if (!check_room(&xabs, &dx, &yabs, &dy, vault)) {
 				r1 = 0;
 				continue;
 			}
-			wtmp = dx+1;
-			htmp = dy+1;
-			r2.lx = xabs-1; r2.ly = yabs-1;
+
+			/* praise be, finally setting width and height variables properly */
+			wtmp = dx + 1;
+			htmp = dy + 1;
+
+			/* Set up r2 with the full area of the room's footprint, including
+			* its walls. */
+			r2.lx = xabs - 1;
+			r2.ly = yabs - 1;
 			r2.hx = xabs + wtmp;
 			r2.hy = yabs + htmp;
-		} else {	/* Only some parameters are random */
-			int rndpos = 0;
-			if (xtmp < 0 && ytmp < 0) { /* Position is RANDOM */
-				xtmp = rnd(5);
-				ytmp = rnd(5);
-				rndpos = 1;
 			}
+		else { /* Only some parameters are random */
+			int rndpos = 0;
+			xabs = (xtmp < 0) ? rn2(COLNO) : xtmp;
+			yabs = (ytmp < 0) ? rn2(COLNO) : ytmp;
+
 			if (wtmp < 0 || htmp < 0) { /* Size is RANDOM */
 				wtmp = rn1(15, 3);
 				htmp = rn1(8, 2);
@@ -467,58 +530,65 @@ xchar	rtype, rlit;
 			if (yaltmp == -1) /* Vertical alignment is RANDOM */
 			    yaltmp = rnd(3);
 
-			/* Try to generate real (absolute) coordinates here! */
-
-			xabs = (((xtmp-1) * COLNO) / 5) + 1;
-			yabs = (((ytmp-1) * ROWNO) / 5) + 1;
 			switch (xaltmp) {
 			      case LEFT:
 				break;
 			      case RIGHT:
-				xabs += (COLNO / 5) - wtmp;
+				xabs -= wtmp;
 				break;
 			      case CENTER:
-				xabs += ((COLNO / 5) - wtmp) / 2;
+				xabs -= wtmp / 2;
 				break;
 			}
 			switch (yaltmp) {
 			      case TOP:
 				break;
 			      case BOTTOM:
-				yabs += (ROWNO / 5) - htmp;
+				yabs -= htmp;
 				break;
 			      case CENTER:
-				yabs += ((ROWNO / 5) - htmp) / 2;
+				yabs -= htmp / 2;
 				break;
 			}
 
+			/* make sure room is staying in bounds */
 			if (xabs + wtmp - 1 > COLNO - 2)
 			    xabs = COLNO - wtmp - 3;
 			if (xabs < 2)
 			    xabs = 2;
-			if (yabs + htmp - 1> ROWNO - 2)
+			if (yabs + htmp - 1 > ROWNO - 2)
 			    yabs = ROWNO - htmp - 3;
 			if (yabs < 2)
 			    yabs = 2;
 
-			/* Try to find a rectangle that fit our room ! */
-
-			r2.lx = xabs-1; r2.ly = yabs-1;
-			r2.hx = xabs + wtmp + rndpos;
-			r2.hy = yabs + htmp + rndpos;
+			/* Try to find a rectangle that fits our room */
+			r2.lx = xabs - 1;
+			r2.ly = yabs - 1;
+			r2.hx = xabs + wtmp;
+			r2.hy = yabs + htmp;
 			r1 = get_rect(&r2);
 		}
 	} while (++trycnt <= 100 && !r1);
+
 	if (!r1) {	/* creation of room failed ? */
 		return FALSE;
 	}
+
+	/* r2 is contained inside r1: remove r1 and split it into four smaller
+	* rectangles representing the areas of r1 that don't intersect with r2. */
 	split_rects(r1, &r2);
 
 	if (!vault) {
+		/* set this room's id number to be unique for joining purposes */
 		smeq[nroom] = nroom;
-		add_room(xabs, yabs, xabs+wtmp-1, yabs+htmp-1,
-			 rlit, rtype, FALSE);
-	} else {
+		/* actually add the room, setting the terrain properly */
+		add_room(xabs, yabs, xabs + wtmp - 1, yabs + htmp - 1, rlit, rtype,
+			FALSE);
+	}
+	else {
+		/* vaults are isolated so don't get added to smeq; also apparently
+		* don't have add_room() called on them. The lx and ly is set so that
+		* makerooms() can store them in vault_x and vault_y. */
 		rooms[nroom].lx = xabs;
 		rooms[nroom].ly = yabs;
 	}
@@ -2087,6 +2157,8 @@ dlb *fd;
 
 	free_rooms(tmproom, nrooms);
 
+	level.flags.sp_lev_nroom = nroom;
+
 	/* read the corridors */
 
 	Fread((genericptr_t) &ncorr, sizeof(ncorr), 1, fd);
@@ -2405,6 +2477,7 @@ dlb *fd;
 #endif
 		}
 	}
+	level.flags.sp_lev_nroom = nroom;
 
 	Fread((genericptr_t) &n, 1, sizeof(n), fd);
 						/* Number of doors */
@@ -2537,7 +2610,7 @@ dlb *fd;
 		} while(prevstair.x && xi++ < 100 &&
 			distmin(x,y,prevstair.x,prevstair.y) <= 8);
 		if ((badtrap = t_at(x,y)) != 0) deltrap(badtrap);
-		mkstairs(x, y, (char)tmpstair.up, (struct mkroom *)0);
+		mkstairs(x, y, (char)tmpstair.up, room_at(x,y));
 		prevstair.x = x;
 		prevstair.y = y;
 	}
@@ -2600,11 +2673,19 @@ dlb *fd;
 
     }		/* numpart loop */
 
+	/* insert rooms into the wallwalk sections prior to doing the mazewalk */
+	maze_add_rooms(10, -1);
+	maze_add_openings(5);
+
     nwalk_sav = nwalk;
     while(nwalk--) {
 	    x = (xchar) walklist[nwalk].x;
 	    y = (xchar) walklist[nwalk].y;
 	    dir = walklist[nwalk].dir;
+
+		/* adding rooms may have placed a room overtop of the wallwalk start */
+		if (levl[x][y].roomno - ROOMOFFSET >= level.flags.sp_lev_nroom)
+			maze_remove_room(levl[x][y].roomno - ROOMOFFSET);
 
 	    /* don't use move() - it doesn't use W_NORTH, etc. */
 	    switch (dir) {
@@ -2651,8 +2732,16 @@ dlb *fd;
 		    y--;
 	    }
 
-	    walkfrom(x, y);
+	    walkfrom(x, y, 0);
     }
+	/* remove a few dead ends */
+	maze_remove_deadends(ROOM, TRUE);
+
+	/* add special rooms, dungeon features */
+	if (!In_quest(&u.uz))
+		maze_touchup_rooms(rnd(3));
+	maze_damage_rooms(85);
+
     wallification(1, 0, COLNO-1, ROWNO-1);
 
     /*

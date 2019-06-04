@@ -2405,6 +2405,22 @@ struct monst *mtmp;
 	return TRUE;
 }
 
+void
+remove_monster(x, y)
+int x;
+int y;
+{
+	struct monst * mtmp = level.monsters[x][y];
+	
+	if(mtmp){
+		if (opaque(mtmp->data))
+			unblock_point(mtmp->mx, mtmp->my);
+		mtmp = (struct monst *)0;
+		level.monsters[x][y] = (struct monst *)0;
+	}
+	return;
+}
+
 #endif /* OVL0 */
 
 /*monmove.c*/

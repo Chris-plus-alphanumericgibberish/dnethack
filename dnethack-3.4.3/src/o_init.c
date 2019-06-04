@@ -1453,7 +1453,7 @@ dodiscovered()				/* free after Robert Viduya */
 	    if ((dis = disco[i]) && interesting_to_discover(dis)) {
 		ct++;
 		if (oclass != prev_class) {
-		    putstr(tmpwin, iflags.menu_headings, let_to_name(oclass, FALSE));
+		    putstr(tmpwin, iflags.menu_headings, let_to_name(oclass, FALSE, FALSE));
 		    prev_class = oclass;
 		}
 		Sprintf(buf, "%s %s",(objects[dis].oc_pre_discovered ? "*" : " "),

@@ -403,7 +403,7 @@ choke(food)	/* To a full belly all food is bad. (It.) */
 		killer = Hallucination ? "amateur-hour horseshit" : "absorbing too much energy and exploding"; //8-bit theater
 		You("die...");
 		done(DISINTEGRATED);
-		explode(u.ux, u.uy, 0, u.uhpmax/2, MON_EXPLODE, EXPL_MAGICAL, 1);
+		explode(u.ux, u.uy, AD_MAGM, MON_EXPLODE, u.uhpmax/2, EXPL_MAGICAL, 1);
 		u.uhp = u.uhpmax/2;
 		pline("You reform!");
 		morehungry(u.uenmax/2);	/* lifesaved */

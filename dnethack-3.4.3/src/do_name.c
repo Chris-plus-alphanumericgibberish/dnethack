@@ -12,7 +12,7 @@ STATIC_DCL struct artifact artilist[];
 
 #ifdef OVLB
 
-STATIC_DCL void FDECL(do_oname, (struct obj *));
+//STATIC_DCL void FDECL(do_oname, (struct obj *));//moved to extern.h
 static void FDECL(getpos_help, (BOOLEAN_P,const char *));
 
 extern const char what_is_an_unknown_object[];		/* from pager.c */
@@ -398,7 +398,6 @@ do_mname()
  * when there might be pointers around in unknown places. For now: only
  * when obj is in the inventory.
  */
-STATIC_OVL
 void
 do_oname(obj)
 register struct obj *obj;
@@ -586,81 +585,31 @@ const char *name;
 		
 		if(obj->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD) obj->owt = 150;
 		
-		if(obj->oartifact == ART_GARNET_ROD) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_LIFEHUNT_SCYTHE) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_PROFANED_GREATSCYTHE) obj->objsize = MZ_HUGE;
-		else if(obj->oartifact == ART_FRIEDE_S_SCYTHE) obj->objsize = MZ_SMALL;
-		else if(obj->oartifact == ART_ROGUE_GEAR_SPIRITS) obj->objsize = MZ_SMALL;
-		else if(obj->oartifact == ART_FIELD_MARSHAL_S_BATON) obj->objsize = MZ_SMALL;
-		else if(obj->oartifact == ART_GENOCIDE) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_WRATHFUL_WIND) obj->objsize = MZ_HUGE;
-		// else if(obj->oartifact == ART_HEARTCLEAVER) obj->objsize = MZ_HUGE; //Actually, if it is MZ_MEDIUM Baphomet can wield it one-handed
-		else if(obj->oartifact == ART_THREE_HEADED_FLAIL) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_AVARICE) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_STING_OF_THE_POISON_QUEEN) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_WAND_OF_ORCUS) obj->objsize = MZ_HUGE;
-		else if(obj->oartifact == ART_UNBLEMISHED_SOUL) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_DIADEM_OF_AMNESIA) obj->objsize = MZ_HUGE;
-		else if(obj->oartifact == ART_WRATH_OF_HEAVEN) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_ALL_SEEING_EYE_OF_THE_FLY) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_COLD_SOUL) obj->objsize = MZ_LARGE;
-		else if(obj->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) obj->objsize = MZ_LARGE;
-		else if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default size
-		else obj->objsize = MZ_MEDIUM;
+
+		if (obj->oartifact && artilist[obj->oartifact].size)
+			obj->objsize = artilist[obj->oartifact].size;
+		else if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR)
+			;//keep current/default size
+		else
+			obj->objsize = MZ_MEDIUM;
 		
-		if(obj->oartifact == ART_TROLLSBANE) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_DEMONBANE) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_WEREBANE) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_VAMPIRE_KILLER) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_SCEPTRE_OF_MIGHT) obj->obj_material = BONE;
-		else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) obj->obj_material = GOLD;
-		else if(obj->oartifact == ART_AEGIS) obj->obj_material = LEATHER;
-		else if(obj->oartifact == ART_HERMES_S_SANDALS) obj->obj_material = GOLD;
-		else if(obj->oartifact == ART_GRAYSWANDIR) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_SANSARA_MIRROR) obj->obj_material = GOLD;
-		else if(obj->oartifact == ART_MIRROR_BRAND) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_SOULMIRROR) obj->obj_material = MITHRIL;
-		else if(obj->oartifact == ART_SUNSWORD) obj->obj_material = GOLD;
-		else if(obj->oartifact == ART_SODE_NO_SHIRAYUKI) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_TOBIUME) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_LIFEHUNT_SCYTHE) obj->obj_material = DRAGON_HIDE;
-		else if(obj->oartifact == ART_PROFANED_GREATSCYTHE) obj->obj_material = MINERAL;
-		else if(obj->oartifact == ART_FRIEDE_S_SCYTHE) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_BLADE_SINGER_S_SPEAR) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_BLADE_DANCER_S_DAGGER) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_QUICKSILVER) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_SKY_RENDER) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_ROD_OF_SEVEN_PARTS) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_ANNULUS) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_SILVER_STARLIGHT) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_CLAWS_OF_THE_REVENANCER) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_WEBWEAVER_S_CROOK) obj->obj_material = BONE;
-		else if(obj->oartifact == ART_RUINOUS_DESCENT_OF_STARS) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_SICKLE_MOON) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_FIRE_OF_HEAVEN) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_THUNDER_S_VOICE) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_WRATH_OF_HEAVEN) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO) obj->obj_material = METAL;
-		else if(obj->oartifact == ART_SCOURGE_OF_LOLTH) obj->obj_material = SILVER;
-		else if(obj->oartifact >= ART_SWORD_OF_ERATHAOL && obj->oartifact <= ART_HAMMER_OF_BARQUIEL) obj->obj_material = SILVER;
-		else if(obj->oartifact == ART_ITLACHIAYAQUE) obj->obj_material = OBSIDIAN_MT;
-		else if(obj->oartifact == ART_SOL_VALTIVA) obj->obj_material = OBSIDIAN_MT;
-		else if(obj->otyp == SABER) obj->obj_material = SILVER;
-		else if(obj->otyp == KHAKKHARA) obj->obj_material = SILVER;
-		else if(obj->otyp == CHAKRAM) obj->obj_material = SILVER;
-		else if(obj->otyp == GLOVES) obj->obj_material = LEATHER;
-		else if(obj->otyp == BAR) obj->obj_material = IRON;
-		else if(obj->otyp == VIPERWHIP) obj->obj_material = SILVER;
-		else if(obj->otyp == find_gcirclet()) obj->obj_material = GOLD;
-		else if(obj->otyp == ARMORED_BOOTS) obj->obj_material = COPPER;
-		else if(obj->otyp == ROUNDSHIELD) obj->obj_material = COPPER;
-		else if(obj->otyp == LIGHTSABER) obj->obj_material = SILVER;
-		else if(obj->otyp == BEAMSWORD) obj->obj_material = GOLD;
-		else if(obj->otyp == KAMEREL_VAJRA) obj->obj_material = GOLD;
-		else if(obj->otyp == DOUBLE_LIGHTSABER) obj->obj_material = PLATINUM;
-		else if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default material
-		else obj->obj_material = objects[obj->otyp].oc_material;
+		if (obj->oartifact && artilist[obj->oartifact].material)  obj->obj_material = artilist[obj->oartifact].material;
+		else if (obj->otyp == SABER)                              obj->obj_material = SILVER;
+		else if (obj->otyp == KHAKKHARA)                          obj->obj_material = SILVER;
+		else if (obj->otyp == CHAKRAM)                            obj->obj_material = SILVER;
+		else if (obj->otyp == GLOVES)                             obj->obj_material = LEATHER;
+		else if (obj->otyp == BAR)                                obj->obj_material = IRON;
+		else if (obj->otyp == VIPERWHIP)                          obj->obj_material = SILVER;
+		else if (obj->otyp == find_gcirclet())                    obj->obj_material = GOLD;
+		else if (obj->otyp == ARMORED_BOOTS)                      obj->obj_material = COPPER;
+		else if (obj->otyp == ROUNDSHIELD)                        obj->obj_material = COPPER;
+		else if (obj->otyp == LIGHTSABER)                         obj->obj_material = SILVER;
+		else if (obj->otyp == BEAMSWORD)                          obj->obj_material = GOLD;
+		else if (obj->otyp == KAMEREL_VAJRA)                      obj->obj_material = GOLD;
+		else if (obj->otyp == DOUBLE_LIGHTSABER)                  obj->obj_material = PLATINUM;
+		else if (is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR);//keep current/default material
+		else
+			obj->obj_material = objects[obj->otyp].oc_material;
 		
 		if(is_nameable_artifact((&artilist[obj->oartifact])) || obj->oartifact == ART_EXCALIBUR); //keep current/default body type
 		else obj->bodytypeflag = MB_HUMANOID;

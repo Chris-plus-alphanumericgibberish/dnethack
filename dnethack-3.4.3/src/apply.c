@@ -4277,7 +4277,7 @@ do_break_wand(obj)
     case WAN_MAGIC_MISSILE:
     wanexpl:
 	explode(u.ux, u.uy,
-		(obj->otyp - WAN_MAGIC_MISSILE), dmg, WAND_CLASS, expltype, 1);
+		wand_adtype(obj->otyp), WAND_CLASS, dmg, expltype, 1);
 	makeknown(obj->otyp);	/* explode described the effect */
 	/* make magic trap if you broke a wand of magic missile */
 	if ((obj->spe > 2) && rn2(obj->spe - 2) && !u.uswallow &&
@@ -4386,7 +4386,7 @@ do_break_wand(obj)
     }
 
     /* magical explosion and its visual effect occur before specific effects */
-    explode(obj->ox, obj->oy, 0, rnd(dmg), WAND_CLASS, EXPL_MAGICAL, 1);
+    explode(obj->ox, obj->oy, AD_MAGM, WAND_CLASS, rnd(dmg), EXPL_MAGICAL, 1);
 
     /* this makes it hit us last, so that we can see the action first */
     for (i = 0; i <= 8; i++) {
@@ -5836,17 +5836,17 @@ doapply()
 		res = use_hypospray(obj);
 	break;
 	case RAYGUN:
-		if(obj->altmode == ZT_FIRE){
-			obj->altmode = ZT_DEATH;
+		if(obj->altmode == AD_FIRE){
+			obj->altmode = AD_DEAD;
 			You("set %s to kill.", yname(obj));
-		} else if(obj->altmode == ZT_DEATH){
-			obj->altmode = ZT_LIGHTNING;
+		} else if(obj->altmode == AD_DEAD){
+			obj->altmode = AD_DISN;
 			You("set %s to disintegrate.", yname(obj));
-		} else if(obj->altmode == ZT_LIGHTNING){
-			obj->altmode = ZT_SLEEP;
+		} else if(obj->altmode == AD_DISN){
+			obj->altmode = AD_SLEE;
 			You("set %s to stun.", yname(obj));
 		} else {
-			obj->altmode = ZT_FIRE;
+			obj->altmode = AD_FIRE;
 			You("set %s to heat.", yname(obj));
 		}
 	break;

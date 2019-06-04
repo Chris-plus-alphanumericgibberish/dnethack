@@ -72,6 +72,8 @@ unsigned gpflags;
 			else	return (is_flyer(mdat) || breathless_mon(mtmp) || is_swimmer(mdat) ||
 								is_clinger(mdat) || amphibious_mon(mtmp));
 	    } else if (mdat->mlet == S_EEL && !ignorewater) {
+			if (is_pool(x, y, TRUE))
+				return (mdat->msize == MZ_TINY);
 			return FALSE;
 	    } else if (is_lava(x,y)) {
 			if (mtmp == &youmonst)

@@ -1381,6 +1381,65 @@ check_spirit_let(let)
 			!(spiritPOwner[u.spiritPOrder[i]] & SEAL_SPECIAL)) || 
 			spiritPOwner[u.spiritPOrder[i]] & u.specialSealsActive & ~SEAL_SPECIAL);
 }
+/*
+ * returns the skill associated with a spell damage type
+ * assumes all spells of a damage type are in the same school
+ */
+int
+spell_skill_from_adtype(atype)
+int atype;
+{
+	int spell = 0;
+	switch (atype)
+	{
+	case AD_MAGM:
+	case AD_FIRE:
+	case AD_COLD:
+	case AD_ELEC:
+	case AD_DEAD:
+	case AD_DRLI:
+		return P_ATTACK_SPELL;
+	case AD_DRST:
+	case AD_ACID:
+		return P_MATTER_SPELL;
+	case AD_SLEE:
+		return P_ENCHANTMENT_SPELL;
+	default:
+		impossible("unaccounted for atype in spell_skill_from_adtype: %d", atype);
+		return P_ATTACK_SPELL;
+	}
+}
+
+int
+spell_adtype(spell)
+int spell;
+{
+	switch (spell)
+	{
+	case SPE_MAGIC_MISSILE:
+		return AD_MAGM;
+	case SPE_FIREBALL:
+	case SPE_FIRE_STORM:
+		return AD_FIRE;
+	case SPE_CONE_OF_COLD:
+	case SPE_BLIZZARD:
+		return AD_COLD;
+	case SPE_LIGHTNING_BOLT:
+	case SPE_LIGHTNING_STORM:
+		return AD_ELEC;
+	case SPE_ACID_SPLASH:
+		return AD_ACID;
+	case SPE_POISON_SPRAY:
+		return AD_DRST;
+	case SPE_FINGER_OF_DEATH:
+		return AD_DEAD;
+	case SPE_SLEEP:
+		return AD_SLEE;
+	default:
+		impossible("unaccounted-for spell passed to spell_adtype: %d", spell);
+		return -1;
+	}
+}
 
 STATIC_OVL const char *
 spelltypemnemonic(skill)
@@ -1732,11 +1791,11 @@ purifying_blast()
 	
 	mon = m_at(u.ux+u.dx, u.uy+u.dy);
 	if(!mon){
-		buzz(SPE_FIREBALL - SPE_MAGIC_MISSILE + 10, 0,
+		buzz(AD_FIRE, SPBOOK_CLASS, TRUE, 0,
 			u.ux, u.uy, u.dx, u.dy,25,d(10,dsize));
 	} else if(resists_elec(mon) || resists_disint(mon)){
 		shieldeff(mon->mx, mon->my);
-		buzz(SPE_FIREBALL - SPE_MAGIC_MISSILE + 10, 0, 
+		buzz(AD_FIRE, SPBOOK_CLASS, TRUE, 0,
 			u.ux+u.dx, u.uy+u.dy, u.dx, u.dy,25,d(10,dsize));
 	} else {
 		mhurtle(mon, u.dx, u.dy, 25);
@@ -1747,7 +1806,7 @@ purifying_blast()
 		if (mon->mhp <= 0){
 			xkilled(mon, 1);
 		}
-		buzz(SPE_FIREBALL - SPE_MAGIC_MISSILE + 10, 0,
+		buzz(AD_FIRE, SPBOOK_CLASS, TRUE, 0,
 			u.ux, u.uy, u.dx, u.dy,25,d(10,dsize));
 	}
 	// u.uacinc-=7;  //Note: was added when purifying blast began to charge.
@@ -1803,7 +1862,7 @@ spiriteffects(power, atme)
 		}break;
 		case PWR_FIRE_BREATH:
 			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
-			buzz((int) (20 + AD_FIRE-1), 0,
+			buzz(AD_FIRE, FOOD_CLASS, TRUE, 0,
 				u.ux, u.uy, u.dx, u.dy,0,d(5,dsize));
 		break;
 		case PWR_TRANSDIMENSIONAL_RAY:{
@@ -1894,7 +1953,7 @@ spiriteffects(power, atme)
 			sy = u.uy;
 			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
 			if(u.uswallow){
-				explode(u.ux, u.uy, 5/*Electrical*/, d(range, dsize) * (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_MAGICAL, 1 + !!Double_spell_size);
+				explode(u.ux, u.uy, AD_ELEC, WAND_CLASS, d(range, dsize) * (Double_spell_size ? 3 : 2) / 2, EXPL_MAGICAL, 1 + !!Double_spell_size);
 			} else {
 				while(--range >= 0){
 					lsx = sx; sx += u.dx;
@@ -1903,13 +1962,13 @@ spiriteffects(power, atme)
 						mon = m_at(sx, sy);
 						if(mon){
 							dmg = d(range+1,dsize); //Damage decreases with range
-							explode(sx, sy, 5/*Electrical*/, dmg * (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_MAGICAL, 1 + !!Double_spell_size);
+							explode(sx, sy, AD_ELEC, WAND_CLASS, dmg * (Double_spell_size ? 3 : 2) / 2, EXPL_MAGICAL, 1 + !!Double_spell_size);
 							break;//break loop
 						}
 					} else {
 						if(range < 4) range++;
 						dmg = d(range+1,dsize); //Damage decreases with range
-						explode(lsx, lsy, 5/*Electrical*/, dmg * (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_MAGICAL, 1 + !!Double_spell_size);
+						explode(lsx, lsy, AD_ELEC, WAND_CLASS, dmg * (Double_spell_size ? 3 : 2) / 2, EXPL_MAGICAL, 1 + !!Double_spell_size);
 						break;//break loop
 					}
 				}
@@ -2771,7 +2830,7 @@ spiriteffects(power, atme)
 				if (throwspell()) {
 					if(uwep->age < 500) uwep->age = 0;
 					else uwep->age -= 500;
-					explode(u.dx, u.dy, 1/*Fire*/, d(rnd(5), dsize)* (Double_spell_size ? 3 : 2) / 2, WAND_CLASS, EXPL_FIERY, 1 + !!Double_spell_size);
+					explode(u.dx, u.dy, AD_FIRE, WAND_CLASS, d(rnd(5), dsize)* (Double_spell_size ? 3 : 2) / 2, EXPL_FIERY, 1 + !!Double_spell_size);
 					end_burn(uwep, TRUE);
 					begin_burn(uwep, FALSE);
 				} else return 0;
@@ -3568,8 +3627,8 @@ spiriteffects(power, atme)
 			//else
 			useup(umirror);
 			if(u.sealsActive&SEAL_ASTAROTH) unbind(SEAL_ASTAROTH,TRUE);
-			explode(u.ux,u.uy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER, 1);
-			explode(sx,sy,8/*Phys*/, d(5,dsize), TOOL_CLASS, HI_SILVER, 1);
+			explode(u.ux,u.uy, AD_PHYS, TOOL_CLASS, d(5,dsize), HI_SILVER, 1);
+			explode(sx,sy, AD_PHYS, TOOL_CLASS, d(5,dsize), HI_SILVER, 1);
 			
 			while(sx != u.ux && sy != u.uy){
 				sx -= u.dx;
@@ -3795,7 +3854,7 @@ boolean atme;
 	boolean confused = (Confusion != 0);
 	struct obj *pseudo;
 	coord cc;
-	int expl_type = 0;
+	int color = 0;
 	int inacc = 0;
 	boolean miss = FALSE;
 	int dam = 0;
@@ -3906,19 +3965,19 @@ boolean atme;
 	 * effects, e.g. more damage, further distance, and so on, without
 	 * additional cost to the spellcaster.
 	 */
-	case SPE_LIGHTNING_STORM:	expl_type = EXPL_MAGICAL;
+	case SPE_LIGHTNING_STORM:	color = EXPL_MAGICAL;
 								n = rnd(6) + 6;
 								dam = u.ulevel + spell_damage_bonus();
 								rad = 0;
 								inacc = 3;
 								goto dothrowspell;
-	case SPE_BLIZZARD:			expl_type = EXPL_FROSTY;
+	case SPE_BLIZZARD:			color = EXPL_FROSTY;
 								n = rnd(3) + 1;
 								dam = u.ulevel + spell_damage_bonus();
 								rad = 1;
 								inacc = 1;
 								goto dothrowspell;
-	case SPE_FIRE_STORM:		expl_type = EXPL_FIERY;
+	case SPE_FIRE_STORM:		color = EXPL_FIERY;
 								n = 1;
 								dam = rnd(u.ulevel) + rnd(u.ulevel) + u.ulevel + spell_damage_bonus();
 								rad = 2;
@@ -3967,9 +4026,7 @@ dothrowspell:
 						}
 					}
 					else {
-						explode(u.dx, u.dy,
-							pseudo->otyp - SPE_LIGHT + 10,
-							dam, 0, expl_type, rad);
+						explode(u.dx, u.dy, spell_adtype(pseudo->otyp), 0, dam, color, rad);
 					}
 				}
 			}

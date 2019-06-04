@@ -246,6 +246,8 @@
 struct artifact {
 	int	    otyp;
 	const char  *name;
+	int material;	/* default material */
+	int size;		/* default size */
 	unsigned long spfx;	/* special effect from wielding/wearing */
 	unsigned long cspfx;	/* special effect just from carrying obj */
 	unsigned long mtype;	/* monster symbol */

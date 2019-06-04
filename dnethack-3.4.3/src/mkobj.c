@@ -448,7 +448,7 @@ boolean artif;
 		}
 		else if(otmp->otyp == RAYGUN){
 			otmp->ovar1 = (8 + rnd(8))*10L;
-			otmp->altmode = ZT_SLEEP;
+			otmp->altmode = AD_SLEE;
 		}
 		else if(otmp->otyp == MASS_SHADOW_PISTOL){
 			struct obj *stone = mksobj(ROCK, TRUE, FALSE);
@@ -461,7 +461,7 @@ boolean artif;
 		else if(is_blaster(otmp)){ //Rayguns and mass-shadow pistols are also blasters, so this has to go under that case
 			otmp->ovar1 = 80L + rnd(20);
 			if(otmp->otyp == ARM_BLASTER) otmp->altmode = WP_MODE_SINGLE;
-			if(otmp->otyp == RAYGUN) otmp->altmode = ZT_FIRE;
+			if(otmp->otyp == RAYGUN) otmp->altmode = AD_FIRE;	// I think this is never reached?
 		}
 		else if(otmp->otyp == MOON_AXE){
 			switch(phase_of_the_moon()){

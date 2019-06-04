@@ -494,9 +494,9 @@ roomfill	: /* nothing */
 
 room_pos	: '(' INTEGER ',' INTEGER ')'
 		  {
-			if ( $2 < 1 || $2 > 5 ||
-			    $4 < 1 || $4 > 5 ) {
-			    yyerror("Room position should be between 1 & 5!");
+			if ( $2 < 0 || $2 > 80 ||
+			    $4 < 0 || $4 > 20 ) {
+			    yyerror("Room position should be in map bounds!");
 			} else {
 			    current_coord.x = $2;
 			    current_coord.y = $4;
