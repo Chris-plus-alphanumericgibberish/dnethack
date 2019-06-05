@@ -459,7 +459,13 @@ mattackm(magr, mdef)
 		}
 #endif /*TAME_RANGED_ATTACKS*/
 		if(mattk->aatyp != AT_MARI){
-			if (magr->weapon_check == NEED_WEAPON || (MAINHAND ? (!MON_WEP(magr)) : (!MON_SWEP(magr)))) {
+			if(MAINHAND && !MON_WEP(magr)){
+				magr->weapon_check = NEED_HTH_WEAPON;
+				if (mon_wield_item(magr) != 0) return 0;
+			} else if(mattk->aatyp == AT_XWEP && !MON_SWEP(magr)){
+				magr->weapon_check = NEED_HTH_WEAPON;
+				if (mon_wield_item(magr) != 0) return 0;
+			} else if(magr->weapon_check == NEED_WEAPON){
 				magr->weapon_check = NEED_HTH_WEAPON;
 				if (mon_wield_item(magr) != 0) return 0;
 			}
