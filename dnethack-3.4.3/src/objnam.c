@@ -1526,7 +1526,7 @@ boolean with_price;
 			break;
 		}
 		if (obj->otyp == CANDELABRUM_OF_INVOCATION) {
-				char *tmpbuf[BUFSZ];
+				char tmpbuf[BUFSZ];
 
 			if (!obj->spe)
 			    Strcpy(tmpbuf, "no");
