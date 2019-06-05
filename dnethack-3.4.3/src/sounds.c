@@ -1536,7 +1536,7 @@ asGuardian:
 						}
 					}
 					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
-						u.uencouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, tmpm->encouraged - rnd(mtmp->m_lev/3+1));
+						u.uencouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, u.uencouraged - rnd(mtmp->m_lev/3+1));
 						You_feel("%s!", u.uencouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" : "depressed");
 					}
 					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
