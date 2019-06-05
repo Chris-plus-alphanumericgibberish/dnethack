@@ -3005,7 +3005,7 @@ register struct obj *atmp;
 
 	if (DESTROY_ARM(uarmc)) {
 		if (donning(otmp)) cancel_don();
-		Your("%s is torn to shreads!",
+		Your("%s is torn to shreds!",
 		     cloak_simple_name(uarmc));
 		(void) Cloak_off();
 		useup(otmp);
@@ -3018,7 +3018,7 @@ register struct obj *atmp;
 #ifdef TOURIST
 	} else if (DESTROY_ARM(uarmu)) {
 		if (donning(otmp)) cancel_don();
-		Your("shirt is torn off!");
+		Your("underclothes are torn off!");
 		(void) Shirt_off();
 		useup(otmp);
 #endif

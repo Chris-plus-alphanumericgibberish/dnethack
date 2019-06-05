@@ -6628,7 +6628,7 @@ arti_invoke(obj)
                 break;
               case COMMAND_FILTH:
                 obj->opoisoned = OPOISON_FILTH;
-                pline("A filty coating forms on %s.", The(xname(obj)));
+                pline("A filthy coating forms on %s.", The(xname(obj)));
                 break;
           }
         } break;
