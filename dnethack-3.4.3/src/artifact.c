@@ -3237,7 +3237,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			if(otmp->osinging == OSING_CONFUSE)
 				mdef->mconf = 1;
 			else if(otmp->osinging == OSING_CANCEL)
-				mdef->mspec_used = max(0, mdef->mspec_used+otmp->spe);
+				mdef->mspec_used = max(0, mdef->mspec_used+otmp->spe+1);
 			else if(otmp->osinging == OSING_INSANE){
 				mdef->mconf = 1;
 				mdef->mstun = 1;
