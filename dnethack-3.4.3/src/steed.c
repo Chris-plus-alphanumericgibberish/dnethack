@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "edog.h"
 
 
 #ifdef STEED
@@ -303,7 +304,7 @@ mount_steed(mtmp, force)
 	    return (FALSE);
 	}
 	
-	if (!force && !(Role_if(PM_KNIGHT) || Role_if(PM_NOBLEMAN)) && !mtmp->isminion && !(--mtmp->mtame)) {
+	if (!force && !(Role_if(PM_KNIGHT) || Role_if(PM_NOBLEMAN)) && !mtmp->isminion && !EDOG(mtmp)->loyal && !(--mtmp->mtame)) {
 	    /* no longer tame */
 	    newsym(mtmp->mx, mtmp->my);
 	    pline("%s resists%s!", Monnam(mtmp),
