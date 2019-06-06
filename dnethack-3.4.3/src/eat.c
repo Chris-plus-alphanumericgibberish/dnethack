@@ -435,8 +435,12 @@ choke(food)	/* To a full belly all food is bad. (It.) */
 			You("choke over it.");
 			killer = "quick snack";
 		}
-		You("die...");
-		done(CHOKING);
+		if (!Unchanging && Upolyd) {
+			rehumanize();
+		} else {
+			You("die...");
+			done(CHOKING);
+		}
 	 }
 	}
 }
@@ -3978,9 +3982,13 @@ register int num;
 			else{
 				Your("mainspring is wound too tight!");
 				Your("clockwork breaks apart!");
-				killer_format = KILLED_BY;
-				killer = "overwinding";
-				done(OVERWOUND);
+				if (!Unchanging && Upolyd) {
+					rehumanize();
+				} else {
+					killer_format = KILLED_BY;
+					killer = "overwinding";
+					done(OVERWOUND);
+				}
 				victual.piece = 0;
 				victual.mon = 0;
 				return;
