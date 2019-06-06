@@ -413,7 +413,7 @@ boolean devour;
 	    delobj(obj);
 	} else if (obj == uchain)
 	    unpunish();
-	else if (obj->quan > 1L && obj->oclass == FOOD_CLASS) {
+	else if (obj->quan > 1L && (obj->oclass == FOOD_CLASS || obj->oclass == CHAIN_CLASS)) {
 	    obj->quan--;
 	    obj->owt = weight(obj);
 	} else
