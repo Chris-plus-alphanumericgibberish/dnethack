@@ -199,7 +199,8 @@ dig_check(madeby, verbose, x, y)
 	    if(verbose) pline_The("throne is too hard to break apart.");
 	    return(FALSE);
 	} else if (IS_ALTAR(levl[x][y].typ) && (madeby != BY_OBJECT ||
-				Is_astralevel(&u.uz) || Is_sanctum(&u.uz))) {
+		Is_astralevel(&u.uz) || Is_sanctum(&u.uz) || (Role_if(PM_EXILE) && Is_nemesis(&u.uz)))
+	) {
 	    if(verbose) pline_The("altar is too hard to break apart.");
 	    return(FALSE);
 	} else if (Weightless) {
