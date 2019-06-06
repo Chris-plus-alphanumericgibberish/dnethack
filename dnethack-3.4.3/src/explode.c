@@ -121,7 +121,7 @@ ExplodeRegion *reg;
 
 /* This is the "do-it-all" explosion command */
 STATIC_DCL void FDECL(do_explode,
-	(int,int,ExplodeRegion *,int,int,CHAR_P,int,int,BOOLEAN_P));
+	(int,int,ExplodeRegion *,int,int,int,int,int,BOOLEAN_P));
 
 /* Note: I had to choose one of three possible kinds of "type" when writing
  * this function: a wand type (like in zap.c), an adtyp, or an object type.
@@ -199,7 +199,7 @@ int color;
 	free_explode_region(area);
 }
 
-void
+STATIC_DCL void
 do_explode(x, y, area, adtyp, olet, dam, color, dest, yours)
 int x, y;
 ExplodeRegion *area;
