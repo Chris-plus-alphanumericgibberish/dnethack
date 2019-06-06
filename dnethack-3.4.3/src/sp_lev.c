@@ -219,7 +219,8 @@ register int humidity;
 	    typ = levl[x][y].typ;
 	    if (typ == ROOM || typ == AIR ||
 		    typ == CLOUD || typ == ICE ||
-			typ == CORR || typ == PUDDLE)
+			typ == CORR || typ == PUDDLE ||
+			typ == GRASS)
 		return TRUE;
 	}
 	if (humidity & WET) {

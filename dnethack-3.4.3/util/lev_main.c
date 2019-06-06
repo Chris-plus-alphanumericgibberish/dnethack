@@ -518,7 +518,12 @@ char c;
 		  case 'P'  : return(POOL);
 		  case 'L'  : return(LAVAPOOL);
 		  case 'I'  : return(ICE);
+		  case ','  : 
+			      return(GRASS);
+		  case 'G'  : 
+			      return(GRASS);
 		  case 'W'  : return(WATER);
+		  case 'w'  : return(PUDDLE);
 		  case 'T'	: return (TREE);
 		  case 'F'	: return (IRONBARS);	/* Fe = iron */
 	    }

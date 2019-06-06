@@ -1046,24 +1046,24 @@ GEOMETRY: center, center
 MAP
 0----------------------------------------------------------------------------
 1----------------------------------------------------------------------------
-2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+2T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+4T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+6T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+8T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T...............................
-1 T T T T T T T T T T T T T T T T T T T T T T T . . . . . . . . . . . . . . .
-2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T...............................
-3 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
-5 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
-7 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
-8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.....T.T.T.T.T.T.T.T.T.T.T.T.T.
-9 T T T T T T T T T T T T T T T T T T T T T T T . T T T T T T T T T T T T T T
+0T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+1 T T T T T T T T T T T T T T T T T T T T T T T , , , , , , , , , , , , , , ,
+2T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+3 T T T T T T T T T T T T T T T T T T T T T T T , T T T T T T T T T T T T T T
+4T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,,,,,T,T,T,T,T,T,T,T,T,T,T,T,T,
+5 T T T T T T T T T T T T T T T T T T T T T T T , T T T T T T T T T T T T T T
+6T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,,,,,T,T,T,T,T,T,T,T,T,T,T,T,T,
+7 T T T T T T T T T T T T T T T T T T T T T T T , T T T T T T T T T T T T T T
+8T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,,,,,T,T,T,T,T,T,T,T,T,T,T,T,T,
+9 T T T T T T T T T T T T T T T T T T T T T T T , T T T T T T T T T T T T T T
 0----------------------------------------------------------------------------
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -1125,23 +1125,23 @@ GEOMETRY: center, center
 MAP
 0----------------------------------------------------------------------------
 1----------------------------------------------------------------------------
-2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+2T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+4T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+6T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+8T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-0............................................................................
-1.. . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-2............................................................................
+0,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
+1,, , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , , ,
+2,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,
 3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+4T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+6T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+8T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,T,
 9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
 0----------------------------------------------------------------------------
 ENDMAP

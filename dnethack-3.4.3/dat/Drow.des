@@ -305,24 +305,24 @@ GEOMETRY:center,center
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
 0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
-1TTTTTTT.....T...TTTT...TTT....TTTTTTTTT...TTTT.TT...TTTT......TTTTT.T......T
-2TT........TT......TT..TT.........................T...TTTT......TT...T..T...T
-3TT...TT....T...T............TTTTTTTTTTTTTTTTTTT.......TTT...T..T...T...TT..T
-4T..TTT.......T..T...TT....TTT.................TTT..T.TTTT..TT..T..........TT
-5T...T.....TTT...TTT..T...TT...}}}}}}}.}}}}}}}...TT..TTTTT..TTT.....TTT...TTT
-6TT...TT..TTTTT...TT......T..}}}|----T.T----|}}}..T...TTT...TTT...TTTTTTTTTTT
-7TTT...TT.TTTTTT....T.....T.}}|--T.........T--|}}.T....T...TTTT..TTT....TTTTT
-8TT.T...T..TTT..T.....T...T.}|-T..T.......T..T-|}.T........TTTTT...........TT
-9TT..T.T....T.......TT....T.}|T...............T|}.T..T.....TTTTT............T
-0T...T......T.......T.....T.......................T..TT...TTTTT.............T
-1T..TTT.TT...T....TTT.T...T.}|T...............T|}.T.TTT...TTTTTT............T
-2T.TT.....T........T..T...T.}|-T..T.......T..T-|}.T.T.....TTTT.TTT.........TT
-3TTT.......T..T........T..T.}}|--T.........T--|}}.T......TTT.T...TTTT....TTTT
-4TTT.......T..TT..........T..}}}|----T.T----|}}}..T.....TTTT......T..TTT...TT
-5TT.........T...TT....T...TT...}}}}}}}.}}}}}}}...TT....TTTT..TT...T........TT
-6TTT.......TT...T....TTT...TTT.................TTT....TTTTTT.TT..T..........T
-7TTTTT...TTTT.T...T.TTTTT....TTTTTTTTTTTTTTTTTTT.....TTTTTTT.TTT.T...TT....TT
-8TTTTTTTTTTTTT.TTTTTTTTT.TT.......................TT.TTTTTTTT......TTTTTT.TTT
+1TTTTTTT,,,,,T,,,TTTT,,,TTT,,,,TTTTTTTTT,,,TTTT,TT,,,TTTT,,,,,,TTTTT,T,,,,,,T
+2TT,,,,,,,,TT,,,,,,TT,,TT,,,,,,,,,,,,,,,,,,,,,,,,,T,,,TTTT,,,,,,TT,,,T,,T,,,T
+3TT,,,TT,,,,T,,,T,,,,,,,,,,,,TTTTTTTTTTTTTTTTTTT,,,,,,,TTT,,,T,,T,,,T,,,TT,,T
+4T,,TTT,,,,,,,T,,T,,,TT,,,,TTT,,,,,,,,,,,,,,,,,TTT,,T,TTTT,,TT,,T,,,,,,,,,,TT
+5T,,,T,,,,,TTT,,,TTT,,T,,,TT,,,}}}}}}},}}}}}}},,,TT,,TTTTT,,TTT,,,,,TTT,,,TTT
+6TT,,,TT,,TTTTT,,,TT,,,,,,T,,}}}|----T,T----|}}},,T,,,TTT,,,TTT,,,TTTTTTTTTTT
+7TTT,,,TT,TTTTTT,,,,T,,,,,T,}}|--T,,,,,,,,,T--|}},T,,,,T,,,TTTT,,TTT,,,,TTTTT
+8TT,T,,,T,,TTT,,T,,,,,T,,,T,}|-T,,T,,,,,,,T,,T-|},T,,,,,,,,TTTTT,,,,,,,,,,,TT
+9TT,,T,T,,,,T,,,,,,,TT,,,,T,}|T,,,,,,,,,,,,,,,T|},T,,T,,,,,TTTTT,,,,,,,,,,,,T
+0T,,,T,,,,,,T,,,,,,,T,,,,,T,,,,,,,,,,,,,,,,,,,,,,,T,,TT,,,TTTTT,,,,,,,,,,,,,T
+1T,,TTT,TT,,,T,,,,TTT,T,,,T,}|T,,,,,,,,,,,,,,,T|},T,TTT,,,TTTTTT,,,,,,,,,,,,T
+2T,TT,,,,,T,,,,,,,,T,,T,,,T,}|-T,,T,,,,,,,T,,T-|},T,T,,,,,TTTT,TTT,,,,,,,,,TT
+3TTT,,,,,,,T,,T,,,,,,,,T,,T,}}|--T,,,,,,,,,T--|}},T,,,,,,TTT,T,,,TTTT,,,,TTTT
+4TTT,,,,,,,T,,TT,,,,,,,,,,T,,}}}|----T,T----|}}},,T,,,,,TTTT,,,,,,T,,TTT,,,TT
+5TT,,,,,,,,,T,,,TT,,,,T,,,TT,,,}}}}}}},}}}}}}},,,TT,,,,TTTT,,TT,,,T,,,,,,,,TT
+6TTT,,,,,,,TT,,,T,,,,TTT,,,TTT,,,,,,,,,,,,,,,,,TTT,,,,TTTTTT,TT,,T,,,,,,,,,,T
+7TTTTT,,,TTTT,T,,,T,TTTTT,,,,TTTTTTTTTTTTTTTTTTT,,,,,TTTTTTT,TTT,T,,,TT,,,,TT
+8TTTTTTTTTTTTT,TTTTTTTTT,TT,,,,,,,,,,,,,,,,,,,,,,,TT,TTTTTTTT,,,,,,TTTTTT,TTT
 9TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
 ENDMAP
 # Dungeon Description
@@ -435,7 +435,7 @@ MONSTER: random, random, random
 MAZE: "Dro-filb", ' '
 FLAGS: hardfloor,shortsighted
 #
-INIT_MAP: '.' , 'T', true, true, lit, true
+INIT_MAP: 'G' , 'T', true, true, lit, true
 NOMAP
 #
 STAIR: random, up

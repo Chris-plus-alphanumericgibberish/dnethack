@@ -473,31 +473,36 @@ register struct edog *edog;
 		if(monstermoves > edog->hungrytime + 750)
 			edog->hungrytime = monstermoves + 750;
 	}
-    if (monstermoves > edog->hungrytime)
-	{
-		/* We're hungry; check if we're carrying anything we can eat
-		   Intelligent pets should be able to carry such food */
-		register struct obj *otmp, *obest = (struct obj *)0;
-		int best_nutrit = -1; //cur_nutrit = -1,
-		int cur_food = APPORT, best_food = APPORT;
-		for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
-		{
-//	        cur_nutrit = dog_nutrition(mtmp, otmp);
-			cur_food = dogfood(mtmp, otmp);
-			if (cur_food < best_food) /*&& cur_nutrit > best_nutrit)*/
+	if((monstermoves + DOG_SATIATED) > edog->hungrytime){
+		if(herbivorous(mtmp->data) && !carnivorous(mtmp->data) && levl[mtmp->mx][mtmp->my].typ == GRASS){
+			if(cansee(mtmp->mx, mtmp->my))
+				pline("%s eats some grass.", mon_visible(mtmp) ? noit_Monnam(mtmp) : "It");
+			edog->hungrytime += 5*objects[FOOD_RATION].oc_nutrition;
+		} else if (monstermoves > edog->hungrytime){
+			/* We're hungry; check if we're carrying anything we can eat
+			   Intelligent pets should be able to carry such food */
+			register struct obj *otmp, *obest = (struct obj *)0;
+			int best_nutrit = -1; //cur_nutrit = -1,
+			int cur_food = APPORT, best_food = APPORT;
+			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
 			{
-//			    best_nutrit = cur_nutrit;
-				best_food = cur_food;
-				obest = otmp;
+	//	        cur_nutrit = dog_nutrition(mtmp, otmp);
+				cur_food = dogfood(mtmp, otmp);
+				if (cur_food < best_food) /*&& cur_nutrit > best_nutrit)*/
+				{
+	//			    best_nutrit = cur_nutrit;
+					best_food = cur_food;
+					obest = otmp;
+				}
 			}
-		}
-		if (obest != (struct obj *)0)
-		{
-			obj_extract_self(obest);
-			place_object(obest, mtmp->mx, mtmp->my);
-			if (dog_eat(mtmp, obest, mtmp->mx, mtmp->my, FALSE) == 2)
-				return(TRUE);
-			return(FALSE);
+			if (obest != (struct obj *)0)
+			{
+				obj_extract_self(obest);
+				place_object(obest, mtmp->mx, mtmp->my);
+				if (dog_eat(mtmp, obest, mtmp->mx, mtmp->my, FALSE) == 2)
+					return(TRUE);
+				return(FALSE);
+			}
 		}
 	}
 	if (monstermoves > edog->hungrytime + 500) {

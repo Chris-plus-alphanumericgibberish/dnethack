@@ -239,9 +239,11 @@ bad_location(x, y, lx, ly, hx, hy)
 {
     return((boolean)(occupied(x, y) ||
 	   within_bounded_area(x,y, lx,ly, hx,hy) ||
-	   !((levl[x][y].typ == CORR && level.flags.is_maze_lev) ||
+	   !((levl[x][y].typ == CORR && (level.flags.is_maze_lev || level.flags.is_cavernous_lev)) ||
 		   (Is_waterlevel(&u.uz) && levl[x][y].typ == MOAT) ||
-	       levl[x][y].typ == ROOM || levl[x][y].typ == AIR)));
+	       levl[x][y].typ == ROOM || 
+	       levl[x][y].typ == GRASS || 
+	       levl[x][y].typ == AIR)));
 }
 
 /* pick a location in area (lx, ly, hx, hy) but not in (nlx, nly, nhx, nhy) */
@@ -483,7 +485,7 @@ fixup_special()
 	if(Is_wiz1_level(&u.uz)) {
 	croom = search_special(MORGUE);
 	create_secret_door(croom, W_SOUTH|W_EAST|W_WEST);
-	    }
+    }
 	/* SANCTUM: add sdoor to temple*/
 	if (Is_sanctum(&u.uz)) {
 		croom = search_special(TEMPLE);
@@ -493,6 +495,14 @@ fixup_special()
 	/* ALIGNMENT QUESTS */
 	/* LAW QUEST: features */
 	if (In_law(&u.uz)){
+		/*Convert the room squares left by mazewalk to grass prior to placing shops*/
+		if (Is_arcadia_woods(&u.uz)){
+			for (x = 0; x<COLNO; x++){
+				for (y = 0; y<ROWNO; y++){
+					if (levl[x][y].typ == ROOM && (x<69 || !Is_arcadia3(&u.uz))) levl[x][y].typ = GRASS;
+				}
+			}
+		}
 		place_law_features();
 	}
 	/* NEUTRAL QUEST: various features */

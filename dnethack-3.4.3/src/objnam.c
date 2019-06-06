@@ -785,7 +785,7 @@ boolean dofull;
 			if (obj->oproperties&OPROP_MORGW && obj->known && obj->cursed)
 				Strcat(buf, "morgul ");
 			/* note: "holy" and "unholy" properties are shown in the BUC part of the name, as they replace "blessed" and "cursed". */
-	}
+		}
 	}
 }
 
@@ -1878,6 +1878,7 @@ register const char *str;
 	if (strncmpi(str, "the ", 4) &&
 	    strcmp(str, "molten lava") &&
 	    strcmp(str, "iron bars") &&
+	    strcmp(str, "grass") &&
 	    strcmp(str, "ice")) {
 		if (index(vowels, *str) &&
 		    strncmp(str, "one-", 4) &&
@@ -2596,6 +2597,7 @@ const char *oldstr;
 			   !BSTRCMPI(bp, p-6, "tricks") ||
 			   !BSTRCMPI(bp, p-9, "paralysis") ||
 			   !BSTRCMPI(bp, p-5, "glass") ||
+			   !BSTRCMPI(bp, p-5, "grass") ||
 			   !BSTRCMP(bp, p-4, "ness") ||
 			   !BSTRCMPI(bp, p-14, "shape changers") ||
 			   !BSTRCMPI(bp, p-15, "detect monsters") ||
@@ -3888,6 +3890,13 @@ srch:
 			del_engr_ward_at(u.ux, u.uy);
 			pline("A pool of molten lava.");
 			if (!(Levitation || Flying)) (void) lava_effects();
+			newsym(u.ux, u.uy);
+			*wishreturn = WISH_SUCCESS;
+			return &zeroobj;
+		}
+		if (!BSTRCMP(bp, p-5, "grass")) {  /* also matches "wild grass" */
+			levl[u.ux][u.uy].typ = GRASS;
+			pline("A patch of grass.");
 			newsym(u.ux, u.uy);
 			*wishreturn = WISH_SUCCESS;
 			return &zeroobj;

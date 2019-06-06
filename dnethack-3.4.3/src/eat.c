@@ -2835,6 +2835,21 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		return 0;
 	}
 	
+	if(herbivorous(youracedata) && !carnivorous(youracedata) && levl[u.ux][u.uy].typ == GRASS && can_reach_floor() &&
+		/* if we can't touch floor objects then use invent food only */
+#ifdef STEED
+			!u.usteed /* can't eat off floor while riding */
+#endif
+	){
+		if(yn("Eat some of the grass growing here?") == 'y'){
+			You("eat some grass.");
+			if(u.uhunger < u.uhungermax * 3/4 || yn_function("You feel awfully full, stop eating?",ynchars,'y') == 'n'){
+				lesshungry(objects[FOOD_RATION].oc_nutrition/objects[FOOD_RATION].oc_delay);
+			}
+			return 1;
+		}
+	}
+	
 	if (!(otmp = floorfood("eat", 0))) return 0;
 	if (check_capacity((char *)0)) return 0;
 	

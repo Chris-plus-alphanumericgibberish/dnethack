@@ -172,7 +172,7 @@ MONSTER:'q',"baluchitherium",(33,06),hostile
 MONSTER:'q',"mastodon",(34,07),hostile
 MONSTER:'q',"mastodon",random,hostile
 MONSTER:'q',"mastodon",random,hostile
-MONSTER:'D',"mastodon",random,hostile
+MONSTER:'q',"mastodon",random,hostile
 MONSTER:'D',"triceratops",(03,12)
 MONSTER:'D',"triceratops",(20,17)
 MONSTER:'D',"triceratops",(35,08)

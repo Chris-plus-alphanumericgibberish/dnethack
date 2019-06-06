@@ -183,10 +183,6 @@ unsigned *ospecial;
 				} else if(offset >= S_litroom && offset <= S_dnladder){
 					color = CLR_YELLOW;
 				}
-			} else if(Is_sunkcity(&u.uz)){
-				if(offset >= S_drkroom && offset <= S_litcorr){
-					color = CLR_BRIGHT_GREEN;
-				}
 			} else if(Is_peanut(&u.uz)){
 				if(offset >= S_vwall && offset <= S_trwall){
 					color = CLR_BROWN;
@@ -241,7 +237,6 @@ unsigned *ospecial;
 									|| *in_rooms(x,y, BARRACKS)
 									|| *in_rooms(x,y, COURT)
 								) color = (offset == S_litroom) ? CLR_BROWN : CLR_BLACK;
-								else color = (offset == S_litroom) ? CLR_BRIGHT_GREEN : CLR_GREEN;
 							}
 						else color = (offset == S_litroom) ? CLR_BROWN : CLR_BLACK;
 					}
@@ -275,8 +270,6 @@ unsigned *ospecial;
 						else if(offset >= S_drkroom && offset <= S_dnladder){
 							if(offset == S_litcorr || offset == S_corr)
 								;
-							else
-								color = CLR_GREEN;
 							
 						}
 						if (offset >= S_vwall && offset <= S_hcdoor) {
@@ -335,10 +328,14 @@ unsigned *ospecial;
 							color = CLR_YELLOW;
 						if(offset >= S_vwall && offset <= S_hcdoor)
 							color = CLR_BROWN;
-						if (offset == S_drkroom)
+						if (offset == S_drkgrass)
 							color = CLR_BROWN;
-						if (offset == S_litroom)
+						if (offset == S_litgrass)
 							color = CLR_YELLOW;
+						if (offset == S_drkroom)
+							color = CLR_BLACK;
+						if (offset == S_litroom)
+							color = CLR_BROWN;
 						if (offset == S_tree)
 							color = CLR_BROWN;
 					}

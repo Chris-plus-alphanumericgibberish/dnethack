@@ -3631,9 +3631,15 @@ use_pole (obj)
 	     */
 	    if (mtmp->mhp < oldhp)
 		u.uconduct.weaphit++;
-	} else
+	} else if(levl[cc.x][cc.y].typ == GRASS){
+		   levl[cc.x][cc.y].typ = ROOM;
+		   if(!rn2(3)) mksobj_at(SHEAF_OF_HAY,cc.x,cc.y,TRUE,FALSE);
+		   You("cut away the grass!");
+		   newsym(cc.x,cc.y);
+	} else {
 	    /* Now you know that nothing is there... */
 	    pline("%s", nothing_happens);
+	}
 	return (1);
 }
 
