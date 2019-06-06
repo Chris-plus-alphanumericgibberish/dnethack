@@ -213,6 +213,7 @@ mattackm(magr, mdef)
 		    strike = 0,	/* hit this attack (default to 0) */
 		    attk,	/* attack attempted this time */
 		    struck = 0,	/* hit at least once */
+			marinum = 0, /* number of mari weapons used */
 		    res[NATTK];	/* results of all attacks */
     struct attack   *mattk, alt_attk;
     struct permonst *pa, *pd;
@@ -504,12 +505,8 @@ mattackm(magr, mdef)
 					&& !otmp->owornmask
 				) wcount++;
 			}
-			wcount -= i;
-			if(MON_WEP(magr))
-				wcount++;
-			if(MON_SWEP(magr))
-				wcount++;
-			for(otmp = magr->minvent; otmp; otmp = otmp->nobj){
+			wcount -= marinum;
+			if(wcount > 0) for(otmp = magr->minvent; otmp; otmp = otmp->nobj){
 				if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
 					|| (otmp->otyp == IRON_CHAIN && magr->data == &mons[PM_CATHEZAR])
 					) && !otmp->oartifact
@@ -518,6 +515,7 @@ mattackm(magr, mdef)
 					&& --wcount <= 0
 				) break;
 			}
+			marinum++;
 		} else {
 			otmp = MON_WEP(magr);
 		}
@@ -634,11 +632,13 @@ meleeattack:
 			}
 		} else
 		    missmm(magr, mdef, mattk);
-		if(mattk->aatyp == AT_MARI && i == 5){
-			if(tmp > rnd(20 + i*2)){
-				struct attack rend = {AT_HUGS, AD_WRAP, magr->data == &mons[PM_SHAKTARI] ? 8 : 4, 6};
-				// res[i] = hitmm(magr, mdef, &rend);
+		if(distmin(magr->mx,magr->my,mdef->mx,mdef->my) < 2 && !DEADMONSTER(mdef) && magr->data == &mons[PM_DEMOGORGON] && res[i]){
+			magr->mvar2 = magr->mvar2+1;
+			if(magr->mvar2>=2){
+				struct attack rend = {AT_NONE, AD_SHRD, 3, 12};
+				res[i] = hitmm(magr, mdef, &rend);
 				mon_ranged_gazeonly = 0;
+				magr->mvar2=0;
 			}
 		}
 		break;
@@ -818,7 +818,6 @@ meleeattack:
 		attk = 0;
 		break;
 	}
-
 	if (attk && !(res[i] & MM_AGR_DIED) &&
 	    dist2(magr->mx, magr->my, mdef->mx, mdef->my) < 3)
 	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED, mattk);
@@ -838,6 +837,18 @@ meleeattack:
 	if (!magr->mcanmove || magr->msleeping) return res[i];
 	if (res[i] & MM_HIT) struck = 1;	/* at least one hit */
     }
+	if(i == NATTK && res[0] == MM_HIT && res[1] == MM_HIT){
+		if(pa == &mons[PM_MARILITH] || pa == &mons[PM_SHAKTARI] || pa == &mons[PM_KARY__THE_FIEND_OF_FIRE]){
+			/*Mariliths get a wrap attack if their first two attacks hit*/
+			struct attack rend = {AT_HUGS, AD_WRAP, magr->data == &mons[PM_SHAKTARI] ? 8 : 4, 6};
+			(void) hitmm(magr, mdef, &rend);
+			mon_ranged_gazeonly = 0;
+		}
+	}
+	if(magr->data == &mons[PM_DEMOGORGON]){ 
+		magr->mvar2 = 0;
+	}
+
 
 	if (mdef->data == &mons[PM_URANIUM_IMP] && !mdef->mcan) {
 	    /* avoid mysterious force message by not using tele_restrict() */
@@ -1643,6 +1654,65 @@ physical:{
 				if(magr->mtame){
 					EDOG(magr)->hungrytime += pd->cnutrit/10;  //400/10 = human nut/10
 				}
+		}
+		if(mattk->adtyp == AD_SHRD){
+			struct obj *obj = some_armor(mdef);
+			if(obj){
+				int i = 0;
+				switch (mattk->aatyp) {
+					case AT_LNCK:
+					case AT_BITE:
+						pline("%s's teeth catch on %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+					break;
+					case AT_STNG:
+						pline("%s's stinger catches on %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+					break;
+					case AT_BUTT:
+						pline("%s's horn catches on %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+					break;
+					case AT_TENT:
+						pline("%s's tentacles catch on %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+					break;
+					case AT_EXPL:
+					case AT_BOOM:
+						pline("%s's shrapnel hits %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+					break;
+					case AT_WEAP:
+					case AT_XWEP:
+					case AT_MARI:
+						if(otmp) pline("%s's weapon strikes %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+						else pline("%s's claws catch on %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+					break;
+					default:
+						pline("%s's claws catch on %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
+					break;
+				}
+				i = 1;
+				if(magr->data==&mons[PM_DEMOGORGON]) i += rnd(4);
+				for(; i>0; i--){
+					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
+						damage_item(obj);
+						if(!i) pline("%s %s less effective.", s_suffix(Monnam(mdef)), aobjnam(obj, "seem"));
+					}
+					else if(!obj->oartifact || (magr->data==&mons[PM_DEMOGORGON] && rn2(10)) ){
+						claws_destroy_marm(mdef, obj);
+						i = 0;
+					}
+				}
+			} else if(magr->data == &mons[PM_DEMOGORGON]) {
+				if (noncorporeal(pd) || amorphous(pd)) {
+					Sprintf(buf, "%s", Monnam(magr));
+					pline("%s tries to rip %s apart!",
+				      buf, mon_nam(mdef));
+					tmp = (int)(1.5 * tmp);
+				} else {
+					mdef->mhp = 1;
+					tmp += 400; //FATAL_DAMAGE_MODIFIER;
+					Sprintf(buf, "%s", Monnam(magr));
+					pline("%s rips %s apart!",
+						  buf, mon_nam(mdef));
+				}
+			}
 		}
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////

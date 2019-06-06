@@ -1132,6 +1132,9 @@ lightsaber_form_sdie:
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
 
+	if (otmp->oproperties&OPROP_FLAYW && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA) || (mon && some_armor(mon))))
+		tmp = 1;
+
 	/* "very heavy iron ball"; weight increase is in increments of 160 */
 	if (otyp == HEAVY_IRON_BALL && tmp > 0) {
 	    int wt = (int)objects[HEAVY_IRON_BALL].oc_weight;

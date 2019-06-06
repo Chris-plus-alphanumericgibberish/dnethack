@@ -2907,7 +2907,72 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 		*dmgptr += bonus;
 	}
-	
+	if(otmp->oproperties&OPROP_FLAYW){
+		struct obj *obj = some_armor(mdef);
+		int i;
+		if(obj){
+			if(youdefend){
+				pline("%s slices your armor!", The(xname(otmp)));
+				i = 1;
+				if(!otmp->oproperties&OPROP_LESSW) i += rnd(4);
+				for(; i>0; i--){
+					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
+						damage_item(obj);
+						if(!i) Your("%s less effective.", aobjnam(obj, "seem"));
+					} else if(!obj->oartifact){
+						claws_destroy_arm(obj);
+						i = 0;
+					}
+				}
+			} else {
+				i = 1;
+				pline("%s slices %s armor!", The(xname(otmp)), s_suffix(mon_nam(mdef)));
+				if(!otmp->oproperties&OPROP_LESSW) i += rnd(4);
+				for(; i>0; i--){
+					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
+						damage_item(obj);
+						if(!i) pline("%s %s less effective.", s_suffix(Monnam(mdef)), aobjnam(obj, "seem"));
+					} else if(!obj->oartifact){
+						claws_destroy_marm(mdef, obj);
+						i = 0;
+					}
+				}
+			}
+		} else {
+			if(youdefend){
+				if(!(thick_skinned(youracedata) || u.sealsActive&SEAL_ECHIDNA || nonliving(youracedata))){
+					static long ulastscreamed = 0;
+					if(ulastscreamed < monstermoves){
+						if(!is_silent(youracedata)){
+							You("%s from the pain!", humanoid_torso(youracedata) ? "scream" : "shriek");
+						} else {
+							You("writhe in pain!");
+						}
+						ulastscreamed = monstermoves;
+					}
+					youmonst.movement = -12;
+				}
+			} else {
+				if(!(thick_skinned(mdef->data) || nonliving_mon(mdef))){
+					static long lastscreamed = 0;
+					static struct monst *lastmon = 0;
+					if(lastscreamed < monstermoves || lastmon != mdef){
+						if(!is_silent_mon(mdef)){
+							if(canseemon(mdef))
+								pline("%s %s in pain!", Monnam(mdef), humanoid_torso(mdef->data) ? "screams" : "shrieks");
+							else You_hear("%s %s in pain!", mdef->mtame ? noit_mon_nam(mdef) : mon_nam(mdef), humanoid_torso(mdef->data) ? "screaming" : "shrieking");
+						} else {
+							if(canseemon(mdef))
+								pline("%s writhes in pain!", Monnam(mdef));
+						}
+						lastscreamed = monstermoves;
+						lastmon = mdef;
+					}
+					mdef->movement = -12;
+				}
+			}
+		}
+	}
 	return messaged;
 }
   

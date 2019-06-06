@@ -5341,15 +5341,52 @@ register struct	monst	*mtmp;
 			break;
 ///////////////////////////////
 			case PM_BAEL:
-				otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+				otmp = mksobj(FLAIL, FALSE, FALSE);
+				otmp->oproperties = OPROP_FLAYW;
+				otmp->obj_material = GOLD;
+				otmp->spe = 6;
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(SCIMITAR, FALSE, FALSE);
+				otmp->oproperties = OPROP_FLAYW;
+				otmp->obj_material = GOLD;
+				otmp->spe = 6;
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(SABER, FALSE, FALSE);
+				otmp->oproperties = OPROP_FLAYW;
+				otmp->obj_material = GOLD;
+				otmp->spe = 6;
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(SHORT_SWORD, FALSE, FALSE);
+				otmp->oproperties = OPROP_FLAYW;
+				otmp->obj_material = GOLD;
+				otmp->spe = 6;
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(SCALPEL, FALSE, FALSE);
+				otmp->oproperties = OPROP_FLAYW;
+				otmp->obj_material = GOLD;
+				otmp->spe = 6;
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(STILETTO, FALSE, FALSE);
+				otmp->oproperties = OPROP_FLAYW;
+				otmp->obj_material = GOLD;
+				otmp->spe = 6;
+				curse(otmp);
+				(void) mpickobj(mtmp, otmp);
+				
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+				(void) mongets(mtmp, GAUNTLETS_OF_POWER);
+				
+				otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
 				otmp = oname(otmp, artiname(ART_GENOCIDE));
 				otmp->spe = 9;
 				curse(otmp);
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
-				(void) mongets(mtmp, TWO_HANDED_SWORD);
-				(void) mongets(mtmp, GAUNTLETS_OF_POWER);
-				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 		    case PM_DISPATER:
 //				(void)mongets(mtmp, WAN_STRIKING);

@@ -216,6 +216,7 @@ struct obj {
 #define OPROP_PSIOW		0x0000000000800000
 #define OPROP_VORPW		0x0000000001000000
 #define OPROP_MORGW		0x0000000002000000
+#define OPROP_FLAYW		0x0000000004000000
 
 	unsigned oeaten;	/* nutrition left in food, if partly eaten */
 	long age;		/* creation date */
@@ -226,6 +227,18 @@ struct obj {
 	   be (or follow) a long int */
 	long owornmask;
 	/* Weapons and artifacts */
+//	define W_ARM	    0x00000001L /* Body armor */
+//	define W_ARMC	    0x00000002L /* Cloak */
+//	define W_ARMH	    0x00000004L /* Helmet/hat */
+//	define W_ARMS	    0x00000008L /* Shield */
+//	define W_ARMG	    0x00000010L /* Gloves/gauntlets */
+//	define W_ARMF	    0x00000020L /* Footwear */
+//ifdef TOURIST
+//	define W_ARMU	    0x00000040L /* Undershirt */
+//	define W_ARMOR	     (W_ARM | W_ARMC | W_ARMH | W_ARMS | W_ARMG | W_ARMF | W_ARMU)
+//else
+//	define W_ARMOR	     (W_ARM | W_ARMC | W_ARMH | W_ARMS | W_ARMG | W_ARMF)
+//endif
 //define W_WEP	    0x00000100L /* Wielded weapon */
 //define W_QUIVER     0x00000200L /* Quiver for (f)iring ammo */
 //define W_SWAPWEP    0x00000400L /* Secondary weapon */

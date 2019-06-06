@@ -3053,6 +3053,57 @@ register struct obj *atmp;
 }
 
 int
+claws_destroy_marm(mtmp, otmp)
+register struct monst *mtmp;
+register struct obj *otmp;
+{
+	long unwornmask;
+	if(!otmp || !mtmp)
+		return 0;
+	if(obj_resists(otmp, 0, 100))
+		return 0;
+	if(!otmp->owornmask)
+		return 0;
+	obj_extract_self(otmp);
+	if ((unwornmask = otmp->owornmask) != 0L) {
+		mtmp->misc_worn_check &= ~unwornmask;
+		if (otmp->owornmask & W_WEP){
+			setmnotwielded(mtmp,otmp);
+			MON_NOWEP(mtmp);
+		}
+		if (otmp->owornmask & W_SWAPWEP){
+			setmnotwielded(mtmp,otmp);
+			MON_NOSWEP(mtmp);
+		}
+		otmp->owornmask = 0L;
+		update_mon_intrinsics(mtmp, otmp, FALSE, FALSE);
+		if(unwornmask&W_ARM){
+			if(canseemon(mtmp))
+				pline("%s armor rips open!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMC){
+			if(canseemon(mtmp))
+				pline("%s %s is torn to shreds!", s_suffix(Monnam(mtmp)), cloak_simple_name(otmp));
+		} else if(unwornmask&W_ARMH){
+			if(canseemon(mtmp))
+				pline("%s helm is knocked to pieces!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMS){
+			if(canseemon(mtmp))
+				pline("%s shield shatters!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMG){
+			if(canseemon(mtmp))
+				pline("%s gloves are torn off!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMF){
+			if(canseemon(mtmp))
+				pline("%s boots are ripped open!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMU){
+			if(canseemon(mtmp))
+				pline("%s underclothes are torn off!", s_suffix(Monnam(mtmp)));
+		}
+		m_useup(mtmp, otmp);
+	}
+}
+
+int
 teleport_arm(atmp)
 register struct obj *atmp;
 {

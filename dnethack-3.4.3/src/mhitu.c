@@ -321,43 +321,89 @@ struct permonst *mptr;
 int indx, prev_result[];
 struct attack *alt_attk_buf;
 {
-    struct attack *attk = &mptr->mattk[indx];
+    struct attack *attk;
 	static int subout = 0;
-	if(indx==0){
-		if(
-			(mptr == &mons[PM_LICH__THE_FIEND_OF_EARTH] && rn2(4)) ||
-			(mptr == &mons[PM_KARY__THE_FIEND_OF_FIRE] && rn2(100)<37) ||
-			(mptr == &mons[PM_KRAKEN__THE_FIEND_OF_WATER] && rn2(100)<52) ||
-			(mptr == &mons[PM_TIAMAT__THE_FIEND_OF_WIND] && !rn2(4)) ||
-			(mptr == &mons[PM_CHAOS] && rn2(3))
-		){
-			subout = 1;
+	if(indx < NATTK){
+		attk = &mptr->mattk[indx];
+	} else {
+		attk = alt_attk_buf;
+		attk->aatyp = 0;
+		attk->adtyp = 0;
+		attk->damn = 0;
+		attk->damd = 0;
+	}
+	
+	//Five fiends' spellcasting routines
+	if(
+		(mptr == &mons[PM_LICH__THE_FIEND_OF_EARTH]) ||
+		(mptr == &mons[PM_KARY__THE_FIEND_OF_FIRE]) ||
+		(mptr == &mons[PM_KRAKEN__THE_FIEND_OF_WATER]) ||
+		(mptr == &mons[PM_TIAMAT__THE_FIEND_OF_WIND]) ||
+		(mptr == &mons[PM_CHAOS])
+	){
+		if(indx==0){
+			if(
+				(mptr == &mons[PM_LICH__THE_FIEND_OF_EARTH] && rn2(4)) ||
+				(mptr == &mons[PM_KARY__THE_FIEND_OF_FIRE] && rn2(100)<37) ||
+				(mptr == &mons[PM_KRAKEN__THE_FIEND_OF_WATER] && rn2(100)<52) ||
+				(mptr == &mons[PM_TIAMAT__THE_FIEND_OF_WIND] && !rn2(4)) ||
+				(mptr == &mons[PM_CHAOS] && rn2(3))
+			){
+				subout = 1;
+				*alt_attk_buf = *attk;
+				attk = alt_attk_buf;
+				attk->aatyp = AT_MAGC;
+				attk->adtyp = AD_SPEL;
+				attk->damn = 0;
+				attk->damd = 0;
+			} else subout = 0;
+		}
+		if(subout){
 			*alt_attk_buf = *attk;
 			attk = alt_attk_buf;
-			attk->aatyp = AT_MAGC;
-			attk->adtyp = AD_SPEL;
+			attk->aatyp = 0;
+			attk->adtyp = 0;
 			attk->damn = 0;
 			attk->damd = 0;
-			return attk;
-		} else subout = 0;
+		}
+	}
+	//Bael's alternate attack forms
+	if((mptr == &mons[PM_BAEL])){
+		static const struct attack marilithHands[6] = {
+			{AT_MARI, AD_PHYS, 1,15},
+			{AT_MARI, AD_PHYS, 1,15},
+			{AT_MARI, AD_PHYS, 1,15},
+			{AT_MARI, AD_PHYS, 1,15},
+			{AT_MARI, AD_PHYS, 1,15},
+			{AT_MARI, AD_PHYS, 1,15}
+		};
+		static const struct attack swordArchon[6] = {
+			{AT_CLAW, AD_EFIR, 3,7},
+			{AT_CLAW, AD_EFIR, 3,7},
+			{AT_BUTT, AD_FIRE, 9,1},
+			{AT_BITE, AD_POSN, 9,1},
+			{AT_GAZE, AD_STDY, 1,9},
+			{0, 0, 0,0},
+		};
+		if(indx==0){
+			if(!rn2(7)){
+				subout = 1;
+			} else if(!rn2(6)){
+				subout = 2;
+			} else subout = 0;
+		}
+		if(subout == 1){
+			*alt_attk_buf = swordArchon[indx];
+			attk = alt_attk_buf;
+		} else if(subout == 2){
+			*alt_attk_buf = marilithHands[indx];
+			attk = alt_attk_buf;
+		}
 	}
 
 	/* twoweapon symmetry -- if the previous attack missed, do not make an offhand attack */
 	if (indx > 0 && prev_result[indx - 1] <= 0 && attk->aatyp == AT_XWEP)
 	{
-		subout = 1;
-		*alt_attk_buf = *attk;
-		attk = alt_attk_buf;
-		attk->aatyp = AT_NONE;
-		attk->adtyp = AD_PHYS;
-		attk->damn = 0;
-		attk->damd = 0;
-		return attk;
-	}
-	else
-		subout = 0;
-
-	if(subout){
 		*alt_attk_buf = *attk;
 		attk = alt_attk_buf;
 		attk->aatyp = 0;
@@ -366,7 +412,7 @@ struct attack *alt_attk_buf;
 		attk->damd = 0;
 		return attk;
 	}
-	
+
     /* prevent a monster with two consecutive disease or hunger attacks
        from hitting with both of them on the same turn; if the first has
        already hit, switch to a stun attack for the second */
@@ -380,14 +426,6 @@ struct attack *alt_attk_buf;
 		*alt_attk_buf = *attk;
 		attk = alt_attk_buf;
 		attk->adtyp = AD_STUN;
-    }
-    if (indx > 0 && prev_result[indx - 1] > 0 &&
-		(attk->adtyp == AD_SHRD) &&
-	    attk->adtyp == mptr->mattk[indx - 1].adtyp
-	) {
-		*alt_attk_buf = *attk;
-		attk = alt_attk_buf;
-		attk->adtyp = AD_PHYS;
     }
     return attk;
 }
@@ -406,7 +444,7 @@ mattacku(mtmp)
 	register struct monst *mtmp;
 {
 	struct	attack	*mattk, alt_attk;
-	int	i, j, tmp, tchtmp, sum[NATTK];
+	int	i, j, tmp, marinum = 0, tchtmp, sum[NATTK];
 	int deva;
 	struct	permonst *mdat = mtmp->data;
 	struct obj *oarmor;
@@ -1262,11 +1300,7 @@ mattacku(mtmp)
 							&& !otmp->owornmask
 						) wcount++;
 					}
-					wcount -= i;
-					if(MON_WEP(mtmp))
-						wcount++;
-					if(MON_SWEP(mtmp))
-						wcount++;
+					wcount -= marinum;
 					for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj){
 						if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
 							|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])
@@ -1276,6 +1310,7 @@ mattacku(mtmp)
 							&& --wcount <= 0
 						) break;
 					}
+					marinum++;
 					if(otmp) {
 						hittmp = hitval(otmp, &youmonst);
 						tmp += hittmp;
@@ -1313,12 +1348,6 @@ mattacku(mtmp)
 							tmp += 4*(otmp->objsize - mtmp->data->msize);
 							tchtmp += 2*(otmp->objsize - mtmp->data->msize);
 						}
-					}
-					if(i == 5 && sum[0] && sum[1]){
-						/*Mariliths get a wrap attack if their first two attacks hit*/
-						struct attack rend = {AT_HUGS, AD_WRAP, mdat == &mons[PM_SHAKTARI] ? 8 : 4, 6};
-						sum[i] = hitmu(mtmp, &rend);
-						mon_ranged_gazeonly = 0;
 					}
 			    } else
 					wildmiss(mtmp, mattk);
@@ -1480,6 +1509,14 @@ mattacku(mtmp)
 			}
 		}
 	    /* sum[i] == 0: unsuccessful attack */
+	}
+	if(i == NATTK && (mdat == &mons[PM_MARILITH] || mdat == &mons[PM_SHAKTARI] || mdat == &mons[PM_KARY__THE_FIEND_OF_FIRE])){
+		/*Mariliths get a wrap attack if their first two attacks hit*/
+		if((sum[0] && sum[1]) || u.ustuck == mtmp){
+			struct attack rend = {AT_HUGS, AD_WRAP, mdat == &mons[PM_SHAKTARI] ? 8 : 4, 6};
+			(void) hitmu(mtmp, &rend);
+			mon_ranged_gazeonly = 0;
+		}
 	}
 	if(mdat == &mons[PM_DEMOGORGON]){ 
 		mtmp->mvar1 = 0;
@@ -2744,14 +2781,14 @@ dopois:
 	    case AD_WRAP:
 		if ((!mtmp->mcan || u.ustuck == mtmp) && !sticks(youracedata)) {
 		    if (!u.ustuck && !rn2(10)) {
-			if (u_slip_free(mtmp, mattk)) {
-			    dmg = 0;
-			} else {
-			    pline("%s swings itself around you!",
-				  Monnam(mtmp));
-				if(Upolyd && u.umonnum == PM_TOVE) pline("Fortunately, you are much too slithy to grab!");
-				else u.ustuck = mtmp;
-			}
+				if (u_slip_free(mtmp, mattk)) {
+					dmg = 0;
+				} else {
+					pline("%s swings itself around you!",
+					  Monnam(mtmp));
+					if(Upolyd && u.umonnum == PM_TOVE) pline("Fortunately, you are much too slithy to grab!");
+					else u.ustuck = mtmp;
+				}
 		    } else if(u.ustuck == mtmp) {
 				if (is_pool(mtmp->mx,mtmp->my, FALSE) && !Swimming
 					&& !Breathless) {
@@ -3329,7 +3366,7 @@ dopois:
 		case AD_SHRD:{
 		    struct obj *obj = some_armor(&youmonst);
 			hitmsg(mtmp, mattk);
-			if(obj && mtmp->data != &mons[PM_RETRIEVER]){
+			if(obj){
 			 int i = 0;
 			 switch (mattk->aatyp) {
 				case AT_LNCK:
@@ -3365,23 +3402,25 @@ dopois:
 				if(obj->spe > -1*objects[(obj)->otyp].a_ac){
 					damage_item(obj);
 					if(!i) Your("%s less effective.", aobjnam(obj, "seem"));
-				}
-				else if(!obj->oartifact || (mtmp->data==&mons[PM_DEMOGORGON] && rn2(10)) ){
-				 claws_destroy_arm(obj);
-				 i = 0;
+				} else if(!obj->oartifact || (mtmp->data==&mons[PM_DEMOGORGON] && rn2(10)) ){
+					claws_destroy_arm(obj);
+					i = 0;
 				}
 			 }
 			}
 			else if(mtmp->data==&mons[PM_DEMOGORGON]){
 				if (noncorporeal(youracedata) || amorphous(youracedata)) {
 					pline("%s tries to rip %s apart!",
-				      mon_nam(mtmp), "you");
+				      Monnam(mtmp), "you");
 					dmg = (int)(1.5 * dmg);
+				} else {
+					if(Upolyd)
+						u.mh = 1;
+					else u.uhp = 1;
+					dmg += 400; //FATAL_DAMAGE_MODIFIER;
+					pline("%s rips %s apart!",
+						  Monnam(mtmp), "you");
 				}
-				dmg = 2 * (Upolyd ? u.mh : u.uhp)
-					  + 400; //FATAL_DAMAGE_MODIFIER;
-				pline("%s rips %s apart!",
-				      mon_nam(mtmp), "you");
 			}
 		} break;
 ///////////////////////////////////////////////////////////////////////////////////////////
