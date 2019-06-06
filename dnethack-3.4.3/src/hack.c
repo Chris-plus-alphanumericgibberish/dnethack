@@ -614,6 +614,8 @@ int mode;
 			dmgtype(youracedata, AD_CORR))) {
 			You("eat through the bars.");
 			dissolve_bars(x,y);
+			if(youracedata == &mons[PM_RUST_MONSTER])
+				lesshungry(objects[BAR].oc_nutrition);
 	    }
 	    if (!(Passes_walls || passes_bars(youracedata)))
 		return FALSE;

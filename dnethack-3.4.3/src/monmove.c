@@ -6,6 +6,7 @@
 #include "mfndpos.h"
 #include "artifact.h"
 #include "epri.h"
+#include "edog.h"
 
 extern boolean notonhead;
 
@@ -2153,6 +2154,9 @@ postmov:
 					Monnam(mtmp)); 
 				}
 				dissolve_bars(mtmp->mx, mtmp->my);
+				if(mtmp->data == &mons[PM_RUST_MONSTER] && mtmp->mtame && mtmp->isminion){
+					EDOG(mtmp)->hungrytime += 5*objects[BAR].oc_nutrition;
+				}
 			}
 		    else if (flags.verbose && canseemon(mtmp))
 				Norep("%s %s %s the iron bars.", Monnam(mtmp),
