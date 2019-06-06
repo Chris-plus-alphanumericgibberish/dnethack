@@ -3715,14 +3715,25 @@ place_law_features()
 		}
 		
 	} else if(Is_arcadia_woods(&u.uz)){
-		if(!rn2(4))
-			mkcamp(VALAVI_CAMP);
-		if(!rn2(4))
-			mkcamp(FORMIAN_CAMP1);
-		if(!rn2(4))
-			mkcamp(FORMIAN_CAMP2);
-		if(!rn2(4))
-			mkcamp(THRIAE_CAMP);
+		if(on_level(&u.uz, &arcadia1_level)){
+			if(!rn2(3))
+				mkcamp(VALAVI_CAMP);
+			if(!rn2(3))
+				mkcamp(FORMIAN_CAMP1);
+			if(!rn2(3))
+				mkcamp(FORMIAN_CAMP2);
+			if(!rn2(3))
+				mkcamp(THRIAE_CAMP);
+		} else {
+			if(!rn2(4))
+				mkcamp(VALAVI_CAMP);
+			if(!rn2(4))
+				mkcamp(FORMIAN_CAMP1);
+			if(!rn2(4))
+				mkcamp(FORMIAN_CAMP2);
+			if(!rn2(4))
+				mkcamp(THRIAE_CAMP);
+		}
 	}
 }
 
