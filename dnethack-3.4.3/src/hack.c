@@ -1559,7 +1559,9 @@ domove()
 		place_monster(mtmp, u.ux0, u.uy0);
 
 		/* check for displacing it into pools and traps */
-		switch (minliquid(mtmp) ? 2 : mintrap(mtmp)) {
+		trap = t_at(u.ux0, u.uy0);
+		int switchcase = minliquid(mtmp) ? 2 : mintrap(mtmp);
+		switch (switchcase) {
 		case 0:
 		    You("%s %s.", mtmp->mtame ? "displaced" : "frightened",
 			pnambuf);
@@ -1567,8 +1569,10 @@ domove()
 		case 1:		/* trapped */
 		case 3:		/* changed levels */
 		    /* there's already been a trap message, reinforce it */
-		    abuse_dog(mtmp);
-		    adjalign(-3);
+			if(!(switchcase == 3 && trap->ttyp == MAGIC_PORTAL)){
+			    abuse_dog(mtmp);
+			    adjalign(-3);
+			}
 		    break;
 		case 2:
 		    /* it may have drowned or died.  that's no way to
