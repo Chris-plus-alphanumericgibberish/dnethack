@@ -172,14 +172,16 @@ boolean talk;
     } else
 		mon = makemon(&mons[mnum], u.ux, u.uy, NO_MM_FLAGS);
     if (mon) {
-	if (talk) {
-	    pline_The("voice of %s booms:", align_gname(alignment));
-	    verbalize("Thou shalt pay for thy indiscretion!");
-	    if (!Blind)
-		pline("%s appears before you.", An(Hallucination ? rndmonnam() : mon->data->mname));
-	}
-	mon->mpeaceful = FALSE;
-	/* don't call set_malign(); player was naughty */
+		if (talk) {
+			pline_The("voice of %s booms:", align_gname(alignment));
+			verbalize("Thou shalt pay for thy indiscretion!");
+			if (!Blind)
+			pline("%s appears before you.", An(Hallucination ? rndmonnam() : mon->data->mname));
+		}
+		mon->mpeaceful = FALSE;
+		/* don't call set_malign(); player was naughty */
+		mon->msleeping = 0;
+		mon->mcanmove = 1;
     }
 	
 	/* fix house setting */
