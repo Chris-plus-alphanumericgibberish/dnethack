@@ -419,7 +419,7 @@ moveloop()
 						mtmp->perminvis = FALSE;
 						newsym(mtmp->mx,mtmp->my);
 					}
-				} else if(mtmp->data == &mons[PM_GRUE]){
+				} else if(mtmp->data == &mons[PM_GRUE] || mtmp->data == &mons[PM_INVIDIAK]){
 					if(isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
 						mtmp->minvis = TRUE;
 						mtmp->perminvis = TRUE;
@@ -1220,6 +1220,12 @@ karemade:
 						flags.botl = 1;
 					} else if (u.mh < 1)
 						rehumanize();
+				} else if (youracedata == &mons[PM_INVIDIAK] && !isdark(u.ux,u.uy)) {
+					if (u.mh > 1) {
+						u.mh--;
+						flags.botl = 1;
+					} else if (u.mh < 1)
+						rehumanize();
 				} else if (Upolyd) {
 					if(u.mh < u.mhmax){
 						if (u.mh < 1)
@@ -1560,7 +1566,7 @@ karemade:
 				mtmp->perminvis = FALSE;
 				newsym(mtmp->mx,mtmp->my);
 			}
-		} else if(mtmp->data == &mons[PM_GRUE]){
+		} else if(mtmp->data == &mons[PM_GRUE] || mtmp->data == &mons[PM_INVIDIAK]){
 			if(isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
 				mtmp->minvis = TRUE;
 				mtmp->perminvis = TRUE;

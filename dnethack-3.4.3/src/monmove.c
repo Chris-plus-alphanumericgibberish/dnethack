@@ -608,6 +608,18 @@ boolean digest_meal;
 		}
 		return;
 	}
+	if(!DEADMONSTER(mon) && mon->data == &mons[PM_INVIDIAK] && !isdark(mon->mx, mon->my)){
+		mon->mhp -= 1;
+		if(mon->mhp == 0){
+			mondied(mon);
+			return;
+		}
+		if (mon->mspec_used) mon->mspec_used--;
+		if (digest_meal) {
+			if (mon->meating) mon->meating--;
+		}
+		return;
+	}
 	/* Clouds on Lolth's level deal damage */
 	if(Is_lolth_level(&u.uz) && levl[mon->mx][mon->my].typ == CLOUD){
 		if (!(nonliving_mon(mon) || breathless_mon(mon))){
