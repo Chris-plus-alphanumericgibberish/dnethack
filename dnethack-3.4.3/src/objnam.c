@@ -2617,6 +2617,7 @@ const char *oldstr;
 			   !BSTRCMPI(bp, p-14, "Dwarvish Lords") || /* axe */
 			   !BSTRCMPI(bp, p-12, "Elvish Lords") || /* mace */
 			   !BSTRCMPI(bp, p-11, "Seven Parts") || /* spear */
+			   !BSTRCMPI(bp, p-10, "Lost Names") || /* book */
 			   !BSTRCMPI(bp, p-15, "Infinite Spells") || /* book */
 			   !BSTRCMPI(bp, p-10, "eucalyptus") ||
 #ifdef WIZARD
