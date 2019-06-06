@@ -1082,16 +1082,16 @@ as_extra_healing:
 			}else{
 				violated_vegetarian();
 				u.uconduct.unvegan++;
-				if (otmp->cursed)
+				if (otmp->blessed)
 				pline("Yecch!  This %s.", Hallucination ?
 				"liquid could do with a good stir" : "blood has congealed");
 				else pline(Hallucination ?
 				  "The %s liquid stirs memories of home." :
 				  "The %s blood tastes delicious.",
 				  otmp->odiluted ? "watery" : "thick");
-				if (!otmp->cursed && !Race_if(PM_INCANTIFIER) && !uclockwork)
+				if (!otmp->blessed && !Race_if(PM_INCANTIFIER) && !uclockwork)
 					lesshungry((otmp->odiluted ? 1 : 2) *
-						(otmp->blessed ? mons[(otmp)->corpsenm].cnutrit*1.5/5 : mons[(otmp)->corpsenm].cnutrit/5 ));
+						(otmp->cursed ? mons[(otmp)->corpsenm].cnutrit*1.5/5 : mons[(otmp)->corpsenm].cnutrit/5 ));
 			}
 
 		} else {
