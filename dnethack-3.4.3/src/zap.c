@@ -1470,7 +1470,56 @@ poly_obj(obj, id)
 			}
 			return obj;
 		} else if(obj->otyp == HYPOSPRAY_AMPULE){
+			int pick;
 			otmp = mksobj(HYPOSPRAY_AMPULE, FALSE, FALSE);
+			do{
+				switch(rn2(14)){
+					case 0:
+						pick = POT_GAIN_ABILITY;
+					break;
+					case 1:
+						pick = POT_RESTORE_ABILITY;
+					break;
+					case 2:
+						pick = POT_BLINDNESS;
+					break;
+					case 3:
+						pick = POT_CONFUSION;
+					break;
+					case 4:
+						pick = POT_PARALYSIS;
+					break;
+					case 5:
+						pick = POT_SPEED;
+					break;
+					case 6:
+						pick = POT_HALLUCINATION;
+					break;
+					case 7:
+						pick = POT_HEALING;
+					break;
+					case 8:
+						pick = POT_EXTRA_HEALING;
+					break;
+					case 9:
+						pick = POT_GAIN_ENERGY;
+					break;
+					case 10:
+						pick = POT_SLEEPING;
+					break;
+					case 11:
+						pick = POT_FULL_HEALING;
+					break;
+					case 12:
+						pick = POT_POLYMORPH;
+					break;
+					case 13:
+						pick = POT_AMNESIA;
+					break;
+				}
+			} while(pick == (int)obj->ovar1);
+			otmp->ovar1 = (long)pick;
+			otmp->spe = obj->spe;
 		} else {
 			int try_limit = 3;
 			/* Try up to 3 times to make the magic-or-not status of

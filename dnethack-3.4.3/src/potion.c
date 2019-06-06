@@ -2517,7 +2517,7 @@ dodip()
 		else if (was_swapwep) setuswapwep(obj);
 		else if (was_quiver) setuqwep(obj);
 
-		if (obj->otyp != save_otyp) {
+		if (obj->otyp != save_otyp || (obj->otyp == HYPOSPRAY_AMPULE && objects[HYPOSPRAY_AMPULE].oc_name_known)) {
 			makeknown(POT_POLYMORPH);
 			useup(potion);
 			prinv((char *)0, obj, 0L);
