@@ -825,6 +825,7 @@ random_special_room()
 			add_rspec_room(TEMPLE		,  5, !level.flags.has_temple);
 			add_rspec_room(SHOPBASE		,  5, TRUE);
 			add_rspec_room(0			, 50, TRUE);
+		} else if(level.flags.is_cavernous_lev){
 		} else {
 			/* ROOM-AND-CORRIDORS */
 random_special_room_default_room_and_corridors:
