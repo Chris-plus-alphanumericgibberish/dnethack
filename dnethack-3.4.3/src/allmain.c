@@ -347,6 +347,19 @@ moveloop()
 
 	oldCon = ACURR(A_CON);
 	oldWisBon = ACURR(A_WIS)/4;
+	
+	if(u.ualignbase[A_ORIGINAL] == A_LAWFUL && flags.initalign != 0){
+		flags.initalign = 0;
+		impossible("Bad alignment initializer detected and fixed. Save and reload.");
+	}
+	if(u.ualignbase[A_ORIGINAL] == A_NEUTRAL && flags.initalign != 1){
+		flags.initalign = 1;
+		impossible("Bad alignment initializer detected and fixed. Save and reload.");
+	}
+	if(u.ualignbase[A_ORIGINAL] == A_CHAOTIC && flags.initalign != 2){
+		flags.initalign = 2;
+		impossible("Bad alignment initializer detected and fixed. Save and reload.");
+	}
 //	printMons();
 //	printDPR();
     for(;;) {/////////////////////////MAIN LOOP/////////////////////////////////
@@ -1868,7 +1881,7 @@ newgame()
 	flags.panLgod = -1;	/* role_init() will reset this */
 	flags.panNgod = -1;	/* role_init() will reset this */
 	flags.panCgod = -1;	/* role_init() will reset this */
-	role_init();		/* must be before init_dungeons(), u_init(),
+	role_init(TRUE);		/* must be before init_dungeons(), u_init(),
 				 * and init_artifacts() */
 	
 	init_dungeons();	/* must be before u_init() to avoid rndmonst()
