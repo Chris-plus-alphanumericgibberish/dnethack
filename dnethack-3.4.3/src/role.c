@@ -2235,7 +2235,8 @@ plnamesuffix()
  * This code also replaces quest_init().
  */
 void
-role_init()
+role_init(newgame)
+int newgame;
 {
 	int alignmnt;
 
@@ -2245,7 +2246,7 @@ role_init()
 	plnamesuffix();
 
 	/* Check for a valid role.  Try flags.initrole first. */
-	if (!validrole(flags.initrole)) {
+	if (!validrole(flags.initrole) && newgame) {
 	    /* Try the player letter second */
 	    if ((flags.initrole = str2role(pl_character)) < 0)
 	    	/* None specified; pick a random role */
@@ -2258,21 +2259,21 @@ role_init()
 	pl_character[PL_CSIZ-1] = '\0';
 
 	/* Check for a valid race */
-	if (!validrace(flags.initrole, flags.initrace))
+	if (!validrace(flags.initrole, flags.initrace) && newgame)
 	    flags.initrace = randrace(flags.initrole);
 
 	/* Check for a valid gender.  If new game, check both initgend
 	 * and female.  On restore, assume flags.female is correct. */
-	if (flags.pantheon == -1) {	/* new game */
+	if (flags.pantheon == -1 && newgame) {	/* new game */
 	    if (!validgend(flags.initrole, flags.initrace, flags.female))
 		flags.female = !flags.female;
 	}
-	if (!validgend(flags.initrole, flags.initrace, flags.initgend))
+	if (!validgend(flags.initrole, flags.initrace, flags.initgend) && newgame)
 	    /* Note that there is no way to check for an unspecified gender. */
 	    flags.initgend = flags.female;
 
 	/* Check for a valid alignment */
-	if (!validalign(flags.initrole, flags.initrace, flags.initalign))
+	if (!validalign(flags.initrole, flags.initrace, flags.initalign) && newgame)
 	    /* Pick a random alignment */
 	    flags.initalign = randalign(flags.initrole, flags.initrace);
 	alignmnt = aligns[flags.initalign].value;
