@@ -626,8 +626,8 @@ const char *ElfPriestLgod = "Manwe Sulimo",
 		   *ElfPriestNgod = "Mandos",
 		   *ElfPriestCgod = "Lorien"; /* Elven */
 
-const char *AnachrononautLgod = "Ilsensine",
-		   *AnachrononautLgodEnd = "Ilsensine the Banished One";
+const char *AnachrononautLgod = "_Ilsensine",
+		   *AnachrononautLgodEnd = "_Ilsensine the Banished One";
 
 const char *getAnachrononautLgod(){return AnachrononautLgod;}
 const char *getAnachrononautLgodEnd(){return AnachrononautLgodEnd;}
