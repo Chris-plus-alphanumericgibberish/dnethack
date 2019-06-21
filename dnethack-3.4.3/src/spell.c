@@ -519,7 +519,7 @@ learn()
 		}
 	}
 
-	if (booktype = further_study(book->otyp))
+	if ((booktype = further_study(book->otyp)))
 	{
 		You("are able to apply the writings of the book to learn another spell.");
 		Sprintf(splname, objects[booktype].oc_name_known ?
@@ -639,7 +639,7 @@ struct obj *spellbook;
 				}
 			}
 			int booktype;
-			if (booktype = further_study(spellbook->ovar1)){
+			if ((booktype = further_study(spellbook->ovar1))){
 				You("understand the material thoroughly, and can see a way to cast another spell.");
 				Sprintf(splname, objects[booktype].oc_name_known ?
 					"\"%s\"" : "the \"%s\" spell",
@@ -4977,7 +4977,7 @@ int spell;
 			cast_bon = 0;
 			if (spell_skilltype(spellid(spell)) == P_ATTACK_SPELL || spell_skilltype(spellid(spell)) == P_ENCHANTMENT_SPELL)
 				cast_bon += 1;
-			if (uwep->oartifact && !(uwep->oartifact == ART_PEN_OF_THE_VOID && !mvitals[PM_ACERERAK].died > 0))
+			if (uwep->oartifact && !(uwep->oartifact == ART_PEN_OF_THE_VOID && !(mvitals[PM_ACERERAK].died > 0)))
 				cast_bon *= 2;
 			splcaster -= cast_bon;
 		}

@@ -737,11 +737,13 @@ gcrownu()
 		in_hand = (uwep && uwep->oartifact == ART_REAVER);
 		already_exists = exist_artifact(SCIMITAR, artiname(ART_REAVER));
 		verbalize("Hurrah for our Pirate King!");
+		livelog_write_string("became the Pirate King");
 	} else if((Pantheon_if(PM_VALKYRIE) || Role_if(PM_VALKYRIE)) && flags.initgend){
 		u.uevent.uhand_of_elbereth = 2; /* Alignment of Skadi is treated as neutral */
 		in_hand = FALSE;
 		already_exists = exist_artifact(BOW, artiname(ART_BOW_OF_SKADI));
 		verbalize("I greet you, my daughter.");
+		livelog_write_string("greeted as a daughter of Skadi");
 	} else if(Race_if(PM_DWARF) && (urole.ldrnum == PM_THORIN_II_OAKENSHIELD || urole.ldrnum == PM_DAIN_II_IRONFOOT)){
 		u.uevent.uhand_of_elbereth = 1; /* Alignment of Dwarf king is treated as lawful */
 		if(urole.ldrnum == PM_THORIN_II_OAKENSHIELD){
@@ -761,6 +763,7 @@ gcrownu()
 		pline("<<You who straddle the line between our world and the void beyond,");
 		pline("  you shall be our emissary to that which gave rise to us all>>");
 		bindspirit(COUNCIL);
+		livelog_write_string("became the Emissary of Elements");
 		return;
 	} else {
     switch (u.ualign.type) {
@@ -771,17 +774,20 @@ gcrownu()
 			in_hand = FALSE;
 			already_exists = exist_artifact(DROVEN_CROSSBOW, artiname(ART_LIECLEAVER));
 			verbalize("I dub thee...  The Blade of Ver'tas!");
+			livelog_write_string("became the Blade of Ver'tas");
 		} else {
 			if(flags.initgend){ /*Female*/
 				u.uevent.uhand_of_elbereth = 16;
 				in_hand = FALSE;
 				already_exists = exist_artifact(SICKLE, artiname(ART_SICKLE_MOON));
 				verbalize("I dub thee...  The Hand of Eilistraee!");
+				livelog_write_string("became the Hand of Eilistraee");
 			} else { /*male*/
 				in_hand = FALSE;
 				u.uevent.uhand_of_elbereth = 19;
 				verbalize("As shadows define the light, so too do webs define the spider.");
 				verbalize("You shall be my shepherd, to wrap the world in webs of shadow!");
+				livelog_write_string("became the Shepherd of the Black Web");
 				u.specialSealsKnown |= SEAL_BLACK_WEB;
 				return;
 			}
@@ -791,6 +797,7 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_ARCOR_KERYM));
 		verbalize("I crown thee...  The Hand of Elbereth!");
+		livelog_write_string("became the Hand of Elbereth");
 	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
 		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
 	) {
@@ -798,32 +805,38 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(GOLDEN_ARROW, artiname(ART_SUNBEAM));
 		verbalize("I anoint thee...  High %s of Apollo!", flags.female ? "Priestess" : "Priest");
+		livelog_write_string("anointed by Apollo");
 	} else if(Race_if(PM_GNOME) && Role_if(PM_RANGER)) {
 		u.uevent.uhand_of_elbereth = 31;
 		in_hand = FALSE;
 		already_exists = exist_artifact(GRAY_DRAGON_SCALES, artiname(ART_STEEL_SCALES_OF_KURTULMAK));
 		verbalize("I claim thee...  Great Slave-Vassal of Kurtulmak!");
+		livelog_write_string("claimed by Kurtulmak");
 	} else if(Pantheon_if(PM_KNIGHT) || Role_if(PM_KNIGHT)){
 		u.uevent.uhand_of_elbereth = 1;
 		in_hand = FALSE;
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_CLARENT));
 		verbalize("I crown thee...  King of the Angles!");
+		livelog_write_string("crowned King of the Angles");
 	} else if(Pantheon_if(PM_HEALER) || Role_if(PM_HEALER)){
 		u.uevent.uhand_of_elbereth = 34;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROUNDSHIELD, artiname(ART_AEGIS));
 		verbalize("I dub thee...  The Arm of Athena!");
+		livelog_write_string("became the Arm of Athena");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 4;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
 		verbalize("I dub thee...  The Sage of Law!");
+		livelog_write_string("became the Sage of Law");
 	} else if(Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)){
 		u.uevent.uhand_of_elbereth = 10;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
 		if(already_exists) already_exists = exist_artifact(SPE_SECRETS, artiname(ART_BOOK_OF_INFINITE_SPELLS));
 		verbalize("I dub thee...  The Magister of Law!");
+		livelog_write_string("became the Magister of Law");
 	} else if(Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)){
 		in_hand = FALSE;
 		if(Race_if(PM_VAMPIRE)) already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
@@ -831,9 +844,11 @@ gcrownu()
 		if(Race_if(PM_VAMPIRE)){
 			u.uevent.uhand_of_elbereth = 9;
 			verbalize("I crown thee...  The Dark %s!", flags.female ? "Lady" : "Lord");
+			livelog_write_string("recieved the helm of the Dark Lord");
 		} else {
 			u.uevent.uhand_of_elbereth = 7;
 			verbalize("I crown thee...  The Saint %s!", flags.female ? "Queen" : "King");
+			livelog_write_string("recieved the crown of the Saint King");
 		}
 	} else if(Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)){
 		char crown_msg[BUFSZ];
@@ -844,9 +859,14 @@ gcrownu()
 		strcat(crown_msg, plname);
 		strcat(crown_msg, "!");
 		verbalize1(crown_msg);
+		strcpy(crown_msg, "became the Nasu no ");
+		strcat(crown_msg, plname);
+		strcat(crown_msg, "!");
+		livelog_write_string(crown_msg);
 	} else {
 		u.uevent.uhand_of_elbereth = 1;
 		verbalize("I dub thee...  The Arm of the Law!");
+		livelog_write_string("became the Arm of the Law");
 	}
 	break;
     case A_NEUTRAL:
@@ -857,11 +877,13 @@ gcrownu()
 				in_hand = FALSE;
 				already_exists = exist_artifact(GAUNTLETS_OF_DEXTERITY, artiname(ART_CLAWS_OF_THE_REVENANCER));
 				verbalize("I dub thee...  The Hand of Kiaransali!");
+				livelog_write_string("became the Hand of Kiaransali");
 			} else { /*male*/
 				u.uevent.uhand_of_elbereth = 26;
 				in_hand = FALSE;
 				already_exists = exist_artifact(DROVEN_SHORT_SWORD, artiname(ART_LOLTH_S_FANG));
 				verbalize("I dub thee...  The Hand of Keptolo!");
+				livelog_write_string("became the Hand of Keptolo");
 			}
 		} else {
 			if(flags.initgend){ /*Female*/
@@ -869,11 +891,13 @@ gcrownu()
 				in_hand = FALSE;
 				already_exists = exist_artifact(GAUNTLETS_OF_DEXTERITY, artiname(ART_CLAWS_OF_THE_REVENANCER));
 				verbalize("I dub thee...  The Hand of Kiaransali!");
+				livelog_write_string("became the Hand of Kiaransali");
 			} else { /*male*/
 				u.uevent.uhand_of_elbereth = 20;
 				in_hand = FALSE;
 				already_exists = exist_artifact(DROVEN_SHORT_SWORD, artiname(ART_LOLTH_S_FANG));
 				verbalize("I dub thee...  The Sword of Vhaeraun!");
+				livelog_write_string("became the Sword of Vhaeraun");
 			}
 		}
 	} else if(Race_if(PM_ELF)){
@@ -881,6 +905,7 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(RUNESWORD, artiname(ART_ARYFAERN_KERYM));
 		verbalize("I dub thee...  The Doomspeaker of Vaire!");
+		livelog_write_string("became the Doomspeaker of Vaire");
 	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
 		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
 	) {
@@ -888,27 +913,32 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(CLOAK_OF_INVISIBILITY, artiname(ART_VEIL_OF_LATONA));
 		verbalize("I anoint thee...  High %s of Latona!", flags.female ? "Priestess" : "Priest");
+		livelog_write_string("anointed by Latona");
 	} else if(Race_if(PM_GNOME) && Role_if(PM_RANGER)) {
 		u.uevent.uhand_of_elbereth = 32;
 		in_hand = FALSE;
 		already_exists = exist_artifact(AMBER, artiname(ART_GLITTERSTONE));
 		verbalize("I dub thee...  Thane of Garl Glittergold!");
+		livelog_write_string("became the Thane of Garl Glittergold");
 	} else if(Pantheon_if(PM_HEALER) || Role_if(PM_HEALER)){
 		u.uevent.uhand_of_elbereth = 35;
 		in_hand = FALSE;
 		already_exists = exist_artifact(FLYING_BOOTS, artiname(ART_HERMES_S_SANDALS));
 		verbalize("I dub thee... Messenger of Hermes!");
+		livelog_write_string("became the Messenger of Hermes");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 5;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_GRANDMASTER_S_ROBE));
 		verbalize("Thou shalt be the Grandmaster of Balance!");
+		livelog_write_string("became the Grandmaster of Balance");
 	} else if(Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)){
 		u.uevent.uhand_of_elbereth = 11;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
 		if(already_exists) already_exists = exist_artifact(SPE_SECRETS, artiname(ART_BOOK_OF_INFINITE_SPELLS));
 		verbalize("Thou shalt be the Wizard of Balance!");
+		livelog_write_string("became the Wizard of Balance");
 	} else if(Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)){
 		in_hand = FALSE;
 		if(Race_if(PM_VAMPIRE)) already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
@@ -916,15 +946,18 @@ gcrownu()
 		if(Race_if(PM_VAMPIRE)){
 			u.uevent.uhand_of_elbereth = 9;
 			verbalize("I crown thee...  Dark %s!", flags.female ? "Lady" : "Lord");
+			livelog_write_string("recieved the helm of the Dark Lord");
 		} else {
 			u.uevent.uhand_of_elbereth = 8;
 			verbalize("I dub thee...  The Grey Saint!");
+			livelog_write_string("recieved the crown of the Saint King");
 		}
 	} else {
 		u.uevent.uhand_of_elbereth = 2;
 		in_hand = (uwep && uwep->oartifact == ART_VORPAL_BLADE);
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_VORPAL_BLADE));
 		verbalize("Thou shalt be my Envoy of Balance!");
+		livelog_write_string("became the Envoy of Balance");
 	}
 	break;
     case A_CHAOTIC:
@@ -935,11 +968,13 @@ gcrownu()
 				in_hand = FALSE;
 				already_exists = exist_artifact(ELVEN_MITHRIL_COAT, artiname(ART_WEB_OF_LOLTH));
 				verbalize("I crown thee...  The Hand of Lolth!");
+				livelog_write_string("became the Hand of Lolth");
 			} else { /*male*/
 				u.uevent.uhand_of_elbereth = 27;
 				in_hand = FALSE;
 				already_exists = exist_artifact(MORNING_STAR, artiname(ART_RUINOUS_DESCENT_OF_STARS));
 				verbalize("I dub thee...  The Hammer of Ghaunadaur!");
+				livelog_write_string("became the Hammer of Ghaunadaur");
 			}
 		} else {
 			if(flags.initgend){ /*Female*/
@@ -947,11 +982,13 @@ gcrownu()
 				in_hand = FALSE;
 				already_exists = exist_artifact(ELVEN_MITHRIL_COAT, artiname(ART_WEB_OF_LOLTH));
 				verbalize("I crown thee...  The Hand of Lolth!");
+				livelog_write_string("became the Hand of Lolth");
 			} else { /*male*/
 				u.uevent.uhand_of_elbereth = 21;
 				in_hand = FALSE;
 				already_exists = exist_artifact(DROVEN_SHORT_SWORD, artiname(ART_LOLTH_S_FANG));
 				verbalize("I dub thee...  The Fang of Lolth!");
+				livelog_write_string("became the Fang of Lolth");
 			}
 		}
 	} else if(Race_if(PM_ELF)){
@@ -959,6 +996,7 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(ELVEN_BROADSWORD, artiname(ART_ARYVELAHR_KERYM));
 		verbalize("I dub thee...  The Whisperer of Este!");
+		livelog_write_string("became the Whisperer of Este");
 	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
 		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
 	) {
@@ -966,38 +1004,45 @@ gcrownu()
 		in_hand = FALSE;
 		already_exists = exist_artifact(SILVER_ARROW, artiname(ART_MOONBEAM));
 		verbalize("I anoint thee...  High %s of Diana!", flags.female ? "Priestess" : "Priest");
+		livelog_write_string("anointed by Diana");
 	} else if(Race_if(PM_GNOME) && Role_if(PM_RANGER)) {
 		u.uevent.uhand_of_elbereth = 33;
 		in_hand = FALSE;
 		already_exists = exist_artifact(GAUNTLETS_OF_POWER, artiname(ART_GREAT_CLAWS_OF_URDLEN));
 		verbalize("Thou art chosen to rend the Earth in My Name!");
+		livelog_write_string("chosen by Urdlen");
 	} else if(Pantheon_if(PM_HEALER) || Role_if(PM_HEALER)){
 		u.uevent.uhand_of_elbereth = 36;
 		in_hand = FALSE;
 		already_exists = exist_artifact(TRIDENT, artiname(ART_POSEIDON_S_TRIDENT));
 		verbalize("I dub thee... Glory of Poseidon!");
+		livelog_write_string("became the Glory of Poseidon");
 	} else if(Pantheon_if(PM_MONK) || Role_if(PM_MONK)){
 		u.uevent.uhand_of_elbereth = 6;
 		in_hand = FALSE;
 		already_exists = exist_artifact(ROBE, artiname(ART_ROBE_OF_THE_ARCHMAGI));
 		verbalize("Thou art chosen to cause dismay in My Name!");
+		livelog_write_string("became the Glory of Eequor");
 	} else if(Pantheon_if(PM_WIZARD) || Role_if(PM_WIZARD)){
 		u.uevent.uhand_of_elbereth = 12;
 		in_hand = FALSE;
 		already_exists = exist_artifact(SPE_SECRETS, artiname(ART_NECRONOMICON));
 		if(already_exists) already_exists = exist_artifact(SPE_SECRETS, artiname(ART_BOOK_OF_INFINITE_SPELLS));
 		verbalize("Thou art chosen to take lives for My Glory!");
+		livelog_write_string("became the Glory of Chardros");
 	} else if(Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)){
 		u.uevent.uhand_of_elbereth = 9;
 		in_hand = FALSE;
 		already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
 		verbalize("I crown thee...  Dark %s!", flags.female ? "Lady" : "Lord");
+		livelog_write_string("recieved the helm of the Dark Lord");
 	} else {
 		u.uevent.uhand_of_elbereth = 3;
 		in_hand = (uwep && uwep->oartifact == ART_STORMBRINGER);
 		already_exists = exist_artifact(RUNESWORD, artiname(ART_STORMBRINGER));
 		verbalize("Thou art chosen to %s for My Glory!",
 			  already_exists && !in_hand ? "take lives" : "steal souls");
+		livelog_write_string("became the Glory of Arioch");
 	}
 	break;
     }
@@ -1450,14 +1495,16 @@ gcrownu()
 	}
 
     /* enhance weapon regardless of alignment or artifact status */
-    if (ok_wep(obj)) {
+    if (ok_wep(obj) || ok_arm(obj)) {
 		bless(obj);
 		obj->oeroded = obj->oeroded2 = 0;
 		obj->oerodeproof = TRUE;
 		obj->bknown = obj->rknown = TRUE;
 		if (obj->spe < 1) obj->spe = 1;
 		/* acquire skill in this weapon */
-		unrestrict_weapon_skill(weapon_type(obj));
+		if (ok_wep(obj)) {
+			unrestrict_weapon_skill(weapon_type(obj));
+		}
     } else if (class_gift == STRANGE_OBJECT) {
 		/* opportunity knocked, but there was nobody home... */
 		You_feel("unworthy.");

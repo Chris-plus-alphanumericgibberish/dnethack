@@ -5871,6 +5871,7 @@ arti_invoke(obj)
 			if(!u.uevent.uread_necronomicon){
 				if(obj->ovar1) You("find notes scribbled the margins!  These will come in handy!");
 				u.uevent.uread_necronomicon = 1;
+				livelog_write_string("read the necronomicon for the first time");
 			}
 			discover_artifact(ART_NECRONOMICON);
 			identify(obj);

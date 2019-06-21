@@ -172,14 +172,14 @@ STATIC_DCL boolean FDECL(help_dir, (CHAR_P,const char *));
 #ifdef OVL1
 
 STATIC_PTR int
-doprev_message(VOID_ARGS)
+doprev_message()
 {
     return nh_doprev_message();
 }
 
 /* Count down by decrementing multi */
 STATIC_PTR int
-timed_occupation(VOID_ARGS)
+timed_occupation()
 {
 	(*timed_occ_fn)();
 	if (multi > 0)
@@ -296,7 +296,7 @@ char ch;
 #ifdef OVLB
 
 STATIC_PTR int
-doextcmd(VOID_ARGS)	/* here after # - now read a full-word command */
+doextcmd()	/* here after # - now read a full-word command */
 {
 	int idx, retval;
 
@@ -312,7 +312,7 @@ doextcmd(VOID_ARGS)	/* here after # - now read a full-word command */
 }
 
 int
-doextlist(VOID_ARGS)	/* here after #? - now list all full-word commands */
+doextlist()	/* here after #? - now list all full-word commands */
 {
 	register const struct ext_func_tab *efp;
 	char	 buf[BUFSZ];
@@ -833,7 +833,7 @@ use_reach_attack()
 		
 		find_to_hit_rolls(mtmp, &tmp, &tmpw, &tmpt);
 		
-	    (void) hmonas(mtmp, youmonst.data, tmp, tmpw, tmpt);
+	    (void) hmonas(mtmp, tmp, tmpw, tmpt);
 	} else
 	    /* Now you know that nothing is there... */
 	    pline("%s", nothing_happens);
@@ -1066,7 +1066,7 @@ dounmaintain()
 		if (!spell_maintained(spell))
 			continue;
 		
-		Sprintf(buf,	OBJ_NAME(objects[spell]));
+		Sprintf(buf,	"%s", OBJ_NAME(objects[spell]));
 		any.a_int = spell;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -3633,7 +3633,7 @@ minimal_enlightenment()
 }
 
 STATIC_PTR int
-doattributes(VOID_ARGS)
+doattributes()
 {
 	if (!minimal_enlightenment())
 		return 0;

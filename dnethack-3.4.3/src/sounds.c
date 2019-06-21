@@ -2053,11 +2053,12 @@ int commander;
 
 	default:
 		for (i = 0; command_chain[i][0] >= LOW_PM; i++)
-		if (follower == command_chain[i][0])
+		if (follower == command_chain[i][0]) {
 			if (commander == command_chain[i][1])
 				return TRUE;
 			else
 				return permon_in_command_chain(command_chain[i][1], commander);
+		}
 		break;
 	}
 	return FALSE;

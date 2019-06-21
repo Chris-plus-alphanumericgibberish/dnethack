@@ -23,7 +23,7 @@ extern boolean m_using;
 STATIC_DCL void FDECL(polyuse, (struct obj*, int, int));
 STATIC_DCL void FDECL(create_polymon, (struct obj *, int));
 STATIC_DCL boolean FDECL(zap_updown, (struct obj *));
-STATIC_DCL int FDECL(zhitm, (struct monst *,int,int,boolean,int,int,struct obj **));
+STATIC_DCL int FDECL(zhitm, (struct monst *,int,int,int,int,int,struct obj **));
 STATIC_DCL void FDECL(zhitu, (int,int,int,int,const char *,XCHAR_P,XCHAR_P));
 #ifdef STEED
 STATIC_DCL boolean FDECL(zap_steed, (struct obj *));
@@ -3451,7 +3451,7 @@ STATIC_OVL int
 zhitm(mon, adtyp, olet, yours, nd, flat, ootmp)			/* returns damage to mon */
 struct monst *mon;
 int adtyp, olet;
-boolean yours;
+int yours;
 int nd, flat;
 struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 {
@@ -4045,7 +4045,7 @@ void
 buzz(adtyp, olet, yours, nd, sx, sy, dx, dy, range, flat)
 int adtyp, olet;
 int nd;
-boolean yours;
+int yours;
 xchar sx,sy;
 int dx, dy, range, flat;
 {
@@ -4520,7 +4520,7 @@ int
 zap_over_floor(x, y, adtyp, olet, yours, shopdamage)
 xchar x, y;
 int adtyp, olet;
-boolean yours;
+int yours;
 boolean *shopdamage;
 {
 	struct monst *mon;

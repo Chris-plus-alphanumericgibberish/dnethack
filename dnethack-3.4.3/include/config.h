@@ -278,6 +278,12 @@ typedef signed char	schar;
 typedef unsigned char	uchar;
 #endif
 
+/* TODO: include inttypes.h or stdint.h and use uint32_t instead of long? */
+typedef long glyph_t;
+
+#define UTF8_GLYPHS	/* Allow UTF8 glyphs for monsters, objects and dungeon */
+/* #define HAVE_SETLOCALE */ /* Query locale, if UTF8 is supported? */
+
 /*
  * Various structures have the option of using bitfields to save space.
  * If your C compiler handles bitfields well (e.g., it can initialize structs

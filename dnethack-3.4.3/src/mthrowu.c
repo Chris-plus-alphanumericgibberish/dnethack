@@ -1994,7 +1994,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	    }
 	    if(!mtmp->mspec_used && rn2(3)) {
 
-		if((typ >= AD_MAGM) && (typ <= AD_ACID) || typ == AD_GOLD) {
+		if(((typ >= AD_MAGM) && (typ <= AD_ACID)) || typ == AD_GOLD) {
 
 		    if(canseemon(mtmp))
 			pline("%s breathes %s!", Monnam(mtmp),
@@ -2091,7 +2091,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	    }
 	    if(!mtmp->mspec_used && rn2(3)) {
 
-		if((typ >= AD_MAGM) && (typ <= AD_ACID) || typ == AD_GOLD) {
+		if(((typ >= AD_MAGM) && (typ <= AD_ACID)) || typ == AD_GOLD) {
 
 		    if(canseemon(mtmp))
 		    {

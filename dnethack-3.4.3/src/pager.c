@@ -13,14 +13,31 @@
 
 STATIC_DCL boolean FDECL(is_swallow_sym, (int));
 STATIC_DCL int FDECL(append_str, (char *, const char *));
-STATIC_DCL struct permonst * FDECL(lookat, (int, int, char *, char *, char *));
-STATIC_DCL void FDECL(checkfile,
-		      (char *,struct permonst *,BOOLEAN_P,BOOLEAN_P));
+STATIC_DCL struct monst * FDECL(lookat, (int, int, char *, char *, char *));
 STATIC_DCL int FDECL(do_look, (BOOLEAN_P));
 STATIC_DCL boolean FDECL(help_menu, (int *));
+STATIC_DCL char * get_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_generation_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_weight_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_resistance_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_weakness_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_conveys_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_mm_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_mt_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_mb_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_ma_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_mv_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_mg_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_speed_description_of_monster_type(struct monst *, char *);
+STATIC_DCL char * get_description_of_attack_type(uchar);
+STATIC_DCL char * get_description_of_damage_type(uchar);
+STATIC_DCL char * get_description_of_damage_prefix(uchar, uchar);
+STATIC_DCL int generate_list_of_resistances(struct monst *, char *, int);
 #ifdef PORT_HELP
 extern void NDECL(port_help);
 #endif
+
+extern const int monstr[];
 
 /* Returns "true" for characters that could represent a monster's stomach. */
 STATIC_OVL boolean
@@ -95,7 +112,7 @@ static const char * const bodyStr[] = {
  * Return the name of the glyph found at (x,y).
  * If not hallucinating and the glyph is a monster, also monster data.
  */
-STATIC_OVL struct permonst *
+STATIC_OVL struct monst *
 lookat(x, y, buf, monbuf, shapebuff)
     int x, y;
     char *buf, *monbuf, *shapebuff;
@@ -443,7 +460,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 	break;
     }
 
-    return ((pm && !Hallucination) ? pm : (struct permonst *) 0);
+    return ((mtmp && !Hallucination) ? mtmp : (struct monst *) 0);
 }
 
 /*
@@ -456,7 +473,7 @@ lookat(x, y, buf, monbuf, shapebuff)
  *	 lcase() for data.base lookup so that we can have a clean key.
  *	 Therefore, we create a copy of inp _just_ for data.base lookup.
  */
-STATIC_OVL void
+void
 checkfile(inp, pm, user_typed_name, without_asking)
     char *inp;
     struct permonst *pm;
@@ -1017,12 +1034,14 @@ do_look(quick)
     char    out_str[BUFSZ], look_buf[BUFSZ];
     const char *x_str, *firstmatch = 0;
     struct permonst *pm = 0;
+    struct monst *mtmp = 0;
     int     i, ans = 0;
-    int     sym;		/* typed symbol or converted glyph */
+    glyph_t sym;		/* typed symbol or converted glyph */
     int	    found;		/* count of matching syms found */
     coord   cc;			/* screen pos of unknown glyph */
     boolean save_verbose;	/* saved value of flags.verbose */
     boolean from_screen;	/* question from the screen */
+    boolean force_defsyms;	/* force using glyphs from defsyms[].sym */
     boolean need_to_look;	/* need to get explan. from glyph */
     boolean hit_trap;		/* true if found trap explanation */
     int skipped_venom;		/* non-zero if we ignored "splash of venom" */
@@ -1122,7 +1141,7 @@ do_look(quick)
 		monexplain[i]) {
 		need_to_look = TRUE;
 		if (!found) {
-		    Sprintf(out_str, "%c       %s", sym, an(monexplain[i]));
+		    Sprintf(out_str, "%c       %s", (uchar)sym, an(monexplain[i]));
 		    firstmatch = monexplain[i];
 		    found++;
 		} else {
@@ -1146,7 +1165,7 @@ do_look(quick)
 	 */
 	if (u.uswallow && from_screen && is_swallow_sym(sym)) {
 	    if (!found) {
-		Sprintf(out_str, "%c       %s", sym, mon_interior);
+		Sprintf(out_str, "%c       %s", (uchar)sym, mon_interior);
 		firstmatch = mon_interior;
 	    } else {
 		found += append_str(out_str, mon_interior);
@@ -1163,7 +1182,7 @@ do_look(quick)
 		    continue;
 		}
 		if (!found) {
-		    Sprintf(out_str, "%c       %s", sym, an(objexplain[i]));
+		    Sprintf(out_str, "%c       %s", (uchar)sym, an(objexplain[i]));
 		    firstmatch = objexplain[i];
 		    found++;
 			hallu_obj++;
@@ -1175,7 +1194,7 @@ do_look(quick)
 
 	if (sym == DEF_INVISIBLE) {
 	    if (!found) {
-		Sprintf(out_str, "%c       %s", sym, an(invisexplain));
+		Sprintf(out_str, "%c       %s", (uchar)sym, an(invisexplain));
 		firstmatch = invisexplain;
 		found++;
 	    } else {
@@ -1198,12 +1217,12 @@ do_look(quick)
 
 		if (!found) {
 		    if (is_cmap_trap(i)) {
-			Sprintf(out_str, "%c       a trap", sym);
+			Sprintf(out_str, "%c       a trap", (uchar)sym);
 			hit_trap = TRUE;
 		    } else if (level.flags.lethe && !strcmp(x_str, "water")) { //Lethe patch
-			Sprintf(out_str, "%c       sparkling water", sym); //Lethe patch
+			Sprintf(out_str, "%c       sparkling water", (uchar)sym); //Lethe patch
 		    } else {
-			Sprintf(out_str, "%c       %s", sym,
+			Sprintf(out_str, "%c       %s", (uchar)sym,
 				article == 2 ? the(x_str) :
 				article == 1 ? an(x_str) : x_str);
 		    }
@@ -1231,7 +1250,7 @@ do_look(quick)
 	    if (sym == (from_screen ? warnsyms[i] : def_warnsyms[i].sym)) {
 		if (!found) {
 			Sprintf(out_str, "%c       %s",
-				sym, def_warnsyms[i].explanation);
+				(uchar)sym, def_warnsyms[i].explanation);
 			firstmatch = def_warnsyms[i].explanation;
 			found++;
 		} else {
@@ -1249,7 +1268,7 @@ do_look(quick)
 	if (skipped_venom && found < 2) {
 	    x_str = objexplain[VENOM_CLASS];
 	    if (!found) {
-		Sprintf(out_str, "%c       %s", sym, an(x_str));
+		Sprintf(out_str, "%c       %s", (uchar)sym, an(x_str));
 		firstmatch = x_str;
 		found++;
 	    } else {
@@ -1261,7 +1280,7 @@ do_look(quick)
 	if (iflags.bouldersym && sym == iflags.bouldersym) {
 	    if (!found) {
 		firstmatch = "boulder";
-		Sprintf(out_str, "%c       %s", sym, an(firstmatch));
+		Sprintf(out_str, "%c       %s", (uchar)sym, an(firstmatch));
 		found++;
 	    } else {
 		found += append_str(out_str, "boulder");
@@ -1283,7 +1302,7 @@ do_look(quick)
 		char shapebuf[BUFSZ];
 		char temp_buf[BUFSZ];
 
-		pm = lookat(cc.x, cc.y, look_buf, monbuf, shapebuf);
+		mtmp = lookat(cc.x, cc.y, look_buf, monbuf, shapebuf);
 		firstmatch = look_buf;
 		if (*firstmatch) {
 			if(shapebuf[0]){
@@ -1303,12 +1322,28 @@ do_look(quick)
 		    Sprintf(temp_buf, " [seen: %s]", monbuf);
 		    (void)strncat(out_str, temp_buf, BUFSZ-strlen(out_str)-1);
 		}
+		if (mtmp != (struct monst *) 0) {
+			strcat(out_str, "\n");
+			temp_buf[0] = '\0';
+			get_description_of_monster_type(mtmp, temp_buf);
+			(void)strncat(out_str, temp_buf, BUFSZ - strlen(out_str) - 1);
+		}
 		}
 	}
 
 	/* Finally, print out our explanation. */
 	if (found) {
-	    pline("%s", out_str);
+		winid datawin = create_nhwindow(NHW_MENU);
+		char * temp_print;
+		temp_print = strtok(out_str, "\n");
+		while (temp_print != NULL)
+		{
+			putstr(datawin, 0, temp_print);
+			temp_print = strtok(NULL, "\n");
+		}
+		display_nhwindow(datawin, TRUE);
+		destroy_nhwindow(datawin);
+	    //pline("%s", out_str);
 	    /* check the data file for information about this thing */
 	    if (found == 1 && ans != LOOK_QUICK && ans != LOOK_ONCE &&
 			(ans == LOOK_VERBOSE || (flags.help && !quick))) {
@@ -1328,6 +1363,791 @@ do_look(quick)
     return 0;
 }
 
+
+int
+append(char * buf, int condition, char * text, boolean many)
+{
+	if (condition) {
+		if (buf != NULL) {
+			if (many) {
+				(void)strcat(buf, ", ");
+			}
+			(void)strcat(buf, text);
+		}
+		return many + 1;
+	}
+	return many;
+}
+int
+appendgroup(char * buf, int condition, char * primer, char * text, boolean many, boolean group)
+{
+	if (condition) {
+		if (buf != NULL) {
+			if (group) {
+				(void)strcat(buf, "/");
+			}
+			else {
+				if (many)
+					(void)strcat(buf, ", ");
+				(void)strcat(buf, primer);
+				(void)strcat(buf, " ");
+			}
+			(void)strcat(buf, text);
+		}
+		return group + 1;
+	}
+	return group;
+}
+
+int
+generate_list_of_resistances(struct monst * mtmp, char * temp_buf, int resists)
+{
+	unsigned int mr_flags;
+	unsigned long mg_flags = mtmp->data->mflagsg;
+	if (resists == 1)
+	{
+		mr_flags = mtmp->data->mresists;
+		if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED)
+			mr_flags = mr_flags | MR_COLD | MR_SLEEP | MR_POISON | MR_DRAIN | MG_RPIERCE | ((mtmp->mfaction == ZOMBIFIED) ? MG_RBLUNT : MG_RSLASH);
+	}
+	if (resists == 0)
+		mr_flags = mtmp->data->mconveys;
+	int many = 0;
+	many = append(temp_buf, (mr_flags & MR_FIRE), "fire", many);
+	many = append(temp_buf, (mr_flags & MR_COLD), "cold", many);
+	many = append(temp_buf, (mr_flags & MR_SLEEP), "sleep", many);
+	many = append(temp_buf, (mr_flags & MR_DISINT), "disintegration", many);
+	many = append(temp_buf, (mr_flags & MR_ELEC), "electricity", many);
+	many = append(temp_buf, (mr_flags & MR_POISON), "poison", many);
+	many = append(temp_buf, (mr_flags & MR_ACID), "acid", many);
+	many = append(temp_buf, (mr_flags & MR_STONE), "petrification", many);
+	many = append(temp_buf, (mr_flags & MR_DRAIN), "level drain", many);
+	many = append(temp_buf, (mr_flags & MR_SICK), "sickness", many);
+	many = append(temp_buf, (mr_flags & MR_MAGIC), "magic", many);
+	many = append(temp_buf, (((mg_flags & MG_WRESIST) != 0L) && resists == 1), "weapon attacks", many);
+	many = append(temp_buf, (((mg_flags & MG_RBLUNT ) != 0L) && resists == 1), "blunt", many);
+	many = append(temp_buf, (((mg_flags & MG_RSLASH ) != 0L) && resists == 1), "slashing", many);
+	many = append(temp_buf, (((mg_flags & MG_RPIERCE) != 0L) && resists == 1), "piercing", many);
+	//many = append(temp_buf, ((mg_flags & MG_RALL) == MG_RALL), "blunt & slashing & piercing", many);
+	return many;
+}
+
+char *
+get_generation_description_of_monster_type(struct monst * mtmp, char * temp_buf)
+{
+	struct permonst * ptr = mtmp->data;
+	int many = 0;
+
+	many = append(temp_buf, !(ptr->geno & G_NOGEN), "Normal generation", many);
+	many = append(temp_buf, (ptr->geno & G_NOGEN), "Special generation", many);
+	many = append(temp_buf, (ptr->geno & G_UNIQ), "unique", many);
+	many = 0;
+	many = append(temp_buf, (ptr->geno & G_SGROUP), " in groups", many);
+	many = append(temp_buf, (ptr->geno & G_LGROUP), " in large groups", many);
+	if ((ptr->geno & G_NOGEN) == 0) {
+		char frequency[BUFSZ] = "";
+		sprintf(frequency, ", with frequency %d.", (ptr->geno & G_FREQ));
+		strcat(temp_buf, frequency);
+	}
+	else {
+		strcat(temp_buf, ".");
+	}
+	return temp_buf;
+}
+
+char *
+get_weight_description_of_monster_type(struct monst * mtmp, char * temp_buf)
+{
+	struct permonst * ptr = mtmp->data;
+
+	sprintf(temp_buf, "Weight = %d. Nutrition = %d.", ptr->cwt, ptr->cnutrit);
+
+	return temp_buf;
+}
+
+char *
+get_resistance_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	char temp_buf[BUFSZ] = "";
+	temp_buf[0] = '\0';
+	int count = generate_list_of_resistances(mtmp, temp_buf, 1);
+
+	if (species_reflects(mtmp))
+		strcat(description, "Reflects. ");
+
+	if (count == 0) {
+		strcat(description, "No resistances.");
+	}
+	else {
+		strcat(description, "Resists ");
+		strcat(description, temp_buf);
+		strcat(description, ".");
+	}
+	return description;
+}
+
+char *
+get_weakness_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	char temp_buf[BUFSZ] = "";
+	temp_buf[0] = '\0';
+	int many = 0;
+
+	many = append(temp_buf, hates_holy_mon(mtmp)	, "holy"		, many);
+	many = append(temp_buf, hates_unholy(ptr)		, "unholy"		, many);
+	many = append(temp_buf, hates_silver(ptr)		, "silver"		, many);
+	many = append(temp_buf, hates_iron(ptr)			, "iron"		, many);
+
+	if (many) {
+		strcat(description, "Weak to ");
+		strcat(description, temp_buf);
+		strcat(description, ".");
+	}
+	return description;
+}
+
+char *
+get_conveys_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	char temp_buf[BUFSZ] = "";
+	temp_buf[0] = '\0';
+	int count = generate_list_of_resistances(mtmp, temp_buf, 0);
+	if ((ptr->geno & G_NOCORPSE) != 0 || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED) {
+		strcat(description, "Leaves no corpse. ");
+	}
+	else if (count == 0) {
+		strcat(description, "Corpse conveys no resistances. ");
+	}
+	else {
+		strcat(description, "Corpse conveys ");
+		strcat(description, temp_buf);
+		if (count == 1) {
+			strcat(description, " resistance. ");
+		}
+		else {
+			strcat(description, " resistances. ");
+		}
+	}
+
+	return description;
+}
+
+char *
+get_mm_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	strcat(description, "Movement: ");
+	int many = 0;
+	many = append(description, notonline(ptr)			, "avoids you"			, many);
+	many = append(description, fleetflee(ptr)			, "flees"				, many);
+	many = append(description, is_flyer(ptr)			, "flies"				, many);
+	many = append(description, is_floater(ptr)			, "floats"				, many);
+	many = append(description, is_clinger(ptr)			, "clings to ceilings"	, many);
+	many = append(description, is_swimmer(ptr)			, "swims"				, many);
+	many = append(description, breathless_mon(mtmp)		, "is breathless"		, many);
+	many = append(description, amphibious(ptr)			, "survives underwater"	, many);
+	many = append(description, passes_walls(ptr)		, "phases"				, many);
+	many = append(description, amorphous(ptr)			, "squeezes in gaps"	, many);
+	many = append(description, tunnels(ptr)				, "tunnels"				, many);
+	many = append(description, needspick(ptr)			, "digs"				, many);
+	many = append(description, can_teleport(ptr)		, "teleports"			, many);
+	many = append(description, control_teleport(ptr)	, "controls teleports"	, many);
+	many = append(description, mteleport(ptr)			, "teleports often"		, many);
+	many = append(description, stationary(ptr)			, "stationary"			, many);
+	many = append(description, (many==0)				, "moves normally"		, many);
+	strcat(description, ". ");
+	return description;
+}
+
+char *
+get_mt_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	strcat(description, "Thinking: ");
+	int many = 0;
+	int eats = 0;
+	int likes = 0;
+	int wants = 0;
+
+	many = append(description, bold(ptr)				, "fearless"					, many);
+	many = append(description, hides_under(ptr)			, "hides"						, many);
+	many = append(description, is_hider(ptr)			, "camoflauged"					, many);
+	many = append(description, notake(ptr)				, "doesn't pick up items"		, many);
+	many = append(description, mindless_mon(mtmp)		, "mindless"					, many);
+	many = append(description, is_animal(ptr)			, "animal minded"				, many);
+	eats = appendgroup(description, carnivorous(ptr)	, "eats",	"meat"				, many, eats);
+	eats = appendgroup(description, herbivorous(ptr)	, "eats",	"veggies"			, many, eats);
+	eats = appendgroup(description, metallivorous(ptr)	, "eats",	"metal"				, many, eats);
+	many = appendgroup(description, magivorous(ptr)		, "eats",	"magic"				, many, eats) + many;
+	many = append(description, is_domestic(ptr)			, "domestic"					, many);
+	many = append(description, is_wanderer(ptr)			, "wanders"						, many);
+	many = append(description, always_hostile_mon(mtmp)	, "usually hostile"				, many);
+	many = append(description, always_peaceful(ptr)		, "usually peaceful"			, many);
+	many = append(description, throws_rocks(ptr)		, "throws rocks"				, many);
+	likes= appendgroup(description, likes_gold(ptr)		, "likes",	"gold"				, many, likes);
+	likes= appendgroup(description, likes_gems(ptr)		, "likes",	"gems"				, many, likes);
+	likes= appendgroup(description, likes_objs(ptr)		, "likes",	"equipment"			, many, likes);
+	many = appendgroup(description, likes_magic(ptr)	, "likes",	"magic items"		, many, likes) + many;
+	wants= appendgroup(description, wants_bell(ptr)		, "wants",	"the bell"				, many, wants);
+	wants= appendgroup(description, wants_book(ptr)		, "wants",	"the book"				, many, wants);
+	wants= appendgroup(description, wants_cand(ptr)		, "wants",	"the candalabrum"		, many, wants);
+	wants= appendgroup(description, wants_qart(ptr)		, "wants",	"your quest artifact"	, many, wants);
+	many = appendgroup(description, wants_amul(ptr)		, "wants",	"the amulet"			, many, wants) + many;
+	many = append(description, can_betray(ptr)			, "traitorous"					, many);
+	many = append(description, (many==0)				, "nothing special"				, many);
+	strcat(description, ". ");
+	return description;
+}
+char *
+get_mb_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	strcat(description, "Body: ");
+	int many = 0;
+	many = append(description, your_race(ptr)			, "same race as you"		, many);
+	many = append(description, !haseyes(ptr)			, "eyeless"					, many);
+	many = append(description, sensitive_ears(ptr)		, "has sensitive ears"		, many);
+	many = append(description, nohands(ptr)				, "handless"				, many);
+	many = append(description, nolimbs(ptr)				, "limbless"				, many);
+	many = append(description, !has_head(ptr)			, "headless"				, many);
+	many = append(description, has_horns(ptr)			, "has horns"				, many);
+	many = append(description, is_whirly(ptr)			, "whirly"					, many);
+	many = append(description, flaming(ptr)				, "flaming"					, many);
+	many = append(description, is_stone(ptr)			, "stony"					, many);
+	many = append(description, is_anhydrous(ptr)		, "water-less"				, many);
+	many = append(description, unsolid(ptr)				, "unsolid"					, many);
+	many = append(description, slithy(ptr)				, "slithy"					, many);
+	many = append(description, thick_skinned(ptr)		, "thick-skinned"			, many);
+	many = append(description, lays_eggs(ptr)			, "oviparus"				, many);
+	many = append(description, acidic(ptr)				, "acidic to eat"			, many);
+	many = append(description, poisonous(ptr)			, "poisonous to eat"		, many);
+	many = append(description, freezing(ptr)			, "freezing to eat"			, many);
+	many = append(description, burning(ptr)				, "burning to eat"			, many);
+	many = append(description, hallucinogenic(ptr)		, "hallucinogenic to eat"	, many);
+	many = append(description, is_deadly(ptr)			, "deadly to eat"			, many);
+	many = append(description, is_male(ptr)				, "always male"				, many);
+	many = append(description, is_female(ptr)			, "always female"			, many);
+	many = append(description, is_neuter(ptr)			, "neuter"					, many);
+	many = append(description, strongmonst(ptr)			, "strong"					, many);
+	many = append(description, infravisible(ptr)		, "infravisible"			, many);
+	many = append(description, humanoid(ptr)			, "humanoid"				, many);
+	many = append(description, animaloid(ptr)			, "animaloid"				, many);
+	many = append(description, serpentine(ptr)			, "serpent"					, many);
+	many = append(description, centauroid(ptr)			, "centauroid"				, many);
+	many = append(description, snakemanoid(ptr)			, "human-serpent"			, many);
+	many = append(description, leggedserpent(ptr)		, "animal-serpent"			, many);
+	many = append(description, (many==0)				, "unknown thing"			, many);
+	strcat(description, ". ");
+	return description;
+}
+
+char *
+get_ma_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	strcat(description, "Race: ");
+	int many = 0;
+	many = append(description, (is_undead_mon(mtmp))			, "undead"				, many);
+	many = append(description, (ptr->mflagsa & MA_WERE)			, "lycanthrope"			, many);
+	many = append(description, (ptr->mflagsa & MA_HUMAN)		, "human"				, many);
+	many = append(description, (ptr->mflagsa & MA_ELF)			, "elf"					, many);
+	many = append(description, (ptr->mflagsa & MA_DROW)			, "drow"				, many);
+	many = append(description, (ptr->mflagsa & MA_DWARF)		, "dwarf"				, many);
+	many = append(description, (ptr->mflagsa & MA_GNOME)		, "gnome"				, many);
+	many = append(description, (ptr->mflagsa & MA_ORC)			, "orc"					, many);
+	many = append(description, (ptr->mflagsa & MA_VAMPIRE)		, "vampire"				, many);
+	many = append(description, (ptr->mflagsa & MA_CLOCK)		, "clockwork automaton"	, many);
+	many = append(description, (ptr->mflagsa & MA_UNLIVING)		, "not alive"			, many);
+	many = append(description, (ptr->mflagsa & MA_PLANT)		, "plant"				, many);
+	many = append(description, (ptr->mflagsa & MA_GIANT)		, "giant"				, many);
+	many = append(description, (ptr->mflagsa & MA_INSECTOID)	, "insectoid"			, many);
+	many = append(description, (ptr->mflagsa & MA_ARACHNID)		, "arachind"			, many);
+	many = append(description, (ptr->mflagsa & MA_AVIAN)		, "avian"				, many);
+	many = append(description, (ptr->mflagsa & MA_REPTILIAN)	, "reptilian"			, many);
+	many = append(description, (ptr->mflagsa & MA_ANIMAL)		, "mundane animal"		, many);
+	many = append(description, (ptr->mflagsa & MA_AQUATIC)		, "water-dweller"		, many);
+	many = append(description, (ptr->mflagsa & MA_DEMIHUMAN)	, "demihuman"			, many);
+	many = append(description, (ptr->mflagsa & MA_FEY)			, "fey"					, many);
+	many = append(description, (ptr->mflagsa & MA_ELEMENTAL)	, "elemental"			, many);
+	many = append(description, (ptr->mflagsa & MA_DRAGON)		, "dragon"				, many);
+	many = append(description, (ptr->mflagsa & MA_DEMON)		, "demon"				, many);
+	many = append(description, (ptr->mflagsa & MA_MINION)		, "minion of a deity"	, many);
+	many = append(description, (ptr->mflagsa & MA_PRIMORDIAL)	, "primordial"			, many);
+	many = append(description, (ptr->mflagsa & MA_ET)			, "alien"				, many);
+	strcat(description, ". ");
+	return description;
+}
+
+char *
+get_mv_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	strcat(description, "Vision: ");
+	int many = 0;
+	many = append(description, goodsmeller(ptr)			, "scent"					, many);
+	many = append(description, perceives(ptr)			, "see invisible"			, many);
+	many = append(description, telepathic(ptr)			, "telepathy"				, many);
+	many = append(description, normalvision(ptr)		, "normal vision"			, many);
+	many = append(description, darksight(ptr)			, "darksight"				, many);
+	many = append(description, catsight(ptr)			, "catsight"				, many);
+	many = append(description, lowlightsight2(ptr)		, "good low light vision"	, many);
+	many = append(description, lowlightsight3(ptr)		, "great low light vision"	, many);
+	many = append(description, echolocation(ptr)		, "echolocation"			, many);
+	many = append(description, extramission(ptr)		, "extramission"			, many);
+	many = append(description, rlyehiansight(ptr)		, "rlyehian sight"			, many);
+	many = append(description, infravision(ptr)			, "infravision"				, many);
+	many = append(description, bloodsense(ptr)			, "bloodsense"				, many);
+	many = append(description, lifesense(ptr)			, "lifesense"				, many);
+	many = append(description, earthsense(ptr)			, "earthsense"				, many);
+	many = append(description, senseall(ptr)			, "senseall"				, many);
+	many = append(description, (many==0)				, "blind"					, many);
+	strcat(description, ". ");
+	return description;
+}
+char * get_mg_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	struct permonst * ptr = mtmp->data;
+	strcat(description, "Mechanics: ");
+	int many = 0;
+	many = append(description, is_tracker(ptr)			, "tracks you"				, many);
+	many = append(description, is_displacer(ptr)		, "displacing"				, many);
+	many = append(description, polyok(ptr)				, "valid polymorph form"	, many);
+	many = append(description, !polyok(ptr)				, "invalid polymorph form"	, many);
+	many = append(description, is_untamable(ptr)		, "untamable"				, many);
+	many = append(description, extra_nasty(ptr)			, "nasty"					, many);
+	many = append(description, nospellcooldowns(ptr)	, "quick-caster"			, many);
+	many = append(description, is_lord(ptr)				, "lord"					, many);
+	many = append(description, is_prince(ptr)			, "prince"					, many);
+	many = append(description, opaque(ptr)				, "opaque"					, many);
+	many = append(description, regenerates(ptr)			, "regenerating"			, many);
+	many = append(description, levl_follower(mtmp)		, "stalks you"				, many);
+	many = append(description, (many==0)				, "normal"					, many);
+	strcat(description, ". ");
+	return description;
+}
+
+char *
+get_speed_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	int speed = mtmp->data->mmove;
+	switch (mtmp->mfaction)
+	{
+	case ZOMBIFIED:
+		speed = max(6, speed * 1/2);
+		break;
+	case SKELIFIED:
+		speed = max(6, speed * 3/4);
+		break;
+	}
+	if (speed > 35) {
+		sprintf(description, "Extremely fast (%d). ", speed);
+	}
+	else if (speed > 19) {
+		sprintf(description, "Very fast (%d). ", speed);
+	}
+	else if (speed > 12) {
+		sprintf(description, "Fast (%d). ", speed);
+	}
+	else if (speed == 12) {
+		sprintf(description, "Normal speed (%d). ", speed);
+	}
+	else if (speed > 8) {
+		sprintf(description, "Slow (%d). ", speed);
+	}
+	else if (speed > 3) {
+		sprintf(description, "Very slow (%d). ", speed);
+	}
+	else if (speed > 0) {
+		sprintf(description, "Almost immobile (%d). ", speed);
+	}
+	else {
+		sprintf(description, "Immobile (%d). ", speed);
+	}
+
+	if (stationary(mtmp->data)) sprintf(description, "Can't move around. Speed %d. ", speed);
+
+	return description;
+}
+
+char *
+get_description_of_attack_type(uchar id)
+{
+	switch (id){
+	//case AT_ANY: return "fake attack; dmgtype_fromattack wildcard";
+	case AT_NONE: return "passive";
+	case AT_CLAW: return "claw";
+	case AT_BITE: return "bite";
+	case AT_KICK: return "kick";
+	case AT_BUTT: return "head butt";
+	case AT_TUCH: return "touch";
+	case AT_STNG: return "sting";
+	case AT_HUGS: return "crushing bearhug";
+	case AT_SPIT: return "spit";
+	case AT_ENGL: return "engulf";
+	case AT_BREA: return "breath";
+	case AT_EXPL: return "explosion";
+	case AT_BOOM: return "on death";
+	case AT_GAZE: return "targeted gaze";
+	case AT_TENT: return "tentacles";
+	case AT_ARRW: return "launch ammo";
+	case AT_WHIP: return "whip";
+	case AT_LRCH: return "reaching attack";
+	case AT_HODS: return "mirror attack";
+	case AT_LNCK: return "reaching bite";
+	case AT_MMGC: return "uses magic spell(s)";
+	case AT_ILUR: return "swallow attack";
+	case AT_HITS: return "automatic hit";
+	case AT_WISP: return "mist wisps";
+	case AT_TNKR: return "tinker";
+	case AT_SHDW: return "phasing";
+	case AT_BEAM: return "ranged beam";
+	case AT_DEVA: return "million-arm weapon";
+	case AT_5SQR: return "long reach touch";
+	case AT_WDGZ: return "passive gaze";
+	case AT_MARI: return "carried weapon";
+	case AT_XWEP: return "offhand weapon";
+	case AT_WEAP: return "weapon";
+	case AT_MAGC: return "uses magic spell(s)";
+	default:
+			impossible("bug in get_description_of_attack_type(%d)", id);
+			return "<MISSING DECRIPTION, THIS IS A BUG>";
+	}
+}
+
+char *
+get_description_of_damage_type(uchar id)
+{
+	switch (id){
+	//case AD_ANY: return "fake damage; attacktype_fordmg wildcard";
+	case AD_PHYS: return "physical";
+	case AD_MAGM: return "magic missiles";
+	case AD_FIRE: return "fire";
+	case AD_COLD: return "frost";
+	case AD_SLEE: return "sleep";
+	case AD_DISN: return "disintegration";
+	case AD_ELEC: return "shock";
+	case AD_DRST: return "poison (STR)";
+	case AD_ACID: return "acid";
+	case AD_SPC1: return "for extension of buzz()";
+	case AD_SPC2: return "for extension of buzz()";
+	case AD_BLND: return "blinds";
+	case AD_STUN: return "stuns";
+	case AD_SLOW: return "slows";
+	case AD_PLYS: return "paralyses";
+	case AD_DRLI: return "drains life";
+	case AD_DREN: return "drains energy";
+	case AD_LEGS: return "damages legs";
+	case AD_STON: return "petrifies";
+	case AD_STCK: return "sticky";
+	case AD_SGLD: return "steals gold";
+	case AD_SITM: return "steals item";
+	case AD_SEDU: return "seduces & steals multiple items";
+	case AD_TLPT: return "teleports you";
+	case AD_RUST: return "rusts armour";
+	case AD_CONF: return "confuses";
+	case AD_DGST: return "digests";
+	case AD_HEAL: return "heals wounds";
+	case AD_WRAP: return "crushes and drowns";
+	case AD_WERE: return "confers lycanthropy";
+	case AD_DRDX: return "poison (DEX)";
+	case AD_DRCO: return "poison (CON)";
+	case AD_DRIN: return "drains intelligence";
+	case AD_DISE: return "confers diseases";
+	case AD_DCAY: return "decays organics";
+	case AD_SSEX: return "seduces";
+	case AD_HALU: return "causes hallucination";
+	case AD_DETH: return "drains life force";
+	case AD_PEST: return "causes illness";
+	case AD_FAMN: return "causes hunger";
+	case AD_SLIM: return "slimes";
+	case AD_ENCH: return "disenchants";
+	case AD_CORR: return "corrodes armor";
+	case AD_POSN: return "poison";
+	case AD_WISD: return "drains wisdom";
+	case AD_VORP: return "vorpal strike";
+	case AD_SHRD: return "destroys armor";
+	case AD_SLVR: return "silver arrows";
+	case AD_BALL: return "iron balls";
+	case AD_BLDR: return "boulders";
+	case AD_VBLD: return "boulder volley";
+	case AD_TCKL: return "tickle";
+	case AD_WET: return "splash with water";
+	case AD_LETHE: return "splash with lethe water";
+	case AD_BIST: return "bisecting beak";
+	case AD_CNCL: return "cancelation";
+	case AD_DEAD: return "deadly gaze";
+	case AD_SUCK: return "sucks you apart";
+	case AD_MALK: return "immobilize and shock";
+	case AD_UVUU: return "splatters your head";
+	case AD_ABDC: return "abduction teleportation";
+	case AD_KAOS: return "spawn Chaos";
+	case AD_LSEX: return "seduces";
+	case AD_HLBD: return "creates demons";
+	case AD_SPNL: return "spawns Leviathan or Levistus";
+	case AD_MIST: return "migo mist projector";
+	case AD_TELE: return "monster teleports away";
+	case AD_POLY: return "polymorphs you";
+	case AD_PSON: return "psionic attacks.  uses some from cleric and wiz";
+	case AD_GROW: return "grows brethren on death";
+	case AD_SOUL: return "strengthens brethren on death";
+	case AD_TENT: return "LarienTelrunya's bane";
+	case AD_JAILER: return "sets Lucifer to apear and drops third key of law when killed";
+	case AD_AXUS: return "fire-shock-drain-cold combo";
+	case AD_UNKNWN: return "Priest of an unknown God";
+	case AD_SOLR: return "silver arrows";
+	case AD_CHKH: return "escalating damage";
+	case AD_HODS: return "mirror attack";
+	case AD_CHRN: return "cursed unicorn horn";
+	case AD_LOAD: return "loadstones";
+	case AD_GARO: return "physical damage + rumor";
+	case AD_GARO_MASTER: return "physical damage + oracle";
+	case AD_LVLT: return "level teleport";
+	case AD_BLNK: return "mental invasion";
+	case AD_WEEP: return "level teleport and drain";
+	case AD_SPOR: return "generate spore";
+	case AD_FNEX: return "fern spore explosion";
+	case AD_SSUN: return "reflected sunlight";
+	case AD_MAND: return "mandrake shriek";
+	case AD_BARB: return "retalitory physical";
+	case AD_LUCK: return "drains luck";
+	case AD_VAMP: return "drains blood";
+	case AD_WEBS: return "spreads webbing";
+	case AD_ILUR: return "drains memories";
+	case AD_TNKR: return "tinkers";
+	case AD_FRWK: return "firework explosions";
+	case AD_STDY: return "studies you, making you vulnerable";
+	case AD_OONA: return "Oona's energy type";
+	case AD_NTZC: return "anti-equipment";
+	case AD_WTCH: return "spawns tentacles";
+	case AD_SHDW: return "shadow weapons";
+	case AD_STTP: return "teleports your gear away";
+	case AD_HDRG: return "half-dragon breath";
+	case AD_STAR: return "silver starlight rapier";
+	case AD_EELC: return "elemental electric";
+	case AD_EFIR: return "elemental fire";
+	case AD_EDRC: return "elemental poison (CON)";
+	case AD_ECLD: return "elemental cold";
+	case AD_EACD: return "elemental acid";
+	case AD_CNFT: return "conflict-inducing touch";
+	case AD_BLUD: return "Sword of Blood";
+	case AD_SURY: return "Arrows of Slaying";
+	case AD_NPDC: return "drains constitution";
+	case AD_GLSS: return "silver mirror shards";
+	case AD_MERC: return "mercury blade";
+	case AD_GOLD: return "turns victim to gold";
+	case AD_DUNSTAN: return "stones throw themselves at target";
+	case AD_IRIS: return "iridescent tentacles";
+	case AD_NABERIUS: return "tarnished bloody fangs";
+	case AD_OTIAX: return "mist tendrals";
+	case AD_SIMURGH: return "thirty-colored feathers";
+	case AD_CMSL: return "cold missile";
+	case AD_FMSL: return "fire missile";
+	case AD_EMSL: return "electric missile";
+	case AD_SMSL: return "physical missile";
+	case AD_WMTG: return "War Machine targeting gaze";
+	case AD_CLRC: return "random clerical spell";
+	case AD_SPEL: return "random magic spell";
+	case AD_RBRE: return "random breath weapon";
+	case AD_RGAZ: return "random gaze attack";
+	case AD_RETR: return "elemental gaze attack";
+	case AD_SAMU: return "steal Amulet";
+	case AD_CURS: return "steal intrinsic";
+	case AD_SQUE: return "steal Quest Artifact or Amulet";
+	default:
+			impossible("bug in get_description_of_damage_type(%d)", id);
+			return "<MISSING DESCRIPTION, THIS IS A BUG>";
+	}
+}
+
+char *
+get_description_of_damage_prefix(uchar aatyp, uchar adtyp)
+{
+	switch (aatyp)
+	{
+	case AT_WEAP:
+	case AT_XWEP:
+	case AT_DEVA:
+		switch (adtyp)
+		{
+		case AD_PHYS:
+			return "";
+		case AD_FIRE:
+		case AD_COLD:
+		case AD_ELEC:
+		case AD_ACID:
+			return "physical + 4d6 ";
+		case AD_EFIR:
+		case AD_ECLD:
+		case AD_EELC:
+		case AD_EACD:
+			return "physical + 3d7 ";
+		default:
+			return "physical + ";
+		}
+		break;
+	}
+	return "";
+}
+
+char *
+get_description_of_attack(struct attack *mattk, char * main_temp_buf)
+{
+	if (!(mattk->damn + mattk->damd + mattk->aatyp + mattk->adtyp)) {
+		main_temp_buf[0] = '\0';
+		return main_temp_buf;
+	}
+
+	char temp_buf[BUFSZ] = "";
+	if (mattk->damn + mattk->damd) {
+		sprintf(main_temp_buf, "%dd%d", mattk->damn, mattk->damd);
+#ifndef USE_TILES
+		strcat(main_temp_buf, ",");
+#endif
+		strcat(main_temp_buf, " ");
+	}
+	else {
+		main_temp_buf[0] = '\0';
+	}
+#ifndef USE_TILES
+	while (strlen(main_temp_buf) < 6) {
+		strcat(main_temp_buf, " ");
+	}
+#endif
+	sprintf(temp_buf, "%s - %s%s", get_description_of_attack_type(mattk->aatyp), get_description_of_damage_prefix(mattk->aatyp, mattk->adtyp), get_description_of_damage_type(mattk->adtyp));
+	strcat(main_temp_buf, temp_buf);
+#ifdef USE_TILES
+	strcat(main_temp_buf, "; ");
+#endif
+	return main_temp_buf;
+}
+
+char *
+get_description_of_monster_type(struct monst * mtmp, char * description)
+{
+	/*
+	pline("%d<><><>", plined_length("12345678901234567890123456789012345678901234567890123456789012345678901234567890"));//0 passed
+	pline("%d<><><>", plined_length("1234567890123456789012345678901234567890123456789012345678901234567890123456789"));
+	*/
+	char temp_buf[BUFSZ] = "";
+	char main_temp_buf[BUFSZ] = "";
+	struct permonst * ptr = mtmp->data;
+	int monsternumber = monsndx(ptr);
+
+	char name[BUFSZ] = "";
+	Strcat(name, ptr->mname);
+	if (mtmp->mfaction == ZOMBIFIED)		Strcat(name, " zombie");
+	else if (mtmp->mfaction == SKELIFIED)	Strcat(name, " skeleton");
+	else if (mtmp->mfaction == CRYSTALFIED) Strcat(name, " vitrean");
+	else if (mtmp->mfaction == FRACTURED)	Strcat(name, " witness");
+
+	temp_buf[0] = '\0';
+	if (iflags.pokedex) {
+		sprintf(temp_buf, "Accessing Pokedex entry for %s... ", (!Upolyd || (monsternumber < NUMMONS)) ? name : "this weird creature");
+		strcat(description, temp_buf);
+
+		strcat(description, "\n");
+		strcat(description, " ");
+		strcat(description, "\n");
+		if (iflags.pokedex & POKEDEX_SHOW_STATS){
+			strcat(description, "Base statistics of this monster type:");
+			strcat(description, "\n");
+			int ac = ptr->ac + (mtmp->mfaction == CRYSTALFIED ? -16 : mtmp->mfaction == SKELIFIED ? -6 : mtmp->mfaction == ZOMBIFIED ? -2 : 0);
+			sprintf(temp_buf, "Base level = %d. Difficulty = %d. AC = %d. MR = %d. Alignment %d. ", ptr->mlevel, monstr[monsndx(ptr)], ac, ptr->mr, ptr->maligntyp);
+			strcat(description, temp_buf);
+			temp_buf[0] = '\0';
+			strcat(description, get_speed_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_GENERATION){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_generation_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_RESISTS){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_resistance_description_of_monster_type(mtmp, temp_buf));
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_weakness_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_CONVEYS){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_conveys_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_WEIGHT){
+			temp_buf[0] = '\0';
+			strcat(description, get_weight_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_MM){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_mm_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_MT){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_mt_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_MB){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_mb_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_MV){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_mv_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_MG){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_mg_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_MA){
+			temp_buf[0] = '\0';
+			strcat(description, "\n");
+			strcat(description, get_ma_description_of_monster_type(mtmp, temp_buf));
+		}
+		if (iflags.pokedex & POKEDEX_SHOW_ATTACKS){
+			strcat(description, "\n");
+			strcat(description, "Attacks:");
+			strcat(description, "\n");
+			struct attack *mattk;
+			struct attack alt_attk;
+			int sum[NATTK];
+			int i;
+
+			for (i = 0; i < NATTK; i++) {
+				sum[i] = 1;
+				mattk = getmattk(mtmp, ptr, i, sum, &alt_attk);
+
+				main_temp_buf[0] = '\0';
+				get_description_of_attack(mattk, temp_buf);
+				if (temp_buf[0] == '\0') {
+					if (i == 0) {
+#ifndef USE_TILES
+						strcat(description, "    ");
+#endif
+						strcat(description, "none");
+						strcat(description, "\n");
+					}
+					continue;
+				}
+#ifndef USE_TILES
+				strcat(main_temp_buf, "    ");
+#endif
+				strcat(main_temp_buf, temp_buf);
+				strcat(main_temp_buf, "\n");
+				strcat(description, main_temp_buf);
+			}
+		}
+	}
+	return description;
+}
 
 int
 dowhatis()

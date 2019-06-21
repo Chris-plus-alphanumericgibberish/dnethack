@@ -247,7 +247,7 @@ struct symdef {
 };
 
 extern const struct symdef defsyms[MAXPCHARS];	/* defaults */
-extern uchar showsyms[MAXPCHARS];
+extern glyph_t showsyms[MAXPCHARS];
 extern const struct symdef def_warnsyms[WARNCOUNT];
 
 /*

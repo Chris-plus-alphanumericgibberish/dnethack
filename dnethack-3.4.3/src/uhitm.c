@@ -94,7 +94,7 @@ int attk;
 /* FALSE means it's OK to attack */
 boolean
 attack_checks(mtmp, wep)
-register struct monst *mtmp;
+struct monst *mtmp;
 struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 {
 	char qbuf[QBUFSZ];
@@ -639,7 +639,7 @@ register struct monst *mtmp;
 			|| Race_if(PM_CHIROPTERAN) 
 			|| (!uwep && Race_if(PM_YUKI_ONNA))
 		){
-			keepattacking = hmonas(mtmp, youracedata, tmp, weptmp, tchtmp);
+			keepattacking = hmonas(mtmp, tmp, weptmp, tchtmp);
 			attacksmade = 1;
 		} else {
 			keepattacking = hitum(mtmp, weptmp, youmonst.data->mattk);
@@ -4228,12 +4228,12 @@ register struct attack *mattk;
 }
 
 boolean
-hmonas(mon, mas, tmp, weptmp, tchtmp)		/* attack monster as a monster. */
+hmonas(mon, tmp, weptmp, tchtmp)		/* attack monster as a monster. */
 register struct monst *mon;
-register struct permonst *mas;
 register int tmp, weptmp, tchtmp;
 {
 	struct attack *mattk, alt_attk;
+	struct permonst *mas = youmonst.data;
 	int	i, sum[NATTK], hittmp = 0;
 	int	nsum = 0;
 	int	dhit = 0;
@@ -4246,7 +4246,7 @@ register int tmp, weptmp, tchtmp;
 	
 	for(i = 0; i < NATTK; i++) {
 	    sum[i] = 0;
-	    mattk = getmattk(mas, i, sum, &alt_attk);
+	    mattk = getmattk(&youmonst, mas, i, sum, &alt_attk);
 		wepused = FALSE;
 		
 		if (mas == &mons[PM_GRUE] && (i>=2) && !((!levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux] & TEMP_LIT1 && !(viz_array[u.uy][u.ux] & TEMP_DRK1)))

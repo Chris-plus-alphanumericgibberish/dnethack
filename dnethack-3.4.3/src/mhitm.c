@@ -344,7 +344,7 @@ mattackm(magr, mdef)
 	if(DEADMONSTER(mdef) || DEADMONSTER(magr))
 		break;
 	res[i] = MM_MISS;
-	mattk = getmattk(pa, i, res, &alt_attk);
+	mattk = getmattk(magr, pa, i, res, &alt_attk);
 	otmp = (struct obj *)0;
 	attk = 1;
 	
@@ -353,75 +353,6 @@ mattackm(magr, mdef)
 		|| (levl[magr->mx][magr->my].lit && (viz_array[magr->my][magr->mx] & TEMP_DRK1 && !(viz_array[magr->my][magr->mx] & TEMP_LIT1)))))
 		continue;
 	    
-	if(magr->mfaction == ZOMBIFIED || magr->mfaction == SKELIFIED || magr->mfaction == CRYSTALFIED){
-		if(mattk->aatyp == AT_SPIT 
-			|| mattk->aatyp == AT_BREA 
-			|| mattk->aatyp == AT_GAZE 
-			|| mattk->aatyp == AT_ARRW 
-			|| mattk->aatyp == AT_MMGC 
-			|| mattk->aatyp == AT_TNKR 
-			|| mattk->aatyp == AT_SHDW 
-			|| mattk->aatyp == AT_BEAM 
-			|| mattk->aatyp == AT_MAGC
-			|| (mattk->aatyp == AT_TENT && magr->mfaction == SKELIFIED)
-			|| (i == 0 && 
-				(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_MARI) && 
-				mattk->adtyp == AD_PHYS && 
-				mattk->damn*mattk->damd/2 < (magr->m_lev/10+1)*max(magr->data->msize*2, 4)/2
-			   )
-			|| (!derundspec && mattk->aatyp == 0 && mattk->adtyp == 0 && mattk->damn == 0 && mattk->damd == 0)
-			|| (!derundspec && i == NATTK-1 && (magr->mfaction == CRYSTALFIED || magr->mfaction == SKELIFIED))
-		){
-			if(i == 0){
-				alt_attk.aatyp = AT_CLAW;
-				alt_attk.adtyp = AD_PHYS;
-				alt_attk.damn = magr->m_lev/10+1 + (magr->mfaction != ZOMBIFIED ? 1 : 0);
-				alt_attk.damd = max(magr->data->msize*2, 4);
-				mattk = &alt_attk;
-			}
-			else if(!derundspec && magr->mfaction == SKELIFIED){
-				derundspec = TRUE;
-				alt_attk.aatyp = AT_TUCH;
-				alt_attk.adtyp = AD_SLOW;
-				alt_attk.damn = 1;
-				alt_attk.damd = max(magr->data->msize*2, 4);
-				mattk = &alt_attk;
-			}
-			else if(!derundspec && magr->mfaction == CRYSTALFIED){
-				derundspec = TRUE;
-				alt_attk.aatyp = AT_TUCH;
-				alt_attk.adtyp = AD_ECLD;
-				alt_attk.damn = min(10,magr->m_lev/3);
-				alt_attk.damd = 8;
-				mattk = &alt_attk;
-			}
-			else continue;
-		}
-	}
-	if(magr->mfaction == FRACTURED){
-			if(!derundspec && 
-				mattk->aatyp == 0 && mattk->adtyp == 0 && mattk->damn == 0 && mattk->damd == 0
-			){
-				derundspec = TRUE;
-				alt_attk.aatyp = AT_CLAW;
-				alt_attk.adtyp = AD_GLSS;
-				alt_attk.damn = max(magr->m_lev/10+1, mattk->damn);
-				alt_attk.damd = max(magr->data->msize*2, max(mattk->damd, 4));
-				mattk = &alt_attk;
-			}
-			if(mattk->aatyp == AT_CLAW && 
-				(mattk->adtyp == AD_PHYS || mattk->adtyp == AD_SAMU || mattk->adtyp == AD_SQUE)
-			){
-				alt_attk.aatyp = AT_CLAW;
-				alt_attk.adtyp = AD_GLSS;
-				alt_attk.damn = mattk->damn;
-				alt_attk.damd = mattk->damd;
-				mattk = &alt_attk;
-			}
-			if(mattk->aatyp == AT_GAZE)
-				continue;
-	}
-	
 	/*Plasteel helms cover the face and prevent bite attacks*/
 	if((magr->misc_worn_check & W_ARMH) && which_armor(magr, W_ARMH) &&
 		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM || ((which_armor(magr, W_ARMH))->otyp) == PONTIFF_S_CROWN) && 
@@ -2629,9 +2560,6 @@ physical:{
 */
 	    default:	tmp = 0;
 			break;
-	}
-	if(magr->mfaction == ZOMBIFIED){
-		tmp *= 2;
 	}
 	if(magr->data == &mons[PM_UVUUDAUM] && !weaponhit){
 		if(hates_unholy(mdef->data)){

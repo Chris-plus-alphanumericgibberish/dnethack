@@ -842,7 +842,7 @@ add_material_words(obj, buf)
 struct obj *obj;
 char *buf;
 {
-	if (!((id_for_material(obj)) ^ (obj->known)) &&
+	if (id_for_material(obj) ||
 		((obj->obj_material != ((obj->oartifact && artilist[obj->oartifact].material && obj->known) ? artilist[obj->oartifact].material : objects[obj->otyp].oc_material))
 		&& !(is_lightsaber(obj) && litsaber(obj)))){
 		if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD && obj->lamplit){
@@ -1222,24 +1222,29 @@ boolean with_price;
 		}
 		break;
 	case SCROLL_CLASS:
-		Strcat(buf, "scroll");
-			if (!obj->dknown) break;
-			if (nn) {
-			Strcat(buf, " of ");
-				if (obj->otyp != SCR_WARD) Strcat(buf, actualn);
-			else Strcat(buf, wardDecode[obj->oward]);
-			}
-			else if (un) {
-			Strcat(buf, " called ");
-			Strcat(buf, un);
-			}
-			else if (ocl->oc_magic) {
-			Strcat(buf, " labeled ");
+		if (obj->dknown && !un && !ocl->oc_magic)
+		{
 			Strcat(buf, dn);
-			}
-			else {
-			Strcpy(buf, dn);
-			Strcat(buf, " scroll");
+			Strcat(buf, " ");
+		}
+		Strcat(buf, "scroll");
+		if (!obj->dknown) break;
+		if (nn) {
+		Strcat(buf, " of ");
+			if (obj->otyp != SCR_WARD) Strcat(buf, actualn);
+		else Strcat(buf, wardDecode[obj->oward]);
+		}
+		else if (un) {
+		Strcat(buf, " called ");
+		Strcat(buf, un);
+		}
+		else if (ocl->oc_magic) {
+		Strcat(buf, " labeled ");
+		Strcat(buf, dn);
+		}
+		else {
+			// "unlabeled scroll" should be the only case, and is already handled above.
+			;
 		}
 		break;
 	case WAND_CLASS:
@@ -1304,16 +1309,16 @@ boolean with_price;
 		if (!ignore_oquan)
 #endif
 	if (obj->quan != 1L) Strcpy(buf, makeplural(buf));
-	}//endif obj_is_pname
+	}//endif !obj_is_pname(obj)
 
-	if ((obj->onamelth && obj->dknown)) {
-		if (!(obj_is_pname(obj) || the_unique_obj(obj)) || !obj->known) Strcat(buf, " named ");
-		if ((obj_is_pname(obj) || the_unique_obj(obj)) && obj->known && !strcmp(ONAME(obj), "Fluorite Octahedron")){
+	if ((obj->onamelth && obj->dknown) || (obj_is_pname(obj))) {
+		if (!obj_is_pname(obj) && obj->onamelth && obj->dknown) Strcat(buf, " named ");
+		if (obj_is_pname(obj) && obj->known && (obj->oartifact == ART_FLUORITE_OCTAHEDRON)){
 			if (obj->quan == 8) Strcat(buf, "Fluorite Octet");
 			else if (obj->quan > 1) Strcat(buf, "Fluorite Octahedra");
 			else Strcat(buf, "Fluorite Octahedron");
 	}
-		else if ((obj_is_pname(obj) || the_unique_obj(obj)) && obj->known && !strncmpi(ONAME(obj), "the ", 4))
+		else if (obj_is_pname(obj) && obj->known && !strncmpi(ONAME(obj), "the ", 4))
 			Strcat(buf, ONAME(obj)+4);
     else
 			Strcat(buf, ONAME(obj));
@@ -1931,19 +1936,47 @@ const char *str;
 	    if(((tmp = rindex(str, ' ')) || (tmp = rindex(str, '-'))) &&
 	       (tmp[1] < 'A' || tmp[1] > 'Z'))
 		insert_the = TRUE;
-	    else if (tmp && index(str, ' ') < tmp) {	/* has spaces */
-		/* it needs an article if the name contains "of" */
-		tmp = strstri(str, " of ");
-		named = strstri(str, " named ");
-		called = strstri(str, " called ");
-		if (called && (!named || called < named)) named = called;
+		else {
+//	    else if (tmp && index(str, ' ') < tmp) {	/* has spaces */
+//		/* it needs an article if the name contains "of" */
+//		tmp = strstri(str, " of ");
+//		named = strstri(str, " named ");
+//		called = strstri(str, " called ");
+//		if (called && (!named || called < named)) named = called;
+//
+//		if (tmp && (!named || tmp < named))	/* found an "of" */
+//		    insert_the = TRUE;
+//		/* stupid special case: lacks "of" but needs "the" */
+//		else if (!named && (l = strlen(str)) >= 31 &&
+//		      !strcmp(&str[l - 31], "Platinum Yendorian Express Card"))
+//		    insert_the = TRUE;
 
-		if (tmp && (!named || tmp < named))	/* found an "of" */
+			// This will catch all artifacts listed in artilist.h whose coded names begin with "The "
+			int i;
+			for (i = 1; i < NROFARTIFACTS && !insert_the; i++)
+			{
+				if (!strncmp(artilist[i].name, "The ", 4) &&
+					((l = strlen(str)) >= strlen(artilist[i].name) - 4) &&
+					!strcmp(&str[l - (strlen(artilist[i].name) - 4)], artilist[i].name + 4))
 		    insert_the = TRUE;
-		/* stupid special case: lacks "of" but needs "the" */
-		else if (!named && (l = strlen(str)) >= 31 &&
-		      !strcmp(&str[l - 31], "Platinum Yendorian Express Card"))
+			}
+
+			// This will have to catch any remaining items that should start with "the "
+			// Notably, unique items fall in this category, as they are in Capital Case but are not in artilist.h
+			if (!insert_the && (
+				(strlen(str) >= 15 && (
+				!strncmp(str, "Bell of Opening", 15)
+				)) ||
+				(strlen(str) >= 16 && (
+				!strncmp(str, "Amulet of Yendor", 16) ||
+				!strncmp(str, "Book of the Dead", 16)
+				)) ||
+				(strlen(str) >= 25 && (
+				!strncmp(str, "Candelabrum of Invocation", 25)
+				))
+				))
 		    insert_the = TRUE;
+
 	    }
 	}
 	if (insert_the)

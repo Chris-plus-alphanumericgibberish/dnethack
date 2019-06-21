@@ -298,7 +298,7 @@ register struct obj *obj;
 		if (obj->spe > 0)
 		{
 			struct monst * mtmp;
-			if (mtmp = makemon(&mons[PM_WERERAT], u.ux, u.uy, NO_MM_FLAGS))
+			if ((mtmp = makemon(&mons[PM_WERERAT], u.ux, u.uy, NO_MM_FLAGS)))
 			{
 				if (!Blind)
 					You_hear("something from the pipes wish it was a real boy, and %s scuttles out of the sink!", a_monnam(mtmp));
@@ -1042,6 +1042,7 @@ boolean at_stairs, falling, portal;
 		newlevel->dlevel = dunlevs_in_dungeon(newlevel);
 	if (newdungeon && In_endgame(newlevel)) { /* 1st Endgame Level !!! */
 	    if (u.uhave.amulet) {
+			livelog_write_string("entered the Planes");
 		    assign_level(newlevel, &earth_level);
 		} else return;
 	}
@@ -1547,6 +1548,7 @@ final_level()
 	create_mplayers(rn1(4, 3), TRUE);
 
 	if(u.uevent.ukilled_apollyon){
+		livelog_write_string("confronted the Fallen");
 		int host;
 	    pline(
 	     "A voice booms: \"The Angel of the Pit hast fallen!  We have returned!\"");

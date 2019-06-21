@@ -981,7 +981,7 @@ int attempts;
 void
 maze_remove_deadends(floortyp, careful)
 int floortyp;
-boolean careful;
+int careful;
 {
 	char dirok[4];
 	int x, y, dir, idx, idx2, dx, dy, dx2, dy2;

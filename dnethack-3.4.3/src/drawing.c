@@ -20,7 +20,7 @@
 #define g_FILLER(symbol) 0
 
 uchar oc_syms[MAXOCLASSES] = DUMMY; /* the current object  display symbols */
-uchar showsyms[MAXPCHARS]  = DUMMY; /* the current feature display symbols */
+glyph_t showsyms[MAXPCHARS]  = DUMMY; /* the current feature display symbols */
 uchar monsyms[MAXMCLASSES] = DUMMY; /* the current monster display symbols */
 uchar warnsyms[WARNCOUNT]  = DUMMY;  /* the current warning display symbols */
 #ifdef USER_DUNGEONCOLOR
@@ -336,7 +336,7 @@ void NDECL((*ibmgraphics_mode_callback)) = 0;	/* set in tty_start_screen() */
 void NDECL((*cursesgraphics_mode_callback)) = 0;
 #endif
 
-static uchar ibm_graphics[MAXPCHARS] = {
+static glyph_t ibm_graphics[MAXPCHARS] = {
 /* 0*/	g_FILLER(S_stone),
 	0xb3,	/* S_vwall:	meta-3, vertical rule */
 	0xc4,	/* S_hwall:	meta-D, horizontal rule */
@@ -442,7 +442,7 @@ static uchar ibm_graphics[MAXPCHARS] = {
 #ifdef TERMLIB
 void NDECL((*decgraphics_mode_callback)) = 0;  /* set in tty_start_screen() */
 
-static uchar dec_graphics[MAXPCHARS] = {
+static glyph_t dec_graphics[MAXPCHARS] = {
 /* 0*/	g_FILLER(S_stone),
 	0xf8,	/* S_vwall:	meta-x, vertical rule */
 	0xf1,	/* S_hwall:	meta-q, horizontal rule */
@@ -546,7 +546,7 @@ static uchar dec_graphics[MAXPCHARS] = {
 #endif  /* TERMLIB */
 
 #ifdef MAC_GRAPHICS_ENV
-static uchar mac_graphics[MAXPCHARS] = {
+static glyph_t mac_graphics[MAXPCHARS] = {
 /* 0*/	g_FILLER(S_stone),
 	0xba,	/* S_vwall */
 	0xcd,	/* S_hwall */
@@ -790,7 +790,7 @@ def_char_to_monclass(ch)
 
 void
 assign_graphics(graph_chars, glth, maxlen, offset)
-register uchar *graph_chars;
+register glyph_t *graph_chars;
 int glth, maxlen, offset;
 {
     register int i;
@@ -870,7 +870,7 @@ int gr_set_flag;
 #endif
 #ifdef CURSES_GRAPHICS
     case CURS_GRAPHICS:
-	    assign_graphics((uchar *)0, 0, MAXPCHARS, 0);
+	    assign_graphics((glyph_t *)0, 0, MAXPCHARS, 0);
         iflags.cursesgraphics = TRUE;
 	    iflags.IBMgraphics = FALSE;
 	    iflags.DECgraphics = FALSE;
@@ -887,10 +887,10 @@ int gr_set_flag;
  * saved display symbols for objects & features.
  */
 static uchar save_oc_syms[MAXOCLASSES] = DUMMY;
-static uchar save_showsyms[MAXPCHARS]  = DUMMY;
+static glyph_t save_showsyms[MAXPCHARS]  = DUMMY;
 static uchar save_monsyms[MAXPCHARS]   = DUMMY;
 
-static const uchar r_oc_syms[MAXOCLASSES] = {
+static const glyph_t r_oc_syms[MAXOCLASSES] = {
 /* 0*/	'\0',
 	ILLOBJ_SYM,
 	WEAPON_SYM,

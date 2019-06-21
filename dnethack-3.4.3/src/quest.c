@@ -327,6 +327,7 @@ chat_with_leader()
 	    qt_pager(QT_ASSIGNQUEST + (flags.stag ? QT_TURNEDSTAG : 0));
 	    exercise(A_WIS, TRUE);
 	    Qstat(got_quest) = TRUE;
+		livelog_write_string("was given their Quest");
 		if(Role_if(PM_EXILE)){
 			bindspirit(DAHLVER_NAR);
 			u.sealTimeout[DAHLVER_NAR-FIRST_SEAL] = moves + 5000;

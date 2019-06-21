@@ -2864,10 +2864,10 @@ struct monst *
 create_particular(specify_attitude, specify_derivation, allow_multi, ma_require, mg_restrict, gen_restrict)
 unsigned long specify_attitude;		// -1 -> true; 0 -> false; >0 -> as given
 int specify_derivation;				// -1 -> true; 0 -> false; >0 -> as given
-boolean allow_multi;
+int allow_multi;
 unsigned long ma_require;
 unsigned long mg_restrict;
-unsigned short gen_restrict;
+int gen_restrict;
 {
 	char buf[BUFSZ], *bufp, *p, monclass = MAXMCLASSES;
 	int which, tries, i;
@@ -2957,7 +2957,7 @@ unsigned short gen_restrict;
 				whichpm = mkclass(monclass, Inhell ? G_HELL : G_NOHELL);
 				goto createmon;	// skip past the section which needs whichpm to exist
 			}
-			if(!(whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES)))
+			if(!((whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES))))
 			{
 				pline("You ask too generally for creatures so uncommon.");
 				continue;
@@ -2981,7 +2981,7 @@ unsigned short gen_restrict;
 						(whichpm->mflagsg & mg_restrict) ||
 						(whichpm->geno & gen_restrict)) && i < 100)
 					{
-					if (whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES))
+					if ((whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES)))
 						i++;
 					else
 						i = 100;

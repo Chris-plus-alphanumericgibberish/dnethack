@@ -1118,7 +1118,7 @@ makelevel()
 	/* Zoos */
 	{
 	int zootype;
-	if (zootype = random_special_room())
+	if ((zootype = random_special_room()))
 		mkroom(zootype);
 	}
 
@@ -1852,7 +1852,7 @@ struct mkroom *croom;
 boolean
 mkfeature(typ, mazeflag, croom)
 int typ;
-boolean mazeflag;
+int mazeflag;
 struct mkroom *croom;
 {
 	coord m;
@@ -1995,6 +1995,9 @@ mkinvokearea()
     mkstairs(u.ux, u.uy, 0, (struct mkroom *)0); /* down */
     newsym(u.ux, u.uy);
     vision_full_recalc = 1;	/* everything changed */
+
+    livelog_write_string("performed the invocation");
+
 #ifdef RECORD_ACHIEVE
     achieve.perform_invocation = 1;
 #endif

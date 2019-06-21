@@ -254,7 +254,7 @@ wildmiss(mtmp, mattk)		/* monster attacked your displaced image */
 		case 1: pline("%s attacks a spot beside you.", Monnam(mtmp));
 		    break;
 		case 2: pline("%s strikes at %s!", Monnam(mtmp),
-				levl[mtmp->mux][mtmp->muy].typ == WATER
+				((int)levl[mtmp->mux][mtmp->muy].typ) == WATER
 				    ? "empty water" : "thin air");
 		    break;
 		default:pline("%s %s wildly!", Monnam(mtmp), swings);
@@ -316,15 +316,20 @@ boolean message;
 
 /* select a monster's next attack, possibly substituting for its usual one */
 struct attack *
-getmattk(mptr, indx, prev_result, alt_attk_buf)
+getmattk(mtmp, mptr, indx, prev_result, alt_attk_buf)
+struct monst *mtmp;
 struct permonst *mptr;
 int indx, prev_result[];
 struct attack *alt_attk_buf;
 {
     struct attack *attk;
-	static int subout = 0;
+	static int subout;
+	static boolean derundspec;
+
 	if(indx < NATTK){
 		attk = &mptr->mattk[indx];
+		*alt_attk_buf = *attk;
+		attk = alt_attk_buf;		// by default, use the buffer space
 	} else {
 		attk = alt_attk_buf;
 		attk->aatyp = 0;
@@ -333,6 +338,89 @@ struct attack *alt_attk_buf;
 		attk->damd = 0;
 	}
 	
+	// Sanity: reset static variables every time indx == 0
+	if (indx == 0)
+	{
+		subout = 0;
+		derundspec = FALSE;
+	}
+
+	// Derived undead
+	if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
+		if (attk->aatyp == AT_SPIT
+			|| attk->aatyp == AT_BREA
+			|| attk->aatyp == AT_GAZE
+			|| attk->aatyp == AT_ARRW
+			|| attk->aatyp == AT_MMGC
+			|| attk->aatyp == AT_TNKR
+			|| attk->aatyp == AT_SHDW
+			|| attk->aatyp == AT_BEAM
+			|| attk->aatyp == AT_MAGC
+			|| (attk->aatyp == AT_TENT && mtmp->mfaction == SKELIFIED)
+			|| (indx == 0 &&
+			(attk->aatyp == AT_CLAW || attk->aatyp == AT_WEAP || attk->aatyp == AT_XWEP || attk->aatyp == AT_MARI) &&
+			attk->adtyp == AD_PHYS &&
+			attk->damn*attk->damd / 2 < (mtmp->m_lev / 10 + 1)*max(mptr->msize * 2, 4) / 2
+			)
+			|| (!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+			|| (!derundspec && indx == NATTK - 1 && (mtmp->mfaction == CRYSTALFIED || mtmp->mfaction == SKELIFIED))
+			){
+			// yes, replace the current attack
+			if (indx == 0){
+				attk->aatyp = AT_CLAW;
+				attk->adtyp = AD_PHYS;
+				attk->damn = mtmp->m_lev / 10 + 1 + (mtmp->mfaction != ZOMBIFIED ? 1 : 0);
+				attk->damd = max(mptr->msize * 2, 4);
+			}
+			else if (!derundspec && mtmp->mfaction == SKELIFIED){
+				derundspec = TRUE;
+				attk->aatyp = AT_TUCH;
+				attk->adtyp = AD_SLOW;
+				attk->damn = 1;
+				attk->damd = max(mtmp->data->msize * 2, 4);
+			}
+			else if (!derundspec && mtmp->mfaction == CRYSTALFIED){
+				derundspec = TRUE;
+				attk->aatyp = AT_TUCH;
+				attk->adtyp = AD_ECLD;
+				attk->damn = min(10, mtmp->m_lev / 3);
+				attk->damd = 8;
+			}
+			else {
+				// remove the disallowed attack
+				attk->aatyp = 0;
+				attk->adtyp = 0;
+				attk->damn = 0;
+				attk->damd = 0;
+			}
+		}
+	}
+	if (mtmp->mfaction == FRACTURED){
+		// no gazes allowed
+		if (attk->aatyp == AT_GAZE)
+		{
+			attk->aatyp = 0;
+			attk->adtyp = 0;
+			attk->damn = 0;
+			attk->damd = 0;
+		}
+		// replace first blank spot with a bonus claw
+		if (!derundspec &&
+			attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+		{
+			derundspec = TRUE;		// only one
+			attk->aatyp = AT_CLAW;
+			attk->adtyp = AD_GLSS;
+			attk->damn = max(mtmp->m_lev / 10 + 1, attk->damn);
+			attk->damd = max(mptr->msize * 2, max(attk->damd, 4));
+		}
+		// change some existing claws' damage types
+		if (attk->aatyp == AT_CLAW && (attk->adtyp == AD_PHYS || attk->adtyp == AD_SAMU || attk->adtyp == AD_SQUE))
+		{
+			attk->adtyp = AD_GLSS;
+		}
+	}
+
 	//Five fiends' spellcasting routines
 	if(
 		(mptr == &mons[PM_LICH__THE_FIEND_OF_EARTH]) ||
@@ -341,6 +429,7 @@ struct attack *alt_attk_buf;
 		(mptr == &mons[PM_TIAMAT__THE_FIEND_OF_WIND]) ||
 		(mptr == &mons[PM_CHAOS])
 	){
+		// first index -- determing if using the alternate attack set (solo spellcasting)
 		if(indx==0){
 			if(
 				(mptr == &mons[PM_LICH__THE_FIEND_OF_EARTH] && rn2(4)) ||
@@ -350,17 +439,13 @@ struct attack *alt_attk_buf;
 				(mptr == &mons[PM_CHAOS] && rn2(3))
 			){
 				subout = 1;
-				*alt_attk_buf = *attk;
-				attk = alt_attk_buf;
 				attk->aatyp = AT_MAGC;
 				attk->adtyp = AD_SPEL;
 				attk->damn = 0;
 				attk->damd = 0;
 			} else subout = 0;
 		}
-		if(subout){
-			*alt_attk_buf = *attk;
-			attk = alt_attk_buf;
+		else if(subout){	// other indices than the first are nulled out IF spellcasting
 			attk->aatyp = 0;
 			attk->adtyp = 0;
 			attk->damn = 0;
@@ -385,13 +470,15 @@ struct attack *alt_attk_buf;
 			{AT_GAZE, AD_STDY, 1,9},
 			{0, 0, 0,0},
 		};
+		// first index -- determine which attack form
 		if(indx==0){
-			if(!rn2(7)){
+			if(!rn2(7)){		// 1/7 of marilith
 				subout = 1;
-			} else if(!rn2(6)){
+			} else if(!rn2(6)){	// 1/7 of sword archon
 				subout = 2;
-			} else subout = 0;
+			} else subout = 0;	// 5/7 of normal
 		}
+		// If using marilith or sword archon, sub out entire attack chain
 		if(subout == 1){
 			*alt_attk_buf = swordArchon[indx];
 			attk = alt_attk_buf;
@@ -401,11 +488,16 @@ struct attack *alt_attk_buf;
 		}
 	}
 
+	/* Undead damage multipliers -- note that these must be after actual replacements are done */
+	/* zombies deal double damage, and all undead deal double damage at midnight */
+	if (mtmp->mfaction == ZOMBIFIED && (is_undead_mon(mtmp) && midnight()))
+		attk->damn *= 3;
+	else if (mtmp->mfaction == ZOMBIFIED || (is_undead_mon(mtmp) && midnight()))
+		attk->damn *= 2;
+
 	/* twoweapon symmetry -- if the previous attack missed, do not make an offhand attack */
 	if (indx > 0 && prev_result[indx - 1] <= 0 && attk->aatyp == AT_XWEP)
 	{
-		*alt_attk_buf = *attk;
-		attk = alt_attk_buf;
 		attk->aatyp = 0;
 		attk->adtyp = 0;
 		attk->damn = 0;
@@ -423,8 +515,6 @@ struct attack *alt_attk_buf;
 		mptr == &mons[PM_ASTRAL_DEVA]) &&
 	    attk->adtyp == mptr->mattk[indx - 1].adtyp
 	) {
-		*alt_attk_buf = *attk;
-		attk = alt_attk_buf;
 		attk->adtyp = AD_STUN;
     }
     return attk;
@@ -758,7 +848,7 @@ mattacku(mtmp)
 			break;
 		
 	    sum[i] = 0;
-	    mattk = getmattk(mdat, i, sum, &alt_attk);
+	    mattk = getmattk(mtmp, mdat, i, sum, &alt_attk);
 	    if (u.uswallow && (mattk->aatyp != AT_ENGL && mattk->aatyp != AT_ILUR))
 			continue;
 		
@@ -766,64 +856,7 @@ mattacku(mtmp)
 			|| (levl[mtmp->mx][mtmp->my].lit && (viz_array[mtmp->my][mtmp->mx] & TEMP_DRK1 && !(viz_array[mtmp->my][mtmp->mx] & TEMP_LIT1)))))
 			continue;
 		
-		if(mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
-			if(mattk->aatyp == AT_SPIT 
-				|| mattk->aatyp == AT_BREA 
-				|| mattk->aatyp == AT_GAZE 
-				|| mattk->aatyp == AT_ARRW 
-				|| mattk->aatyp == AT_MMGC 
-				|| mattk->aatyp == AT_TNKR 
-				|| mattk->aatyp == AT_SHDW 
-				|| mattk->aatyp == AT_BEAM 
-				|| mattk->aatyp == AT_MAGC
-				|| (mattk->aatyp == AT_TENT && mtmp->mfaction == SKELIFIED)
-				|| (i == 0 && 
-					(mattk->aatyp == AT_CLAW || mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_MARI) && 
-					mattk->adtyp == AD_PHYS && 
-					mattk->damn*mattk->damd/2 < (mtmp->m_lev/10+1)*max(mtmp->data->msize*2, 4)/2
-				   )
-				|| (!derundspec && mattk->aatyp == 0 && mattk->adtyp == 0 && mattk->damn == 0 && mattk->damd == 0)
-				|| (!derundspec && i == NATTK-1 && (mtmp->mfaction == CRYSTALFIED || mtmp->mfaction == SKELIFIED))
-			){
-				if(i == 0){
-					alt_attk.aatyp = AT_CLAW;
-					alt_attk.adtyp = AD_PHYS;
-					alt_attk.damn = mtmp->m_lev/10+1 + (mtmp->mfaction != ZOMBIFIED ? 1 : 0);
-					alt_attk.damd = max(mtmp->data->msize*2, 4);
-					mattk = &alt_attk;
-				}
-				else if(!derundspec && mtmp->mfaction == SKELIFIED){
-					derundspec = TRUE;
-					alt_attk.aatyp = AT_TUCH;
-					alt_attk.adtyp = AD_SLOW;
-					alt_attk.damn = 1;
-					alt_attk.damd = max(mtmp->data->msize*2, 4);
-					mattk = &alt_attk;
-				}
-				else if(!derundspec && mtmp->mfaction == CRYSTALFIED){
-					derundspec = TRUE;
-					alt_attk.aatyp = AT_TUCH;
-					alt_attk.adtyp = AD_ECLD;
-					alt_attk.damn = min(10,mtmp->m_lev/3);
-					alt_attk.damd = 8;
-					mattk = &alt_attk;
-				}
-				else continue;
-			}
-		}
-		if(mtmp->mfaction == FRACTURED){
-			if((!derundspec && 
-				mattk->aatyp == 0 && mattk->adtyp == 0 && mattk->damn == 0 && mattk->damd == 0)
-				|| (mattk->aatyp == AT_CLAW && (mattk->adtyp == AD_PHYS || mattk->adtyp == AD_SAMU || mattk->adtyp == AD_SQUE))
-			){
-				derundspec = TRUE;
-				alt_attk.aatyp = AT_CLAW;
-				alt_attk.adtyp = AD_GLSS;
-				alt_attk.damn = max(mtmp->m_lev/10+1, mattk->damn);
-				alt_attk.damd = max(mtmp->data->msize*2, max(mattk->damd, 4));
-				mattk = &alt_attk;
-			}
-		}
+		
 		
 		/*Plasteel helms cover the face and prevent bite attacks*/
 		if(mtmp->misc_worn_check & W_ARMH){
@@ -1765,8 +1798,6 @@ hitmu(mtmp, mattk)
 	if(weaponhit && mattk->adtyp != AD_PHYS) dmg = 0;
 	else if(mtmp->mflee && mdat == &mons[PM_BANDERSNATCH]) dmg = d((int)mattk->damn, 2*(int)mattk->damd);
 	else dmg = d((int)mattk->damn, (int)mattk->damd);
-	if(is_undead_mon(mtmp) && midnight())
-		dmg += d((int)mattk->damn, (int)mattk->damd); /* extra damage */
 
 /*	Next a cancellation factor	*/
 /*	Use uncancelled when the cancellation factor takes into account certain
@@ -2792,9 +2823,10 @@ dopois:
 		    } else if(u.ustuck == mtmp) {
 				if (is_pool(mtmp->mx,mtmp->my, FALSE) && !Swimming
 					&& !Breathless) {
+					int ltyp = levl[mtmp->mx][mtmp->my].typ;
 					boolean moat =
-					(levl[mtmp->mx][mtmp->my].typ != POOL) &&
-					(levl[mtmp->mx][mtmp->my].typ != WATER) &&
+					(ltyp != POOL) &&
+					(ltyp != WATER) &&
 					!Is_medusa_level(&u.uz) &&
 					!Is_waterlevel(&u.uz);
 					
@@ -3657,9 +3689,6 @@ dopois:
 	}
 	if(u.uhp < 1) done_in_by(mtmp);
 
-	if(mtmp->mfaction == ZOMBIFIED){
-		dmg *= 2;
-	}
 	if(mtmp->data == &mons[PM_UVUUDAUM] && !weaponhit){
 		if(hates_unholy(youracedata)){
 			pline("%s's glory sears you!", Monnam(mtmp));
@@ -4176,7 +4205,7 @@ boolean ufound;
     if (!ufound)
 	pline("%s explodes at a spot in %s!",
 	    canseemon(mtmp) ? Monnam(mtmp) : "It",
-	    levl[mtmp->mux][mtmp->muy].typ == WATER
+	    ((int)levl[mtmp->mux][mtmp->muy].typ) == WATER
 		? "empty water" : "thin air");
     else {
 	register int tmp = d((int)mattk->damn, (int)mattk->damd);

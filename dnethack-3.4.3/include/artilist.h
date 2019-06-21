@@ -247,7 +247,7 @@ A("Mjollnir",			WAR_HAMMER,			0,			0,		/* Mjo:llnir */
 	0, A_NEUTRAL, PM_VALKYRIE, NON_PM, 4000L, 
 	SPFX2_ELEC,0,0),
 
-A("the Pen of the Void",	ATHAME,			0,			0,
+A("The Pen of the Void",	ATHAME,			0,			0,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_ATTK), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(5,0),	NO_DFNS,	NO_CARY,
@@ -396,7 +396,7 @@ A("The Rod of the Ram",			MACE, 		0,			0,/* Wolf, Ram, and Hart? Ram demon? */
 	0, A_NEUTRAL, NON_PM, NON_PM, 3000L, 
 	SPFX2_RAM2,0,0),
 
-A("Atma Weapon", 		BEAMSWORD, 			0,			0,/*Sword whose attack power is bound to its wielder's life force*/
+A("The Atma Weapon", 		BEAMSWORD, 		0,			0,/*Sword whose attack power is bound to its wielder's life force*/
 	(SPFX_RESTR|SPFX_CON_OR), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, MG_NASTY /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(6,6),	NO_DFNS,	NO_CARY,
@@ -588,7 +588,7 @@ A("Yoichi no yumi", YUMI, 					0,			0,/*Needs encyc entry*/
 	CREATE_AMMO, A_LAWFUL, NON_PM, NON_PM, 4000L, 
 	0,0,0),
 
-A("Fluorite Octahedron", BLUE_FLUORITE, 	0,			0,/*Needs encyc entry*/
+A("The Fluorite Octahedron", BLUE_FLUORITE, 			0,			0,/*Needs encyc entry*/
 	(SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
@@ -619,7 +619,7 @@ A("The Cloak of the Unheld One",	OILSKIN_CLOAK, 		0,			0,/*Needs encyc entry*/
 	TELEPORT_SHOES, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,0,(WSFX_PLUSSEV|WSFX_FREEACT)),
 
-A("Beastmaster's Duster", LEATHER_JACKET, 	0,			0,/*Needs encyc entry*/
+A("The Beastmaster's Duster", LEATHER_JACKET, 			0,			0,/*Needs encyc entry*/
 	(SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
@@ -889,7 +889,7 @@ A("The Staff of Twelve Mirrors",	KHAKKHARA,			0,			0,
 	0,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 
 	0,0,0),
 
-A("Sansara Mirror",	MIRRORBLADE,						GOLD,		0,
+A("The Sansara Mirror",	MIRRORBLADE,					GOLD,		0,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_HPHDAM), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(8,8),	NO_DFNS,	NO_CARY,
@@ -981,7 +981,7 @@ A("Moonbeam",	SILVER_ARROW, 							0,			0,/*Needs encyc entry*/
 	0, A_CHAOTIC, PM_RANGER, NON_PM, 1000L,
 	SPFX2_BRIGHT,0,0),
 
-A("Veil of Latona",	CLOAK_OF_INVISIBILITY, 				0,			0,/*Needs encyc entry*/
+A("The Veil of Latona",	CLOAK_OF_INVISIBILITY, 			0,			0,/*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN|SPFX_REFLECT), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	DFNS(AD_MAGM),	CARY(AD_DRLI),
@@ -1110,7 +1110,7 @@ A("Spidersilk",	ELVEN_MITHRIL_COAT, 					0,			0,/*Needs encyc entry*/
 	0,	A_CHAOTIC,	 NON_PM, PM_DROW, 5000L,
 	SPFX2_SPELLUP,0,WSFX_PLUSSEV), /*Adds sleep poison to unarmed attacks*/
 
-A("Webweaver's Crook",	FAUCHARD, 						BONE,		0,/*Needs encyc entry*/
+A("The Webweaver's Crook",	FAUCHARD, 					BONE,		0,/*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(1,0),	NO_DFNS,	CARY(AD_MAGM), 
@@ -1304,7 +1304,7 @@ A("Yorshka's Spear",			SPEAR, 					0,			0,/*Needs encyc entry*/
 	0, A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L,//Note: Drains energy/sets special ability cooldowns 
 	0,0,0),
 
-A("Dragon's Heart-Stone",			FLINT, 				0,			0,/*Needs encyc entry*/
+A("The Dragon's Heart-Stone",			FLINT, 			0,			0,/*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN),0, //Can only behead creatures that don't know where you are.
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,//Note: Doubles dragon attributes when carried
@@ -1346,7 +1346,7 @@ A("The Steel Scales of Kurtulmak",	GRAY_DRAGON_SCALES,	IRON,		0,/*causes spell p
 	0, A_LAWFUL, NON_PM, PM_KOBOLD, 5000L,
 	0,0,0),
 
-A("Glitterstone", AMBER,								0,			0,
+A("The Glitterstone", AMBER,							0,			0,
     (SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_EREGEN),
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
     NO_ATTK, NO_DFNS, NO_CARY,
@@ -1546,7 +1546,7 @@ A("Avarice", SHORT_SWORD,								0,			MZ_LARGE, /*Needs encyc entry*/
 	THEFT_TYPE,	A_LAWFUL, NON_PM, NON_PM, 9999L, 
 	SPFX2_STEAL,SPFX3_NOCNT,0),
 
-A("Fire of Heaven", TRIDENT, 							SILVER,		0,/*Needs encyc entry*/
+A("The Fire of Heaven", TRIDENT, 						SILVER,		0,/*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	FIRE(1,0),	NO_DFNS,	NO_CARY,
@@ -1595,7 +1595,7 @@ A("Ramithane", LONG_SWORD,								0,			0, /*Needs encyc entry*/
 	0,	A_LAWFUL, NON_PM, NON_PM, 3333L, 
 	0, SPFX3_NOCNT,0),
 
-A("Wrath of Heaven", LONG_SWORD,						SILVER,		MZ_LARGE, /*Needs encyc entry*/
+A("The Wrath of Heaven", LONG_SWORD,					SILVER,		MZ_LARGE, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	ELEC(1,0),	NO_DFNS,	NO_CARY,
@@ -1839,7 +1839,7 @@ A("The Striped Shirt of the Falsely Accused", STRIPED_SHIRT,	0,			0,
 
 /* Healer */
 /* TODO 2x vs living */
-A("Scalpel of Life and Death",	SCALPEL,			0,			0,
+A("The Scalpel of Life and Death",	SCALPEL,					0,			0,
 	(SPFX_NOGEN|SPFX_RESTR), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,

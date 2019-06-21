@@ -2065,6 +2065,7 @@ int agrmoral;
 		if(agrmoral > 0) bonus += base;
 		else if(agrmoral < 0) bonus -= base/2+1;
 	}
+	return bonus;
 }
 
 #ifdef OVL0
@@ -2198,7 +2199,7 @@ find_ac()
 	if (uarmu)	uac -= arm_ac_bonus(uarmu);
 	
 	if(uwep){
-		if((is_rapier(uwep) == RAPIER && !arti_shining(uwep))
+		if((is_rapier(uwep) && !arti_shining(uwep))
 				) uac -= max(
 					min(
 					(ACURR(A_DEX)-13)/4,

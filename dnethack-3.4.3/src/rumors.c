@@ -403,16 +403,20 @@ register struct monst *oracl;
 	add_xpts = 0;	/* first oracle of each type gives experience points */
 	if (u_pay == minor_cost) {
 		outrumor(1, BY_ORACLE);
-		if (!u.uevent.minor_oracle)
+		if (!u.uevent.minor_oracle){
 		    add_xpts = u_pay / (u.uevent.major_oracle ? 25 : 10);
 		    /* 5 pts if very 1st, or 2 pts if major already done */
+			if(!u.uevent.major_oracle) livelog_write_string("consulted the oracle for the first time");
+		}
 		u.uevent.minor_oracle = TRUE;
 	} else {
 		boolean cheapskate = u_pay < major_cost;
 		outoracle(cheapskate, TRUE);
-		if (!cheapskate && !u.uevent.major_oracle)
+		if (!cheapskate && !u.uevent.major_oracle){
 		    add_xpts = u_pay / (u.uevent.minor_oracle ? 25 : 10);
 		    /* ~100 pts if very 1st, ~40 pts if minor already done */
+			if(!u.uevent.minor_oracle) livelog_write_string("consulted the oracle for the first time");
+		}
 		u.uevent.major_oracle = TRUE;
 		exercise(A_WIS, !cheapskate);
 	}

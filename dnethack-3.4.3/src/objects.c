@@ -1340,7 +1340,7 @@ OBJECT(OBJ("bed",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,WOOD), 0,
 		BED_CLASS,   900, 0, 2000,  1000, 20, 20, 0, 0, 0, 2000, HI_WOOD),
 OBJECT(OBJ("knapsack",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,PLASTIC), 0,
 		BED_CLASS,   100, 0, 60,  100, 20, 20, 0, 0, 0, 2000, CLR_GREEN),
-OBJECT(OBJ("gurney",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,PLASTIC), 0,
+OBJECT(OBJ("gurney",(char *)0), BITS(1,0,0,0,0,0,0,0,1,0,0,P_NONE,METAL), 0,
 		BED_CLASS,     0, 0, 60,  100, 20, 20, 0, 0, 0, 2000, CLR_WHITE),
 */
 #ifdef CONVICT
