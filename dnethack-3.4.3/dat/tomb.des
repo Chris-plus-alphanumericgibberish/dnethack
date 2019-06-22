@@ -63,6 +63,8 @@ OBJECT: '!', random, (47,9)
 OBJECT: '!', random, (47,9)
 OBJECT: random, random, (47,9)
 OBJECT: random, random, (47,9)
+OBJECT: '!', "water", (47,9),cursed,0
+OBJECT: '!', "water", (47,9),cursed,0
 OBJECT: random, random, random
 OBJECT:'(',"chest",(23,1)
 OBJECT: random, random, (23,1)
@@ -96,6 +98,8 @@ OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
 OBJECT: random, random, (47,10)
+OBJECT: '!', "water", (47,10),cursed,0
+OBJECT: '!', "water", (47,10),cursed,0
 MONSTER: 'L', random, (47,9)
 OBJECT:'(',"magic chest",(47,10)
 MONSTER: '.',random,random
