@@ -1588,7 +1588,7 @@ A("Unblemished Soul", UNICORN_HORN, 					0,			MZ_LARGE,/*Needs encyc entry*/
 	0,	A_LAWFUL, NON_PM, NON_PM, 3333L, 
 	SPFX2_SILVERED,SPFX3_NOCNT,0),
 
-A("Ramithane", LONG_SWORD,								0,			0, /*Needs encyc entry*/
+A("Ramithaine", LONG_SWORD,								0,			0, /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_BEHEAD),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(6,1),	NO_DFNS,	NO_CARY,
