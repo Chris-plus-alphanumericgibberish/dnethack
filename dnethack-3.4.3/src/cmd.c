@@ -116,6 +116,7 @@ STATIC_PTR int NDECL(doprev_message);
 STATIC_PTR int NDECL(timed_occupation);
 STATIC_PTR int NDECL(doextcmd);
 STATIC_PTR int NDECL(domonability);
+STATIC_PTR int NDECL(domountattk);
 STATIC_PTR int NDECL(dooverview_or_wiz_where);
 # ifdef WIZARD
 STATIC_PTR int NDECL(wiz_wish);
@@ -3853,6 +3854,7 @@ static const struct func_tab cmdlist[] = {
 #endif
 	{'a', FALSE, doapply},
 	{'A', FALSE, doddoremarm},
+	{C('a'), TRUE, domountattk},
 	{M('a'), TRUE, doorganize},
 /*	'b', 'B' : go sw */
 	{'B', FALSE, domonability},
@@ -3971,6 +3973,7 @@ struct ext_func_tab extcmdlist[] = {
 	{"jump", "jump to a location", dojump, FALSE},
 	{"loot", "loot a box on the floor", doloot, FALSE},
 	{"monster", "use a monster's special ability", domonability, TRUE},
+	{"mount", "order mount to attack", domountattk, TRUE},
 	{"name", "name an item or type of object", ddocall, TRUE},
 	{"offer", "offer a sacrifice to the gods", dosacrifice, FALSE},
 	{"overview", "show an overview of the dungeon", dooverview, TRUE},
