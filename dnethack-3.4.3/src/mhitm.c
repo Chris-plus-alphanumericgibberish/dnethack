@@ -530,7 +530,9 @@ meleeattack:
 		    break;
 		}
 		dieroll = rnd(20 + i*2);
-		if(mattk->aatyp == AT_TUCH || mattk->aatyp == AT_5SQR || mattk->aatyp == AT_SHDW){
+		if(mattk->aatyp == AT_XWEP && i>0 && res[i-1]==MM_HIT){
+			strike = TRUE; //Don't roll twice
+		} else if(mattk->aatyp == AT_TUCH || mattk->aatyp == AT_5SQR || mattk->aatyp == AT_SHDW){
 			strike = (tchtmp > dieroll);
 		} else {
 			strike = (tmp > dieroll);
