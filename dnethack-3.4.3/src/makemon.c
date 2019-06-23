@@ -6523,7 +6523,7 @@ register int	mmflags;
 					else if(Role_if(PM_NOBLEMAN)){
 						if(flags.initgend) curhouse = u.start_house;
 						else curhouse = (((u.start_house - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE))+FIRST_HOUSE;
-					} else if((&u.uz)->dlevel >= qlocate_level.dlevel){
+					} else if((&u.uz)->dlevel <= qlocate_level.dlevel){
 						curhouse = rn2(2) ? u.start_house : flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
 					} else {
 						curhouse = flags.initgend ? EILISTRAEE_SYMBOL : EDDER_SYMBOL;
