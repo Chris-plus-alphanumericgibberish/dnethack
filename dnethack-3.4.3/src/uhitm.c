@@ -990,6 +990,7 @@ int thrown;
 	struct permonst *mdat = mon->data;
 	int barehand_silver_rings = 0, barehand_iron_rings = 0, barehand_unholy_rings = 0, barehand_jade_rings = 0;
 	int eden_silver = 0;
+	int simurgh_iron = 0;
 	/* The basic reason we need all these booleans is that we don't want
 	 * a "hit" message when a monster dies, so we have to know how much
 	 * damage it did _before_ outputting a hit message, but any messages
@@ -1146,12 +1147,14 @@ int thrown;
 			if (uleft 
 				&& (uleft->obj_material == IRON)
 			) barehand_iron_rings++;
+			else if(u.sealsActive&SEAL_SIMURGH) simurgh_iron++;
 			if (uright 
 				&& (uright->obj_material == IRON)
 			) barehand_iron_rings++;
+			else if(u.sealsActive&SEAL_SIMURGH) simurgh_iron++;
 			
-			if ((barehand_iron_rings) && hates_iron(mdat)) {
-			    tmp += d(barehand_iron_rings,mon->m_lev);
+			if ((barehand_iron_rings || simurgh_iron) && hates_iron(mdat)) {
+			    tmp += d(barehand_iron_rings+simurgh_iron,mon->m_lev);
 			    ironmsg = TRUE;
 			}
 			
@@ -1189,7 +1192,7 @@ int thrown;
 			    tmp += d(barehand_jade_rings, 20);
 			    silvermsg = TRUE; /* jade ring handled in same code block as silver ring */
 			}
-			/* posioned rings */
+			/* poisoned rings */
 			if(uright && uright->opoisoned && isSignetRing(uright->otyp)){
 				if(uright->opoisoned & OPOISON_BASIC && !rn2(10)){
 					if (resists_poison(mon))
@@ -2585,16 +2588,16 @@ defaultvalue:
 		int justeden = 0;
 
 		if (canspotmon(mon)) {
-		    if (barehand_silver_rings == 1)
+		    if (barehand_jade_rings == 1 && barehand_silver_rings == 1)
+			fmt = "Your %ssilver and jade rings sear %s!";
+		    else if (barehand_silver_rings == 1)
 			fmt = "Your %ssilver ring sears %s!";
 		    else if (barehand_silver_rings == 2)
 			fmt = "Your %ssilver rings sear %s!";
-		    else if (barehand_jade_rings == 1 && barehand_silver_rings == 1)
-			fmt = "Your %ssilver and jade rings sear %s!";
-		    else if (barehand_jade_rings == 2)
-			fmt = "Your %sjade rings sear %s!";
 		    else if (barehand_jade_rings == 1)
 			fmt = "Your %sjade ring sears %s!";
+		    else if (barehand_jade_rings == 2)
+			fmt = "Your %sjade rings sear %s!";
 		    else if (silverobj && saved_oname[0]) {
 		    	Sprintf(silverobjbuf, "Your %%s%s%s %s %%s!",
 		    		strstri(saved_oname, "silver") ?
@@ -2621,6 +2624,7 @@ defaultvalue:
 		const char *fmt;
 		char *whom = mon_nam(mon);
 		char ironobjbuf[BUFSZ];
+		int justsimurgh = 0;
 
 		if (canspotmon(mon)) {
 		    if (barehand_iron_rings == 1)
@@ -2633,8 +2637,10 @@ defaultvalue:
 					"" : "cold-iron ",
 				saved_oname, vtense(saved_oname, "sear"));
 		    	fmt = ironobjbuf;
-		    }
-			else fmt = "The %siron sears %s!";
+		    } else if(simurgh_iron){
+				fmt = "Your iron claws sear %s";
+				justsimurgh = 1;
+		    } else fmt = "The %siron sears %s!";
 		} else {
 		    *whom = highc(*whom);	/* "it" -> "It" */
 		    fmt = "%s is seared!";
@@ -2642,9 +2648,10 @@ defaultvalue:
 		/* note: s_suffix returns a modifiable buffer */
 		if (!noncorporeal(mdat))
 		    whom = strcat(s_suffix(whom), " flesh");
-		if(canspotmon(mon)) 
-			pline(fmt, "", whom);
-		else pline(fmt, whom);
+		if(canspotmon(mon)){
+			if(justsimurgh) pline(fmt, whom);
+			else pline(fmt, (simurgh_iron) ? "iron claws and " : "", whom);
+		} else pline(fmt, whom);
 	}
 	if (unholymsg) {
 		const char *fmt;
@@ -3808,12 +3815,19 @@ register struct attack *mattk;
 			}
 		}break;
 		case AD_SIMURGH:
+			if(rn2(5)){
 			if(hates_iron(mdef->data)){
-				Your("claws of cold iron sear %s.",mon_nam(mdef));
-				tmp+=d(2, mdef->m_lev);
+					Your("Cold iron quills brush %s.",mon_nam(mdef));
+					tmp+=d(rnd(5), (mdef->m_lev+1)/2);
 			}
+				break;
+			} // else
 			pline("Radiant feathers slice through %s.",mon_nam(mdef));
-			switch(rn2(15)){
+			if(hates_iron(mdef->data)){
+				pline("The cold iron rachises sear %s.",mon_nam(mdef));
+				tmp+=d(5, mdef->m_lev);
+			}
+			for(int i = 0; i<5;i++) switch(rn2(15)){
 				case 0:
 					if(!resists_fire(mdef)){
 						tmp+= rnd(spiritDsize());
@@ -3875,7 +3889,7 @@ register struct attack *mattk;
 					else shieldeff(mdef->mx, mdef->my);
 				break;
 				case 14:
-					if(emits_light(mdef->data)) tmp+= rnd(spiritDsize());
+					if(breathless_mon(mdef)) tmp+= rnd(spiritDsize());
 					else shieldeff(mdef->mx, mdef->my);
 				break;
 			}
