@@ -1024,6 +1024,15 @@ struct mkroom	*croom;
 		otmp = mkobj_at(oclass, x, y, !named);
 	}
 
+	if(In_quest(&u.uz) && !Role_if(PM_CONVICT)){
+		if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
+		if(otmp->oclass == ARMOR_CLASS){
+			if(is_suit(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
+			else if(is_helmet(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HEADMODIMASK);
+			else if(is_shirt(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
+		}
+	}
+	
 	if (o->spe != -127)	/* That means NOT RANDOM! */
 	    otmp->spe = (schar)o->spe;
 
