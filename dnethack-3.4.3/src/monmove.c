@@ -1145,6 +1145,32 @@ register struct monst *mtmp;
 	/* the watch will look around and see if you are up to no good :-) */
 	if (mdat == &mons[PM_WATCHMAN] || mdat == &mons[PM_WATCH_CAPTAIN])
 		watch_on_duty(mtmp);
+	if(mdat == &mons[PM_NURSE]){
+		int i, j;
+		struct trap *ttmp;
+		struct monst *tmon;
+		for(i=-1; i<2; i++)
+			for(j=-1; j<2; j++)
+				if(isok(mtmp->mx+i,mtmp->my+j)){
+					ttmp = t_at(mtmp->mx+i,mtmp->my+j);
+					tmon = m_at(mtmp->mx+i,mtmp->my+j);
+					if(ttmp && ttmp->ttyp == VIVI_TRAP && tmon && tmon->mtrapped){
+						if(canspotmon(mtmp))
+							pline("%s frees a vivisected prisoner from an essence trap!", Monnam(mtmp));
+						tmon->mpeaceful = mtmp->mpeaceful;
+						tmon->mtrapped = 0;
+						if(mtmp->mtame){
+							reward_untrap(ttmp, tmon);
+							u.uevent.uaxus_foe = 1;
+							pline("An alarm sounds!");
+							aggravate();
+						}
+						deltrap(ttmp);
+						newsym(mtmp->mx+i,mtmp->my+j);
+						return 1;
+					}
+				}
+	}
 	if(mdat == &mons[PM_TOVE] && !rn2(20)){
 		struct trap *ttmp = t_at(mtmp->mx, mtmp->my);
 		struct rm *lev = &levl[mtmp->mx][mtmp->my];
