@@ -505,7 +505,7 @@ NEARDATA struct permonst mons[] = {
 	MA_MINION|MA_FEY /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS|MV_LOWLIGHT3 /*MV*/, CLR_CYAN),
     MON("eye of doom", S_EYE, //3 /*Needs tile*/
 	LVL(15, 12, -9,100, 0), (G_GENO|G_HELL|1),
-	A(ATTK(AT_GAZE, AD_STDY, 5, 8), ATTK(AT_NONE, AD_PLYS, 3,7),
+	A(ATTK(AT_GAZE, AD_STDY, 8, 8), ATTK(AT_NONE, AD_PLYS, 3,7),
 	  ATTK(AT_MAGC, AD_SPEL, 0, 0), NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(10, CN_HUGE, 0, MS_SILENT, MZ_HUGE), 0, 0, //eyes of doom are huge but shockingly light
 	MM_FLY|MM_FLOAT|MM_AMPHIBIOUS /*MM*/, MT_HOSTILE|MT_NOTAKE /*MT*/,
