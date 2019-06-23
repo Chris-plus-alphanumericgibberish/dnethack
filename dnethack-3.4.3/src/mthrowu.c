@@ -98,7 +98,10 @@ boolean burn;
 		if(bypassDR) dam -= base_udr();
 		else dam -= roll_udr((struct monst *) 0);
 		
-		if(u.ustdy) dam += u.ustdy;
+		if(dam > 0 && u.ustdy){
+			dam += u.ustdy;
+			u.ustdy /= 2;
+		}
 		
 		if(dam < 1) dam = 1;
 		
