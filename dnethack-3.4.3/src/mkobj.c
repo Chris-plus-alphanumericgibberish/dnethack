@@ -2570,7 +2570,7 @@ maid_clean(mon, obj)
 			struct engr *oep = engr_at(mon->mx,mon->my);
 			if(canseemon(mon)) pline("The maid banishes the unholy object to hell.");
 			add_to_migration(obj);
-			obj->ox = valley_level.dnum;
+			obj->ox = sanctum_level.dnum;
 			obj->oy = sanctum_level.dlevel - 1; /* vs level, bottom of the accesible part of hell */
 			obj->owornmask = (long)MIGR_RANDOM;
 			if(!oep){
