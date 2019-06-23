@@ -2363,7 +2363,7 @@ physical:{
 					magr->mhpmax += d(1,4);
 					magr->mhp += d(1,6);
 					if(magr->mhp > magr->mhpmax) magr->mhp = magr->mhpmax;
-					if(magr->mtame){
+					if(magr->mtame && !magr->isminion){
 						EDOG(magr)->hungrytime += pd->cnutrit/4;  //400/4 = human nut/4
 					}
 			}
