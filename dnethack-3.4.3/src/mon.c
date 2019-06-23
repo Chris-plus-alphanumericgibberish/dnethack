@@ -351,6 +351,28 @@ register struct monst *mtmp;
 		}
 		goto default_1;
 
+	    case PM_SARA__THE_LAST_ORACLE:
+		if (mtmp->mrevived) {
+			if (canseemon(mtmp))
+			   pline("%s recently returned eyes vanish once more.",
+				s_suffix(Monnam(mtmp)));
+		} else {
+			if (canseemon(mtmp))
+			   pline("%s eyes vanish.",
+				s_suffix(Monnam(mtmp)));
+		}
+		goto default_1;
+	    case PM_ORACLE:
+		if (mtmp->mrevived) {
+			if (canseemon(mtmp))
+			   pline("%s recently regrown eyes crumble to dust.",
+				s_suffix(Monnam(mtmp)));
+		} else {
+			if (canseemon(mtmp))
+			   pline("%s eyes crumble to dust.",
+				s_suffix(Monnam(mtmp)));
+		}
+		goto default_1;
 	    case PM_WHITE_UNICORN:
 	    case PM_GRAY_UNICORN:
 	    case PM_BLACK_UNICORN:
@@ -473,6 +495,8 @@ register struct monst *mtmp;
 			obj->quan = d(1,4);
 			obj->owt = weight(obj);
 			if(!mtmp->mrevived && !rn2(20)){
+				obj = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+			} else if(!mtmp->mrevived && !rn2(19)){
 				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
 			} else if(!mtmp->mrevived && !rn2(10)){
 				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
@@ -528,6 +552,8 @@ register struct monst *mtmp;
 			obj->quan = d(3,4);
 			obj->owt = weight(obj);
 			if(!rn2(20)){
+				obj = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
+			} else if(!rn2(19)){
 				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
 			} else if(!rn2(10)){
 				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
@@ -563,11 +589,6 @@ register struct monst *mtmp;
 				obj = mksobj_at(SCRAP, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
 			}
-			if(!rn2(20)){
-				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
-			} else if(!rn2(10)){
-				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
-			}
 		break;
 	    case PM_HELLFIRE_COLOSSUS:
 			obj = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
@@ -583,11 +604,50 @@ register struct monst *mtmp;
 				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
 			}
 			mtmp->mnamelth = 0;
-			if(!rn2(20)){
-				obj = mksobj_at(TINNING_KIT, x, y, TRUE, FALSE);
-			} else if(!rn2(10)){
-				obj = mksobj_at(CAN_OF_GREASE, x, y, TRUE, FALSE);
-			}
+		break;
+	    case PM_ANDROID:
+			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+		break;
+	    case PM_CRUCIFIED_ANDROID:
+			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
+			obj->oeroded = 1;
+			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
+			obj->oeroded = 1;
+		break;
+	    case PM_MUMMIFIED_ANDROID:
+			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+		break;
+	    case PM_FLAYED_ANDROID:
+			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+		break;
+	    case PM_PARASITIZED_ANDROID:
+			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			obj = mksobj_at(CORPSE, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_PARASITIC_MIND_FLAYER;
+			fix_object(obj);
+		break;
+	    case PM_GYNOID:
+			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+		break;
+	    case PM_CRUCIFIED_GYNOID:
+			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
+			obj->oeroded = 1;
+			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
+			obj->oeroded = 1;
+		break;
+	    case PM_MUMMIFIED_GYNOID:
+			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+		break;
+	    case PM_FLAYED_GYNOID:
+			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+		break;
+	    case PM_PARASITIZED_GYNOID:
+			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			obj = mksobj_at(CORPSE, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_PARASITIC_MIND_FLAYER;
+			fix_object(obj);
 		break;
 	    case PM_DANCING_BLADE:
 			obj = mksobj_at(TWO_HANDED_SWORD, x, y, FALSE, FALSE);
@@ -743,6 +803,75 @@ register struct monst *mtmp;
 			}
 		goto default_1;
 		break;
+	    case PM_TWITCHING_FOUR_ARMED_CHANGED:
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_gas_cloud(x, y, 4, rnd(3)+1);
+			flags.cth_attk=FALSE;
+			obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_MYRKALFR;
+			obj->quan = 2;
+			obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_ELF;
+			obj->quan = 2;
+			num = rn1(10,10);
+			while (num--){
+				obj = mksobj_at(WORM_TOOTH, x, y, FALSE, FALSE);
+				obj->oproperties = OPROP_LESSW|OPROP_FLAYW;
+			}
+		goto default_1;
+		break;
+	    case PM_CLAIRVOYANT_CHANGED:
+			flags.cth_attk=TRUE;//state machine stuff.
+			create_gas_cloud(x, y, 4, rnd(3)+1);
+			flags.cth_attk=FALSE;
+			obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_HUMAN;
+			obj->quan = 2;
+			obj->owt = weight(obj);
+			obj->oartifact = ART_EYE_OF_THE_ORACLE;
+			obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_HUMAN;
+			obj->quan = 14;
+			obj->owt = weight(obj);
+			obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_HUMAN;
+			obj->quan = 4;
+			obj->owt = weight(obj);
+		goto default_1;
+		break;
+	    case PM_EMBRACED_DROWESS:{
+			struct monst *mon;
+			mon = makemon(&mons[PM_DROW_CAPTAIN], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mhpmax = (mon->m_lev * 8) - 4;
+				mon->mhp = mon->mhpmax;
+				mon->female = TRUE;
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+			}
+			obj = mkcorpstat(CORPSE, mon, (struct permonst *)0, x, y, FALSE);
+			mongone(mon);
+		}break;
+	    case PM_PARASITIZED_EMBRACED_ALIDER:{
+			struct monst *mon;
+			mon = makemon(&mons[PM_ALIDER], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mhpmax = (mon->m_lev * 8) - 4;
+				mon->mhp = mon->mhpmax;
+				mon->female = TRUE;
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+			}
+			mkcorpstat(CORPSE, mon, (struct permonst *)0, x, y, FALSE);
+			mongone(mon);
+			obj = mksobj_at(CORPSE, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_PARASITIC_MASTER_MIND_FLAYER;
+			fix_object(obj);
+		}break;
 	    default_1:
 	    default:
 		if (mvitals[mndx].mvflags & G_NOCORPSE)
@@ -4053,6 +4182,8 @@ boolean was_swallowed;			/* digestion */
 	if (is_golem(mdat)
 		   || is_mplayer(mdat)
 		   || is_rider(mdat)
+		   || mon->m_id == quest_status.leader_m_id
+		   || mon->data->msound == MS_NEMESIS
 		   || (uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_LIFE && mon->mtame)
 		   || mdat == &mons[PM_UNDEAD_KNIGHT]
 		   || mdat == &mons[PM_WARRIOR_OF_SUNLIGHT]
@@ -4065,6 +4196,9 @@ boolean was_swallowed;			/* digestion */
 		   || mdat == &mons[PM_NIGHTMARE]
 		   || mdat == &mons[PM_CHROMATIC_DRAGON]
 		   || mdat == &mons[PM_PLATINUM_DRAGON]
+		   || mdat == &mons[PM_CHANGED]
+		   || mdat == &mons[PM_WARRIOR_CHANGED]
+		   || mdat == &mons[PM_CLAIRVOYANT_CHANGED]
 //		   || mdat == &mons[PM_PINK_UNICORN]
 		   )
 		return TRUE;

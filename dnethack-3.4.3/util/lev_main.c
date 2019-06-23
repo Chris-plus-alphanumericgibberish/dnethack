@@ -525,6 +525,7 @@ char c;
 		  case 'W'  : return(WATER);
 		  case 'w'  : return(PUDDLE);
 		  case 'T'	: return (TREE);
+		  case 't'	: return (DEADTREE);
 		  case 'F'	: return (IRONBARS);	/* Fe = iron */
 	    }
 	return(INVALID_TYPE);

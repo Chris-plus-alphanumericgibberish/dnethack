@@ -103,6 +103,8 @@ E int FDECL(narrow_spec_applies, (struct obj *,struct monst *));
 E void FDECL(discover_artifact, (int));
 E boolean FDECL(undiscovered_artifact, (int));
 E int FDECL(disp_artifact_discoveries, (winid));
+E boolean FDECL(otyp_hit, (struct monst *,struct monst *,
+				struct obj *,int *,int));
 E boolean FDECL(oproperty_hit, (struct monst *,struct monst *,
 				struct obj *,int *,int));
 E boolean FDECL(artifact_hit, (struct monst *,struct monst *,
@@ -487,7 +489,9 @@ E struct obj *NDECL(unchanger);
 E void NDECL(reset_remarm);
 E int NDECL(doddoremarm);
 E int FDECL(destroy_arm, (struct obj *));
+E int FDECL(destroy_marm, (struct monst *, struct obj *));
 E int FDECL(claws_destroy_arm, (struct obj *));
+E int FDECL(claws_destroy_marm, (struct monst *, struct obj *));
 E int FDECL(teleport_arm, (struct obj *));
 E int FDECL(tent_destroy_arm, (struct obj *));
 E void FDECL(adj_abon, (struct obj *,SCHAR_P));
@@ -526,6 +530,7 @@ E void FDECL(wantdoor, (int,int,genericptr_t));
 
 /* ### dokick.c ### */
 
+E void FDECL(kickdmg, (struct monst *, BOOLEAN_P));
 E boolean FDECL(ghitm, (struct monst *,struct obj *));
 E void FDECL(container_impact_dmg, (struct obj *));
 E int NDECL(dokick);
@@ -1908,6 +1913,7 @@ E int NDECL(dogaze);
 E int NDECL(dohide);
 E int NDECL(domindblast);
 E int NDECL(dodarken);
+E int NDECL(doandroid);
 E int NDECL(doclockspeed);
 E void FDECL(skinback, (BOOLEAN_P));
 E const char *FDECL(mbodypart, (struct monst *,int));
@@ -2029,7 +2035,7 @@ E long NDECL(random);
 
 E int NDECL(doread);
 E boolean FDECL(is_chargeable, (struct obj *));
-E void FDECL(recharge, (struct obj *,int));
+E int FDECL(recharge, (struct obj *,int));
 E void FDECL(forget, (int));
 E void FDECL(forget_objects, (int));
 E void FDECL(forget_levels, (int));

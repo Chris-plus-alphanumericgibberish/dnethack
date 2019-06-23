@@ -180,7 +180,7 @@ WEAPON("moon axe", "two-handed axe", /*Needs encyc entry*//*Needs tile*/
 WEAPON("short sword", (char *)0,
 	1, 0, 0,  8, 30, 10,  6,  8, 0, P,   P_SHORT_SWORD, IRON, HI_METAL),
 WEAPON("vibroblade", "gray short sword", /*Needs encyc entry*//*Needs tile*/
-	1, 0, 0,  0,  5, 10,  6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, CLR_GRAY),
+	1, 0, 0,  0,  5,1000, 6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, CLR_GRAY),
 WEAPON("elven short sword", "runed short sword",
 	0, 0, 0,  2,  2, 10,  7,  7, 2, P,   P_SHORT_SWORD, WOOD, HI_WOOD),
 WEAPON("droven short sword", "short sword", /*Needs encyc entry*/
@@ -233,6 +233,18 @@ WEAPON("runesword", "runed black blade",
 	0, 0, 0,  0, 40,300,  10,  10, 0, S,   P_BROAD_SWORD, IRON, CLR_BLACK),
 						/* +d4 small, +1 large */
 						/* +5d2 +d8 from level drain */
+WEAPON("white vibrosword", "white sword", /*Needs encyc entry*//*Needs tile*/
+	0, 0, 0,  0,  7,8000, 10, 12, 1, P|S,   P_LONG_SWORD, PLASTIC, CLR_WHITE),
+WEAPON("gold-bladed vibrosword", "black and gold sword", /*Needs encyc entry*//*Needs tile*/
+	0, 0, 0,  0, 80,8000, 10, 12, 1, P|S,   P_LONG_SWORD,    GOLD, CLR_BLACK),
+WEAPON("red-eyed vibrosword", "blue-glowing sword", /*Needs encyc entry*//*Needs tile*/
+	0, 0, 0,  0, 80,8000, 10, 12, 1, P|S,   P_LONG_SWORD, PLASTIC, CLR_GRAY),
+WEAPON("white vibrozanbato", "curved white sword",
+	0, 0, 1,  0, 60,50000, 16,  8, 2, S,   P_TWO_HANDED_SWORD, PLASTIC, CLR_WHITE),
+						    /* +2d6 large */
+WEAPON("gold-bladed vibrozanbato", "curved black and gold sword",
+	0, 0, 1,  0, 60,50000, 16,  8, 2, S,   P_TWO_HANDED_SWORD, GOLD, CLR_BLACK),
+						    /* +2d6 large */
 
 /* polearms */
 /* spear-type */
@@ -252,7 +264,11 @@ WEAPON("naginata", "samurai-sword polearm",
 WEAPON("lance", (char *)0,
 	1, 0, 0,  4,180, 10,  6,  8, 0, P,   P_LANCE, IRON, HI_METAL),
 WEAPON("force pike", "long gray spear",/*Needs tile*/
-	0, 0, 0,  0, 30, 10,  6,  8, 2, P|S,   P_LANCE, PLASTIC, CLR_GRAY),
+	0, 0, 0,  0, 30, 1000,  6,  8, 2, P|S,   P_LANCE, PLASTIC, CLR_GRAY),
+WEAPON("white vibrospear", "long white spear",/*Needs tile*/
+	0, 0, 0,  0, 30, 1000,  6,  8, 2, P|S,   P_LANCE, PLASTIC, CLR_WHITE),
+WEAPON("gold-bladed vibrospear", "long black and gold spear",/*Needs tile*/
+	0, 0, 0,  0, 30, 1000,  6,  8, 2, P|S,   P_LANCE, GOLD, CLR_BLACK),
 WEAPON("elven lance", "runed lance", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0,  0, 11, 10,  8,  8, 2, P,   P_LANCE, WOOD, HI_WOOD),
 WEAPON("droven lance", "lance", /*Needs encyc entry*//*Needs tile*/
@@ -679,9 +695,11 @@ GLOVES("crystal gauntlets", "glass gauntlets", /*Needs encyc entry*//*Needs tile
 GLOVES("gauntlets", (char *)0, /*Needs encyc entry*//*Needs tile*/
 		1, 0,  0,	   4, 2, 25, 10, 8, 2, 0, IRON, HI_METAL),
 GLOVES("bronze gauntlets", "metal gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 1, 25, 10, 8, 2, 0, COPPER, HI_COPPER),
+		0, 0,  0,	   0, 2, 25, 10, 8, 2, 0, COPPER, HI_COPPER),
+GLOVES("long gloves", (char *)0,
+		1, 0,  0,	   0, 1, 15,  8, 10, 2, 1, CLOTH, CLR_WHITE),
 GLOVES("harmonium gauntlets", "red-lacquered hooked gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 1, 40,  1, 9, 2, 0, METAL, CLR_RED),
+		0, 0,  0,	   0, 2, 40,  1, 9, 2, 0, METAL, CLR_RED),
 GLOVES("high-elven gauntlets", "runed gauntlets", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2,  5, 50, 8, 2, 0, MITHRIL, HI_METAL),
 GLOVES("plasteel gauntlets", "hard white gauntlets", /*Needs encyc entry*//*Needs tile*/
@@ -712,6 +730,8 @@ BOOTS("stilettos", "high-heeled shoes", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 1, 10, 60, 10, 0, 0, IRON, HI_METAL),
 BOOTS("high boots", "jackboots",
 		0, 0,  0,	  15, 2, 20, 12, 10, 2, 0, LEATHER, HI_LEATHER),
+BOOTS("heeled boots", (char *)0,
+		1, 0,  0,	   0, 2, 20, 12, 10, 2, 0, LEATHER, CLR_BLACK),
 BOOTS("crystal boots", "glass boots", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	   0, 2,150,300,   9, 0, 0, GLASS, CLR_CYAN),
 /* With shuffled appearances... */
@@ -898,6 +918,8 @@ TOOLMASK("R'lyehian faceplate", "ebon pane", POISON_RES,/*Needs tile*/
 								0, 0, 1, 0,   0, 15, 200, GLASS, CLR_BLACK),
 TOOL("lenses", (char *)0,		1, 0, 0, 0,   5,  3,  80, GLASS, HI_GLASS), /*Needs encyc entry*/
 TOOL("blindfold", (char *)0,    1, 0, 0, 0,  45,  2,  20, CLOTH, CLR_GRAY),
+TOOL("android visor", "black blindfold",
+								0, 0, 0, 0,   0,  2,  40, CLOTH, CLR_BLACK),
 TOOL("towel", (char *)0,        1, 0, 0, 0,  45,  2,  50, CLOTH, CLR_MAGENTA),
 #ifdef STEED
 TOOL("saddle", (char *)0,       1, 0, 0, 0,   5,200, 150, LEATHER, HI_LEATHER),
@@ -1363,6 +1385,10 @@ OBJECT(OBJ("scrap", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON), 0, 
 OBJECT(OBJ("hellfire component", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,METAL), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS,    0, 0,    1,  0,  1,  1, 0, 0,   0, 20, CLR_ORANGE),
 						/* +1 both l & s */
+OBJECT(OBJ("broken android", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,METAL), 0, /*Needs encyc entry*//*Needs tile*/
+		CHAIN_CLASS,    0, 0, 3000,  0,  1,  1, 0, 0,   0, 20, CLR_WHITE),
+OBJECT(OBJ("broken gynoid", (char *)0), BITS(1,1,0,0,0,0,0,0,0,0,WHACK,P_NONE,METAL), 0, /*Needs encyc entry*//*Needs tile*/
+		CHAIN_CLASS,    0, 0, 3000,  0,  1,  1, 0, 0,   0, 20, CLR_WHITE),
 
 OBJECT(OBJ("rope of entangling", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,VEGGY), 0,
 		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  0, 200, CLR_BROWN),

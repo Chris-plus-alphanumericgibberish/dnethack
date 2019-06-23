@@ -2806,6 +2806,11 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	
 	boolean dont_start = FALSE;
 	
+	if(uandroid){
+		pline("Though you may look human, you run on magical energy, not food.");
+		pline("Use #monster to rest and recover.");
+		return 0;
+	}
 	if(uclockwork){
 		long uUpgrades = (u.clockworkUpgrades&(WOOD_STOVE|MAGIC_FURNACE|HELLFIRE_FURNACE|SCRAP_MAW));
 		if(!uUpgrades){
@@ -3873,6 +3878,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 {
 	int hungermod = 1;
 	if (u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) return;	/* you don't feel hungrier */
+	if(inediate(youracedata) && !uclockwork && !Race_if(PM_INCANTIFIER)) return;
 	
 	if(u.usleep) hungermod *= 10; /* slow metabolic rate while asleep */
 	/* Convicts can last twice as long at hungry and below */
@@ -3883,20 +3889,18 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if(is_vampire(youracedata))
 		hungermod *= (maybe_polyd(youmonst.data->mlevel, u.ulevel)/10 + 1);
 	
-	if ((carnivorous(youracedata)
-		|| herbivorous(youracedata)
-		|| magivorous(youracedata)
-		|| Race_if(PM_INCANTIFIER)
-		|| is_vampire(youracedata))
+	if ((!inediate(youracedata) || Race_if(PM_INCANTIFIER))
 		&& !(moves % hungermod)
 		&& !( (Slow_digestion && !Race_if(PM_INCANTIFIER)) ||
-				(uclockwork) ))
-			(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);		/* ordinary food consumption */
-	if(uwep && (
-		uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youracedata)))
+				(uclockwork) )
 	){
-		if(Race_if(PM_INCANTIFIER)) u.uen -= 9;
-		else u.uhunger -= 9;
+		(Race_if(PM_INCANTIFIER) ? u.uen-- : u.uhunger--);		/* ordinary food consumption */
+		if(uwep && (
+			uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youracedata)))
+		){
+			if(Race_if(PM_INCANTIFIER)) u.uen -= 9;
+			else u.uhunger -= 9;
+		}
 	}
 	if(uclockwork){
 		if(u.ucspeed == SLOW_CLOCKSPEED){
@@ -3953,6 +3957,7 @@ void
 morehungry(num)	/* called after vomiting and after performing feats of magic */
 register int num;
 {
+	if(inediate(youracedata) && !uclockwork && !Race_if(PM_INCANTIFIER)) return;
 	if(Race_if(PM_INCANTIFIER)) u.uen -= num;
 	else u.uhunger -= num;
 	newuhs(TRUE);

@@ -443,7 +443,18 @@ boolean artif;
 			otmp->spe = -rne(3);
 		} else	blessorcurse(otmp, 10);
 		
-		if(otmp->otyp == FORCE_PIKE || otmp->otyp == VIBROBLADE){
+		if(otmp->otyp == WHITE_VIBROSWORD
+		 || otmp->otyp == WHITE_VIBROSPEAR
+		 || otmp->otyp == WHITE_VIBROZANBATO
+		)
+			otmp->oproperties |= OPROP_HOLYW;
+		if(otmp->otyp == GOLD_BLADED_VIBROSWORD
+		 || otmp->otyp == GOLD_BLADED_VIBROSPEAR
+		 || otmp->otyp == GOLD_BLADED_VIBROZANBATO
+		)
+			otmp->oproperties |= OPROP_UNHYW;
+		
+		if(is_vibroweapon(otmp)){
 			otmp->ovar1 = 80L + rnd(20);
 		}
 		else if(otmp->otyp == RAYGUN){

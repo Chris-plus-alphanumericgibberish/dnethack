@@ -336,6 +336,11 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_BYAKHEE] ||
 			(mtmp->data == &mons[PM_HUNTING_HORROR] && complete == 6) ||
 			mtmp->data == &mons[PM_MIND_FLAYER] ||
+			mtmp->data == &mons[PM_PARASITIC_MIND_FLAYER] ||
+			mtmp->data == &mons[PM_PARASITIZED_ANDROID] ||
+			mtmp->data == &mons[PM_PARASITIZED_GYNOID] ||
+			(mtmp->data == &mons[PM_PARASITIC_MASTER_MIND_FLAYER] && complete == 6) ||
+			(mtmp->data == &mons[PM_PARASITIZED_EMBRACED_ALIDER] && complete == 6) ||
 			(mtmp->data == &mons[PM_MASTER_MIND_FLAYER] && complete == 6) ||
 			mtmp->data == &mons[PM_DEEP_ONE] ||
 			mtmp->data == &mons[PM_DEEPER_ONE] ||
@@ -1833,25 +1838,12 @@ not_special:
 			struct monst *m2 = (struct monst *)0;
 			int distminbest = SQSRCHRADIUS;
 			for(m2=fmon; m2; m2 = m2->nmon){
-				if(m2->m_id == quest_status.leader_m_id && Role_if(PM_ANACHRONONAUT) && !mtmp->mpeaceful && In_quest(&u.uz)){
-					/*make a beeline for the leader*/
-					distminbest = min(distminbest,dist2(mtmp->mx,mtmp->my,m2->mx,m2->my));
-					leader_target = TRUE;
-					gx = m2->mx;
-					gy = m2->my;
-					appr = 1;
-					if(mon_can_see_mon(mtmp, m2)){
-						mtmp->mux = m2->mx;
-						mtmp->muy = m2->my;
-						appr = 1;
-						break;
-					}
-				} else if(dist2(mtmp->mx,mtmp->my,m2->mx,m2->my) < distminbest
+				if(distmin(mtmp->mx,mtmp->my,m2->mx,m2->my) < distminbest
 						&& mm_aggression(mtmp,m2)
-						&& clear_path(mtmp->mx, mtmp->my, m2->mx, m2->my)
+						&& (clear_path(mtmp->mx, mtmp->my, m2->mx, m2->my) || !rn2(10))
 						&& mon_can_see_mon(mtmp, m2)
 				){
-					distminbest = dist2(mtmp->mx,mtmp->my,m2->mx,m2->my);
+					distminbest = distmin(mtmp->mx,mtmp->my,m2->mx,m2->my);
 					leader_target = FALSE;
 					gx = m2->mx;
 					gy = m2->my;
@@ -1867,7 +1859,24 @@ not_special:
 						appr = 1;
 					}
 				}
+			}//End target closest hostile
+			
+			if(Role_if(PM_ANACHRONONAUT) && !mtmp->mpeaceful && In_quest(&u.uz)){
+				for(m2=fmon; m2; m2 = m2->nmon){
+					if(m2->m_id == quest_status.leader_m_id){
+						if(distminbest >= SQSRCHRADIUS){
+							/*make a beeline for the leader*/
+							leader_target = TRUE;
+							gx = m2->mx;
+							gy = m2->my;
+							mtmp->mux = m2->mx;
+							mtmp->muy = m2->my;
+							appr = 1;
+						}
+						break;
+					}
 			}
+			}//End target ana leader
 		}
 		if(Role_if(PM_ANACHRONONAUT) && !mtmp->mpeaceful && In_quest(&u.uz) && Is_qstart(&u.uz)){
 			if(mtmp->mhp == mtmp->mhpmax && (
@@ -2409,6 +2418,7 @@ struct monst *mtmp;
 		    typ != BAG_OF_TRICKS && !Is_candle(obj) &&
 		    typ != OILSKIN_SACK && typ != LEASH &&
 		    typ != STETHOSCOPE && typ != BLINDFOLD && 
+		    typ != ANDROID_VISOR && 
 			typ != TOWEL && typ != R_LYEHIAN_FACEPLATE &&
 		    typ != TIN_WHISTLE && typ != MAGIC_WHISTLE &&
 		    typ != MAGIC_MARKER && typ != TIN_OPENER &&

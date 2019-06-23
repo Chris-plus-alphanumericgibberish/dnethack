@@ -15,6 +15,7 @@
 STATIC_DCL void NDECL(do_positionbar);
 #endif
 
+STATIC_DCL void NDECL(androidUpkeep);
 STATIC_DCL void NDECL(printMons);
 STATIC_DCL void NDECL(printDPR);
 STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
@@ -290,6 +291,61 @@ digYchasm(mtmp)
 		x=x+1;
 	}
 }
+
+STATIC_OVL
+void
+androidUpkeep()
+{
+	//Pay unusual upkeep here, possibly pass out
+	if(uandroid && !u.usleep){
+		int mult = 30/u.ulevel;
+		//Possibly pass out if you begin this step with 0 energy.
+		if(u.uen == 0 && !rn2(10+u.ulevel) && moves >= u.nextsleep){
+			int t = rn1(u.uenmax*mult, u.uenmax*mult);
+			You("pass out from exhaustion!");
+			u.nextsleep = moves+rnz(350)+t;
+			u.lastslept = moves;
+			fall_asleep(-t, TRUE);
+			nomul(-1*u.uenmax/mult, "passed out from exhaustion");
+		}
+		if(u.phasengn){
+			u.uen -= 10;
+			if(u.uen <= 0){
+				u.uen = 0;
+				You("can no longer maintain phase!");
+				u.phasengn = 0;
+			}
+		}
+		if(u.ucspeed == HIGH_CLOCKSPEED){
+			u.uen -= 1;
+			if(u.uen <= 0){
+				u.uen = 0;
+				You("can no longer maintain emergency speed!");
+				u.ucspeed = NORM_CLOCKSPEED;
+			}
+		}
+		//Exceeding operational time
+		static char fatigue_warning = 0;
+		if(moves >= u.nextsleep+700 && u.uen > 10 && !fatigue_warning){
+			fatigue_warning = 1;
+			You_feel("fatigued.");
+		}
+		static char e_fatigued = 0;
+		if(moves >= u.nextsleep+700 && u.uen > 1 && u.uen <= 10 && !e_fatigued){
+			e_fatigued = 1;
+			You_feel("extremely fatigued.");
+		}
+		static char pass_warning = 0;
+		if(moves >= u.nextsleep && u.uen <= 1 && !pass_warning){
+			pass_warning = 1;
+			You_feel("like you're about to pass out.");
+		}
+		if(moves > u.nextsleep+700 && u.uen > 0){
+			if(!(moves%20)) u.uen -= 1;
+		}
+	}
+}
+
 /* perform 1 turn's worth of time-dependent hp modification, mostly silently */
 /* NOTES: can rehumanize(), can print You("pass out from exertion!") if moving when overloaded at 1 hp */
 void
@@ -300,6 +356,9 @@ you_regen_hp()
 	int * hpmax;
 	int * hp;
 
+	if(uandroid && !u.usleep)
+		return;
+	
 	// set hp, maxhp pointers
 	hp    = (Upolyd) ? (&u.mh)    : (&u.uhp);
 	hpmax = (Upolyd) ? (&u.mhmax) : (&u.uhpmax);
@@ -431,6 +490,9 @@ you_regen_pw()
 	int wtcap = near_capacity();
 	int per30 = 0;
 
+	if(uandroid && !u.usleep)
+		return;
+	
 	// natural power regeneration
 	if (wtcap < MOD_ENCUMBER &&		// not overly encumbered
 		!Race_if(PM_INCANTIFIER)	// not an incantifier
@@ -619,14 +681,21 @@ moveloop()
 				youmonst.movement -= 1;
 			} else if(uwep && uwep->oartifact == ART_SODE_NO_SHIRAYUKI){
 				youmonst.movement -= 3;
+			} else if(uandroid && u.ucspeed == HIGH_CLOCKSPEED){
+				youmonst.movement -= 3;
 			} else if(uwep && uwep->oartifact == ART_TOBIUME){
 				youmonst.movement -= 4;
 			} else {
 				youmonst.movement -= NORMAL_SPEED;
 			}
-		} else {
-			youmonst.movement -= NORMAL_SPEED;
-		}
+		} else if(uandroid && u.ucspeed == HIGH_CLOCKSPEED){
+			if(u.umoved){
+				youmonst.movement -= 3;
+			} else {
+					u.ucspeed = NORMAL_SPEED;
+				youmonst.movement -= NORMAL_SPEED;
+			}
+		} else youmonst.movement -= NORMAL_SPEED;
 		
 		  /**************************************************/
 		 /*monsters that respond to the player turn go here*/
@@ -1091,6 +1160,7 @@ karemade:
 				if(mtmp && !(LBbreach && moves%5)) {
 					verbalize("**EMERGENCY ALERT: hostile entities detected within Last Bastion**");
 					LBbreach = TRUE;
+					(void) makemon((struct permonst *)0, xdnstair, ydnstair, MM_ADJACENTOK);
 				} else if(!mtmp) LBbreach = FALSE;
 				
 				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) if(!mtmp->mpeaceful && mtmp->mx <= 26 && mtmp->mx > 23) break;
@@ -1124,9 +1194,9 @@ karemade:
 				}
 				else (void) makemon((struct permonst *)0, 0, 0, NO_MM_FLAGS);
 			}
-			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !Is_qstart(&u.uz) && !rn2(50)){
-				struct monst* mtmp = makemon(&mons[PM_SEMBLANCE], rn1(COLNO-3,2), rn1(ROWNO-3,2), MM_ADJACENTSTRICT|MM_ADJACENTOK);
-				//"Where stray illuminations from the Far Realm leak onto another plane, matter stirs at the beckoning of inexplicable urges before burining to ash."
+			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !Is_qstart(&u.uz) && !rn2(35)){
+				struct monst* mtmp = makemon(&mons[PM_SEMBLANCE], rn1(COLNO-3,2), rn1(ROWNO-3,2), MM_ADJACENTOK);
+				//"Where stray illuminations from the Far Realm leak onto another plane, matter stirs at the beckoning of inexplicable urges before burning to ash."
 				if(mtmp && canseemon(mtmp)) pline("The base matter of the world stirs at the beckoning of inexplicable urges, dancing with a semblance of life.");
 			}
 
@@ -1279,6 +1349,9 @@ karemade:
 				hungerup = 2*moveamt/NORMAL_SPEED - 1;
 				if(u.slowclock < hungerup) morehungry(hungerup-u.slowclock);
 				else if(!(moves%(u.slowclock - hungerup + 1))) morehungry(1);
+			}
+			if(uandroid && u.ucspeed == HIGH_CLOCKSPEED){
+				if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
 			}
 			if(uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
@@ -1483,6 +1556,7 @@ karemade:
 		     */
 			you_regen_hp();
 			you_regen_pw();
+			androidUpkeep();
 
 		    if(!(u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
 			if(Teleportation && !rn2(85) && !(
@@ -1518,7 +1592,7 @@ karemade:
 			if(Polymorph && !rn2(100))
 			    change = 1;
 			else if (u.ulycn >= LOW_PM && !Upolyd &&
-				 !uclockwork &&
+				 !umechanoid&&
 				 !rn2(80 - (20 * night())))
 			    change = 2;
 			if (change && !Unchanging) {
@@ -2025,9 +2099,16 @@ newgame()
 			com_pager(211);
 		} else if(Role_if(PM_ANACHRONONAUT)){
 			com_pager(218);
-			com_pager(219);
-			com_pager(220);
-			com_pager(221);
+			if(Race_if(PM_ANDROID)){
+				com_pager(222);
+				com_pager(223);
+				com_pager(224);
+				com_pager(225);
+			} else {
+				com_pager(219);
+				com_pager(220);
+				com_pager(221);
+			}
 		} else if(Race_if(PM_WORM_THAT_WALKS)){
 			if(Role_if(PM_CONVICT)){
 				com_pager(214);
@@ -2103,15 +2184,21 @@ boolean new_game;	/* false => restoring an old game */
 		pline("#chat to a fresh seal to contact the spirit beyond.");
 		pline("Press Ctrl^F or type #power to fire active spirit powers!");
 	}
-	if(Darksight){
+	if(Race_if(PM_DROW)){
 		pline("Beware, droven armor evaporates in light!");
 		pline("Use #monster to create a patch of darkness.");
 	}
-	else if(Race_if(PM_CLOCKWORK_AUTOMATON)){
+	if(Race_if(PM_ANDROID)){
+		pline("Androids do not need to eat, but *do* need to sleep.");
+		pline("Use #monster to access your innate abilities, including sleep.");
+		pline("Use '.' to recover HP using magic energy.");
+		pline("Sleep to recover magic energy.");
+	}
+	if(Race_if(PM_CLOCKWORK_AUTOMATON)){
 		pline("Use #monster to adjust your clockspeed.");
 		You("do not heal naturally. Use '.' to attempt repairs.");
 	}
-	else if(Race_if(PM_INCANTIFIER)){
+	if(Race_if(PM_INCANTIFIER)){
 		pline("Incantifiers eat magic, not food, and do not heal naturally.");
 	}
 	}

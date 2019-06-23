@@ -119,7 +119,7 @@ hack_artifacts()
 	struct artifact *art;
 	int alignmnt = flags.stag ? u.ualign.type : aligns[flags.initalign].value;
 	
-	if(Role_if(PM_EXILE)) alignmnt = A_VOID; //hack_artifacts may be called before this is propperly set
+	if(Role_if(PM_EXILE)) alignmnt = A_VOID; //hack_artifacts may be called before this is properly set
 	if((Race_if(PM_DROW) || Race_if(PM_MYRKALFR)) && !Role_if(PM_EXILE) && !Role_if(PM_CONVICT) && !flags.initgend){
 		alignmnt = A_NEUTRAL; /* Males are neutral */
 	}
@@ -159,6 +159,11 @@ hack_artifacts()
 	artilist[ART_VESTMENT_OF_HELL].otyp = find_opera_cloak();
 	artilist[ART_CROWN_OF_THE_SAINT_KING].otyp = gcircletsa;
 	artilist[ART_HELM_OF_THE_DARK_LORD].otyp = find_vhelm();
+	
+	if(Role_if(PM_ANACHRONONAUT)){
+		artilist[ART_CRESCENT_BLADE].race = NON_PM;
+		artilist[ART_CRESCENT_BLADE].alignment = A_NONE;
+	}
 	
 	/* Remove flag from the non-matching first gift */
 	if(Pantheon_if(PM_BARBARIAN)){
@@ -723,6 +728,7 @@ struct obj *obj;
     return (obj && (
 		(obj->oartifact && spec_ability2(obj, SPFX2_SHINING)) ||
 		(is_lightsaber(obj) && litsaber(obj)) ||
+		(obj->oproperties&OPROP_PHSEW) ||
 		((obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) && obj->lamplit)
 	));
 }
@@ -2741,6 +2747,54 @@ int basedmg;
 }
 
 boolean
+otyp_hit(magr, mdef, otmp, dmgptr, dieroll)
+struct monst *magr, *mdef;
+struct obj *otmp;
+int *dmgptr;
+int dieroll; /* needed for Magicbane and vorpal blades */
+{
+	boolean youattack = (magr == &youmonst);
+	boolean youdefend = (mdef == &youmonst);
+	boolean vis = (!youattack && magr && cansee(magr->mx, magr->my))
+	    || (!youdefend && cansee(mdef->mx, mdef->my))
+	    || (youattack && u.uswallow && mdef == u.ustuck && !Blind);
+	boolean messaged=FALSE;
+	static const char you[] = "you";
+	char hittee[BUFSZ];
+	int basedmg = *dmgptr;
+	
+	Strcpy(hittee, youdefend ? you : mon_nam(mdef));
+	
+	//Add the bonus damage
+	//*dmgptr += otyp_dbon(mdef, otmp, *dmgptr);
+	
+	if(pure_weapon(otmp) && otmp->spe >= 6){
+		if(youattack){
+			if(Upolyd && u.mh == u.mhmax)
+				*dmgptr += basedmg*.2;
+			else if(!Upolyd && u.uhp == u.uhpmax)
+				*dmgptr += basedmg*.2;
+		} else {
+			if(magr && magr->mhp == magr->mhpmax)
+				*dmgptr += basedmg*.2;
+		}
+	}
+	
+	if(dark_weapon(otmp) && otmp->spe >= 6){
+		if(youattack){
+			if(Upolyd && u.mh <= u.mhmax*.3)
+				*dmgptr += basedmg*.2;
+			else if(!Upolyd && u.uhp <= u.uhpmax*.3)
+				*dmgptr += basedmg*.2;
+		} else {
+			if(magr && magr->mhp <= magr->mhpmax*.3)
+				*dmgptr += basedmg*.2;
+		}
+	}
+	return FALSE;
+}
+
+boolean
 oproperty_hit(magr, mdef, otmp, dmgptr, dieroll)
 struct monst *magr, *mdef;
 struct obj *otmp;
@@ -2914,7 +2968,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			if(youdefend){
 				pline("%s slices your armor!", The(xname(otmp)));
 				i = 1;
-				if(!otmp->oproperties&OPROP_LESSW) i += rnd(4);
+				if(!(otmp->oproperties&OPROP_LESSW)) i += rnd(4);
 				for(; i>0; i--){
 					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
 						damage_item(obj);
@@ -2927,7 +2981,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			} else {
 				i = 1;
 				pline("%s slices %s armor!", The(xname(otmp)), s_suffix(mon_nam(mdef)));
-				if(!otmp->oproperties&OPROP_LESSW) i += rnd(4);
+				if(!(otmp->oproperties&OPROP_LESSW)) i += rnd(4);
 				for(; i>0; i--){
 					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
 						damage_item(obj);
@@ -2950,7 +3004,9 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						}
 						ulastscreamed = monstermoves;
 					}
-					youmonst.movement = -12;
+					if(otmp->oproperties&OPROP_LESSW)
+						youmonst.movement = max(youmonst.movement-2, -12);
+					else youmonst.movement = max(youmonst.movement-6, -12);
 				}
 			} else {
 				if(!(thick_skinned(mdef->data) || nonliving_mon(mdef))){
@@ -6915,6 +6971,116 @@ arti_invoke(obj)
 			if(song == 0);//canceled
 			else obj->osinging = song;
 			obj->age = 0;
+		}break;
+		case ORACLE:{
+			char ch;
+			int oops;
+
+			if (Blind) {
+				pline("Too bad you can't see %s.", the(xname(obj)));
+				break;
+			}
+			oops = (rnd(obj->blessed ? 16 : 20) > ACURR(A_INT) || obj->cursed);
+			if (oops) {
+				switch (rnd(4)) {
+					case 1 : pline("%s too much to comprehend!", Tobjnam(obj, "are"));
+					break;
+					case 2 : pline("%s you!", Tobjnam(obj, "confuse"));
+						make_confused(HConfusion + rnd(100),FALSE);
+						break;
+					case 3 : if (!resists_blnd(&youmonst)) {
+						pline("%s your vision!", Tobjnam(obj, "damage"));
+						make_blinded(Blinded + rnd(100),FALSE);
+						if (!Blind) Your1(vision_clears);
+						} else {
+						pline("%s your vision.", Tobjnam(obj, "assault"));
+						You("are unaffected!");
+						}
+						break;
+					case 4 : pline("%s your mind!", Tobjnam(obj, "zap"));
+						(void) make_hallucinated(HHallucination + rnd(100),FALSE,0L);
+						break;
+				}
+				break;
+			}
+
+			if (Hallucination) {
+				switch(rnd(6)) {
+				case 1 : You("grok some groovy globs of incandescent lava.");
+				break;
+				case 2 : pline("Whoa!  Psychedelic colors, %s!",
+					   poly_gender() == 1 ? "babe" : "dude");
+				break;
+				case 3 : pline_The("crystal pulses with sinister %s light!",
+						hcolor((char *)0));
+				break;
+				case 4 : You("see goldfish swimming above fluorescent rocks.");
+				break;
+				case 5 : You("see tiny snowflakes spinning around a miniature farmhouse.");
+				break;
+				default: pline("Hey!  A girl with kaleidoscope eyes!");
+				break;
+				}
+			break;
+			}
+
+			/* read a single character */
+			if (flags.verbose) You("may look for an object or monster symbol.");
+			ch = yn_function("What do you look for?", (char *)0, '\0');
+			/* Don't filter out ' ' here; it has a use */
+			if ((ch != def_monsyms[S_GHOST]) && (ch != def_monsyms[S_SHADE]) && index(quitchars,ch)) { 
+			if (flags.verbose) pline1(Never_mind);
+			return 1;
+			}
+			You("peer into %s...", the(xname(obj)));
+			nomul(-rnd(obj->blessed ? 6 : 10), "peering through the Oracle's eye");
+			nomovemsg = "";
+			{
+				int class;
+				int ret = 0;
+
+				/* special case: accept ']' as synonym for mimic
+				 * we have to do this before the def_char_to_objclass check
+				 */
+				if (ch == DEF_MIMIC_DEF) ch = DEF_MIMIC;
+
+				if ((class = def_char_to_objclass(ch)) != MAXOCLASSES)
+					ret = object_detect((struct obj *)0, class);
+				else if ((class = def_char_to_monclass(ch)) != MAXMCLASSES)
+					ret = monster_detect((struct obj *)0, class);
+				else if (iflags.bouldersym && (ch == iflags.bouldersym))
+					ret = object_detect((struct obj *)0, ROCK_CLASS);
+				else switch(ch) {
+					case '^':
+						ret = trap_detect((struct obj *)0);
+						break;
+					default:
+						{
+						static const struct {
+							const char *what;
+							d_level *where;
+						} level_detects[] = {
+						  { "Delphi", &oracle_level },
+						  { "a worthy opponent", &challenge_level },
+						  { "a castle", &stronghold_level },
+						  { "the Wizard of Yendor's tower", &wiz1_level },
+						};
+						int i = rn2(SIZE(level_detects));
+						You("see %s, %s.",
+						level_detects[i].what,
+						level_distance(level_detects[i].where));
+						}
+						ret = 0;
+						break;
+				}
+
+				if (ret) {
+					if (!rn2(100))  /* make them nervous */
+					You("see the Wizard of Yendor gazing back at you.");
+					else pline_The("vision is unclear.");
+				}
+			}
+			return 1;
 		}break;
 		default: pline("Program in dissorder.  Artifact invoke property not recognized");
 		break;

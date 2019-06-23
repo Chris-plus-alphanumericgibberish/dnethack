@@ -708,6 +708,14 @@ dofire()
 		return throw_obj(uwep, shotlimit, THROW_UWEP);
 	}
 	
+	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && Race_if(PM_ANDROID)){
+		/*See below for shotlimit*/
+		shotlimit = (multi || save_cm) ? multi + 1 : 0;
+		multi = 0;		/* reset; it's been used up */
+
+		return throw_obj(uwep, shotlimit, THROW_UWEP);
+	}
+	
 	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep)))  && uwep->oartifact == ART_ROGUE_GEAR_SPIRITS){
 		struct obj *bolt = mksobj(CROSSBOW_BOLT, FALSE, FALSE);
 		int result;
@@ -1322,6 +1330,12 @@ boolean hitsroof;
 	if(obj->oproperties){
 		artimsg |= oproperty_hit((struct monst *)0, &youmonst, obj, &newdamage, dieroll);
 		dmg += (newdamage - basedamage);
+		newdamage = basedamage;
+	}
+	if(spec_prop_otyp(obj)){
+		artimsg |= otyp_hit((struct monst *)0, &youmonst, obj, &newdamage, dieroll);
+		dmg += (newdamage - basedamage);
+		newdamage = basedamage;
 	}
 	
 
@@ -1463,6 +1477,7 @@ int thrown;
 		bhitpos.y = mon->my;
 	} else if(u.dz) {
 	    if (u.dz < 0 &&  ( 
+				Race_if(PM_ANDROID) || 
 				(obj->oartifact == ART_MJOLLNIR &&
 				 Role_if(PM_VALKYRIE)) || 
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
@@ -1478,11 +1493,13 @@ int thrown;
 				  Tobjnam(obj, "hit"), ceiling(u.ux,u.uy));
 			obj = addinv(obj);
 			(void) encumber_msg();
-			if(obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON || obj->oartifact == ART_ANNULUS){
+			if(!obj->owornmask){
+				if((obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON || is_ammo(obj)) && !uquiver){
 				setuqwep(obj);
-			} else{
-				setuwep(obj);
-				u.twoweap = twoweap;
+				} else if(!uwep){
+					setuwep(obj);
+					u.twoweap = twoweap;
+				}
 			}
 			return;
 		}
@@ -1653,6 +1670,7 @@ int thrown;
 	} else {
 		/* the code following might become part of dropy() */
 		if ( ( 
+				Race_if(PM_ANDROID) ||
 				(obj->oartifact == ART_MJOLLNIR &&
 				 Role_if(PM_VALKYRIE)) || 
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
@@ -1706,11 +1724,13 @@ int thrown;
 			pline("%s to your hand!", Tobjnam(obj, "return"));
 			obj = addinv(obj);
 			(void) encumber_msg();
-			if(obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON){
+			if(!obj->owornmask){
+				if((obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON || is_ammo(obj)) && !uquiver){
 				setuqwep(obj);
-			} else{
-				setuwep(obj);
-				u.twoweap = twoweap;
+				} else if(!uwep){
+					setuwep(obj);
+					u.twoweap = twoweap;
+				}
 			}
 			if(cansee(bhitpos.x, bhitpos.y))
 			    newsym(bhitpos.x,bhitpos.y);
@@ -1728,8 +1748,10 @@ int thrown;
 					"%s back toward you, hitting your %s!",
 				  Tobjnam(obj, Blind ? "hit" : "fly"),
 				  body_part(ARM));
-			    (void) artifact_hit((struct monst *)0,
-						&youmonst, obj, &dmg, 0);
+				if(obj->oartifact){
+				    (void) artifact_hit((struct monst *)0,
+							&youmonst, obj, &dmg, 0);
+				}
 			    losehp(dmg, xname(obj),
 				obj_is_pname(obj) ? KILLED_BY : KILLED_BY_AN);
 			}
@@ -2004,6 +2026,7 @@ int thrown;
 		case PLASTEEL_GAUNTLETS:
 		tmp -= 1;
 		break;
+	    case LONG_GLOVES:
 	    case GLOVES:
 	    case GAUNTLETS_OF_DEXTERITY:
 		case HIGH_ELVEN_GAUNTLETS:

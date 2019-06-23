@@ -1044,7 +1044,7 @@ register const char *let,*word;
 		    ((otmp->oclass == FOOD_CLASS && otmp->otyp != MEAT_RING) ||
 		    (otmp->oclass == TOOL_CLASS &&
 		     otyp != BLINDFOLD && otyp != MASK && otyp != R_LYEHIAN_FACEPLATE && 
-			 otyp != TOWEL && otyp != LENSES) ||
+			 otyp != TOWEL && otyp != ANDROID_VISOR && otyp != LENSES) ||
 			 (otmp->oclass == CHAIN_CLASS)
 			))
 		|| (!strcmp(word, "wield") &&
@@ -1407,8 +1407,8 @@ struct obj *otmp;
 		s1 = "T", s2 = "take", s3 = " off";
 	} else if ((ocls == RING_CLASS || otyp == MEAT_RING) ||
 		ocls == AMULET_CLASS ||
-		(otyp == BLINDFOLD || otyp == TOWEL || otyp == LENSES || 
-		otyp == MASK || otyp == R_LYEHIAN_FACEPLATE)) {
+		(otyp == BLINDFOLD || otyp == ANDROID_VISOR || otyp == TOWEL ||
+		otyp == LENSES || otyp == MASK || otyp == R_LYEHIAN_FACEPLATE)) {
 	    if (!strcmp(word, "wear"))
 		s1 = "P", s2 = "put", s3 = " on";
 	    else if (!strcmp(word, "take off"))
@@ -3131,7 +3131,7 @@ mergable_traits(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	  obj->odrained != otmp->odrained || obj->orotten != otmp->orotten))
 	    return(FALSE);
 
-	if (obj->otyp == CORPSE || obj->otyp == EGG || obj->otyp == TIN || obj->otyp == POT_BLOOD) {
+	if (obj->otyp == CORPSE || obj->otyp == EYEBALL || obj->otyp == EGG || obj->otyp == TIN || obj->otyp == POT_BLOOD) {
 		if (obj->corpsenm != otmp->corpsenm)
 				return FALSE;
 	}
@@ -3149,6 +3149,9 @@ mergable_traits(otmp, obj)	/* returns TRUE if obj  & otmp can be merged */
 	/* allow candle merging only if their ages are close */
 	/* see begin_burn() for a reference for the magic "25" */
 	if (Is_candle(obj) && obj->age/25 != otmp->age/25)
+	    return(FALSE);
+
+	if (obj->oartifact && obj->age/25 != otmp->age/25)
 	    return(FALSE);
 
 	/* burning potions of oil never merge */

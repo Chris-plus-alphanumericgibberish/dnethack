@@ -5,7 +5,7 @@
 #ifndef QTEXT_H
 #define QTEXT_H
 
-#define N_HDR	29		/* Maximum number of categories */
+#define N_HDR	30		/* Maximum number of categories */
 				/* (i.e., num roles + 1) */
 #define LEN_HDR 3		/* Maximum length of a category name */
 
@@ -18,7 +18,7 @@ struct qtmsg {
 
 #ifdef MAKEDEFS_C	/***** MAKEDEFS *****/
 
-#define N_MSG	200		/* arbitrary (was 100) */
+#define N_MSG	400		/* arbitrary (was 100) */
 
 struct msghdr {
 	int	n_msg;

@@ -2339,7 +2339,7 @@ boolean ordinary;
 				You("zap yourself, but seem unharmed.");
 				ugolemeffects(AD_ELEC, d(12,6));
 		    }
-			if(!EShock_resistance){
+			if(!InvShock_resistance){
 				destroy_item(WAND_CLASS, AD_ELEC);
 				destroy_item(RING_CLASS, AD_ELEC);
 			}
@@ -2365,7 +2365,7 @@ boolean ordinary;
 				pline("You've set yourself afire!");
 				damage = d(12,6);
 		    }
-			if(!EFire_resistance){
+			if(!InvFire_resistance){
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				destroy_item(POTION_CLASS, AD_FIRE);
 				destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -2387,7 +2387,7 @@ boolean ordinary;
 				You("imitate a popsicle!");
 				damage = d(12,6);
 		    }
-			if(!ECold_resistance){
+			if(!InvCold_resistance){
 				destroy_item(POTION_CLASS, AD_COLD);
 			}
 		    break;
@@ -3723,7 +3723,7 @@ xchar sx, sy;
 			else dam = flat;
 			if(Reflecting) dam = dam/2+1;
 		}
-		if(!EFire_resistance){
+		if(!InvFire_resistance){
 			if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
 			if (flags.drgn_brth || !rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
 			if (flags.drgn_brth || !rn2(5)) destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -3741,7 +3741,7 @@ xchar sx, sy;
 			else dam = flat;
 			if(Reflecting) dam = dam/2+1;
 	    }
-		if(!ECold_resistance){
+		if(!InvCold_resistance){
 			if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
 			if (flags.drgn_brth) destroy_item(POTION_CLASS, AD_COLD);
 		}
@@ -3879,7 +3879,7 @@ xchar sx, sy;
 			exercise(A_CON, FALSE);
 			if(Reflecting) dam = dam/2+1;
 	    }
-		if(!EShock_resistance){
+		if(!InvShock_resistance){
 			if (flags.drgn_brth || !rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 			if (flags.drgn_brth || !rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 		}

@@ -489,7 +489,6 @@ You will have to pass through the city and the nascent
 Penumbra if you are to reach Ground Zero, where the Annulus
 was lost on the Eve of Falling Stars, on the day of your
 birth.
-%i.
 %E
 %Cp Ana 00036
 Once again, you arrive at the ruins of the city.
@@ -566,7 +565,7 @@ our world.
 retrieve the Amulet of Yendor, that was stolen by
 Moloch at the beginning of time.
 
-"With the Amulet in your possetion, the gods will
+"With the Amulet in your possession, the gods will
 allow you to climb up to the Astral Plane.  Once
 there, you must use the Annulus to Annul the High
 Altar of Ilsensine and eject her from this
@@ -595,6 +594,200 @@ to the Astral Plane.  Once there, you must use the Annulus
 to Annul the High Altar of Ilsensine and eject her from
 this universe before she can consume the heavens and the
 earth."
+%E
+#
+#	Android Anachrononaut
+#
+%Cc And 00001
+You have found the Bastions' portal, that leads through time to 
+the  warrens surrounding what was the last-surviving Bastion.
+
+Data-sync indicates a hero from the Bastion passed through this 
+place on their way to a battle site known as Ground Zero.  
+The Annulus, though taken from Ground Zero, has followed the 
+unbroken ring of time back to that place.
+
+You should hasten to Ground Zero, for there is nothing for you
+in the shattered remains of the Bastion.
+%E
+%Cp And 00002
+Once again, you pass through the portal.
+%E
+%Cp And 00003
+UNUSED
+%E
+%Cp And 00005
+UNUSED
+%E
+%Cp And 00006
+UNUSED
+%E
+%Cp And 00007
+UNUSED
+%E
+%Cp And 00008
+UNUSED
+%E
+%Cp And 00009
+UNUSED
+%E
+%Cp And 00010
+UNUSED
+%E
+%Cp And 00011
+UNUSED
+%E
+%Cp And 00012
+UNUSED
+%E
+%Cp And 00013
+UNUSED
+%E
+%Cp And 00014
+UNUSED
+%E
+%Cc And 00015
+UNUSED
+%E
+%Cp And 00016
+UNUSED
+%E
+%Cp And 00017
+UNUSED
+%E
+%Cc And 00018
+UNUSED
+%E
+%Cc And 00019
+UNUSED
+%E
+%Cc And 00020
+UNUSED
+%E
+%Cc And 00021
+UNUSED
+%E
+%Cp And 00025
+UNUSED
+%E
+%Cp And 00026
+UNUSED
+%E
+%Cp And 00027
+UNUSED
+%E
+%Cp And 00028
+UNUSED
+%E
+%Cp And 00029
+UNUSED
+%E
+%Cp And 00030
+UNUSED
+%E
+%Cp And 00031
+UNUSED
+%E
+%Cp And 00032
+UNUSED
+%E
+%Cp And 00033
+UNUSED
+%E
+%Cp And 00034
+UNUSED
+%E
+%Cc And 00035
+The ruins here are just barely recognizable.  In this 
+city, there was a laboratory where research into 
+autonomous thaumaturgic war machines was conducted.
+
+You came on-line in that laboratory, and underwent 
+preliminary testing in and around this city.  As your
+sister wrote, it seems the city has since been destroyed
+in a meteor bombardment.  Beyond the city you see a growing
+disk of distorted matter rising into the night sky.
+
+The data synced from the Bastion net indicates that you will
+need to pass that zone to reach the Ground Zero battle site.
+
+...Perhaps you should search for your sisters while you're
+in the city?
+%E
+%Cp And 00036
+Once again, you arrive at the ruins of the city.
+%E
+%Cc And 00040
+An overwhelming feeling of being watched fills your mind.
+
+It seems you have reached Ground Zero.
+%E
+%Cp And 00041
+You have returned to Ground Zero.
+%E
+%Cc And 00050
+UNUSED
+%E
+%Cc And 00051
+UNUSED
+%E
+%Cp And 00052
+UNUSED
+%E
+%Cp And 00053
+UNUSED
+%E
+%Cp And 00060
+UNUSED
+%E
+%Cp And 00061
+UNUSED
+%E
+%Cp And 00062
+UNUSED
+%E
+%Cp And 00063
+UNUSED
+%E
+%Cp And 00064
+UNUSED
+%E
+%Cp And 00065
+UNUSED
+%E
+%Cp And 00066
+UNUSED
+%E
+%Cp And 00067
+UNUSED
+%E
+%Cp And 00068
+UNUSED
+%E
+%Cp And 00069
+UNUSED
+%E
+%Cc And 00070
+You have recovered the Annulus, lost at the Battle of
+Heavenfall on the Eve of Falling Stars, retrieved,
+and lost again.
+
+You must break the ring of time.
+%E
+%Cp And 00080
+UNUSED
+%E
+%Cc And 00081
+UNUSED
+%E
+%Cc And 00082
+UNUSED
+%E
+%Cc And 00090
+UNUSED
+%E
+%Cc And 00091
+UNUSED
 %E
 #
 #	Barbarian
@@ -7935,6 +8128,7 @@ Go now!  You are banished from this place.
  %n:	return((char *)neminame());
  %g:	return((char *)guardname());
  %G:	return((char *)align_gtitle(u.ualignbase[1]));
+ %h:	return((char *)((flags.female) ?  urace.individual.f : urace.individual.m));
  %H:	return((char *)homebase());
  %a:	return(Alignnam(u.ualignbase[1]));
  %A:	return(Alignnam(u.ualign.type));
@@ -8147,7 +8341,7 @@ the amulet would be granted ascendance over the other
 gods of the world.  Eventually, one such hero recovered
 the amulet and bore it up the the Astral Plane in the
 name of their god.  The hero was rewarded by their 
-ascendent deity with demi-godhood and immortality.
+ascendant deity with demi-godhood and immortality.
 %E
 %Cc - 00219
 That time is long past.  The ascendance and immortality
@@ -8170,7 +8364,7 @@ the ritual before the courtyard is overrun>>
 %E
 %Cc - 00220
 **EMERGENCY ALERT:  Picket line overrun.  Telemetry
-suggests 100%% losses.  Hostile entitites vectoring
+suggests 100%% losses.  Hostile entities vectoring
 on Last Bastion.**
 
 <<Once the ritual is complete, proceed to the Dungeons
@@ -8180,4 +8374,54 @@ further instructions>>
 %E
 %Cc - 00221
 <<Good luck, %s.>>
+%E
+#
+#	Legacy text for Androids
+#
+%Cc - 00222
+That time is long past.  The ascendance and immortality
+of the gods proved a lie, for heaven is now in ruins,
+consumed by the cursed goddess of the mind flayers.
+
+You, a newly constructed %h, were placed into
+storage after an initial testing phase, in anticipation
+of a major battle in the war.
+%E
+%Cc - 00223
+Which made it all the more confusing to have awakened
+by yourself, apparently in the distant past, with
+a pair of yellow sticky notes on your forehead.
+%E
+%Cc - 00224
+"Hi, unit %p.  I don't have long to write,
+so I'll try to be quick.
+
+"The perimeter breach alarm woke the first batch
+of us up, and it doesn't look good.  The city's
+been wiped out (looks like by meteors), and 
+we're not getting any response from the military
+net or the Bastion relays.
+
+"We did find some stored emergency data-dumps, and
+they look bad.  Looks like the Bastions tried some
+sort of time-travel strategy to destroy Ilsensine
+before she could consume heaven, but it failed.
+
+"I think we're the only ones left."
+%E
+%Cc - 00225
+"We're going to put you, your adjutant, and a bunch
+of weapons in a pile and initiate a time-space 
+rupture.  You'll  probably end up scattered all 
+over the target region, but there's no time to do
+better.  Our sisters are holding the perimeter as 
+best they can, but more enemies are pouring in from
+all directions.
+
+"Once you wake up, you need to find the Dungeons of
+Doom, locate the Bastions' time-portal, retrieve the
+Annulus from wherever it ended up, and use it against
+Ilsensine in the past.
+
+"So, you know.  Good luck."
 %E

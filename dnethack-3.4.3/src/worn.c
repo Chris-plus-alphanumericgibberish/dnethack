@@ -831,6 +831,13 @@ struct monst *mon;
 	if(mon->data == &mons[PM_CLOCKWORK_AUTOMATON]){
 		base += 1;
 	}
+	if(mon->data == &mons[PM_ANDROID] 
+	|| mon->data == &mons[PM_GYNOID]
+	|| mon->data == &mons[PM_FLAYED_ANDROID]
+	|| mon->data == &mons[PM_MUMMIFIED_ANDROID]
+	){
+		base += 6;
+	}
 	if(is_true_dragon(mon->data)){
 		base += 5;
 	}
@@ -919,6 +926,12 @@ lowertorso:
 				} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (uwep->spe+1)/2,0);
 				}
+				if (uarmu){
+					if(uarmu->otyp == BLACK_DRESS || uarmu->otyp == VICTORIAN_UNDERWEAR){
+						armac += arm_dr_bonus(uarmu);
+						if(magr) armac += properties_dr(uarmu, agralign, agrmoral);
+					}
+				}
 				armac += clkdr;
 			break;
 			case 2:
@@ -971,7 +984,6 @@ lowertorso:
 			armac += arm_dr_bonus(curarm);
 			if(magr) armac += properties_dr(curarm, agralign, agrmoral);
 		}
-		
 		//Note: Bias this somehow?
 		switch(rn2(5)){
 			case 0:
@@ -995,6 +1007,13 @@ mon_lowertorso:
 					}
 				} else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
+				}
+				if (which_armor(mon, W_ARMU)){
+					curarm = which_armor(mon, W_ARMU);
+					if(curarm->otyp == BLACK_DRESS || curarm->otyp == VICTORIAN_UNDERWEAR){
+						armac += arm_dr_bonus(curarm);
+						if(magr) armac += properties_dr(curarm, agralign, agrmoral);
+					}
 				}
 				armac += clkdr;
 			break;

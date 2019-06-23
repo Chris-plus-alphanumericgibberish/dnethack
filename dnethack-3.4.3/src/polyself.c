@@ -20,6 +20,7 @@ STATIC_DCL void NDECL(uunstick);
 STATIC_DCL int FDECL(armor_to_dragon,(int));
 STATIC_DCL void NDECL(newman);
 STATIC_DCL short NDECL(doclockmenu);
+STATIC_DCL short NDECL(dodroidmenu);
 
 /* Assumes u.umonster is set up already */
 /* Use u.umonster since we might be restoring and you may be polymorphed */
@@ -614,6 +615,8 @@ int	mntmp;
 		pline(use_thec,monsterc,"invoke darkness");
 	    if (uclockwork)
 		pline(use_thec,monsterc,"adjust your clockspeed");
+	    if (uandroid)
+		pline(use_thec,monsterc,"use your abilities");
 	    if (can_breathe(youmonst.data))
 		pline(use_thec,monsterc,"use your breath weapon");
 	    if (attacktype(youmonst.data, AT_SPIT))
@@ -1351,6 +1354,226 @@ doclockspeed()
 	return 0;
 }
 
+int
+doandroid()
+{
+	short newspeed = dodroidmenu();
+	if(newspeed == PHASE_ENGINE){
+		if(u.phasengn){
+			u.phasengn = 0;
+			You("deactivate your phase engine.");
+		} else {
+			u.phasengn = 1;
+			You("activate your phase engine.");
+		}
+		return 0;
+	} else if(newspeed == HIGH_CLOCKSPEED){
+		You("activate emergency high speed.");
+		u.ucspeed = HIGH_CLOCKSPEED;
+		return 0;
+	} else if(newspeed == NORM_CLOCKSPEED){
+		You("reduce speed to normal.");
+		u.ucspeed = NORM_CLOCKSPEED;
+		return 1;
+	} else if(newspeed == SLOW_CLOCKSPEED){
+		int mult = 30/u.ulevel;
+		int duration = (u.uenmax - u.uen)*mult*2/3, i, lim;
+		You("enter sleep mode.");
+		u.ucspeed = NORM_CLOCKSPEED;
+		for (i = 0; i < A_MAX; i++) {
+			lim = AMAX(i);
+			if (i == A_STR && u.uhs >= 3) --lim;	/* WEAK */
+			if (ABASE(i) < lim) {
+				ABASE(i)++;
+				flags.botl = 1;
+			}
+		}
+		u.nextsleep = moves+rnz(350)+duration;
+		u.lastslept = moves;
+		fall_asleep(-rn1(duration+1, duration+1), TRUE);
+		return 1;
+	} else if(newspeed == RECHARGER){
+		static const char recharge_type[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
+	    struct obj *otmp = getobj(recharge_type, "charge");
+
+	    if (!otmp) {
+			return 0;
+	    }
+	    if(!recharge(otmp, 0))
+			You("recharged %s", the(xname(otmp)));
+		u.uen -= 10;
+	    update_inventory();
+		return 1;
+	} else if(newspeed == ANDROID_COMBO){
+		struct monst *mon;
+		int tmp, weptmp, tchtmp;
+		if(!uwep){
+			static struct attack unarmedcombo[] = 
+			{
+				{AT_WEAP,AD_PHYS,0,0},
+				{AT_WEAP,AD_PHYS,0,0},
+				{AT_KICK,AD_PHYS,0,0},
+				{AT_KICK,AD_PHYS,0,0},
+				{0,0,0,0}
+			};
+			if(!getdir((char *)0)) return 0;
+			if(u.ustuck && u.uswallow)
+				mon = u.ustuck;
+			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+			if(!mon) You("swing wildly!");
+			else {
+				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+				hmonwith(mon, tmp, weptmp, tchtmp, unarmedcombo, 2);
+			}
+			u.uen--;
+			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_SKILLED && u.uen > 0){
+				if(dokick()){
+					u.uen--;
+				} else return 1;
+			}
+			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_EXPERT && u.uen > 0){
+				if(jump(1) || dokick()){
+					u.uen--;
+				} else return 1;
+			}
+			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_MASTER && u.uen > 0){
+				if(!jump(1) && !getdir((char *)0)) return 0;
+				if(u.ustuck && u.uswallow)
+					mon = u.ustuck;
+				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) You("swing wildly!");
+				else {
+					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+					hmonwith(mon, tmp, weptmp, tchtmp, unarmedcombo, 4);
+				}
+				u.uen--;
+			}
+			return 1;
+		} else if(objects[uwep->otyp].oc_skill == P_SPEAR || objects[uwep->otyp].oc_skill == P_LANCE){ //!uwep handled above
+			static struct attack spearcombo[] = 
+			{
+				{AT_WEAP,AD_PHYS,0,0},
+				{AT_WEAP,AD_PHYS,0,0},
+				{0,0,0,0}
+			};
+			if(!getdir((char *)0)) return 0;
+			if(fast_weapon(uwep)) youmonst.movement+=2;
+			if(u.ustuck && u.uswallow)
+				mon = u.ustuck;
+			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+			if(!mon) You("stab wildly!");
+			else {
+				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+				hmonwith(mon, tmp, weptmp, tchtmp, spearcombo, 2);
+			}
+			u.uen--;
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
+				if(!getdir((char *)0)) return 1;
+				if(u.ustuck && u.uswallow)
+					mon = u.ustuck;
+				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) You("stab wildly!");
+				else {
+					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+					hmonwith(mon, tmp, weptmp, tchtmp, spearcombo, 2);
+				}
+				u.uen--;
+			}
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
+				if(!getdir((char *)0)) return 1;
+				if(u.ustuck && u.uswallow)
+					mon = u.ustuck;
+				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) You("stab wildly!");
+				else {
+					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+					hmonwith(mon, tmp, weptmp, tchtmp, spearcombo, 2);
+				}
+				u.uen--;
+			}
+			return 1;
+		} else if(!bimanual(uwep,youracedata)){ //!uwep handled above
+			if(!getdir((char *)0)) return 0;
+			if(u.ustuck && u.uswallow)
+				mon = u.ustuck;
+			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+			if(fast_weapon(uwep)) youmonst.movement+=2;
+			if(!mon) You("swing wildly!");
+			else {
+				static struct attack onehandercombo[] = 
+				{
+					{AT_WEAP,AD_PHYS,0,0},
+					{AT_WEAP,AD_PHYS,0,0},
+					{0,0,0,0}
+				};
+				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+				hmonwith(mon, tmp, weptmp, tchtmp, onehandercombo, 2);
+			}
+			u.uen--;
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
+				if(dofire()){
+					u.uen--;
+				} else return 1;
+			}
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
+				if(dofire()){
+					u.uen--;
+				} else return 1;
+			}
+			return 1;
+		} else if(bimanual(uwep,youracedata)){ //!uwep handled above
+			int clockwisex[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
+			int clockwisey[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
+			int i,j;
+			static struct attack twohandercombo[] = 
+			{
+				{AT_WEAP,AD_PHYS,0,0},
+				{0,0,0,0}
+			};
+			if(!getdir((char *)0)) return 0;
+			if(fast_weapon(uwep)) youmonst.movement+=2;
+			for(i=7;i>=0;i--)
+				if(clockwisex[i] == u.dx && clockwisey[i] == u.dy)
+					break;
+			for(j=8;j>=0;j--){
+				if(u.ustuck && u.uswallow)
+					mon = u.ustuck;
+				else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
+				if(mon){
+					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+					hmonwith(mon, tmp, weptmp, tchtmp, twohandercombo, 1);
+				}
+			}
+			u.uen--;
+			youmonst.movement -= 3;
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
+				if(!dokick()) return 1;
+				for(i=0;i<8;i++)
+					if(clockwisex[i] == u.dx && clockwisey[i] == u.dy)
+						break;
+				for(j=0;j<=8;j++){
+					if(u.ustuck && u.uswallow)
+						mon = u.ustuck;
+					else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
+					if(mon){
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, twohandercombo, 1);
+					}
+				}
+				u.uen--;
+				youmonst.movement -= 3;
+			}
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
+				if(dofire()){
+					u.uen--;
+				} else return 1;
+			}
+			return 1;
+		}
+	}
+	return 0;
+}
+
 STATIC_OVL void
 uunstick()
 {
@@ -1695,6 +1918,90 @@ doclockmenu()
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
 	return (n > 0) ? (short)selected[0].item.a_int : (short)u.ucspeed;
+}
+
+STATIC_OVL short
+dodroidmenu()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Use what ability?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(moves >= u.nextsleep){
+		Sprintf(buf, "Sleep and regenerate");
+		any.a_int = SLOW_CLOCKSPEED;	/* must be non-zero */
+		incntlet = 's';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	} else {
+		Sprintf(buf, "Last rest began on turn %d", u.lastslept);
+		add_menu(tmpwin, NO_GLYPH, &any, 0, 0, 0, buf, MENU_UNSELECTED);
+	}
+	
+	if(u.ucspeed == HIGH_CLOCKSPEED){
+		Sprintf(buf, "Emergency speed (active)");
+		any.a_int = NORM_CLOCKSPEED;	/* must be non-zero */
+	incntlet = 'e';
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	} else if(u.uen > 0){
+		Sprintf(buf, "Emergency speed");
+		any.a_int = HIGH_CLOCKSPEED;	/* must be non-zero */
+		incntlet = 'e';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(u.uen >= 10){
+		Sprintf(buf, "Recharger");
+		incntlet = 'r';
+		any.a_int = RECHARGER;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(((uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_BASIC) || (!uwep && P_SKILL(P_MARTIAL_ARTS) >= P_BASIC)) && u.uen > 0 && !u.twoweap){
+		Sprintf(buf, "Combo");
+		incntlet = 'c';
+		any.a_int = ANDROID_COMBO;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(u.clockworkUpgrades&PHASE_ENGINE && !u.phasengn){
+		Sprintf(buf, "Phase engine (active)");
+		incntlet = 'p';
+		any.a_int = PHASE_ENGINE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if(u.clockworkUpgrades&PHASE_ENGINE && !u.phasengn){
+		Sprintf(buf, "Phase engine");
+		incntlet = 'p';
+		any.a_int = PHASE_ENGINE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	
+	end_menu(tmpwin, "Select android ability");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? (short)selected[0].item.a_int : 0;
 }
 
 #endif /* OVLB */

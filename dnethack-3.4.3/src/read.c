@@ -590,7 +590,7 @@ struct obj *obj;
 //#ifdef FIREARMS
 	if (is_blaster(obj) && (obj->recharged < 4 || (obj->otyp != HAND_BLASTER && obj->otyp != ARM_BLASTER)))
 	    return TRUE;
-	if ((obj->otyp == FORCE_PIKE || obj->otyp == VIBROBLADE || obj->otyp == SEISMIC_HAMMER))
+	if (is_vibroweapon(obj) || obj->otyp == SEISMIC_HAMMER)
 	    return TRUE;
 //#endif
 	if (is_weptool(obj))	/* specific check before general tools */
@@ -603,8 +603,10 @@ struct obj *obj;
 /*
  * recharge an object; curse_bless is -1 if the recharging implement
  * was cursed, +1 if blessed, 0 otherwise.
+ *
+ * Returns 1 if the item is destroyed
  */
-void
+int
 recharge(obj, curse_bless)
 struct obj *obj;
 int curse_bless;
@@ -637,7 +639,7 @@ int curse_bless;
 	    if (!(obj->oartifact) && n > 0 && (obj->otyp == WAN_WISHING ||
 		    (n * n * n > rn2(7*7*7)))) {	/* recharge_limit */
 		wand_explode(obj);
-		return;
+		return 1;
 	    }
 	    /* didn't explode, so increment the recharge count */
 	    if(n < 7) obj->recharged = (unsigned)(n + 1);
@@ -656,7 +658,7 @@ int curse_bless;
 		else obj->spe++;
 		if (obj->otyp == WAN_WISHING && obj->spe > 3) {
 		    wand_explode(obj);
-		    return;
+		    return 1;
 		}
 		if (obj->spe >= lim) p_glow2(obj, NH_BLUE);
 		else p_glow1(obj);
@@ -677,6 +679,7 @@ int curse_bless;
 				s = rnd(3 * abs(obj->spe));	/* amount of damage */
 				useup(obj);
 				losehp(s, "exploding ring", KILLED_BY_AN);
+				return 1;
 			} else {
 				long mask = is_on ? (obj == uleft ? LEFT_RING :
 							 RIGHT_RING) : 0L;
@@ -702,8 +705,7 @@ int curse_bless;
 	    }
 
 	} else if (obj->oclass == TOOL_CLASS || is_blaster(obj)
-		   || obj->otyp == DWARVISH_HELM || obj->otyp == VIBROBLADE 
-		   || obj->otyp == FORCE_PIKE || obj->otyp == SEISMIC_HAMMER) {
+		   || obj->otyp == DWARVISH_HELM || is_vibroweapon(obj)) {
 	    int rechrg = (int)obj->recharged;
 
 	    if (objects[obj->otyp].oc_charged) {
@@ -783,7 +785,11 @@ int curse_bless;
 		    if (obj->otyp != DWARVISH_HELM) {
 				obj->spe = 1;
 		    }
+		    obj->age += 750;
+		    if (obj->age > 150000) obj->age = 1500;
+		    p_glow1(obj);
 		}
+		break;
 //#ifdef FIREARMS
 	    case HAND_BLASTER:
 	    case ARM_BLASTER:
@@ -802,6 +808,13 @@ int curse_bless;
 		break;
 	    case CUTTING_LASER:
 	    case VIBROBLADE:
+	    case WHITE_VIBROSWORD:
+	    case GOLD_BLADED_VIBROSWORD:
+	    case WHITE_VIBROZANBATO:
+	    case GOLD_BLADED_VIBROZANBATO:
+	    case RED_EYED_VIBROSWORD:
+	    case WHITE_VIBROSPEAR:
+	    case GOLD_BLADED_VIBROSPEAR:
 	    case FORCE_PIKE:
 	    case SEISMIC_HAMMER:
 			if(is_blessed) obj->ovar1 = 100L;
@@ -901,6 +914,7 @@ int curse_bless;
  not_chargable:
 	    You("have a feeling of loss.");
 	}
+	return 0;
 }
 
 

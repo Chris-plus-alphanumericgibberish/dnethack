@@ -381,6 +381,7 @@ struct you {
 #define MATTK_SCREAM 17
 #define MATTK_HOLE 18
 #define MATTK_REACH 19
+#define MATTK_DROID 20
 	struct attribs	macurr,		/* for monster attribs */
 			mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */
@@ -409,6 +410,16 @@ struct you {
 #define HELLFIRE_FURNACE	0x000080L
 #define SCRAP_MAW			0x000100L
 #define HIGH_TENSION		0x000200L
+#define HEAVY_BLASTER		0x000400L
+#define SECOND_BLASTER		0x000800L
+
+//define	HIGH_CLOCKSPEED	1
+//define	NORM_CLOCKSPEED	2
+//define	SLOW_CLOCKSPEED	3
+#define	RECHARGER			4
+#define ANDROID_COMBO		5
+//define PHASE_ENGINE		32
+//define HEAVY_BLASTER		1024
 	
 	int slowclock;
 	
@@ -475,6 +486,8 @@ struct you {
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */
 	long lastprayed;
+	long lastslept;
+	long nextsleep;
 	int regen_blocked;
 	uchar lastprayresult, reconciled;
 #define	PRAY_NONE	0
@@ -728,6 +741,8 @@ struct you {
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
+#define uandroid ((Race_if(PM_ANDROID) && !Upolyd) || (Upolyd && (youmonst.data == &mons[PM_ANDROID] || youmonst.data == &mons[PM_GYNOID])))
+#define umechanoid (uclockwork || uandroid)
 #define BASE_ATTACK_BONUS	((Role_if(PM_BARBARIAN) || Role_if(PM_CONVICT) || Role_if(PM_KNIGHT) || Role_if(PM_ANACHRONONAUT) || \
 								Role_if(PM_PIRATE) || Role_if(PM_SAMURAI) || Role_if(PM_VALKYRIE) || (u.sealsActive&SEAL_BERITH) || \
 								(!uwep && (Role_if(PM_MONK) || (u.sealsActive&SEAL_EURYNOME))) || \

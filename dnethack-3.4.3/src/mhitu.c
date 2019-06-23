@@ -1838,7 +1838,7 @@ hitmu(mtmp, mattk)
 				/* WAC -- or using a pole at short range... */
 				(is_pole(uwep) && 
 					uwep->otyp != AKLYS && 
-					uwep->otyp != FORCE_PIKE && 
+					!is_vibropike(uwep) && 
 					uwep->otyp != NAGINATA && 
 					uwep->oartifact != ART_WEBWEAVER_S_CROOK && 
 					uwep->oartifact != ART_SILENCE_GLAIVE && 
@@ -1892,17 +1892,23 @@ hitmu(mtmp, mattk)
 				int basedamage = dmg;
 				int newdamage = dmg;
 				int hmessage = 0;
-				if(uwep->oproperties){
-					hmessage |= oproperty_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
-				}
-				dmg += (newdamage - basedamage);
-				newdamage = basedamage;
 				if (uwep->oartifact){
 					hmessage |= artifact_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
+					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if(uwep->oproperties){
+					hmessage |= oproperty_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
+					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if (spec_prop_otyp(uwep)){
+					hmessage |= otyp_hit(mtmp, &youmonst, uwep, &newdamage,dieroll);
+					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
 				}
 				if(!hmessage)
 					 hitmsg(mtmp, mattk);
-				dmg += (newdamage - basedamage);
 			}
 			//End artifact damage block:
 			if (!dmg) break;
@@ -1973,10 +1979,13 @@ hitmu(mtmp, mattk)
 				/* WAC -- or using a pole at short range... */
 				(is_pole(otmp) && 
 					otmp->otyp != AKLYS && 
-					otmp->otyp != FORCE_PIKE && 
+					!is_vibropike(otmp) && 
+					otmp->otyp != NAGINATA && 
 					otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
+					otmp->oartifact != ART_SILENCE_GLAIVE && 
 					otmp->oartifact != ART_HEARTCLEAVER && 
 					otmp->oartifact != ART_SOL_VALTIVA && 
+					otmp->oartifact != ART_SHADOWLOCK && 
 					otmp->oartifact != ART_PEN_OF_THE_VOID
 				)) {
 			    /* then do only 1-2 points of damage */
@@ -2049,17 +2058,23 @@ hitmu(mtmp, mattk)
 				int basedamage = dmg;
 				int newdamage = dmg;
 				int hmessage = 0;
-				if(otmp->oproperties){
-					hmessage |= oproperty_hit(mtmp, &youmonst, otmp, &newdamage,dieroll);
-				}
-				dmg += (newdamage - basedamage);
-				newdamage = basedamage;
 				if (otmp->oartifact){
 					hmessage |= artifact_hit(mtmp, &youmonst, otmp, &newdamage,dieroll);
+					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if(otmp->oproperties){
+					hmessage |= oproperty_hit(mtmp, &youmonst, otmp, &newdamage,dieroll);
+					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if(spec_prop_otyp(otmp)){
+					hmessage |= otyp_hit(mtmp, &youmonst, otmp, &newdamage,dieroll);
+					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
 				}
 				if(!hmessage)
 					 hitmsg(mtmp, mattk);
-				dmg += (newdamage - basedamage);
 			}
 			//End artifact damage block:
 			if (!dmg) break;
@@ -2237,7 +2252,7 @@ hitmu(mtmp, mattk)
 			    rehumanize();
 			    break;
 		    } 
-			if(!EFire_resistance){
+			if(!InvFire_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(20))
@@ -2281,7 +2296,7 @@ hitmu(mtmp, mattk)
 			rehumanize();
 			break;
 		} 
-		if(!EFire_resistance){
+		if(!InvFire_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(SCROLL_CLASS, AD_FIRE);
 			if((int) mtmp->m_lev > rn2(20))
@@ -2300,7 +2315,7 @@ hitmu(mtmp, mattk)
 				pline_The("frost doesn't seem cold!");
 				dmg = 0;
 		    } 
-			if(!ECold_resistance){
+			if(!InvCold_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(POTION_CLASS, AD_COLD);
 			}
@@ -2321,7 +2336,7 @@ hitmu(mtmp, mattk)
 				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON
 			) dmg = 0; //Deeper link
 		}
-		if(!ECold_resistance){
+		if(!InvCold_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(POTION_CLASS, AD_COLD);
 		}
@@ -2335,7 +2350,7 @@ hitmu(mtmp, mattk)
 				pline_The("zap doesn't shock you!");
 				dmg = 0;
 		    } 
-			if(!EShock_resistance){
+			if(!InvShock_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(20))
@@ -2358,7 +2373,7 @@ hitmu(mtmp, mattk)
 				 ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || u.sealsActive&SEAL_ASTAROTH
 			) dmg = 0; //Deeper link
 		}
-		if(!EShock_resistance){
+		if(!InvShock_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(WAND_CLASS, AD_ELEC);
 			if((int) mtmp->m_lev > rn2(20))
@@ -2397,10 +2412,10 @@ hitmu(mtmp, mattk)
 				}
 				if(!Stunned) make_stunned((long)dmg, TRUE);
 			}
-			if(!EShock_resistance){
+			if(!InvShock_resistance){
 				if (!rn2(10)) (void) destroy_item(RING_CLASS, AD_ELEC);
 				if (!rn2(10)) (void) destroy_item(WAND_CLASS, AD_ELEC);
-				if(!Shock_resistance && !EFire_resistance){
+				if(!Shock_resistance && !InvFire_resistance){
 					if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_FIRE);
 					if (!rn2(4)) (void) destroy_item(SCROLL_CLASS, AD_FIRE);
 					if (!rn2(10)) (void) destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -2419,7 +2434,7 @@ hitmu(mtmp, mattk)
 					You("are suddenly very cold!");
 					mdamageu(mtmp, dmg);
 				}
-				if(!ECold_resistance) {
+				if(!InvCold_resistance) {
 					if (!rn2(4)) (void) destroy_item(POTION_CLASS, AD_COLD);
 				}
 			}
@@ -2518,7 +2533,7 @@ dopois:
 			&& rn2(100) >= 4){	return 0;
 		}
 		hitmsg(mtmp, mattk);
-		if (defends(AD_DRIN, uwep) || !has_head(youracedata) || uclockwork) {
+		if (defends(AD_DRIN, uwep) || !has_head(youracedata) || umechanoid) {
 		    You("don't seem harmed.");
 		    /* Not clear what to do for green slimes */
 		    break;
@@ -2679,7 +2694,7 @@ dopois:
 			hitmsg(mtmp, mattk);
 			/* if vampire biting (and also a pet) */
 			if (mattk->aatyp == AT_BITE &&
-				has_blood(youracedata) && !uclockwork
+				has_blood(youracedata) && !umechanoid
 				&& (mtmp->data != &mons[PM_VAMPIRE_BAT] || u.usleep)
 			) {
 			   Your("blood is being drained!");
@@ -2694,7 +2709,7 @@ dopois:
 				}
 			}
 			if (!mtmp->mcan	&& (mtmp->data != &mons[PM_VAMPIRE_BAT] || u.usleep) && !rn2(3) && !Drain_resistance) {
-				if(!has_blood(youracedata) || uclockwork) pline("%s feeds on you life force!",Monnam(mtmp));
+				if(!has_blood(youracedata) || umechanoid) pline("%s feeds on you life force!",Monnam(mtmp));
 			    losexp("life force drain",TRUE,FALSE,FALSE);
 				if(mtmp->data == &mons[PM_BLOOD_BLOATER]){
 					(void)split_mon(mtmp, 0);
@@ -2873,7 +2888,7 @@ dopois:
 		if (uncancelled && !rn2(4) && u.ulycn == NON_PM &&
 			!Protection_from_shape_changers &&
 			!spec_ability2(uwep, SPFX2_NOWERE) &&
-			!uclockwork
+			!umechanoid
 		) {
 		    You_feel("feverish.");
 		    exercise(A_CON, FALSE);
@@ -3587,7 +3602,7 @@ dopois:
 			else {
 				dmg += d(1,4);
 			}
-		    if (!EShock_resistance) {
+		    if (!InvShock_resistance) {
 				if((int) mtmp->m_lev > rn2(30))
 					destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(30))
@@ -3963,7 +3978,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 					ugolemeffects(AD_ELEC,tmp);
 					tmp = 0;
 				} 
-				if(!EShock_resistance){
+				if(!InvShock_resistance){
 					if((int) mtmp->m_lev > rn2(20))
 					destroy_item(WAND_CLASS, AD_ELEC);
 					if((int) mtmp->m_lev > rn2(20))
@@ -3978,7 +3993,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				ugolemeffects(AD_EELC,tmp);
 				tmp /= 2;
 			}
-			if(!EShock_resistance){
+			if(!InvShock_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(20))
@@ -3995,7 +4010,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				} else {
 					You("are freezing to death!");
 				}
-				if (!ECold_resistance) {
+				if (!InvCold_resistance) {
 					if((int) mtmp->m_lev > rn2(20))
 						destroy_item(POTION_CLASS, AD_COLD);
 				}
@@ -4010,7 +4025,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			} else {
 				You("are freezing to death!");
 			}
-			if (!ECold_resistance) {
+			if (!InvCold_resistance) {
 				if((int) mtmp->m_lev > rn2(20))
 					destroy_item(POTION_CLASS, AD_COLD);
 			}
@@ -4025,7 +4040,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				} else {
 					You("are burning to a crisp!");
 				}
-				if(!EFire_resistance){
+				if(!InvFire_resistance){
 					if((int) mtmp->m_lev > rn2(20))
 					destroy_item(SCROLL_CLASS, AD_FIRE);
 					if((int) mtmp->m_lev > rn2(20))
@@ -4045,7 +4060,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			} else {
 				You("are burning to a crisp!");
 			}
-			if(!EFire_resistance){
+			if(!InvFire_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(20))
@@ -4254,8 +4269,8 @@ common:
 		    if (Half_physical_damage) tmp = (tmp+1) / 2;
 		    mdamageu(mtmp, tmp);
 		}
-		if(mattk->adtyp == AD_FIRE || mattk->adtyp == AD_EFIR){
-			if(!EFire_resistance){
+		if(mattk->adtyp == AD_FIRE || mattk->adtyp == AD_EFIR || mattk->adtyp == AD_ACFR){
+			if(!InvFire_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if((int) mtmp->m_lev > rn2(20))
@@ -4264,19 +4279,19 @@ common:
 				destroy_item(SPBOOK_CLASS, AD_FIRE);
 			}
 		} else if(mattk->adtyp == AD_ELEC || mattk->adtyp == AD_EELC){
-			if(!EShock_resistance){
+			if(!InvShock_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(WAND_CLASS, AD_ELEC);
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(RING_CLASS, AD_ELEC);
 			}
 		} else if(mattk->adtyp == AD_COLD || mattk->adtyp == AD_ECLD){
-			if(!ECold_resistance){
+			if(!InvCold_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(POTION_CLASS, AD_COLD);
 			}
 		}
-		if (mattk->adtyp == AD_FIRE || mattk->adtyp == AD_EFIR) burn_away_slime();
+		if (mattk->adtyp == AD_FIRE || mattk->adtyp == AD_EFIR || mattk->adtyp == AD_ACFR) burn_away_slime();
 		break;
 
 	    case AD_BLND:
@@ -4773,7 +4788,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			} else {
 				succeeded=1;
 			}
-			if(!(EFire_resistance || Reflecting)){
+			if(!(InvFire_resistance || Reflecting)){
 				if ((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if ((int) mtmp->m_lev > rn2(20))
@@ -4801,7 +4816,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				dmg = 0;
 				succeeded=0;
 		    }
-			if(!EFire_resistance){
+			if(!InvFire_resistance){
 				if ((int) mtmp->m_lev > rn2(20))
 				destroy_item(SCROLL_CLASS, AD_FIRE);
 				if ((int) mtmp->m_lev > rn2(20))
@@ -4828,7 +4843,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				dmg = 0;
 				succeeded=0;
 		    }
-			if(!ECold_resistance){
+			if(!InvCold_resistance){
 				if ((int) mtmp->m_lev > rn2(20))
 					destroy_item(POTION_CLASS, AD_COLD);
 			}
@@ -4850,7 +4865,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				dmg = 0;
 				succeeded=0;
 		    }
-			if(!EShock_resistance){
+			if(!InvShock_resistance){
 				if ((int) mtmp->m_lev > rn2(20))
 				destroy_item(RING_CLASS, AD_ELEC);
 				if ((int) mtmp->m_lev > rn2(20))

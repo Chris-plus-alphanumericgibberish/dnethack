@@ -259,7 +259,7 @@ mattackm(magr, mdef)
 			tchtmp += oarmor->spe;
 		}
 	}
-	if(magr->data == &mons[PM_UVUUDAUM]){
+	if(magr->data == &mons[PM_UVUUDAUM] || magr->data == &mons[PM_CLAIRVOYANT_CHANGED]){
 		tmp += 20;
 		tchtmp += 20;
 	}
@@ -458,6 +458,10 @@ mattackm(magr, mdef)
 			if(otmp->objsize - magr->data->msize > 0){
 				tmp += -4*(otmp->objsize - magr->data->msize);
 				tchtmp += -2*(otmp->objsize - magr->data->msize);
+			}
+			if(is_lightsaber(otmp) && (magr->data == &mons[PM_MIND_FLAYER] || magr->data == &mons[PM_MASTER_MIND_FLAYER])){
+				tmp += 12;
+				tchtmp += 12;
 			}
 		}
 		/* fall through */
@@ -1434,7 +1438,7 @@ physical:{
 					/* WAC -- or using a pole at short range... */
 					(is_pole(otmp) &&
 						otmp->otyp != AKLYS && 
-						otmp->otyp != FORCE_PIKE && 
+						!is_vibropike(otmp) && 
 						otmp->otyp != NAGINATA && 
 						otmp->oartifact != ART_WEBWEAVER_S_CROOK && 
 						otmp->oartifact != ART_SILENCE_GLAIVE && 
@@ -1495,6 +1499,14 @@ physical:{
 				if (otmp) {
 					int basedamage = tmp;
 					int newdamage = tmp;
+					if(otmp->oartifact){
+						(void)artifact_hit(magr,mdef, otmp, &newdamage, dieroll);
+						if (mdef->mhp <= 0 || migrating_mons == mdef)
+						return (MM_DEF_DIED |
+							(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
+						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
+					}
 					if(otmp->oproperties){
 						(void)oproperty_hit(magr,mdef, otmp, &newdamage, dieroll);
 						if (mdef->mhp <= 0 || migrating_mons == mdef)
@@ -1503,12 +1515,13 @@ physical:{
 						tmp += (newdamage - basedamage);
 						newdamage = basedamage;
 					}
-					if(otmp->oartifact){
-						(void)artifact_hit(magr,mdef, otmp, &newdamage, dieroll);
+					if(spec_prop_otyp(otmp)){
+						(void)otyp_hit(magr,mdef, otmp, &newdamage, dieroll);
 						if (mdef->mhp <= 0 || migrating_mons == mdef)
 						return (MM_DEF_DIED |
 							(grow_up(magr,mdef) ? 0 : MM_AGR_DIED));
 						tmp += (newdamage - basedamage);
+						newdamage = basedamage;
 					}
 				}
 				if (otmp && tmp)
@@ -1517,7 +1530,7 @@ physical:{
 				tmp += d(3*((int)mattk->damn), (int)mattk->damd);
 			}
 			// tack on bonus elemental damage, if applicable
-			if (mattk->adtyp != AD_PHYS){
+			if (mattk->adtyp != AD_PHYS && mattk->adtyp != AD_HEAL){
 				alt_attk.aatyp = AT_NONE;
 				if(mattk->adtyp == AD_OONA)
 					alt_attk.adtyp = u.oonaenergy;
@@ -2952,6 +2965,12 @@ struct attack *mattk;
 			}
 			if(mdef->mtame) initedog(omon);
 		} break;
+	    case AD_SHDW:
+		    if (canseemon(magr)){
+				Strcpy(buf, s_suffix(Monnam(mdef)));
+				pline("%s falls upon %s.", buf, mon_nam(magr));
+		    }
+		break;
 	    case AD_STAR:
 			if((otmp && otmp == MON_WEP(magr)) || !hates_silver(magr->data)) {
             	tmp = 0;

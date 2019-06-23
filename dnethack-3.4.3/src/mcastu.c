@@ -1265,7 +1265,7 @@ elec_spell:
 			pline("But you resist the effects.");
 			dmg = 0;
 		}
-		if(!EShock_resistance){
+		if(!InvShock_resistance){
 			destroy_item(WAND_CLASS, AD_ELEC);
 			if(!rn2(10)) destroy_item(RING_CLASS, AD_ELEC);
 		}
@@ -1280,7 +1280,7 @@ fire_spell:
 			pline("But you resist the effects.");
 			dmg = 0;
 		}
-		if(!EFire_resistance) {
+		if(!InvFire_resistance) {
 			destroy_item(POTION_CLASS, AD_FIRE);
 			if(!rn2(6)) destroy_item(SCROLL_CLASS, AD_FIRE);
 			if(!rn2(10)) destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -1296,7 +1296,7 @@ cold_spell:
 			pline("But you resist the effects.");
 			dmg = 0;
 		}
-		if(!ECold_resistance) destroy_item(POTION_CLASS, AD_COLD);
+		if(!InvCold_resistance) destroy_item(POTION_CLASS, AD_COLD);
 		stop_occupation();
 		break;
 	    case AD_MAGM:
@@ -1427,14 +1427,14 @@ int spellnum;
                    (old ? "even more " : ""));
            make_blinded(Blinded + (long)u.ucreamed - old, FALSE);
        }
-       You("smell putrid!%s", !uclockwork?" You gag and vomit.":"");
-		if (!uclockwork) vomit();
+       You("smell putrid!%s", !umechanoid?" You gag and vomit.":"");
+		if (!umechanoid) vomit();
 		/* same effect as "This water gives you bad breath!" */
 		for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
 			if(!DEADMONSTER(mtmp2) && (mtmp2 != mtmp))
 			monflee(mtmp2, 0, FALSE, FALSE);
 		}
-		if(!Sick && !uclockwork) make_sick((long)rn1(ACURR(A_CON), 20), /* Don't make the PC more sick */
+		if(!Sick && !umechanoid) make_sick((long)rn1(ACURR(A_CON), 20), /* Don't make the PC more sick */
 								(char *)0, TRUE, SICK_NONVOMITABLE);
 		dmg = rnd(Half_physical_damage ? 5 : 10);
 		stop_occupation();
@@ -1494,7 +1494,7 @@ int spellnum;
 	   stop_occupation();
      break;
      case PLAGUE:
-       if (!Sick_resistance && !uclockwork) {
+       if (!Sick_resistance && !umechanoid) {
           You("are afflicted with disease!");
            make_sick(Sick ? Sick/3L + 1L : (long)rn1(ACURR(A_CON), 20),
                         (char *)0, TRUE, SICK_NONVOMITABLE);
@@ -1551,7 +1551,7 @@ int spellnum;
 				pline("It feels mildly uncomfortable.");
 				dmg = 0;
 			} 
-			if (!EAcid_resistance) {
+			if (!InvAcid_resistance) {
 				destroy_item(POTION_CLASS, AD_FIRE);
 			}
 			erode_obj(uwep, TRUE, FALSE);
@@ -1611,7 +1611,7 @@ int spellnum;
 	} else{
 	    dmg = d(8, 6);
 	}
-	if (!EFire_resistance) {
+	if (!InvFire_resistance) {
 		destroy_item(SCROLL_CLASS, AD_FIRE);
 		destroy_item(POTION_CLASS, AD_FIRE);
 		destroy_item(SPBOOK_CLASS, AD_FIRE);
@@ -1639,7 +1639,7 @@ int spellnum;
 	} else {
 	    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
 	}
-	if (!ECold_resistance) {
+	if (!InvCold_resistance) {
 		destroy_item(POTION_CLASS, AD_COLD);
 	}
 	stop_occupation();
@@ -1665,7 +1665,7 @@ int spellnum;
 		} else {
 			dmg += Half_spell_damage ? (hfdmg+1)/2 : hfdmg;
 		}
-		if (!ECold_resistance) {
+		if (!InvCold_resistance) {
 			if(hfdmg > rnd(20)) destroy_item(POTION_CLASS, AD_COLD);
 		}
 		stop_occupation();
@@ -1686,7 +1686,7 @@ int spellnum;
 			} else {
 				dmg = d(8, 6);
 			}
-			if (!(reflects || EShock_resistance)) {
+			if (!(reflects || InvShock_resistance)) {
 				destroy_item(WAND_CLASS, AD_ELEC);
 				destroy_item(RING_CLASS, AD_ELEC);
 			}

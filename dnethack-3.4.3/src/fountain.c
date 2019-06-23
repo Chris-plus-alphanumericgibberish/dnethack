@@ -248,7 +248,7 @@ drinkfountain()
 
 		case 20: /* Foul water */
 
-			if (!uclockwork){
+			if (!umechanoid){
 				pline_The("water is foul!  You gag and vomit.");
 				morehungry(rn1(20, 11));
 				vomit();

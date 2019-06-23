@@ -72,6 +72,10 @@ rank_of(lev, monnum, female)
 	register struct Role *role;
 	register int i;
 
+	if(monnum == PM_INCANTIFIER)
+		monnum = PM_WIZARD;
+	if(monnum == PM_HALF_DRAGON)
+		monnum = PM_BARBARIAN;
 
 	/* Find the role */
 	if(Role_if(monnum)) role = &urole;

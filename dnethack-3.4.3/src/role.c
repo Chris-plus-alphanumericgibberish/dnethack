@@ -67,7 +67,7 @@ struct Role roles[] = {
 	PM_SARA__THE_LAST_ORACLE, PM_TROOPER, NON_PM,
 	NON_PM, NON_PM, NON_PM, NON_PM,
 	ART_ANNULUS,
-	MA_HUMAN|MA_DWARF|MA_ELF|MA_VAMPIRE|MA_DRAGON, ROLE_MALE|ROLE_FEMALE |
+	MA_HUMAN|MA_DWARF|MA_ELF|MA_VAMPIRE|MA_DRAGON|MA_CLOCK, ROLE_MALE|ROLE_FEMALE |
 	  ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/* Str Int Wis Dex Con Cha */
 	{  12, 10,  7, 10,  10,  7 },
@@ -906,6 +906,21 @@ struct Race myrkalfr =
 	/* Init   Lower  Higher */
 	{  1, 0,  0, 1,  1, 0 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
+	NO_NIGHTVISION
+};
+
+struct Race android = 
+{	"android", "android", "android-kind", "And",
+	{"android", "gynoid"},
+	PM_ANDROID, PM_GYNOID, PM_MUMMIFIED_ANDROID, PM_FLAYED_ANDROID,
+	ROLE_MALE|ROLE_FEMALE | ROLE_NEUTRAL,
+	MA_CLOCK, 0, MA_ELF|MA_ORC|MA_DROW,
+	/*  Str    Int Wis Dex Con Cha */
+	{    3,     3,  3,  3,  3,  3 },
+	{   20,    18, 16, 22, 22, 18 },
+	/* Init   Lower  Higher */
+	{  2, 0,  1, 3,  1, 0 },	/* Hit points */
+	{  1, 0,  1, 0,  1, 0 },	/* Energy */
 	NO_NIGHTVISION
 };
 
@@ -2281,8 +2296,17 @@ int newgame;
 	/* Initialize urole and urace */
 	urole = roles[flags.initrole];
 	urace = races[flags.initrace];
-	if(Role_if(PM_ANACHRONONAUT) && Race_if(PM_DROW)){
+	if(Role_if(PM_ANACHRONONAUT)){
+		if(Race_if(PM_DROW))
 		urace = myrkalfr;
+		if(Race_if(PM_CLOCKWORK_AUTOMATON)){
+			urace = android;
+			urole.filecode = "And";
+			quest_status.got_quest = TRUE;
+			quest_status.leader_is_dead = TRUE;
+			flags.questprogress = 1;
+			livelog_write_string("received their quest via sticky-note");
+		}
 	}
 
 	/* Fix up the god names */

@@ -2019,7 +2019,7 @@ register struct obj *obj;
 	consume_obj_charge(obj, TRUE);
 	if(has_blood(&mons[corpse->corpsenm])
 		|| !(Race_if(PM_VAMPIRE) || Race_if(PM_INCANTIFIER) || 
-			uclockwork)
+			umechanoid)
 		|| yn("This corpse does not have blood. Tin it?") == 'y'
 	){
 		if ((can = mksobj(TIN, FALSE, FALSE)) != 0) {
@@ -4991,7 +4991,7 @@ struct obj **optr;
 		useup(obj);
 		*optr = 0;
 	} else {
-		if(uclockwork){
+		if(umechanoid){
 			if(Upolyd && u.mh < u.mhmax) u.mh = min(u.mhmax,u.mh+mons[u.umonnum].mlevel);
 			else if(!Upolyd && u.uhp < u.uhpmax) u.uhp = min(u.uhpmax,u.uhp + u.ulevel);
 			else {
@@ -5369,6 +5369,7 @@ doapply()
 	
 	else switch(obj->otyp){
 	case BLINDFOLD:
+	case ANDROID_VISOR:
 	case LENSES:
 	case R_LYEHIAN_FACEPLATE:
 	case MASK:
@@ -5379,7 +5380,7 @@ doapply()
 		else You("are already %s.",
 			ublindf->otyp == TOWEL ?     "covered by a towel" :
 			(ublindf->otyp == MASK || ublindf->otyp == R_LYEHIAN_FACEPLATE ) ? "wearing a mask" :
-			ublindf->otyp == BLINDFOLD ? "wearing a blindfold" :
+			(ublindf->otyp == BLINDFOLD || ublindf->otyp == ANDROID_VISOR) ? "wearing a blindfold" :
 						     "wearing lenses");
 		break;
 	case CREAM_PIE:

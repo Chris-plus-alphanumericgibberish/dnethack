@@ -339,6 +339,7 @@ struct artifact {
 #define AEGIS           (LAST_PROP+68)
 #define WATER           (LAST_PROP+69)
 #define SINGING         (LAST_PROP+70)
+#define ORACLE          (LAST_PROP+71)
 
 
 #define MASTERY_ARTIFACT_LEVEL 20

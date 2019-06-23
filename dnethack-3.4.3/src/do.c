@@ -2171,6 +2171,34 @@ donull()
 				occupation = 0; /*redundant failsafe? why doesn't stop_occupation work?*/
 			}
 		} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
+	} else if(uandroid){
+		if(!Upolyd && u.uhp<u.uhpmax && u.uen > 0){
+			u.uhp += u.ulevel/3+1;
+			flags.botl = 1;
+			u.uen--;
+			if(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_HEALING){
+				u.uhp++;
+			}
+			if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+			if(u.uhp == u.uhpmax){
+				You("finish regenerating.");
+				stop_occupation();
+				occupation = 0; /*redundant failsafe? why doesn't stop_occupation work?*/
+			}
+		} else if(Upolyd && u.mh<u.mhmax && u.uen > 0){
+			u.mh += u.ulevel/3+1;
+			flags.botl = 1;
+			u.uen--;
+			if(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_HEALING){
+				u.uhp++;
+			}
+			if(u.mh > u.mhmax) u.mh = u.mhmax;
+			if(u.mh == u.mhmax){
+				You("finish regenerating.");
+				stop_occupation();
+				occupation = 0; /*redundant failsafe? why doesn't stop_occupation work?*/
+			}
+		} else if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
 	} else {
 		if(u.sealsActive&SEAL_EURYNOME && ++u.eurycounts>5) unbind(SEAL_EURYNOME,TRUE);
 		if(Upolyd && u.uhp<u.uhpmax){

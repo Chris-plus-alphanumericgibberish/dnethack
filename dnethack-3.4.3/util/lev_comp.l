@@ -88,7 +88,7 @@ static int map_cnt = 0;
 		  map_cnt = 0;
 		  return MAP_ID;
 		}
-<MAPC>[-|}{+wABCISHKPLNYWTFG\\#., 0123456789]*\r?\n {
+<MAPC>[-|}{+twABCISHKPLNYWTFG\\#., 0123456789]*\r?\n {
 		  int len = yyleng;
 		  /* convert \r\n to \n */
 		  if (len >= 2 && yytext[len - 2] == '\r') len -= 1;

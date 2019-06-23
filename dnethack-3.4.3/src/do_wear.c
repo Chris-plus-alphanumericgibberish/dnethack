@@ -102,6 +102,7 @@ Boots_on()
 	case IRON_SHOES:
 	case ARMORED_BOOTS:
 	case HIGH_BOOTS:
+	case HEELED_BOOTS:
 	case PLASTEEL_BOOTS:
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
@@ -195,6 +196,7 @@ Boots_off()
 	case IRON_SHOES:
 	case ARMORED_BOOTS:
 	case HIGH_BOOTS:
+	case HEELED_BOOTS:
 	case PLASTEEL_BOOTS:
 	case CRYSTAL_BOOTS:
 	case JUMPING_BOOTS:
@@ -496,6 +498,7 @@ Gloves_on()
 
     switch(uarmg->otyp) {
 	case GLOVES:
+	case LONG_GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
 	case GAUNTLETS:
 	case HARMONIUM_GAUNTLETS:
@@ -530,6 +533,7 @@ Gloves_off()
 
     switch(uarmg->otyp) {
 	case GLOVES:
+	case LONG_GLOVES:
 	case HIGH_ELVEN_GAUNTLETS:
 	case GAUNTLETS:
 	case HARMONIUM_GAUNTLETS:
@@ -1869,13 +1873,13 @@ doputon()
 			if (ublindf->otyp == TOWEL)
 				Your("%s is already covered by a towel.",
 					body_part(FACE));
-			else if (ublindf->otyp == BLINDFOLD) {
+			else if (ublindf->otyp == BLINDFOLD || ublindf->otyp == ANDROID_VISOR) {
 				if (otmp->otyp == LENSES)
 					already_wearing2("lenses", "a blindfold");
 				else
 					already_wearing("a blindfold");
 			} else if (ublindf->otyp == LENSES) {
-				if (otmp->otyp == BLINDFOLD)
+				if (otmp->otyp == BLINDFOLD || otmp->otyp == ANDROID_VISOR)
 					already_wearing2("a blindfold", "some lenses");
 				else
 					already_wearing("some lenses");
@@ -1884,7 +1888,8 @@ doputon()
 			return(0);
 		}
 		if (otmp->otyp != MASK && otmp->otyp != R_LYEHIAN_FACEPLATE && 
-			otmp->otyp != BLINDFOLD && otmp->otyp != TOWEL && otmp->otyp != LENSES
+			otmp->otyp != BLINDFOLD && otmp->otyp != ANDROID_VISOR && 
+			otmp->otyp != TOWEL && otmp->otyp != LENSES
 		) {
 			You_cant("wear that!");
 			return(0);
@@ -2225,6 +2230,7 @@ find_ac()
 	if(u.specialSealsActive&SEAL_DAHLVER_NAR && !Upolyd) uac -=  min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
 	else if(u.specialSealsActive&SEAL_DAHLVER_NAR && Upolyd) uac -=  min(u.ulevel/2,(u.mhmax - u.mh)/10);
 	if(uclockwork) uac -= (u.clockworkUpgrades&ARMOR_PLATING) ? 5 : 2; /*armor bonus for automata*/
+	if(uandroid) uac -= 6; /*armor bonus for androids*/
 	if (uac < -128) uac = -128;	/* u.uac is an schar */
 	if(uac != u.uac){
 		u.uac = uac;
@@ -2292,6 +2298,7 @@ find_dr()
 		else armdr += arm_dr_bonus(uarmu);
 	}
 	
+	if(uandroid) armdr += (6*2+3*3); /*armor bonus for androids*/
 	armdr /= 5;
 	
 	udr += armdr;
@@ -2358,6 +2365,7 @@ struct monst *magr;
 		case 0:
 uppertorso:
 			//Note: upper body (shirt plus torso armor)
+			if(uandroid) udr += 6; /*thick chest armor*/
 			if (uarmu){
 				if(uarmu->otyp != BODYGLOVE){
 					armdr += arm_dr_bonus(uarmu);
@@ -2368,6 +2376,7 @@ uppertorso:
 		case 1:
 lowertorso:
 			//Note: lower body (torso armor only)
+			if(uandroid) udr += 3; /*flexible torso armor*/
 			if (uarm){
 				if(uarm->otyp != JUMPSUIT){
 					armdr += arm_dr_bonus(uarm);
@@ -2379,6 +2388,7 @@ lowertorso:
 			armdr += clkdr;
 		break;
 		case 2:
+			if(uandroid) udr += 6; /*thick cranial armor*/
 			if(!has_head(youracedata)) goto uppertorso;
 			if (uarmh){
 				armdr += arm_dr_bonus(uarmh);
@@ -2388,6 +2398,7 @@ lowertorso:
 		break;
 		case 3:
 boot_hit:
+			if(uandroid) udr += 3; /*thinner leg armor*/
 			if(!can_wear_boots(youracedata)) goto lowertorso;
 			if (uarmf){
 				armdr += arm_dr_bonus(uarmf);
@@ -2398,6 +2409,7 @@ boot_hit:
 			armdr += clkdr;
 		break;
 		case 4:
+			if(uandroid) udr += 3; /*thinner arm armor*/
 			if(!can_wear_gloves(youracedata)) goto uppertorso;
 			if (uarmg){
 				armdr += arm_dr_bonus(uarmg);
@@ -2942,11 +2954,11 @@ register struct obj *atmp;
 	} else if (DESTROY_ARM(uarmu)) {
 		if((!obj_resists(otmp, 0, 100))){
 			if (donning(otmp)) cancel_don();
-			Your("shirt crumbles into tiny threads and falls apart!");
+			Your("underclothes crumble into tiny threads and fall apart!");
 			(void) Shirt_off();
 			useup(otmp);
 		} else {
-			Your("shirt resists destruction!");
+			Your("underclothes resists destruction!");
 		}
 	} else if (DESTROY_ARM(uarmh)) {
 		if((!obj_resists(otmp, 0, 100))){
@@ -2992,6 +3004,57 @@ register struct obj *atmp;
 #undef DESTROY_ARM
 	stop_occupation();
 	return(1);
+}
+
+int
+destroy_marm(mtmp, otmp)
+register struct monst *mtmp;
+register struct obj *otmp;
+{
+	long unwornmask;
+	if(!otmp || !mtmp)
+		return 0;
+	if(obj_resists(otmp, 0, 100))
+		return 0;
+	if(!otmp->owornmask)
+		return 0;
+	obj_extract_self(otmp);
+	if ((unwornmask = otmp->owornmask) != 0L) {
+		mtmp->misc_worn_check &= ~unwornmask;
+		if (otmp->owornmask & W_WEP){
+			setmnotwielded(mtmp,otmp);
+			MON_NOWEP(mtmp);
+		}
+		if (otmp->owornmask & W_SWAPWEP){
+			setmnotwielded(mtmp,otmp);
+			MON_NOSWEP(mtmp);
+		}
+		otmp->owornmask = 0L;
+		update_mon_intrinsics(mtmp, otmp, FALSE, FALSE);
+		if(unwornmask&W_ARM){
+			if(canseemon(mtmp))
+				pline("%s armor turns to dust!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMC){
+			if(canseemon(mtmp))
+				pline("%s %s crumbles and turns to dust!", s_suffix(Monnam(mtmp)), cloak_simple_name(otmp));
+		} else if(unwornmask&W_ARMH){
+			if(canseemon(mtmp))
+				pline("%s helm turns to dust and is blown away!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMS){
+			if(canseemon(mtmp))
+				pline("%s shield crumbles away!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMG){
+			if(canseemon(mtmp))
+				pline("%s gloves vanish!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMF){
+			if(canseemon(mtmp))
+				pline("%s boots disintegrate!", s_suffix(Monnam(mtmp)));
+		} else if(unwornmask&W_ARMU){
+			if(canseemon(mtmp))
+				pline("%s underclothes crumble into tiny threads and fall apart!", s_suffix(Monnam(mtmp)));
+		}
+		m_useup(mtmp, otmp);
+	}
 }
 
 /* hit by destroy armor scroll/black dragon breath/monster spell */
@@ -3184,7 +3247,7 @@ register struct obj *atmp;
 
 	if (DESTROY_ARM(uarmc)) {
 		if (donning(otmp)) cancel_don();
-		pline("The tentacles tear your cloak to shreads!");
+		pline("The tentacles tear your cloak to shreds!");
 		(void) Cloak_off();
 		useup(otmp);
 	} else if (DESTROY_ARM(uarm)) {
@@ -3195,7 +3258,7 @@ register struct obj *atmp;
 #ifdef TOURIST
 	} else if (DESTROY_ARM(uarmu)) {
 		if (donning(otmp)) cancel_don();
-		pline("The tentacles tear your shirt to shreads!");
+		pline("The tentacles tear your shirt to shreds!");
 		(void) Shirt_off();
 		useup(otmp);
 #endif

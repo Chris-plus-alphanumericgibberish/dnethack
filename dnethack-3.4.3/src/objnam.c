@@ -521,9 +521,9 @@ char *buf;
 		* always allow "uncursed potion of water"
 	 */
 		if (obj->cursed)
-			Strcat(buf, (obj->known && obj->oproperties&OPROP_UNHYW) ? "unholy " : "cursed ");
+			Strcat(buf, (obj->known && (obj->oproperties&OPROP_UNHYW || obj->oproperties&OPROP_UNHY)) ? "unholy " : "cursed ");
 		else if (obj->blessed)
-			Strcat(buf, (obj->known && obj->oproperties&OPROP_HOLYW) ? "holy " : "blessed ");
+			Strcat(buf, (obj->known && (obj->oproperties&OPROP_HOLYW || obj->oproperties&OPROP_HOLY)) ? "holy " : "blessed ");
 		else if (iflags.show_buc || ((!obj->known || !objects[obj->otyp].oc_charged ||
 			(obj->oclass == ARMOR_CLASS ||
 			obj->oclass == RING_CLASS))
@@ -735,6 +735,25 @@ boolean dofull;
 			Strcat(buf, "woolen ");
 		else
 			Strcat(buf, "wool-lined ");
+	} else if(obj->oproperties && (obj->oartifact == 0 || dofull)){
+		if(obj->oproperties&OPROP_ANAR && obj->known)
+			Strcat(buf, "anarchic ");
+		if(obj->oproperties&OPROP_CONC && obj->known)
+			Strcat(buf, "concordant ");
+		if(obj->oproperties&OPROP_AXIO && obj->known)
+			Strcat(buf, "axiomatic ");
+		if(obj->oproperties&OPROP_MAGC && obj->known)
+			Strcat(buf, "magic-resistant ");
+		if(obj->oproperties&OPROP_REFL)
+			Strcat(buf, "reflective ");
+		if(obj->oproperties&OPROP_FIRE && obj->known)
+			Strcat(buf, "fireproof ");
+		if(obj->oproperties&OPROP_COLD && obj->known)
+			Strcat(buf, "coldproof ");
+		if(obj->oproperties&OPROP_ELEC && obj->known)
+			Strcat(buf, "voltproof ");
+		if(obj->oproperties&OPROP_ACID && obj->known)
+			Strcat(buf, "acidproof ");
 	}
 
 	if (obj->oproperties && (obj->oartifact == 0 || dofull)){
@@ -753,6 +772,12 @@ boolean dofull;
 		else {
 			if(obj->oproperties&OPROP_LESSW && obj->known)
 				Strcat(buf, "lesser ");
+			if (obj->oproperties&OPROP_ANARW && obj->known)
+				Strcat(buf, "anarchic ");
+			if (obj->oproperties&OPROP_CONCW && obj->known)
+				Strcat(buf, "concordant ");
+			if (obj->oproperties&OPROP_AXIOW && obj->known)
+				Strcat(buf, "axiomatic ");
 			if (obj->oproperties&OPROP_PSIOW){
 				if (obj->known) Strcat(buf, "psionic ");
 				else if (Blind_telepat) Strcat(buf, "whispering ");
@@ -760,6 +785,8 @@ boolean dofull;
 			if (obj->oproperties&OPROP_DEEPW){
 				if (Blind_telepat && obj->spe < 8) Strcat(buf, "mumbling ");
 			}
+			if (obj->oproperties&OPROP_PHSEW)
+				Strcat(buf, "faded ");
 			if (obj->oproperties&OPROP_WATRW)
 				Strcat(buf, "misty ");
 			if (obj->oproperties&OPROP_FIREW){
@@ -774,16 +801,12 @@ boolean dofull;
 				Strcat(buf, "sizzling ");
 			if (obj->oproperties&OPROP_MAGCW)
 				Strcat(buf, "sparkling ");
-			if (obj->oproperties&OPROP_ANARW && obj->known)
-				Strcat(buf, "anarchic ");
-			if (obj->oproperties&OPROP_CONCW && obj->known)
-				Strcat(buf, "concordant ");
-			if (obj->oproperties&OPROP_AXIOW && obj->known)
-				Strcat(buf, "axiomatic ");
 			if (obj->oproperties&OPROP_VORPW && obj->known)
 				Strcat(buf, "vorpal ");
 			if (obj->oproperties&OPROP_MORGW && obj->known && obj->cursed)
 				Strcat(buf, "morgul ");
+			if (obj->oproperties&OPROP_FLAYW && obj->known)
+				Strcat(buf, "flaying ");
 			/* note: "holy" and "unholy" properties are shown in the BUC part of the name, as they replace "blessed" and "cursed". */
 		}
 	}
@@ -1078,13 +1101,11 @@ boolean with_price;
 		    Sprintf(eos(buf), " of a%s %s",
 				index(vowels, *(mons[obj->corpsenm].mname)) ? "n" : "",
 			mons[obj->corpsenm].mname);
-			else if (is_blaster(obj) && obj->known)
+			else if (is_blaster(obj) && (obj->known || Race_if(PM_ANDROID)))
 		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
-			else if (obj->otyp == FORCE_PIKE && obj->known)
+			else if (is_vibroweapon(obj) && (obj->known || Race_if(PM_ANDROID)))
 		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
-			else if (obj->otyp == VIBROBLADE && obj->known)
-		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
-			else if (obj->otyp == SEISMIC_HAMMER && obj->known)
+			else if (obj->otyp == SEISMIC_HAMMER && (obj->known || Race_if(PM_ANDROID)))
 		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
 		break;
 	    case ARMOR_CLASS:
@@ -1556,7 +1577,7 @@ boolean with_price;
 		break;
 	case WAND_CLASS:
 		charges:
-			if (obj->known)
+			if (obj->known || Race_if(PM_ANDROID))
 				Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, obj->spe);
 			else if (obj->spe <= 0 && Race_if(PM_INCANTIFIER))
 				Sprintf(eos(buf), " (empty)");
@@ -3306,9 +3327,15 @@ int wishflags;
 		} else if (!strncmpi(bp, "freezing ", l=9)
 			) {
 			oproperties |= OPROP_COLDW;
+		} else if (!strncmpi(bp, "reflective ", l=11)
+			) {
+			oproperties |= OPROP_REFL;
 		} else if (!strncmpi(bp, "misty ", l=6)
 			) {
 			oproperties |= OPROP_WATRW;
+		} else if (!strncmpi(bp, "faded ", l=6)
+			) {
+			oproperties |= OPROP_PHSEW;
 		} else if (!strncmpi(bp, "psionic ", l=8) || !strncmpi(bp, "whispering ", l=11)
 			) {
 			oproperties |= OPROP_PSIOW;
@@ -3347,6 +3374,9 @@ int wishflags;
 		} else if (!strncmpi(bp, "morgul ", l=7)
 			) {
 			oproperties |= OPROP_MORGW;
+		} else if (!strncmpi(bp, "flaying ", l=8)
+			) {
+			oproperties |= OPROP_FLAYW;
 		} else
 			break;
 		bp += l;
@@ -4013,8 +4043,15 @@ typfnd:
 		typ == BEAMSWORD ||
 		typ == DOUBLE_LIGHTSABER ||
 		typ == VIBROBLADE ||
+		typ == WHITE_VIBROSWORD ||
+		typ == GOLD_BLADED_VIBROSWORD ||
+		typ == WHITE_VIBROZANBATO ||
+		typ == GOLD_BLADED_VIBROZANBATO ||
+		typ == RED_EYED_VIBROSWORD ||
 		typ == SEISMIC_HAMMER ||
 		typ == FORCE_PIKE ||
+		typ == WHITE_VIBROSPEAR ||
+		typ == GOLD_BLADED_VIBROSPEAR ||
 		(typ >= PISTOL && typ <= RAYGUN) ||
 		(typ >= SHOTGUN_SHELL && typ <= LASER_BEAM) ||
 		typ == FLACK_HELMET ||
@@ -4375,10 +4412,10 @@ typfnd:
 			case WEAPON_CLASS:
 				oproperties &= (OPROP_FIREW | OPROP_COLDW | OPROP_PSIOW | OPROP_DEEPW | OPROP_WATRW | OPROP_ELECW | OPROP_ACIDW | OPROP_MAGCW 
 								| OPROP_ANARW | OPROP_CONCW | OPROP_AXIOW | OPROP_HOLYW | OPROP_UNHYW | OPROP_VORPW | OPROP_MORGW | OPROP_FLAYW
-								| OPROP_LESSW);
+								| OPROP_PHSEW | OPROP_LESSW);
 				break;
 			case ARMOR_CLASS:
-				oproperties &= (OPROP_FIRE | OPROP_COLD | OPROP_ELEC | OPROP_ACID | OPROP_MAGC | OPROP_ANAR | OPROP_CONC | OPROP_AXIO);
+				oproperties &= (OPROP_FIRE | OPROP_COLD | OPROP_ELEC | OPROP_ACID | OPROP_MAGC | OPROP_ANAR | OPROP_CONC | OPROP_AXIO | OPROP_REFL);
 				break;
 			default:
 				oproperties = 0;

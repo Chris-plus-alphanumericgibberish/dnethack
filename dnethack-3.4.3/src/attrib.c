@@ -142,6 +142,15 @@ const struct innate {
 		     {	 15, &(HFire_resistance), "heat resistant", "less heat resistant" },
 		     {	 0, 0, 0, 0 } },
 
+	and_abil[] = { {	1, &(HPoison_resistance), "", "" },
+		     {	 1, &(HSick_resistance), "", "" },
+		     {	 1, &(HStone_resistance), "", "" },
+		     {	 1, &(HCold_resistance), "", "" },
+		     {   5, &(HStealth), ">Initiating short-range camouflage<", ">Short-range camouflage damaged<" },
+		     {  10, &(HShock_resistance), ">Initiating ion-channel re-direction<", ">Ion-channel re-direction non-operational<" },
+		     {  15, &(HFire_resistance), ">Activating non-conservative heat sink<", ">Non-conservative heat sink destroyed<" },
+		     {	 0, 0, 0, 0 } },
+
 	vam_abil[] = { {	1, &(HPoison_resistance), "", "" },
 			 {	11, &(HCold_resistance), "the chill of the grave", "the warmth of life" },
 		     {	 21, &(HPolymorph_control), "in control", "out of control" },
@@ -365,7 +374,7 @@ boolean	inc_or_dec;
 	pline("Exercise:");
 #endif
 	if (i == A_CHA) return;	/* can't exercise cha */
-	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
+	if(umechanoid) return; /* Mechanoids can't excercise abilities */
 	if(u.sealsActive&SEAL_HUGINN_MUNINN && (i == A_INT || i == A_WIS)) return; /* don't excercise int or wis while artificially maxed */
 	
 	/* no physical exercise while polymorphed; the body's temporary */
@@ -468,7 +477,7 @@ exerchk()
 {
 	int	i, mod_val;
 	
-	if(uclockwork) return; /* Clockwork Automata can't excercise abilities */
+	if(umechanoid) return; /* Mechanoids can't excercise abilities */
 	/*	Check out the periodic accumulations */
 	exerper();
 	
@@ -798,6 +807,7 @@ int oldlevel, newlevel;
 	case PM_MYRKALFR:       rabil = elf_abil;	break;
 	case PM_ORC:            rabil = orc_abil;	break;
 	case PM_CLOCKWORK_AUTOMATON:rabil = clk_abil;	break;
+	case PM_ANDROID:		rabil = and_abil;	break;
 	case PM_INCANTIFIER:	rabil = inc_abil;	break;
 	case PM_VAMPIRE:		rabil = vam_abil;	break;
 	case PM_HALF_DRAGON:	rabil = hlf_abil;	break;
@@ -831,8 +841,11 @@ int oldlevel, newlevel;
 			else
 				*(abil->ability) |= mask;
 			if(!(*(abil->ability) & INTRINSIC & ~mask)) {
-			    if(*(abil->gainstr))
-				You_feel("%s!", abil->gainstr);
+			    if(*(abil->gainstr)){
+					if(Race_if(PM_ANDROID) && mask == FROMRACE)
+						pline("");
+					else You_feel("%s!", abil->gainstr);
+				}
 			}
 		} else if (oldlevel >= abil->ulevel && newlevel < abil->ulevel) {
 			*(abil->ability) &= ~mask;

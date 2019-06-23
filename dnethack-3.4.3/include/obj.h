@@ -217,6 +217,8 @@ struct obj {
 #define OPROP_VORPW		0x0000000001000000
 #define OPROP_MORGW		0x0000000002000000
 #define OPROP_FLAYW		0x0000000004000000
+#define OPROP_REFL		0x0000000008000000
+#define OPROP_PHSEW		0x0000000010000000
 
 	unsigned oeaten;	/* nutrition left in food, if partly eaten */
 	long age;		/* creation date */
@@ -465,6 +467,30 @@ struct obj {
 							 (otmp)->otyp == KAMEREL_VAJRA || \
 							 (otmp)->otyp == BEAMSWORD || \
 							 (otmp)->otyp == DOUBLE_LIGHTSABER)
+#define is_vibroweapon(otmp) ((otmp)->otyp == VIBROBLADE || \
+							  is_vibrosword(otmp) || \
+							  is_vibropike(otmp))
+#define is_vibrosword(otmp)	 ((otmp)->otyp == WHITE_VIBROSWORD || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROSWORD || \
+						  (otmp)->otyp == WHITE_VIBROZANBATO || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROZANBATO || \
+						  (otmp)->otyp == RED_EYED_VIBROSWORD)
+#define is_vibropike(otmp)	 ((otmp)->otyp ==  WHITE_VIBROSPEAR || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROSPEAR || \
+						  (otmp)->otyp == FORCE_PIKE)
+#define fast_weapon(otmp)	 ((otmp)->otyp == WHITE_VIBROSWORD || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROSWORD || \
+						  (otmp)->otyp == WHITE_VIBROZANBATO || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROZANBATO || \
+						  (otmp)->otyp ==  WHITE_VIBROSPEAR || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROSPEAR)
+#define pure_weapon(otmp)	 ((otmp)->otyp == WHITE_VIBROSWORD || \
+						  (otmp)->otyp == WHITE_VIBROZANBATO || \
+						  (otmp)->otyp ==  WHITE_VIBROSPEAR)
+#define dark_weapon(otmp)	 ((otmp)->otyp == GOLD_BLADED_VIBROSWORD || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROZANBATO || \
+						  (otmp)->otyp == GOLD_BLADED_VIBROSPEAR)
+#define spec_prop_otyp(otmp)	(pure_weapon(otmp) || dark_weapon(otmp))
 #define is_multigen(otmp)	((otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
 			 objects[otmp->otyp].oc_skill <= -P_BOW))

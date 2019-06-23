@@ -286,6 +286,8 @@ char c;
 			break;
 	    case 'G':	str = align_gtitle(u.ualignbase[A_ORIGINAL]);
 			break;
+	    case 'h':	str = (flags.female) ?  urace.individual.f : urace.individual.m;
+			break;
 	    case 'H':	str = homebase();
 			break;
 	    case 'a':	str = align_str(u.ualignbase[A_ORIGINAL]);

@@ -111,7 +111,7 @@ register struct obj *obj;
 				&& !u.usteed
 #endif
 				&& obj->otyp != AKLYS
-				&& obj->otyp != FORCE_PIKE
+				&& !is_vibropike(obj)
 				&& obj->otyp != NAGINATA
 				&& obj->oartifact != ART_WEBWEAVER_S_CROOK
 				&& obj->oartifact != ART_SILENCE_GLAIVE

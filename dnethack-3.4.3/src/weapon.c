@@ -378,8 +378,29 @@ int spec;
 		case VIBROBLADE:
 			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie/2;
 		break;
+		case WHITE_VIBROSWORD:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie/2;
+		break;
+		case GOLD_BLADED_VIBROSWORD:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie/2;
+		break;
+		case RED_EYED_VIBROSWORD:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie;
+		break;
+		case WHITE_VIBROZANBATO:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+d(4,6+2*dmod)+ldie/2+dmod;
+		break;
+		case GOLD_BLADED_VIBROZANBATO:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+d(4,6+2*dmod)+ldie/2+dmod;
+		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, ldie)+ldie;
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie;
+		break;
+		case WHITE_VIBROSPEAR:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie/2;
+		break;
+		case GOLD_BLADED_VIBROSPEAR:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, ldie)+ldie/2;
 		break;
 		case SEISMIC_HAMMER:
 			if(otmp->ovar1 && otmp->ovar1-->0) tmp = rnd(3*(ldie+otmp->spe));
@@ -415,7 +436,7 @@ int spec;
 					if(!Shock_resistance){
 						tmp += d(6,6); //wand of lightning
 					}
-					if(!EShock_resistance){
+					if(!InvShock_resistance){
 						if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 						if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 					}
@@ -446,7 +467,7 @@ int spec;
 					if(!Shock_resistance){
 						tmp += d(2,6);
 					}
-					if(!EShock_resistance){
+					if(!InvShock_resistance){
 						if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 						if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 					}
@@ -765,8 +786,29 @@ lightsaber_form_ldie:
 		case VIBROBLADE:
 			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
 		break;
+		case WHITE_VIBROSWORD:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
+		break;
+		case GOLD_BLADED_VIBROSWORD:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
+		break;
+		case RED_EYED_VIBROSWORD:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie;
+		break;
+		case WHITE_VIBROZANBATO:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
+		break;
+		case GOLD_BLADED_VIBROZANBATO:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
+		break;
 		case FORCE_PIKE:
-			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(2, sdie)+sdie;
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie;
+		break;
+		case WHITE_VIBROSPEAR:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
+		break;
+		case GOLD_BLADED_VIBROSPEAR:
+			if(otmp->ovar1 && otmp->ovar1-->0) tmp += d(1, sdie)+sdie/2;
 		break;
 		case SEISMIC_HAMMER:
 			if(otmp->ovar1 && otmp->ovar1-->0) tmp = rnd(3*(sdie+otmp->spe));
@@ -803,7 +845,7 @@ lightsaber_form_ldie:
 					if(!Shock_resistance){
 						tmp += d(6,6);
 					}
-					if(!EShock_resistance){
+					if(!InvShock_resistance){
 						if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 						if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 					}
@@ -835,7 +877,7 @@ lightsaber_form_ldie:
 					if(!Shock_resistance){
 						tmp += d(2,6);
 					}
-					if(!EShock_resistance){
+					if(!InvShock_resistance){
 						if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 						if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 					}
@@ -1251,7 +1293,7 @@ lightsaber_form_sdie:
 					if(species_resists_cold(&youmonst)) bonus += 1.5*(rnd(6) + otmp->spe);
 					else bonus += rnd(6) + otmp->spe;
 				}
-				if(!EFire_resistance){
+				if(!InvFire_resistance){
 					if (!rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
 					if (!rn2(3)) destroy_item(SPBOOK_CLASS, AD_FIRE);
 					if (!rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
@@ -1261,7 +1303,7 @@ lightsaber_form_sdie:
 					if(species_resists_fire(&youmonst)) bonus += 1.5*(rnd(6) + otmp->spe);
 					else bonus += rnd(6) + otmp->spe;
 				}
-				if(!ECold_resistance){
+				if(!InvCold_resistance){
 					if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
 				}
 			} else if(otmp->otyp == SUNROD && otmp->lamplit){
@@ -1270,11 +1312,11 @@ lightsaber_form_sdie:
 						bonus += 1.5*(rnd(6) + otmp->spe);
 					else bonus += rnd(6) + otmp->spe;
 				}
-				if(!EShock_resistance){
+				if(!InvShock_resistance){
 					if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
 					if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
 				}
-				if(!EAcid_resistance){
+				if(!InvAcid_resistance){
 					if (rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
 				}
 				if (!resists_blnd(&youmonst)) {
@@ -1811,9 +1853,16 @@ register struct monst *mtmp;
 static const NEARDATA short hwep[] = {
 	  CORPSE,  /* cockatrice corpse */
 	  KAMEREL_VAJRA /*quite a lot plus elect plus blindness*/,
+	  GOLD_BLADED_VIBROZANBATO,/*2d16+8/2d8+4d6+10*/
+	  WHITE_VIBROZANBATO,/*2d16+8/2d8+4d6+10*/
 	  DOUBLE_LIGHTSABER/*6d8*/, 
+	  RED_EYED_VIBROSWORD,/*2d8+8/2d12+12*/
 	  BEAMSWORD/*3d10*/,
 	  FORCE_PIKE,/*2d6+6/2d8+8*/
+	  GOLD_BLADED_VIBROSWORD,/*2d8+4/2d12+6*/
+	  WHITE_VIBROSWORD,/*2d8+4/2d12+6*/
+	  GOLD_BLADED_VIBROSPEAR,/*2d6+3/2d8+3*/
+	  WHITE_VIBROSPEAR,/*2d6+3/2d8+3*/
 	  LIGHTSABER/*3d8*/,
 	  MIRRORBLADE/*your weapon is probably pretty darn good*/,
 	  HEAVY_IRON_BALL,/*1d25/1d25*/
@@ -2418,6 +2467,8 @@ struct obj *otmp;
 		) && !uarms && !u.twoweap
 		) bonus *= 2;
 		else if(otmp->otyp == KATANA && !uarms && !u.twoweap)
+			bonus *= 1.5;
+		else if(is_vibrosword(otmp) && !uarms && !u.twoweap)
 			bonus *= 1.5;
 		
 		if(otmp==uwep 

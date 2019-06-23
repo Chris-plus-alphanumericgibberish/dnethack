@@ -37,8 +37,8 @@
 #define resists_confusion(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
 
 #define is_blind(mon)		(!((mon)->mcansee) || (darksight((mon)->data) && !(\
-													(!levl[u.ux][u.uy].lit && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))\
-													|| (levl[u.ux][u.uy].lit &&  (viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))))))
+													(!levl[(mon)->mx][(mon)->my].lit && !(viz_array[(mon)->my][(mon)->mx]&TEMP_LIT1 && !(viz_array[(mon)->my][(mon)->mx]&TEMP_DRK1)))\
+													|| (levl[(mon)->mx][(mon)->my].lit &&  (viz_array[(mon)->my][(mon)->mx]&TEMP_DRK1 && !(viz_array[(mon)->my][(mon)->mx]&TEMP_LIT1))))))
 #define is_deaf(mon)		(!((mon)->mcanhear))
 
 #define is_molochan(ptr)	((ptr)->maligntyp == A_NONE)
@@ -202,6 +202,7 @@
 #define freezing(ptr)		(((ptr)->mflagsb & MB_CHILL) != 0L)
 #define burning(ptr)		(((ptr)->mflagsb & MB_TOSTY) != 0L)
 #define hallucinogenic(ptr)		(((ptr)->mflagsb & MB_HALUC) != 0L)
+#define inediate(ptr)		(!(carnivorous(ptr) || herbivorous(ptr) || metallivorous(ptr) || magivorous(ptr) || is_vampire(ptr)))
 #define carnivorous(ptr)	(((ptr)->mflagst & MT_CARNIVORE) != 0L)
 #define herbivorous(ptr)	(((ptr)->mflagst & MT_HERBIVORE) != 0L)
 #define metallivorous(ptr)	(((ptr)->mflagst & MT_METALLIVORE) != 0L)
@@ -435,7 +436,7 @@
 #define webmaker(ptr)		((ptr) == &mons[PM_CAVE_SPIDER] || \
 				 (ptr) == &mons[PM_GIANT_SPIDER] || (ptr) == &mons[PM_PHASE_SPIDER] || \
 				 (ptr) == &mons[PM_MIRKWOOD_SPIDER] || (ptr) == &mons[PM_MIRKWOOD_ELDER] || \
-				 (ptr) == &mons[PM_SPROW] || (ptr) == &mons[PM_DRIDER] || \
+				 (ptr) == &mons[PM_SPROW] || (ptr) == &mons[PM_DRIDER] || (ptr) == &mons[PM_ALIDER] || \
 				 (ptr) == &mons[PM_EDDERKOP] || \
 				 (ptr) == &mons[PM_AVATAR_OF_LOLTH] || (ptr) == &mons[PM_DROW_MUMMY])
 #define is_unicorn(ptr)		((ptr)->mlet == S_UNICORN && likes_gems(ptr))
@@ -547,6 +548,10 @@
 
 #define is_mind_flayer(ptr)	((ptr) == &mons[PM_MIND_FLAYER] || \
 				 (ptr) == &mons[PM_MASTER_MIND_FLAYER] || \
+				 (ptr) == &mons[PM_PARASITIZED_ANDROID] || \
+				 (ptr) == &mons[PM_PARASITIZED_GYNOID] || \
+				 (ptr) == &mons[PM_PARASITIC_MIND_FLAYER] || \
+				 (ptr) == &mons[PM_PARASITIC_MASTER_MIND_FLAYER] || \
 				 (ptr) == &mons[PM_ALHOON] || \
 				 (ptr) == &mons[PM_ELDER_BRAIN] || \
 				 (ptr) == &mons[PM_LUGRIBOSSK] || \

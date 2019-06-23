@@ -31,6 +31,7 @@
 #define Fire_resistance		(HFire_resistance || EFire_resistance || \
 				 species_resists_fire(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_FIRE) ||\
 				 ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA || u.sealsActive&SEAL_FAFNIR)
+#define InvFire_resistance	(EFire_resistance || ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA)
 
 #define HCold_resistance	u.uprops[COLD_RES].intrinsic
 #define ECold_resistance	u.uprops[COLD_RES].extrinsic
@@ -38,6 +39,7 @@
 				 species_resists_cold(&youmonst) || \
 				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON)
 #define Cold_resistance		(HCold_resistance || ECold_resistance || NCold_resistance)
+#define InvCold_resistance	(ECold_resistance || ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA)
 
 #define HSleep_resistance	u.uprops[SLEEP_RES].intrinsic
 #define ESleep_resistance	u.uprops[SLEEP_RES].extrinsic
@@ -55,6 +57,7 @@
 #define Shock_resistance	(HShock_resistance || EShock_resistance || \
 				 species_resists_elec(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ELEC) ||\
 				 ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || u.sealsActive&SEAL_ASTAROTH)
+#define InvShock_resistance	(EShock_resistance || ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || (HShock_resistance&FROMRACE && Race_if(PM_ANDROID)))
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
@@ -67,6 +70,7 @@
 #define EAcid_resistance	u.uprops[ACID_RES].extrinsic
 #define Acid_resistance		(HAcid_resistance || EAcid_resistance || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ACID) ||\
 							 species_resists_acid(&youmonst) || u.sealsActive&SEAL_ECHIDNA)
+#define InvAcid_resistance	(EAcid_resistance)
 
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
@@ -138,7 +142,7 @@
 								!(viz_array[u.uy][u.ux]&TEMP_DRK2)\
 						&& !(ublindf && (ublindf->otyp == LENSES || ublindf->otyp == MASK)) && !Is_waterlevel(&u.uz)))))
 #define Blinded			u.uprops[BLINDED].intrinsic
-#define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK)
+#define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK && ublindf->otyp != ANDROID_VISOR)
 		/* ...means blind because of a cover */
 #define NoLightBlind	((Blinded || Blindfolded || !haseyes(youracedata)) && \
 		 !(u.sealsActive&SEAL_DANTALION && !((uarm && uarm->obj_material != GLASS) || (uarmu && uarmu->obj_material != GLASS))) && \
@@ -289,7 +293,7 @@
 #define HWeldproof	u.uprops[WELDPROOF].intrinsic
 #define EWeldproof	u.uprops[WELDPROOF].extrinsic
 #define Weldproof	(HWeldproof || EWeldproof || \
-					 is_demon(youracedata) || is_undead(youracedata) || (u.ulycn >= LOW_PM) ||\
+					 is_demon(youracedata) || is_undead(youracedata) || (u.ulycn >= LOW_PM) || (Race_if(PM_ANDROID)) ||\
 					 (u.specialSealsActive&SEAL_ACERERAK)\
 					)
 

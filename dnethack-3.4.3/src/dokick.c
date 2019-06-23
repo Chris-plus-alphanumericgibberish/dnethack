@@ -14,7 +14,6 @@ static NEARDATA const char *gate_str;
 
 extern boolean notonhead;	/* for long worms */
 
-STATIC_DCL void FDECL(kickdmg, (struct monst *, BOOLEAN_P));
 STATIC_DCL void FDECL(kick_monster, (XCHAR_P, XCHAR_P));
 STATIC_DCL int FDECL(kick_object, (XCHAR_P, XCHAR_P));
 STATIC_DCL char *FDECL(kickstr, (char *));
@@ -25,7 +24,7 @@ static NEARDATA struct obj *kickobj;
 
 static const char kick_passes_thru[] = "kick passes harmlessly through";
 
-STATIC_OVL void
+void
 kickdmg(mon, clumsy)
 register struct monst *mon;
 register boolean clumsy;
@@ -47,7 +46,7 @@ register boolean clumsy;
 	if (clumsy) dmg /= 2;
 
 	/* kicking a dragon or an elephant will not harm it */
-	if (thick_skinned(mon->data) && !(uarmf && (uarmf->otyp == STILETTOS || uarmf->otyp == KICKING_BOOTS))) dmg = 0;
+	if (thick_skinned(mon->data) && !(uarmf && (uarmf->otyp == STILETTOS || uarmf->otyp == HEELED_BOOTS || uarmf->otyp == KICKING_BOOTS))) dmg = 0;
 
 	if(resist_attacks(mon->data))
 		dmg = 0;
@@ -116,6 +115,15 @@ register boolean clumsy;
 						return;
 					if (newdamage == 0) return;
 					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
+				}
+				if(spec_prop_otyp(uarmf)){
+					(void)otyp_hit(&youmonst, mon, uarmf, &newdamage, roll);
+					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
+						return;
+					if (newdamage == 0) return;
+					dmg += (newdamage - basedamage);
+					newdamage = basedamage;
 				}
 			}
 		}
@@ -123,7 +131,7 @@ register boolean clumsy;
 		exercise(A_DEX, TRUE);
 	}
 	
-	if(uarmf && (uarmf->otyp == STILETTOS)){
+	if(uarmf && (uarmf->otyp == STILETTOS || uarmf->otyp == HEELED_BOOTS)){
 		dmg += rnd(bigmonst(mon->data) ? 2 : 6);
 	}
 	

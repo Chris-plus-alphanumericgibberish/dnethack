@@ -1003,6 +1003,14 @@ A("Poseidon's Trident",	TRIDENT,						0,			0,
 	0,0,0),
 
 
+A("The Eye of the Oracle", EYEBALL,							0,			0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_HSPDAM|SPFX_INTEL),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,        NO_DFNS,        CARY(AD_MAGM),
+	ORACLE,     A_NEUTRAL, NON_PM, NON_PM, 500L,
+	0,0,0),
+
+
 /*//////////Role-specific Quest Artifacts//////////*/
 /*
 A("The Orb of Detection",	CRYSTAL_BALL,
@@ -1089,7 +1097,7 @@ A("The Tentacle Rod",		FLAIL, 						0,			0,/*Needs encyc entry*/
 	0, A_NONE, NON_PM, PM_DROW, 5000L,
 	SPFX2_TENTROD,0,0),
 
-A("The Crescent Blade",		SABER, 						0,			0,/*Needs encyc entry*/
+A("The Crescent Blade",		SABER, 					SILVER,			0,/*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_ATTK|SPFX_BEHEAD), SPFX_REFLECT,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	FIRE(4,0),	NO_DFNS,	NO_CARY,

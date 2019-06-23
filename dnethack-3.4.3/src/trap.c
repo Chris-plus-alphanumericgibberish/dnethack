@@ -774,9 +774,21 @@ unsigned trflags;
 			if(is_hard(uarmh)) {
 			    pline("Fortunately, you are wearing a hard helmet.");
 			    dmg = 2;
-			} else if (flags.verbose) {
-			    Your("%s does not protect you.", xname(uarmh));
-			}
+				} else if (umechanoid) {
+					pline("Fortunately, you have a very hard head!");
+					dmg = 2;
+				} else if (thick_skinned(youracedata)) {
+					pline("Fortunately, you have a thick head!");
+					dmg = 2;
+				} else if (flags.verbose) {
+				    Your("%s does not protect you.", xname(uarmh));
+				}
+			} else if (umechanoid) {
+				pline("Fortunately, you have a very hard head!");
+				dmg = 2;
+			} else if (thick_skinned(youracedata)) {
+				pline("Fortunately, you have a thick head!");
+				dmg = 2;
 		    }
 
 		    if (!Blind) otmp->dknown = 1;
@@ -2761,7 +2773,7 @@ struct obj *box;	/* null for floor trap */
 	
 	burn_away_slime();
 
-	if (burnarmor(&youmonst) || (rn2(3) && !EFire_resistance)) {
+	if (burnarmor(&youmonst) || (rn2(3) && !InvFire_resistance)) {
 	    destroy_item(SCROLL_CLASS, AD_FIRE);
 	    destroy_item(SPBOOK_CLASS, AD_FIRE);
 	    destroy_item(POTION_CLASS, AD_FIRE);
@@ -4445,7 +4457,7 @@ boolean disarm;
 			} else {
 			    dmg = d(4, 4);
 			}
-			if(!EShock_resistance){
+			if(!InvShock_resistance){
 				destroy_item(RING_CLASS, AD_ELEC);
 				destroy_item(WAND_CLASS, AD_ELEC);
 			}
@@ -4728,7 +4740,7 @@ burn_stuff:
 	(void) Boots_off();
 	useup(obj);
     }
-	if(!(Wwalking || EFire_resistance)){
+	if(!(Wwalking || InvFire_resistance)){
 		destroy_item(SCROLL_CLASS, AD_FIRE);
 		destroy_item(SPBOOK_CLASS, AD_FIRE);
 		destroy_item(POTION_CLASS, AD_FIRE);
