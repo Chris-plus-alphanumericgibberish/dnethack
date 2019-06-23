@@ -3254,24 +3254,20 @@ dopois:
 #ifdef TOURIST
 		   && !uarmu
 #endif
-		   && !uarm && !uarmh && !uarms && !uarmg && !uarmc && !uarmf) {
+		   && !uarm) {
 		    boolean goaway = FALSE;
 		    pline("%s hits!  (I hope you don't mind.)", Monnam(mtmp));
 		    if (Upolyd) {
 			u.mh += rnd(7);
-			if (!rn2(7)) {
-			    /* no upper limit necessary; effect is temporary */
+			if (!rn2(7) && u.mhmax < 5 * u.ulevel + d(2 * u.ulevel, 10)) {
 			    u.mhmax++;
-			    if (!rn2(13)) goaway = TRUE;
 			}
 			if (u.mh > u.mhmax) u.mh = u.mhmax;
 		    } else {
 			u.uhp += rnd(7);
-			if (!rn2(7)) {
+			if (!rn2(7) && u.uhpmax < 5 * u.ulevel + d(2 * u.ulevel, 10)) {
 			    /* hard upper limit via nurse care: 25 * ulevel */
-			    if (u.uhpmax < 5 * u.ulevel + d(2 * u.ulevel, 10))
 				u.uhpmax++;
-			    if (!rn2(13)) goaway = TRUE;
 			}
 			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 		    }
@@ -3289,14 +3285,20 @@ dopois:
 		    }
 		    dmg = 0;
 		} else {
-		    if (mtmp->mpeaceful) {
+			if(Upolyd){
+				u.mh++;
+				if (u.mh > u.mhmax) u.mh = u.mhmax;
+			} else {
+				u.uhp++;
+				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+			}
+		    if (mtmp->mpeaceful && !mtmp->mtame) {
 			if (flags.soundok && !(moves % 5)) {
 		      if(Role_if(PM_HEALER)) verbalize("Doc, I can't help you unless you cooperate.");
-			  else pline("%s changes %s mind.", Monnam(mtmp), mhis(mtmp));
 			}
-			dmg = 0;
 			monflee(mtmp, d(3, 6), TRUE, FALSE);
 		    } else hitmsg(mtmp, mattk);
+			dmg = 0;
 		}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
