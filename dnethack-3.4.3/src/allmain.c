@@ -2685,8 +2685,9 @@ printAttacks(buf, ptr)
 		"Shadow blades",	/*27*/
 		"Beam",	/*28*/
 		"Deva Arms",	/*29*/
-		"five-square-reach touch",	/*30*/
-		"wide-angle (passive) gaze"	/*31*/
+		"Five-square-reach touch",	/*30*/
+		"Wide-angle (passive) gaze"	/*31*/
+		"Rend"	/*32*/
 	};
 	static char *damageKey[] = {
 		"physical",				/*0*/
@@ -2807,27 +2808,31 @@ printAttacks(buf, ptr)
 		"blood blade",			/*115*/
 		"Surya Deva arrow",		/*116*/
 		"[[constitution]] drain",/*117*/
+		"Silver mirror shards", /*118*/
+		"Mercury blade",		/*119*/
+		"Gold transmutation", 	/*120*/
+		"Holy fire", 			/*121*/
 		// "[[ahazu abduction]]",	/**/
-		"[[stone choir]]",		/*118*/
-		"[[water vampire]]",	/*119*/
-		"[[bloody fangs]]",		/*120*/
-		"[[item freeing]]",		/*121*/
-		"[[rainbow feathers]]",	/*122*/
-		"[[Vorlon explosion]]",	/*123*/
-		"[[cold explosion]]",	/*124*/
-		"[[fire explosion]]",	/*125*/
-		"[[shock explosion]]",	/*126*/
-		"[[physical explosion]]",/*127*/
-		"[[Vorlon missile]]",	/*128*/
-		"[[Warmachine missile]]",/*129*/
-		"[[clerical spell]]",	/*130*/
-		"[[mage spell]]",		/*131*/
-		"[[random breath type]]",/*132*/
-		"[[random gaze type]]",	/*133*/
-		"[[random elemental gaze]]",/*134*/
-		"[[Amulet theft]]",		/*135*/
-		"[[Intrinsic theft]]",	/*136*/
-		"[[Quest Artifact theft]]"/*137*/
+		"[[stone choir]]",		/*122*/
+		"[[water vampire]]",	/*123*/
+		"[[bloody fangs]]",		/*124*/
+		"[[item freeing]]",		/*125*/
+		"[[rainbow feathers]]",	/*126*/
+		"[[Vorlon explosion]]",	/*127*/
+		"[[cold explosion]]",	/*128*/
+		"[[fire explosion]]",	/*129*/
+		"[[shock explosion]]",	/*130*/
+		"[[physical explosion]]",/*131*/
+		"[[Vorlon missile]]",	/*132*/
+		"[[Warmachine missile]]",/*133*/
+		"[[clerical spell]]",	/*134*/
+		"[[mage spell]]",		/*135*/
+		"[[random breath type]]",/*136*/
+		"[[random gaze type]]",	/*137*/
+		"[[random elemental gaze]]",/*138*/
+		"[[Amulet theft]]",		/*139*/
+		"[[Intrinsic theft]]",	/*140*/
+		"[[Quest Artifact theft]]"/*141*/
 	};
 	for(i = 0; i<6; i++){
 		attk = &ptr->mattk[i];

@@ -571,7 +571,7 @@ meleeattack:
 		if(distmin(magr->mx,magr->my,mdef->mx,mdef->my) < 2 && !DEADMONSTER(mdef) && magr->data == &mons[PM_DEMOGORGON] && res[i]){
 			magr->mvar2 = magr->mvar2+1;
 			if(magr->mvar2>=2){
-				struct attack rend = {AT_NONE, AD_SHRD, 3, 12};
+				struct attack rend = {AT_REND, AD_SHRD, 3, 12};
 				res[i] = hitmm(magr, mdef, &rend);
 				mon_ranged_gazeonly = 0;
 				magr->mvar2=0;
@@ -579,6 +579,7 @@ meleeattack:
 		}
 		break;
 
+	    case AT_REND:	/* automatic if prev two attacks succeed */
 	    case AT_HUGS:	/* automatic if prev two attacks succeed */
 		strike = (i >= 2 && res[i-1] == MM_HIT && res[i-2] == MM_HIT);
 		if (strike){
@@ -1036,6 +1037,7 @@ hitmm(magr, mdef, mattk)
 				    Sprintf(buf,"%s squeezes", magr_name);
 				    break;
 				}
+			case AT_REND:
 			case AT_NONE:
 				break;
 			default:
@@ -1659,7 +1661,37 @@ physical:{
 		}
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AD_DISN:{
+			struct obj *obj;
+			int i = 0;
+			if(vis){
+				if(magr->data == &mons[PM_SWORD_ARCHON] || magr->data == &mons[PM_BAEL]) 
+					pline("%s glows faintly blue!", Monnam(mdef));
+				else pline("%s glows sickly green!", Monnam(mdef));
+			}
+			i = tmp;
+			for(; i>0; i--){
+				obj = some_armor(mdef);
+				if(obj){
+					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
+						damage_item(obj);
+					}
+					else if(!obj->oartifact){
+						destroy_marm(mdef, obj);
+					}
+				} else {
+					i = 0;
+					if(!resists_disint(mdef)){
+						pline("%s disintegrates!", Monnam(mdef));
+						monkilled(mdef,"",AD_DISN);
+						if(mdef->mhp <= 0) return MM_DEF_DIED;
+					}
+				}
+			}
+			tmp = 0;
+		}break;
 	    case AD_FIRE:
+	    case AD_EFIR:
 		if (cancelled) {
 		    tmp = 0;
 		    break;
@@ -1709,6 +1741,44 @@ physical:{
 		/* only potions damage resistant players in destroy_item */
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		break;
+	    case AD_ACFR:{
+		int mult = 1;
+		if(!resists_fire(mdef)){
+			mult++;
+			if (vis)
+				pline("%s is %s!", Monnam(mdef),
+				  on_fire(mdef->data, mattk));
+			if (mdef->data == &mons[PM_STRAW_GOLEM] ||
+				mdef->data == &mons[PM_PAPER_GOLEM] ||
+				mdef->data == &mons[PM_SPELL_GOLEM]) {
+					(void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+					(void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+					if (vis) pline("%s burns completely!", Monnam(mdef));
+					mondied(mdef);
+					if (mdef->mhp > 0) return 0;
+					else if (mdef->mtame && !vis)
+						pline("May %s roast in peace.", mon_nam(mdef));
+					return (MM_DEF_DIED | (grow_up(magr,mdef) ?
+								0 : MM_AGR_DIED));
+			} else if (mdef->data == &mons[PM_MIGO_WORKER]) {
+					if (vis) pline("%s\'s brain melts!", Monnam(mdef));
+					mondied(mdef);
+					if (mdef->mhp > 0) return 0;
+					else if (mdef->mtame && !vis)
+						pline("May %s roast in peace.", mon_nam(mdef));
+					return (MM_DEF_DIED | (grow_up(magr,mdef) ?
+								0 : MM_AGR_DIED));
+			}
+			(void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+			(void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+			(void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+		}
+		if(hates_holy_mon(mdef)){
+			if (vis) pline("%s seared by the holy flames!", Monnam(mdef));
+			mult++;
+		}
+		tmp *= mult;
+		}break;
 /////////////////////////////////////////////////
 		case AD_STDY:
 		if (magr->mcan || is_blind(magr)){
@@ -3075,6 +3145,24 @@ struct attack *mattk;
 		if(canseemon(magr))
 		    pline("%s is suddenly very hot!", Monnam(magr));
 		break;
+	    case AD_ACFR:{
+		int mult = 0;
+		if (!resists_fire(magr)) {
+			mult++;
+			if(canseemon(magr))
+				pline("%s is suddenly very hot!", Monnam(magr));
+		}
+		if(hates_holy_mon(magr)){
+			mult++;
+			if(canseemon(magr))
+				pline("%s seared by the holy flames!", Monnam(magr));
+		}
+		if (!tmp) {
+		    if (canseemon(magr)) {
+				pline("%s is mildly warmed.", Monnam(magr));
+		    }
+		}
+		}break;
 	    case AD_ELEC:
 	    case AD_EELC:
 		if (resists_elec(magr)) {
@@ -3122,6 +3210,7 @@ int aatyp;
     case AT_BEAM:
     case AT_SHDW:
     case AT_WISP:
+    case AT_REND:		/* If the previous attacks were OK, this one is too */
 	w_mask = ~0L;		/* special case; no defense needed */
 	break;
     case AT_CLAW:

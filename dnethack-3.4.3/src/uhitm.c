@@ -3214,6 +3214,40 @@ register struct attack *mattk;
 		/* only potions damage resistant players in destroy_item */
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		break;
+	    case AD_ACFR:{
+		int mult = 1;
+		if(!resists_fire(mdef)){
+			mult++;
+			if (!Blind)
+				pline("%s is %s!", Monnam(mdef),
+				  on_fire(mdef->data, mattk));
+			if (mdef->data == &mons[PM_STRAW_GOLEM] ||
+				mdef->data == &mons[PM_PAPER_GOLEM] ||
+				mdef->data == &mons[PM_SPELL_GOLEM]) {
+					(void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+					(void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+					if (!Blind) pline("%s burns completely!", Monnam(mdef));
+					pline("%s burns completely!", Monnam(mdef));
+					xkilled(mdef,2);
+					tmp = 0;
+					break;
+			} else if (mdef->data == &mons[PM_MIGO_WORKER]) {
+					if (!Blind) pline("%s\'s brain melts!", Monnam(mdef));
+					pline("%s's brain melts!", Monnam(mdef));
+					xkilled(mdef,2);
+					tmp = 0;
+					break;
+			}
+			(void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+			(void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+			(void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+		}
+		if(hates_holy_mon(mdef)){
+			if (!Blind) pline("%s seared by the holy flames!", Monnam(mdef));
+			mult++;
+		}
+		tmp *= mult;
+		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_COLD:
 		if (negated) {
@@ -3977,6 +4011,9 @@ common:
 	    case AD_EFIR:
 		resistance = resists_fire(mdef);
 		goto ecommon;
+	    case AD_ACFR:
+		resistance = resists_fire(mdef) && !hates_holy_mon(mdef);
+		goto ecommon;
 	    case AD_EELC:
 		resistance = resists_elec(mdef);
 ecommon:
@@ -4232,6 +4269,25 @@ register struct attack *mattk;
 				}
 			    golemeffects(mdef,(int)mattk->adtyp,dam);
 			break;
+			case AD_ACFR:{
+				int mult = 0;
+				if (!resists_fire(mdef)) {
+					mult++;
+					pline("%s is burning to a crisp!",Monnam(mdef));
+					dam += destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+					dam += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+					dam += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+				}
+				if (hates_holy_mon(mdef)) {
+					mult++;
+					pline("%s is seared by the holy flames!", Monnam(mdef));
+				}
+				dam *= mult;
+				if (!tmp){
+					shieldeff(mdef->mx, mdef->my);
+					pline("%s seems mildly warm.", Monnam(mdef));
+				}
+			}break;
 		}
 		end_engulf();
 		if ((mdef->mhp -= dam) <= 0) {
@@ -4497,6 +4553,14 @@ wisp_shdw_dhit:
 			}
 			break;
 
+		case AT_REND:
+			/* automatic if prev two attacks succeed */
+			if(i >= 2 && sum[i-1] && sum[i-2]) {
+				dhit = 1;
+				wakeup(mon, TRUE);
+				sum[i] = damageum(mon, mattk);
+			}
+		break;
 		case AT_EXPL:	/* automatic hit if next to */
 			dhit = -1;
 			wakeup(mon, TRUE);
@@ -4779,6 +4843,15 @@ wisp_shdw_dhit2:
 				u.ustuck = mon;
 				sum[i] = damageum(mon, mattk);
 			}
+		}
+		break;
+
+	case AT_REND:
+		/* automatic if prev two attacks succeed */
+		if(i >= 2 && sum[i-1] && sum[i-2]) {
+			dhit = 1;
+			wakeup(mon, TRUE);
+			sum[i] = damageum(mon, mattk);
 		}
 		break;
 

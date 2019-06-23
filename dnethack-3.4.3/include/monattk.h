@@ -39,6 +39,7 @@
 #define AT_DEVA		29	/* million-arm weapon attack */
 #define AT_5SQR		30	/* five square reach touch */
 #define AT_WDGZ		31	/* wide gaze - passive, like medusa */
+#define AT_REND		32	/* hits if the previous two attacks hit, otherwise does nothing */
 
 #define AT_WEAP		252	/* uses weapon */
 #define AT_XWEP		253	/* uses offhanded weapon */
@@ -168,11 +169,12 @@
 #define AD_GLSS		118	/* silver mirror shards */
 #define AD_MERC		119	/* mercury blade */
 #define AD_GOLD     120 /* goldify (only implemented for mammon's breath attack!) */
+#define AD_ACFR     121 /* Archon fire (1x Phys, +1x Fire, +1x Holy) */
 
 //#define AD_AHAZU	116 /*  */
 //Amon is a headbutt (AT_BUTT/AD_PHYS)
 //Chupoclops is a poisonous bite (AT_BITE/AD_DRST)
-#define AD_DUNSTAN	121
+#define AD_DUNSTAN	122
 #define AD_IRIS		AD_DUNSTAN+1
 #define AD_NABERIUS	AD_DUNSTAN+2
 #define AD_OTIAX	AD_DUNSTAN+3
