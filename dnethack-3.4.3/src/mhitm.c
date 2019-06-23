@@ -1407,10 +1407,10 @@ mdamagem(magr, mdef, mattk)
 			tmp += u.chokhmah;
 	    case AD_WERE:
 	    case AD_PHYS:
+		case AD_SHRD:
 			//defered special attacks
 	    case AD_VORP:
 	    case AD_TENT:
-		case AD_SHRD:
 	    case AD_HODS:
 	    case AD_CHRN:
 	    case AD_SUCK:
