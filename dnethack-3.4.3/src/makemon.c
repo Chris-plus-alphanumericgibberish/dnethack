@@ -3577,8 +3577,7 @@ register struct monst *mtmp;
 				otmp->spe = 5;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(HELMET, FALSE, FALSE);
-				otmp->obj_material = COPPER;
+				otmp = mksobj(BRONZE_HELM, FALSE, FALSE);
 				otmp->spe = 3;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
@@ -3598,10 +3597,7 @@ register struct monst *mtmp;
 				otmp->oproperties = OPROP_LESSW;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(HELMET, TRUE, FALSE);
-				otmp->obj_material = COPPER;
-				fix_object(otmp);
-				(void) mpickobj(mtmp, otmp);
+				(void)mongets(mtmp, BRONZE_HELM);
 				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
 				(void)mongets(mtmp, BRONZE_GAUNTLETS);
 				(void)mongets(mtmp, ARMORED_BOOTS);
@@ -4263,10 +4259,7 @@ register struct monst *mtmp;
 			}
 			mongets(mtmp, BRONZE_PLATE_MAIL);
 			mongets(mtmp, BRONZE_GAUNTLETS);
-			otmp = mksobj(HELMET, TRUE, FALSE);
-			otmp->obj_material = COPPER;
-			fix_object(otmp);
-			(void) mpickobj(mtmp, otmp);
+			mongets(mtmp, BRONZE_HELM);
 			otmp = mksobj(LANCE, TRUE, FALSE);
 			otmp->obj_material = COPPER;
 			fix_object(otmp);
@@ -5301,13 +5294,13 @@ register struct	monst	*mtmp;
 				mongets(mtmp, LONG_SWORD);
 				mongets(mtmp, LONG_SWORD);
 				mongets(mtmp, BRONZE_PLATE_MAIL);
-				mongets(mtmp, HELMET);
+				mongets(mtmp, BRONZE_HELM);
 				mongets(mtmp, BRONZE_GAUNTLETS);
 			} else if(ptr == &mons[PM_GUARDIAN_NAGA] || ptr == &mons[PM_GUARDIAN_NAGA_HATCHLING]){
 				chance = rnd(10);
 				if(chance >= 7){
 					mongets(mtmp, BRONZE_PLATE_MAIL);
-					mongets(mtmp, HELMET);
+					mongets(mtmp, BRONZE_HELM);
 				}
 			}
 		break;
