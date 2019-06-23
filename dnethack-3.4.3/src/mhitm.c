@@ -1260,7 +1260,7 @@ mdamagem(magr, mdef, mattk)
 	boolean phasearmor = FALSE;
 	boolean weaponhit = (mattk->aatyp == AT_WEAP || mattk->aatyp == AT_XWEP || mattk->aatyp == AT_DEVA || mattk->aatyp == AT_MARI);
 	struct attack alt_attk;
-	int attack_type = (weaponhit) ? AD_PHYS : mattk->adtyp;
+	int attack_type = ((weaponhit && mattk->adtyp != AD_HEAL)) ? AD_PHYS : mattk->adtyp;
 	int ispoisoned = 0;
 	
 	if(weaponhit && mattk->adtyp != AD_PHYS) tmp = 0;

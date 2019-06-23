@@ -3069,7 +3069,7 @@ register struct attack *mattk;
 	    demonpet();
 	    return(0);
 	}
-	switch (weaponhit ? AD_PHYS : mattk->adtyp) {
+	switch ((weaponhit && mattk->adtyp != AD_HEAL) ? AD_PHYS : mattk->adtyp) {
 	    case AD_STUN:
 		if(!Blind)
 		    pline("%s %s for a moment.", Monnam(mdef),
@@ -3089,7 +3089,7 @@ register struct attack *mattk;
 		if(weaponhit) {
 		    if(uwep) tmp = 0;
 			// tack on bonus elemental damage, if applicable
-			if (mattk->adtyp != AD_PHYS){
+			if (mattk->adtyp != AD_PHYS && mattk->adtyp != AD_HEAL){
 				alt_attk.aatyp = AT_NONE;
 				if(mattk->adtyp == AD_OONA)
 					alt_attk.adtyp = u.oonaenergy;

@@ -1814,7 +1814,7 @@ hitmu(mtmp, mattk)
 	//uncancelled = !mtmp->mcan && ((rn2(3) >= armpro) || !rn2(50));
 	permdmg = 0;
 /*	Now, adjust damages via resistances or specific attacks */
-	switch(weaponhit ? AD_PHYS : mattk->adtyp) {
+	switch((weaponhit && mattk->adtyp != AD_HEAL) ? AD_PHYS : mattk->adtyp) {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_HODS:
@@ -2111,7 +2111,7 @@ hitmu(mtmp, mattk)
 				dmg += d(3*((int)mattk->damn), (int)mattk->damd);
 			
 			// tack on bonus elemental damage, if applicable
-			if (mattk->adtyp != AD_PHYS){
+			if (mattk->adtyp != AD_PHYS && mattk->adtyp != AD_HEAL){
 				alt_attk.aatyp = AT_NONE;
 				if(mattk->adtyp == AD_OONA)
 					alt_attk.adtyp = u.oonaenergy;
