@@ -220,10 +220,6 @@ register boolean special;
 				if (helm == HELM_OF_BRILLIANCE) helm = STRANGE_OBJECT;
 			} else helm = LEATHER_HELM;
 		break;
-		case PM_CLOCKWORK_AUTOMATON:
-		    weapon = LONG_SWORD;
-		    armor = BRONZE_PLATE_MAIL;
-		break;
 #ifdef PM_CONVICT
 		case PM_CONVICT:
 		    if (rn2(4)) weapon = FLAIL;
