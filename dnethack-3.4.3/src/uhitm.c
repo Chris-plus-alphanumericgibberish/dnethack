@@ -2406,7 +2406,7 @@ defaultvalue:
 		}
 		if(uarmg && (uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN || uarmg->oartifact == ART_CLAWS_OF_THE_REVENANCER)){
 			weaponmask |= SLASH;
-		} else if(!Upolyd && Race_if(PM_HALF_DRAGON)){
+		} else if(!Upolyd && (Race_if(PM_HALF_DRAGON) || Race_if(PM_CHIROPTERAN))){
 			weaponmask |= SLASH;
 		}
 		//Can always whack someone
