@@ -1951,6 +1951,7 @@ u_init()
 		}
 		if(Race_if(PM_CLOCKWORK_AUTOMATON)){
 			u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] = u.ualign.type = A_LAWFUL;
+			flags.initalign = 0; // 0 == lawful
 		}
 		/* This depends on the order in objects.c */
 		for (i = TIN_WHISTLE; i <= DRUM_OF_EARTHQUAKE; i++)
@@ -1982,6 +1983,7 @@ u_init()
 		}
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 			u.ualign.type = A_VOID; /* Override racial alignment */
+		flags.initalign = 4; // 4 == VOID
 		u.hod += 10;  /*One transgression is all it takes*/
 		u.gevurah += 5; /*One resurection or two rehumanizations is all it takes*/
 		u.daat += 8;
@@ -2006,6 +2008,7 @@ u_init()
 		else u.uhunger = 200;
     	u.ualignbase[A_CURRENT] = u.ualignbase[A_ORIGINAL] =
 			u.ualign.type = A_CHAOTIC; /* Override racial alignment */
+		flags.initalign = 2; // 2 == chaotic
         urace.hatemask |= urace.lovemask;   /* Hated by the race's allies */
         urace.lovemask = 0; /* Convicts are pariahs of their race */
         break;
