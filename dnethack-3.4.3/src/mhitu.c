@@ -3814,9 +3814,9 @@ dopois:
 			dmg += d(2,4); //Add segment damage
 	}
 	
-	if(dmg && u.ustdy){
+	if(dmg > 0 && u.ustdy){
 		dmg += u.ustdy;
-		u.ustdy -= 1;
+		u.ustdy /= 2;
 	}
 	
 	if(attacktype_fordmg(youracedata, AT_NONE, AD_STAR)){
@@ -4232,7 +4232,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 						pline("Unfortunately your mind is still gone.");
 					else
 						Your("last thought drifts away.");
-					killer = "memmory loss";
+					killer = "memory loss";
 					killer_format = KILLED_BY;
 					done(DIED);
 					lifesaved++;
