@@ -3814,7 +3814,8 @@ register struct attack *mattk;
 				}
 			}
 		}break;
-		case AD_SIMURGH:
+		case AD_SIMURGH:{
+			int i;
 			if(rn2(5)){
 			if(hates_iron(mdef->data)){
 					Your("Cold iron quills brush %s.",mon_nam(mdef));
@@ -3827,7 +3828,7 @@ register struct attack *mattk;
 				pline("The cold iron rachises sear %s.",mon_nam(mdef));
 				tmp+=d(5, mdef->m_lev);
 			}
-			for(int i = 0; i<5;i++) switch(rn2(15)){
+			for(i = 0; i<5;i++) switch(rn2(15)){
 				case 0:
 					if(!resists_fire(mdef)){
 						tmp+= rnd(spiritDsize());
@@ -3896,7 +3897,7 @@ register struct attack *mattk;
 			if(!is_blind(mdef) && haseyes(mdef->data)){
 				mdef->mstun = 1;
 			}
-		break;
+		}break;
 		case AD_FRWK:{
 			int x,y,i;
 			for(i = rn2(3)+2; i > 0; i--){
