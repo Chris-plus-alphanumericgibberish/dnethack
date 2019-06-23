@@ -733,7 +733,7 @@ mattacku(mtmp)
 			tchtmp -= uwep->spe+1;
 		}
 	}
-	if(mtmp->data == &mons[PM_UVUUDAUM]){
+	if(mtmp->data == &mons[PM_UVUUDAUM] || mtmp->data == &mons[PM_CLAIRVOYANT_CHANGED]){
 		tmp += 20;
 		tchtmp += 20;
 	}
