@@ -88,7 +88,18 @@ boolean artif;
 	struct obj *otmp;
 
 	otmp = mkobj(let, artif);
+	
+	if(In_quest(&u.uz) && !Role_if(PM_CONVICT) && in_mklev){
+		if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
+		if(otmp->oclass == ARMOR_CLASS){
+			if(is_suit(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
+			else if(is_helmet(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HEADMODIMASK);
+			else if(is_shirt(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HUMANOID) ? MB_HUMANOID : ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
+		}
+	}
+	
 	place_object(otmp, x, y);
+	
 	return(otmp);
 }
 
@@ -100,7 +111,18 @@ boolean init, artif;
 	struct obj *otmp;
 
 	otmp = mksobj(otyp, init, artif);
+	
+	if(In_quest(&u.uz) && !Role_if(PM_CONVICT) && in_mklev){
+		if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
+		if(otmp->oclass == ARMOR_CLASS){
+			if(is_suit(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
+			else if(is_helmet(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HEADMODIMASK);
+			else if(is_shirt(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HUMANOID) ? MB_HUMANOID : ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
+		}
+	}
+	
 	place_object(otmp, x, y);
+	
 	return(otmp);
 }
 

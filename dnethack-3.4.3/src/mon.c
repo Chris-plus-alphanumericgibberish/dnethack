@@ -4873,7 +4873,17 @@ xkilled(mtmp, dest)
 		) {
 			int typ;
 
+			/*Death Drop*/
 			otmp = mkobj_at(RANDOM_CLASS, x, y, TRUE);
+			if(In_quest(&u.uz) && !Role_if(PM_CONVICT)){
+				if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
+				if(otmp->oclass == ARMOR_CLASS){
+					if(is_suit(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
+					else if(is_helmet(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HEADMODIMASK);
+					else if(is_shirt(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_HUMANOID) ? MB_HUMANOID : ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
+				}
+			}
+			
 			/* Don't create large objects from small monsters */
 			typ = otmp->otyp;
 			if (mdat->msize < MZ_HUMAN && typ != FOOD_RATION
