@@ -538,7 +538,7 @@ ARMOR("black dress", (char *)0, /*Needs encyc entry*/
 ARMOR("consort's suit", "loud foppish suit", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 1, 0,	0, 5, 10, 	1000, 10, 1, 1, ARM_SUIT, CLOTH, CLR_BRIGHT_MAGENTA),
 ARMOR("gentleman's suit", "expensive clothes", /*Needs encyc entry*/
-	0, 0, 1, 0,	0, 5, 10, 1000,  10, 1, 1, ARM_SUIT, CLOTH, CLR_BLACK),
+	0, 0, 1, 0,	0, 5, 10, 1000,  10, 1, 2, ARM_SUIT, CLOTH, CLR_BLACK),
 ARMOR("gentlewoman's dress", "expensive dress", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 6,150, 1000,  10, 1, 3, ARM_SUIT, BONE, CLR_RED), /*Specifically, whale bone*/
 ARMOR("crystal plate mail", (char *)0, /*Needs encyc entry*/
