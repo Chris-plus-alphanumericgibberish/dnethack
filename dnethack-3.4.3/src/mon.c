@@ -3584,6 +3584,116 @@ register struct monst *mtmp;
 	}
 	if(mtmp->iswiz) wizdead();
 	if(mtmp->data->msound == MS_NEMESIS) nemdead();        
+	//Asc items and crucial bookkeeping
+	if(Race_if(PM_DROW) && !Role_if(PM_NOBLEMAN) && mtmp->data == &mons[urole.neminum] && !flags.made_bell){
+		(void) mksobj_at(BELL_OF_OPENING, mtmp->mx, mtmp->my, TRUE, FALSE);
+		flags.made_bell = TRUE;
+	}
+	if(mtmp->data == &mons[PM_OONA]){
+		struct obj *obj;
+		obj = mksobj_at(SKELETON_KEY, mtmp->mx, mtmp->my, FALSE, FALSE);
+		obj = oname(obj, artiname(ART_THIRD_KEY_OF_LAW));
+		obj->spe = 0;
+		obj->cursed = obj->blessed = FALSE;
+	}
+	if(mtmp->data == &mons[PM_GARLAND]){
+		int x = mtmp->mx, y = mtmp->my;
+		struct obj *otmp;
+		makemon(&mons[PM_CHAOS], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+	}
+	if(mtmp->data == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] && !(u.uevent.ukilled_illurien)){
+		u.uevent.ukilled_illurien = 1;
+		u.ill_cnt = rn1(1000, 250);
+	}
+	if(mtmp->data == &mons[PM_ORCUS]){
+		struct engr *oep = engr_at(mtmp->mx,mtmp->my);
+		if(!oep){
+			make_engr_at(mtmp->mx, mtmp->my,
+			 "", 0L, DUST);
+			oep = engr_at(mtmp->mx,mtmp->my);
+		}
+		oep->ward_id = TENEBROUS;
+		oep->halu_ward = 0;
+		oep->ward_type = BURN;
+		oep->complete_wards = 1;
+	}
+	if(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
+		u.chokhmah++;
+		u.keter++;
+	}
+	if (mtmp->data == &mons[PM_CHAOS] && mvitals[PM_CHAOS].died == 1) {
+	} else if(mtmp->data->geno & G_UNIQ && mvitals[monsndx(mtmp->data)].died == 1){
+		char buf[BUFSZ];
+		buf[0]='\0';
+		if(nonliving(mtmp->data)) Sprintf(buf,"destroyed %s",noit_nohalu_mon_nam(mtmp));
+		else Sprintf(buf,"killed %s",noit_nohalu_mon_nam(mtmp));
+	}
+	//Remove linked hungry dead
+	if(mtmp->data == &mons[PM_BLOB_OF_PRESERVED_ORGANS]){
+		struct monst *mon, *mtmp2;
+		for (mon = fmon; mon; mon = mtmp2){
+			mtmp2 = mon->nmon;
+			if(mon->data == &mons[PM_HUNGRY_DEAD]){
+				if(mtmp->mvar1 == (long)mon->m_id){
+					if(mon->mhp > 0){
+						mon->mhp = 0;
+						mondied(mon);
+					}
+					break;
+				}
+			}
+		}
+		if(!mon){
+			for (mon = migrating_mons; mon; mon = mtmp2){
+				mtmp2 = mon->nmon;
+				if(mon->data == &mons[PM_HUNGRY_DEAD]){
+					if(mtmp->mvar1 == (long)mon->m_id){
+						mon_arrive(mon, TRUE);
+						if(mon->mhp > 0){
+							mon->mhp = 0;
+							mondied(mon);
+						}
+						break;
+					}
+				}
+			}
+		}
+	}
+	//Remove linked sword
+	if(mtmp->data == &mons[PM_SURYA_DEVA]){
+		struct monst *mon, *mtmp2;
+		for (mon = fmon; mon; mon = mtmp2){
+			mtmp2 = mon->nmon;
+			if(mon->data == &mons[PM_DANCING_BLADE] && mon->mvar1 == mtmp->m_id){
+				if (DEADMONSTER(mon)) continue;
+				mon->mhp = -10;
+				monkilled(mon,"",AD_DRLI);
+			}
+		}
+	}
+	//Remove linked tentacles
+	if(mtmp->data == &mons[PM_WATCHER_IN_THE_WATER] || mtmp->data == &mons[PM_KETO]){
+		struct monst *mon, *mtmp2;
+		for (mon = fmon; mon; mon = mtmp2){
+			mtmp2 = mon->nmon;
+			if(mon->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || mon->data == &mons[PM_LONG_SINUOUS_TENTACLE] || mon->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
+				if (DEADMONSTER(mon)) continue;
+				mon->mhp = -10;
+				monkilled(mon,"",AD_DRLI);
+			}
+		}
+	}
+	
+	//Quest flavor
+	if(Role_if(PM_ANACHRONONAUT) && mtmp->mpeaceful && In_quest(&u.uz) && Is_qstart(&u.uz)){
+		if(mtmp->data == &mons[PM_TROOPER]){
+			verbalize("**ALERT: trooper %d vital signs terminated**", (int)(mtmp->m_id));
+		} else if(mtmp->data == &mons[PM_MYRKALFAR_WARRIOR]){
+			verbalize("**ALERT: warrior %d vital signs terminated**", (int)(mtmp->m_id));
+		} else if(mtmp->data != &mons[PM_PHANTASM]){
+			verbalize("**ALERT: citizen %d vital signs terminated**", (int)(mtmp->m_id));
+		}
+	}
 #ifdef RECORD_ACHIEVE
 	if(mtmp->data == &mons[PM_LUCIFER]){
 		achieve.killed_lucifer = 1;
@@ -3616,27 +3726,6 @@ boolean was_swallowed;			/* digestion */
 {
 	struct permonst *mdat = mon->data;
 	int i, tmp;
-	if(Race_if(PM_DROW) && !Role_if(PM_NOBLEMAN) && mdat == &mons[urole.neminum] && !flags.made_bell){
-		(void) mksobj_at(BELL_OF_OPENING, mon->mx, mon->my, TRUE, FALSE);
-		flags.made_bell = TRUE;
-		if(mdat == &mons[PM_ECLAVDRA]) return FALSE;
-	}
-	if(mdat == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] && !(u.uevent.ukilled_illurien)){
-		u.uevent.ukilled_illurien = 1;
-		u.ill_cnt = rn1(1000, 250);
-	}
-	if(mdat == &mons[PM_ORCUS]){
-		struct engr *oep = engr_at(mon->mx,mon->my);
-		if(!oep){
-			make_engr_at(mon->mx, mon->my,
-			 "", 0L, DUST);
-			oep = engr_at(mon->mx,mon->my);
-		}
-		oep->ward_id = TENEBROUS;
-		oep->halu_ward = 0;
-		oep->ward_type = BURN;
-		oep->complete_wards = 1;
-	}
 	if (mdat == &mons[PM_VLAD_THE_IMPALER]) {
 		if(mvitals[PM_VLAD_THE_IMPALER].died == 1) livelog_write_string("destroyed Vlad the Impaler");
 	    if (cansee(mon->mx, mon->my) && !was_swallowed)
@@ -3653,10 +3742,9 @@ boolean was_swallowed;			/* digestion */
 			pline("%s body crumbles into dust.", s_suffix(Monnam(mon)));
 	    if(mdat != &mons[PM_VECNA] && mdat != &mons[PM_LICH__THE_FIEND_OF_EARTH]) return FALSE; /*Vecna leaves his hand or eye*/
 	}
+	else if(mdat == &mons[PM_ECLAVDRA]) return FALSE;
 	else if(mdat == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		if(mvitals[PM_CHOKHMAH_SEPHIRAH].died == 1) livelog_write_string("destroyed a chokhmah sephirah");
-		u.chokhmah++;
-		u.keter++;
 		return FALSE;
 	}
 	else if (mdat == &mons[PM_CHAOS] && mvitals[PM_CHAOS].died == 1) {
@@ -3669,15 +3757,13 @@ boolean was_swallowed;			/* digestion */
 		else Sprintf(buf,"killed %s",noit_nohalu_mon_nam(mon));
 		livelog_write_string(buf);
 	}
+	//Must be done here for reasons that are obscure
 	if(Role_if(PM_ANACHRONONAUT) && mon->mpeaceful && In_quest(&u.uz) && Is_qstart(&u.uz)){
 		if(mdat == &mons[PM_TROOPER]){
-			verbalize("**ALERT: trooper %d vital signs terminated**", (int)(mon->m_id));
 			if(!cansee(mon->mx,mon->my)) map_invisible(mon->mx, mon->my);
 		} else if(mdat == &mons[PM_MYRKALFAR_WARRIOR]){
-			verbalize("**ALERT: warrior %d vital signs terminated**", (int)(mon->m_id));
 			if(!cansee(mon->mx,mon->my)) map_invisible(mon->mx, mon->my);
 		} else if(mdat != &mons[PM_PHANTASM]){
-			verbalize("**ALERT: citizen %d vital signs terminated**", (int)(mon->m_id));
 			if(!cansee(mon->mx,mon->my)) map_invisible(mon->mx, mon->my);
 		}
 	}
@@ -3689,57 +3775,10 @@ boolean was_swallowed;			/* digestion */
 		mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
 		mtmp->mhp =  mtmp->mhpmax;
 	}
-	if(mdat == &mons[PM_BLOB_OF_PRESERVED_ORGANS]){
-		struct monst *mtmp, *mtmp2;
-		for (mtmp = fmon; mtmp; mtmp = mtmp2){
-			mtmp2 = mtmp->nmon;
-			if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
-				if(mon->mvar1 == (long)mtmp->m_id){
-					if(mtmp->mhp > 0){
-						mtmp->mhp = 0;
-						mondied(mtmp);
-					}
-					break;
-				}
-			}
-		}
-		if(!mtmp){
-			for (mtmp = migrating_mons; mtmp; mtmp = mtmp2){
-				mtmp2 = mtmp->nmon;
-				if(mtmp->data == &mons[PM_HUNGRY_DEAD]){
-					if(mon->mvar1 == (long)mtmp->m_id){
-						mon_arrive(mtmp, TRUE);
-						if(mtmp->mhp > 0){
-							mtmp->mhp = 0;
-							mondied(mtmp);
-						}
-						break;
-					}
-				}
-			}
-		}
-	}
-	
-	if(mdat == &mons[PM_SURYA_DEVA]){
-		struct monst *mtmp, *mtmp2;
-		for (mtmp = fmon; mtmp; mtmp = mtmp2){
-			mtmp2 = mtmp->nmon;
-			if(mtmp->data == &mons[PM_DANCING_BLADE] && mtmp->mvar1 == mon->m_id){
-				if (DEADMONSTER(mtmp)) continue;
-				mtmp->mhp = -10;
-				monkilled(mtmp,"",AD_DRLI);
-			}
-		}
-	}
 	
 	/* Gas spores always explode upon death */
 	for(i = 0; i < NATTK; i++) {
 		if(mdat->mattk[i].aatyp == AT_NONE &&  mdat->mattk[i].adtyp == AD_OONA){
-			struct obj *obj;
-			obj = mksobj_at(SKELETON_KEY, mon->mx, mon->my, FALSE, FALSE);
-			obj = oname(obj, artiname(ART_THIRD_KEY_OF_LAW));
-			obj->spe = 0;
-			obj->cursed = obj->blessed = FALSE;
 			mdat->mattk[i].aatyp = AT_BOOM;
 			mdat->mattk[i].adtyp = u.oonaenergy;
 		}
@@ -3835,16 +3874,6 @@ boolean was_swallowed;			/* digestion */
 				makemon(rn2(2) ? &mons[PM_LEVIATHAN] : &mons[PM_LEVISTUS], mon->mx, mon->my, MM_ADJACENTOK);
 			} else if(mdat == &mons[PM_ANCIENT_OF_DEATH]){
 				if(!(u.sealsActive&SEAL_OSE)) explode(mon->mx, mon->my, AD_MAGM, MON_EXPLODE, tmp, EXPL_DARK, 1);
-			} else if(mdat->mattk[i].adtyp == AD_WTCH){
-				struct monst *mtmp, *mtmp2;
-				for (mtmp = fmon; mtmp; mtmp = mtmp2){
-					mtmp2 = mtmp->nmon;
-					if(mtmp->data == &mons[PM_SWARM_OF_SNAKING_TENTACLES] || mtmp->data == &mons[PM_LONG_SINUOUS_TENTACLE] || mtmp->data == &mons[PM_WIDE_CLUBBED_TENTACLE]){
-						if (DEADMONSTER(mtmp)) continue;
-						mtmp->mhp = -10;
-						monkilled(mtmp,"",AD_DRLI);
-					}
-				}
 			} else if(mdat->mattk[i].adtyp == AD_MAND){
 				struct monst *mtmp, *mtmp2;
 				if(mon->mcan){
@@ -3897,40 +3926,6 @@ boolean was_swallowed;			/* digestion */
 			for(i = 0; i<18; i++) makemon(&mons[PM_HORNED_DEVIL], mon->mx, mon->my, MM_ADJACENTOK);
 			for(i = 0; i<30; i++) makemon(&mons[PM_LEMURE], mon->mx, mon->my, MM_ADJACENTOK);
 	    	return (FALSE);
-		}
-		else if(mdat->mattk[i].adtyp == AD_KAOS){
-			int x = mon->mx, y = mon->my;
-			struct obj *otmp;
-			makemon(&mons[PM_CHAOS], mon->mx, mon->my, MM_ADJACENTOK);
-			// if(mvitals[PM_TIAMAT__THE_FIEND_OF_WIND].died){
-				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				// otmp = oname(otmp, artiname(ART_AIR_CRYSTAL));		
-				// curse(otmp);
-				// otmp->oerodeproof = TRUE;
-				// // rloco(otmp);
-			// }
-			// if(mvitals[PM_KRAKEN__THE_FIEND_OF_WATER].died){
-				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				// otmp = oname(otmp, artiname(ART_WATER_CRYSTAL));		
-				// curse(otmp);
-				// otmp->oerodeproof = TRUE;
-				// // rloco(otmp);
-			// }
-			// if(mvitals[PM_KARY__THE_FIEND_OF_FIRE].died){
-				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				// otmp = oname(otmp, artiname(ART_FIRE_CRYSTAL));
-				// curse(otmp);
-				// otmp->oerodeproof = TRUE;
-				// // rloco(otmp);
-			// }
-			// if(mvitals[PM_LICH__THE_FIEND_OF_EARTH].died){
-				// otmp = mksobj_at(CRYSTAL_BALL, x, y, FALSE, FALSE);
-				// otmp = oname(otmp, artiname(ART_EARTH_CRYSTAL));		
-				// curse(otmp);
-				// otmp->oerodeproof = TRUE;
-				// // rloco(otmp);
-			// }
-			return (FALSE);
 		}
   		else if(	( (mdat->mattk[i].aatyp == AT_NONE && mdat==&mons[PM_GREAT_CTHULHU])
 					 || mdat->mattk[i].aatyp == AT_BOOM) 
