@@ -1053,6 +1053,11 @@ dospinweb()
 			deltrap(ttmp);
 			newsym(u.ux, u.uy);
 			return(1);
+		case VIVI_TRAP:
+			You("spin a web, ruining the delicate machinery.");
+			deltrap(ttmp);
+			newsym(u.ux, u.uy);
+			return(1);
 		case ARROW_TRAP:
 		case DART_TRAP:
 		case BEAR_TRAP:

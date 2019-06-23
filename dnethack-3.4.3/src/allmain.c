@@ -968,13 +968,6 @@ moveloop()
 			flags.shade_level=0;
 		    for (mtmp = fmon; mtmp; mtmp = nxtmon){
 				nxtmon = mtmp->nmon;
-				/* Possibly vanish */
-				if(mtmp->mvanishes>-1){
-					if(--mtmp->mvanishes == 0){
-						monvanished(mtmp);
-						continue;
-					}
-				}
 				/* check for bad swap weapons */
 				if (mtmp->msw) {
 					struct obj *obj;
@@ -990,6 +983,23 @@ moveloop()
 				if(mtmp->mtame && !mtmp->mpeaceful){
 					impossible("Hostile+tame monster state detected (and fixed)");
 					mtmp->mpeaceful = TRUE;
+				}
+				/* Possibly vanish */
+				if(mtmp->mvanishes>-1){
+					if(--mtmp->mvanishes == 0){
+						monvanished(mtmp);
+						continue;
+					}
+				}
+				/* Monsters in a essence trap can't move */
+				if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+					mtmp->mhp = 1;
+					mtmp->movement = 0;
+					continue;
+				}
+				/* Possibly wake up */
+				if(mtmp->mtame && mtmp->mstrategy&STRAT_WAITMASK){
+					mtmp->mstrategy &= ~STRAT_WAITMASK;
 				}
 				/* Possibly become hostile */
 				if(mtmp->mpeacetime && !mtmp->mtame){

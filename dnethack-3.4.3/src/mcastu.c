@@ -1084,7 +1084,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	int dmd, dmn;
 	struct obj *mirror;
 
-	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
+	
 	if(is_derived_undead_mon(mtmp) && mtmp->mfaction != FRACTURED) return 0;
 	/* Three cases:
 	 * -- monster is attacking you.  Search for a useful spell.
@@ -3153,7 +3154,7 @@ castmm(mtmp, mdef, mattk)
 	int dmd, dmn;
 	struct obj *mirror;
 
-	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my)&& t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
 	
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;

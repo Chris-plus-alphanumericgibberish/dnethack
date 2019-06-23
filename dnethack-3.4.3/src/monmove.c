@@ -599,6 +599,9 @@ mon_regen(mon, digest_meal)
 struct monst *mon;
 boolean digest_meal;
 {
+	if(mon->mtrapped && t_at(mon->mx, mon->my) && t_at(mon->mx, mon->my)->ttyp == VIVI_TRAP)
+		return;
+	
 	if(!DEADMONSTER(mon) && mon->mhp < mon->mhpmax/2 && (mon->data == &mons[PM_CHANGED] || mon->data == &mons[PM_WARRIOR_CHANGED])){
 		mon->mhp -= 1;
 		flags.cth_attk=TRUE;//state machine stuff.
@@ -964,7 +967,7 @@ register struct monst *mtmp;
 
 	/* some monsters teleport */
 	if (can_teleport(mdat) && (mtmp->mflee || !rn2(5)) && !rn2(40) && !mtmp->iswiz &&
-	    !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) &&
+	    !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP)) &&
 	    !level.flags.noteleport) {
 		(void) rloc(mtmp, FALSE);
 		return(0);
@@ -1062,7 +1065,7 @@ register struct monst *mtmp;
 	if(is_covetous(mdat) && (mdat!=&mons[PM_DEMOGORGON] || !rn2(3)) 
 		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
 		&& mdat!=&mons[PM_LEGION] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
-		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+		&& !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
 		&& !(mtmp->mpeaceful && !mtmp->mtame) /*Don't telespam the player if peaceful*/
 	) (void) tactics(mtmp);
 	
@@ -1086,7 +1089,7 @@ register struct monst *mtmp;
 		&& (!mtmp->mpeaceful || Darksight)
 		&& (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
-		&& !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+		&& !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
 		&& !(mindless_mon(mtmp))
 	){
 		if(cansee(mtmp->mx,mtmp->my)) pline("%s invokes the darkness.",Monnam(mtmp));
@@ -1600,7 +1603,7 @@ register int after;
 
 	/* teleport if that lies in our nature */
 	if(mteleport(ptr) && !rn2(5) && !mtmp->mcan &&
-	   !tele_restrict(mtmp) && !(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+	   !tele_restrict(mtmp) && !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
 	) {
 	    if(mtmp->mhp < 7 || mtmp->mpeaceful || rn2(2))
 		(void) rloc(mtmp, FALSE);
@@ -2065,7 +2068,7 @@ not_special:
 		}
 	} else {
 	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp) && 
-			!(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz))
+			!(mtmp->data->maligntyp < 0 && !(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
 		) {
 			(void) rloc(mtmp, FALSE);
 			return(1);

@@ -24,6 +24,7 @@ STATIC_DCL boolean FDECL(maze_inbounds, (XCHAR_P, XCHAR_P));
 STATIC_DCL void FDECL(move, (int *,int *,int));
 STATIC_DCL void NDECL(setup_waterlevel);
 STATIC_DCL void NDECL(unsetup_waterlevel);
+STATIC_DCL void NDECL(fill_dungeon_of_ill_regard);
 
 
 STATIC_OVL boolean
@@ -502,6 +503,9 @@ fixup_special()
 					if (levl[x][y].typ == ROOM && (x<69 || !Is_arcadia3(&u.uz))) levl[x][y].typ = GRASS;
 				}
 			}
+		}
+		if (Is_illregrd(&u.uz)){
+			fill_dungeon_of_ill_regard();
 		}
 		place_law_features();
 	}
@@ -2193,4 +2197,92 @@ boolean ini;
 	}
 }
 
+STATIC_DCL void
+fill_dungeon_of_ill_regard(){
+	int corrs = 0, all = 0, med = 0, strong = 0;
+	int i = 0, j = 0;
+	int x = 0, y = 0;
+	int *skips;
+	struct monst *mon;
+	struct trap *trap;
+	for (x = 0; x<COLNO; x++){
+		for (y = 0; y<ROWNO; y++){
+			if (isok(x,y) && levl[x][y].typ == CORR) corrs++;
+		}
+	}
+	for(i = 0; i < PM_LONG_WORM_TAIL ; i++){
+		if(mons[i].geno&(G_NOGEN|G_UNIQ) || mvitals[i].mvflags&G_GONE || mons[i].mlet == S_PLANT)
+			continue;
+		if(mons[i].maligntyp < -10)
+			strong++;
+		if(mons[i].maligntyp < -5)
+			med++;
+		if(mons[i].maligntyp < 0){
+			all++;
+			// pline("%s", mons[i].mname);
+		}
+	}
+	// pline("Cells: %d, All: %d, Medium: %d, Strong: %d", corrs, all, med-strong, strong);
+	skips = (int *)malloc(sizeof(int)*all);
+	for(i = 0; i<all; i++){
+		if(i < corrs)
+			skips[i] = 0;
+		else skips[i] = 1;
+	}
+	for(i = 0; i<all; i++){
+		j = rn2(all); //swap pos i with pos j
+		x = skips[i]; //keep old value of pos i
+		skips[i] = skips[j];
+		skips[j] = x;
+	}
+#define LOOP_BODY	\
+			if(isok(x,y) && levl[x][y].typ == CORR){\
+				while(i < PM_LONG_WORM_TAIL \
+				&& (mons[i].maligntyp >= 0 || (mons[i].geno&(G_NOGEN|G_UNIQ)) || mvitals[i].mvflags&G_GONE || mons[i].mlet == S_PLANT || skips[j])){\
+					if(mons[i].maligntyp < 0 && !(mons[i].geno&(G_NOGEN|G_UNIQ)) && !(mvitals[i].mvflags&G_GONE) && mons[i].mlet != S_PLANT) j++;\
+					i++;\
+				}\
+				if(i < PM_LONG_WORM_TAIL){\
+					mon = makemon(&mons[i], x, y, NO_MINVENT);\
+					trap = maketrap(x, y, VIVI_TRAP);\
+					trap->tseen = TRUE;\
+					if(!mon) impossible("bad monster placement at %d, %d.", x, y);\
+					else {\
+						mon->mtrapped = 1;\
+						mon->movement = 0;\
+						mon->mhp = 1;\
+					}\
+					i++;\
+					j++;\
+				} else {\
+					x = COLNO;\
+					y = ROWNO;\
+					break;\
+				}\
+			}
+
+	i = 0;
+	j = 0;
+	for (y = 0; y<ROWNO/2; y++){
+		for (x = 2*y+1; x<COLNO-2*y-1; x++){
+			LOOP_BODY
+		}
+	}
+	for (x = COLNO; x>COLNO/2; x--){
+		for (y = (COLNO-x-1); y<(ROWNO-(COLNO-x-1)); y++){
+			LOOP_BODY
+		}
+	}
+	for (y = ROWNO; y>ROWNO/2; y--){
+		for (x = COLNO-2*(ROWNO-y); x>=2*(ROWNO-y); x--){
+			LOOP_BODY
+		}
+	}
+	for (x = 0; x<COLNO/2; x++){
+		for (y = ROWNO-(x-1); y>=((x-1)); y--){
+			LOOP_BODY
+		}
+	}
+	free(skips);
+}
 /*mkmaze.c*/

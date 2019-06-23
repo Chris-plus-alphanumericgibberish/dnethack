@@ -139,6 +139,9 @@ struct monst *mon;
 	    return;
 	}
 
+	if(is_heladrin(mon->data) && mon->mtrapped && t_at(mon->mx, mon->my) && t_at(mon->mx, mon->my)->ttyp == VIVI_TRAP)
+		return;
+	
 	if(canseemon(mon) && !Hallucination) {
 		if(mon->data != &mons[PM_ANUBITE] && mon->data != &mons[PM_ANUBAN_JACKAL] &&
 		  !is_eladrin(mon->data) && !is_yochlol(mon->data)

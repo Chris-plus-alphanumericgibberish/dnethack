@@ -510,7 +510,8 @@ E void FDECL(keepdogs, (BOOLEAN_P));
 E void FDECL(migrate_to_level, (struct monst *,int,XCHAR_P,coord *));
 E int FDECL(dogfood, (struct monst *,struct obj *));
 E struct monst *FDECL(tamedog, (struct monst *,struct obj *));
-E struct monst *FDECL(make_pet_minion, (int,ALIGNTYP_P));
+E struct monst *FDECL(tamedog_core, (struct monst *,struct obj *, int));
+E struct monst *FDECL(make_pet_minion, (int,aligntyp));
 E void FDECL(abuse_dog, (struct monst *));
 E void FDECL(wary_dog, (struct monst *, BOOLEAN_P));
 E void FDECL(enough_dogs, (int));
@@ -2464,6 +2465,7 @@ E struct monst *FDECL(activate_statue_trap,
 E void FDECL(dotrap, (struct trap *, unsigned));
 E void FDECL(seetrap, (struct trap *));
 E int FDECL(mintrap, (struct monst *));
+E void FDECL(reward_untrap, (struct trap *, struct monst *));
 E void FDECL(rloc_trap, (struct trap *));
 E void FDECL(instapetrify, (const char *));
 E void FDECL(minstapetrify, (struct monst *,BOOLEAN_P));

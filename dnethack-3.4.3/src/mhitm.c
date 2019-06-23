@@ -220,6 +220,8 @@ mattackm(magr, mdef)
 	struct obj *oarmor;
 	boolean derundspec = 0;
 	
+	if(magr->mtrapped && t_at(magr->mx, magr->my) && t_at(magr->mx, magr->my)->ttyp == VIVI_TRAP) return 0;
+	
     if (!magr || !mdef) return(MM_MISS);		/* mike@genat */
     if (!magr->mcanmove || magr->msleeping) return(MM_MISS);
     pa = magr->data;  pd = mdef->data;
@@ -484,7 +486,6 @@ mattackm(magr, mdef)
 		}
 		else goto meleeattack;
 		case AT_BEAM:
-		if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 		if(!mlined_up(magr, mdef, FALSE) || dist2(magr->mx,magr->my,mdef->mx,mdef->my) > BOLT_LIM*BOLT_LIM){
 #ifdef TAME_RANGED_ATTACKS
                     break; /* might have more ranged attacks */
@@ -616,7 +617,6 @@ meleeattack:
 		break;
 
 	    case AT_ARRW:{
-			if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 			if((mattk->adtyp != AD_SHDW || dist2(magr->mx,magr->my,mdef->mx,mdef->my)>2) && mlined_up(magr, mdef, FALSE)){
 				int n;
 				if (canseemon(magr)) pline("%s shoots.", Monnam(magr));
@@ -721,7 +721,6 @@ meleeattack:
             case AT_MMGC:{
 				int temp=0;
 				int range;
-				if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 				
 				if( magr->data == &mons[PM_DEMOGORGON] && distmin(magr->mx, magr->my, mdef->mx, mdef->my) > 1 && !magr->mflee && rn2(6)) 
 					break; //cast spells more rarely if he's in melee range
@@ -813,7 +812,7 @@ struct monst *mdef;
     int multishot, mhp;
 	const char *onm;
 
-	if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
+	if(magr->mtrapped && t_at(magr->mx, magr->my) && t_at(magr->mx, magr->my)->ttyp == VIVI_TRAP) return 0;
 	
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (magr->weapon_check == NEED_WEAPON || !MON_WEP(magr)) {
@@ -1070,7 +1069,7 @@ gazemm(magr, mdef, mattk)
 {
 	char buf[BUFSZ];
 
-	if(magr->data->maligntyp < 0 && Is_illregrd(&u.uz)) return MM_MISS;
+	if(magr->mtrapped && t_at(magr->mx, magr->my) && t_at(magr->mx, magr->my)->ttyp == VIVI_TRAP) return 0;
 	
 	if (magr->mcan) return MM_MISS;
 

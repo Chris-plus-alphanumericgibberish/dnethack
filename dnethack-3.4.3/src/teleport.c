@@ -1567,6 +1567,11 @@ struct monst *mtmp;
 boolean give_feedback;
 {
 	coord cc;
+	int illrgrd = FALSE;//teleport will be fatal to target due to ill-regard equipment)
+	
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+		illrgrd = TRUE;
+	}
 
 	if (mtmp->ispriest && *in_rooms(mtmp->mx, mtmp->my, TEMPLE)) {
 	    if (give_feedback)
@@ -1578,10 +1583,26 @@ boolean give_feedback;
 	    unstuck(mtmp);
 	    (void) rloc(mtmp, FALSE);
 	} else if (is_rider(mtmp->data) && rn2(13) &&
-		   enexto(&cc, u.ux, u.uy, mtmp->data))
+		   enexto(&cc, u.ux, u.uy, mtmp->data)
+	){
+		if(illrgrd && canspotmon(mtmp)) pline("%s vanishes out of the equipment that imprisons %s.", Monnam(mtmp), himherit(mtmp));
 	    rloc_to(mtmp, cc.x, cc.y);
-	else
+	} else {
+		if(illrgrd && canspotmon(mtmp)) pline("%s vanishes out of the equipment that imprisons %s.", Monnam(mtmp), himherit(mtmp));
 	    (void) rloc(mtmp, FALSE);
+	}
+	
+	if(illrgrd){
+		if(Is_illregrd(&u.uz)){
+			u.uevent.uaxus_foe = 1;
+			pline("An alarm sounds!");
+			aggravate();
+		}
+		if(!DEADMONSTER(mtmp)){
+			if(canspotmon(mtmp)) pline("Unfortunately, that equipment was the only thing keeping %s %s.", himherit(mtmp), nonliving_mon(mtmp) ? "intact" : "alive");
+			mondied(mtmp);
+		}
+	}
 	return TRUE;
 }
 

@@ -550,6 +550,7 @@ mattacku(mtmp)
 		 */
 	boolean derundspec = 0;
 		/*derived undead has used its special attack*/
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
 	if(!ranged) nomul(0, NULL);
 	if(mtmp->mhp <= 0 || (Underwater && !is_swimmer(mtmp->data)))
 	    return(0);
@@ -1096,7 +1097,6 @@ mattacku(mtmp)
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_ARRW:{
 			int n;
-			if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 			if((mattk->adtyp != AD_SHDW || range2) && lined_up(mtmp)){
 				if (canseemon(mtmp)) pline("%s shoots at you!", Monnam(mtmp));
 				for(n = d(mattk->damn, mattk->damd); n > 0; n--) sum[i] = firemu(mtmp, mattk);
@@ -1134,7 +1134,6 @@ mattacku(mtmp)
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AT_BEAM:
-			if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 			if(lined_up(mtmp) && dist2(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy) <= BOLT_LIM*BOLT_LIM){
 				if (foundyou) sum[i] = hitmu(mtmp, mattk);
 				else wildmiss(mtmp, mattk);
@@ -1415,7 +1414,6 @@ mattacku(mtmp)
 		case AT_MAGC:
 		case AT_MMGC:{
 			int temp=0;
-			if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
 			
 			if( mdat == &mons[PM_DEMOGORGON] && !range2 && !mtmp->mflee && rn2(6)) break; //cast spells more rarely if he's in melee range
 			if (range2 && mattk->adtyp != AD_SPEL && mattk->adtyp != AD_CLRC && mattk->adtyp != AD_STAR)
@@ -4365,7 +4363,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 	struct	permonst *mdat = mtmp->data;
 	char buf[BUFSZ];
 
-	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
 	if(ward_at(u.ux,u.uy) == HAMSA) return 0;
 	//if(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) return 0;
 	if(mattk->adtyp == AD_RGAZ){

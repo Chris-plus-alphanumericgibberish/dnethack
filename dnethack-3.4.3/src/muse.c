@@ -1027,7 +1027,7 @@ struct monst *mtmp;
 	
 	if(tbx == 0 && tby == 0) return FALSE; //Target is not lined up.
 	
-	if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) return 0;
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
 	
 	if (target)
 	{
@@ -1365,15 +1365,18 @@ struct obj *obj;			/* 2nd arg to fhitm/fhito */
 		    if(hitanything)	range--;
 		}
 		typ = levl[bhitpos.x][bhitpos.y].typ;
-		if (typ == IRONBARS && obj->otyp==WAN_STRIKING && !Is_illregrd(&u.uz)){
+		if (typ == IRONBARS && obj->otyp==WAN_STRIKING){
 			char numbars;
 			struct obj *obj;
 			You_hear("a sharp crack!");
 		    levl[bhitpos.x][bhitpos.y].typ = CORR;
 			for(numbars = d(2,4)-1; numbars > 0; numbars--){
 				obj = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
+				if(Is_illregrd(&u.uz))
+					obj->obj_material = METAL;
 			    obj->spe = 0;
 			    obj->cursed = obj->blessed = FALSE;
+				fix_object(obj);
 			}
 		    newsym(bhitpos.x, bhitpos.y);
 		}

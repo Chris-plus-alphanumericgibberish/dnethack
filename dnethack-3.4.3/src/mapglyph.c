@@ -121,7 +121,7 @@ unsigned *ospecial;
 	if (HAS_ROGUE_IBM_GRAPHICS && iflags.use_color) {
 	    if (offset >= S_vwall && offset <= S_hcdoor)
 		color = CLR_BROWN;
-	    else if (offset >= S_arrow_trap && offset <= S_polymorph_trap)
+	    else if (offset >= S_arrow_trap && offset <= S_essence_trap)
 		color = CLR_MAGENTA;
 	    else if (offset == S_corr || offset == S_litcorr)
 		color = CLR_GRAY;

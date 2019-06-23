@@ -1183,7 +1183,7 @@ mcalcdistress()
 	    if (minliquid(mtmp)) continue;
 	}
 
-	if(mtmp->data == &mons[PM_HEZROU] && !Is_illregrd(&u.uz)){
+	if(mtmp->data == &mons[PM_HEZROU] && !(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP)){
 		flags.cth_attk=TRUE;//state machine stuff.
 		create_gas_cloud(mtmp->mx+rn2(3)-1, mtmp->my+rn2(3)-1, rnd(3), rnd(3)+1);
 		flags.cth_attk=FALSE;
@@ -2959,6 +2959,10 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	// if(magr->mpeaceful && mdef->mpeaceful && (magr->mtame || mdef->mtame)) return 0L;
 	
 	if(magr->mtame && (mdef->mtame || mdef->moccupation)){
+			return 0L;
+	}
+	
+	if(mdef->mtrapped && t_at(mdef->mx, mdef->my) && t_at(mdef->mx, mdef->my)->ttyp == VIVI_TRAP){
 			return 0L;
 	}
 	
@@ -4761,7 +4765,7 @@ xkilled(mtmp, dest)
 	int mndx;
 	register struct obj *otmp;
 	register struct trap *t;
-	boolean redisp = FALSE;
+	boolean redisp = FALSE, illalarm = FALSE;
 	boolean wasinside = u.uswallow && (u.ustuck == mtmp);
 
 
@@ -4785,6 +4789,11 @@ xkilled(mtmp, dest)
 	    }
 	}
 
+	if(Is_illregrd(&u.uz)){
+		if(mtmp->mtrapped && t_at(x, y) && t_at(x, y)->ttyp == VIVI_TRAP){
+			illalarm = TRUE;
+		}
+	}
 	if (mtmp->mtrapped && (t = t_at(x, y)) != 0 &&
 		(t->ttyp == PIT || t->ttyp == SPIKED_PIT) &&
 		boulder_at(x, y))
@@ -4911,7 +4920,12 @@ cleanup:
 		u.hod += 10;
 		You_feel("guilty...");
 	}
-	
+	/*Killing the specimens in the Dungeon of Ill-Regard angers the autons*/
+	if(illalarm){
+		u.uevent.uaxus_foe = 1;
+		pline("An alarm sounds!");
+		aggravate();
+	}
 	/* give experience points */
 	tmp = experience(mtmp, (int)mvitals[mndx].died + 1);
 	more_experienced(tmp, 0);

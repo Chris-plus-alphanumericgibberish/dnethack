@@ -671,6 +671,14 @@ boolean chatting;
 	char verbuf[BUFSZ];
 	char class_list[MAXOCLASSES+2];
 
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+		if(chatting && canspotmon(mtmp))
+			pline("%s is sleeping peacefully; presumably the doing of the delicate equipment that displays %s vivisected form.", 
+				Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : "their")
+			);
+		return 0;
+	}
+	
     /* presumably nearness and sleep checks have already been made */
 	if (!flags.soundok) return(0);
 	if (is_silent_mon(mtmp)){
@@ -1178,7 +1186,7 @@ asGuardian:
 		struct trap *ttmp;
 		int ix, iy, i;
 		boolean inrange = FALSE;
-		if(mtmp->data->maligntyp < 0 && Is_illregrd(&u.uz)) break;
+		if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) break;
 		if((mtmp->data == &mons[PM_INTONER] && !rn2(5)) || mtmp->data == &mons[PM_BLACK_FLOWER]){
 			if (!canspotmon(mtmp))
 				map_invisible(mtmp->mx, mtmp->my);
@@ -2408,6 +2416,14 @@ int dz;
 	){
 		tx = tx+u.dx; ty = ty+u.dy;
 		mtmp = m_at(tx, ty);
+	}
+	
+	if(mtmp && mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+		if(canspotmon(mtmp))
+			pline("%s is sleeping peacefully; presumably the doing of the delicate equipment that displays %s vivisected form.", 
+				Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : hisherits(mtmp))
+			);
+		return 0;
 	}
 	
     if (!mtmp || mtmp->mundetected ||
