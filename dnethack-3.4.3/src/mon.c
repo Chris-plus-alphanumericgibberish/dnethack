@@ -3836,23 +3836,31 @@ boolean was_swallowed;			/* digestion */
 				u.uevent.ukilled_apollyon = 1;
 			}
 			else if(mdat->mattk[i].adtyp == AD_GARO){
-				pline("\"R-regrettable... Although my rival, you were spectacular.");
-				pline("I shall take my bow by opening my heart and revealing my wisdom...");
-				outrumor(rn2(2), BY_OTHER); //either true (3/4) or false (1/4), no mechanism specified.
-				pline("Belief or disbelief rests with you.");
-				pline("To die without leaving a corpse....\"");
-				explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
-				pline("\"That is the way of us Garo.\"");
+				if(couldsee(mon->mx, mon->my)){
+					pline("\"R-regrettable... Although my rival, you were spectacular.");
+					pline("I shall take my bow by opening my heart and revealing my wisdom...");
+					outrumor(rn2(2), BY_OTHER); //either true (3/4) or false (1/4), no mechanism specified.
+					pline("Belief or disbelief rests with you.");
+					pline("To die without leaving a corpse....\"");
+					explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
+					pline("\"That is the way of us Garo.\"");
+				} else {
+					explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
+				}
 			}
 			else if(mdat->mattk[i].adtyp == AD_GARO_MASTER){
-				pline("\"To think thou couldst defeat me...");
-				pline("Though my rival, thou were't spectacular.");
-				pline("I shall take my bow by opening my heart and revealing my wisdom...");
-				outgmaster(); //Gives out a major consultation. Does not set the consultation flags.
-				pline("Do not forget these words...");
-				pline("Die I shall, leaving no corpse.\"");
-				explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
-				pline("\"That is the law of us Garo.\"");
+				if(couldsee(mon->mx, mon->my)){
+					pline("\"To think thou couldst defeat me...");
+					pline("Though my rival, thou were't spectacular.");
+					pline("I shall take my bow by opening my heart and revealing my wisdom...");
+					outgmaster(); //Gives out a major consultation. Does not set the consultation flags.
+					pline("Do not forget these words...");
+					pline("Die I shall, leaving no corpse.\"");
+					explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
+					pline("\"That is the law of us Garo.\"");
+				} else {
+					explode(mon->mx, mon->my, AD_PHYS, MON_EXPLODE, tmp, EXPL_MUDDY, 1);
+				}
 			}
 			else if(mdat->mattk[i].adtyp == AD_COLD){
 			//mdat == &mons[PM_BAALPHEGOR] || mdat == &mons[PM_ANCIENT_OF_ICE] || mdat == &mons[PM_FREEZING_SPHERE]){
