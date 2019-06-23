@@ -718,6 +718,7 @@ gcrownu()
     short class_gift;
     int sp_no;
 #define ok_wep(o) ((o) && ((o)->oclass == WEAPON_CLASS || is_weptool(o)))
+#define ok_arm(o) ((o) && ((o)->oclass == ARMOR_CLASS))
 	
 	if(!Role_if(PM_EXILE)){
 		HSee_invisible |= FROMOUTSIDE;
