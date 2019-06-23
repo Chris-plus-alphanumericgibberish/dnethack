@@ -2648,12 +2648,18 @@ physical:{
 	    default:	tmp = 0;
 			break;
 	}
-	if(magr->data == &mons[PM_UVUUDAUM] && !weaponhit){
+	if(magr->data == &mons[PM_UVUUDAUM] && !weaponhit && mdef->data != &mons[PM_UVUUDAUM]){
 		if(hates_unholy(mdef->data)){
-			if (vis) pline("%s's glory sears %s!", Monnam(magr), mon_nam(mdef));
+			if (vis){
+				Strcpy(buf, Monnam(magr));
+				pline("%s's glory sears %s!", buf, mon_nam(mdef));
+			}
 			tmp += d(3,7);
-		} else if(hates_holy(mdef->data)){
-			if (vis) pline("%s's glory sears %s!", Monnam(magr), mon_nam(mdef));
+		} else if(hates_holy_mon(mdef)){
+			if (vis){
+				Strcpy(buf, Monnam(magr));
+				pline("%s's glory sears %s!", buf, mon_nam(mdef));
+			}
 			tmp += d(4,9);
 		}
 	}
