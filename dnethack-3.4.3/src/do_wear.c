@@ -2062,11 +2062,11 @@ int agrmoral;
 		if(agralign <= 0) bonus += base;
 		else bonus -= base/2+1;
 	}
-	if(arm->oproperties&OPROP_HOLY){
+	if(arm->oproperties&OPROP_HOLY && arm->blessed){
 		if(agrmoral < 0) bonus += base;
 		else if(agrmoral > 0) bonus -= base/2+1;
 	}
-	if(arm->oproperties&OPROP_UNHY){
+	if(arm->oproperties&OPROP_UNHY && arm->cursed){
 		if(agrmoral > 0) bonus += base;
 		else if(agrmoral < 0) bonus -= base/2+1;
 	}
