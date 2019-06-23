@@ -1045,7 +1045,7 @@ boolean artif;
 		}
 		/* CM: gnomish hats have candles */
 		if (otmp->otyp == GNOMISH_POINTY_HAT) {
-		    otmp->age = (long) rn1(50,50);
+		    otmp->age = (long) rn1(900,900);//Last longer than dwarvish helms, since the radius is smaller
 		    otmp->lamplit = 0;
 		}
 		if(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == CONSORT_S_SUIT){
