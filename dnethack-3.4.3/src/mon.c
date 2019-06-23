@@ -4713,7 +4713,7 @@ int how;
 	    be_sad = (mdef->mtame != 0);
 
 	/* no corpses if digested or disintegrated */
-	if(how == AD_DGST || how == -AD_RBRE)
+	if(how == AD_DGST || how == -AD_RBRE || how == AD_DISN)
 	    mondead(mdef);
 	else
 	    mondied(mdef);
