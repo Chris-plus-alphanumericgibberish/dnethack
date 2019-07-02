@@ -1315,7 +1315,7 @@ NEARDATA struct permonst mons[] = {
  * quadrupeds
  */
     MON("lamb", S_QUADRUPED, //4
-	LVL(0, 12, 10, 0, 0), (G_GENO|G_SGROUP|4),
+	LVL(0, 12, 10, 0, 0), (G_GENO|G_SGROUP|1),
 	A(ATTK(AT_BUTT, AD_PHYS, 1, 2), ATTK(AT_KICK, AD_PHYS, 1, 2),
 	  NO_ATTK, NO_ATTK, 
 	  NO_ATTK, NO_ATTK),
@@ -1332,7 +1332,7 @@ NEARDATA struct permonst mons[] = {
 	MB_ANIMAL|MB_LONGHEAD|MB_NOHANDS /*MB*/, MG_INFRAVISIBLE /*MG*/,
 	MA_ANIMAL /*MA*/,  MV_NORMAL|MV_SCENT /*MV*/, CLR_BROWN),
     MON("sheep", S_QUADRUPED, //4
-	LVL(3, 12, 8, 0, 0), (G_GENO|G_SGROUP|4),
+	LVL(3, 12, 8, 0, 0), (G_GENO|G_SGROUP|1),
 	A(ATTK(AT_BUTT, AD_PHYS, 1, 4), ATTK(AT_KICK, AD_PHYS, 1, 3),
 	  NO_ATTK, NO_ATTK, 
 	  NO_ATTK, NO_ATTK),
