@@ -394,6 +394,7 @@ static const char *haluMesg[] = {
 		"Free! Apple pie with every meal! We don't care if you don't like apple - Take It!",
 		"For there is a hole in the sky",
 		"and too long have I gazed",
+		"There is no fate, there is no destiny, there are only the threads of the future and hands to grasp them; as told before and forever more, do as thou wilt.",
 	"The quality of your lives depends on what you make of them!", /* The Life and Times of Scrooge McDuck */
 	"We do not threaten or warn or advise. We tell the truth.", /* The Mansion of E */
 		"What you stole is even more dangerous and precious than you know.",
