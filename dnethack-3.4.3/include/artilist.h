@@ -46,7 +46,7 @@ A("",				STRANGE_OBJECT,			0,			0,
 //////////////////////Crowning Gifts///////////////////////////////////////
 /*Take Me Up/Cast Me Away*/
 A("Excalibur",			LONG_SWORD,			0,			0,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH),0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_SEEK|SPFX_DEFN|SPFX_INTEL|SPFX_SEARCH|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(20,10),	DRLI(0,0),	NO_CARY,	//Excalibur is a very accurate weapon, a property that almost doesn't matter except for vs high level demons
 	0, A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, //Excalibur does extra blessed damage to demons and undead, +3d7 instead of 1d4
@@ -68,7 +68,7 @@ A("Excalibur",			LONG_SWORD,			0,			0,
  */
 
 A("Stormbringer",		RUNESWORD,			0,			0,
-	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL|SPFX_DRLI), 0,
+	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INTEL|SPFX_DRLI|SPFX_INHER), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	DRLI(5,2),	DRLI(0,0),	NO_CARY,	
 	0, A_CHAOTIC, NON_PM, NON_PM, 8000L, 
@@ -79,7 +79,7 @@ A("Stormbringer",		RUNESWORD,			0,			0,
  *	allowing those at all causes more problems than worth the effort).
  */
 A("Vorpal Blade",		LONG_SWORD,			0,			0,
-	(SPFX_RESTR|SPFX_BEHEAD), 0,
+	(SPFX_RESTR|SPFX_BEHEAD|SPFX_INHER), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(5,1),	NO_DFNS,	NO_CARY, /*Special code in weapon.c throws an extra die, so 2d8+2 vs small, 2d12+2 vs large*/	
 	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, /*Vorpal Blade also uses exploading dice (roll again if maximum number is rolled)*/
@@ -87,7 +87,7 @@ A("Vorpal Blade",		LONG_SWORD,			0,			0,
 									 /*So vorpal sword is effectively 2d10+2/2d14+2*/
 
 A("The Marauder's Map", SCR_MAGIC_MAPPING,	0,			0, /*Needs encyc entry*/
-	(SPFX_RESTR), 0, 
+	(SPFX_RESTR|SPFX_INHER), 0, 
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	OBJECT_DET,	A_CHAOTIC, PM_PIRATE, NON_PM, 2000L,
@@ -299,14 +299,14 @@ A("Rhongomyniad",			LANCE, 			0,			0,/*Needs encyc entry*/
 	0,0,0), 
 
 A("The Rod of Lordly Might", MACE, 			0,			0,/*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_DEFN), 0,
+	(SPFX_RESTR|SPFX_DEFN|SPFX_INHER), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(3,0),	NO_DFNS,	NO_CARY,
 	LORDLY,	A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, 
 	0,SPFX3_ENGRV,0), 
 
 A("The Singing Sword",	LONG_SWORD,			0,			0,
-	(SPFX_RESTR|SPFX_INTEL),0,
+	(SPFX_RESTR|SPFX_INTEL|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(1,1),	NO_DFNS,	NO_CARY,
 	SINGING,		A_NONE, PM_BARD, NON_PM, 5000L,
@@ -348,7 +348,7 @@ A("Fire Brand",			LONG_SWORD,			0,			0,
 	0,0,0),
 
 A("The Golden Sword of Y'ha-Talla",			SCIMITAR,			GOLD,			0,
-	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN),0,
+	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	DRST(5,0),	DRST(0,0),	NO_CARY,
 	LORDLY, A_NONE, NON_PM, NON_PM, 3000L, 
@@ -369,7 +369,7 @@ A("Mirror Brand",	LONG_SWORD,				SILVER,		0,
 	0,0,0),
 
 A("Sunsword",			LONG_SWORD,			GOLD,		0,
-	(SPFX_RESTR|SPFX_CON_OR|SPFX_SEARCH), 0,
+	(SPFX_RESTR|SPFX_CON_OR|SPFX_SEARCH|SPFX_INHER), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, (MA_UNDEAD|MA_DEMON) /*MA*/, 0 /*MV*/,
 	PHYS(1,0),	DFNS(AD_BLND),	NO_CARY,	/*also petrifies trolls, making this weapon strictly better than*/
 	0, A_LAWFUL, NON_PM, NON_PM, 1500L, 	/*trollsbane.  But trollsbane can be twoweaponed.*/
@@ -418,7 +418,7 @@ A("The Black Arrow",	ANCIENT_ARROW, 		0,			0,/*Needs encyc entry*/
 	0,0,0), 
 
 A("Tensa Zangetsu",		TSURUGI,			0,			0,
-	(SPFX_RESTR|SPFX_HSPDAM),0,
+	(SPFX_RESTR|SPFX_HSPDAM|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*also has a haste effect when wielded, but massively increases hunger and damages the wielder*/
 	PHYS(1,0),	NO_DFNS,	NO_CARY,
 	SPEED_BANKAI, A_NEUTRAL, NON_PM, NON_PM, 4444L,/*The invoked attack is very powerful*/
@@ -427,14 +427,14 @@ A("Tensa Zangetsu",		TSURUGI,			0,			0,
 /*//////////Other Artifacts//////////*/
 
 A("Sode no Shirayuki",		KATANA,			SILVER,		0,
-	(SPFX_RESTR|SPFX_ATTK),0,
+	(SPFX_RESTR|SPFX_ATTK|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	COLD(1,0),	COLD(0,0),	NO_CARY,  /*Sort of intermediate between a double damage and a utility weapon,*/
 	ICE_SHIKAI, A_LAWFUL, NON_PM, NON_PM, 8000L,/*Sode no Shirayuki gains x2 ice damage after using the third dance.*/
 	0,0,0), /*however, it only keeps it for a few rounds, and the other dances are attack magic. */
 
 A("Tobiume",		LONG_SWORD,				METAL,		0,
-	(SPFX_RESTR|SPFX_ATTK),0,
+	(SPFX_RESTR|SPFX_ATTK|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	FIRE(1,1),	FIRE(0,0),	NO_CARY,/*Tobiume is an awkward weapon.  It loses 3 damage vs large and 2 vs small*/
 	FIRE_SHIKAI, A_CHAOTIC, NON_PM, NON_PM, 8000L,
@@ -470,21 +470,21 @@ A("Release from Care",			SCYTHE, 	0,			0,/*Needs encyc entry*/
 	0,0,0),
 
 A("The Lifehunt Scythe",			SCYTHE,					DRAGON_HIDE,	MZ_LARGE,/*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_DEFN|SPFX_BEHEAD),0, //Can only behead creatures that don't know where you are.
+	(SPFX_RESTR|SPFX_DEFN|SPFX_BEHEAD|SPFX_INHER),0, //Can only behead creatures that don't know where you are.
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(6,6),	DRLI(0,0),	COLD(0,0), //Actually only applies vs living or undead creatures
 	INVIS, A_CHAOTIC, NON_PM, NON_PM, 4000L, //Note: Has Str and Dex scaling for +16 max
 	SPFX2_STLTH,0,0),
 
 A("The Holy Moonlight Sword",		LONG_SWORD, 			METAL,			0,/*Needs encyc entry*/
-	(SPFX_RESTR),0, //Becomes two sizes larger when lit, likely requiring two hands
+	(SPFX_RESTR|SPFX_INHER),0, //Becomes two sizes larger when lit, likely requiring two hands
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(12,0),	NO_DFNS,	NO_CARY, //Actually only applies vs non-magic resistance and while lit
 	ENLIGHTENING, A_NONE, NON_PM, NON_PM, 4000L, 
 	0,0,0), //Also silver when NOT lit, and shining when lit
 
 A("The Silence Glaive",		GLAIVE, 		0,			0,/*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_DRLI),0,
+	(SPFX_RESTR|SPFX_ATTK|SPFX_DEFN|SPFX_DRLI|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	DRLI(1,1),	DRLI(0,0),	NO_CARY,
 	SATURN, A_NONE, NON_PM, NON_PM, 8000L, 
@@ -676,7 +676,7 @@ A("Water Flowers", WATER_WALKING_BOOTS,		0,			0,
 	SPFX2_SILVERED,0,WSFX_PLUSSEV),
 
 A("Hammerfeet", KICKING_BOOTS,				0,			0,
-	(SPFX_RESTR),0,
+	(SPFX_RESTR|SPFX_INHER),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	PHYS(1,0),	NO_DFNS,	NO_CARY,
 	0, A_CHAOTIC, NON_PM, NON_PM, 4000L, 
@@ -876,7 +876,7 @@ A("The Necronomicon", SPE_SECRETS, 						0,			0,/*from the works of HP Lovecraft
 	0,SPFX3_NOCNT,0),
 
 A("Infinity's Mirrored Arc",	DOUBLE_LIGHTSABER,		0,			0,
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_INHER), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
 	ALTMODE,	A_NEUTRAL, NON_PM, NON_PM, 3000L, 

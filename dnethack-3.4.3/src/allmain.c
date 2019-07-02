@@ -6,6 +6,13 @@
 
 #include "hack.h"
 #include "edog.h"
+#include "artifact.h"
+#ifdef OVLB
+#include "artilist.h"
+#else
+STATIC_DCL struct artifact artilist[];
+#endif
+
 
 #ifndef NO_SIGNAL
 #include <signal.h>
@@ -18,6 +25,7 @@ STATIC_DCL void NDECL(do_positionbar);
 STATIC_DCL void NDECL(androidUpkeep);
 STATIC_DCL void NDECL(printMons);
 STATIC_DCL void NDECL(printDPR);
+STATIC_DCL int NDECL(do_inheritor_menu);
 STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
 STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
 
@@ -2155,7 +2163,60 @@ newgame()
 	if(Darksight) litroom(FALSE,NULL);
 	/* Success! */
 	welcome(TRUE);
+	if(Race_if(PM_INHERITOR)){
+		int inherited;
+		struct obj *otmp;
+		do{inherited = do_inheritor_menu();}while(!inherited);
+		otmp = mksobj((int)artilist[inherited].otyp, FALSE, FALSE);
+	    otmp = oname(otmp, artilist[inherited].name);
+		expert_weapon_skill(weapon_type(otmp));
+		discover_artifact(inherited);
+		fully_identify_obj(otmp);
+	    otmp = hold_another_object(otmp, "Oops!  %s to the floor!",
+				       The(aobjnam(otmp, "slip")), (const char *)0);
+	    // otmp->oartifact = inherited;
+	}
 	return;
+}
+
+STATIC_OVL int
+do_inheritor_menu()
+{
+	winid tmpwin;
+	int n, how, i;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	for (i = 1; i<=NROFARTIFACTS; i++)
+	{
+		// if ((artilist[i].spfx2) && artilist[i].spfx && artilist[i].spfx)
+		if(artilist[i].spfx&SPFX_INHER
+		&& !Role_if(artilist[i].role)
+		&& !Pantheon_if(artilist[i].role)
+		&& (artilist[i].alignment == A_NONE
+			|| artilist[i].alignment == u.ualign.type)
+		){
+			Sprintf(buf, "%s", artilist[i].name);
+			any.a_int = i;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			incntlet = (incntlet == 'z') ? 'A' : (incntlet == 'Z') ? 'a' : (incntlet + 1);
+		}
+	}
+
+	end_menu(tmpwin, "Which artifact did you inherit?");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? selected[0].item.a_int : 0;
 }
 
 /* show "welcome [back] to nethack" message at program startup */

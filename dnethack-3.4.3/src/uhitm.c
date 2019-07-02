@@ -2289,7 +2289,7 @@ defaultvalue:
 	    } else if ((u.ualign.type == A_LAWFUL) && !Race_if(PM_ORC) &&
 				!((Race_if(PM_DROW) && !flags.initgend && 
 					(Role_if(PM_PRIEST) || Role_if(PM_ROGUE) || Role_if(PM_RANGER) || Role_if(PM_WIZARD)) ) ||
-				  ((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON)) && (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER)))
+				  ((Race_if(PM_HUMAN) || Race_if(PM_INHERITOR) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON)) && (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER)))
 				 ) && 
 			(u.ualign.record > -10)
 		) {

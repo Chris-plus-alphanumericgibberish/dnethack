@@ -34,6 +34,7 @@
 #define SPFX_REFLECT 0x01000000L /* Reflection */
 #define SPFX_CONFL  0x02000000L  /* Conflict */
 #define SPFX_AGGRM  0x04000000L /* Aggravate monster */
+#define SPFX_INHER  0x08000000L /* Can be Inherited */
 /* expanded special effects*/
 #define SPFX2_NONE		0x0000000L	/* nothing special */
 #define SPFX2_DIG		0x0000001L	/* Can dig with artifact, as if it were a pick. Clarent Patch (GreyKnight)*/

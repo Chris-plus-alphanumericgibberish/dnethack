@@ -799,7 +799,7 @@ gcrownu()
 		already_exists = exist_artifact(LONG_SWORD, artiname(ART_ARCOR_KERYM));
 		verbalize("I crown thee...  The Hand of Elbereth!");
 		livelog_write_string("became the Hand of Elbereth");
-	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INHERITOR) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
 		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
 	) {
 		u.uevent.uhand_of_elbereth = 28;
@@ -907,7 +907,7 @@ gcrownu()
 		already_exists = exist_artifact(RUNESWORD, artiname(ART_ARYFAERN_KERYM));
 		verbalize("I dub thee...  The Doomspeaker of Vaire!");
 		livelog_write_string("became the Doomspeaker of Vaire");
-	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INHERITOR) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
 		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
 	) {
 		u.uevent.uhand_of_elbereth = 29;
@@ -998,7 +998,7 @@ gcrownu()
 		already_exists = exist_artifact(ELVEN_BROADSWORD, artiname(ART_ARYVELAHR_KERYM));
 		verbalize("I dub thee...  The Whisperer of Este!");
 		livelog_write_string("became the Whisperer of Este");
-	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INHERITOR) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
 		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
 	) {
 		u.uevent.uhand_of_elbereth = 30;
@@ -1220,7 +1220,7 @@ gcrownu()
 		expert_weapon_skill(P_BOW);
 		if (obj && obj->oartifact == ART_BOW_OF_SKADI)
 			discover_artifact(ART_BOW_OF_SKADI);
-	} else if((Race_if(PM_HUMAN) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
+	} else if((Race_if(PM_HUMAN) || Race_if(PM_INHERITOR) || Race_if(PM_INCANTIFIER) || Race_if(PM_HALF_DRAGON))
 		&& (Pantheon_if(PM_RANGER) || Role_if(PM_RANGER))
 	){
 		if (class_gift != STRANGE_OBJECT) {

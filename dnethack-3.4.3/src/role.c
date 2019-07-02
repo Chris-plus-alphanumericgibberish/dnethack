@@ -834,6 +834,20 @@ const struct Race races[] = {
 	{  0, 0,  100, 0, 100, 0 },		/* Energy */
 	NORMALNIGHTVIS
 },
+{	"Inheritor", "human", "humanity", "Inh",
+	{"man", "woman"},
+	PM_INHERITOR, NON_PM, PM_HUMAN_MUMMY, PM_ZOMBIE,
+	ROLE_MALE|ROLE_FEMALE |
+	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
+	MA_HUMAN, 0, MA_GNOME|MA_ORC|MA_ELF,
+	/*    Str     Int Wis Dex Con Cha */
+	{      3,      3,  3,  3,  3,  3 },
+	{ STR18(100), 18, 18, 18, 18, 18 },
+	/* Init   Lower  Higher */
+	{  2, 0,  0, 2,  1, 0 },	/* Hit points */
+	{  1, 0,  2, 0,  2, 0 },		/* Energy */
+	NORMALNIGHTVIS
+},
 {	"orc", "orcish", "orcdom", "Orc",
 	{0, 0},
 	PM_ORC, NON_PM, PM_ORC_MUMMY, PM_ZOMBIE,
