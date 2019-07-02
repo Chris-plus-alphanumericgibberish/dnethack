@@ -156,7 +156,7 @@ register char oclass;
 		sum = 0;
 		for(i = first; i < last; i++) sum += objects[i].oc_prob;
 		if(sum == 0) {
-			if(objects[i].oc_class == RING_CLASS)
+			if(objects[first].oc_class == RING_CLASS)
 				first++;//Ring of wishes should remain 0
 			for(i = first; i < last; i++)
 			    objects[i].oc_prob = (1000+i-first)/(last-first);
