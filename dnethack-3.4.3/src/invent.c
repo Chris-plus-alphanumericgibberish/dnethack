@@ -2288,7 +2288,7 @@ struct obj *obj;
 		any.a_void = (genericptr_t)doputon;
 		add_menu(win, NO_GLYPH, &any, 'W', 0, ATR_NONE,
 				"Put this amulet on", MENU_UNSELECTED);
-	    } else if (obj->otyp == TOWEL || obj->otyp == BLINDFOLD || obj->otyp == ANDROID_VISOR) {
+	    } else if (obj->otyp == TOWEL || obj->otyp == BLINDFOLD || obj->otyp == R_LYEHIAN_FACEPLATE || obj->otyp == ANDROID_VISOR) {
 		any.a_void = (genericptr_t)doputon;
 		add_menu(win, NO_GLYPH, &any, 'W', 0, ATR_NONE,
 				"Use this to blindfold yourself", MENU_UNSELECTED);
