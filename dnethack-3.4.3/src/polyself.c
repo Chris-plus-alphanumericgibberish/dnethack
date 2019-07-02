@@ -1544,7 +1544,7 @@ doandroid()
 				if(u.ustuck && u.uswallow)
 					mon = u.ustuck;
 				else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
-				if(mon){
+				if(mon && !mon->mtame){
 					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
 					hmonwith(mon, tmp, weptmp, tchtmp, twohandercombo, 1);
 				}
