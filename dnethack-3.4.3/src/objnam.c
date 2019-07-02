@@ -3018,7 +3018,7 @@ int wishflags;
 		sizewished = FALSE;
 	int objsize = youracedata->msize;
 	long bodytype = 0L;
-	long oproperties = 0L;
+	long long int oproperties = 0L;
 	char oclass;
 	char *un, *dn, *actualn;
 	const char *name=0;
