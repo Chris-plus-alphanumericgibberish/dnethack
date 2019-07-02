@@ -124,7 +124,7 @@ int type;
 boolean print;
 struct monst *victim;
 {
-	static NEARDATA const char * const action[] = { "smoulder", "rust", "rot", "corrode" };
+	static NEARDATA const char * const action[] = { "smolder", "rust", "rot", "corrode" };
 	static NEARDATA const char * const msg[] =  { "burnt", "rusted", "rotten", "corroded" };
 	boolean vulnerable = FALSE;
 	boolean grprot = FALSE;
