@@ -1857,9 +1857,19 @@ register struct monst *mtmp;
 				} else if (mm == PM_NORN){
 					/* Nothing */
 				} else if (mm == PM_NEFERET_THE_GREEN){
-					otmp = mksobj(KHAKKHARA, FALSE, FALSE);
-					bless(otmp);
+					otmp = mksobj(FLAIL, TRUE, FALSE);
 					otmp->spe = 7;
+					otmp->obj_material = GOLD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(SHEPHERD_S_CROOK, TRUE, FALSE);
+					otmp->spe = 7;
+					otmp->obj_material = GOLD;
+					otmp->objsize = MZ_SMALL;
+					fix_object(otmp);
+					bless(otmp);
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(ELVEN_BOW, FALSE, FALSE);
