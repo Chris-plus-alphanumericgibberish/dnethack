@@ -219,6 +219,55 @@ static struct trobj Binder[] = {
 	{ TRIPE_RATION, 0, FOOD_CLASS, 2, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
+static struct trobj Binder_Hedrow[] = {
+	{ VOULGE, 0, WEAPON_CLASS, 1, 0 },
+	{ DROVEN_DAGGER, 0, WEAPON_CLASS, 1, 0 },
+	{ DROVEN_CLOAK, 0, ARMOR_CLASS, 1, 0 },
+	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
+	{ SLIME_MOLD, UNDEF_SPE, FOOD_CLASS, 4, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Binder_Drow[] = {
+	{ DROVEN_DAGGER, 0, WEAPON_CLASS, 1, 0 },
+	{ BLACK_DRESS, 0, ARMOR_CLASS, 1, 0 },
+	{ DROVEN_CLOAK, 0, ARMOR_CLASS, 1, 0 },
+	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
+	{ SLIME_MOLD, UNDEF_SPE, FOOD_CLASS, 4, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Binder_Dwarf[] = {
+	{ BATTLE_AXE, 0, WEAPON_CLASS, 1, 0 },
+	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
+	{ CHAIN_MAIL, 0, ARMOR_CLASS, 1, 0 },
+	{ GLOVES, 0, ARMOR_CLASS, 1, 0 },
+	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, 0 },
+	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
+	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
+	{ APPLE, 0, FOOD_CLASS, 2, 0 },
+	{ TRIPE_RATION, 0, FOOD_CLASS, 2, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Binder_Elf[] = {
+	{ ELVEN_SPEAR, 0, WEAPON_CLASS, 1, 0 },
+	{ ELVEN_DAGGER, 0, WEAPON_CLASS, 1, 0 },
+	{ ELVEN_SICKLE, 0, WEAPON_CLASS, 1, 0 },
+	{ ELVEN_TOGA, 0, ARMOR_CLASS, 1, 0 },
+	{ LEMBAS_WAFER, 0, FOOD_CLASS, 1, 0 },
+	{ APPLE, 0, FOOD_CLASS, 2, 0 },
+	{ TRIPE_RATION, 0, FOOD_CLASS, 2, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
+static struct trobj Binder_Vam[] = {
+	{ RAPIER, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
+	{ KNIFE, 0, WEAPON_CLASS, 1, UNDEF_BLESS },
+#define BIN_NOB_SHIRT	2
+	{ RUFFLED_SHIRT, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+#define BIN_NOB_SUIT	3
+	{ GENTLEMAN_S_SUIT, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ APPLE, 0, FOOD_CLASS, 2, 0 },
+	{ FOOD_RATION, 0, FOOD_CLASS, 2, 0 },
+	{ 0, 0, 0, 0, 0 }
+};
 //initialization of an extern in you.h
 boolean forcesight = FALSE;
 boolean forceblind = FALSE;
@@ -686,8 +735,8 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	ATHAME,						DROVEN_DAGGER	      },
     { PM_DROW,	DAGGER,						DROVEN_DAGGER	      },
     { PM_DROW,	KNIFE,						DROVEN_DAGGER	      },
-    { PM_DROW,	SPEAR,						DROVEN_SHORT_SWORD	      },
     { PM_DROW,	SHORT_SWORD,				DROVEN_SHORT_SWORD     },
+    { PM_DROW,	SPEAR,						DROVEN_SHORT_SWORD	      },
     { PM_DROW,	BOW,						DROVEN_CROSSBOW	      },
     { PM_DROW,	ARROW,						DROVEN_BOLT	      },
     { PM_DROW,	LEATHER_CLOAK,				DROVEN_CLOAK  },
@@ -1992,7 +2041,22 @@ u_init()
 	break;
 #endif
 	case PM_EXILE:
-		ini_inv(Binder);
+		if(Race_if(PM_VAMPIRE)){
+			if(flags.female){
+				Binder_Vam[BIN_NOB_SHIRT].trotyp = VICTORIAN_UNDERWEAR;
+				Binder_Vam[BIN_NOB_SUIT].trotyp = GENTLEWOMAN_S_DRESS;
+			}
+			ini_inv(Binder_Vam);
+		} else if(Race_if(PM_DROW)){
+			if(flags.female)
+				ini_inv(Binder_Drow);
+			else ini_inv(Binder_Hedrow);
+		} else if(Race_if(PM_DWARF)){
+			ini_inv(Binder_Dwarf);
+		} else if(Race_if(PM_ELF)){
+			ini_inv(Binder_Elf);
+		} else
+			ini_inv(Binder);
 		skill_init(Skill_N);
 		knows_object(FLINT);
 		knows_object(SHEPHERD_S_CROOK);
@@ -2975,13 +3039,50 @@ register struct trobj *trop;
 		} else {
 #endif
 			if(Role_if(PM_EXILE)){
-				obj->dknown = obj->rknown = obj->sknown = 1;
-				if(obj->oclass == WEAPON_CLASS && !Race_if(PM_DWARF)){
-					if(obj->obj_material != WOOD) obj->oeroded = 1;
-					else obj->oeroded2 = 1;
-				} else if(obj->oclass == FOOD_CLASS){
-					obj->ostolen = TRUE;
-				} else if(obj->otyp == FLINT) obj->known = 1;
+				if(Race_if(PM_VAMPIRE)){
+					obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
+					if (objects[obj->otyp].oc_uses_known) obj->known = 1;
+					knows_object(obj->otyp);
+					if(obj->oclass == WEAPON_CLASS){
+						if(obj->obj_material == METAL){
+							obj->obj_material = IRON;
+							fix_object(obj);
+						}
+						if(obj->obj_material != WOOD) obj->oeroded = 1;
+						else obj->oeroded2 = 1;
+					} else if(obj->oclass == ARMOR_CLASS){
+						obj->oeroded3 = 1;
+					}
+				} else if(Race_if(PM_DROW)){
+					obj->dknown = obj->rknown = obj->sknown = 1;
+					if(flags.female){
+						if(obj->otyp == BLACK_DRESS) obj->ostolen = TRUE;
+					}
+					if(obj->oclass == FOOD_CLASS){
+						obj->ostolen = TRUE;
+					}
+				} else if(Race_if(PM_DWARF)){
+					obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
+					if (objects[obj->otyp].oc_uses_known) obj->known = 1;
+					knows_object(obj->otyp);
+					
+					if(obj->otyp == CHAIN_MAIL) obj->oeroded = 3;
+					else if(obj->oclass == ARMOR_CLASS && is_damageable(obj)) obj->oeroded = 1;
+				} else if(Race_if(PM_ELF)){
+					obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
+					if (objects[obj->otyp].oc_uses_known) obj->known = 1;
+					knows_object(obj->otyp);
+					
+					if((obj->oclass == WEAPON_CLASS || obj->oclass == ARMOR_CLASS) && is_damageable(obj)) obj->oeroded = 1;
+				} else {
+					obj->dknown = obj->rknown = obj->sknown = 1;
+					if(obj->oclass == WEAPON_CLASS){
+						if(obj->obj_material != WOOD) obj->oeroded = 1;
+						else obj->oeroded2 = 1;
+					} else if(obj->oclass == FOOD_CLASS){
+						obj->ostolen = TRUE;
+					} else if(obj->otyp == FLINT) obj->known = 1;
+				}
 			}else{
 				obj->dknown = obj->bknown = obj->rknown = obj->sknown = 1;
 				if (objects[otyp].oc_uses_known) obj->known = 1;
