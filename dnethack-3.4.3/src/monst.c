@@ -1759,7 +1759,7 @@ NEARDATA struct permonst mons[] = {
 	MA_MINION|MA_FEY /*MA*/,  MV_CATSIGHT|MV_SEE_INVIS|MV_LOWLIGHT3 /*MV*/, CLR_BROWN),
     MON("stinking cloud", S_VORTEX,// /*Needs encyc entry*//*Needs tile*/
 	LVL(10, 6, -1, 19, -10), (G_HELL|G_NOCORPSE|G_NOGEN), /*Engulfing vorticies slower than 12 get 2x speed when stuck to you*/
-	A(ATTK(AT_ENGL, AD_DRST, 3,8), NO_ATTK,
+	A(ATTK(AT_ENGL, AD_DRST, 3,8), ATTK(AT_ENGL, AD_PHYS, 1, 8),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(0, 0, 0, MS_SILENT, MZ_MEDIUM),
 	MR_FIRE|MR_SLEEP|MR_POISON|MR_STONE, 0,
