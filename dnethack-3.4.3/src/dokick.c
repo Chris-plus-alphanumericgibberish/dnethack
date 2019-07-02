@@ -828,7 +828,7 @@ dokick()
 	} else if (!rn2(2) && IS_PUDDLE(levl[u.ux][u.uy].typ) &&
 		    !Levitation && !Flying && !Wwalking &&
 			/* mud boots negate water resistance */
-			(!uarmf || strncmp(OBJ_DESCR(objects[uarmf->otyp]), "mud ", 4))
+			(!uarmf || uarmf->otyp == find_mboots())
 	) {
 		pline_The("water at your %s hinders your ability to kick.",
 			makeplural(body_part(FOOT)));
