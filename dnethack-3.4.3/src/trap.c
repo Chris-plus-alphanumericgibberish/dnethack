@@ -62,6 +62,8 @@ struct monst *victim;
     int mat_idx;
     
     if (!victim) return 0;
+	if(victim == &youmonst && InvFire_resistance) return 0;
+	if(victim != &youmonst && resists_fire(victim)) return 0;
 #define burn_dmg(obj,descr) rust_dmg(obj, descr, 0, FALSE, victim)
     while (1) {
 	switch (rn2(5)) {
