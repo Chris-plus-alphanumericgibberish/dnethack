@@ -63,7 +63,7 @@ unsigned gpflags;
 			if (mtmp == &youmonst)
 				return !!(Amphibious);
 			else return (is_swimmer(mdat) || breathless_mon(mtmp) || amphibious_mon(mtmp));
-	    } else if (is_pool(x,y, FALSE) && !ignorewater) {
+	    } else if (is_pool(x,y, FALSE) && !(ignorewater || (mtmp == &youmonst && Is_waterlevel(&u.uz)))) {
 			if(mtmp == &youmonst && level.flags.lethe)
 				return !!(Levitation || Flying || Wwalking);
 			if (mtmp == &youmonst)
