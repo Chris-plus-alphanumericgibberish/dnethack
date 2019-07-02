@@ -1529,7 +1529,9 @@ karemade:
 				}
 			} else if(u.utemp) u.utemp = 0;
 			
-			if(u.uinwater) u.uboiler = MAX_BOILER;
+			if(u.uinwater && !u.umoved){
+				if(uclockwork) u.uboiler = MAX_BOILER;
+			}
 			
 			if(u.ukinghill){
 				if(u.protean > 0) u.protean--;
@@ -1715,6 +1717,9 @@ karemade:
 					}
 				}
 			}
+		}
+		if(u.uinwater){//Moving around will also call this, so your stuff degrades faster if you move
+			water_damage(invent, FALSE, FALSE, level.flags.lethe, &youmonst);
 		}
 
 		hpDiff -= u.uhp;
