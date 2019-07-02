@@ -1382,10 +1382,11 @@ struct obj	*sobj;
 	    break;
 	case SCR_CONFUSE_MONSTER:
 	case SPE_CONFUSE_MONSTER:
-		if(youracedata->mlet != S_HUMAN || sobj->cursed) {
-			if(!HConfusion) You_feel("confused.");
-			make_confused(HConfusion + rnd(100),FALSE);
-		} else  if(confused) {
+		// if(youracedata->mlet != S_HUMAN || sobj->cursed) {
+			// if(!HConfusion) You_feel("confused.");
+			// make_confused(HConfusion + rnd(100),FALSE);
+		// } else  if(confused) {
+		if(confused) {
 		    if(!sobj->blessed) {
 			Your("%s begin to %s%s.",
 			    makeplural(body_part(HAND)),
