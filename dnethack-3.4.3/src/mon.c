@@ -1921,6 +1921,7 @@ movemon()
 	){
 		if(canseemon(mtmp)) pline("%s gets angry...", mon_nam(mtmp));
 		mtmp->mpeaceful = 0;
+		mtmp->mtame = 0;
 	}
 	if(mtmp->data == &mons[PM_UVUUDAUM]){
 		if(u.uevent.invoked 
