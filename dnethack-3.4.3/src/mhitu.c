@@ -346,7 +346,19 @@ struct attack *alt_attk_buf;
 	}
 
 	// Derived undead
-	if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
+	if (mtmp->mfaction == VAMPIRIC){
+		if (attk->aatyp == AT_BITE
+			|| (!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+			|| (!derundspec && indx == NATTK - 1)
+		){
+			derundspec = TRUE;
+			attk->aatyp = AT_BITE;
+			attk->adtyp = AD_VAMP;
+			attk->damn = max(1, attk->damn);
+			attk->damd = max(4, max(mtmp->data->msize * 2, attk->damd));
+		}
+	}
+	else if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
 		if (attk->aatyp == AT_SPIT
 			|| attk->aatyp == AT_BREA
 			|| attk->aatyp == AT_GAZE
@@ -364,7 +376,7 @@ struct attack *alt_attk_buf;
 			)
 			|| (!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
 			|| (!derundspec && indx == NATTK - 1 && (mtmp->mfaction == CRYSTALFIED || mtmp->mfaction == SKELIFIED))
-			){
+		){
 			// yes, replace the current attack
 			if (indx == 0){
 				attk->aatyp = AT_CLAW;

@@ -1411,11 +1411,24 @@ generate_list_of_resistances(struct monst * mtmp, char * temp_buf, int resists)
 {
 	unsigned int mr_flags;
 	unsigned long mg_flags = mtmp->data->mflagsg;
-	if (resists == 1)
-	{
+	if (resists == 1){
 		mr_flags = mtmp->data->mresists;
-		if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED)
-			mr_flags = mr_flags | MR_COLD | MR_SLEEP | MR_POISON | MR_DRAIN | MG_RPIERCE | ((mtmp->mfaction == ZOMBIFIED) ? MG_RBLUNT : MG_RSLASH);
+		if(mtmp->mfaction == ZOMBIFIED){
+			mr_flags |= MR_COLD | MR_SLEEP | MR_POISON | MR_DRAIN;
+			mg_flags |= MG_RPIERCE | MG_RBLUNT;
+		}
+		if(mtmp->mfaction == SKELIFIED){
+			mr_flags |= MR_COLD | MR_SLEEP | MR_POISON | MR_DRAIN;
+			mg_flags |= MG_RPIERCE | MG_RSLASH;
+		}
+		if(mtmp->mfaction == CRYSTALFIED){
+			mr_flags |= MR_COLD | MR_SLEEP | MR_POISON | MR_DRAIN;
+			mg_flags |= MG_RPIERCE | MG_RSLASH;
+		}
+		if(mtmp->mfaction == VAMPIRIC){
+			mr_flags |= MR_SLEEP | MR_POISON | MR_DRAIN;
+			if(mtmp->m_lev > 10) mr_flags |= MR_COLD;
+		}
 	}
 	if (resists == 0)
 		mr_flags = mtmp->data->mconveys;
@@ -2049,6 +2062,7 @@ get_description_of_monster_type(struct monst * mtmp, char * description)
 	else if (mtmp->mfaction == SKELIFIED)	Strcat(name, " skeleton");
 	else if (mtmp->mfaction == CRYSTALFIED) Strcat(name, " vitrean");
 	else if (mtmp->mfaction == FRACTURED)	Strcat(name, " witness");
+	else if (mtmp->mfaction == VAMPIRIC)	Strcat(name, " vampire");
 
 	temp_buf[0] = '\0';
 	if (iflags.pokedex) {

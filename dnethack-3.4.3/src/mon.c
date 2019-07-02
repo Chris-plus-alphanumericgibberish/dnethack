@@ -200,6 +200,7 @@ STATIC_VAR int cham_to_pm[] = {
 			 ((mon)->data->geno & G_UNIQ) ||		\
 			 is_reviver((mon)->data) ||			\
 			 ((mon)->mfaction == ZOMBIFIED) ||			\
+			 ((mon)->mfaction == VAMPIRIC) ||			\
 			 ((mon)->zombify) ||			\
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\

@@ -167,6 +167,7 @@ resists_cold(mon)
 	if(!mon) return FALSE;
 	
 	return (species_resists_cold(mon) || mon_resistance(mon, COLD_RES) || 
+		(mon->mfaction == VAMPIRIC && mon->m_lev > 10) || 
 		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
 		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
 }
@@ -178,7 +179,7 @@ resists_sleep(mon)
 	if(!mon) return FALSE;
 	
 	return (species_resists_sleep(mon) || mon_resistance(mon, SLEEP_RES) || 
-		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		mon->mfaction == VAMPIRIC || mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
 		((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
 }
 
@@ -207,7 +208,7 @@ resists_poison(mon)
 	if(!mon) return FALSE;
 	
 	return (species_resists_poison(mon) || mon_resistance(mon, POISON_RES) || 
-		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		mon->mfaction == VAMPIRIC || mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
 		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
 }
 

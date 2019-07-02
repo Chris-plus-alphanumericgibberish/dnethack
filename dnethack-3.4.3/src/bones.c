@@ -409,6 +409,13 @@ struct obj *corpse;
 			in_mklev = FALSE;
 			if(mtmp)
 				mtmp->mfaction = CRYSTALFIED;
+		} else if(u.ugrave_arise == PM_VAMPIRE){
+			u.ugrave_arise = (u.mfemale && urole.femalenum != NON_PM) ? urole.femalenum : urole.malenum;
+			in_mklev = TRUE;
+			mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
+			in_mklev = FALSE;
+			if(mtmp)
+				mtmp->mfaction = VAMPIRIC;
 		} else {
 			in_mklev = TRUE;
 			mtmp = makemon(&mons[u.ugrave_arise], u.ux, u.uy, NO_MM_FLAGS);
