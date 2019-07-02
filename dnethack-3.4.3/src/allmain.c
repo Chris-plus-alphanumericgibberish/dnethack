@@ -309,12 +309,12 @@ androidUpkeep()
 		int mult = 30/u.ulevel;
 		//Possibly pass out if you begin this step with 0 energy.
 		if(u.uen == 0 && !rn2(10+u.ulevel) && moves >= u.nextsleep){
-			int t = rn1(u.uenmax*mult, u.uenmax*mult);
+			int t = rn1(u.uenmax*mult+40, u.uenmax*mult+40);
 			You("pass out from exhaustion!");
 			u.nextsleep = moves+rnz(350)+t;
 			u.lastslept = moves;
 			fall_asleep(-t, TRUE);
-			nomul(-1*u.uenmax/mult, "passed out from exhaustion");
+			nomul(-1*u.uenmax, "passed out from exhaustion");
 		}
 		if(u.phasengn){
 			u.uen -= 10;
