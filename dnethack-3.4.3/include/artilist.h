@@ -723,8 +723,8 @@ A("Hellrider's Saddle",			SADDLE,		0,			0,
 
 /*//////////Law Quest Artifacts//////////*/
 
-A("The Rod of Seven Parts",	SPEAR, 			SILVER,		0,/*From D&D*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR|SPFX_INTEL|SPFX_DALIGN|SPFX_DEFN), 0,
+A("The Rod of Seven Parts",	SPEAR, 			METAL,		0,/*From D&D*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR|SPFX_INTEL|SPFX_DALIGN|SPFX_DEFN|SPFX_INHER), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(7,20),	DRLI(0,0),	NO_CARY,
 	SEVENFOLD,	A_LAWFUL, NON_PM, NON_PM, 7777L, 
