@@ -5585,6 +5585,8 @@ courtmon(kingnum)
 				return &mons[PM_HEDROW_WIZARD];
 			if(i>50)
 				return &mons[PM_HEDROW_WARRIOR];
+			if(i>45)
+				return &mons[PM_DROW_CAPTAIN];
 			if(i>40)
 				return &mons[PM_DROW];
 			if(i>30)
