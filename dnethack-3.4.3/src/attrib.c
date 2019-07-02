@@ -152,6 +152,7 @@ const struct innate {
 		     {	 0, 0, 0, 0 } },
 
 	vam_abil[] = { {	1, &(HPoison_resistance), "", "" },
+			 {	 1, &(HSleep_resistance), "", "" },
 			 {	11, &(HCold_resistance), "the chill of the grave", "the warmth of life" },
 		     {	 21, &(HPolymorph_control), "in control", "out of control" },
 		     {	 0, 0, 0, 0 } },
