@@ -404,7 +404,7 @@ you_regen_hp()
 	
 	// "Natural" regeneration has stricter limitations
 	if (u.regen_blocked > 0) u.regen_blocked--;		// not regen_blocked (NOTE: decremented here)
-	else if (!nonliving(youracedata) &&				// not nonliving
+	else if (!(nonliving(youracedata) && !uandroid) &&	// not nonliving, however, androids auto-repair while asleep
 		!Race_if(PM_INCANTIFIER) &&					// not incantifier (including while polymorphed)
 		(wtcap < MOD_ENCUMBER || !u.umoved) &&		// not overloaded
 		!(uwep && uwep->oartifact == ART_ATMA_WEAPON && uwep->lamplit && !Drain_resistance && rn2(4)) // 3 in 4 chance of being prevented by Atma Weapon
