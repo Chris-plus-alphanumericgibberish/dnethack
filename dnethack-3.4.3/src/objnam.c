@@ -4403,7 +4403,7 @@ typfnd:
 	    if (eroded2 && (is_corrodeable(otmp) || is_rottable(otmp)))
 		    otmp->oeroded2 = eroded2;
 	    if (eroded3 && otmp->otyp == DROVEN_CLOAK)
-		    otmp->ovar1 = eroded3;
+		    otmp->oeroded3 = eroded3;
 
 	    /* set erodeproof */
 	    if (erodeproof && !eroded && !eroded2)
