@@ -536,4 +536,10 @@ struct artifact {
 				(m) == ART_MARAUDER_S_MAP\
 			)
 
+#define double_bonus_damage_artifact(m) (\
+	(m) == ART_LIMITED_MOON ||\
+	(m) == ART_STAFF_OF_TWELVE_MIRRORS ||\
+	(m) == ART_POSEIDON_S_TRIDENT\
+	)
+
 #endif /* ARTIFACT_H */

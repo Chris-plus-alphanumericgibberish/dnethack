@@ -33,6 +33,7 @@ STATIC_DCL char FDECL(obj_to_let,(struct obj *));
 STATIC_PTR int FDECL(u_material_next_to_skin,(int));
 STATIC_PTR int FDECL(u_bcu_next_to_skin,(int));
 STATIC_DCL int FDECL(itemactions,(struct obj *));
+STATIC_DCL void FDECL(describe_item, (struct obj *, int, int, winid *));
 
 #ifdef OVLB
 
@@ -1955,11 +1956,25 @@ ddoinv()
 {
 	char c;
 	struct obj *otmp;
-	c = display_inventory((char *)0, iflags.item_use_menu);
+	c = display_inventory((char *)0, TRUE);
 	if (!c) return 0;
 	for (otmp = invent; otmp; otmp = otmp->nobj)
 		if (otmp->invlet == c) break;
-	if (otmp) return itemactions(otmp);
+		if (otmp)
+		{
+			if (iflags.item_use_menu)
+				return itemactions(otmp);
+			else
+			{
+				winid datawin = create_nhwindow(NHW_MENU);
+				putstr(datawin, ATR_NONE, doname(otmp));
+				describe_item(otmp, otmp->otyp, otmp->oartifact, &datawin);
+				checkfile(xname(otmp), 0, FALSE, TRUE, &datawin);
+				display_nhwindow(datawin, TRUE);
+				destroy_nhwindow(datawin);
+				return 0;
+			}
+		}
 	return 0;
 }
 
@@ -2045,7 +2060,7 @@ struct obj *obj;
 			carrying(CANDELABRUM_OF_INVOCATION))
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Attach this candle to the candelabrum", MENU_UNSELECTED);
-	else if (obj->otyp == WAX_CANDLE || obj->otyp == TALLOW_CANDLE)
+	else if (obj->otyp == WAX_CANDLE || obj->otyp == TALLOW_CANDLE || obj->otyp == CANDLE_OF_INVOCATION)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Light or extinguish this candle", MENU_UNSELECTED);
 	else if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
@@ -2098,6 +2113,40 @@ struct obj *obj;
 	else if (obj->oclass == WAND_CLASS)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Break this wand", MENU_UNSELECTED);
+	else if (obj->otyp == UPGRADE_KIT)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Use the upgrade kit", MENU_UNSELECTED);
+	else if (obj->oartifact == ART_DARKWEAVER_S_CLOAK)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Release or absorb darkness", MENU_UNSELECTED);
+	else if (obj->otyp == DROVEN_CLOAK)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Spin out or sweep up a web", MENU_UNSELECTED);
+	else if (obj->oartifact == ART_AEGIS)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Change Aegis' form", MENU_UNSELECTED);
+	else if (obj->otyp == RAKUYO || obj->otyp == RAKUYO_SABER || obj->otyp == RAKUYO_DAGGER)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Latch or unlatch your rakuyo", MENU_UNSELECTED);
+	else if (obj->otyp == TORCH || obj->otyp == SHADOWLANDER_S_TORCH)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Light or snuff this torch", MENU_UNSELECTED);
+	else if (obj->otyp == SUNROD && !obj->lamplit)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Light this sunrod", MENU_UNSELECTED);
+	else if (obj->otyp == SENSOR_PACK)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Use this sensor pack", MENU_UNSELECTED);
+	else if (obj->otyp == HYPOSPRAY)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Inject an ampule with this hypospray", MENU_UNSELECTED);
+	else if ((is_knife(obj) && !(obj->oartifact == ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_MARIONETTE))
+		&& (u.wardsknown & (WARD_TOUSTEFNA | WARD_DREPRUN | WARD_OTTASTAFUR | WARD_KAUPALOKI | WARD_VEIOISTAFUR | WARD_THJOFASTAFUR)))
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Carve a stave with this knife", MENU_UNSELECTED);
+	else if (is_lightsaber(obj) && obj->oartifact != ART_INFINITY_S_MIRRORED_ARC)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Ignite or deactivate this lightsaber", MENU_UNSELECTED);
 	/* d: drop item, works on everything */
 	any.a_void = (genericptr_t)dodrop;
 	add_menu(win, NO_GLYPH, &any, 'd', 0, ATR_NONE,
@@ -2125,8 +2174,9 @@ struct obj *obj;
 			obj->oclass == GEM_CLASS || obj->oclass == RING_CLASS)
 		add_menu(win, NO_GLYPH, &any, 'E', 0, ATR_NONE,
 				"Write on the floor with this object", MENU_UNSELECTED);
-	/* I: describe item, works on everything */
+	/* I: describe item, works on any items whose actual name is known */
 	any.a_void = (genericptr_t)dotypeinv;
+	if (objects[obj->otyp].oc_name_known)
 	add_menu(win, NO_GLYPH, &any, 'I', 0, ATR_NONE,
 			"Describe this item", MENU_UNSELECTED);
 	/* p: pay for unpaid items */
@@ -2160,6 +2210,19 @@ struct obj *obj;
 	else if (obj->oclass == SPBOOK_CLASS)
 		add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
 				"Study this spellbook", MENU_UNSELECTED);
+	else if (obj->oartifact == ART_EXCALIBUR || obj->oartifact == ART_GLAMDRING || obj->oartifact == ART_ROD_OF_SEVEN_PARTS)
+				add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
+				"Read the inscription on this weapon", MENU_UNSELECTED);
+	else if (obj->oartifact == ART_BOW_OF_SKADI)
+				add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
+				"Study the runes on this bow", MENU_UNSELECTED);
+	else if (obj->oartifact == ART_ITLACHIAYAQUE)
+				add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
+				"Read into the smoky depths of this shield", MENU_UNSELECTED);
+	else if (obj->oartifact == ART_PEN_OF_THE_VOID)
+				add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
+				"Inspect this weapon", MENU_UNSELECTED);
+	/* R: rub */
 	any.a_void = (genericptr_t)dorub;
 	if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP)
 		add_menu(win, NO_GLYPH, &any, 'R', 0, ATR_NONE,
@@ -2189,6 +2252,8 @@ struct obj *obj;
 	any.a_void = (genericptr_t)doinvoke;
 	if ((obj->otyp == FAKE_AMULET_OF_YENDOR && !obj->known) ||
 			obj->oartifact || objects[obj->otyp].oc_unique ||
+			(obj->otyp == RIN_WISHES && objects[obj->otyp].oc_name_known && (obj->owornmask & W_RING)) ||
+			(obj->otyp == CANDLE_OF_INVOCATION && obj->lamplit) ||
 			obj->otyp == MIRROR) /* wtf NetHack devteam? */
 		add_menu(win, NO_GLYPH, &any, 'V', 0, ATR_NONE,
 				"Try to invoke a unique power of this object", MENU_UNSELECTED);
@@ -2197,8 +2262,7 @@ struct obj *obj;
 	   wielded */
 	any.a_void = (genericptr_t)dowield;
 	if (obj == uwep) {}
-	else if (obj->oclass == WEAPON_CLASS || obj->otyp == PICK_AXE ||
-			obj->otyp == UNICORN_HORN)
+	else if (obj->oclass == WEAPON_CLASS || is_weptool(obj))
 		add_menu(win, NO_GLYPH, &any, 'w', 0, ATR_NONE,
 				"Wield this as your weapon", MENU_UNSELECTED);
 	else if (obj->otyp == TIN_OPENER)
@@ -2221,7 +2285,7 @@ struct obj *obj;
 		any.a_void = (genericptr_t)doputon;
 		add_menu(win, NO_GLYPH, &any, 'W', 0, ATR_NONE,
 				"Put this amulet on", MENU_UNSELECTED);
-	    } else if (obj->otyp == TOWEL || obj->otyp == BLINDFOLD) {
+	    } else if (obj->otyp == TOWEL || obj->otyp == BLINDFOLD || obj->otyp == ANDROID_VISOR) {
 		any.a_void = (genericptr_t)doputon;
 		add_menu(win, NO_GLYPH, &any, 'W', 0, ATR_NONE,
 				"Use this to blindfold yourself", MENU_UNSELECTED);
@@ -2281,7 +2345,12 @@ struct obj *obj;
 	/* dotypeinv() means that we want the item described. Just do it
 	   directly rather than fighting with a multiselect menu. */
 	if (feedback_fn == dotypeinv) {
-		checkfile(xname(obj), 0, TRUE, TRUE);
+		winid datawin = create_nhwindow(NHW_MENU);
+		putstr(datawin, ATR_NONE, doname(obj));
+		describe_item(obj, obj->otyp, obj->oartifact, &datawin);
+		checkfile(xname(obj), 0, FALSE, TRUE, &datawin);
+		display_nhwindow(datawin, TRUE);
+		destroy_nhwindow(datawin);
 		return 0;
 	}
 	/* In most cases, we can just set getobj's result directly.
@@ -2293,7 +2362,795 @@ struct obj *obj;
 
 	return n;
 }
+/* 
+ * describe_item()
+ * 
+ * Prints lines describing the given object to the passed nhwindow reference
+ * Requires that the player knows the name of the object (ie, objects[obj->otyp].oc_name_known == TRUE)
+ *   or that obj doesn't exist (ie we are describing what a "cloak of magic resistance" typically is like)
+ * Requires an actual object to be passed, as many object-related functions require an obj pointer
+ */
+void
+describe_item(obj, otyp, oartifact, datawin)
+struct obj *obj;
+int otyp;
+int oartifact;
+winid *datawin;
+{
+	if (obj)
+	{
+		otyp = obj->otyp;
+		oartifact = obj->oartifact;
+	}
+	struct objclass oc = objects[otyp];
+	char olet = oc.oc_class;
+	char buf[BUFSZ];
+	char buf2[BUFSZ];
+	const char* dir = (oc.oc_dir == NODIR ? "Non-directional"
+		: (oc.oc_dir == IMMEDIATE ? "Beam"
+		: "Ray"));
 
+#define OBJPUTSTR(str) putstr(*datawin, ATR_NONE, str)
+#define ADDCLASSPROP(cond, str)         \
+	if (cond) {							\
+	if (*buf) { Strcat(buf, ", "); }    \
+	Strcat(buf, str);                   \
+	}
+
+	/* check that we aren't giving away information about a real object here */
+	if (obj && !oc.oc_name_known)
+	{
+		OBJPUTSTR("You don't know much about this item yet.");
+		return;
+	}
+
+		/* Object classes currently with no special messages here: amulets. */
+	if (olet == WEAPON_CLASS || (olet == TOOL_CLASS && oc.oc_skill)) {
+		if (oc.oc_skill >= 0) {
+			if (obj) {
+				Sprintf(buf, "%s-handed weapon%s%s",
+					(oc.oc_bimanual ? "Two" : "Single"), (is_weptool(obj) ? "-tool" : ""),
+					(oc.oc_bimanual == bimanual(obj, youmonst.data) ? "." :
+					bimanual(obj, youmonst.data) ? ", but large enough you actually need two hands."
+					: ", but you can wield it one-handed.")
+					);
+			}
+			else {
+				Sprintf(buf, "%s-handed weapon%s",
+					(oc.oc_bimanual ? "Two" : "Single"), ((olet == TOOL_CLASS && oc.oc_skill) ? "-tool" : ""));
+			}
+		}
+		else if (oc.oc_skill <= -P_BOW && oc.oc_skill >= -P_CROSSBOW) {
+			Strcpy(buf, "Ammunition.");
+		}
+		else {
+			Strcpy(buf, "Thrown missile.");
+		}
+		OBJPUTSTR(buf);
+
+		/* weapon dice! */
+		// note: dmgval_core can handle not being given an obj; it will attempt to use otyp instead
+		struct weapon_dice wdice[2];
+		(void) dmgval_core(&wdice[0], FALSE, obj, otyp);	// small dice
+		(void) dmgval_core(&wdice[1], TRUE, obj, otyp);		// large dice
+
+		Sprintf(buf, "Damage: ");
+
+		if (wdice[0].oc.damn && wdice[0].oc.damd)
+		{
+			Sprintf(buf2, "%dd%d", wdice[0].oc.damn, wdice[0].oc.damd);
+			Strcat(buf, buf2);
+		}
+		if (wdice[0].bon.damn && wdice[0].bon.damd)
+		{
+			Sprintf(buf2, "+%dd%d", wdice[0].bon.damn, wdice[0].bon.damd);
+			Strcat(buf, buf2);
+		}
+		if (wdice[0].flat)
+		{
+			Sprintf(buf2, "%s", sitoa(wdice[0].flat));
+			Strcat(buf, buf2);
+		}
+		Strcat(buf, " versus small and ");
+		/* is there a difference between large and small dice? */
+		if (wdice[0].oc.aatyp != wdice[1].oc.aatyp ||
+			wdice[0].oc.adtyp != wdice[1].oc.adtyp ||
+			wdice[0].oc.damn != wdice[1].oc.damn ||
+			wdice[0].oc.damd != wdice[1].oc.damd ||
+			wdice[0].bon.aatyp != wdice[1].bon.aatyp ||
+			wdice[0].bon.adtyp != wdice[1].bon.adtyp ||
+			wdice[0].bon.damn != wdice[1].bon.damn ||
+			wdice[0].bon.damd != wdice[1].bon.damd ||
+			wdice[0].flat != wdice[1].flat)
+		{
+			if (wdice[1].oc.damn && wdice[1].oc.damd)
+			{
+				Sprintf(buf2, "%dd%d", wdice[1].oc.damn, wdice[1].oc.damd);
+				Strcat(buf, buf2);
+			}
+			if (wdice[1].bon.damn && wdice[1].bon.damd)
+			{
+				Sprintf(buf2, "+%dd%d", wdice[1].bon.damn, wdice[1].bon.damd);
+				Strcat(buf, buf2);
+			}
+			if (wdice[1].flat)
+			{
+				Sprintf(buf2, "%s", sitoa(wdice[1].flat));
+				Strcat(buf, buf2);
+			}
+			Strcat(buf, " versus ");
+		}
+		Strcat(buf, "large monsters.");
+		OBJPUTSTR(buf);
+		/* artifact bonus damage (artifacts only) */
+		if (oartifact && (artilist[oartifact].attk.damn || artilist[oartifact].attk.damd || artilist[oartifact].attk.adtyp))
+		{
+			register const struct artifact *oart = &artilist[oartifact];
+			/* bonus damage, or double damage? We already checked that oart->attk exists */
+			if (oart->attk.damd)
+			{// 1dX bonus damage
+				if (oart->attk.damd > 1)
+				{
+					Sprintf(buf, "Deals %dd%d bonus ",
+						((is_lightsaber(obj) && litsaber(obj)) ? 3 : 1) * (double_bonus_damage_artifact(oartifact) ? 2 : 1),
+						oart->attk.damd);
+				}
+				else
+				{
+					Sprintf(buf, "Deals %d bonus ",
+						((is_lightsaber(obj) && litsaber(obj)) ? 3 : 1) * (double_bonus_damage_artifact(oartifact) ? 2 : 1));
+				}
+			}
+			else
+			{// double damage (except when it's triple)
+				Sprintf(buf, "Deals %s ",
+					double_bonus_damage_artifact(oartifact) ? "triple" : "double");
+			}
+
+			/* now figure out who it deals the bonus damage to */
+			switch (oartifact)
+			{
+			case ART_HOLY_MOONLIGHT_SWORD:
+				Strcat(buf, "magic damage, while lit.");
+				break;
+			case ART_PEN_OF_THE_VOID:
+				/* overwrite the previous mention of how much the bonus is*/
+				if (mvitals[PM_ACERERAK].died > 0)
+				{
+					Sprintf(buf, "Deals double damage");
+					if (obj->ovar1)
+						Strcat(buf, ", and enhanced spirit bonus damage.");
+					else
+						Strcat(buf, ".");
+				}
+				else
+				{
+					if (obj->ovar1)
+						Sprintf(buf, "Deals bonus damage from the spirit bound into it.");
+					else
+						buf[0] = '\0';
+				}
+				break;
+			case ART_LIFEHUNT_SCYTHE:
+			case ART_PROFANED_GREATSCYTHE:
+				Strcat(buf, "damage to living and undead.");
+				break;
+			case ART_GIANTSLAYER:
+				Strcat(buf, "damage to large creatures.");
+				break;
+			default:
+				if (!(oart->spfx & (SPFX_DBONUS | SPFX_ATTK)))
+				{
+					if (oart->attk.adtyp == AD_PHYS)
+						Strcat(buf, "damage.");
+					else
+						buf[0] = '\0';
+				}
+				else if (oart->spfx & SPFX_ATTK)
+				{
+					switch (oart->attk.adtyp) {
+					case AD_FIRE: Strcat(buf, "fire damage."); break;
+					case AD_COLD: Strcat(buf, "cold damage."); break;
+					case AD_ELEC: Strcat(buf, "lightning damage."); break;
+					case AD_ACID: Strcat(buf, "acid damage."); break;
+					case AD_MAGM: 
+					case AD_STUN: Strcat(buf, "magic damage."); break;
+					case AD_DRST: Strcat(buf, "poison damage."); break;
+					case AD_DRLI: Strcat(buf, "life drain damage."); break;
+					case AD_STON: Strcat(buf, "petrifying damage."); break;
+						break;
+					}
+				}
+				else if (oart->spfx & SPFX_CON_OR)
+				{
+					Strcat(buf, "damage to ");
+					/* SMOP: this should be made into a list somewhere and used for specific warning messages as well,
+					 * ie, "Warned of fey and magic-item users." instead of "warned of demiliches"
+					 */
+					switch (oartifact)
+					{
+					case ART_ORCRIST:					Strcat(buf, "orcs and demons.");							break;
+					case ART_STING:						Strcat(buf, "orcs and spiders.");							break;
+					case ART_GRIMTOOTH:					Strcat(buf, "humans, elves, dwarves, and angels.");			break;
+					case ART_CARNWENNAN:				Strcat(buf, "fey and magic-item users.");					break;
+					case ART_SLAVE_TO_ARMOK:			Strcat(buf, "lords, elves, orcs, and the innocent.");		break;
+					case ART_CLAIDEAMH:					Strcat(buf, "those bound by iron and ancient laws.");		break;
+					case ART_DRAGONLANCE:				Strcat(buf, "dragons.");									break;
+					case ART_NODENSFORK:				Strcat(buf, "the eldritch, the telepathic, the deep.");		break;
+					case ART_GAIA_S_FATE:				Strcat(buf, "things attuned to nature.");					break;
+					case ART_DEMONBANE:					Strcat(buf, "demons.");										break;
+					case ART_WEREBANE:					Strcat(buf, "were-beasts and demihumans.");					break;
+					case ART_GIANTSLAYER:				Strcat(buf, "giants.");										break;
+					case ART_VAMPIRE_KILLER:			Strcat(buf, "demons, were-beasts and the undead.");			break;
+					case ART_KINGSLAYER:				Strcat(buf, "lords and ladies and kings and queens.");		break;
+					case ART_PEACE_KEEPER:				Strcat(buf, "those that always seek violence.");			break;
+					case ART_OGRESMASHER:				Strcat(buf, "ogres.");										break;
+					case ART_TROLLSBANE:				Strcat(buf, "trolls and all who regenerate quickly.");		break;
+					case ART_MIRROR_BRAND:				Strcat(buf, "all lawful or chaotic");						break;
+					case ART_SUNSWORD:					Strcat(buf, "demons and the undead.");						break;
+					case ART_ATMA_WEAPON:				Strcat(buf, "worthy foes.");								break;
+					case ART_FUMA_ITTO_NO_KEN:			Strcat(buf, "cross-aligned.");								break;
+					case ART_ROD_OF_SEVEN_PARTS:		Strcat(buf, "any who stand against law.");					break;
+					case ART_WEREBUSTER:				Strcat(buf, "were-beasts.");								break;
+					case ART_BLACK_CRYSTAL:				Strcat(buf, "non-chaotics.");								break;
+					case ART_CLARENT:					Strcat(buf, "the thick-skinned");							break;
+					case ART_SCEPTRE_OF_MIGHT:			Strcat(buf, "cross-aligned.");								break;
+					case ART_IRON_BALL_OF_LEVITATION:	Strcat(buf, "cross-aligned.");								break;
+					case ART_WEB_OF_LOLTH:				Strcat(buf, "elves.");										break;
+					case ART_MITRE_OF_HOLINESS:			Strcat(buf, "undead.");										break;
+					case ART_ICONOCLAST:				Strcat(buf, "humans, elves, dwarves, and gnomes.");			break;
+					case ART_SCOURGE_OF_LOLTH:			Strcat(buf, "elves.");										break;
+					default:
+						Strcat(buf, "hated foes.");
+						break;
+					}
+				}
+				else
+					Strcat(buf, "damage.");
+				break;
+			}
+			if (buf[0] != '\0')
+				OBJPUTSTR(buf);
+		}
+		/* offensive object properties (objects only) */
+		if (obj && obj->oproperties & OPROP_W_MASK)
+		{
+			/* holy/unholy bonus damage */
+			buf[0] = '\0';
+			ADDCLASSPROP((obj->oproperties&OPROP_HOLYW && obj->blessed), "holy");
+			ADDCLASSPROP((obj->oproperties&OPROP_UNHYW && obj->cursed), "unholy");
+			if (buf[0] != '\0')
+			{
+				Sprintf(buf2, "Deals %s %s damage.",
+					(obj->oproperties&OPROP_LESSW ? "1d8 bonus" : "double"),
+					buf);
+				OBJPUTSTR(buf2);
+			}
+			/* simple damage properties */
+			buf[0] = '\0';
+			ADDCLASSPROP(obj->oproperties&OPROP_FIREW, "fire");
+			ADDCLASSPROP(obj->oproperties&OPROP_COLDW, "cold");
+			ADDCLASSPROP(obj->oproperties&OPROP_WATRW, "water");
+			ADDCLASSPROP(obj->oproperties&OPROP_ELECW, "lightning");
+			ADDCLASSPROP(obj->oproperties&OPROP_ACIDW, "acid");
+			ADDCLASSPROP(obj->oproperties&OPROP_MAGCW, "magic");
+			ADDCLASSPROP(obj->oproperties&OPROP_PSIOW, "psionic");
+			if (buf[0] != '\0')
+			{
+				Sprintf(buf2, "Deals %s %s damage.",
+					(obj->oproperties&OPROP_LESSW ? "1d8 bonus" : "double"),
+					buf);
+				OBJPUTSTR(buf2);
+			}
+			/* alignment damage properties */
+			buf[0] = '\0';
+			ADDCLASSPROP(obj->oproperties&OPROP_ANARW, "lawful and neutral creatures");
+			ADDCLASSPROP(obj->oproperties&OPROP_CONCW, "lawful and chaotic creatures");
+			ADDCLASSPROP(obj->oproperties&OPROP_AXIOW, "neutral and chaotic creatures");
+			if (buf[0] != '\0')
+			{
+				Sprintf(buf2, "Deals %s damage to %s.",
+					(obj->oproperties&OPROP_LESSW ? "1d8 bonus" : "double"),
+					buf);
+				OBJPUTSTR(buf2);
+			}
+			/* other stuff
+			 * commented out because artifacts don't get any behaviours more interesting
+			 * than bonus damage (such as Vorpal Blade being vorpal)
+			 */
+//			buf[0] = '\0';
+//			ADDCLASSPROP((obj->oproperties&OPROP_DEEPW && obj->spe < 8), "telepathically lashes out");
+//			ADDCLASSPROP((obj->oproperties&OPROP_VORPW), "beheads creatures");
+//			ADDCLASSPROP((obj->oproperties&OPROP_MORGW), "inflicts unhealing wounds while cursed");
+//			ADDCLASSPROP((obj->oproperties&OPROP_FLAYW), "destroys armor");
+//			if (buf[0] != '\0')
+//			{
+//				Sprintf(buf2, "It %s.", buf);
+//				OBJPUTSTR(buf2);
+//			}
+		}
+
+
+		/* to-hit */
+		int hitbon = oc.oc_hitbon - (obj ? (4 * max(0,(obj->objsize - youracedata->msize))) : 0);
+		if (hitbon != 0)
+		{
+			Sprintf(buf, "Has a %s %s to hit.",
+				sitoa(hitbon),
+				(hitbon >= 0 ? "bonus" : "penalty"));
+			OBJPUTSTR(buf);
+		}
+	}
+	if (olet == ARMOR_CLASS) {
+		/* Armor type */
+		/* Indexes here correspond to ARM_SHIELD, etc; not the W_* masks.
+		* Expects ARM_SUIT = 0, all the way up to ARM_SHIRT = 6. */
+		const char* armorslots[] = {
+			"torso", "shield", "helm", "gloves", "boots", "cloak", "shirt"
+		};
+		if (obj) {
+			Sprintf(buf, "%s, worn in the %s slot.",
+				(oc.oc_armcat != ARM_SUIT ? "Armor" :
+				is_light_armor(obj) ? "Light armor" :
+				is_medium_armor(obj) ? "Medium armor" :
+				"Heavy armor"),
+				armorslots[oc.oc_armcat]);
+		}
+		else {
+			/* currently, the is_x_armor checks wouldn't actually need an obj,
+			 * but there's no sense in rewriting perfectly good code to fit
+			 * immediate needs and possibly prevent future changes that would
+			 * like details from the obj itself 
+			 */
+			Sprintf(buf, "Armor, worn in the %s slot.",
+				armorslots[oc.oc_armcat]);
+		}
+		OBJPUTSTR(buf);
+		/* Defense */
+		if (obj && obj->known) {// calculate the actual AC and DR this armor gives
+			Sprintf(buf, "Is worth %d AC and %d DR.",
+				arm_ac_bonus(obj), arm_dr_bonus(obj));
+		}
+		else {// say what the base stats are
+			Sprintf(buf, "Base %d AC and %d DR.",
+				oc.a_ac, oc.a_dr);
+		}
+		OBJPUTSTR(buf);
+		/* Magic cancellation */
+		if (oc.a_can > 0)
+		{
+			Sprintf(buf, "Grants magic cancellation, level %d.", oc.a_can);
+			OBJPUTSTR(buf);
+		}
+		/* Don/Doff time */
+		Sprintf(buf, "Takes %d turn%s to put on or remove.",
+			max(1, oc.oc_delay), (max(1, oc.oc_delay) == 1 ? "" : "s"));
+		OBJPUTSTR(buf);
+
+		/* Enchantment limit */
+		if (obj && is_plussev_armor(obj))
+			OBJPUTSTR("Holds enchantments well.");
+	}
+	if (olet == FOOD_CLASS) {
+		if (otyp == TIN) {
+			if (obj && obj->known)
+			{
+				if (obj->spe > 0)
+				{ // spinach
+					OBJPUTSTR("Comestible providing 600 nutrition.");
+					OBJPUTSTR("Takes various amounts of turns to open and eat.");
+					OBJPUTSTR("Is vegan.");
+				}
+				else if (obj->corpsenm == NON_PM)
+				{ // empty
+					OBJPUTSTR("Comestible providing no nutrition.");
+					OBJPUTSTR("Takes various amounts of turns to open.");
+				}
+				else
+				{ // contains a monster
+					OBJPUTSTR("Comestible providing varied nutrition.");
+					OBJPUTSTR("Takes various amounts of turns to eat.");
+					if (vegan(&mons[obj->corpsenm]))
+						OBJPUTSTR("Is vegan.");
+					else if (vegetarian(&mons[obj->corpsenm]))
+						OBJPUTSTR("Is vegetarian but not vegan.");
+					else
+						OBJPUTSTR("Is not vegetarian.");
+				}
+			}
+			else
+			{
+				OBJPUTSTR("Comestible providing varied nutrition.");
+				OBJPUTSTR("Takes various amounts of turns to eat.");
+				OBJPUTSTR("May or may not be vegetarian.");
+			}
+		}
+		else if (otyp == CORPSE) {
+			Sprintf(buf, "Comestible providing %d nutrition%s.", mons[obj->corpsenm].cnutrit, (obj && obj->oeaten ? " when eaten whole" : ""));
+			OBJPUTSTR(buf);
+			OBJPUTSTR("Takes various amounts of turns to eat.");
+			if (obj)
+			{
+				if (vegan(&mons[obj->corpsenm]))
+					OBJPUTSTR("Is vegan.");
+				else if (vegetarian(&mons[obj->corpsenm]))
+					OBJPUTSTR("Is vegetarian but not vegan.");
+				else
+					OBJPUTSTR("Is not vegetarian.");
+			}
+			else {
+				OBJPUTSTR("May or may not be vegetarian.");
+			}
+		}
+		else {
+			Sprintf(buf, "Comestible providing %d nutrition%s.", oc.oc_nutrition, (obj && obj->oeaten ? " when eaten whole" : ""));
+			OBJPUTSTR(buf);
+			Sprintf(buf, "Takes %d turn%s to eat.", oc.oc_delay,
+				(oc.oc_delay == 1 ? "" : "s"));
+			OBJPUTSTR(buf);
+			/* TODO: put special-case VEGGY foods in a list which can be
+			* referenced by doeat(), so there's no second source for this. */
+			if (oc.oc_material == FLESH && otyp != EGG) {
+				OBJPUTSTR("Is not vegetarian.");
+			}
+			else {
+				/* is either VEGGY food or egg */
+				switch (otyp) {
+				case PANCAKE:
+				case FORTUNE_COOKIE:
+				case EGG:
+				case CREAM_PIE:
+				case CANDY_BAR:
+				case LUMP_OF_ROYAL_JELLY:
+					OBJPUTSTR("Is vegetarian but not vegan.");
+					break;
+				default:
+					OBJPUTSTR("Is vegan.");
+				}
+			}
+		}
+	}
+	if (olet == POTION_CLASS) {
+		/* nothing special */
+		OBJPUTSTR("Potion.");
+	}
+	if (olet == SCROLL_CLASS) {
+		/* nothing special */
+		OBJPUTSTR("Scroll.");
+	}
+	if (olet == SPBOOK_CLASS) {
+		if (!(obj && oartifact))
+		{
+			Sprintf(buf, "Level %d spellbook, in the %s school. %s spell.",
+				oc.oc_level, spelltypemnemonic(oc.oc_skill), dir);
+			OBJPUTSTR(buf);
+		}
+		else
+		{
+			OBJPUTSTR("Ancient tome.");
+		}
+	}
+	if (olet == WAND_CLASS) {
+		Sprintf(buf, "%s wand.", dir);
+		OBJPUTSTR(buf);
+	}
+	if (olet == RING_CLASS) {
+		OBJPUTSTR((oc.oc_charged && otyp != RIN_WISHES) ? "Chargeable ring." : "Ring.");
+		if (oc.oc_tough) {
+			OBJPUTSTR("Is made of a hard material.");
+		}
+	}
+	if (olet == GEM_CLASS) {
+		if (oc.oc_material == MINERAL) {
+			OBJPUTSTR("Type of stone.");
+		}
+		else if (oc.oc_material == GLASS) {
+			OBJPUTSTR("Piece of colored glass.");
+		}
+		else {
+			OBJPUTSTR("Precious gem.");
+		}
+	}
+	if (olet == TOOL_CLASS && !(olet == TOOL_CLASS && oc.oc_skill)) {
+		const char* subclass = "tool";
+		switch (otyp) {
+		case BLINDFOLD:
+		case TOWEL:
+		case R_LYEHIAN_FACEPLATE:
+		case MASK:
+		case LENSES:
+			subclass = "facial accessory";
+			break;
+		case BOX:
+		case CHEST:
+		case MAGIC_CHEST:
+		case MASSIVE_STONE_CRATE:
+		case ICE_BOX:
+		case SACK:
+		case OILSKIN_SACK:
+		case BAG_OF_HOLDING:
+			subclass = "container";
+			break;
+		case SKELETON_KEY:
+		case UNIVERSAL_KEY:
+		case LOCK_PICK:
+		case CREDIT_CARD:
+			subclass = "unlocking tool";
+			break;
+		case TALLOW_CANDLE:
+		case WAX_CANDLE:
+		case CANDLE_OF_INVOCATION:
+		case TORCH: //actually over-ridden by being a weapon-tool
+		case SUNROD: //actually over-ridden by being a weapon-tool
+		case BRASS_LANTERN:
+		case OIL_LAMP:
+		case MAGIC_LAMP:
+		case CANDELABRUM_OF_INVOCATION:
+			subclass = "light source";
+			break;
+		case SHADOWLANDER_S_TORCH:	//actually over-ridden by being a weapon-tool
+			subclass = "dark source";
+			break;
+		case LAND_MINE:
+		case BEARTRAP:
+			subclass = "trap which can be set";
+			break;
+		case TIN_WHISTLE:
+		case MAGIC_WHISTLE:
+		case BELL:
+		case BELL_OF_OPENING:
+		case LEATHER_DRUM:
+		case DRUM_OF_EARTHQUAKE:
+			subclass = "atonal instrument";
+			break;
+		case BUGLE:
+		case MAGIC_FLUTE:
+		case WOODEN_FLUTE:
+		case TOOLED_HORN:
+		case FIRE_HORN:
+		case FROST_HORN:
+		case WOODEN_HARP:
+		case MAGIC_HARP:
+			subclass = "tonal instrument";
+			break;
+		case HYPOSPRAY:
+		case SENSOR_PACK:
+		case POWER_PACK:
+		case BULLET_FABBER:
+			subclass = "future-tech tool";
+			break;
+		}
+		Sprintf(buf, "%s%s.", (oc.oc_charged ? "chargeable " : ""), subclass);
+		/* capitalize first letter of buf */
+		buf[0] -= ('a' - 'A');
+		OBJPUTSTR(buf);
+	}
+
+	/* cost, wt should go next */
+	Sprintf(buf, "Base cost %d. Weighs %d aum.%s",
+		(int)((obj && oartifact) ? artilist[oartifact].cost : oc.oc_cost),
+		(int)(obj ? (weight(obj) / max(1, obj->quan)) : oc.oc_weight),
+		((obj && obj->quan != 1) ? " (per item)" : ""));
+	OBJPUTSTR(buf);
+
+	/* powers conferred */
+	extern const struct propname {
+		int prop_num;
+		const char* prop_name;
+	} propertynames[]; /* located in timeout.c */
+	int i;
+
+	int * properties_item = item_property_list(obj, otyp);
+	int * properties_art = art_property_list(oartifact, FALSE);
+	int * properties_art_carried = art_property_list(oartifact, TRUE);
+
+	for (i = 0; propertynames[i].prop_name; i++) {
+		boolean got_prop = FALSE, while_carried = FALSE;
+		int j = 0;
+
+		if (oc.oc_oprop == propertynames[i].prop_num)
+			got_prop = TRUE;
+
+		j = 0;
+		while (properties_item[j] && !got_prop) {
+			if (properties_item[j] == propertynames[i].prop_num)
+				got_prop = TRUE;
+			j++;
+		}
+		j = 0;
+		if (oartifact)
+		{
+			while (properties_art[j] && !got_prop) {
+				if (properties_art[j] == propertynames[i].prop_num)
+					got_prop = TRUE;
+				j++;
+			}
+		}
+		j = 0;
+		if (oartifact)
+		{
+			while (properties_art_carried[j] && !while_carried) {
+				if (properties_art_carried[j] == propertynames[i].prop_num)
+				{
+					got_prop = TRUE;
+					while_carried = TRUE;
+				}
+				j++;
+			}
+		}
+
+		if (got_prop) {
+			/* proper grammar */
+			const char* confers = "Makes you";
+			const char* effect = propertynames[i].prop_name;
+			switch (propertynames[i].prop_num) {
+				/* special overrides because prop_name is bad */
+			case STRANGLED:
+				effect = "choke";
+				break;
+			case FLYING:
+				effect = "fly";
+				break;
+			case NULLMAGIC:
+				effect = "apart from magic";
+				break;
+			case LIFESAVED:
+				effect = "life saving";
+				/* FALLTHRU */
+				/* for things that don't work with "Makes you" */
+			case GLIB:
+			case WOUNDED_LEGS:
+			case DETECT_MONSTERS:
+			case SEE_INVIS:
+			case HUNGER:
+			case WARNING:
+			case WARN_OF_MON:
+			case SEARCHING:
+			case INFRAVISION:
+			case AGGRAVATE_MONSTER:
+			case CONFLICT:
+			case JUMPING:
+			case TELEPORT_CONTROL:
+			case SWIMMING:
+			case SLOW_DIGESTION:
+			case HALF_SPDAM:
+			case HALF_PHDAM:
+			case REGENERATION:
+			case ENERGY_REGENERATION:
+			case PROTECTION:
+			case PROT_FROM_SHAPE_CHANGERS:
+			case POLYMORPH_CONTROL:
+			case FREE_ACTION:
+			case FIXED_ABIL:
+				confers = "Confers";
+				break;
+			default:
+				break;
+			}
+			if (strstri(propertynames[i].prop_name, "resistance"))
+				confers = "Confers";
+			Sprintf(buf, "%s %s%s.", confers, effect, (while_carried ? " while carried" : ""));
+			OBJPUTSTR(buf);
+		}
+	}
+	/* Other magical properties while worn that aren't covered by prop.h (or rather, propertynames[]) -- artifacts may cause more than one to apply, so don't if-else chain */
+	if (otyp == HELM_OF_OPPOSITE_ALIGNMENT)	OBJPUTSTR("Forces an alignment change.");
+	if (otyp == AMULET_OF_CHANGE)				OBJPUTSTR("Forces a change of gender.");
+	if (otyp == DUNCE_CAP)						OBJPUTSTR("Greatly reduces INT.");
+	if (otyp == GAUNTLETS_OF_POWER ||
+		oartifact == ART_SCEPTRE_OF_MIGHT ||
+		oartifact == ART_STORMBRINGER ||
+		oartifact == ART_OGRESMASHER)			OBJPUTSTR("Greatly increases STR.");
+	if (oartifact == ART_STORMBRINGER ||
+		oartifact == ART_GREAT_CLAWS_OF_URDLEN ||
+		oartifact == ART_OGRESMASHER)			OBJPUTSTR("Greatly increases CON.");
+	if (oartifact == ART_PREMIUM_HEART)		OBJPUTSTR("Greatly increases DEX.");
+	if (otyp == KICKING_BOOTS)					OBJPUTSTR("Improves kicking.");
+	if (otyp == MUMMY_WRAPPING)				OBJPUTSTR("Prevents invisibility.");
+	if (otyp == RIN_GAIN_STRENGTH)				OBJPUTSTR("Increases STR by its enchantment.");
+	if (otyp == GAUNTLETS_OF_DEXTERITY)		OBJPUTSTR("Increases DEX by its enchantment.");
+	if (otyp == RIN_GAIN_CONSTITUTION)			OBJPUTSTR("Increases CON by its enchantment.");
+	if (otyp == HELM_OF_BRILLIANCE)			OBJPUTSTR("Increases INT and WIS by its enchantment.");
+	if (otyp == RIN_INCREASE_DAMAGE)			OBJPUTSTR("Increases your weapon damage.");
+	if (otyp == RIN_INCREASE_ACCURACY)			OBJPUTSTR("Increases your to-hit modifier.");
+	if (otyp == AMULET_VERSUS_CURSES ||
+		oartifact == ART_HELPING_HAND ||
+		oartifact == ART_TREASURY_OF_PROTEUS ||
+		oartifact == ART_TENTACLE_ROD ||
+		oartifact == ART_MAGICBANE)			OBJPUTSTR("Protects your inventory from being cursed.");
+
+	/* Effects based on the base description of the item -- only one will apply, so an if-else chain is appropriate */
+	/* randomized appearance items */
+	if      (otyp == find_gcirclet())			OBJPUTSTR("Increases CHA by its enchantment.");
+//	else if (otyp ==  find_ogloves())			OBJPUTSTR("Erosion resistant.");				// We don't comment on erosion-proofing elsewhere, either
+	else if (otyp ==  find_tgloves())			OBJPUTSTR("Slightly increases unarmed damage.");
+//	else if (otyp ==  find_pgloves())			OBJPUTSTR("Slightly increased defense.");		// Increased defensive stats are shown in the AC/DR section
+	else if (otyp ==  find_fgloves())			OBJPUTSTR("Increases to-hit when fighting with a free off-hand.");
+	else if (otyp ==   find_skates())			OBJPUTSTR("Prevents slipping on ice.");
+	else if (otyp ==   find_cboots())			OBJPUTSTR("Slightly increases to-hit.");
+	else if (otyp ==   find_mboots())			OBJPUTSTR("Protects against drowning attacks.");
+	else if (otyp ==   find_hboots())			OBJPUTSTR("Increases carrying capacity.");
+	else if (otyp ==   find_bboots())			OBJPUTSTR("Cannot be pulled straight off of your legs.");
+	else if (otyp ==   find_jboots())			OBJPUTSTR("Reduces the severity of leg wounds.");
+	else if (otyp ==    find_vhelm())			OBJPUTSTR("Protects from blinding claws and venom.");
+	else if (otyp == find_engagement_ring())	OBJPUTSTR("Protects from unwanted advances.");
+	else if (isSignetRing(otyp))				OBJPUTSTR("Can be poisoned.");
+	/* non-randomized appearance items */
+	else if (otyp == HARMONIUM_BOOTS ||
+		otyp == HARMONIUM_SCALE_MAIL ||
+		otyp == HARMONIUM_PLATE ||
+		otyp == HARMONIUM_GAUNTLETS ||
+		otyp == HARMONIUM_HELM)					OBJPUTSTR("Slightly increased defense against non-lawfuls.");
+	else if (otyp == PLASTEEL_HELM ||
+		otyp == CRYSTAL_HELM ||
+		otyp == PONTIFF_S_CROWN ||
+		otyp == WHITE_FACELESS_ROBE ||
+		otyp == BLACK_FACELESS_ROBE ||
+		otyp == SMOKY_VIOLET_FACELESS_ROBE)		OBJPUTSTR("Covers the face entirely.");
+	else if (otyp == DROVEN_HELM ||
+		otyp == DROVEN_PLATE_MAIL ||
+		otyp == DROVEN_CHAIN_MAIL)				OBJPUTSTR("Dissolves in light.");
+	/* and some obscure usage mechanics of fixed-appearance items */
+	else if (otyp == RIN_WISHES)				OBJPUTSTR("Can be invoked while worn.");
+	else if (otyp == CANDLE_OF_INVOCATION)		OBJPUTSTR("Can be invoked while lit.");
+
+
+	buf[0] = '\0';
+	ADDCLASSPROP(oartifact, "an artifact");
+	ADDCLASSPROP((oc.oc_magic && !oartifact), "inherently magical");		// overkill to say an artifact is inherently magical, and makes it weird when one isn't
+	ADDCLASSPROP((oc.oc_nowish || oartifact >= ART_ROD_OF_SEVEN_PARTS), "not wishable");
+	if (*buf) {
+		Sprintf(buf2, "Is %s.", buf);
+		OBJPUTSTR(buf2);
+	}
+
+	/* Material.
+	* Note that we should not show the material of certain objects if they are
+	* subject to description shuffling that includes materials. If the player
+	* has already discovered this object, though, then it's fine to show the
+	* material.
+	* Edit by Nero: dnh is assuming that oc_name_known == TRUE if this function is called. 
+	*
+	* This is very similar to materialnm[], but the slight difference is
+	* that this is always the noun form whereas materialnm uses adjective
+	* forms; most materials have the same noun and adjective forms but two
+	* (wood/wooden, vegetable matter/organic) don't 
+	*
+	* Finally, this requires an object. Dnethack does some funny things with a few items
+	* to show adjectives, like the default material of sabers being metal, so showing
+	* what material items are "normally" made of could be misleading.
+	*/
+	if (obj) {
+		Strcpy(buf2, materialnm[obj->obj_material]);
+
+		if (obj->obj_material == WOOD) {	// Made of wooden. No.
+			Sprintf(buf2, "wood");
+		}
+		else if (obj->obj_material == VEGGY) {	// Made of organic. Also no.
+			Sprintf(buf2, "vegetable matter");
+		}
+		else if (obj->obj_material == DRAGON_HIDE)
+		{
+			if (oc.oc_material > LEATHER && oc.oc_material != DRAGON_HIDE)	// hard dragon-stuff
+				Sprintf(buf2, "dragonbone");
+			else
+				Sprintf(buf2, "dragonhide");
+		}
+		else if (obj->obj_material == GEMSTONE && oc.oc_tough) {	// Made of <hard> gemstone, when you can engrave with it
+			Sprintf(buf2, "hard gemstone");
+		}
+		Sprintf(buf, "Made of %s.", buf2);
+		OBJPUTSTR(buf);
+	}
+
+	/* Full-line remarks */
+	if (oc.oc_merge && !oartifact) {	// even when an artifact can merge with identical items (ie Sunbeam), it sounds really weird
+		OBJPUTSTR("Merges with identical items.");
+	}
+	if (oc.oc_unique) {
+		OBJPUTSTR("Unique item.");
+	}
+}
 
 /*
  * find_unpaid()

@@ -472,24 +472,27 @@ lookat(x, y, buf, monbuf, shapebuff)
  *	 must not be changed directly, e.g. via lcase(). We want to force
  *	 lcase() for data.base lookup so that we can have a clean key.
  *	 Therefore, we create a copy of inp _just_ for data.base lookup.
+ * 
+ * Returns TRUE if it found an entry and printed to the nhwindow
  */
-void
-checkfile(inp, pm, user_typed_name, without_asking)
+boolean
+checkfile(inp, pm, user_typed_name, without_asking, printwindow)
     char *inp;
     struct permonst *pm;
     boolean user_typed_name, without_asking;
+	winid *printwindow;
 {
     dlb *fp;
     char buf[BUFSZ], newstr[BUFSZ];
     char *ep, *dbase_str;
     long txt_offset;
     int chk_skip;
-    boolean found_in_file = FALSE, skipping_entry = FALSE;
+    boolean found_in_file = FALSE, skipping_entry = FALSE, wrote = FALSE;
 
     fp = dlb_fopen(DATAFILE, "r");
     if (!fp) {
 	pline("Cannot open data file!");
-	return;
+	return FALSE;
     }
 
     /* To prevent the need for entries in data.base like *ngel to account
@@ -551,7 +554,7 @@ checkfile(inp, pm, user_typed_name, without_asking)
 	if (!dlb_fgets(buf, BUFSZ, fp) || !dlb_fgets(buf, BUFSZ, fp)) {
 	    impossible("can't read 'data' file");
 	    (void) dlb_fclose(fp);
-	    return;
+	    return FALSE;
 	} else if (sscanf(buf, "%8lx\n", &txt_offset) < 1 || txt_offset <= 0)
 	    goto bad_data_file;
 
@@ -593,31 +596,33 @@ checkfile(inp, pm, user_typed_name, without_asking)
 	if (sscanf(buf, "%ld,%d\n", &entry_offset, &entry_count) < 2) {
 bad_data_file:	impossible("'data' file in wrong format");
 		(void) dlb_fclose(fp);
-		return;
+		return FALSE;
 	}
 
 	if (user_typed_name || without_asking || yn("More info?") == 'y') {
-	    winid datawin;
 
 	    if (dlb_fseek(fp, txt_offset + entry_offset, SEEK_SET) < 0) {
 		pline("? Seek error on 'data' file!");
 		(void) dlb_fclose(fp);
-		return;
+		return FALSE;
 	    }
-	    datawin = create_nhwindow(NHW_MENU);
+		char *encyc_header = "Encyclopedia entry:";
+		putstr(*printwindow, 0, "\n");
+		putstr(*printwindow, 0, encyc_header);
+		putstr(*printwindow, 0, "\n");
 	    for (i = 0; i < entry_count; i++) {
 		if (!dlb_fgets(buf, BUFSZ, fp)) goto bad_data_file;
 		if ((ep = index(buf, '\n')) != 0) *ep = 0;
 		if (index(buf+1, '\t') != 0) (void) tabexpand(buf+1);
-		putstr(datawin, 0, buf+1);
+		putstr(*printwindow, 0, buf + 1);
+		wrote = TRUE;
 	    }
-	    display_nhwindow(datawin, FALSE);
-	    destroy_nhwindow(datawin);
 	}
     } else if (user_typed_name)
 	pline("I don't have any information on those things.");
 
     (void) dlb_fclose(fp);
+	return wrote;
 }
 
 /* getpos() return values */
@@ -1066,7 +1071,10 @@ do_look(quick)
 	    return 0;
 
 	if (out_str[1]) {	/* user typed in a complete string */
-	    checkfile(out_str, pm, TRUE, TRUE);
+		winid datawin = create_nhwindow(NHW_MENU);
+	    if(checkfile(out_str, pm, TRUE, TRUE, &datawin))
+			display_nhwindow(datawin, TRUE);
+		destroy_nhwindow(datawin);
 	    return 0;
 	}
 	sym = out_str[0];
@@ -1341,9 +1349,6 @@ do_look(quick)
 			putstr(datawin, 0, temp_print);
 			temp_print = strtok(NULL, "\n");
 		}
-		display_nhwindow(datawin, TRUE);
-		destroy_nhwindow(datawin);
-	    //pline("%s", out_str);
 	    /* check the data file for information about this thing */
 	    if (found == 1 && ans != LOOK_QUICK && ans != LOOK_ONCE &&
 			(ans == LOOK_VERBOSE || (flags.help && !quick))) {
@@ -1351,8 +1356,10 @@ do_look(quick)
 		Strcpy(temp_buf, level.flags.lethe //lethe
 					&& !strcmp(firstmatch, "water")?
 				"lethe" : firstmatch);
-		checkfile(temp_buf, pm, FALSE, (boolean)(ans == LOOK_VERBOSE));
+		(void)checkfile(temp_buf, pm, FALSE, (boolean)(ans == LOOK_VERBOSE), &datawin);
 	    }
+		display_nhwindow(datawin, TRUE);
+		destroy_nhwindow(datawin);
 	} else {
 	    pline("I've never heard of such things.");
 	}

@@ -22,6 +22,82 @@ STATIC_DCL void FDECL(cleanup_burn, (genericptr_t,long));
 
 #ifdef OVLB
 
+/* used by wizard mode #timeout and #wizintrinsic; order by 'interest'
+   for timeout countdown, where most won't occur in normal play */
+const struct propname {
+    int prop_num;
+    const char *prop_name;
+} propertynames[] = {
+    { INVULNERABLE, "invulnerable" },
+    { STONED, "petrifying" },
+    { SLIMED, "becoming slime" },
+    { STRANGLED, "strangling" },
+    { SICK, "fatally sick" },
+    { STUNNED, "stunned" },
+    { CONFUSION, "confused" },
+    { HALLUC, "hallucinating" },
+    { BLINDED, "blinded" },
+    { VOMITING, "vomiting" },
+    { GLIB, "slippery fingers" },
+    { WOUNDED_LEGS, "wounded legs" },
+	{ SLEEPING, "sleeping" },
+    { TELEPORT, "teleporting" },
+    { POLYMORPH, "polymorphing" },
+    { LEVITATION, "levitating" },
+    { FAST, "very fast" },
+    { CLAIRVOYANT, "clairvoyant" },
+    { DETECT_MONSTERS, "monster detection" },
+    { SEE_INVIS, "see invisible" },
+    { INVIS, "invisible" },
+    { FIRE_RES, "fire resistance" },
+    { COLD_RES, "cold resistance" },
+    { SLEEP_RES, "sleep resistance" },
+    { DISINT_RES, "disintegration resistance" },
+    { SHOCK_RES, "shock resistance" },
+    { POISON_RES, "poison resistance" },
+    { ACID_RES, "acid resistance" },
+    { STONE_RES, "stoning resistance" },
+    { DRAIN_RES, "drain resistance" },
+    { SICK_RES, "sickness resistance" },
+    { ANTIMAGIC, "magic resistance" },
+    { HALLUC_RES, "hallucination resistance" },
+    { FUMBLING, "fumbling" },
+    { HUNGER, "voracious hunger" },
+    { TELEPAT, "telepathic" },
+    { WARNING, "dangersense" },
+    { WARN_OF_MON, "warning of specific foes" },
+    { WARN_UNDEAD, "warn: undead" },
+    { SEARCHING, "searching" },
+    { INFRAVISION, "infravision" },
+    { ADORNED, "adorned (+/- Cha)" },
+    { DISPLACED, "displaced" },
+    { STEALTH, "stealthy" },
+    { AGGRAVATE_MONSTER, "monster aggravation" },
+    { CONFLICT, "conflict" },
+    { JUMPING, "jumping" },
+    { TELEPORT_CONTROL, "teleport control" },
+    { FLYING, "flying" },
+    { WWALKING, "water walking" },
+    { SWIMMING, "swimming" },
+    { MAGICAL_BREATHING, "magical breathing" },
+    { PASSES_WALLS, "pass thru walls" },
+    { SLOW_DIGESTION, "slow digestion" },
+    { HALF_SPDAM, "half spell damage" },
+    { HALF_PHDAM, "half physical damage" },
+    { REGENERATION, "HP regeneration" },
+    { ENERGY_REGENERATION, "energy regeneration" },
+    { PROTECTION, "extra protection" },
+    { PROT_FROM_SHAPE_CHANGERS, "protection from shape changers" },
+    { POLYMORPH_CONTROL, "polymorph control" },
+    { UNCHANGING, "unchanging" },
+    { REFLECTING, "reflecting" },
+    { FREE_ACTION, "free action" },
+    { FIXED_ABIL, "fixed abilites" },
+    { LIFESAVED, "life will be saved" },
+	{ NULLMAGIC, "magic nullification" },
+    {  0, 0 },
+};
+
 /* He is being petrified - dialogue by inmet!tower */
 static NEARDATA const char * const stoned_texts[] = {
 	"You are slowing down.",		/* 5 */
@@ -2298,9 +2374,13 @@ wiz_timeout_queue()
 {
     winid win;
     char buf[BUFSZ];
+    const char *propname;
+    long intrinsic;
+	int i, p, count, longestlen, ln;
 
     win = create_nhwindow(NHW_MENU);	/* corner text window */
-    if (win == WIN_ERR) return 0;
+    if (win == WIN_ERR)
+        return 0;
 
     Sprintf(buf, "Current time = %ld.", monstermoves);
     putstr(win, 0, buf);
@@ -2309,6 +2389,40 @@ wiz_timeout_queue()
     putstr(win, 0, "");
     print_queue(win, timer_base);
 
+    /* Timed properies:
+     * check every one; the majority can't obtain temporary timeouts in
+     * normal play but those can be forced via the #wizintrinsic command.
+     */
+    count = longestlen = 0;
+    for (i = 0; (propname = propertynames[i].prop_name) != 0; ++i) {
+        p = propertynames[i].prop_num;
+        intrinsic = u.uprops[p].intrinsic;
+        if (intrinsic & TIMEOUT) {
+            ++count;
+            if ((ln = (int) strlen(propname)) > longestlen)
+                longestlen = ln;
+        }
+    }
+    putstr(win, 0, "");
+    if (!count) {
+        putstr(win, 0, "No timed properties.");
+    } else {
+        putstr(win, 0, "Timed properties:");
+        putstr(win, 0, "");
+        for (i = 0; (propname = propertynames[i].prop_name) != 0; ++i) {
+            p = propertynames[i].prop_num;
+            intrinsic = u.uprops[p].intrinsic;
+            if (intrinsic & TIMEOUT) {
+                /* timeout value can be up to 16777215 (0x00ffffff) but
+                   width of 4 digits should result in values lining up
+                   almost all the time (if/when they don't, it won't
+                   look nice but the information will still be accurate) */
+                Sprintf(buf, " %*s %4ld", -longestlen, propname,
+                        (intrinsic & TIMEOUT));
+                putstr(win, 0, buf);
+            }
+        }
+    }
     display_nhwindow(win, FALSE);
     destroy_nhwindow(win);
 

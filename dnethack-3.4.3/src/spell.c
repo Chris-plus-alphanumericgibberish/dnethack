@@ -47,7 +47,6 @@ STATIC_DCL int NDECL(throwgaze);
 STATIC_DCL void NDECL(cast_protection);
 STATIC_DCL boolean FDECL(sightwedge, (int,int, int,int, int,int));
 STATIC_DCL void FDECL(spell_backfire, (int));
-STATIC_DCL const char *FDECL(spelltypemnemonic, (int));
 STATIC_DCL int FDECL(spellhunger, (int));
 STATIC_DCL int FDECL(isqrt, (int));
 STATIC_DCL boolean FDECL(run_maintained_spell, (int));
@@ -1441,7 +1440,7 @@ int spell;
 	}
 }
 
-STATIC_OVL const char *
+const char *
 spelltypemnemonic(skill)
 int skill;
 {

@@ -904,7 +904,10 @@ char *buf;
 				else Strcat(buf, "bone ");
 			break;
 			case DRAGON_HIDE:
-				obj->oclass == WEAPON_CLASS ? Strcat(buf, "dragon-tooth ") : Strcat(buf, "dragon-scale ");
+			if (objects[obj->otyp].oc_material > LEATHER && objects[obj->otyp].oc_material != DRAGON_HIDE)
+				obj->oclass == WEAPON_CLASS ? Strcat(buf, "dragon-tooth ") : Strcat(buf, "dragon-bone ");
+			else
+				Strcat(buf, "dragon-scale ");
 			break;
 			case IRON:
 			if (obj->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) Strcat(buf, "steel ");
@@ -3247,8 +3250,9 @@ int wishflags;
 			mat = WOOD;
 		} else if ((!strncmpi(bp, "dragonhide ", l=11) || !strncmpi(bp, "dragon-hide ", l=12) || !strncmpi(bp, "dragon hide ", l=12)
 			|| !strncmpi(bp, "dragonscale ", l=12) || !strncmpi(bp, "dragon-scale ", l=13) || !strncmpi(bp, "dragon scale ", l=13)
+			|| !strncmpi(bp, "dragonbone ", l=11) || !strncmpi(bp, "dragon-bone ", l=12) || !strncmpi(bp, "dragon bone ", l=12)
 			|| !strncmpi(bp, "dragontooth ", l=12) || !strncmpi(bp, "dragon-tooth ", l=13) || !strncmpi(bp, "dragon tooth ", l=13))
-			&& strncmpi(bp, "dragon scale mail", 17)
+			&& strncmpi(bp, "dragon scale mail", 17) && strncmpi(bp, "dragon-bone wand", 16)
 			) {
 			mat = DRAGON_HIDE;
 		} else if (!strncmpi(bp, "iron ", l=5) && strncmpi(bp, "iron skull cap", 14)

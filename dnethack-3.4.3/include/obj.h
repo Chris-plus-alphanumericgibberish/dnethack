@@ -198,27 +198,29 @@ struct obj {
 #define OPROP_ANAR		0x0000000000000020
 #define OPROP_CONC		0x0000000000000040
 #define OPROP_AXIO		0x0000000000000080
-#define OPROP_FIREW		0x0000000000000100
-#define OPROP_COLDW		0x0000000000000200
-#define OPROP_ELECW		0x0000000000000400
-#define OPROP_ACIDW		0x0000000000000800
-#define OPROP_MAGCW		0x0000000000001000
-#define OPROP_ANARW		0x0000000000002000
-#define OPROP_CONCW		0x0000000000004000
-#define OPROP_AXIOW		0x0000000000008000
-#define OPROP_LESSW		0x0000000000010000
-#define OPROP_HOLYW		0x0000000000020000
-#define OPROP_UNHYW		0x0000000000040000
-#define OPROP_HOLY		0x0000000000080000
-#define OPROP_UNHY		0x0000000000100000
-#define OPROP_WATRW		0x0000000000200000
-#define OPROP_DEEPW		0x0000000000400000
-#define OPROP_PSIOW		0x0000000000800000
-#define OPROP_VORPW		0x0000000001000000
-#define OPROP_MORGW		0x0000000002000000
-#define OPROP_FLAYW		0x0000000004000000
-#define OPROP_REFL		0x0000000008000000
-#define OPROP_PHSEW		0x0000000010000000
+#define OPROP_HOLY		0x0000000000000100
+#define OPROP_UNHY		0x0000000000000200
+#define OPROP_REFL		0x0000000000000400
+#define OPROP_DEF_MASK	0x00000000ffffffff
+#define OPROP_FLAYW		0x0000000100000000
+#define OPROP_PHSEW		0x0000000200000000
+#define OPROP_FIREW		0x0000000400000000
+#define OPROP_COLDW		0x0000000800000000
+#define OPROP_ELECW		0x0000001000000000
+#define OPROP_ACIDW		0x0000002000000000
+#define OPROP_MAGCW		0x0000004000000000
+#define OPROP_ANARW		0x0000008000000000
+#define OPROP_CONCW		0x0000010000000000
+#define OPROP_AXIOW		0x0000020000000000
+#define OPROP_LESSW		0x0000040000000000
+#define OPROP_HOLYW		0x0000080000000000
+#define OPROP_UNHYW		0x0000100000000000
+#define OPROP_WATRW		0x0000200000000000
+#define OPROP_DEEPW		0x0000400000000000
+#define OPROP_PSIOW		0x0000800000000000
+#define OPROP_VORPW		0x0001000000000000
+#define OPROP_MORGW		0x0002000000000000
+#define OPROP_W_MASK	~OPROP_DEF_MASK
 
 	unsigned oeaten;	/* nutrition left in food, if partly eaten */
 	long age;		/* creation date */
@@ -309,6 +311,26 @@ struct obj {
 
 	long oextra[1];		/* used for name of ordinary objects - length
 				   is flexible; amount for tmp gold objects.  Must be last? */
+};
+
+/*
+* structure to hold enough data about a weapon's damage dice to perform
+* any special cases that only involve the item itself
+*    ie, not including interactions with the defender
+*/
+struct weapon_dice {
+#ifdef PERMONST_H
+	struct attack oc;	/* object class dice from objects.c, modified in dmg_val_core() */
+	struct attack bon;	/* bonus dice assigned in dmg_val_core() */
+#endif
+	int flat;			/* flat damage */
+	/* dice use the following AT and AD types to signal different kinds of rolls:
+	* AT_NONE    -- normal roll			(d(n x) -- returns the sum of n rolls of 1 to x)
+	* >=AT_EXPL  -- exploding dice roll	(exploding_d(n x m) -- m is hacked in by specifying AT_EXPL+m as the aatyp)
+	* AD_PHYS    -- normal roll			(d(n x) -- returns the sum of n rolls of 1 to x)
+	* AD_LUCK    -- luck-based roll		(rnl(x) -- returns 0 to x-1, and good luck makes it tend towards 0)
+	* These can be combined:			(lucky_exploding_d(n x m) -- does what it says on the tin)
+	*/
 };
 
 //Useful items (ovar1 flags for planned cloak of useful items)
@@ -579,6 +601,17 @@ struct obj {
 				|| (otmp)->otyp == DWARVISH_CLOAK\
 				|| (otmp)->otyp == DWARVISH_ROUNDSHIELD)
 #define is_gnomish_armor(otmp)	((otmp)->otyp == GNOMISH_POINTY_HAT)
+
+#define is_plussev_armor(otmp)	(is_elven_armor((otmp))\
+								|| arti_plussev((otmp))\
+								|| ((otmp)->otyp == CORNUTHAUM && Role_if(PM_WIZARD))\
+								|| ((otmp)->otyp == ROBE && Role_if(PM_WIZARD) && (otmp)->oartifact == ART_ROBE_OF_THE_ARCHMAGI)\
+								|| (otmp)->otyp == CRYSTAL_HELM\
+								|| (otmp)->otyp == CRYSTAL_PLATE_MAIL\
+								|| (otmp)->otyp == CRYSTAL_SHIELD\
+								|| (otmp)->otyp == CRYSTAL_GAUNTLETS\
+								|| (otmp)->otyp == CRYSTAL_BOOTS\
+								|| (otmp)->otyp == CLOAK_OF_PROTECTION)
 
 #define is_twoweapable_artifact(otmp) ((otmp)->oartifact == ART_STING\
 				|| (otmp)->oartifact == ART_ORCRIST\

@@ -1245,16 +1245,7 @@ struct obj	*sobj;
 			break;
 		}
 		/* elven armor vibrates warningly when enchanted beyond a limit */
-		special_armor = is_elven_armor(otmp) ||
-			arti_plussev(otmp) || /* special artifact armors */
-			(Role_if(PM_WIZARD) && otmp->otyp == CORNUTHAUM) ||
-			(Role_if(PM_WIZARD) && otmp->otyp == ROBE && otmp->oartifact == ART_ROBE_OF_THE_ARCHMAGI) ||
-			otmp->otyp == CRYSTAL_HELM ||
-			otmp->otyp == CRYSTAL_PLATE_MAIL ||
-			otmp->otyp == CRYSTAL_SHIELD ||
-			otmp->otyp == CRYSTAL_GAUNTLETS ||
-			otmp->otyp == CRYSTAL_BOOTS ||
-			otmp->otyp == CLOAK_OF_PROTECTION;//Cloaks of protection are specialized defensive items.
+		special_armor = is_plussev_armor(otmp);
 		if (sobj->cursed)
 		    same_color =
 			(otmp->otyp == BLACK_DRAGON_SCALE_MAIL ||

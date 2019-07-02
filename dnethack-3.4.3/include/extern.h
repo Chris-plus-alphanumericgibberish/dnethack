@@ -70,6 +70,7 @@ E struct obj *FDECL(mk_minor_special, (struct obj *));
 E const char *FDECL(artifact_name, (const char *,short *));
 E boolean FDECL(exist_artifact, (int,const char *));
 E void FDECL(artifact_exists, (struct obj *,const char *,BOOLEAN_P));
+E int * FDECL(art_property_list, (int, BOOLEAN_P));
 E int NDECL(nartifact_exist);
 E boolean FDECL(spec_ability, (struct obj *,unsigned long));
 E boolean FDECL(spec_ability2, (struct obj *,unsigned long));
@@ -114,13 +115,13 @@ E int FDECL(doparticularinvoke,(struct obj *));
 E void FDECL(arti_speak, (struct obj *));
 E boolean FDECL(artifact_light, (struct obj *));
 E int FDECL(artifact_wet, (struct obj *, BOOLEAN_P));
-E long FDECL(spec_mm, (struct obj *));
-E long FDECL(spec_mt, (struct obj *));
-E long FDECL(spec_mb, (struct obj *));
-E long FDECL(spec_mg, (struct obj *));
-E long FDECL(spec_ma, (struct obj *));
-E long FDECL(spec_mv, (struct obj *));
-E long FDECL(spec_s, (struct obj *));
+E long FDECL(spec_mm, (int));
+E long FDECL(spec_mt, (int));
+E long FDECL(spec_mb, (int));
+E long FDECL(spec_mg, (int));
+E long FDECL(spec_ma, (int));
+E long FDECL(spec_mv, (int));
+E long FDECL(spec_s,  (int));
 E boolean FDECL(artifact_has_invprop, (struct obj *,UCHAR_P));
 E long FDECL(arti_cost, (struct obj *));
 E void FDECL(arti_poly_contents, (struct obj *));
@@ -1787,7 +1788,7 @@ E const char *NDECL(rndobjnam);
 E char *FDECL(dowhatdoes_core,(CHAR_P, char *));
 E int NDECL(dohelp);
 E int NDECL(dohistory);
-E void FDECL(checkfile, (char *,struct permonst *,BOOLEAN_P,BOOLEAN_P));
+E boolean FDECL(checkfile, (char *,struct permonst *,BOOLEAN_P,BOOLEAN_P, winid*));
 
 /* ### pcmain.c ### */
 
@@ -2327,6 +2328,7 @@ E int NDECL(spiritDsize);
 E int NDECL(dospirit);
 E int FDECL(spell_skill_from_adtype, (int));
 E int FDECL(spell_adtype, (int));
+E const char *FDECL(spelltypemnemonic, (int));
 E int FDECL(spell_skilltype, (int));
 E int FDECL(spiriteffects, (int,BOOLEAN_P));
 E int FDECL(spelleffects, (int,BOOLEAN_P,int));
@@ -2699,6 +2701,7 @@ E int NDECL(dosuspend);
 /* ### weapon.c ### */
 
 E int FDECL(hitval, (struct obj *,struct monst *));
+E int FDECL(dmgval_core, (struct weapon_dice *, boolean, struct obj *, int));
 E int FDECL(dmgval, (struct obj *,struct monst *, int));
 E struct obj *FDECL(select_rwep, (struct monst *));
 E struct obj *FDECL(select_hwep, (struct monst *));
@@ -2799,7 +2802,7 @@ E int FDECL(count_wsegs, (struct monst *));
 E boolean FDECL(worm_known, (struct monst *));
 
 /* ### worn.c ### */
-
+E int *FDECL(item_property_list, (struct obj*, int));
 E void FDECL(setworn, (struct obj *,long));
 E void FDECL(setnotworn, (struct obj *));
 E void FDECL(mon_set_minvis, (struct monst *));
