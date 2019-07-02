@@ -401,14 +401,14 @@
 				 u.sealsActive&SEAL_ENKI) && !Punished) || \
 				 (u.usteed && is_swimmer(u.usteed->data)))
 #else
-# define Swimming	((HSwimming || ESwimming || \
+# define Swimming	(((HSwimming || ESwimming || \
 				 is_swimmer(youracedata) || \
-				 Is_waterlevel(&u.uz) || \
-				 u.sealsActive&SEAL_ENKI) && !Punished && inv_weight() < 0)
-# define NoburdSwimming	((HSwimming || ESwimming || \
+				 u.sealsActive&SEAL_ENKI) \
+				 && !Punished && inv_weight() < 0) || Is_waterlevel(&u.uz))
+# define NoburdSwimming	(((HSwimming || ESwimming || \
 				 is_swimmer(youracedata) || \
-				 Is_waterlevel(&u.uz) || \
-				 u.sealsActive&SEAL_ENKI) && !Punished)
+				 u.sealsActive&SEAL_ENKI) \
+				 && !Punished) || Is_waterlevel(&u.uz))
 #endif
 	/* Get wet, don't go under water unless if amphibious */
 
