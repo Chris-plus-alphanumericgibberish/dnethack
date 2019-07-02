@@ -3134,15 +3134,21 @@ register struct trobj *trop;
 					obj->cursed = 1;
 				}
 			}
-			if(hates_silver(youracedata)){
+			if(hates_silver(youracedata) 
+				&& (obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS)
+				&& !is_ammo(obj)
+			){
 				if(obj->obj_material == SILVER){
 					obj->obj_material = GOLD;
 					fix_object(obj);
 				}
 			}
-			if(hates_iron(youracedata)){
+			if(hates_iron(youracedata)
+				&& (obj->oclass == ARMOR_CLASS || obj->oclass == WEAPON_CLASS)
+				&& !is_ammo(obj)
+			){
 				if(obj->obj_material == IRON){
-					obj->obj_material = MITHRIL;
+					obj->obj_material = Race_if(PM_DROW) ? OBSIDIAN_MT : MITHRIL;
 					fix_object(obj);
 				}
 			}
