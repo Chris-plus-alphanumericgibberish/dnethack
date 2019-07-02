@@ -836,7 +836,7 @@ add_poison_words(obj, buf)
 struct obj *obj;
 char *buf;
 {
-	if (is_poisonable(obj) && obj->opoisoned){
+	if (obj->opoisoned){
 		if (obj->opoisoned & OPOISON_BASIC) Strcat(buf, "poisoned ");
 		if (obj->opoisoned & OPOISON_FILTH) Strcat(buf, "filth-crusted ");
 		if (obj->opoisoned & OPOISON_SLEEP) Strcat(buf, "drug-coated ");
