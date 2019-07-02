@@ -1917,6 +1917,18 @@ struct obj * otmp;
 	return arm_ac_bonus(otmp) + arm_dr_bonus(otmp);
 }
 
+int
+greatest_erosion(otmp)
+struct obj * otmp;
+{
+	int greatest = 0;
+	if(otmp->oeroded > greatest) greatest = (int) otmp->oeroded;
+	if(otmp->oeroded2 > greatest) greatest = (int) otmp->oeroded2;
+	if(otmp->oeroded3 > greatest) greatest = (int) otmp->oeroded3;
+	
+	return greatest;
+}
+
 int arm_ac_bonus(otmp)
 struct obj * otmp;
 {

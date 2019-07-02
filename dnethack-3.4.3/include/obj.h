@@ -81,7 +81,7 @@ struct obj {
 
 	Bitfield(oeroded,2);	/* rusted/burnt/vaporized weapon/armor */
 	Bitfield(oeroded2,2);	/* corroded/rotted/fractured weapon/armor */
-#define greatest_erosion(otmp) (int)((otmp)->oeroded > (otmp)->oeroded2 ? (otmp)->oeroded : (otmp)->oeroded2)
+	Bitfield(oeroded3,2);	/* tatteredness */
 #define MAX_ERODE 3
 #define orotten oeroded		/* rotten food */
 #define odiluted oeroded	/* diluted potions */
@@ -114,9 +114,9 @@ struct obj {
 	Bitfield(lifted,1); /* dipped in potion of levitation */
 	Bitfield(lightened,1);/* dipped in potion of enlightenment */
 	Bitfield(shopOwned,1);	/* owned by a shopkeeper */
+	/* 0 free bits */
 	Bitfield(ostolen,1); 	/* was removed from a shop without being sold */
     Bitfield(was_thrown,1); /* for pickup_thrown */
-	/* 0 free bits */
 	Bitfield(fromsink,1);
 	Bitfield(yours,1);	/* obj is yours (eg. thrown by you) */
 	Bitfield(masters,1);	/* obj is given by a monster's master, it will not drop it */
@@ -143,7 +143,7 @@ struct obj {
 //define GLASS		19
 //define GEMSTONE	20
 //define MINERAL		21
-	/* 21 free bits in this field, I think -CM */
+	/* 19 free bits in this field, I think -CM */
 	
 	long bodytypeflag;	/* MB tag(s) this item goes with. */
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
@@ -265,7 +265,6 @@ struct obj {
 			
 	long ovar1;		/* extra variable. Specifies: */
 			/*Records the contents of Books of Secrets*/
-			/*Records the tatteredness level of droven cloaks. */
 			/*Records the cracked level of masks. */
 			/*Records special features for weapons. */
 			/* 	Records moon phase for moon axes */

@@ -475,6 +475,7 @@ E int FDECL(canwearobj, (struct obj *, long *, BOOLEAN_P));
 E int NDECL(dowear);
 E int NDECL(doputon);
 E int FDECL(arm_total_bonus, (struct obj *));
+E int FDECL(greatest_erosion, (struct obj *));
 E int FDECL(arm_ac_bonus, (struct obj *));
 E int FDECL(arm_dr_bonus, (struct obj *));
 E int NDECL(base_uac);

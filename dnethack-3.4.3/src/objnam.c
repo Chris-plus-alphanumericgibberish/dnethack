@@ -702,7 +702,7 @@ char *buf;
 		Strcat(buf, is_corrodeable(obj) ? "corroded " :
 			"rotted ");
 	}
-	if (obj->ovar1 && obj->otyp == DROVEN_CLOAK) {
+	if (obj->oeroded3) {
 		switch (obj->ovar1) {
 		case 2:	Strcat(buf, "very "); break;
 		case 3:	Strcat(buf, "thoroughly "); break;
