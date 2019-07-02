@@ -99,7 +99,7 @@ Boots_on()
 
     switch(uarmf->otyp) {
 	case LOW_BOOTS:
-	case IRON_SHOES:
+	case SHOES:
 	case ARMORED_BOOTS:
 	case HIGH_BOOTS:
 	case HEELED_BOOTS:
@@ -193,7 +193,7 @@ Boots_off()
 		}
 		break;
 	case LOW_BOOTS:
-	case IRON_SHOES:
+	case SHOES:
 	case ARMORED_BOOTS:
 	case HIGH_BOOTS:
 	case HEELED_BOOTS:

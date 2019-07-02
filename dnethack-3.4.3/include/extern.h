@@ -481,6 +481,7 @@ E int NDECL(base_uac);
 E void NDECL(find_ac);
 E int NDECL(base_udr);
 E void NDECL(find_dr);
+E int FDECL(slot_udr, (int, struct monst *));
 E int FDECL(roll_udr, (struct monst *));
 E void NDECL(glibr);
 E struct obj *FDECL(some_armor,(struct monst *));

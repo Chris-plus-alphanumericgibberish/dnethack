@@ -152,31 +152,31 @@ OBJECT:')',random,random
 OBJECT:'[',"dwarvish helm",random
 OBJECT:'[',"dwarvish roundshield",random
 OBJECT:'[',"plate mail",random
-OBJECT:'[',"iron shoes",random
+OBJECT:'[',"shoes",random
 
 OBJECT:')',random,random
 OBJECT:'[',"dwarvish helm",random
 OBJECT:'[',"dwarvish roundshield",random
 OBJECT:'[',"plate mail",random
-OBJECT:'[',"iron shoes",random
+OBJECT:'[',"shoes",random
 
 OBJECT:')',random,random
 OBJECT:'[',"dwarvish helm",random
 OBJECT:'[',"dwarvish roundshield",random
 OBJECT:'[',"dwarvish mithril-coat",random
-OBJECT:'[',"iron shoes",random
+OBJECT:'[',"shoes",random
 
 OBJECT:')',random,random
 OBJECT:'[',"dwarvish helm",random
 OBJECT:'[',"dwarvish roundshield",random
 OBJECT:'[',"dwarvish mithril-coat",random
-OBJECT:'[',"iron shoes",random
+OBJECT:'[',"shoes",random
 
 OBJECT:')',random,random
 OBJECT:'[',"dwarvish helm",random
 OBJECT:'[',"dwarvish roundshield",random
 OBJECT:'[',"dwarvish mithril-coat",random
-OBJECT:'[',"iron shoes",random
+OBJECT:'[',"shoes",random
 
 OBJECT:'*',random,random
 OBJECT:'*',random,random
@@ -265,7 +265,7 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 
 CONTAINER:'`',"statue",(58,12), "dwarf king", 1
 OBJECT:')',random,contained
@@ -273,14 +273,14 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 CONTAINER:'`',"statue",(60,12), "dwarf king", 1
 OBJECT:')',random,contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 
 CONTAINER:'`',"statue",(67,12), "dwarf king", 1
 OBJECT:')',random,contained
@@ -288,7 +288,7 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 CONTAINER:'(',"chest",(69,12)
 OBJECT:'+',random,random
 OBJECT:'?',"resistance",contained
@@ -304,7 +304,7 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 
 CONTAINER:'(',"chest",(74,14)
 OBJECT:'+',random,random
@@ -376,7 +376,7 @@ OBJECT:')',random,contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 CONTAINER:'(',"chest",(31,16)
 OBJECT:'+',random,contained
 OBJECT:'?',"resistance",contained
@@ -392,7 +392,7 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 
 CONTAINER:'`',"statue",(38,14), "dwarf lord", 1
 OBJECT:')',random,contained
@@ -400,7 +400,7 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 CONTAINER:'(',"chest",(38,16)
 OBJECT:'+',random,random
 OBJECT:'?',"resistance",contained
@@ -416,7 +416,7 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 
 # Magic Chest
 OBJECT:'(',"magic chest",(35,16)
@@ -430,7 +430,7 @@ OBJECT:'[',"dwarvish helm",(69,15)
 OBJECT:'[',"dwarvish roundshield",(69,15)
 OBJECT:'[',"plate mail",(69,15)
 OBJECT:'[',"dwarvish mithril-coat",(69,15)
-OBJECT:'[',"iron shoes",(69,15)
+OBJECT:'[',"shoes",(69,15)
 OBJECT:'[',"dwarvish cloak",(69,15)
 
 CONTAINER:'`',"statue",(58,18), "dwarf king", 1
@@ -439,14 +439,14 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 CONTAINER:'`',"statue",(60,18), "dwarf king", 1
 OBJECT:')',random,contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 
 CONTAINER:'`',"statue",(67,18), "dwarf king", 1
 OBJECT:')',random,contained
@@ -454,7 +454,7 @@ OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish helm",contained
 OBJECT:'[',"dwarvish roundshield",contained
 OBJECT:'[',"plate mail",contained
-OBJECT:'[',"iron shoes",contained
+OBJECT:'[',"shoes",contained
 CONTAINER:'(',"chest",(69,18)
 OBJECT:'+',random,random
 OBJECT:'?',"resistance",contained

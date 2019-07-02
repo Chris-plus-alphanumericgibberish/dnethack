@@ -519,7 +519,7 @@ char *buf;
 		|| (!obj->cursed && !obj->blessed))) {
 		/* allow 'blessed clear potion' if we don't know it's holy water;
 		* always allow "uncursed potion of water"
-	 */
+		*/
 		if (obj->cursed)
 			Strcat(buf, (obj->known && (obj->oproperties&OPROP_UNHYW || obj->oproperties&OPROP_UNHY)) ? "unholy " : "cursed ");
 		else if (obj->blessed)
@@ -865,95 +865,109 @@ add_material_words(obj, buf)
 struct obj *obj;
 char *buf;
 {
-	if (id_for_material(obj) ||
-		((obj->obj_material != ((obj->oartifact && artilist[obj->oartifact].material && obj->known) ? artilist[obj->oartifact].material : objects[obj->otyp].oc_material))
-		&& !(is_lightsaber(obj) && litsaber(obj)))){
-		if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD && obj->lamplit){
-			Strcat(buf, "pale moonlight ");
-		}
-		else switch (obj->obj_material){
-			case LIQUID: /*Wut?*/
-				Strcat(buf, "liquid ");
-			break;
-			case WAX:
-				Strcat(buf, "wax ");
-			break;
-			case VEGGY:
-				Strcat(buf, "straw ");
-			break;
-			case FLESH:
-				Strcat(buf, "flesh ");
-			break;
-			case PAPER:
-				Strcat(buf, "paper ");
-			break;
-			case CLOTH:
-			if ((obj->oproperties&OPROP_WOOL) == OPROP_WOOL)
-					Strcat(buf, "woolen ");
-				else
-					Strcat(buf, "cloth ");
-			break;
-			case LEATHER:
-				Strcat(buf, "leather ");
-			break;
-			case WOOD:
-				Strcat(buf, "wooden ");
-			break;
-			case BONE:
-			if (obj->oartifact == ART_WEBWEAVER_S_CROOK) Strcat(buf, "chitin ");
-				else Strcat(buf, "bone ");
-			break;
-			case DRAGON_HIDE:
-			if (objects[obj->otyp].oc_material > LEATHER && objects[obj->otyp].oc_material != DRAGON_HIDE)
-				obj->oclass == WEAPON_CLASS ? Strcat(buf, "dragon-tooth ") : Strcat(buf, "dragon-bone ");
-			else
-				Strcat(buf, "dragon-scale ");
-			break;
-			case IRON:
-			if (obj->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) Strcat(buf, "steel ");
-				else Strcat(buf, "iron ");
-			break;
-			case METAL:
-			if(!(obj->oproperties&OPROP_LESSW 
-				&& obj->oproperties&OPROP_AXIOW 
-				&& obj->oproperties&(OPROP_FIREW|OPROP_COLDW|OPROP_ELECW)
-				&& obj->known
-			)) Strcat(buf, "metallic ");
-			break;
-			case COPPER:
-				Strcat(buf, "bronze ");
-			break;
-			case SILVER:
-				Strcat(buf, "silver ");
-			break;
-			case GOLD:
-				Strcat(buf, "golden ");
-			break;
-			case PLATINUM:
-				Strcat(buf, "platinum ");
-			break;
-			case MITHRIL:
-				Strcat(buf, "mithril ");
-			break;
-			case PLASTIC:
-				Strcat(buf, "plastic ");
-			break;
-			case GLASS:
-				Strcat(buf, "glass ");
-			break;
-			case GEMSTONE:
-				Strcat(buf, "gem ");
-			break;
-			case MINERAL:
-				obj->oclass == ARMOR_CLASS ? Strcat(buf, "ceramic ") : Strcat(buf, "stone ");
-			break;
-			case OBSIDIAN_MT:
-				Strcat(buf, "obsidian ");
-			break;
-			case SHADOWSTUFF:
-				Strcat(buf, "black ");
-			break;
-		}
+	/*To avoid an if statement with a massive condition, detect cases where the material should NOT be printed, and return out*/
+	/*Avoid obviating randomized appearances*/
+	if(id_for_material(obj) && !obj->known)
+		return;
+	/*Materials don't matter for lit lightsabers, and they should be described in terms of color*/
+	if(is_lightsaber(obj) && litsaber(obj))
+		return;
+	if(obj->oartifact && obj->known){
+		/*Known artifact is made from standard material*/
+		if(artilist[obj->oartifact].material && obj->obj_material == artilist[obj->oartifact].material)
+			return;
+	} else {
+		/*Non-artifact is made from standard material, and isn't of a type for which the material is always shown*/
+		if(obj->known && !(objects[obj->otyp].oc_showmat&IDED) && obj->obj_material == objects[obj->otyp].oc_material)
+			return;
+		/*Unknown item is made from standard material, and isn't of a type for which the material is always shown*/
+		if(!obj->known && !(objects[obj->otyp].oc_showmat&UNIDED) && obj->obj_material == objects[obj->otyp].oc_material)
+			return;
+	}
+	if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD && obj->lamplit){
+		Strcat(buf, "pale moonlight ");
+	}
+	else switch (obj->obj_material){
+	case LIQUID: /*Wut?*/
+		Strcat(buf, "liquid ");
+		break;
+	case WAX:
+		Strcat(buf, "wax ");
+		break;
+	case VEGGY:
+		Strcat(buf, "straw ");
+		break;
+	case FLESH:
+		Strcat(buf, "flesh ");
+		break;
+	case PAPER:
+		Strcat(buf, "paper ");
+		break;
+	case CLOTH:
+		if ((obj->oproperties&OPROP_WOOL) == OPROP_WOOL)
+			Strcat(buf, "woolen ");
+		else
+			Strcat(buf, "cloth ");
+		break;
+	case LEATHER:
+		Strcat(buf, "leather ");
+		break;
+	case WOOD:
+		Strcat(buf, "wooden ");
+		break;
+	case BONE:
+		if (obj->oartifact == ART_WEBWEAVER_S_CROOK) Strcat(buf, "chitin ");
+		else Strcat(buf, "bone ");
+		break;
+	case DRAGON_HIDE:
+		if (objects[obj->otyp].oc_material > LEATHER && objects[obj->otyp].oc_material != DRAGON_HIDE)
+			obj->oclass == WEAPON_CLASS ? Strcat(buf, "dragon-tooth ") : Strcat(buf, "dragon-bone ");
+		else
+			Strcat(buf, "dragon-scale ");
+		break;
+	case IRON:
+		if (obj->oartifact == ART_STEEL_SCALES_OF_KURTULMAK) Strcat(buf, "steel ");
+		else Strcat(buf, "iron ");
+		break;
+	case METAL:
+		if(!(obj->oproperties&OPROP_LESSW 
+			&& obj->oproperties&OPROP_AXIOW 
+			&& obj->oproperties&(OPROP_FIREW|OPROP_COLDW|OPROP_ELECW)
+			&& obj->known
+		)) Strcat(buf, "metallic ");
+		break;
+	case COPPER:
+		Strcat(buf, "bronze ");
+		break;
+	case SILVER:
+		Strcat(buf, "silver ");
+		break;
+	case GOLD:
+		Strcat(buf, "golden ");
+		break;
+	case PLATINUM:
+		Strcat(buf, "platinum ");
+		break;
+	case MITHRIL:
+		Strcat(buf, "mithril ");
+		break;
+	case PLASTIC:
+		Strcat(buf, "plastic ");
+		break;
+	case GLASS:
+		Strcat(buf, "glass ");
+		break;
+	case GEMSTONE:
+		Strcat(buf, "gem ");
+		break;
+	case MINERAL:
+		break;
+	case OBSIDIAN_MT:
+		Strcat(buf, "obsidian ");
+		break;
+	case SHADOWSTUFF:
+		Strcat(buf, "black ");
+		break;
 	}
 }
 
@@ -965,7 +979,7 @@ char *buf;
 	if (obj->otyp == MASK){
 		Strcat(buf, mons[obj->corpsenm].mname);
 		Strcat(buf, " ");
-			}
+	}
 	if (obj->otyp == CORPSE) {
 		if (!(mons[obj->corpsenm].geno & G_UNIQ)) {
 			Strcat(buf, mons[obj->corpsenm].mname);
@@ -2539,7 +2553,7 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 	{ "helm",	ARMOR_CLASS,  LEATHER_HELM, HELM_OF_TELEPATHY },
 	{ "gauntlets",	ARMOR_CLASS,  GLOVES, GAUNTLETS_OF_DEXTERITY },
 	{ "boots",	ARMOR_CLASS,  LOW_BOOTS,      FLYING_BOOTS },
-	{ "shoes",	ARMOR_CLASS,  LOW_BOOTS,      IRON_SHOES },
+	{ "shoes",	ARMOR_CLASS,  LOW_BOOTS,      SHOES },
 	{ "cloak",	ARMOR_CLASS,  MUMMY_WRAPPING, CLOAK_OF_DISPLACEMENT },
 #ifdef TOURIST
 	{ "shirt",	ARMOR_CLASS,  HAWAIIAN_SHIRT, RUFFLED_SHIRT },
@@ -2793,8 +2807,8 @@ struct alt_spellings {
 	{ "leather armour", LEATHER_ARMOR },
 	{ "leather gloves", GLOVES },
 	{ "studded leather armour", STUDDED_LEATHER_ARMOR },
-	{ "chain", IRON_CHAIN },
-	{ "iron chain", IRON_CHAIN },
+	{ "chain", CHAIN },
+	{ "iron chain", CHAIN },
 	{ "iron ball", HEAVY_IRON_BALL },
 	{ "lantern", BRASS_LANTERN },
 	{ "mattock", DWARVISH_MATTOCK },
@@ -4148,7 +4162,7 @@ typfnd:
 		case SLIME_MOLD: otmp->spe = ftype;
 			/* Fall through */
 		case SKELETON_KEY: case UNIVERSAL_KEY: case CHEST: case BOX:
-		case HEAVY_IRON_BALL: case IRON_CHAIN: case STATUE:
+		case HEAVY_IRON_BALL: case CHAIN: case STATUE:
 			/* otmp->cobj already done in mksobj() */
 				break;
 #ifdef MAIL

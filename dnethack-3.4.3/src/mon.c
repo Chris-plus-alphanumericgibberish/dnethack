@@ -576,9 +576,9 @@ register struct monst *mtmp;
 			mtmp->mnamelth = 0;
 			num = d(2,4);
 			while (num--){
-				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(CHAIN, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
-				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(CHAIN, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
 				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
 				obj->oeroded = 3;
@@ -599,8 +599,8 @@ register struct monst *mtmp;
 			obj->owt = weight(obj);
 			num = d(2,6);
 			while (num--){
-				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
-				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(CHAIN, x, y, TRUE, FALSE);
 				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
 			}
 			mtmp->mnamelth = 0;
@@ -660,7 +660,7 @@ register struct monst *mtmp;
 	    case PM_IRON_GOLEM:
 			num = d(2,6);
 			while (num--){
-				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(CHAIN, x, y, TRUE, FALSE);
 				obj = mksobj_at(KITE_SHIELD, x, y, TRUE, FALSE);
 				obj = mksobj_at(BAR, x, y, TRUE, FALSE);
 			}
@@ -669,7 +669,7 @@ register struct monst *mtmp;
 	    case PM_CHAIN_GOLEM:
 			num = d(6,6);
 			while (num--){
-				obj = mksobj_at(IRON_CHAIN, x, y, TRUE, FALSE);
+				obj = mksobj_at(CHAIN, x, y, TRUE, FALSE);
 			}
 			mtmp->mnamelth = 0;
 		break;

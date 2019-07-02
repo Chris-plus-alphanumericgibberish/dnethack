@@ -117,7 +117,7 @@ boolean check_if_better;
 	    /* food */
             ((dogfood(mtmp, otmp) < APPORT) ||
 	    /* chains for some */
-		 ((mtmp->data == &mons[PM_CATHEZAR]) && otmp->otyp == IRON_CHAIN) ||
+		 ((mtmp->data == &mons[PM_CATHEZAR]) && otmp->otyp == CHAIN) ||
 	    /* better weapons */
 	     (is_armed(mtmp->data) &&
 	      (otmp->oclass == WEAPON_CLASS || is_weptool(otmp)) && 

@@ -492,7 +492,7 @@ int otyp;
 	case BLASTER_BOLT:			ocn += 2; flat += ocd; break;
 	case HEAVY_BLASTER_BOLT:	ocn += 2; flat += ocd; break;
 	case LASER_BEAM:			ocn += 2; flat += 10; break;
-	case IRON_CHAIN:			add(1); break;
+	case CHAIN:					add(1); break;
 	case SEISMIC_HAMMER:		if (chrgd){ ocd *= 3; } break;
 	case ACID_VENOM:			if (obj&&obj->ovar1){ ocn = 0; flat = obj->ovar1; } else{ add(6); } break;
 	case LIGHTSABER:			spe_mult = 3; ocn += 2; if(obj&&obj->altmode){ plus(3,3); } break;		// external special case: lightsaber forms
@@ -1374,7 +1374,7 @@ int spot;
 			/* never unsuitable for offhand wielding */
 			(spot!=W_SWAPWEP || (!(otmp->owornmask & (W_WEP)) && (!otmp->cursed || is_weldproof_mon(mtmp)) && !bimanual(otmp, mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0 && 
 				( (otmp->owt <= (30 + (mtmp->m_lev/5)*5)) 
-				|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR]) 
+				|| (otmp->otyp == CHAIN && mtmp->data == &mons[PM_CATHEZAR]) 
 				|| (mtmp->data == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY])
 				)
 			)) &&
@@ -1720,7 +1720,7 @@ static const NEARDATA short hwep[] = {
 	  BULLWHIP/*1d2/1d1*/, 
 	  QUARTERSTAFF/*1d6/1d6*/,
 	  JAVELIN/*1d6/1d6*/, 
-	  IRON_CHAIN/*1d6/1d6*/, 
+	  CHAIN/*1d6/1d6*/, 
 	  WAR_HAMMER/*1d4+1/1d4*/, 
 	  AKLYS/*1d6/1d3*/, 
 	  SUNROD/*1d6/1d3*/, 
@@ -1791,7 +1791,7 @@ register struct monst *mtmp;
 	for(otmp=mtmp->minvent; otmp; otmp = otmp->nobj) {
 		if (/* valid weapon */
 			(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
-			|| otmp->otyp == IRON_CHAIN || otmp->otyp == HEAVY_IRON_BALL
+			|| otmp->otyp == CHAIN || otmp->otyp == HEAVY_IRON_BALL
 			) &&
 			/* an artifact or other special weapon*/
 			(otmp->oartifact || otmp->oproperties) &&
@@ -2755,7 +2755,7 @@ struct obj *obj;
     if ((obj->otyp == HEAVY_IRON_BALL) && (Role_if(PM_CONVICT) || u.sealsActive&SEAL_AHAZU))
         return objects[obj->otyp].oc_skill;
 #endif /* CONVICT */
-    if ((obj->otyp == IRON_CHAIN) && (Role_if(PM_CONVICT) || u.sealsActive&SEAL_AHAZU))
+    if ((obj->otyp == CHAIN) && (Role_if(PM_CONVICT) || u.sealsActive&SEAL_AHAZU))
         return objects[obj->otyp].oc_skill;
 	if (obj->oclass != WEAPON_CLASS && obj->oclass != TOOL_CLASS &&
 	    obj->oclass != GEM_CLASS)

@@ -1050,7 +1050,7 @@ register const char *let,*word;
 			))
 		|| (!strcmp(word, "wield") &&
 		    ((otmp->oclass == TOOL_CLASS && !is_weptool(otmp)) ||
-			(otmp->oclass == CHAIN_CLASS && otmp->otyp != IRON_CHAIN)))
+			(otmp->oclass == CHAIN_CLASS && otmp->otyp != CHAIN)))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
 		|| (!strcmp(word, "inject") && !(otmp->otyp == HYPOSPRAY_AMPULE && otmp->spe > 0))
 		|| (!strcmp(word, "wind with") && ((otmp->oclass == TOOL_CLASS &&
@@ -1102,7 +1102,7 @@ register const char *let,*word;
 			  otmp->otyp != RAKUYO && otmp->otyp != RAKUYO_SABER
 			 ) ||
 			 (otmp->oclass == CHAIN_CLASS && 
-				(otyp == IRON_CHAIN || otyp == SHEAF_OF_HAY)
+				(otyp == CHAIN || otyp == SHEAF_OF_HAY)
 			 ) ||
 		     (otmp->oclass == POTION_CLASS &&
 		     /* only applicable potion is oil, and it will only

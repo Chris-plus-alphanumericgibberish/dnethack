@@ -1899,7 +1899,7 @@ int thrown;
 					case FOSSIL:
 						if(!is_boulder(obj)) goto defaultvalue;
 					case HEAVY_IRON_BALL:	/* 1d25 */
-					case IRON_CHAIN:		/* 1d4+1 */
+					case CHAIN:		/* 1d4+1 */
 						tmp = dmgval(obj, mon, 0);
 						if(obj && ((is_lightsaber(obj) && litsaber(obj)) || arti_shining(obj))) phasearmor = TRUE;
 					break;

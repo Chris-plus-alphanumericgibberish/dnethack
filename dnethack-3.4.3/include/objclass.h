@@ -65,6 +65,9 @@ struct objclass {
 #define MINERAL		21
 #define OBSIDIAN_MT	22
 #define SHADOWSTUFF	23
+	Bitfield(oc_showmat,2);
+#define IDED	2
+#define UNIDED	1
 
 #define is_organic(otmp)	((otmp)->obj_material <= WOOD)
 #define is_metallic(otmp)	((otmp)->obj_material >= IRON && \

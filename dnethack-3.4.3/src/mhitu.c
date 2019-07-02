@@ -1333,7 +1333,7 @@ mattacku(mtmp)
 			    if (foundyou) {
 					for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj){
 						if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
-							|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])
+							|| (otmp->otyp == CHAIN && mtmp->data == &mons[PM_CATHEZAR])
 							)  && !otmp->oartifact
 							&& otmp != MON_WEP(mtmp) && otmp != MON_SWEP(mtmp)
 							&& !otmp->owornmask
@@ -1342,7 +1342,7 @@ mattacku(mtmp)
 					wcount -= marinum;
 					for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj){
 						if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
-							|| (otmp->otyp == IRON_CHAIN && mtmp->data == &mons[PM_CATHEZAR])
+							|| (otmp->otyp == CHAIN && mtmp->data == &mons[PM_CATHEZAR])
 							)  && !otmp->oartifact
 							&& otmp != MON_WEP(mtmp) && otmp != MON_SWEP(mtmp)
 							&& !otmp->owornmask
@@ -2838,7 +2838,7 @@ dopois:
 				static int jboots1 = 0;
 				if (!jboots1) jboots1 = find_jboots();
 				if (rn2(2) && (uarmf->otyp == LOW_BOOTS ||
-							 uarmf->otyp == IRON_SHOES))
+							 uarmf->otyp == SHOES))
 					pline("%s pricks the exposed part of your %s %s!",
 					Monnam(mtmp), sidestr, body_part(LEG));
 				else if (uarmf->otyp != jboots1 && !rn2(5))

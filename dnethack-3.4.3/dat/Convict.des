@@ -65,11 +65,11 @@ TRAP:"web",random
 TRAP:"web",random
 TRAP:"web",random
 # Prison debris
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
 OBJECT[50%]: '0', "heavy iron ball", random
 OBJECT[50%]: '0', "heavy iron ball", random
 # Non diggable walls
@@ -150,79 +150,79 @@ MONSTER: 'K',"hod sephirah",(64,06),asleep
 # Iron golem in supply room
 MONSTER: ''',"iron golem",(11,17),asleep
 # Supply room junk
-OBJECT: '_', "iron chain", (2,15)
-OBJECT: '_', "iron chain", (2,15)
-OBJECT: '_', "iron chain", (3,15)
-OBJECT: '_', "iron chain", (3,15)
-OBJECT: '_', "iron chain", (4,15)
+OBJECT: '_', "chain", (2,15)
+OBJECT: '_', "chain", (2,15)
+OBJECT: '_', "chain", (3,15)
+OBJECT: '_', "chain", (3,15)
+OBJECT: '_', "chain", (4,15)
 OBJECT: '0', "heavy iron ball", (4,15)
-OBJECT: '_', "iron chain", (4,15)
-OBJECT: '_', "iron chain", (5,15)
-OBJECT: '_', "iron chain", (5,15)
-OBJECT: '_', "iron chain", (6,15)
-OBJECT: '_', "iron chain", (6,15)
-OBJECT: '_', "iron chain", (6,15)
-OBJECT: '_', "iron chain", (7,15)
+OBJECT: '_', "chain", (4,15)
+OBJECT: '_', "chain", (5,15)
+OBJECT: '_', "chain", (5,15)
+OBJECT: '_', "chain", (6,15)
+OBJECT: '_', "chain", (6,15)
+OBJECT: '_', "chain", (6,15)
+OBJECT: '_', "chain", (7,15)
 OBJECT: '0', "heavy iron ball", (7,15)
-OBJECT: '_', "iron chain", (8,15)
-OBJECT: '_', "iron chain", (8,15)
-OBJECT: '_', "iron chain", (9,15)
-OBJECT: '_', "iron chain", (9,15)
-OBJECT: '_', "iron chain", (9,15)
-OBJECT: '_', "iron chain", (10,15)
-OBJECT: '_', "iron chain", (10,15)
-OBJECT: '_', "iron chain", (10,15)
-OBJECT: '_', "iron chain", (11,15)
-OBJECT: '_', "iron chain", (11,15)
+OBJECT: '_', "chain", (8,15)
+OBJECT: '_', "chain", (8,15)
+OBJECT: '_', "chain", (9,15)
+OBJECT: '_', "chain", (9,15)
+OBJECT: '_', "chain", (9,15)
+OBJECT: '_', "chain", (10,15)
+OBJECT: '_', "chain", (10,15)
+OBJECT: '_', "chain", (10,15)
+OBJECT: '_', "chain", (11,15)
+OBJECT: '_', "chain", (11,15)
 OBJECT: '0', "heavy iron ball", (11,15)
-OBJECT: '_', "iron chain", (2,16)
+OBJECT: '_', "chain", (2,16)
 OBJECT: '0', "heavy iron ball", (2,16)
-OBJECT: '_', "iron chain", (3,16)
-OBJECT: '_', "iron chain", (3,16)
-OBJECT: '_', "iron chain", (3,16)
-OBJECT: '_', "iron chain", (4,16)
-OBJECT: '_', "iron chain", (4,16)
-OBJECT: '_', "iron chain", (5,16)
-OBJECT: '_', "iron chain", (6,16)
-OBJECT: '_', "iron chain", (6,16)
-OBJECT: '_', "iron chain", (6,16)
-OBJECT: '_', "iron chain", (7,16)
-OBJECT: '_', "iron chain", (7,16)
+OBJECT: '_', "chain", (3,16)
+OBJECT: '_', "chain", (3,16)
+OBJECT: '_', "chain", (3,16)
+OBJECT: '_', "chain", (4,16)
+OBJECT: '_', "chain", (4,16)
+OBJECT: '_', "chain", (5,16)
+OBJECT: '_', "chain", (6,16)
+OBJECT: '_', "chain", (6,16)
+OBJECT: '_', "chain", (6,16)
+OBJECT: '_', "chain", (7,16)
+OBJECT: '_', "chain", (7,16)
 OBJECT: '0', "heavy iron ball", (7,16)
-OBJECT: '_', "iron chain", (7,16)
-OBJECT: '_', "iron chain", (8,16)
-OBJECT: '_', "iron chain", (8,16)
-OBJECT: '_', "iron chain", (9,16)
-OBJECT: '_', "iron chain", (9,16)
-OBJECT: '_', "iron chain", (9,16)
-OBJECT: '_', "iron chain", (10,16)
-OBJECT: '_', "iron chain", (10,16)
-OBJECT: '_', "iron chain", (11,16)
-OBJECT: '_', "iron chain", (2,17)
-OBJECT: '_', "iron chain", (3,17)
-OBJECT: '_', "iron chain", (3,17)
-OBJECT: '_', "iron chain", (3,17)
-OBJECT: '_', "iron chain", (4,17)
+OBJECT: '_', "chain", (7,16)
+OBJECT: '_', "chain", (8,16)
+OBJECT: '_', "chain", (8,16)
+OBJECT: '_', "chain", (9,16)
+OBJECT: '_', "chain", (9,16)
+OBJECT: '_', "chain", (9,16)
+OBJECT: '_', "chain", (10,16)
+OBJECT: '_', "chain", (10,16)
+OBJECT: '_', "chain", (11,16)
+OBJECT: '_', "chain", (2,17)
+OBJECT: '_', "chain", (3,17)
+OBJECT: '_', "chain", (3,17)
+OBJECT: '_', "chain", (3,17)
+OBJECT: '_', "chain", (4,17)
 OBJECT: '0', "heavy iron ball", (4,17)
-OBJECT: '_', "iron chain", (4,17)
-OBJECT: '_', "iron chain", (4,17)
+OBJECT: '_', "chain", (4,17)
+OBJECT: '_', "chain", (4,17)
 OBJECT: '0', "heavy iron ball", (4,17)
-OBJECT: '_', "iron chain", (5,17)
-OBJECT: '_', "iron chain", (6,17)
-OBJECT: '_', "iron chain", (7,17)
-OBJECT: '_', "iron chain", (7,17)
-OBJECT: '_', "iron chain", (7,17)
-OBJECT: '_', "iron chain", (8,17)
+OBJECT: '_', "chain", (5,17)
+OBJECT: '_', "chain", (6,17)
+OBJECT: '_', "chain", (7,17)
+OBJECT: '_', "chain", (7,17)
+OBJECT: '_', "chain", (7,17)
+OBJECT: '_', "chain", (8,17)
 OBJECT: '0', "heavy iron ball", (8,17)
-OBJECT: '_', "iron chain", (9,17)
-OBJECT: '_', "iron chain", (9,17)
+OBJECT: '_', "chain", (9,17)
+OBJECT: '_', "chain", (9,17)
 OBJECT: '0', "heavy iron ball", (9,17)
-OBJECT: '_', "iron chain", (9,17)
-OBJECT: '_', "iron chain", (10,17)
-OBJECT: '_', "iron chain", (10,17)
-OBJECT: '_', "iron chain", (10,17)
+OBJECT: '_', "chain", (9,17)
+OBJECT: '_', "chain", (10,17)
+OBJECT: '_', "chain", (10,17)
+OBJECT: '_', "chain", (10,17)
 OBJECT: '0', "heavy iron ball", (10,17)
-OBJECT: '_', "iron chain", (11,17)
+OBJECT: '_', "chain", (11,17)
 
 
 #
@@ -416,11 +416,11 @@ TRAP:"web",random
 TRAP:"web",random
 TRAP:"web",random
 # Prison debris
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
-OBJECT[75%]: '_', "iron chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
+OBJECT[75%]: '_', "chain", random
 OBJECT[50%]: '0', "heavy iron ball", random
 OBJECT[50%]: '0', "heavy iron ball", random
 

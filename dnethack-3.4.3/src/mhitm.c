@@ -432,7 +432,7 @@ mattackm(magr, mdef)
 			int wcount = 0;
 			for(otmp = magr->minvent; otmp; otmp = otmp->nobj){
 				if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
-					|| (otmp->otyp == IRON_CHAIN && magr->data == &mons[PM_CATHEZAR])
+					|| (otmp->otyp == CHAIN && magr->data == &mons[PM_CATHEZAR])
 					) && !otmp->oartifact
 					&& otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)
 					&& !otmp->owornmask
@@ -441,7 +441,7 @@ mattackm(magr, mdef)
 			wcount -= marinum;
 			if(wcount > 0) for(otmp = magr->minvent; otmp; otmp = otmp->nobj){
 				if((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
-					|| (otmp->otyp == IRON_CHAIN && magr->data == &mons[PM_CATHEZAR])
+					|| (otmp->otyp == CHAIN && magr->data == &mons[PM_CATHEZAR])
 					) && !otmp->oartifact
 					&& otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)
 					&& !otmp->owornmask

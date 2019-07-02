@@ -1821,7 +1821,7 @@ water_friction()
 	if (Swimming && rn2(4))
 		return;		/* natural swimmers have advantage */
 
-    if (uarmf && uarmf->otyp == IRON_SHOES) return; /* iron boots let you walk on the seafloor (Zelda) */
+    if (uarmf && uarmf->otyp == SHOES) return; /* iron boots let you walk on the seafloor (Zelda) */
 
 	if (u.dx && !rn2(!u.dy ? 3 : 6)) {	/* 1/3 chance or half that */
 		/* cancel delta x and choose an arbitrary delta y value */

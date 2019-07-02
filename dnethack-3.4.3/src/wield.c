@@ -59,7 +59,7 @@ STATIC_DCL int FDECL(ready_weapon, (struct obj *));
 #define erodeable_wep(optr)	((optr)->oclass == WEAPON_CLASS \
 				|| is_weptool(optr) \
 				|| (optr)->otyp == HEAVY_IRON_BALL \
-				|| (optr)->otyp == IRON_CHAIN)
+				|| (optr)->otyp == CHAIN)
 
 /* used by welded(), and also while wielding */
 #define will_weld(optr)		((optr)->cursed \
