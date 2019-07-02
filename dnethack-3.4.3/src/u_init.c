@@ -2893,6 +2893,9 @@ register struct trobj *trop;
 				obj->ovar1 = 1;
 				fix_object(obj);
 			}
+			if(obj->otyp == SLIME_MOLD && Race_if(PM_DROW)){
+				obj->spe = fruitadd("mushroom cake");
+			}
 			if(obj->otyp == HEAVY_MACHINE_GUN && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
 				obj->obj_material = MITHRIL;
 				fix_object(obj);
