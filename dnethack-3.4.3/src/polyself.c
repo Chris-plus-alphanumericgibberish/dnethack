@@ -1382,7 +1382,7 @@ doandroid()
 		return 1;
 	} else if(newspeed == SLOW_CLOCKSPEED){
 		int mult = 30/u.ulevel;
-		int duration = (u.uenmax - u.uen)*mult*2/3, i, lim;
+		int duration = (u.uenmax - u.uen)*mult*2/3+30, i, lim;
 		You("enter sleep mode.");
 		u.ucspeed = NORM_CLOCKSPEED;
 		for (i = 0; i < A_MAX; i++) {
