@@ -1911,7 +1911,6 @@ spiriteffects(power, atme)
 							} else{
 								You("hit %s.",mon_nam(mon));
 								setmangry(mon);
-								u_teleport_mon(mon, TRUE);
 							}
 							u_teleport_mon(mon, TRUE);
 						}
