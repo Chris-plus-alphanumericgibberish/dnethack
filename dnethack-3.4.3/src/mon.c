@@ -816,6 +816,11 @@ register struct monst *mtmp;
 			obj->quan = 2;
 			num = rn1(10,10);
 			while (num--){
+				obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+				obj->corpsenm = humanoid_eyes[rn2(SIZE(humanoid_eyes))];
+			}
+			num = rn1(10,10);
+			while (num--){
 				obj = mksobj_at(WORM_TOOTH, x, y, FALSE, FALSE);
 				obj->oproperties = OPROP_LESSW|OPROP_FLAYW;
 			}
