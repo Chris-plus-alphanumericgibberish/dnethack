@@ -21,7 +21,7 @@
 boolean	known;
 
 static NEARDATA const char readable[] =
-		   { ALL_CLASSES, SCROLL_CLASS, SPBOOK_CLASS, 0 };
+		   { ALL_CLASSES, SCROLL_CLASS, TILE_CLASS, SPBOOK_CLASS, 0 };
 static const char all_count[] = { ALLOW_COUNT, ALL_CLASSES, 0 };
 
 static void FDECL(wand_explode, (struct obj *));
@@ -467,8 +467,11 @@ doread()
 			return 1;
 		}
 #endif	/* TOURIST */
+	} else if (scroll->oclass == TILE_CLASS){
+		return read_tile(scroll);
 	} else if (scroll->oclass != SCROLL_CLASS
-		&& scroll->oclass != SPBOOK_CLASS) {
+		&& scroll->oclass != SPBOOK_CLASS
+	) {
 	    pline(silly_thing_to, "read");
 	    return(0);
 	} else if (Blind) {
@@ -537,6 +540,17 @@ doread()
 		else scroll->in_use = FALSE;
 	}
 	return(1);
+}
+
+static
+int
+read_tile(scroll)
+struct obj *scroll;
+{
+	if(!scroll->known){
+		You("don't know how to pronounce the glyph!");
+		return 0;
+	}
 }
 
 static void

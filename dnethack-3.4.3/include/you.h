@@ -739,6 +739,14 @@ struct you {
 	/*Keter counters*/
 	int keter, chokhmah, binah, gevurah, hod, daat, netzach;
 	int regifted; /*keeps track of how many artifacts the player has given to the unknown god*/
+	int uaesh, uaesh_duration, ukrau, ukrau_duration, uhoon, uhoon_duration,
+		uuur, uuur_duration, unaen, unaen_duration, uvaul, uvaul_duration;
+	boolean ufirst_light;
+	long ufirst_light_timeout;
+	boolean ufirst_sky;
+	long ufirst_sky_timeout;
+	boolean ufirst_life;
+	long ufirst_life_timeout;
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
 #define uandroid ((Race_if(PM_ANDROID) && !Upolyd) || (Upolyd && (youmonst.data == &mons[PM_ANDROID] || youmonst.data == &mons[PM_GYNOID])))

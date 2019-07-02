@@ -1699,6 +1699,25 @@ u_init()
 	u.uhouse = 0;
 	u.start_house = 0;
 	
+	u.uaesh = 0;
+	u.uaesh_duration = 0;
+	u.ukrau = 0;
+	u.ukrau_duration = 0;
+	u.uhoon = 0;
+	u.uhoon_duration,
+	u.uuur = 0;
+	u.uuur_duration = 0;
+	u.unaen = 0;
+	u.unaen_duration = 0;
+	u.uvaul = 0;
+	u.uvaul_duration = 0;
+	u.ufirst_light = FALSE;
+	u.ufirst_light_timeout = 0;
+	u.ufirst_sky = FALSE;
+	u.ufirst_sky_timeout = 0;
+	u.ufirst_life = FALSE;
+	u.ufirst_life_timeout = 0;
+	
 	/*Randomize spirit order*/{
 		int i,j,tmp;
 		for(i=0;i<31;i++) u.sealorder[i]=i;

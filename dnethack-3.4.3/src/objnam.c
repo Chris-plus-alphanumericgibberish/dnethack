@@ -342,6 +342,9 @@ register int otyp;
 	case SCROLL_CLASS:
 		Strcpy(buf, "scroll");
 		break;
+	case TILE_CLASS:
+		Strcpy(buf, "tile");
+		break;
 	case WAND_CLASS:
 		Strcpy(buf, "wand");
 		break;
@@ -961,6 +964,7 @@ char *buf;
 		Strcat(buf, "gem ");
 		break;
 	case MINERAL:
+		(obj->oclass == ARMOR_CLASS || obj->oclass == TILE_CLASS) ? Strcat(buf, "ceramic ") : Strcat(buf, "stone ");
 		break;
 	case OBSIDIAN_MT:
 		Strcat(buf, "obsidian ");
@@ -1052,100 +1056,100 @@ boolean with_price;
 	/* finishing up xname stuff, which has a lot of special cases */
 	if (!obj_is_pname(obj))
 	{
-	switch (obj->oclass) {
-	    case AMULET_CLASS:
-		if (!obj->dknown)
-			Strcat(buf, "amulet");
-		else if (typ == AMULET_OF_YENDOR ||
-			 typ == FAKE_AMULET_OF_YENDOR)
-			/* each must be identified individually */
-			Strcat(buf, obj->known ? actualn : dn);
-		else if (nn)
-			Strcat(buf, actualn);
-		else if (un)
+		switch (obj->oclass) {
+		case AMULET_CLASS:
+			if (!obj->dknown)
+				Strcat(buf, "amulet");
+			else if (typ == AMULET_OF_YENDOR ||
+				typ == FAKE_AMULET_OF_YENDOR)
+				/* each must be identified individually */
+				Strcat(buf, obj->known ? actualn : dn);
+			else if (nn)
+				Strcat(buf, actualn);
+			else if (un)
 				Sprintf(eos(buf), "amulet called %s", un);
-		else
+			else
 				Sprintf(eos(buf), "%s amulet", dn);
-		break;
-	    case WEAPON_CLASS:
-	    case VENOM_CLASS:
-	    case TOOL_CLASS:
-		if (typ == LENSES)
-			Strcat(buf, "pair of ");
+			break;
+		case WEAPON_CLASS:
+		case VENOM_CLASS:
+		case TOOL_CLASS:
+			if (typ == LENSES)
+				Strcat(buf, "pair of ");
 			if (typ == HYPOSPRAY_AMPULE){
-			int ptyp = (int)(obj->ovar1);
-			struct objclass *pcl = &objects[ptyp];
-			// register int pnn = ocl->oc_name_known;
-			register const char *pactualn = OBJ_NAME(*pcl);
-			// register const char *pdn = OBJ_DESCR(*pcl);
-			// register const char *pun = pcl->oc_uname;
+				int ptyp = (int)(obj->ovar1);
+				struct objclass *pcl = &objects[ptyp];
+				// register int pnn = ocl->oc_name_known;
+				register const char *pactualn = OBJ_NAME(*pcl);
+				// register const char *pdn = OBJ_DESCR(*pcl);
+				// register const char *pun = pcl->oc_uname;
 				if (!obj->dknown); //add "ampule" below and finish
 				else if (nn) {
-			    if (ptyp == POT_WATER &&
-				obj->bknown && (obj->blessed || obj->cursed)) {
-				Strcat(buf, obj->blessed ? "holy " : "unholy ");
-			    }
-			    Strcat(buf, pactualn);
-			    Strcat(buf, " ");
+					if (ptyp == POT_WATER &&
+							obj->bknown && (obj->blessed || obj->cursed)
+						) {
+						Strcat(buf, obj->blessed ? "holy " : "unholy ");
+					}
+					Strcat(buf, pactualn);
+					Strcat(buf, " ");
 				}
 				else if (un) {
-				Strcat(buf, "ampule called ");
-				Strcat(buf, un);
-				break;
+					Strcat(buf, "ampule called ");
+					Strcat(buf, un);
+					break;
 				}
 				else {
-				Strcat(buf, dn);
+					Strcat(buf, dn);
+					break;
+				}
+				Strcat(buf, "ampule");
+				Sprintf(eos(buf), " (%d doses)", (int)(obj->spe));
 				break;
 			}
-			Strcat(buf, "ampule");
-			Sprintf(eos(buf), " (%d doses)", (int)(obj->spe));
-			break;
-			}
 			else if (!obj->dknown)
-			Strcat(buf, dn ? dn : actualn);
-		else if (nn)
-			Strcat(buf, actualn);
-		else if (un) {
-			Strcat(buf, dn ? dn : actualn);
-			Strcat(buf, " called ");
-			Strcat(buf, un);
+				Strcat(buf, dn ? dn : actualn);
+			else if (nn)
+				Strcat(buf, actualn);
+			else if (un) {
+				Strcat(buf, dn ? dn : actualn);
+				Strcat(buf, " called ");
+				Strcat(buf, un);
 			}
-			else
-			Strcat(buf, dn ? dn : actualn);
-		/* If we use an() here we'd have to remember never to use */
-		/* it whenever calling doname() or xname(). */
-		if (typ == FIGURINE)
-		    Sprintf(eos(buf), " of a%s %s",
+			else Strcat(buf, dn ? dn : actualn);
+			/* If we use an() here we'd have to remember never to use */
+			/* it whenever calling doname() or xname(). */
+			if (typ == FIGURINE)
+				Sprintf(eos(buf), " of a%s %s",
 				index(vowels, *(mons[obj->corpsenm].mname)) ? "n" : "",
-			mons[obj->corpsenm].mname);
+				mons[obj->corpsenm].mname);
 			else if (is_blaster(obj) && (obj->known || Race_if(PM_ANDROID)))
-		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
+				Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
 			else if (is_vibroweapon(obj) && (obj->known || Race_if(PM_ANDROID)))
-		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
+				Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
 			else if (obj->otyp == SEISMIC_HAMMER && (obj->known || Race_if(PM_ANDROID)))
-		    Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
-		break;
-	    case ARMOR_CLASS:
-		/* depends on order of the dragon scales objects */
-		if (typ >= GRAY_DRAGON_SCALES && typ <= YELLOW_DRAGON_SCALES) {
-			Sprintf(eos(buf), "set of %s", actualn);
+				Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, (int)obj->ovar1);
 			break;
-		}
-		if ((typ == VICTORIAN_UNDERWEAR && nn) || (typ == JUMPSUIT && !nn) || (typ == BODYGLOVE && !nn)) {
-			Sprintf(eos(buf), "set of %s", actualn);
-			break;
-		}
+		case ARMOR_CLASS:
+			/* depends on order of the dragon scales objects */
+			if (typ >= GRAY_DRAGON_SCALES && typ <= YELLOW_DRAGON_SCALES) {
+				Sprintf(eos(buf), "set of %s", actualn);
+				break;
+			}
+			if ((typ == VICTORIAN_UNDERWEAR && nn) || (typ == JUMPSUIT && !nn) || (typ == BODYGLOVE && !nn)) {
+				Sprintf(eos(buf), "set of %s", actualn);
+				break;
+			}
 			if (is_boots(obj) || is_gloves(obj)) Strcat(buf, "pair of ");
 
 			if (obj->otyp >= ELVEN_SHIELD && obj->otyp <= ORCISH_SHIELD
 				&& !obj->dknown) {
-			Strcat(buf, "shield");
-			break;
-		}
+				Strcat(buf, "shield");
+				break;
+			}
 			if (obj->otyp == SHIELD_OF_REFLECTION && !obj->dknown) {
-			Strcat(buf, "smooth shield");
-			break;
-		}
+				Strcat(buf, "smooth shield");
+				break;
+			}
 
 			if (nn)	Strcat(buf, actualn);
 			else if (un) {
@@ -1159,194 +1163,234 @@ boolean with_price;
 					Strcat(buf, "helmet");
 				else if (is_shield(obj))
 					Strcat(buf, "shield");
-			else
+				else
 					Strcat(buf, "armor");
-			Strcat(buf, " called ");
-			Strcat(buf, un);
-			}
-			else	Strcat(buf, dn);
-		break;
-	    case FOOD_CLASS:
-		if (typ == SLIME_MOLD) {
-			register struct fruit *f;
-
-				for (f = ffruit; f; f = f->nextf) {
-					if (f->fid == obj->spe) {
-					Strcat(buf, f->fname);
-					break;
-				}
-			}
-			if (!f) impossible("Bad fruit #%d?", obj->spe);
-			break;
-		}
-
-		if (typ == EYEBALL && obj->known) {
-		    if (obj->corpsenm != NON_PM)
-				Sprintf(eos(buf), "%s ", mons[obj->corpsenm].mname);
-		}
-		
-		Strcat(buf, actualn);
-		if (typ == TIN && obj->known) {
-				if (obj->spe > 0)
-			Strcat(buf, " of spinach");
-		    else if (obj->corpsenm == NON_PM)
-		        Strcpy(buf, "empty tin");
-		    else if (vegetarian(&mons[obj->corpsenm]))
-			Sprintf(eos(buf), " of %s", mons[obj->corpsenm].mname);
-		    else
-			Sprintf(eos(buf), " of %s meat", mons[obj->corpsenm].mname);
-		}
-		break;
-	    case COIN_CLASS:
-	    case CHAIN_CLASS:
-		Strcat(buf, actualn);
-			if (obj->owornmask & W_ARM)
-			Strcat(eos(buf), " (wrapped around chest)");
-			else if (obj->owornmask & W_ARMC)
-			Strcat(eos(buf), " (draped over shoulders)");
-			else if (obj->owornmask & W_ARMH)
-			Strcat(eos(buf), " (wrapped around head)");
-			else if (obj->owornmask & W_ARMG)
-			Strcat(eos(buf), " (wrapped around arms)");
-			else if (obj->owornmask & W_ARMF)
-			Strcat(eos(buf), " (wrapped around legs)");
-		break;
-	    case ROCK_CLASS:
-		if (typ == STATUE)
-		    Sprintf(eos(buf), "%s%s of %s%s",
-				(Role_if(PM_ARCHEOLOGIST) && (obj->spe & STATUE_HISTORIC)) ? "historic " : "",
-			actualn,
-			type_is_pname(&mons[obj->corpsenm]) ? "" :
-			  (mons[obj->corpsenm].geno & G_UNIQ) ? "the " :
-				(index(vowels, *(mons[obj->corpsenm].mname)) ?
-								"an " : "a "),
-			mons[obj->corpsenm].mname);
-		else if (typ == FOSSIL)
-		    Sprintf(eos(buf), "%s %s",
-			mons[obj->corpsenm].mname,
-			actualn);
-		else Strcat(buf, actualn);
-		break;
-	    case BALL_CLASS:
-		Sprintf(eos(buf), "%sheavy iron ball",
-			(obj->owt > ocl->oc_weight) ? "very " : "");
-		break;
-	    case POTION_CLASS:
-		if (obj->dknown && obj->odiluted)
-			Strcat(buf, "diluted ");
-			if (typ == POT_BLOOD && (obj->known || is_vampire(youracedata))) {
-			Strcat(buf, "potion");
-			Sprintf(eos(buf), " of %s blood", mons[obj->corpsenm].mname);
-		}
-			else if (nn || un || !obj->dknown) {
-			Strcat(buf, "potion");
-				if (!obj->dknown) break;
-				if (nn) {
-			    Strcat(buf, " of ");
-			    if (typ == POT_WATER &&
-				obj->bknown && (obj->blessed || obj->cursed)) {
-				Strcat(buf, obj->blessed ? "holy " : "unholy ");
-			    }
-			    Strcat(buf, actualn);
-				}
-				else {
 				Strcat(buf, " called ");
 				Strcat(buf, un);
 			}
+			else	Strcat(buf, dn);
+			break;
+		case FOOD_CLASS:
+			if (typ == SLIME_MOLD) {
+				register struct fruit *f;
+
+				for (f = ffruit; f; f = f->nextf) {
+					if (f->fid == obj->spe) {
+						Strcat(buf, f->fname);
+						break;
+					}
+				}
+				if (!f) impossible("Bad fruit #%d?", obj->spe);
+				break;
+			}
+
+			if (typ == EYEBALL && obj->known) {
+				if (obj->corpsenm != NON_PM)
+					Sprintf(eos(buf), "%s ", mons[obj->corpsenm].mname);
+			}
+
+			Strcat(buf, actualn);
+			if (typ == TIN && obj->known) {
+				if (obj->spe > 0)
+					Strcat(buf, " of spinach");
+				else if (obj->corpsenm == NON_PM)
+					Strcpy(buf, "empty tin");
+				else if (vegetarian(&mons[obj->corpsenm]))
+					Sprintf(eos(buf), " of %s", mons[obj->corpsenm].mname);
+				else
+					Sprintf(eos(buf), " of %s meat", mons[obj->corpsenm].mname);
+			}
+			break;
+		case COIN_CLASS:
+		case CHAIN_CLASS:
+			Strcat(buf, actualn);
+			if (obj->owornmask & W_ARM)
+				Strcat(eos(buf), " (wrapped around chest)");
+			else if (obj->owornmask & W_ARMC)
+				Strcat(eos(buf), " (draped over shoulders)");
+			else if (obj->owornmask & W_ARMH)
+				Strcat(eos(buf), " (wrapped around head)");
+			else if (obj->owornmask & W_ARMG)
+				Strcat(eos(buf), " (wrapped around arms)");
+			else if (obj->owornmask & W_ARMF)
+				Strcat(eos(buf), " (wrapped around legs)");
+			break;
+		case ROCK_CLASS:
+			if (typ == STATUE)
+				Sprintf(eos(buf), "%s%s of %s%s",
+				(Role_if(PM_ARCHEOLOGIST) && (obj->spe & STATUE_HISTORIC)) ? "historic " : "",
+				actualn,
+				type_is_pname(&mons[obj->corpsenm]) ? "" :
+				(mons[obj->corpsenm].geno & G_UNIQ) ? "the " :
+				(index(vowels, *(mons[obj->corpsenm].mname)) ?
+				"an " : "a "),
+				mons[obj->corpsenm].mname);
+			else if (typ == FOSSIL)
+				Sprintf(eos(buf), "%s %s",
+				mons[obj->corpsenm].mname,
+				actualn);
+			else Strcat(buf, actualn);
+			break;
+		case BALL_CLASS:
+			Sprintf(eos(buf), "%sheavy iron ball",
+				(obj->owt > ocl->oc_weight) ? "very " : "");
+			break;
+		case POTION_CLASS:
+			if (obj->dknown && obj->odiluted)
+				Strcat(buf, "diluted ");
+			if (typ == POT_BLOOD && (obj->known || is_vampire(youracedata))) {
+				Strcat(buf, "potion");
+				Sprintf(eos(buf), " of %s blood", mons[obj->corpsenm].mname);
+			}
+			else if (nn || un || !obj->dknown) {
+				Strcat(buf, "potion");
+				if (!obj->dknown) break;
+				if (nn) {
+					Strcat(buf, " of ");
+					if (typ == POT_WATER &&
+						obj->bknown && (obj->blessed || obj->cursed)) {
+						Strcat(buf, obj->blessed ? "holy " : "unholy ");
+					}
+					Strcat(buf, actualn);
+				}
+				else {
+					Strcat(buf, " called ");
+					Strcat(buf, un);
+				}
 			}
 			else {
-			Strcat(buf, dn);
-			Strcat(buf, " potion");
+				Strcat(buf, dn);
+				Strcat(buf, " potion");
+			}
+			break;
+		case SCROLL_CLASS:
+		if(obj->otyp < SCR_BLANK_PAPER){
+			if (obj->dknown && !un && !ocl->oc_magic)
+			{
+				Strcat(buf, dn);
+				Strcat(buf, " ");
+			}
+			Strcat(buf, "scroll");
+			if (!obj->dknown) break;
+			if (nn) {
+				Strcat(buf, " of ");
+				if (obj->otyp != SCR_WARD) Strcat(buf, actualn);
+				else Strcat(buf, wardDecode[obj->oward]);
+			}
+			else if (un) {
+				Strcat(buf, " called ");
+				Strcat(buf, un);
+			}
+			else if (ocl->oc_magic) {
+				Strcat(buf, " labeled ");
+				Strcat(buf, dn);
+			}
+			else {
+				// "unlabeled scroll" should be the only case, and is already handled above.
+				;
+			}
+		} else {
+			if (!obj->dknown)
+				Strcat(buf, dn ? dn : actualn);
+			else if (nn)
+				Strcat(buf, actualn);
+			else if (un) {
+				Strcat(buf, dn ? dn : actualn);
+				Strcat(buf, " called ");
+				Strcat(buf, un);
+			}
+			else Strcat(buf, dn ? dn : actualn);
 		}
-		break;
-	case SCROLL_CLASS:
-		if (obj->dknown && !un && !ocl->oc_magic)
-		{
+	break;
+	case TILE_CLASS:
+		if (obj->dknown && !un && !ocl->oc_magic){
 			Strcat(buf, dn);
 			Strcat(buf, " ");
 		}
-		Strcat(buf, "scroll");
+		if(ocl->oc_unique)
+			Strcat(buf, "slab");
+		else
+			Strcat(buf, "tile");
 		if (!obj->dknown) break;
 		if (nn) {
-		Strcat(buf, " of ");
-			if (obj->otyp != SCR_WARD) Strcat(buf, actualn);
-		else Strcat(buf, wardDecode[obj->oward]);
+			Strcat(buf, " bearing the ");
+			Strcat(buf, actualn);
 		}
-		else if (un) {
-		Strcat(buf, " called ");
-		Strcat(buf, un);
+		else if (un){
+			Strcat(buf, " called ");
+			Strcat(buf, un);
 		}
-		else if (ocl->oc_magic) {
-		Strcat(buf, " labeled ");
-		Strcat(buf, dn);
+		else if (ocl->oc_magic){
+			Strcat(buf, " with a ");
+			Strcat(buf, dn);
 		}
 		else {
-			// "unlabeled scroll" should be the only case, and is already handled above.
-			;
+		// "unlabeled scroll" should be the only case, and is already handled above.
+		;
 		}
-		break;
-	case WAND_CLASS:
+			break;
+		case WAND_CLASS:
 			if (!obj->dknown)
-			Strcat(buf, "wand");
+				Strcat(buf, "wand");
 			else if (nn)
-			Sprintf(eos(buf), "wand of %s", actualn);
+				Sprintf(eos(buf), "wand of %s", actualn);
 			else if (un)
-			Sprintf(eos(buf), "wand called %s", un);
-		else
-			Sprintf(eos(buf), "%s wand", dn);
-		break;
-	case SPBOOK_CLASS:
-		if (!obj->dknown) {
-			Strcat(buf, "spellbook");
+				Sprintf(eos(buf), "wand called %s", un);
+			else
+				Sprintf(eos(buf), "%s wand", dn);
+			break;
+		case SPBOOK_CLASS:
+			if (!obj->dknown) {
+				Strcat(buf, "spellbook");
 			}
 			else if (nn) {
-			if (typ != SPE_BOOK_OF_THE_DEAD)
-			    Strcat(buf, "spellbook of ");
-			Strcat(buf, actualn);
+				if (typ != SPE_BOOK_OF_THE_DEAD)
+					Strcat(buf, "spellbook of ");
+				Strcat(buf, actualn);
 			}
 			else if (un) {
-			Sprintf(eos(buf), "spellbook called %s", un);
+				Sprintf(eos(buf), "spellbook called %s", un);
 			}
 			else
-			Sprintf(eos(buf), "%s spellbook", dn);
-		break;
-	case RING_CLASS:
+				Sprintf(eos(buf), "%s spellbook", dn);
+			break;
+		case RING_CLASS:
 			if (!obj->dknown)
-			Strcat(buf, "ring");
+				Strcat(buf, "ring");
 			else if (nn)
-			Sprintf(eos(buf), "ring of %s", actualn);
+				Sprintf(eos(buf), "ring of %s", actualn);
 			else if (un)
-			Sprintf(eos(buf), "ring called %s", un);
-		else
-			Sprintf(eos(buf), "%s ring", dn);
-		break;
-	case GEM_CLASS:
-	    {
-		const char *rock =
-			    (ocl->oc_material == MINERAL ||
-				 ocl->oc_material == MITHRIL ||
-				 ocl->oc_material == SILVER
-				) ? "stone" : "gem";
-		if (!obj->dknown) {
-		    Strcat(buf, rock);
+				Sprintf(eos(buf), "ring called %s", un);
+			else
+				Sprintf(eos(buf), "%s ring", dn);
+			break;
+		case GEM_CLASS:
+		{
+						  const char *rock =
+							  (ocl->oc_material == MINERAL ||
+							  ocl->oc_material == MITHRIL ||
+							  ocl->oc_material == SILVER
+							  ) ? "stone" : "gem";
+						  if (!obj->dknown) {
+							  Strcat(buf, rock);
 						  }
 						  else if (!nn) {
 							  if (un) Sprintf(eos(buf), "%s called %s", rock, un);
-		    else Sprintf(eos(buf), "%s %s", dn, rock);
+							  else Sprintf(eos(buf), "%s %s", dn, rock);
 						  }
 						  else {
-		    Strcat(buf, actualn);
-		    if (GemStone(typ)) Strcat(buf, " stone");
+							  Strcat(buf, actualn);
+							  if (GemStone(typ)) Strcat(buf, " stone");
+						  }
+						  break;
 		}
-		break;
-	    }
-	default:
+		default:
 			Sprintf(eos(buf), "glorkum %d %d %d", obj->oclass, typ, obj->spe);
-	}
+		}
 #ifdef SORTLOOT
 		if (!ignore_oquan)
 #endif
-	if (obj->quan != 1L) Strcpy(buf, makeplural(buf));
+		if (obj->quan != 1L) Strcpy(buf, makeplural(buf));
 	}//endif !obj_is_pname(obj)
 
 	if ((obj->onamelth && obj->dknown) || (obj_is_pname(obj))) {
@@ -1355,12 +1399,12 @@ boolean with_price;
 			if (obj->quan == 8) Strcat(buf, "Fluorite Octet");
 			else if (obj->quan > 1) Strcat(buf, "Fluorite Octahedra");
 			else Strcat(buf, "Fluorite Octahedron");
-	}
+		}
 		else if (obj_is_pname(obj) && obj->known && !strncmpi(ONAME(obj), "the ", 4))
 			Strcat(buf, ONAME(obj)+4);
-    else
+		else 
 			Strcat(buf, ONAME(obj));
-		}
+	}
 
 	if (!dofull && !strncmpi(buf, "the ", 4)) buf += 4;
 
@@ -1371,78 +1415,78 @@ boolean with_price;
 		if (obj && obj->oartifact) oart = &artilist[(obj)->oartifact];
 
 		switch (obj->oclass) {
-	case AMULET_CLASS:
+		case AMULET_CLASS:
 			if (obj->owornmask & W_AMUL)
 				Strcat(buf, " (being worn)");
-		break;
-	case WEAPON_CLASS:
+			break;
+		case WEAPON_CLASS:
 			if (obj->known && obj->oartifact &&
-			(oart->inv_prop == LORDLY || oart->inv_prop == ANNUL)
-		){
+				(oart->inv_prop == LORDLY || oart->inv_prop == ANNUL)
+				){
 				Sprintf(eos(buf), " (%s)", OBJ_NAME(objects[obj->otyp]));
-		}
+			}
 			if (obj->oartifact == ART_SCALPEL_OF_LIFE_AND_DEATH){
 				if (COMMAND_LIFE == obj->ovar1) Sprintf(eos(buf), " (life)");
 				if (COMMAND_DEATH == obj->ovar1) Sprintf(eos(buf), " (death)");
-        }
-		if(obj->oartifact == ART_SINGING_SWORD && uwep == obj){
-			switch(obj->osinging){
-				default:
-						Sprintf(eos(buf), " (tuneless song)");
-				break;
-				case OSING_FEAR:
-						Sprintf(eos(buf), " (ominous chanting)");
-				break;
-				case OSING_HEALING:
-						Sprintf(eos(buf), " (soothing humming)");
-				break;
-				case OSING_RALLY:
-						Sprintf(eos(buf), " (soft whistling)");
-				break;
-				case OSING_CONFUSE:
-						Sprintf(eos(buf), " (horrid cacophony)");
-				break;
-				case OSING_HASTE:
-						Sprintf(eos(buf), " (marching song)");
-				break;
-				case OSING_LETHARGY:
-						Sprintf(eos(buf), " (lethargic song)");
-				break;
-				case OSING_COURAGE:
-						Sprintf(eos(buf), " (inspiring song)");
-				break;
-				case OSING_DIRGE:
-						Sprintf(eos(buf), " (dismal dirge)");
-				break;
-				case OSING_FIRE:
-						Sprintf(eos(buf), " (fiery song)");
-				break;
-				case OSING_FROST:
-						Sprintf(eos(buf), " (chilling song)");
-				break;
-				case OSING_ELECT:
-						Sprintf(eos(buf), " (electrifying song)");
-				break;
-				case OSING_QUAKE:
-						Sprintf(eos(buf), " (earthshaking chant)");
-				break;
-				case OSING_OPEN:
-						Sprintf(eos(buf), " (high ringing)");
-				break;
-				case OSING_DEATH:
-						Sprintf(eos(buf), " (vast rushing)");
-				break;
-				case OSING_LIFE:
-						Sprintf(eos(buf), " (heartbeat cadence)");
-				break;
-				case OSING_INSANE:
-						Sprintf(eos(buf), " (monotonous whining)");
-				break;
-				case OSING_CANCEL:
-						Sprintf(eos(buf), " (discordant notes)");
-				break;
 			}
-		}
+			if(obj->oartifact == ART_SINGING_SWORD && uwep == obj){
+				switch(obj->osinging){
+					default:
+						Sprintf(eos(buf), " (tuneless song)");
+					break;
+					case OSING_FEAR:
+						Sprintf(eos(buf), " (ominous chanting)");
+					break;
+					case OSING_HEALING:
+						Sprintf(eos(buf), " (soothing humming)");
+					break;
+					case OSING_RALLY:
+						Sprintf(eos(buf), " (soft whistling)");
+					break;
+					case OSING_CONFUSE:
+						Sprintf(eos(buf), " (horrid cacophony)");
+					break;
+					case OSING_HASTE:
+						Sprintf(eos(buf), " (marching song)");
+					break;
+					case OSING_LETHARGY:
+						Sprintf(eos(buf), " (lethargic song)");
+					break;
+					case OSING_COURAGE:
+						Sprintf(eos(buf), " (inspiring song)");
+					break;
+					case OSING_DIRGE:
+						Sprintf(eos(buf), " (dismal dirge)");
+					break;
+					case OSING_FIRE:
+						Sprintf(eos(buf), " (fiery song)");
+					break;
+					case OSING_FROST:
+						Sprintf(eos(buf), " (chilling song)");
+					break;
+					case OSING_ELECT:
+						Sprintf(eos(buf), " (electrifying song)");
+					break;
+					case OSING_QUAKE:
+						Sprintf(eos(buf), " (earthshaking chant)");
+					break;
+					case OSING_OPEN:
+						Sprintf(eos(buf), " (high ringing)");
+					break;
+					case OSING_DEATH:
+						Sprintf(eos(buf), " (vast rushing)");
+					break;
+					case OSING_LIFE:
+						Sprintf(eos(buf), " (heartbeat cadence)");
+					break;
+					case OSING_INSANE:
+						Sprintf(eos(buf), " (monotonous whining)");
+					break;
+					case OSING_CANCEL:
+						Sprintf(eos(buf), " (discordant notes)");
+					break;
+				}
+			}
 			//#ifdef FIREARMS
 			if (obj->otyp == STICK_OF_DYNAMITE) {
 				if (obj->lamplit) Strcat(buf, " (lit)");
@@ -1455,7 +1499,7 @@ boolean with_price;
 #  ifdef DEBUG
 				Sprintf(eos(buf), " (%d)", obj->age);
 #  endif
-		}
+			}
 			//#endif	/* FIREARMS */
 			if (obj->otyp == RAYGUN){
 				if (obj->altmode == AD_SLEE) Strcat(buf, " (stun)");
@@ -1464,11 +1508,11 @@ boolean with_price;
 				else if (obj->altmode == AD_DISN) Strcat(buf, " (disintegrate)");
 			}
 			else if (obj->otyp == ARM_BLASTER ||
-				  obj->otyp == ASSAULT_RIFLE ||
-				  obj->otyp == BFG ||
-				  obj->otyp == AUTO_SHOTGUN ||
-				  obj->otyp == SUBMACHINE_GUN
-		){
+				obj->otyp == ASSAULT_RIFLE ||
+				obj->otyp == BFG ||
+				obj->otyp == AUTO_SHOTGUN ||
+				obj->otyp == SUBMACHINE_GUN
+				){
 				if (obj->altmode == WP_MODE_AUTO) Strcat(buf, " (auto)");
 				else if (obj->altmode == WP_MODE_BURST) Strcat(buf, " (burst)");
 				else if (obj->altmode == WP_MODE_SINGLE) Strcat(buf, " (single)");
@@ -1477,23 +1521,23 @@ boolean with_price;
 				Strcat(buf, " (lit)");
 			}
 			else if (is_lightsaber(obj)) {
-		    if (litsaber(obj)){
+				if (litsaber(obj)){
 					if (obj->oartifact == ART_INFINITY_S_MIRRORED_ARC){
-					xchar x, y;
-					int dnm = 0;
-					get_obj_location(obj, &x, &y, 0);
+						xchar x, y;
+						int dnm = 0;
+						get_obj_location(obj, &x, &y, 0);
 						if (levl[x][y].lit &&
 							!(viz_array[y][x] & TEMP_DRK3 &&
 							!(viz_array[y][x] & TEMP_LIT1)
-						)
-					) dnm += 2;
+							)
+							) dnm += 2;
 						if (viz_array[y][x] & TEMP_LIT1 &&
 							!(viz_array[y][x] & TEMP_DRK3)
-					) dnm += 1;
+							) dnm += 1;
 						if (obj->altmode){
 							if (dnm > 1) Strcat(buf, " (two blades lit)");
 							else Strcat(buf, " (two blades flickering)");
-				}
+						}
 						else if (dnm <= 1) Strcat(buf, " (flickering)");
 					}
 					else if (obj->otyp == KAMEREL_VAJRA){
@@ -1510,19 +1554,19 @@ boolean with_price;
 						}
 					}
 					// Sprintf(eos(buf), " (%d)", obj->age);
-			}
+				}
 #  ifdef DEBUG
 				Sprintf(eos(buf), " (%d)", obj->age);
 #  endif
 			}
 			else if (obj->otyp == SHADOWLANDER_S_TORCH
-			|| obj->otyp == TORCH || obj->otyp == SUNROD
-		) {
+				|| obj->otyp == TORCH || obj->otyp == SUNROD
+				) {
 				if (obj->lamplit)
 					Strcat(buf, " (lit)");
-		}
-		break;
-	case ARMOR_CLASS:
+			}
+			break;
+		case ARMOR_CLASS:
 			if (obj->owornmask & W_ARMOR)
 				Strcat(buf, (obj == uskin) ? " (embedded in your skin)" :
 				" (being worn)");
@@ -1553,57 +1597,57 @@ boolean with_price;
 					Sprintf(eos(buf), " (green)");
 				if (YELLOW_DRAGON_SCALE_MAIL == obj->otyp)
 					Sprintf(eos(buf), " (yellow)");
-        }
+			}
 			break;
-	case TOOL_CLASS:
+		case TOOL_CLASS:
 			if (obj->owornmask & (W_TOOL /* blindfold */
 #ifdef STEED
 				| W_SADDLE
 #endif
 				)) {
 				Strcat(buf, " (being worn)");
-			break;
-		}
-		if (obj->otyp == LEASH && obj->leashmon != 0) {
+				break;
+			}
+			if (obj->otyp == LEASH && obj->leashmon != 0) {
 				Strcat(buf, " (in use)");
-			break;
-		}
-		if (obj->otyp == CANDELABRUM_OF_INVOCATION) {
+				break;
+			}
+			if (obj->otyp == CANDELABRUM_OF_INVOCATION) {
 				char tmpbuf[BUFSZ];
 
-			if (!obj->spe)
-			    Strcpy(tmpbuf, "no");
-			else
-			    Sprintf(tmpbuf, "%d", obj->spe);
+				if (!obj->spe)
+					Strcpy(tmpbuf, "no");
+				else
+					Sprintf(tmpbuf, "%d", obj->spe);
 				Sprintf(eos(buf), " (%s candle%s%s)",
-				tmpbuf, plur(obj->spe),
-				!obj->lamplit ? " attached" : ", lit");
+					tmpbuf, plur(obj->spe),
+					!obj->lamplit ? " attached" : ", lit");
 
-			break;
+				break;
 			}
 			else if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP
-			|| obj->otyp == BRASS_LANTERN || Is_candle(obj) || obj->otyp == SHADOWLANDER_S_TORCH
-			|| obj->otyp == TORCH || obj->otyp == SUNROD
-		) {
+				|| obj->otyp == BRASS_LANTERN || Is_candle(obj) || obj->otyp == SHADOWLANDER_S_TORCH
+				|| obj->otyp == TORCH || obj->otyp == SUNROD
+				) {
 				if (obj->lamplit)
 					Strcat(buf, " (lit)");
-			break;
-		}
+				break;
+			}
 			if (objects[obj->otyp].oc_charged && !is_weptool(obj))
-		    goto charges;
-		break;
-	case WAND_CLASS:
+				goto charges;
+			break;
+		case WAND_CLASS:
 		charges:
 			if (obj->known || Race_if(PM_ANDROID))
 				Sprintf(eos(buf), " (%d:%d)", (int)obj->recharged, obj->spe);
 			else if (obj->spe <= 0 && Race_if(PM_INCANTIFIER))
 				Sprintf(eos(buf), " (empty)");
-		break;
-	case POTION_CLASS:
-		if (obj->otyp == POT_OIL && obj->lamplit)
+			break;
+		case POTION_CLASS:
+			if (obj->otyp == POT_OIL && obj->lamplit)
 				Strcat(buf, " (lit)");
-		break;
-	case RING_CLASS:
+			break;
+		case RING_CLASS:
 		ring:
 			if (obj->otyp == RIN_WISHES && obj->known) Sprintf(eos(buf), " (%d remaining)", obj->spe);
 			if (obj->otyp == RIN_WISHES && !obj->known && obj->spe > 0) Sprintf(eos(buf), " with %d star%s", obj->spe, plur(obj->spe));
@@ -1630,66 +1674,66 @@ boolean with_price;
 				if (obj->opoisoned & OPOISON_PARAL) Strcat(buf, " (venom injecting)");
 				if (obj->opoisoned & OPOISON_AMNES) Strcat(buf, " (lethe injecting)");
 				if (obj->opoisoned & OPOISON_ACID)  Strcat(buf, " (acid injecting)");
-		}
-		break;
-	case FOOD_CLASS:
+			}
+			break;
+		case FOOD_CLASS:
 			if (obj->otyp == EGG) {
-		    if (obj->corpsenm >= LOW_PM &&
-			    (obj->known ||
-			    mvitals[obj->corpsenm].mvflags & MV_KNOWS_EGG)) {
-			if (obj->spe)
+				if (obj->corpsenm >= LOW_PM &&
+					(obj->known ||
+					mvitals[obj->corpsenm].mvflags & MV_KNOWS_EGG)) {
+					if (obj->spe)
 						Strcat(buf, " (laid by you)");
-		    }
-		}
-		if (obj->otyp == MEAT_RING) goto ring;
-		break;
-	case BALL_CLASS:
-	case CHAIN_CLASS:
+				}
+			}
+			if (obj->otyp == MEAT_RING) goto ring;
+			break;
+		case BALL_CLASS:
+		case CHAIN_CLASS:
 			if (obj->owornmask & W_BALL)
 				Strcat(buf, " (chained to you)");
 			break;
 		}//end switch(oclass)
 
 		if ((obj->owornmask & W_WEP) && !mrg_to_wielded) {
-		if (obj->quan != 1L) {
+			if (obj->quan != 1L) {
 				Strcat(buf, " (wielded)");
 			}
 			else {
-			const char *hand_s = body_part(HAND);
+				const char *hand_s = body_part(HAND);
 
 				if ((bimanual(obj, youracedata)
-				&& !(u.twoweap && (obj->oartifact == ART_PROFANED_GREATSCYTHE || obj->oartifact == ART_LIFEHUNT_SCYTHE)))
+					&& !(u.twoweap && (obj->oartifact == ART_PROFANED_GREATSCYTHE || obj->oartifact == ART_LIFEHUNT_SCYTHE)))
 					|| (u.twoweap && obj->otyp == STILETTOS))
-				hand_s = makeplural(hand_s);
+					hand_s = makeplural(hand_s);
 				Sprintf(eos(buf), " (weapon in %s)", hand_s);
+			}
 		}
-	}
 		if (obj->owornmask & W_SWAPWEP) {
 			if (mcarried(obj) || (u.twoweap && !(uwep && uwep->otyp == STILETTOS)))	// Monsters twoweaponing stilettos would give a bad message, but they can't even wield stilettos right now...
 				Sprintf(eos(buf), " (wielded in other %s)",
 				body_part(HAND));
-		else
+			else
 				Strcat(buf, " (alternate weapon; not wielded)");
-	}
+		}
 		if (obj->owornmask & W_QUIVER) Strcat(buf, " (in quiver)");
 		if (obj->unpaid) {
-		xchar ox, oy; 
-		long quotedprice = unpaid_cost(obj);
-		struct monst *shkp = (struct monst *)0;
+			xchar ox, oy;
+			long quotedprice = unpaid_cost(obj);
+			struct monst *shkp = (struct monst *)0;
 
-		if (Has_contents(obj) &&
+			if (Has_contents(obj) &&
 				get_obj_location(obj, &ox, &oy, BURIED_TOO | CONTAINED_TOO) &&
-		    costly_spot(ox, oy) &&
-		    (shkp = shop_keeper(*in_rooms(ox, oy, SHOPBASE))))
-			quotedprice += contained_cost(obj, shkp, 0L, FALSE, TRUE);
+				costly_spot(ox, oy) &&
+				(shkp = shop_keeper(*in_rooms(ox, oy, SHOPBASE))))
+				quotedprice += contained_cost(obj, shkp, 0L, FALSE, TRUE);
 			Sprintf(eos(buf), " (unpaid, %ld %s)",
-			quotedprice, currency(quotedprice));
-	}
+				quotedprice, currency(quotedprice));
+		}
 		else if (with_price) {
 			long price = get_cost_of_shop_item(obj);
 			if (price > 0) {
 				Sprintf(eos(buf), " (%ld %s)", price, currency(price));
-	}
+			}
 		}
 		// fix "a" -> "an"
 		if (!strncmp(buf, "a ", 2) &&
@@ -1996,7 +2040,7 @@ const char *str;
 				if (!strncmp(artilist[i].name, "The ", 4) &&
 					((l = strlen(str)) >= strlen(artilist[i].name) - 4) &&
 					!strcmp(&str[l - (strlen(artilist[i].name) - 4)], artilist[i].name + 4))
-		    insert_the = TRUE;
+					insert_the = TRUE;
 			}
 
 			// This will have to catch any remaining items that should start with "the "
@@ -2013,7 +2057,7 @@ const char *str;
 				!strncmp(str, "Candelabrum of Invocation", 25)
 				))
 				))
-		    insert_the = TRUE;
+				insert_the = TRUE;
 
 	    }
 	}
@@ -2270,13 +2314,13 @@ struct obj *obj;
 }
 
 static const char *wrp[] = {
-	"wand", "ring", "potion", "scroll", "gem", "amulet",
+	"wand", "ring", "potion", "scroll", "tile", "gem", "amulet",
 	"spellbook", "spell book",
 	/* for non-specific wishes */
 	"weapon", "armor", "armour", "tool", "food", "comestible",
 };
 static const char wrpsym[] = {
-	WAND_CLASS, RING_CLASS, POTION_CLASS, SCROLL_CLASS, GEM_CLASS,
+	WAND_CLASS, RING_CLASS, POTION_CLASS, SCROLL_CLASS, TILE_CLASS, GEM_CLASS,
 	AMULET_CLASS, SPBOOK_CLASS, SPBOOK_CLASS,
 	WEAPON_CLASS, ARMOR_CLASS, ARMOR_CLASS, TOOL_CLASS, FOOD_CLASS,
 	FOOD_CLASS
@@ -2893,6 +2937,18 @@ struct alt_spellings {
 	{ "droven dress", NOBLE_S_DRESS },
 	{ "armored boots", ARMORED_BOOTS },
 	{ "fossil dark", CHUNK_OF_FOSSIL_DARK },
+	{ "aesh", SYLLABLE_OF_STRENGTH__AESH },
+	{ "strength syllable", SYLLABLE_OF_STRENGTH__AESH },
+	{ "krau", SYLLABLE_OF_POWER__KRAU },
+	{ "power syllable", SYLLABLE_OF_POWER__KRAU },
+	{ "hoon", SYLLABLE_OF_LIFE__HOON },
+	{ "life syllable", SYLLABLE_OF_LIFE__HOON },
+	{ "uur", SYLLABLE_OF_GRACE__UUR },
+	{ "grace syllable", SYLLABLE_OF_GRACE__UUR },
+	{ "naen", SYLLABLE_OF_THOUGHT__NAEN },
+	{ "thought syllable", SYLLABLE_OF_THOUGHT__NAEN },
+	{ "vaul", SYLLABLE_OF_SPIRIT__VAUL },
+	{ "spirit syllable", SYLLABLE_OF_SPIRIT__VAUL },
 	{ (const char *)0, 0 },
 };
 

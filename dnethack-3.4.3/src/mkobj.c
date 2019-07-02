@@ -1151,6 +1151,8 @@ boolean artif;
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 	break;
 	case COIN_CLASS:
+	// case BED_CLASS:
+	case TILE_CLASS:
 		break;	/* do nothing */
 	default:
 		impossible("impossible mkobj %d, sym '%c'.", otmp->otyp,

@@ -198,9 +198,16 @@ shuffle_all()
 			if (oclass == WAND_CLASS)
 			    first += 3;  /* light, darkness, and wishing have fixed descriptions */
 			else if (oclass == AMULET_CLASS ||
-				 oclass == SCROLL_CLASS ||
-				 oclass == SPBOOK_CLASS) {
+				 oclass == TILE_CLASS ||
+				 oclass == SPBOOK_CLASS
+			){
 			    while (!objects[j].oc_magic || objects[j].oc_unique)
+				j--;
+			}
+			else if (oclass == SCROLL_CLASS){
+				j=first;
+			    while (objects[j].oc_magic) //Assumes blank scroll is the sentential
+					j++;
 				j--;
 			}
 

@@ -2207,6 +2207,9 @@ struct obj *obj;
 	else if (obj->oclass == SCROLL_CLASS)
 		add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
 				"Cast the spell on this scroll", MENU_UNSELECTED);
+	else if (obj->oclass == TILE_CLASS)
+		add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
+				"Speak the glyph on this tile", MENU_UNSELECTED);
 	else if (obj->oclass == SPBOOK_CLASS)
 		add_menu(win, NO_GLYPH, &any, 'r', 0, ATR_NONE,
 				"Study this spellbook", MENU_UNSELECTED);
@@ -4219,18 +4222,21 @@ STATIC_VAR NEARDATA const char *names[] = { 0,
 	"Illegal objects", "Weapons", "Armor", "Rings", "Amulets",
 	"Tools", "Comestibles", "Potions", "Scrolls", "Spellbooks",
 	"Wands", "Coins", "Gems", "Boulders/Statues", "Iron balls",
-	"Chains", "Venoms"
+	"Scrap", "Venoms", "Tiles"/*, Beds*/
 };
 
 STATIC_VAR NEARDATA const char *bogusclasses[] = {
 	"Illegal objects", "Weapons", "Armor", "Rings", "Amulets",
 	"Tools", "Comestibles", "Potions", "Scrolls", "Spellbooks",
 	"Wands", "Coins", "Gems", "Boulders/Statues", "Iron balls",
-	"Chains", "Venoms",
-	"Filler","Useless Objects", "Artifacts", "Ascension Kit Items",
+	"Scrap", "Venoms","Tiles",/*, Beds*/
+	"Filler","Useless objects", "Artifacts", "Ascension kit items",
 	"Staves", "Songs", "Drinks", "Grimoires", "Gears", "Cogs",
 	"Marmosets", "Bugs", "Easter Eggs", "Tiny Monuments","Consumables",
-	"Junk", "FOOs", "BARs", "Spoilers", "YANIs", "Splatbooks", "SCPs"
+	"Junk", "FOOs", "BARs", "Spoilers", "YANIs", "Splatbooks", 
+	"Chains", "Paperwork", "Pop-culture references", "Dross",
+	"Pokemon","Forgotten escape items",
+	"SCPs"
 };
 
 static NEARDATA const char oth_symbols[] = {
