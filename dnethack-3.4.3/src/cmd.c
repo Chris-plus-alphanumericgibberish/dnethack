@@ -156,6 +156,7 @@ STATIC_PTR int NDECL(doconduct); /**/
 STATIC_PTR boolean NDECL(minimal_enlightenment);
 STATIC_PTR void NDECL(resistances_enlightenment);
 STATIC_PTR void NDECL(signs_enlightenment);
+STATIC_PTR void NDECL(udr_enlightenment);
 
 #ifdef OVLB
 STATIC_DCL void FDECL(enlght_line, (const char *,const char *,const char *));
@@ -2752,7 +2753,7 @@ int final;
 } /* dump_enlightenment */
 #endif
 
-void
+STATIC_OVL void
 resistances_enlightenment()
 {
 	char buf[BUFSZ];
@@ -2983,7 +2984,52 @@ resistances_enlightenment()
 	return;
 }
 
-void
+STATIC_OVL void
+udr_enlightenment()
+{
+	int dr;
+	char mbuf[BUFSZ] = {'\0'};
+	en_win = create_nhwindow(NHW_MENU);
+	putstr(en_win, 0, "Current Damage Reduction:");
+	putstr(en_win, 0, "");
+	
+	if(!has_head(youracedata)){
+		Sprintf(mbuf, "You have no head; shots hit upper body");
+		putstr(en_win, 0, mbuf);
+	} else {
+		dr = slot_udr(HEAD_DR, (struct monst *)0);
+	Sprintf(mbuf, "Head Armor:       %s%d", (dr>11) ? "11-" : "", dr);
+		putstr(en_win, 0, mbuf);
+	}
+	dr = slot_udr(UPPER_TORSO_DR, (struct monst *)0);
+	Sprintf(mbuf, "Upper Body Armor: %s%d", (dr>11) ? "11-" : "", dr);
+	dr = slot_udr(LOWER_TORSO_DR, (struct monst *)0);
+	putstr(en_win, 0, mbuf);
+	Sprintf(mbuf, "Lower Body Armor: %s%d", (dr>11) ? "11-" : "", dr);
+	putstr(en_win, 0, mbuf);
+	if(!can_wear_gloves(youracedata)){
+		Sprintf(mbuf, "You have no hands; shots hit upper body");
+		putstr(en_win, 0, mbuf);
+	} else {
+		dr = slot_udr(ARM_DR, (struct monst *)0);
+	Sprintf(mbuf, "Hand Armor:       %s%d", (dr>11) ? "11-" : "", dr);
+		putstr(en_win, 0, mbuf);
+	}
+	if(!can_wear_boots(youracedata)){
+		Sprintf(mbuf, "You have no feet; shots hit lower body");
+		putstr(en_win, 0, mbuf);
+	} else {
+		dr = slot_udr(LEG_DR, (struct monst *)0);
+	Sprintf(mbuf, "Foot Armor:       %s%d", (dr>11) ? "11-" : "", dr);
+		putstr(en_win, 0, mbuf);
+	}
+	
+	display_nhwindow(en_win, TRUE);
+	destroy_nhwindow(en_win);
+	return;
+}
+
+STATIC_OVL void
 signs_enlightenment()
 {
 	boolean message = FALSE;
@@ -3700,6 +3746,8 @@ doattributes()
 	if (wizard || discover)
 		enlightenment(0);
 	else resistances_enlightenment();
+	resistances_enlightenment();
+	udr_enlightenment();
 	if(u.sealsActive || u.specialSealsActive) signs_enlightenment();
 	return 0;
 }

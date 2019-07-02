@@ -1016,7 +1016,8 @@ int spec;
 		}
 		if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS 
 			&& !otmp->blessed && !otmp->cursed
-			&& (is_undead_mon(mon) || is_demon(ptr) || hates_unholy(ptr))
+			&& mon
+			&& (holy_damage(mon) || hates_unholy(ptr))
 		){
 			bonus += rnd(10);
 		}

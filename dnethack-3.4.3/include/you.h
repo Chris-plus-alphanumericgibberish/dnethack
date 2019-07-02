@@ -473,6 +473,11 @@ struct you {
 	schar	uacinc;			/* bonus AC (not spell/divine) */
 	schar	uac;
 	schar	udr;
+#define	UPPER_TORSO_DR	0
+#define	LOWER_TORSO_DR	1
+#define	HEAD_DR			2
+#define	LEG_DR			3
+#define	ARM_DR			4
 	uchar	uspellprot;		/* protection by SPE_PROTECTION */
 	uchar	udrunken;		/* drunkeness level (based on total number of potions of booze drunk) */
 	uchar	usptime;		/* #moves until uspellprot-- */

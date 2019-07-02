@@ -2334,7 +2334,8 @@ find_dr()
 #ifdef OVLB
 
 int
-roll_udr(magr)
+slot_udr(slot, magr)
+int slot;
 struct monst *magr;
 {
 	int udr;
@@ -2344,12 +2345,19 @@ struct monst *magr;
 	int clkdr = 0;
 	
 	if(magr){
-		agralign = sgn(magr->data->maligntyp);
+		agralign = (magr == &youmonst) ? sgn(u.ualign.type) : sgn(magr->data->maligntyp);
 		
+		if(magr == &youmonst){
+			if(hates_holy(youracedata))
+				agrmoral = -1;
+			else if(hates_unholy(youracedata))
+				agrmoral = 1;
+		} else {
 		if(hates_holy_mon(magr))
 			agrmoral = -1;
 		else if(hates_unholy(magr->data))
 			agrmoral = 1;
+	}
 	}
 	
 	udr = base_udr();
@@ -2373,8 +2381,8 @@ struct monst *magr;
 	//Note: Bias this somehow?
 	if(magr && magr->data == &mons[PM_XAN])
 		goto boot_hit;
-	switch(rn2(5)){
-		case 0:
+	switch(slot){
+		case UPPER_TORSO_DR:
 uppertorso:
 			//Note: upper body (shirt plus torso armor)
 			if(uandroid) udr += 6; /*thick chest armor*/
@@ -2385,10 +2393,10 @@ uppertorso:
 				}
 			}
 			//Note: SHOULD fall-through here to add the torso armor bonus
-		case 1:
+		case LOWER_TORSO_DR:
 lowertorso:
 			//Note: lower body (torso armor only)
-			if(uandroid) udr += 3; /*flexible torso armor*/
+			if(slot != UPPER_TORSO_DR && uandroid) udr += 3; /*flexible torso armor*/
 			if (uarm){
 				if(uarm->otyp != JUMPSUIT){
 					armdr += arm_dr_bonus(uarm);
@@ -2397,21 +2405,27 @@ lowertorso:
 			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
+			if (uarmu && slot != UPPER_TORSO_DR){
+				if(uarmu->otyp == BLACK_DRESS || uarmu->otyp == VICTORIAN_UNDERWEAR){
+					armdr += arm_dr_bonus(uarmu);
+					if(magr) armdr += properties_dr(uarmu, agralign, agrmoral);
+				}
+			}
 			armdr += clkdr;
 		break;
-		case 2:
-			if(uandroid) udr += 6; /*thick cranial armor*/
+		case HEAD_DR:
 			if(!has_head(youracedata)) goto uppertorso;
+			if(uandroid) udr += 6; /*thick cranial armor*/
 			if (uarmh){
 				armdr += arm_dr_bonus(uarmh);
 				if(magr) armdr += properties_dr(uarmh, agralign, agrmoral);
 			}
 			armdr += clkdr;
 		break;
-		case 3:
+		case LEG_DR:
 boot_hit:
-			if(uandroid) udr += 3; /*thinner leg armor*/
 			if(!can_wear_boots(youracedata)) goto lowertorso;
+			if(uandroid) udr += 3; /*thinner leg armor*/
 			if (uarmf){
 				armdr += arm_dr_bonus(uarmf);
 				if(magr) armdr += properties_dr(uarmf, agralign, agrmoral);
@@ -2420,9 +2434,9 @@ boot_hit:
 			}
 			armdr += clkdr;
 		break;
-		case 4:
-			if(uandroid) udr += 3; /*thinner arm armor*/
+		case ARM_DR:
 			if(!can_wear_gloves(youracedata)) goto uppertorso;
+			if(uandroid) udr += 3; /*thinner arm armor*/
 			if (uarmg){
 				armdr += arm_dr_bonus(uarmg);
 				if(magr) armdr += properties_dr(uarmg, agralign, agrmoral);
@@ -2443,6 +2457,14 @@ boot_hit:
 	
 	if (udr > 127) udr = 127;	/* u.uac is an schar */
 	
+	return udr;
+}
+
+int
+roll_udr(magr)
+struct monst *magr;
+{
+	int udr = slot_udr(rn2(5), magr);
 	//diminishing returns after 10 points of DR.
 	if(udr > 11){
 		if(u.sealsActive&SEAL_BALAM)
