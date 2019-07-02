@@ -1758,7 +1758,7 @@ int part;
 	    return snakeleg_humanoid_parts[part];
 	if (centauroid(mptr))
 	    return centauroid_parts[part];
-	if (is_clockwork(mptr) || (mon == &youmonst && uclockwork))
+	if ((mon != &youmonst && is_clockwork(mptr)) || (mon == &youmonst && uclockwork))
 	    return clockwork_parts[part];
 	if (humanoid(mptr))
 	    return humanoid_parts[part];
