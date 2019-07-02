@@ -1456,7 +1456,7 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, !rn2(10) ? ELVEN_MITHRIL_COAT : ELVEN_TOGA);
 					(void)mongets(mtmp, LOW_BOOTS);
 				} else if (mm == PM_NEANDERTHAL){
-					static int drgnprop[] = {
+					static long long int drgnprop[] = {
 						OPROP_FIREW,
 						OPROP_ACIDW,
 						OPROP_ELECW,

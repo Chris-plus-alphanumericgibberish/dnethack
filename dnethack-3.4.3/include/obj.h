@@ -187,7 +187,7 @@ struct obj {
 #define OPOISON_ACID	0x40 /* Acid coating */
 #define OPOISON_SILVER	0x80 /* Silver coating */
 
-	long	oproperties;/* special properties */
+	long long int oproperties;/* special properties */
 #define OPROP_NONE		0x0000000000000000
 #define OPROP_FIRE		0x0000000000000001
 #define OPROP_COLD		0x0000000000000002
