@@ -2319,7 +2319,6 @@ int newgame;
 			quest_status.got_quest = TRUE;
 			quest_status.leader_is_dead = TRUE;
 			flags.questprogress = 1;
-			livelog_write_string("received their quest via sticky-note");
 		}
 	}
 
