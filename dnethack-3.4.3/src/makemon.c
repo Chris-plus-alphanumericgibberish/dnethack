@@ -768,13 +768,8 @@ register struct monst *mtmp;
 				} else if(mm == PM_DROW_NOVICE){
 					otmp = mksobj(BLACK_DRESS, TRUE, FALSE);
 					otmp->spe = 0;
-					otmp->oeroded2 = 1;
-					otmp->blessed = FALSE;
-					otmp->cursed = TRUE;
-					(void) mpickobj(mtmp, otmp);
-					otmp = mksobj(MUMMY_WRAPPING, TRUE, FALSE);
-					otmp->spe = 0;
-					otmp->oeroded2 = 1;
+					// otmp->oeroded2 = 1;
+					otmp->opoisoned = OPOISON_FILTH;
 					otmp->blessed = FALSE;
 					otmp->cursed = TRUE;
 					(void) mpickobj(mtmp, otmp);
