@@ -2311,8 +2311,11 @@ lookaround()
 	if (levl[x][y].typ == STONE) continue;
 	if (x == u.ux-u.dx && y == u.uy-u.dy) continue;
 
-	if (IS_ROCK(levl[x][y].typ) || (levl[x][y].typ == ROOM) ||
-	    IS_AIR(levl[x][y].typ))
+	if (IS_ROCK(levl[x][y].typ) 
+		|| (levl[x][y].typ == ROOM) 
+		|| (levl[x][y].typ == GRASS) 
+		|| IS_AIR(levl[x][y].typ)
+	)
 	    continue;
 	else if (closed_door(x,y) ||
 		 (mtmp && mtmp->m_ap_type == M_AP_FURNITURE &&
@@ -2323,7 +2326,9 @@ lookaround()
 	    goto bcorr;
 	} else if (levl[x][y].typ == CORR) {
 bcorr:
-	    if(levl[u.ux][u.uy].typ != ROOM) {
+	    if(levl[u.ux][u.uy].typ != ROOM
+		&& levl[u.ux][u.uy].typ != GRASS
+		) {
 		if(flags.run == 1 || flags.run == 3 || flags.run == 8) {
 		    i = dist2(x,y,u.ux+u.dx,u.uy+u.dy);
 		    if(i > 2) continue;
