@@ -1682,7 +1682,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				} else if (mm == PM_KING_ARTHUR){
 					otmp = mksobj(LONG_SWORD, FALSE, FALSE);
-					otmp->oproperties = OPROP_HOLYW|OPROP_AXIOW;
+					otmp->oproperties = OPROP_AXIOW;
 					bless(otmp);
 					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
