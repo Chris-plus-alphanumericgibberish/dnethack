@@ -4213,6 +4213,7 @@ boolean was_swallowed;			/* digestion */
 		   || mdat == &mons[PM_PLATINUM_DRAGON]
 		   || mdat == &mons[PM_CHANGED]
 		   || mdat == &mons[PM_WARRIOR_CHANGED]
+		   || mdat == &mons[PM_TWITCHING_FOUR_ARMED_CHANGED]
 		   || mdat == &mons[PM_CLAIRVOYANT_CHANGED]
 //		   || mdat == &mons[PM_PINK_UNICORN]
 		   )
