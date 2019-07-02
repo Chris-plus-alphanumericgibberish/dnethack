@@ -3372,7 +3372,11 @@ int spellnum;
 	if (mtmp->permspeed == MFAST && spellnum == HASTE_SELF)
 	    return TRUE;
 	/* invisibility when already invisible */
-	if ((mtmp->minvis || mtmp->invis_blkd) && spellnum == DISAPPEAR)
+	if ((mtmp->minvis 
+			|| mtmp->invis_blkd
+			|| (mtmp->mtame && !See_invisible_old)
+		) && spellnum == DISAPPEAR
+	)
 	    return TRUE;
 	/* healing when already healed */
 	if (mtmp->mhp == mtmp->mhpmax && spellnum == CURE_SELF)
