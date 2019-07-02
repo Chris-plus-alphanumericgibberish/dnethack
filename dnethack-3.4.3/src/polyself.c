@@ -1949,7 +1949,7 @@ dodroidmenu()
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 	} else {
-		Sprintf(buf, "Last rest began on turn %d", u.lastslept);
+		Sprintf(buf, "Last rest began on turn %ld", u.lastslept);
 		add_menu(tmpwin, NO_GLYPH, &any, 0, 0, 0, buf, MENU_UNSELECTED);
 	}
 	

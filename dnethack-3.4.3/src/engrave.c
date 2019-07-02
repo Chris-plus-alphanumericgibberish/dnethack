@@ -3573,7 +3573,7 @@ int floorID;
 int
 doseal()
 {
-	dogenengrave(SEAL_MODE);
+	return dogenengrave(SEAL_MODE);
 }
 
 int

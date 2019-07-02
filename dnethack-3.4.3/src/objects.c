@@ -240,10 +240,10 @@ WEAPON("gold-bladed vibrosword", "black and gold sword", /*Needs encyc entry*//*
 WEAPON("red-eyed vibrosword", "blue-glowing sword", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0,  0, 80,8000, 10, 12, 1, P|S,   P_LONG_SWORD, PLASTIC, FALSE, CLR_GRAY),
 WEAPON("white vibrozanbato", "curved white sword",
-	0, 0, 1,  0, 60,50000, 16,  8, 2, S,   P_TWO_HANDED_SWORD, PLASTIC, FALSE, CLR_WHITE),
+	0, 0, 1,  0, 60,16000, 16,  8, 2, S,   P_TWO_HANDED_SWORD, PLASTIC, FALSE, CLR_WHITE),
 						    /* +2d6 large */
 WEAPON("gold-bladed vibrozanbato", "curved black and gold sword",
-	0, 0, 1,  0, 60,50000, 16,  8, 2, S,   P_TWO_HANDED_SWORD, GOLD, FALSE, CLR_BLACK),
+	0, 0, 1,  0, 60,16000, 16,  8, 2, S,   P_TWO_HANDED_SWORD, GOLD, FALSE, CLR_BLACK),
 						    /* +2d6 large */
 
 /* polearms */

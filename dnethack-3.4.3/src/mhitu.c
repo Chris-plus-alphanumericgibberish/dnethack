@@ -465,7 +465,7 @@ struct attack *alt_attk_buf;
 		}
 	}
 	//Bael's alternate attack forms
-	if((mptr == &mons[PM_BAEL])){
+	if(mptr == &mons[PM_BAEL]){
 		static const struct attack marilithHands[6] = {
 			{AT_MARI, AD_PHYS, 1,15},
 			{AT_MARI, AD_PHYS, 1,15},

@@ -3089,6 +3089,7 @@ register struct obj *otmp;
 		}
 		m_useup(mtmp, otmp);
 	}
+	return 1;
 }
 
 /* hit by destroy armor scroll/black dragon breath/monster spell */
@@ -3199,6 +3200,7 @@ register struct obj *otmp;
 		}
 		m_useup(mtmp, otmp);
 	}
+	return 1;
 }
 
 int

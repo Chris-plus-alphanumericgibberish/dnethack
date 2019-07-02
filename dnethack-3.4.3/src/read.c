@@ -33,6 +33,7 @@ static void FDECL(randomize,(int *, int));
 static void FDECL(forget_single_object, (int));
 static void FDECL(maybe_tame, (struct monst *,struct obj *));
 static void FDECL(ranged_set_lightsources, (int, int, genericptr_t));
+static void FDECL(read_tile, (struct obj *));
 
 int
 doread()
