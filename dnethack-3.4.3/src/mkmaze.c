@@ -2152,8 +2152,7 @@ boolean ini;
 		    int ux0 = u.ux, uy0 = u.uy;
 
 		    /* change u.ux0 and u.uy0? */
-		    u.ux = cons->x;
-		    u.uy = cons->y;
+			u_on_newpos(cons->x, cons->y);
 		    newsym(ux0, uy0);	/* clean up old position */
 
 		    if (MON_AT(cons->x, cons->y)) {
