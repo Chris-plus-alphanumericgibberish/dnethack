@@ -191,8 +191,8 @@ MONSTER:'h',"clairvoyant changed",(08,10),asleep
 MONSTER:'U', "elder brain", (10,10), hostile
 MONSTER:'h',"mind flayer",(16,06)
 MONSTER:'h',"edderkop",(17,06)
-MONSTER:'h',"trooper",(18,06)
-MONSTER:'h',"trooper",(16,07)
+MONSTER:'h',"mind flayer",(18,06)
+MONSTER:'h',"mind flayer",(16,07)
 MONSTER:'h',"edderkop",(17,07)
 MONSTER:'h',"mind flayer",(16,08)
 MONSTER:'h',"mind flayer",(16,09)
