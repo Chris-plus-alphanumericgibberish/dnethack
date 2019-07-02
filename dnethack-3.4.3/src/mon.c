@@ -2354,6 +2354,7 @@ mon_can_see_mon(looker, lookie)
 	
 	if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1 && !rn2(8)) return TRUE;
 	if((darksight(looker->data) || (catsight(looker->data) && catsightdark)) && !is_blind(looker)){
+		if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1) return TRUE;
 		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
 			if(levl[lookie->mx][lookie->my].lit){
 				if(viz_array[lookie->my][lookie->mx]&TEMP_DRK1 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT1))
