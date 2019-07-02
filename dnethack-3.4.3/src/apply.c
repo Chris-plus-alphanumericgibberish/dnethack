@@ -5362,12 +5362,9 @@ doapply()
 	if(obj->oartifact == ART_SILVER_STARLIGHT) res = do_play_instrument(obj);
 	else if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) use_lamp(obj);
 	else if(obj->oartifact == ART_AEGIS) res = swap_aegis(obj);
-	
-	if(obj->otyp == RAKUYO || obj->otyp == RAKUYO_SABER){
+	else if(obj->otyp == RAKUYO || obj->otyp == RAKUYO_SABER){
 		return use_rakuyo(obj);
-	}
-	
-	else switch(obj->otyp){
+	} else switch(obj->otyp){
 	case BLINDFOLD:
 	case ANDROID_VISOR:
 	case LENSES:
