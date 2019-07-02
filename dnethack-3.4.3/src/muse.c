@@ -2385,7 +2385,7 @@ struct monst *mtmp;
 	register struct monst *tmpm;
 
 	for(tmpm = fmon; tmpm; tmpm = tmpm->nmon)
-	    if (!DEADMONSTER(tmpm) && mtmp != tmpm) {
+	    if (!DEADMONSTER(tmpm) && mtmp != tmpm && mtmp->mpeaceful != tmpm->mpeaceful) {
 			tmpm->msleeping = 0;
 			if(!tmpm->mcanmove && !rn2(5)) {
 				tmpm->mfrozen = 0;
