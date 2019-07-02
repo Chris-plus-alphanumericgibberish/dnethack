@@ -3997,7 +3997,7 @@ struct obj *obj;
 				You("smell acrid fumes.");
 				pline("%s speaks.", Something);
 			}
-			verbalize("You have summoned me.  I will grant one wish!");
+			verbalize("I am the djinni of the ring.  I will grant one wish!");
 			makewish(allow_artwish()|WISH_VERBOSE);
 			mongone(mtmp);
 			obj->spe--;
