@@ -1207,19 +1207,19 @@ POTION("blood", "blood-red",            0, 0,          18, 50,  CLR_RED),
 		SCROLL_CLASS, prob, 0, 50, cost, 0, 0, 0, 0, 0, 6, HI_GOLD )
 	GOLD_SCROLL("Gold Scroll of Law", "golden",        0,  0,  10), /* Shopkeepers aren't interested in these */
 #undef GOLD_SCROLL
-#define CERAMIC_TILE(name,text) OBJECT( \
+#define CERAMIC_TILE(name,text,prob) OBJECT( \
 		OBJ(name,text), BITS(0,1,0,0,1,0,0,0,0,0,0,P_NONE,MINERAL, IDED|UNIDED), 0, \
-		TILE_CLASS, 0, 0, 3, 300, 0, 0, 0, 0, 0, 6, CLR_WHITE )
+		TILE_CLASS, prob, 0, 3, 300, 0, 0, 0, 0, 0, 6, CLR_WHITE )
 	/* Randomized descriptions */
-	CERAMIC_TILE("syllable of strength: Aesh","bipartite glyph"),
-	CERAMIC_TILE("syllable of power: Krau",   "crossed glyph"),
-	CERAMIC_TILE("syllable of life: Hoon",    "knotted glyph"),
-	CERAMIC_TILE("syllable of grace: Uur",    "multilinear glyph"),
-	CERAMIC_TILE("syllable of thought: Naen", "dotted glyph"),
-	CERAMIC_TILE("syllable of spirit: Vaul",  "hanging glyph"),
+	CERAMIC_TILE("syllable of strength: Aesh","bipartite glyph", 167),
+	CERAMIC_TILE("syllable of power: Krau",   "crossed glyph",   166),
+	CERAMIC_TILE("syllable of life: Hoon",    "knotted glyph",   167),
+	CERAMIC_TILE("syllable of grace: Uur",    "multilinear glyph", 167),
+	CERAMIC_TILE("syllable of thought: Naen", "dotted glyph",    167),
+	CERAMIC_TILE("syllable of spirit: Vaul",  "hanging glyph",   166),
 #undef CERAMIC_TILE
 #define METALIC_SLAB(name,text) OBJECT( \
-		OBJ(name,text), BITS(0,1,0,0,1,0,1,1,1,0,0,P_NONE,METAL, IDED|UNIDED), 0, \
+		OBJ(name,text), BITS(0,0,0,0,1,0,1,1,1,0,0,P_NONE,METAL, IDED|UNIDED), 0, \
 		TILE_CLASS, 0, 0, 3, 3000, 0, 0, 0, 0, 0, 6, CLR_BLACK )
 	/* Fixed descriptions (also, artifact base-items only) */
 	METALIC_SLAB("First Word",  "blinding glyph"),

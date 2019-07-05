@@ -410,6 +410,13 @@ nh_timeout()
 	
 	if(u.lastcast) u.lastcast--;
 	
+	if(u.uaesh_duration) u.uaesh_duration--;
+	if(u.uhoon_duration) u.uhoon_duration--;
+	if(u.ukrau_duration) u.ukrau_duration--;
+	if(u.unaen_duration) u.unaen_duration--;
+	if(u.uuur_duration) u.uuur_duration--;
+	if(u.uvaul_duration) u.uvaul_duration--;
+	
 	if (u.uluck != baseluck) {
 	    int timeout = 600;
 	    int time_luck = stone_luck(FALSE);

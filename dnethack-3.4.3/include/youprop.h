@@ -322,7 +322,7 @@
 #define HDisplaced		u.uprops[DISPLACED].intrinsic
 #define EDisplaced		u.uprops[DISPLACED].extrinsic
 #define Displaced		(HDisplaced || EDisplaced || \
-						 is_displacer(youracedata) || u.sealsActive&SEAL_ORTHOS)
+						 is_displacer(youracedata) || u.sealsActive&SEAL_ORTHOS || u.uvaul_duration)
 
 #define HStealth		u.uprops[STEALTH].intrinsic
 #define EStealth		u.uprops[STEALTH].extrinsic

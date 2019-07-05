@@ -5109,6 +5109,10 @@ int spell;
 	 */
 	chance = chance * (20-splcaster) / 15 - splcaster;
 	
+	//While the Naen syllable is active, the only spell failure chance comes from the Spire 
+	if(u.unaen_duration)
+		chance = 100;
+	
 	if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
 		if(u.uz.dlevel == spire_level.dlevel) chance = 0;
 		else if(u.uz.dlevel == sum_of_all_level.dlevel) chance += 100 - 10*spellev(spell);

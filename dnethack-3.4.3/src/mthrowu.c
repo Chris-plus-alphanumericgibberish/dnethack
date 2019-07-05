@@ -136,6 +136,7 @@ boolean burn;
 		else {
 			if (is_acid) pline("It burns!");
 			if (Half_physical_damage) dam = (dam+1) / 2;
+			if(u.uvaul_duration) dam = (dam + 1) / 2;
 			losehp(dam, knm, kprefix);
 			exercise(A_STR, FALSE);
 		}

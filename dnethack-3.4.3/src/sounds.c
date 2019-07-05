@@ -1065,7 +1065,9 @@ asGuardian:
 					}
 				}
 				ix = mtmp ? rnd((int)mtmp->m_lev) : rnd(10);
-				if(Antimagic || Half_spell_damage) ix = (ix + 1) / ((Antimagic + Half_spell_damage) * 2);
+				if(Antimagic) ix = (ix + 1) / 2;
+				if(Half_spell_damage) ix = (ix+1) / 2;
+				if(u.uvaul_duration) ix = (ix + 1) / 2;
 				make_confused(HConfusion + ix*10, FALSE);
 				make_stunned(HStun + ix*5, FALSE);
 				make_hallucinated(HHallucination + ix*15, FALSE, 0L);
@@ -1528,6 +1530,7 @@ asGuardian:
 							break;
 						}
 						if(Half_spell_damage) dmg /= 2;
+						if(u.uvaul_duration) dmg /= 2;
 						if(dmg) dmg = min(dmg,Upolyd ? (u.mh - 1) : (u.uhp - 1));
 						if(dmg) mdamageu(mtmp,dmg);
 					}

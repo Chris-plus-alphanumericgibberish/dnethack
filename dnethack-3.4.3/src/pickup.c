@@ -1600,6 +1600,7 @@ boolean noit;
 	pline("It develops a huge set of teeth and bites you!");
 	tmp = rnd(10);
 	if (Half_physical_damage) tmp = (tmp+1) / 2;
+	if(u.uvaul_duration) tmp = (tmp + 1) / 2;
 	losehp(tmp, "carnivorous bag", KILLED_BY_AN);
 	makeknown(BAG_OF_TRICKS);
 	return 1;
@@ -1710,6 +1711,7 @@ lootcont:
 		    pline("It develops a huge set of teeth and bites you!");
 		    tmp = rnd(10);
 		    if (Half_physical_damage) tmp = (tmp+1) / 2;
+			if(u.uvaul_duration) tmp = (tmp + 1) / 2;
 		    losehp(tmp, "carnivorous bag", KILLED_BY_AN);
 		    makeknown(BAG_OF_TRICKS);
 		    timepassed = 1;

@@ -343,7 +343,7 @@ register int otyp;
 		Strcpy(buf, "scroll");
 		break;
 	case TILE_CLASS:
-		Strcpy(buf, "tile");
+		Strcpy(buf, "shard");
 		break;
 	case WAND_CLASS:
 		Strcpy(buf, "wand");
@@ -1310,7 +1310,7 @@ boolean with_price;
 		if(ocl->oc_unique)
 			Strcat(buf, "slab");
 		else
-			Strcat(buf, "tile");
+			Strcat(buf, "shard");
 		if (!obj->dknown) break;
 		if (nn) {
 			Strcat(buf, " bearing the ");
@@ -2314,7 +2314,7 @@ struct obj *obj;
 }
 
 static const char *wrp[] = {
-	"wand", "ring", "potion", "scroll", "tile", "gem", "amulet",
+	"wand", "ring", "potion", "scroll", "shard", "gem", "amulet",
 	"spellbook", "spell book",
 	/* for non-specific wishes */
 	"weapon", "armor", "armour", "tool", "food", "comestible",

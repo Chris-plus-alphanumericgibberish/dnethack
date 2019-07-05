@@ -1350,9 +1350,11 @@ boolean hitsroof;
 	if(resist_attacks(youracedata))
 		dmg = 0;
 	if (dmg > 1 && less_damage) dmg = 1;
+	if (dmg > 0) dmg += aeshbon();
 	if (dmg > 0) dmg += u.udaminc;
 	if (dmg < 0) dmg = 0;	/* beware negative rings of increase damage */
 	if (Half_physical_damage) dmg = (dmg + 1) / 2;
+	if (u.uvaul_duration) dmg = (dmg + 1) / 2;
 
 	if (uarmh) {
 	    if (less_damage && dmg < (Upolyd ? u.mh : u.uhp)) {
@@ -1991,6 +1993,9 @@ int thrown;
 			maybe_polyd(youmonst.data->mlevel, u.ulevel);
 	else tmp = -1 + Luck + find_mac(mon) + u.uhitinc + u.spiritAttk +
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*BASE_ATTACK_BONUS;
+	
+	if(u.uuur_duration)
+		tmp += 10;
 	
 	if(!launcher || objects[launcher->otyp].oc_skill == P_SLING){
 		tmp += abon();

@@ -1225,6 +1225,7 @@ register struct obj *otmp;
 			    pline_The("wand hits you!");
 			    tmp = d(2,12);
 			    if(Half_spell_damage) tmp = (tmp+1) / 2;
+				if(u.uvaul_duration) tmp = (tmp + 1) / 2;
 			    losehp(tmp, "wand", KILLED_BY_AN);
 			}
 			stop_occupation();
@@ -1629,7 +1630,8 @@ struct monst *mtmp;
 			    You("are not harmed.");
 			burn_away_slime();
 			if (Half_spell_damage) num = (num+1) / 2;
-			else losehp(num, "scroll of fire", KILLED_BY_AN);
+			if(u.uvaul_duration) num = (num + 1) / 2;
+			losehp(num, "scroll of fire", KILLED_BY_AN);
 			for(mtmp2 = fmon; mtmp2; mtmp2 = mtmp2->nmon) {
 			   if(DEADMONSTER(mtmp2)) continue;
 			   if(mtmp == mtmp2) continue;

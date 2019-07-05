@@ -893,6 +893,7 @@ unsigned trflags;
 		    pline("%s you!", A_gush_of_water_hits);
 		    You("are covered with rust!");
 		    if (Half_physical_damage) dam = (dam+1) / 2;
+			if(u.uvaul_duration) dam = (dam + 1) / 2;
 		    losehp(dam, "rusting away", KILLED_BY);
 		    break;
 		} else if (u.umonnum == PM_FLAMING_SPHERE) {
@@ -901,6 +902,7 @@ unsigned trflags;
 		    pline("%s you!", A_gush_of_water_hits);
 		    You("are extinguished!");
 		    if (Half_physical_damage) dam = (dam+1) / 2;
+			if(u.uvaul_duration) dam = (dam + 1) / 2;
 		    losehp(dam, "drenching", KILLED_BY);
 		    break;
 		} else if (u.umonnum == PM_GREMLIN && rn2(3)) {

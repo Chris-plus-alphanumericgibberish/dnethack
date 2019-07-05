@@ -2158,6 +2158,9 @@ int base_uac()
 	if (HProtection & INTRINSIC) uac -= (u.ublessed+1)/2;
 	uac -= u.uacinc;
 	uac -= u.spiritAC;
+	if(u.uuur_duration)
+		uac -= 10;
+	uac -= u.uuur/2;
 	if(u.edenshield > moves) uac -= 7;
 	if(u.specialSealsActive&SEAL_BLACK_WEB && u.utrap && u.utraptype == TT_WEB)
 		 uac -= 8;
@@ -2204,6 +2207,7 @@ find_ac()
 	int uac;
 	
 	uac = base_uac();
+	uac -= (u.uuur+1)/2;
 	if (uarm)	uac -= arm_ac_bonus(uarm);
 	if (uarmc)	uac -= arm_ac_bonus(uarmc);
 	if (uarmh)	uac -= arm_ac_bonus(uarmh);
@@ -2392,11 +2396,11 @@ uppertorso:
 					if(magr) armdr += properties_dr(uarmu, agralign, agrmoral);
 				}
 			}
+			udr += (u.uvaul+3)/5;
 			//Note: SHOULD fall-through here to add the torso armor bonus
 		case LOWER_TORSO_DR:
 lowertorso:
 			//Note: lower body (torso armor only)
-			if(slot != UPPER_TORSO_DR && uandroid) udr += 3; /*flexible torso armor*/
 			if (uarm){
 				if(uarm->otyp != JUMPSUIT){
 					armdr += arm_dr_bonus(uarm);
@@ -2405,11 +2409,14 @@ lowertorso:
 			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
-			if (uarmu && slot != UPPER_TORSO_DR){
-				if(uarmu->otyp == BLACK_DRESS || uarmu->otyp == VICTORIAN_UNDERWEAR){
+			//Lower body SPECIFIC modifiers
+			if (slot != UPPER_TORSO_DR){
+				if(uandroid) udr += 3; /*flexible torso armor*/
+				if(uarmu && (uarmu->otyp == BLACK_DRESS || uarmu->otyp == VICTORIAN_UNDERWEAR)){
 					armdr += arm_dr_bonus(uarmu);
 					if(magr) armdr += properties_dr(uarmu, agralign, agrmoral);
 				}
+				udr += (u.uvaul+1)/5;
 			}
 			armdr += clkdr;
 		break;
@@ -2420,6 +2427,7 @@ lowertorso:
 				armdr += arm_dr_bonus(uarmh);
 				if(magr) armdr += properties_dr(uarmh, agralign, agrmoral);
 			}
+			udr += (u.uvaul+4)/5;
 			armdr += clkdr;
 		break;
 		case LEG_DR:
@@ -2432,6 +2440,7 @@ boot_hit:
 			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
+			udr += (u.uvaul)/5;
 			armdr += clkdr;
 		break;
 		case ARM_DR:
@@ -2443,6 +2452,7 @@ boot_hit:
 			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
+			udr += (u.uvaul+2)/5;
 		break;
 	}
 	

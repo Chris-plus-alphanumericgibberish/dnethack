@@ -3804,6 +3804,7 @@ boolean was_swallowed;			/* digestion */
 					Sprintf(killer_buf, "%s explosion",
 						s_suffix(mdat->mname));
 					if (Half_physical_damage) tmp = (tmp+1) / 2;
+					if(u.uvaul_duration) tmp = (tmp + 1) / 2;
 					losehp(tmp, killer_buf, KILLED_BY_AN);
 				} 
 				else {
@@ -5202,6 +5203,7 @@ int  typ, fatal, opoistype;
 			} else {
 				i = thrown_weapon ? rnd(6) : rn1(10,6);
 				if(Half_physical_damage) i = (i+1) / 2;
+				if(u.uvaul_duration) i = (i + 1) / 2;
 				losehp(i, pname, kprefix);
 			}
 			if(u.uhp < 1) {
@@ -5240,12 +5242,14 @@ int  typ, fatal, opoistype;
 		} else if(!rn2((fatal/3) + 20*thrown_weapon)){
 			i = thrown_weapon ? 3 : 8;
 			if(Half_physical_damage) i = (i+1) / 2;
+			if(u.uvaul_duration) i = (i + 1) / 2;
 			losehp(i, pname, kprefix);
 			make_blinded(rn1(20, 25),
 					 (boolean)!Blind);
 		} else{
 			i = thrown_weapon ? rnd(3) : rn1(5,3);
 			if(Half_physical_damage) i = (i+1) / 2;
+			if(u.uvaul_duration) i = (i + 1) / 2;
 			losehp(i, pname, kprefix);
 		}
 	}
@@ -5255,11 +5259,13 @@ int  typ, fatal, opoistype;
 		} else if(!rn2((fatal) + 20*thrown_weapon)){
 			i = thrown_weapon ? 6 : 16;
 			if(Half_physical_damage) i = (i+1) / 2;
+			if(u.uvaul_duration) i = (i + 1) / 2;
 			losehp(i, pname, kprefix);
 			nomul(-(rn1(5, 12 - 6)), "immobilized by paralysis venom");
 		} else{
 			i = thrown_weapon ? rnd(6) : rn1(10,6);
 			if(Half_physical_damage) i = (i+1) / 2;
+			if(u.uvaul_duration) i = (i + 1) / 2;
 			losehp(i, pname, kprefix);
 		}
 	}

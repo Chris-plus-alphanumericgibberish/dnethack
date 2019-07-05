@@ -370,6 +370,9 @@ boolean phasing;
 			maybe_polyd(youmonst.data->mlevel, u.ulevel)*bab;
 	}
 	
+	if(u.uuur_duration)
+		tmp += 10;
+	
 	if(u.sealsActive&SEAL_DANTALION && tp_sensemon(mtmp)) tmp += max(0,(ACURR(A_INT)-10)/2);
 	
 /*	Adjust vs. (and possibly modify) monster state.		*/
@@ -2205,6 +2208,7 @@ defaultvalue:
 		if(obj && obj->oartifact == ART_TENTACLE_ROD) tmp += dbon(uwep)/2;
 		else {
 			tmp += u.udaminc;
+			tmp += aeshbon();
 			/* If you throw using a propellor, you don't get a strength
 			 * bonus but you do get an increase-damage bonus.
 			 */

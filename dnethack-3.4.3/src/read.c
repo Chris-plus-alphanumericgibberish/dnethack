@@ -548,10 +548,111 @@ int
 read_tile(scroll)
 struct obj *scroll;
 {
-	if(!scroll->known){
+	static long last_used_move = -1;
+	static short last_used_movement = 0;
+	int res;
+	int duration;
+	//Speak one word of power per move free.
+	res = (moves == last_used_move) &&
+	      (youmonst.movement == last_used_movement);
+	last_used_move = moves;
+	last_used_movement = youmonst.movement;
+	
+	if(!scroll->dknown){
+		You("have never seen it!");
+		return 0;
+	}
+	if(!objects[scroll->otyp].oc_name_known){
 		You("don't know how to pronounce the glyph!");
 		return 0;
 	}
+	if(scroll->otyp == SYLLABLE_OF_STRENGTH__AESH){
+		if(scroll->cursed){
+			pline("\"Aesh!\" The shard's glyph resonates and turns black while the shard turns to dust.");
+			duration = 40;
+			//Note: 4x duration, no permanent bonus
+		} else if(scroll->blessed){
+			pline("\"Aesh!\" The shard's glyph resonates and glows brightly while the shard turns to dust.");
+			duration = 15; //150%
+		} else {
+			pline("\"Aesh!\" The shard's glyph resonates and begins to glow while the shard turns to dust.");
+			duration = 10;
+		}
+		u.uaesh_duration += duration;
+		if(!scroll->cursed) u.uaesh++;
+	} else if(scroll->otyp == SYLLABLE_OF_POWER__KRAU){
+		if(scroll->cursed){
+			pline("\"Krau!\" The shard's glyph resonates and turns black while the shard turns to dust.");
+			duration = 40;
+			//Note: 4x duration, no permanent bonus
+		} else if(scroll->blessed){
+			pline("\"Krau!\" The shard's glyph resonates and glows brightly while the shard turns to dust.");
+			duration = 15; //150%
+		} else {
+			pline("\"Krau!\" The shard's glyph resonates and begins to glow while the shard turns to dust.");
+			duration = 10;
+		}
+		u.ukrau_duration += duration;
+		if(!scroll->cursed) u.ukrau++;
+	} else if(scroll->otyp == SYLLABLE_OF_LIFE__HOON){
+		if(scroll->cursed){
+			pline("\"Hoon!\" The shard's glyph resonates and turns black while the shard turns to dust.");
+			duration = 40;
+			//Note: 4x duration, no permanent bonus
+		} else if(scroll->blessed){
+			pline("\"Hoon!\" The shard's glyph resonates and glows brightly while the shard turns to dust.");
+			duration = 15; //150%
+		} else {
+			pline("\"Hoon!\" The shard's glyph resonates and begins to glow while the shard turns to dust.");
+			duration = 10;
+		}
+		u.uhoon_duration += duration;
+		if(!scroll->cursed) u.uhoon++;
+	} else if(scroll->otyp == SYLLABLE_OF_GRACE__UUR){
+		if(scroll->cursed){
+			pline("\"Uur!\" The shard's glyph resonates and turns black while the shard turns to dust.");
+			duration = 40;
+			//Note: 4x duration, no permanent bonus
+		} else if(scroll->blessed){
+			pline("\"Uur!\" The shard's glyph resonates and glows brightly while the shard turns to dust.");
+			duration = 15; //150%
+		} else {
+			pline("\"Uur!\" The shard's glyph resonates and begins to glow while the shard turns to dust.");
+			duration = 10;
+		}
+		u.uuur_duration += duration;
+		if(!scroll->cursed) u.uuur++;
+	} else if(scroll->otyp == SYLLABLE_OF_THOUGHT__NAEN){
+		if(scroll->cursed){
+			pline("\"Naen!\" The shard's glyph resonates and turns black while the shard turns to dust.");
+			duration = 40;
+			//Note: 4x duration, no permanent bonus
+		} else if(scroll->blessed){
+			pline("\"Naen!\" The shard's glyph resonates and glows brightly while the shard turns to dust.");
+			duration = 15; //150%
+		} else {
+			pline("\"Naen!\" The shard's glyph resonates and begins to glow while the shard turns to dust.");
+			duration = 10;
+		}
+		u.unaen_duration += duration;
+		if(!scroll->cursed) u.unaen++;
+	} else if(scroll->otyp == SYLLABLE_OF_SPIRIT__VAUL){
+		if(scroll->cursed){
+			pline("\"Vaul!\" The shard's glyph resonates and turns black while the shard turns to dust.");
+			duration = 40;
+			//Note: 4x duration, no permanent bonus
+		} else if(scroll->blessed){
+			pline("\"Vaul!\" The shard's glyph resonates and glows brightly while the shard turns to dust.");
+			duration = 15; //150%
+		} else {
+			pline("\"Vaul!\" The shard's glyph resonates and begins to glow while the shard turns to dust.");
+			duration = 10;
+		}
+		u.uvaul_duration += duration;
+		if(!scroll->cursed) u.uvaul++;
+	}
+	useup(scroll);
+	return res;
 }
 
 static void

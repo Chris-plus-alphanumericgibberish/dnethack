@@ -208,8 +208,10 @@ struct obj *otmp;
 				dmg += d((u.ulevel+1)/2, 12);
 			if(dbldam) dmg *= 2;
 			if(!flags.mon_moving && Double_spell_size) dmg *= 1.5;
-			if (otyp == SPE_FORCE_BOLT)
+			if (otyp == SPE_FORCE_BOLT){
+				if(u.ukrau_duration) dmg *= 1.5;
 			    dmg += spell_damage_bonus();
+			}
 			
 			hit(zap_type_text, mtmp, exclam(dmg));
 			(void) resist(mtmp, otmp->oclass, dmg, TELL);
@@ -246,8 +248,10 @@ struct obj *otmp;
 			else dmg = rnd(8);
 			if(dbldam) dmg *= 2;
 			if(!flags.mon_moving && Double_spell_size) dmg *= 1.5;
-			if (otyp == SPE_TURN_UNDEAD)
+			if (otyp == SPE_TURN_UNDEAD){
+				if(u.ukrau_duration) dmg *= 1.5;
 				dmg += spell_damage_bonus();
+			}
 			flags.bypasses = TRUE;	/* for make_corpse() */
 			if (!resist(mtmp, otmp->oclass, dmg, TELL)) {
 			    if (mtmp->mhp > 0) monflee(mtmp, 0, FALSE, TRUE);
@@ -407,8 +411,10 @@ struct obj *otmp;
 		else dmg = rnd(8);
 		if(dbldam) dmg *= 2;
 		if(!flags.mon_moving && Double_spell_size) dmg *= 1.5;
-		if (otyp == SPE_DRAIN_LIFE)
+		if (otyp == SPE_DRAIN_LIFE){
+			if(u.ukrau_duration) dmg *= 1.5;
 			dmg += spell_damage_bonus();
+		}
 		if (resists_drli(mtmp)){
 		    shieldeff(mtmp->mx, mtmp->my);
 	break;	/* skip makeknown */
@@ -3053,7 +3059,22 @@ spell_damage_bonus()
     else		/* helm of brilliance */
 	tmp = 2;
 
+	tmp += kraubon();
+	
     return tmp;
+}
+
+int
+kraubon()
+{
+	int bonus = 0;
+	if(u.ukrau){
+		bonus += u.ukrau/3;
+		//remainder is probabilistic
+		if(rn2(3) < u.ukrau%3)
+			bonus++;
+	}
+	return bonus;
 }
 
 /*
@@ -3472,8 +3493,10 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		}
 		if(!flat) tmp = d(nd,6);
 		else tmp = flat;
-		if (spellcaster)
+		if (spellcaster){
+			if(u.ukrau_duration) tmp *= 1.5;
 		    tmp += spell_damage_bonus();
+		}
 #ifdef WIZ_PATCH_DEBUG
 		if (spellcaster)
 		    pline("Damage = %d + %d", tmp-spell_damage_bonus(),
@@ -3488,8 +3511,10 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		if(!flat) tmp = d(nd,6);
 		else tmp = flat;
 		if (resists_cold(mon)) tmp *= 1.5;
-		if (spellcaster)
+		if (spellcaster){
+			if(u.ukrau_duration) tmp *= 1.5;
 		    tmp += spell_damage_bonus();
+		}
 #ifdef WIZ_PATCH_DEBUG
 		if (spellcaster)
 		    pline("Damage = %d + %d",tmp-spell_damage_bonus(),
@@ -3510,8 +3535,10 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		if(!flat) tmp = d(nd,6);
 		else tmp = flat;
 		if (resists_fire(mon)) tmp *= 1.5;
-		if (spellcaster)
+		if (spellcaster){
+			if(u.ukrau_duration) tmp *= 1.5;
 		    tmp += spell_damage_bonus();
+		}
 #ifdef WIZ_PATCH_DEBUG
 		if (spellcaster)
 		    pline("Damage = %d + %d", tmp-spell_damage_bonus(),
@@ -3630,8 +3657,10 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 			if(!flat) tmp = d(nd,6);
 			else tmp = flat;
 		}
-		if (spellcaster && tmp)
+		if (spellcaster && tmp){
+			if(u.ukrau_duration) tmp *= 1.5;
 		    tmp += spell_damage_bonus();
+		}
 #ifdef WIZ_PATCH_DEBUG
 		if (spellcaster && tmp)
 		    pline("Damage = %d + %d", tmp-spell_damage_bonus(),
@@ -3924,6 +3953,8 @@ xchar sx, sy;
 
 	if (Half_spell_damage && dam &&
 	   (olet != FOOD_CLASS)) /* !Breath */
+	    dam = (dam + 1) / 2;
+	if (u.uvaul_duration && dam)
 	    dam = (dam + 1) / 2;
 	losehp(dam, fltxt, KILLED_BY_AN);
 	return;

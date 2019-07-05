@@ -5126,11 +5126,15 @@ arti_invoke(obj)
 						    destroy_drawbridge(x,y);
 
 				    if ((mtmp = m_at(bhitpos.x, bhitpos.y)) != 0) {
+						int dmg;
+						dmg = d(u.ulevel+obj->spe,12);
+						if(u.ukrau_duration) dmg *= 1.5;
+						dmg += spell_damage_bonus()*3;
 //						pline("mon found at %d, %d", bhitpos.x, bhitpos.y);
 					    if (cansee(bhitpos.x,bhitpos.y) && !canspotmon(mtmp)) {
 						    map_invisible(bhitpos.x, bhitpos.y);
 						}
-					    resist(mtmp, WEAPON_CLASS, d(u.ulevel+obj->spe,12) + spell_damage_bonus()*3, FALSE);
+					    resist(mtmp, WEAPON_CLASS, dmg, FALSE);
 					}
 					bhitpile(pseudo,bhito,bhitpos.x,bhitpos.y);
 				    if(IS_DOOR(typ) || typ == SDOOR) {
@@ -5176,11 +5180,16 @@ arti_invoke(obj)
 				    return 1;
 				}
 				else if(throweffect()){
+					int dmg;
+					dmg = u.ulevel + obj->spe;
+					if(u.ukrau_duration) dmg *= 1.5;
+					dmg += spell_damage_bonus();
+					dmg *= 3;
 					pline("Some no mai, Tsukishiro!");
 					u.SnSd1 = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST)||Role_if(PM_SAMURAI) ? .9 : 1));
 						explode(u.dx, u.dy,
 							AD_COLD, 0,
-							(u.ulevel + obj->spe + spell_damage_bonus())*3,
+							dmg,
 							EXPL_FROSTY, 1);
 					nomul(-1, "performing a sword dance");//both the first and the second dance leave you momentarily exposed.
 				}
@@ -5194,10 +5203,14 @@ arti_invoke(obj)
 				    return 1;
 				}
 				else if(getdir((char *)0) && (u.dx || u.dy)) {
+					int dmg;
+					dmg = u.ulevel + obj->spe;
+					if(u.ukrau_duration) dmg *= 1.5;
+					dmg += spell_damage_bonus();
 					pline("Tsugi no mai, Hakuren!");
 					u.SnSd2 = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST)||Role_if(PM_SAMURAI) ? .9 : 1));
 					buzz(AD_COLD, WAND_CLASS, TRUE,
-						 (u.ulevel + obj->spe + spell_damage_bonus()), u.ux, u.uy, u.dx, u.dy,7+obj->spe,0);
+						 dmg, u.ux, u.uy, u.dx, u.dy,7+obj->spe,0);
 				}
 					nomul(-1, "performing a sword dance");//both the first and the second dance leave you momentarily exposed.
 			}
@@ -5440,13 +5453,17 @@ arti_invoke(obj)
     break;
 	case FIRAGA:
 				if( (obj->spe > 0) && throweffect()){
+			int dmg;
+			dmg = u.ulevel + 10;
+			if(u.ukrau_duration) dmg *= 1.5;
+			dmg += spell_damage_bonus();
 					exercise(A_WIS, TRUE);
 					cc.x=u.dx;cc.y=u.dy;
 					n=3;
 					while(n--) {
 						explode(u.dx, u.dy,
 							AD_FIRE, 0,
-							u.ulevel + 10 + spell_damage_bonus(),
+					dmg,
 							EXPL_FIERY, 1);
 						u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
 						if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||
@@ -5460,13 +5477,17 @@ arti_invoke(obj)
 	break;
 	case BLIZAGA:
 				if( (obj->spe > 0) && throweffect()){
+			int dmg;
+			dmg = u.ulevel + 10;
+			if(u.ukrau_duration) dmg *= 1.5;
+			dmg += spell_damage_bonus();
 					exercise(A_WIS, TRUE);
 					cc.x=u.dx;cc.y=u.dy;
 					n=3;
 					while(n--) {
 						explode(u.dx, u.dy,
 							AD_COLD, 0,
-							u.ulevel + 10 + spell_damage_bonus(),
+					dmg,
 							EXPL_FROSTY, 1);
 						u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
 						if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||
@@ -5480,13 +5501,17 @@ arti_invoke(obj)
 	break;
 	case THUNDAGA:
 				if( (obj->spe > 0) && throweffect()){
+			int dmg;
+			dmg = u.ulevel + 10;
+			if(u.ukrau_duration) dmg *= 1.5;
+			dmg += spell_damage_bonus();
 					exercise(A_WIS, TRUE);
 					cc.x=u.dx;cc.y=u.dy;
 					n=3;
 					while(n--) {
 						explode(u.dx, u.dy,
 							AD_ELEC, 0,
-							u.ulevel + 10 + spell_damage_bonus(),
+					dmg,
 							EXPL_MAGICAL, 1);
 						u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
 						if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||
@@ -5561,13 +5586,17 @@ arti_invoke(obj)
 	break;
 	case SHADOW_FLARE:
 		if( (obj->spe > 0) && throweffect()){
+			int dmg;
+			dmg = u.ulevel + 10;
+			if(u.ukrau_duration) dmg *= 1.5;
+			dmg += spell_damage_bonus();
 			exercise(A_WIS, TRUE);
 			cc.x=u.dx;cc.y=u.dy;
 			n=3;
 			while(n--) {
 				explode(u.dx, u.dy,
 					AD_DISN, 0,
-					u.ulevel + 10 + spell_damage_bonus(),
+					dmg,
 					EXPL_DARK, 1);
 				u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
 				if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||
@@ -5770,6 +5799,10 @@ arti_invoke(obj)
 						strcmp(buf, "Ruat Coelum.") == 0 ||
 						strcmp(buf, "Ruat Coelum!") == 0 ){//Ruat Coelum:  Heaven Falls.  Attack spell.  One charge.
 				if( (obj->spe > 0) && throweffect()){
+					int dmg;
+					dmg = u.ulevel/2 + 1;
+					if(u.ukrau_duration) dmg *= 1.5;
+					dmg += spell_damage_bonus();
 					exercise(A_WIS, TRUE);
 					cc.x=u.dx;cc.y=u.dy;
 					n=u.ulevel/5 + 1;
@@ -5777,7 +5810,7 @@ arti_invoke(obj)
 						int type = d(1,3);
 						explode(u.dx, u.dy,
 							elements[type], 0,
-							u.ulevel/2 + 1 + spell_damage_bonus(),
+							 dmg,
 							explType[type], 1);
 						u.dx = cc.x+rnd(3)-2; u.dy = cc.y+rnd(3)-2;
 						if (!isok(u.dx,u.dy) || !cansee(u.dx,u.dy) ||
@@ -9372,6 +9405,7 @@ int spe;
 			Blind_telepat ? "latent telepathy" : "mind");
 		dmg = d(dnum, dsize);
 		if (Half_spell_damage) dmg = (dmg+1) / 2;
+		if (u.uvaul_duration) dmg = (dmg+1) / 2;
 		losehp(dmg, "psychic blast", KILLED_BY_AN);
 		if(dnum >= 3){
 			for (m2 = fmon; m2; m2 = nmon2) {

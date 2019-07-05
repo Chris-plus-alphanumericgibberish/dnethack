@@ -364,9 +364,6 @@ you_regen_hp()
 	int * hpmax;
 	int * hp;
 
-	if(uandroid && !u.usleep)
-		return;
-	
 	// set hp, maxhp pointers
 	hp    = (Upolyd) ? (&u.mh)    : (&u.uhp);
 	hpmax = (Upolyd) ? (&u.mhmax) : (&u.uhpmax);
@@ -382,6 +379,23 @@ you_regen_hp()
 	if (Upolyd && (*hp < 1))
 		rehumanize();
 
+	//Androids regenerate from active Hoon, but not from other sources unless dormant
+	if(u.uhoon_duration && (*hp) < (*hpmax)){
+		flags.botl = 1;
+		
+		(*hp) += 10;
+
+		if ((*hp) > (*hpmax))
+			(*hp) = (*hpmax);
+	}
+	
+	per30 += u.uhoon;
+	
+	//Androids regenerate from active Hoon, but not from other sources unless dormant
+	// Notably, no bonus from passive Hoon
+	if(uandroid && !u.usleep)
+		return;
+	
 	// fish out of water
 	if (youracedata->mlet == S_EEL && !is_pool(u.ux, u.uy, youracedata->msize == MZ_TINY) && !Is_waterlevel(&u.uz)) {
 		if (is_pool(u.ux, u.uy, TRUE))
@@ -498,9 +512,6 @@ you_regen_pw()
 	int wtcap = near_capacity();
 	int per30 = 0;
 
-	if(uandroid && !u.usleep)
-		return;
-	
 	// natural power regeneration
 	if (wtcap < MOD_ENCUMBER &&		// not overly encumbered
 		!Race_if(PM_INCANTIFIER)	// not an incantifier
@@ -581,6 +592,20 @@ you_regen_pw()
 			u.maintained_en_debt = 0;
 	}
 
+	//Naen fast energy regen applies to androids, too.
+	if(u.unaen_duration && (u.uen < u.uenmax)){
+		flags.botl = 1;
+		u.uen += 10;
+		if (u.uen > u.uenmax)
+			u.uen = u.uenmax;
+	}
+	
+	//Naen passive bonus only partially applies to androids
+	per30 += u.unaen;
+	
+	//Androids only regen power while asleep, but allow their rate to offset spell maintenance
+	if(uandroid && !u.usleep && per30 > 0)
+		return;
 
 	if (((per30 > 0) && (u.uen < u.uenmax)) ||							// if regenerating power
 		((per30 < 0) && ((u.uen > 0) || Race_if(PM_INCANTIFIER)))		// or draining power
@@ -1371,6 +1396,8 @@ karemade:
 			if(uandroid && u.ucspeed == HIGH_CLOCKSPEED){
 				if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
 			}
+			if(u.uuur_duration)
+				moveamt += 6;
 			if(uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
 				switch(min(P_SKILL(FFORM_SORESU), P_SKILL(weapon_type(uwep)))){
 					case P_BASIC:       moveamt = max(moveamt-6,1); break;

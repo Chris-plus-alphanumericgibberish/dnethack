@@ -1244,6 +1244,7 @@ register struct monst *mtmp;
 					Blind_telepat ? "latent telepathy" : "mind");
 				dmg = (mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_LUGRIBOSSK] || mdat == &mons[PM_MAANZECORIAN]) ? d(5,15) : (mdat == &mons[PM_ELDER_BRAIN]) ? d(3,15) : rnd(15);
 				if (Half_spell_damage) dmg = (dmg+1) / 2;
+				if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
 				if(mdat == &mons[PM_SEMBLANCE]) make_hallucinated(HHallucination + dmg, FALSE, 0L);
 				if(mdat == &mons[PM_GREAT_CTHULHU]) make_stunned(HStun + dmg*10, TRUE);

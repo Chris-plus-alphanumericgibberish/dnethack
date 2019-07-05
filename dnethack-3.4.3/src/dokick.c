@@ -153,6 +153,7 @@ register boolean clumsy;
 	
 	if (uarmf) dmg += uarmf->spe;
 	dmg += u.udaminc;	/* add ring(s) of increase damage */
+	dmg += aeshbon();
 	if (dmg > 0)
 		mon->mhp -= dmg;
 	if (silvermsg) {

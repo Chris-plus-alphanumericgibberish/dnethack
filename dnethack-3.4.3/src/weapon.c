@@ -3592,6 +3592,21 @@ register struct obj *obj;
 	obj->owornmask &= ~W_SWAPWEP;
 }
 
+int
+aeshbon()
+{
+	int bonus = 0;
+	if(u.uaesh_duration)
+		bonus += 10;
+	if(u.uaesh){
+		bonus += u.uaesh/3;
+		//remainder is probabilistic
+		if(rn2(3) < u.uaesh%3)
+			bonus++;
+	}
+	return bonus;
+}
+
 #endif /* OVLB */
 
 /*weapon.c*/
