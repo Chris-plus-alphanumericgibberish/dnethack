@@ -706,7 +706,7 @@ char *buf;
 			"rotted ");
 	}
 	if (obj->oeroded3) {
-		switch (obj->ovar1) {
+		switch (obj->oeroded3) {
 		case 2:	Strcat(buf, "very "); break;
 		case 3:	Strcat(buf, "thoroughly "); break;
 		}
