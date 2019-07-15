@@ -478,7 +478,7 @@ register struct monst *mtmp;
 	    case PM_ARSENAL:
 			num = d(3,6);
 			while(num--){
-				obj = mksobj_at(BRONZE_PLATE_MAIL, x, y, TRUE, FALSE);
+				obj = mksobj_at(BRONZE_HALF_PLATE, x, y, TRUE, FALSE);
 				obj->spe = 3;
 			}
 			num = d(2,4);

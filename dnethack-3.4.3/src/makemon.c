@@ -640,6 +640,49 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, GLOVES);
 				(void)mongets(mtmp, HIGH_BOOTS);
 			}
+			else if(ptr == &mons[PM_AZTEC_WARRIOR]) {
+			    otmp = mksobj(TORCH, FALSE, FALSE);
+				otmp->age = (long) rn1(500,1000);
+			    (void) mpickobj(mtmp, otmp);
+				begin_burn(otmp, FALSE);
+				
+				(void)mongets(mtmp, MACUAHUITL);
+				(void)mongets(mtmp, STUDDED_LEATHER_ARMOR);
+				(void)mongets(mtmp, ICHCAHUIPILLI);
+				otmp = mksobj(HELMET, FALSE, FALSE);
+				otmp->obj_material = WOOD;
+				(void) mpickobj(mtmp,otmp);
+
+			}
+			else if(ptr == &mons[PM_AZTEC_SPEARTHROWER]) {
+			    otmp = mksobj(TORCH, FALSE, FALSE);
+				otmp->age = (long) rn1(500,1000);
+			    (void) mpickobj(mtmp, otmp);
+				begin_burn(otmp, FALSE);
+				
+				(void)mongets(mtmp, ATLATL);	
+				m_initthrow(mtmp, JAVELIN, rnd(10));
+				
+				(void)mongets(mtmp, LEATHER_ARMOR);
+				(void)mongets(mtmp, ICHCAHUIPILLI);
+				otmp = mksobj(HELMET, FALSE, FALSE);
+				otmp->obj_material = WOOD;
+				(void) mpickobj(mtmp,otmp);
+			}
+			else if(ptr == &mons[PM_AZTEC_PRIEST]) {
+			    otmp = mksobj(TORCH, FALSE, FALSE);
+				otmp->spe = rnd(3);
+				otmp->age = (long) rn1(1000,2000);
+			    (void) mpickobj(mtmp, otmp);
+				begin_burn(otmp, FALSE);
+				
+				(void)mongets(mtmp, TECPATL);
+				(void)mongets(mtmp, LEATHER_ARMOR);
+				(void)mongets(mtmp, ICHCAHUIPILLI);
+				otmp = mksobj(HELMET, FALSE, FALSE);
+				otmp->obj_material = WOOD;
+				(void) mpickobj(mtmp,otmp);
+			}
 			else if(is_mercenary(ptr)) {
 				int w1 = 0, w2 = 0;
 				switch (mm) {

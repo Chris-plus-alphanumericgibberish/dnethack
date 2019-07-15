@@ -37,22 +37,21 @@
 #define P_HAMMER            15	/* Heavy head on the end */
 #define P_QUARTERSTAFF      16	/* Long-shafted bludgeon */
 #define P_POLEARMS          17
-#define P_SPEAR             18
-#define P_JAVELIN           19
-#define P_TRIDENT           20
-#define P_LANCE             21
-#define P_BOW               22
-#define P_SLING             23
+#define P_SPEAR             18  /* includes javelin */
+#define P_TRIDENT           19
+#define P_LANCE             20
+#define P_BOW               21
+#define P_SLING             22
 //#ifdef FIREARMS
-#define P_FIREARM			24	/* KMH */
+#define P_FIREARM			23	/* KMH */
 //#endif
-#define P_CROSSBOW          25
-#define P_DART              26
-#define P_SHURIKEN          27
-#define P_BOOMERANG         28
-#define P_WHIP              29
-#define P_HARVEST 		    30
-#define P_UNICORN_HORN      31	/* last weapon */
+#define P_CROSSBOW          24
+#define P_DART              25
+#define P_SHURIKEN          26
+#define P_BOOMERANG         27
+#define P_WHIP              28
+#define P_HARVEST 		    29
+#define P_UNICORN_HORN      30	/* last weapon */
 #define P_FIRST_WEAPON      P_DAGGER
 #define P_LAST_WEAPON       P_UNICORN_HORN
 

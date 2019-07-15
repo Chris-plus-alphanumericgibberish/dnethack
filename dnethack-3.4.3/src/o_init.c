@@ -1478,6 +1478,42 @@ dodiscovered()				/* free after Robert Viduya */
     return 0;
 }
 
+int
+object_color(otmp)
+struct obj *otmp;
+{
+	/* should never happen */
+	if (!otmp)
+	{
+		impossible("object_color called with no object");
+		return 0;
+	}
+	/* fake mimic objects use the default color 
+	 * they also have unset data in too many places
+	 */
+	if (otmp->oclass == STRANGE_OBJECT)
+	{
+		return objects[otmp->otyp].oc_color;
+	}
+
+
+	/* artifacts with set colors, currently none */
+//	switch (otmp->oartifact)
+//	{
+//	case ART_BLACK_CRYSTAL:		return CLR_BLACK;
+//	}
+	/* objects with non-standard materials whose base color is that of their material */
+	if (otmp->obj_material != objects[otmp->otyp].oc_material
+		&& materials[objects[otmp->otyp].oc_material].color == objects[otmp->otyp].oc_color)
+	{
+		if (otmp->obj_material == GEMSTONE && otmp->ovar1 && !obj_type_uses_ovar1(otmp) && !obj_art_uses_ovar1(otmp))
+			return objects[otmp->ovar1].oc_color;
+		return materials[otmp->obj_material].color;
+	}
+	/* default color */
+	return objects[otmp->otyp].oc_color;
+}
+
 void
 fix_object(otmp)
 	struct obj *otmp;

@@ -120,6 +120,7 @@ static struct {
 	{ "bear",	BEAR_TRAP },
 	{ "land mine",	LANDMINE },
 	{ "rolling boulder",	ROLLING_BOULDER_TRAP },
+	{ "mummy trap",	MUMMY_TRAP },
 	{ "sleep gas",	SLP_GAS_TRAP },
 	{ "rust",	RUST_TRAP },
 	{ "fire",	FIRE_TRAP },
@@ -250,7 +251,6 @@ char **argv;
 				":dat:sokoban.des",
 				":dat:tower.des",
 				":dat:yendor.des"
-
 				};
 
 	argc = SIZE(mac_argv);

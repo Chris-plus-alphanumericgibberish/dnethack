@@ -2243,8 +2243,7 @@ int whodidit;	/* 1==hero, 0=other, -1==just check whether it'll pass thru */
 //#ifdef FIREARMS
 			(oskill != -P_FIREARM || obj_type == ROCKET) &&
 //#endif
-			oskill != P_SPEAR && oskill != P_JAVELIN &&
-			oskill != P_KNIFE);	/* but not dagger */
+			oskill != P_SPEAR && oskill != P_KNIFE);	/* but not dagger */
 		break;
 	    }
 	case ARMOR_CLASS:
@@ -2261,7 +2260,7 @@ int whodidit;	/* 1==hero, 0=other, -1==just check whether it'll pass thru */
 			obj_type != WAX_CANDLE &&
 			obj_type != LENSES &&
 			obj_type != R_LYEHIAN_FACEPLATE &&
-			obj_type != TIN_WHISTLE &&
+			obj_type != WHISTLE &&
 			obj_type != MAGIC_WHISTLE);
 		break;
 	case ROCK_CLASS:	/* includes boulder */

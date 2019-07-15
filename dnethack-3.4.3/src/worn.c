@@ -10,13 +10,6 @@ STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P)
 STATIC_DCL int NDECL(def_beastmastery);
 STATIC_DCL int NDECL(def_mountedCombat);
 
-// object properties
-const static int FIRE_PROP[] = { FIRE_RES, 0 };
-const static int COLD_PROP[] = { COLD_RES, 0 };
-const static int ELEC_PROP[] = { SHOCK_RES, 0 };
-const static int ACID_PROP[] = { ACID_RES, 0 };
-const static int MAGC_PROP[] = { ANTIMAGIC, 0 };
-
 const struct worn {
 	long w_mask;
 	struct obj **w_obj;
@@ -59,6 +52,7 @@ const struct worn {
 int *
 item_property_list(obj, otyp)
 struct obj* obj;
+int otyp;
 {
 	static int property_list[LAST_PROP];	// the temporary list of properties
 	int cur_prop, i;
@@ -80,7 +74,7 @@ struct obj* obj;
 	const static int SHIM_RES[] = { SEE_INVIS, 0 };
 
 	i = 0;
-	for (cur_prop = 0; cur_prop < LAST_PROP; cur_prop++)
+	for (cur_prop = 1; cur_prop < LAST_PROP; cur_prop++)
 	{
 		got_prop = FALSE;
 		// from objclass
@@ -109,6 +103,10 @@ struct obj* obj;
 				break;
 			case ANTIMAGIC:
 				if (obj->oproperties & OPROP_MAGC)
+					got_prop = TRUE;
+				break;
+			case REFLECTING:
+				if (obj->oproperties & OPROP_REFL)
 					got_prop = TRUE;
 				break;
 			}
@@ -1434,7 +1432,7 @@ long timeout;
 		}
 		if(obj->oeroded < 2){
 			obj->oeroded++;
-			Your("%s degrades.",xname(obj));
+			Your("%s degrade%s.",xname(obj),(obj->quan > 1L ? "" : "s"));
 			start_timer(1, TIMER_OBJECT,
 						LIGHT_DAMAGE, (genericptr_t)obj);
 			stop_occupation();

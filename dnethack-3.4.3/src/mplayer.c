@@ -205,8 +205,8 @@ register boolean special;
 		}break;
 		case PM_BARD:{
 			static int trotyp[] = {
-				WOODEN_FLUTE, TOOLED_HORN, WOODEN_HARP,
-				BELL, BUGLE, LEATHER_DRUM
+				FLUTE, TOOLED_HORN, HARP,
+				BELL, BUGLE, DRUM
 			};
 			(void)mongets(mtmp, trotyp[rn2(SIZE(trotyp))]);
 			armor = rn2(2) ? ELVEN_MITHRIL_COAT : ELVEN_TOGA;
@@ -310,7 +310,7 @@ register boolean special;
 		break;
 		case PM_WORM_THAT_WALKS:
 		    weapon = ATHAME;
-			armor = BRONZE_PLATE_MAIL;
+			armor = BRONZE_HALF_PLATE;
 		    cloak = MUMMY_WRAPPING;
 		    shield = SHIELD_OF_REFLECTION;
 		break;

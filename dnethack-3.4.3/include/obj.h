@@ -264,19 +264,52 @@ struct obj {
 			/*Records runes for wooden weapons */
 			
 	long ovar1;		/* extra variable. Specifies: */
-			/*Records the contents of Books of Secrets*/
-			/*Records the cracked level of masks. */
-			/*Records special features for weapons. */
-			/* 	Records moon phase for moon axes */
+	/* Number of viperwhip heads */
+	/* Moon axe phase */
+	/* Acid venom non-1d6 damage */
+	/* Mask erosion (may be moved to oeroded3 at some point) */
+	/* Ammo for futuretech weapons */
+	/* Hilt engraving for lightsabers */
+	/* Ampule type for hypospray ampules */
+	/* Engraving for rings */
+#define obj_type_uses_ovar1(otmp) (\
+	   (otmp)->otyp == VIPERWHIP \
+	|| (otmp)->otyp == MOON_AXE \
+	|| (otmp)->otyp == ACID_VENOM \
+	|| (otmp)->otyp == MASK \
+	|| is_blaster((otmp)) \
+	|| (otmp)->otyp == RAYGUN \
+	|| (otmp)->otyp == SEISMIC_HAMMER \
+	|| is_vibroweapon((otmp)) \
+	|| (otmp)->otyp == LIGHTSABER \
+	|| (otmp)->otyp == BEAMSWORD \
+	|| (otmp)->otyp == DOUBLE_LIGHTSABER \
+	|| (otmp)->otyp == HYPOSPRAY_AMPULE \
+	|| (otmp)->oclass == RING_CLASS \
+	)
 #define ECLIPSE_MOON	0
 #define CRESCENT_MOON	1
 #define HALF_MOON		2
 #define GIBBOUS_MOON	3
 #define FULL_MOON	 	4
-			/* 	Records theft type for stealing artifacts (reaver (scimitar) and avarice (shortsword) */
-			/* 	Records remaining ammo for blasters and force pikes */
-			/* 	Records the hilt-type for lightsabers */
-			/*  Records songs that the Singing Sword has heard */
+
+	/* Songs that the Singing Sword has heard */
+	/* Spirits bound into the Pen of the Void */
+	/* The ema of damage taken for gloves of the berserker */
+	/* Life/Death for the scalpel of life and death */
+	/* Theft type for stealing artifacts (reaver (scimitar) and avarice (shortsword) */
+	/* Misc data for the artifact spellbooks */
+#define obj_art_uses_ovar1(otmp) (\
+	   (otmp)->oartifact == ART_SINGING_SWORD \
+	|| (otmp)->oartifact == ART_PEN_OF_THE_VOID \
+	|| (otmp)->oartifact == ART_GAUNTLETS_OF_THE_BERSERKER \
+	|| (otmp)->oartifact == ART_SCALPEL_OF_LIFE_AND_DEATH \
+	|| (otmp)->oartifact == ART_REAVER \
+	|| (otmp)->oartifact == ART_AVARICE \
+	|| (otmp)->oartifact == ART_NECRONOMICON \
+	|| (otmp)->oartifact == ART_BOOK_OF_LOST_NAMES \
+	|| (otmp)->oartifact == ART_BOOK_OF_INFINITE_SPELLS \
+	)
 #define OHEARD_FEAR		0x0000000000000001L
 #define OHEARD_HEALING	0x0000000000000002L
 #define OHEARD_RALLY	0x0000000000000004L
@@ -294,15 +327,6 @@ struct obj {
 #define OHEARD_LIFE		0x0000000000004000L
 #define OHEARD_INSANE	0x0000000000008000L
 #define OHEARD_CANCEL	0x0000000000010000L
-			/* Gloves: special features */
-			/* 	Records the ema of damage taken for gloves of the berserker */
-			/* Rings: specifies engraving on certain rings */
-			/* Cloaks: Droven: Tattered level.  */
-			/* Acid venom: nonstandard damage amount */
-			/* Corpses: rummor */
-			/* Rocks: rummor */
-			/* Masks: fracturing level */
-
 
 	schar gifted; /*gifted is of type aligntyp.  For some reason aligntyp isn't being seen at compile*/
 	
@@ -436,25 +460,26 @@ struct weapon_dice {
 			  (otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE ) \
 			 ))
 #define is_spear(otmp)	(otmp->oclass == WEAPON_CLASS && \
-			 objects[otmp->otyp].oc_skill >= P_SPEAR && \
-			 objects[otmp->otyp].oc_skill <= P_JAVELIN)
+			 objects[otmp->otyp].oc_skill == P_SPEAR)
 #define is_farm(otmp)	(otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill == P_HARVEST)
 #define is_launcher(otmp)	(otmp->oclass == WEAPON_CLASS && \
-			 objects[otmp->otyp].oc_skill >= P_BOW && \
-			 objects[otmp->otyp].oc_skill <= P_CROSSBOW)
+			 ((objects[otmp->otyp].oc_skill >= P_BOW && \
+			 objects[otmp->otyp].oc_skill <= P_CROSSBOW) || otmp->otyp == ATLATL))
 #define is_ammo(otmp)	((otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == GEM_CLASS) && \
-			 objects[otmp->otyp].oc_skill >= -P_CROSSBOW && \
-			 objects[otmp->otyp].oc_skill <= -P_BOW)
+			 ((objects[otmp->otyp].oc_skill >= -P_CROSSBOW && \
+			 objects[otmp->otyp].oc_skill <= -P_BOW)))
 #define is_grenade(otmp)	(is_ammo(otmp) && \
 			 	 objects[(otmp)->otyp].w_ammotyp == WP_GRENADE)
 #define ammo_and_launcher(otmp,ltmp) \
-			 (is_ammo(otmp) && (ltmp) && (\
+			 ((otmp) && (ltmp) && (\
 			  (\
 			   (ltmp->otyp == BFG) ||\
 			   (ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE) ||\
 			   (ltmp->otyp == MASS_SHADOW_PISTOL && (otmp->otyp == ltmp->cobj->otyp)) ||\
+			   (ltmp->otyp == ATLATL && is_spear(otmp)) ||\
+			   (!ltmp && is_spear(otmp)) ||\
 			   (otmp->objsize == (ltmp)->objsize || objects[(ltmp)->otyp].oc_skill == P_SLING) &&\
 			    (objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
 			    (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill))\
@@ -467,7 +492,7 @@ struct weapon_dice {
 			 )
 #define is_weptool(o)	((o)->oclass == TOOL_CLASS && \
 			 objects[(o)->otyp].oc_skill != P_NONE)
-#define is_instrument(o)	((o)->otyp >= WOODEN_FLUTE && \
+#define is_instrument(o)	((o)->otyp >= FLUTE && \
 			 (o)->otyp <= DRUM_OF_EARTHQUAKE)
 #define bimanual(otmp,ptr)	(otmp && (otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
@@ -511,7 +536,11 @@ struct weapon_dice {
 #define dark_weapon(otmp)	 ((otmp)->otyp == GOLD_BLADED_VIBROSWORD || \
 						  (otmp)->otyp == GOLD_BLADED_VIBROZANBATO || \
 						  (otmp)->otyp == GOLD_BLADED_VIBROSPEAR)
-#define spec_prop_otyp(otmp)	(pure_weapon(otmp) || dark_weapon(otmp))
+#define spec_prop_otyp(otmp)	((pure_weapon(otmp) || dark_weapon(otmp)) || \
+						  (otmp)->otyp == SUNROD || \
+						  (otmp)->otyp == TORCH || \
+						  (otmp)->otyp == SHADOWLANDER_S_TORCH || \
+						  (otmp)->otyp == KAMEREL_VAJRA)
 #define is_multigen(otmp)	((otmp->oclass == WEAPON_CLASS && \
 			 objects[otmp->otyp].oc_skill >= -P_SHURIKEN && \
 			 objects[otmp->otyp].oc_skill <= -P_BOW))
@@ -572,14 +601,25 @@ struct weapon_dice {
 #define is_harmonium_armor(otmp)	((otmp)->otyp == HARMONIUM_HELM || (otmp)->otyp == HARMONIUM_PLATE\
 								|| (otmp)->otyp == HARMONIUM_SCALE_MAIL || (otmp)->otyp == HARMONIUM_GAUNTLETS\
 								|| (otmp)->otyp == HARMONIUM_BOOTS)
-#define is_light_armor(otmp)	((otmp)->otyp == DWARVISH_MITHRIL_COAT || (otmp)->otyp == ELVEN_MITHRIL_COAT || \
-			(otmp)->otyp == JUMPSUIT || (otmp)->otyp == LEATHER_JACKET || (otmp)->otyp == ELVEN_TOGA || \
-			(otmp)->otyp == BLACK_DRESS)
-#define is_medium_armor(otmp)	((otmp)->otyp == BRONZE_PLATE_MAIL || (otmp)->otyp == DROVEN_CHAIN_MAIL || \
-			(otmp)->otyp == CHAIN_MAIL || (otmp)->otyp == SCALE_MAIL || (otmp)->otyp == STUDDED_LEATHER_ARMOR || \
-			(otmp)->otyp == LEATHER_ARMOR || (otmp)->otyp == BANDED_MAIL || (otmp)->otyp == NOBLE_S_DRESS || \
-			(otmp)->otyp == HARMONIUM_SCALE_MAIL || \
-			(otmp)->otyp == PLASTEEL_ARMOR || (otmp)->otyp == HIGH_ELVEN_PLATE || Is_dragon_mail(otmp))
+#define is_light_armor(otmp)	((otmp)->otyp == DWARVISH_MITHRIL_COAT\
+			|| (otmp)->otyp == ELVEN_MITHRIL_COAT\
+			|| (otmp)->otyp == JUMPSUIT\
+			|| (otmp)->otyp == LEATHER_JACKET\
+			|| (otmp)->otyp == ELVEN_TOGA\
+			|| (otmp)->otyp == BLACK_DRESS)
+#define is_medium_armor(otmp)	((otmp)->otyp == BRONZE_HALF_PLATE\
+			|| (otmp)->otyp == HALF_PLATE\
+			|| (otmp)->otyp == HIGH_ELVEN_PLATE \
+			|| (otmp)->otyp == CHAIN_MAIL\
+			|| (otmp)->otyp == DROVEN_CHAIN_MAIL\
+			|| (otmp)->otyp == SCALE_MAIL\
+			|| (otmp)->otyp == HARMONIUM_SCALE_MAIL\
+			|| (otmp)->otyp == LEATHER_ARMOR\
+			|| (otmp)->otyp == STUDDED_LEATHER_ARMOR\
+			|| (otmp)->otyp == BANDED_MAIL\
+			|| (otmp)->otyp == NOBLE_S_DRESS\
+			|| (otmp)->otyp == PLASTEEL_ARMOR\
+			|| Is_dragon_mail(otmp))
 #define is_elven_armor(otmp)	((otmp)->otyp == ELVEN_HELM\
 				|| (otmp)->otyp == HIGH_ELVEN_HELM\
 				|| (otmp)->otyp == HIGH_ELVEN_GAUNTLETS\
@@ -636,6 +676,7 @@ struct weapon_dice {
 				|| ((otmp)->oartifact == ART_FRIEDE_S_SCYTHE && uwep && uwep->oartifact==ART_LIFEHUNT_SCYTHE)\
 				|| ((otmp)->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE))\
 				|| ((otmp)->oartifact == ART_CLEAVER && Role_if(PM_BARBARIAN))\
+				|| ((otmp)->oartifact == ART_TECPATL_OF_HUHETOTL && Role_if(PM_ARCHEOLOGIST))\
 				|| ((otmp)->oartifact == ART_KIKU_ICHIMONJI && Role_if(PM_SAMURAI))\
 				|| ((otmp)->oartifact == ART_SNICKERSNEE && (Role_if(PM_SAMURAI) || Role_if(PM_TOURIST) ))\
 				|| ((otmp)->oartifact == ART_MAGICBANE && Role_if(PM_WIZARD)))
@@ -732,7 +773,7 @@ struct weapon_dice {
 
 /* MAGIC_LAMP intentionally excluded below */
 /* age field of this is relative age rather than absolute */
-#define age_is_relative(otmp)	((otmp)->otyp == BRASS_LANTERN\
+#define age_is_relative(otmp)	((otmp)->otyp == LANTERN\
 				|| (otmp)->otyp == OIL_LAMP\
 				|| (otmp)->otyp == DWARVISH_HELM\
 				|| (otmp)->otyp == LIGHTSABER\
@@ -744,7 +785,7 @@ struct weapon_dice {
 				|| (otmp)->otyp == WAX_CANDLE\
 				|| (otmp)->otyp == POT_OIL)
 /* object can be ignited */
-#define ignitable(otmp)	((otmp)->otyp == BRASS_LANTERN\
+#define ignitable(otmp)	((otmp)->otyp == LANTERN\
 				|| (otmp)->otyp == OIL_LAMP\
  				|| (otmp)->otyp == DWARVISH_HELM\
  				|| (otmp)->otyp == GNOMISH_POINTY_HAT\
@@ -781,8 +822,6 @@ struct weapon_dice {
 							 (otmp)->obj_material == COPPER || \
 							 (otmp)->obj_material == SILVER || \
 							 (otmp)->obj_material == IRON)
-
-#define id_for_material(otmp) ((otmp)->otyp >= GLOVES && (otmp)->otyp <= GAUNTLETS_OF_DEXTERITY)
 
 /* misc */
 #define is_boulder(otmp)		((otmp)->otyp == BOULDER || (otmp)->otyp == MASSIVE_STONE_CRATE || ((otmp)->otyp == STATUE && opaque(&mons[(otmp)->corpsenm])))

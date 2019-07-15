@@ -117,16 +117,16 @@ struct songspell {
 NEARDATA const struct songspell songs[] = {
 	/* sp_id		name	    level turns instr1		instr2 */
 	{ 0,				"None",				0, 1,	0,				0 },
-	{ SPE_CAUSE_FEAR,	"Fear",				1, 6,	LEATHER_DRUM,	TOOLED_HORN },
-	{ SPE_SLEEP,		"Lullaby",			1, 4,	WOODEN_HARP,	WOODEN_FLUTE },
-	{ SPE_EXTRA_HEALING,"Meditative Healing",1,4,	WOODEN_HARP,	WOODEN_FLUTE },
+	{ SPE_CAUSE_FEAR,	"Fear",				1, 6,	DRUM,	TOOLED_HORN },
+	{ SPE_SLEEP,		"Lullaby",			1, 4,	HARP,	FLUTE },
+	{ SPE_EXTRA_HEALING,"Meditative Healing",1,4,	HARP,	FLUTE },
 	{ SPE_TELEPORT_AWAY,"Rally",			1, 1,	TOOLED_HORN,	BUGLE },
-	{ SPE_CONFUSE_MONSTER,	"Cacophony",	2, 5,	LEATHER_DRUM,	TOOLED_HORN },
-	{ SPE_HASTE_SELF,	"Charge", 			2, 5,	LEATHER_DRUM,	BUGLE },
+	{ SPE_CONFUSE_MONSTER,	"Cacophony",	2, 5,	DRUM,	TOOLED_HORN },
+	{ SPE_HASTE_SELF,	"Charge", 			2, 5,	DRUM,	BUGLE },
 	{ SPE_CANCELLATION,	"Disruption", 		2, 5,	BUGLE,			TOOLED_HORN },
-	{ SPE_SLOW_MONSTER,	"Lethargy",			2, 5,	WOODEN_FLUTE,	WOODEN_HARP },
-	{ SPE_CHARM_MONSTER,"Friendship",		3, 6,	WOODEN_FLUTE,	WOODEN_HARP },
-	{ SPE_CAUSE_FEAR,	"Inspire Courage",	3, 6,	LEATHER_DRUM,	BUGLE }
+	{ SPE_SLOW_MONSTER,	"Lethargy",			2, 5,	FLUTE,	HARP },
+	{ SPE_CHARM_MONSTER,"Friendship",		3, 6,	FLUTE,	HARP },
+	{ SPE_CAUSE_FEAR,	"Inspire Courage",	3, 6,	DRUM,	BUGLE }
 /*	random ideas that weren't implemented -- based in spells from other schools
 	{ SPE_CURE_BLINDNESS,	"Cause Blindness"
 	{ SPE_CURE_SICKNESS,	"Cause Sickness"
@@ -198,7 +198,7 @@ boolean domsg;
 		if(is_bardmon(mtmp->data))
 			r = rnd(20) + mtmp->m_lev;
 	    /* nymphs and some elves sing along harps */
-	    else if ((instr_otyp == WOODEN_HARP)
+	    else if ((instr_otyp == HARP)
 		&& (mtmp->data->mlet == S_NYMPH || is_elf(mtmp->data)
 			|| mtmp->data->mlet == S_CHA_ANGEL
 			|| mtmp->data == &mons[PM_ANGEL]
@@ -207,7 +207,7 @@ boolean domsg;
 		&& (mtmp->mhp*2 > mtmp->mhpmax))
 		    r = max(10,(mtmp->data->mlet == S_NYMPH ? mtmp->m_lev*2 : mtmp->m_lev));
 	    /* parrots (and other birds?) sing along flutes */
-	    if ((instr_otyp == WOODEN_FLUTE)
+	    if ((instr_otyp == FLUTE)
 		&& (mtmp->data == &mons[PM_PARROT] || mtmp->data->mlet == S_CHA_ANGEL)
 		&& (mtmp->mhp*2 > mtmp->mhpmax))
 		    r = max(10,(mtmp->data->mlet == S_NYMPH ? mtmp->m_lev*2 : mtmp->m_lev));
@@ -221,7 +221,7 @@ boolean domsg;
 		    r = max(10,(mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON
 				? mtmp->m_lev*2 : mtmp->m_lev));
 	    /* orcs and ogres sing along (shout, actually) drums and bugles */
-	    else if ((instr_otyp == LEATHER_DRUM || instr_otyp == BUGLE)
+	    else if ((instr_otyp == DRUM || instr_otyp == BUGLE)
 		     && (mtmp->data->mlet == S_ORC
 			 || mtmp->data->mlet == S_OGRE
 			 || (mtmp->data == &mons[PM_TRUMPET_ARCHON] && MON_WEP(mtmp) && !mtmp->mcan)
@@ -305,7 +305,7 @@ boolean domsg;
 			r = -1*(rnd(20) + mtmp->m_lev/3);
 		else if(mtmp->data == &mons[PM_LILLEND])
 			r = -1*(rnd(20) + mtmp->m_lev);
-	    else if ((instr_otyp == WOODEN_HARP || instr_otyp == WOODEN_FLUTE)
+	    else if ((instr_otyp == HARP || instr_otyp == FLUTE)
 		     && (mtmp->data == &mons[PM_CROW] || mtmp->data == &mons[PM_RAVEN]))
 			r = -1*(mtmp->m_lev);
 		else if (mtmp->data->mlet == S_LICH || mtmp->data->mlet == S_DEMON 
@@ -317,14 +317,14 @@ boolean domsg;
 			r = -2*(mtmp->m_lev);
 		else if (mtmp->data == &mons[PM_PARROT])
 			r = -1*(mtmp->m_lev);
-		else if (!(instr_otyp == WOODEN_HARP || instr_otyp == WOODEN_FLUTE)
+		else if (!(instr_otyp == HARP || instr_otyp == FLUTE)
 		     && mtmp->data->mlet == S_NYMPH)
 			r = -3*(mtmp->m_lev);
 		else if (mtmp->data->mlet == S_CENTAUR)
 			r = -1*(mtmp->m_lev);
-		else if (instr_otyp != LEATHER_DRUM 
+		else if (instr_otyp != DRUM 
 			 && (mtmp->data->mlet == S_ORC || mtmp->data->mlet == S_OGRE || mtmp->data->mlet == S_GIANT))
-			r = (instr_otyp == WOODEN_HARP || instr_otyp == WOODEN_FLUTE) ? -2*(mtmp->m_lev) : -1*(mtmp->m_lev);
+			r = (instr_otyp == HARP || instr_otyp == FLUTE) ? -2*(mtmp->m_lev) : -1*(mtmp->m_lev);
     }
 
     if (domsg && (r < 0)){
@@ -443,9 +443,9 @@ int know_spell;
 	if (!know_spell)
 		return 0;
 	
-	if((instr->otyp == LEATHER_DRUM || instr->otyp == DRUM_OF_EARTHQUAKE) && song_id == SNG_FEAR)
+	if((instr->otyp == DRUM || instr->otyp == DRUM_OF_EARTHQUAKE) && song_id == SNG_FEAR)
 		chance = 100;
-	else if(instr->otyp == LEATHER_DRUM || instr->otyp == DRUM_OF_EARTHQUAKE)
+	else if(instr->otyp == DRUM || instr->otyp == DRUM_OF_EARTHQUAKE)
 		chance = ( ACURR(A_STR) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
 		- (songs[song_id].level * (instr->blessed ? 15 : 20));
 	else chance = ( ACURR(A_DEX) * 2 * (P_SKILL(P_MUSICALIZE)-P_UNSKILLED+1) + u.ulevel)
@@ -463,7 +463,7 @@ int know_spell;
 	if (u.uhp < u.uhpmax * 0.3) chance *= 2;
 
 	/* it's also difficult to play some instruments while wearing a shield. */
-	if (uarms && (instr_otyp == WOODEN_HARP || instr_otyp == LEATHER_DRUM)) 
+	if (uarms && (instr_otyp == HARP || instr_otyp == DRUM)) 
 		chance /= 2;
 
 	/* but it's easier with the eyes closed */
@@ -507,7 +507,7 @@ struct obj *instr;
 	any.a_int = SNG_IMPROVISE;
 	add_menu(tmpwin, NO_GLYPH, &any, SNG_IMPROVISE_CHAR, 0, ATR_NONE,
 		 "improvise", MENU_UNSELECTED);
-	if(instr->otyp != LEATHER_DRUM && instr->otyp != DRUM_OF_EARTHQUAKE){
+	if(instr->otyp != DRUM && instr->otyp != DRUM_OF_EARTHQUAKE){
 		/* play notes option */
 		any.a_int = SNG_NOTES;
 		add_menu(tmpwin, NO_GLYPH, &any, SNG_NOTES_CHAR, 0, ATR_NONE,
@@ -622,17 +622,17 @@ struct obj * instr;
 		if (race_peaceful(mtmp->data)) dlev -= dlev0/10;
 
 		// rats like music from flutes (The Pied Piper of Hamelin)
-		if (mtmp->data->mlet == S_RODENT && instr_otyp == WOODEN_FLUTE) {
+		if (mtmp->data->mlet == S_RODENT && instr_otyp == FLUTE) {
 			dlev -= dlev0/5;
 			if (showmsg) msg = "%s seems to briefly swing with your music.";
 		}
 		// angels like the sound of harps
 		if ((mtmp->data == &mons[PM_ANGEL]) && (mtmp->malign >= A_COALIGNED)
-		    && (instr_otyp == WOODEN_HARP))
+		    && (instr_otyp == HARP))
 			dlev -= dlev0/5;
 		// snakes (and nagas) also like music from flutes
 		if (((mtmp->data->mlet == S_SNAKE) || (mtmp->data->mlet == S_NAGA))
-		    && (instr_otyp == WOODEN_FLUTE)) {
+		    && (instr_otyp == FLUTE)) {
 			dlev -= dlev0/5;
 			if (showmsg) msg = "%s briefly dances with your music.";
 		}
@@ -707,7 +707,7 @@ play_song()
 	if(P_SKILL(P_MUSICALIZE) > P_BASIC) distance += P_SKILL(P_MUSICALIZE) - P_BASIC;
 	distance = distance*distance + 1;
 	
-	if(instr_otyp == LEATHER_DRUM) distance = distance*4/3;
+	if(instr_otyp == DRUM) distance = distance*4/3;
 
 	///* songs only have effect after the 1st turn */
 	//if (song_delay <= songs[song_played].level+2) 
@@ -1704,7 +1704,7 @@ struct obj *instr;
 		}
 		break;
 	    } /* else FALLTHRU */
-	case WOODEN_FLUTE:		/* May charm snakes */
+	case FLUTE:		/* May charm snakes */
 	    do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 	    pline("%s.", Tobjnam(instr, do_spec ? "trill" : "toot"));
 		song_noise(u.ulevel * 3);
@@ -1756,7 +1756,7 @@ struct obj *instr;
 		exercise(A_DEX, TRUE);
 		break;
 	    } /* else FALLTHRU */
-	case WOODEN_HARP:		/* May calm Nymph */
+	case HARP:		/* May calm Nymph */
 	    do_spec &= (rn2(ACURR(A_DEX)) + u.ulevel > 25);
 	    pline("%s %s.", The(xname(instr)),
 		  do_spec ? "produces a lilting melody" : "twangs");
@@ -1779,7 +1779,7 @@ struct obj *instr;
 		}
 		break;
 	    } /* else FALLTHRU */
-	case LEATHER_DRUM:		/* Awaken monsters */
+	case DRUM:		/* Awaken monsters */
 	    You("beat a deafening row!");
 	    awaken_monsters(u.ulevel * 40);
 	    exercise(A_WIS, FALSE);
@@ -1808,8 +1808,8 @@ struct obj *instr;
     boolean ok;
 
 	instr_otyp = instr->otyp;
-	if(instr_otyp == MAGIC_HARP) instr_otyp = WOODEN_HARP;
-	else if(instr_otyp == MAGIC_FLUTE) instr_otyp = WOODEN_FLUTE;
+	if(instr_otyp == MAGIC_HARP) instr_otyp = HARP;
+	else if(instr_otyp == MAGIC_FLUTE) instr_otyp = FLUTE;
 	else if(instr_otyp == FIRE_HORN) instr_otyp = TOOLED_HORN;
 	else if(instr_otyp == FROST_HORN) instr_otyp = TOOLED_HORN;
 		
@@ -1842,7 +1842,7 @@ struct obj *instr;
 		return 0;
     }
 
-    if (uarms && (instr->otyp == WOODEN_HARP || instr->otyp == LEATHER_DRUM)){
+    if (uarms && (instr->otyp == HARP || instr->otyp == DRUM)){
 	    You("can't play properly while wearing a shield.");
 		return 0;
 	}
@@ -1857,7 +1857,7 @@ struct obj *instr;
 			return 0;
     } else {
 #endif
-    if (instr->otyp != LEATHER_DRUM && instr->otyp != DRUM_OF_EARTHQUAKE) {
+    if (instr->otyp != DRUM && instr->otyp != DRUM_OF_EARTHQUAKE) {
 	    if (yn("Improvise?") == 'y') song = SNG_IMPROVISE;
 	    else if (u.uevent.uheard_tune == 2 && yn("Play the passtune?") == 'y')
 		song = SNG_PASSTUNE;
@@ -1900,8 +1900,8 @@ struct obj *instr;
 	    song_played = song;
 	    song_instr = instr;
 		instr_otyp = song_instr->otyp;
-		if(instr_otyp == MAGIC_HARP) instr_otyp = WOODEN_HARP;
-		else if(instr_otyp == MAGIC_FLUTE) instr_otyp = WOODEN_FLUTE;
+		if(instr_otyp == MAGIC_HARP) instr_otyp = HARP;
+		else if(instr_otyp == MAGIC_FLUTE) instr_otyp = FLUTE;
 		else if(instr_otyp == FIRE_HORN) instr_otyp = TOOLED_HORN;
 		else if(instr_otyp == FROST_HORN) instr_otyp = TOOLED_HORN;
 	    song_delay = songs[song_played].turns;
@@ -1924,13 +1924,13 @@ struct obj *instr;
 		distance *= 1.5;
 		
 		switch(instr_otyp){
-			case WOODEN_HARP:
+			case HARP:
 				distance = distance*distance + 1;
 				distance /= 10;
 				
 				song_noise(distance);
 			break;
-			case WOODEN_FLUTE:
+			case FLUTE:
 				distance = distance*distance + 1;
 				distance /= 10;
 				
@@ -1946,7 +1946,7 @@ struct obj *instr;
 				
 				song_noise(distance);
 			break;
-			case LEATHER_DRUM:
+			case DRUM:
 				distance = distance*distance + 1;
 				distance = distance*4/3;
 				
@@ -2114,7 +2114,7 @@ char	*buf;
 	/* send a prefix to modify instrumental `timbre' */
 	switch (instr->otyp)
 	{
-	case WOODEN_FLUTE:
+	case FLUTE:
 	case MAGIC_FLUTE:
 	    (void) write(fd, ">ol", 1); /* up one octave & lock */
 	    break;
@@ -2126,7 +2126,7 @@ char	*buf;
 	case BUGLE:
 	    (void) write(fd, "ol", 2); /* octave lock */
 	    break;
-	case WOODEN_HARP:
+	case HARP:
 	case MAGIC_HARP:
 	    (void) write(fd, "l8mlol", 4); /* fast, legato, octave lock */
 	    break;
@@ -2184,7 +2184,7 @@ char	*buf;
     playinit();
     switch (instr->otyp)
     {
-	case WOODEN_FLUTE:
+	case FLUTE:
 	case MAGIC_FLUTE:
 	    playstring(">ol", 1); /* up one octave & lock */
 	    break;
@@ -2196,7 +2196,7 @@ char	*buf;
 	case BUGLE:
 	    playstring("ol", 2); /* octave lock */
 	    break;
-	case WOODEN_HARP:
+	case HARP:
 	case MAGIC_HARP:
 	    playstring("l8mlol", 4); /* fast, legato, octave lock */
 	    break;

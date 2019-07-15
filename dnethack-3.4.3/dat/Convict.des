@@ -460,7 +460,7 @@ MONSTER[50%]:'p',"glass piercer",random
 MONSTER[50%]:'p',"glass piercer",random
 # Tools and corpses
 OBJECT[50%]: '(', "pick-axe", random
-OBJECT[75%]: '(', "brass lantern", random
+OBJECT[75%]: '(', "lantern", random
 OBJECT[50%]: '(', random, random
 OBJECT[25%]: '%', "corpse", random, "miner", 0
 OBJECT[25%]: '%', "corpse", random, "miner", 0

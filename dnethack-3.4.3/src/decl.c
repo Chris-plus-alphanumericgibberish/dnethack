@@ -269,13 +269,35 @@ struct c_common_strings c_common_strings = {
 	"vision quickly clears.", {"the", "your"}
 };
 
-/* NOTE: the order of these words exactly corresponds to the
-   order of oc_material values #define'd in objclass.h. */
-const char *materialnm[] = {
-	"mysterious", "liquid", "wax", "organic", "flesh",
-	"paper", "cloth", "leather", "wooden", "bone", "dragonhide",
-	"iron", "metal", "copper", "silver", "gold", "platinum", "mithril",
-	"plastic", "glass", "gemstone", "stone", "obsidian", "shadow"
+/* struct defined in objclass.h, the master list of materials */
+const struct material materials[] = {
+/*   id             color       density        cost    defense  */
+/*                            [old dnh]       [xnh]      [xnh]  */
+/*   USED           USED           USED      UNUSED     UNUSED  */
+	{0,				CLR_BLACK,		  5,		  0,		 0	},
+	{LIQUID,		HI_ORGANIC,		 10,		  1, 		 0	},
+	{WAX,			CLR_WHITE,		  9,		  1, 		 1	},
+	{VEGGY,			HI_ORGANIC,		  3,		  1, 		 1	},
+	{FLESH,			CLR_RED,		 11,		  3, 		 3	},
+	{PAPER,			CLR_WHITE,		 12,		  2, 		 1	},
+	{CLOTH,			HI_CLOTH,		 15,		  3, 		 2	},
+	{LEATHER,		HI_LEATHER,		  9,		  5, 		 3	},
+	{WOOD,			HI_WOOD,		  5,		  8, 		 4	},
+	{BONE,			CLR_WHITE,		 17,		 20,		 4	},
+	{DRAGON_HIDE,	CLR_WHITE,		 34,		200,		10	},
+	{IRON,			HI_METAL,		 79,		 10,		 5	},
+	{METAL,			HI_METAL,		 77,		 10,		 5	},
+	{COPPER,		HI_COPPER,		 89,		 10,		 4	},
+	{SILVER,		HI_SILVER,		105,		 30,		 5	},
+	{GOLD,			HI_GOLD,		193,		 60,		 3	},
+	{PLATINUM,		CLR_WHITE,		214,		 80,		 4	},
+	{MITHRIL,		HI_SILVER,		 27,		 50,		 6	},
+	{PLASTIC,		CLR_WHITE,		 13,		 10,		 3	},
+	{GLASS,			HI_GLASS,		 24,		 20,		 5	},
+	{GEMSTONE,		CLR_RED,		 36,		500,		 7	},
+	{MINERAL,		CLR_GRAY,		 27,		 10,		 6	},
+	{OBSIDIAN_MT,	CLR_BLACK,		 26,		 10,		 4	},
+	{SHADOWSTEEL,	CLR_BLACK,		 27,		 50,		 6	}
 };
 
 /* Vision */

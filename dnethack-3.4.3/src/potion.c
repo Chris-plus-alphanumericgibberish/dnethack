@@ -2220,19 +2220,19 @@ boolean amnesia;
 			    downgrade_obj(obj, OIL_LAMP, &used);
 			    break;
 			case DRUM_OF_EARTHQUAKE:
-			    downgrade_obj(obj, LEATHER_DRUM, &used);
+			    downgrade_obj(obj, DRUM, &used);
 			    break;
 			case MAGIC_WHISTLE:
 			    /* Magic whistles lose their powers... */
-			    downgrade_obj(obj, TIN_WHISTLE, &used);
+			    downgrade_obj(obj, WHISTLE, &used);
 			    break;
 			case MAGIC_FLUTE:
 			    /* Magic flutes sound normal again... */
-			    downgrade_obj(obj, WOODEN_FLUTE, &used);
+			    downgrade_obj(obj, FLUTE, &used);
 			    break;
 			case MAGIC_HARP:
 			    /* Magic harps sound normal again... */
-			    downgrade_obj(obj, WOODEN_HARP, &used);
+			    downgrade_obj(obj, HARP, &used);
 			    break;
 			case FIRE_HORN:
 			case FROST_HORN:

@@ -1739,6 +1739,9 @@ coord *tm;
 		switch (kind) {
 		    case VIVI_TRAP:
 			kind = NO_TRAP; break;
+			case MUMMY_TRAP:
+			if (!(Is_qlocate(&u.uz) && Role_if(PM_ARCHEOLOGIST))) kind = NO_TRAP; 
+			break;
 		    case MAGIC_PORTAL:
 			kind = NO_TRAP; break;
 		    case ROLLING_BOULDER_TRAP:

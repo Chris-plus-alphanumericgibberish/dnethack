@@ -1419,14 +1419,14 @@ long timeout;
 		    break;
 
    	    case DWARVISH_HELM:
-	    case BRASS_LANTERN:
+	    case LANTERN:
 	    case OIL_LAMP:
 		switch((int)obj->age) {
 		    case 150:
 		    case 100:
 		    case 50:
 			if (canseeit) {
-			    if (obj->otyp == BRASS_LANTERN 
+			    if (obj->otyp == LANTERN 
 				|| obj->otyp == DWARVISH_HELM)
 				lantern_message(obj);
 			    else
@@ -1441,7 +1441,7 @@ long timeout;
 
 		    case 25:
 			if (canseeit) {
-			    if (obj->otyp == BRASS_LANTERN 
+			    if (obj->otyp == LANTERN 
 				|| obj->otyp == DWARVISH_HELM)
 				lantern_message(obj);
 			    else {
@@ -1470,7 +1470,7 @@ long timeout;
 			    switch (obj->where) {
 				case OBJ_INVENT:
 				case OBJ_MINVENT:
-			    if (obj->otyp == BRASS_LANTERN 
+			    if (obj->otyp == LANTERN 
 				|| obj->otyp == DWARVISH_HELM)
 					pline("%s lantern has run out of power.",
 					    whose);
@@ -1479,7 +1479,7 @@ long timeout;
 					    whose, xname(obj));
 				    break;
 				case OBJ_FLOOR:
-			    if (obj->otyp == BRASS_LANTERN 
+			    if (obj->otyp == LANTERN 
 				|| obj->otyp == DWARVISH_HELM)
 					You("see a lantern run out of power.");
 				    else
@@ -2016,7 +2016,7 @@ begin_burn(obj, already_lit)
 		break;
 		
 	    case DWARVISH_HELM:
-	    case BRASS_LANTERN:
+	    case LANTERN:
 	    case OIL_LAMP:
 		/* magic times are 150, 100, 50, 25, and 0 */
 		if (obj->age > 150L)

@@ -2833,7 +2833,7 @@ spiriteffects(power, atme)
 					begin_burn(uwep, FALSE);
 				} else return 0;
 			} else{
-				if(uwep && uwep->otyp == BRASS_LANTERN) pline("You need an oil lamp. These modern lamps just aren't the same!");
+				if(uwep && uwep->otyp == LANTERN) pline("You need an oil lamp. These modern lamps just aren't the same!");
 				else You("must wield a burning lamp!");
 				return 0;
 			}

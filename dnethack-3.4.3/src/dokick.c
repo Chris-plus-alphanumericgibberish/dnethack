@@ -499,8 +499,7 @@ struct obj *obj;
 	    const char *result = (char *)0;
 
 	    otmp2 = otmp->nobj;
-	    if ((otmp->obj_material == GLASS || otmp->obj_material == OBSIDIAN_MT) &&
-		otmp->oclass != GEM_CLASS && !obj_resists(otmp, 33, 100)) {
+	    if (is_shatterable(otmp) && !otmp->oerodeproof && !obj_resists(otmp, 33, 100)) {
 		result = "shatter";
 	    } else if (otmp->otyp == EGG && !rn2(3)) {
 		result = "cracking";
@@ -1766,7 +1765,7 @@ boolean shop_floor_obj;
 	if (breaktest(otmp)) {
 	    const char *result;
 
-	    if ((otmp->obj_material == GLASS || otmp->obj_material == OBSIDIAN_MT)
+		if (is_shatterable(otmp)
 #ifdef TOURIST
 		|| otmp->otyp == EXPENSIVE_CAMERA
 #endif

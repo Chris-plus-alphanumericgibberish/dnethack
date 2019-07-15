@@ -50,8 +50,6 @@ static void FDECL(mon_ignite_lightsaber, (struct obj *, struct monst *));
 
 STATIC_DCL void FDECL(give_may_advance_msg, (int));
 
-//extern struct monst zeromonst;
-
 #ifndef OVLB
 
 STATIC_DCL NEARDATA const short skill_names_indices[];
@@ -66,10 +64,9 @@ STATIC_VAR NEARDATA const short skill_names_indices[P_NUM_SKILLS] = {
 	TWO_HANDED_SWORD, SCIMITAR,       PN_SABER,     CLUB,
 	MACE,             MORNING_STAR,   FLAIL,
 	PN_HAMMER,        QUARTERSTAFF,   PN_POLEARMS,  SPEAR,
-	JAVELIN,          TRIDENT,        LANCE,        BOW,
-	SLING,            PN_FIREARMS,	  CROSSBOW,     DART,
-	SHURIKEN,         BOOMERANG,      PN_WHIP,      PN_HARVEST,
-	UNICORN_HORN,
+	TRIDENT,          LANCE,          BOW,          SLING,
+	PN_FIREARMS,	  CROSSBOW,       DART,         SHURIKEN,
+	BOOMERANG,        PN_WHIP,        PN_HARVEST,   UNICORN_HORN,
 	PN_ATTACK_SPELL,     PN_HEALING_SPELL,
 	PN_DIVINATION_SPELL, PN_ENCHANTMENT_SPELL,
 	PN_CLERIC_SPELL,     PN_ESCAPE_SPELL,
@@ -681,11 +678,17 @@ int spec;
 	/* grab the weapon dice from dmgval_core */
 	spe_mult = dmgval_core(&wdice, bigmonst(ptr), otmp, otyp);
 
+	/* increase die sizes by 2 if Marionette applies*/
+	if (spec & SPEC_MARIONETTE)
+	{
+		wdice.oc.damd += 2;
+		wdice.bon.damd += 2;
+	}
+
 	/* special cases of otyp not covered by dmgval_core:
 	 *  - rakuyo					- add bonus damage
 	 *  - viperwhips				- add ostriking
 	 *  - mirrorblades				- total replacement
-	 *  - kamerel vajra				- bonus elec damage & effects
 	 *  - crystal sword				- bonus enchantment damage
 	 *  - seismic hammer			- damage die based on enchantment
 	 *  - charged future weapons	- drain charge
@@ -705,7 +708,7 @@ int spec;
 			// bonus 1d4 vs small
 			// bonus 1d3 vs large
 			wdice.bon.damn = 1;
-			wdice.bon.damd = (bigmonst(ptr) ? 3 : 4);
+			wdice.bon.damd = max(2, ((bigmonst(ptr) ? 3 : 4) + 2 * (otmp->objsize - MZ_MEDIUM + !!(spec & SPEC_MARIONETTE))));
 			// doubled enchantment
 			spe_mult += 1;
 		}
@@ -740,6 +743,11 @@ int spec;
 			struct weapon_dice mirdice;
 			/* grab the weapon dice from dmgval_core */
 			(void) dmgval_core(&mirdice, bigmonst(ptr), (youdefend ? uwep : MON_WEP(mon)), 0);	//note: dmgval_core handles zero weapons gracefully
+			if (spec & SPEC_MARIONETTE)
+			{
+				mirdice.oc.damd += 2;
+				mirdice.bon.damd += 2;
+			}
 			/* find the damage from those dice */
 			mir += weapon_dmg_roll(&(mirdice.oc), youdefend);
 			mir += weapon_dmg_roll(&(mirdice.bon), youdefend);
@@ -747,73 +755,11 @@ int spec;
 
 			/* use the better */
 			tmp += max(hyp, mir);
+			/* cannot be negative */
+			if (tmp < 0)
+				tmp = 0;
 			/* signal to NOT add normal dice */
 			add_dice = FALSE;
-		}
-		break;
-	case KAMEREL_VAJRA:
-		if (otmp->where == OBJ_MINVENT && otmp->ocarry->data == &mons[PM_ARA_KAMEREL]){
-			if (youdefend){
-				if (!Shock_resistance){
-					tmp += d(6, 6);
-				}
-				if (!InvShock_resistance){
-					if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
-					if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
-				}
-				if (!resists_blnd(&youmonst)) {
-					You("are blinded by the flash!");
-					make_blinded((long)d(1, 50), FALSE);
-					if (!Blind) Your1(vision_clears);
-				}
-			}
-			else if (mon){
-				if (!resists_elec(mon)){
-					tmp += d(6, 6); //wand of lightning
-					if (!rn2(3)) (void)destroy_mitem(mon, WAND_CLASS, AD_ELEC);
-					/* not actually possible yet */
-					if (!rn2(3)) (void)destroy_mitem(mon, RING_CLASS, AD_ELEC);
-				}
-				if (!resists_blnd(mon) &&
-					!(!flags.mon_moving && u.uswallow && mon == u.ustuck)) {
-					register unsigned rnd_tmp = rnd(50);
-					mon->mcansee = 0;
-					if ((mon->mblinded + rnd_tmp) > 127)
-						mon->mblinded = 127;
-					else mon->mblinded += rnd_tmp;
-				}
-			}
-		}
-		else {
-			if (youdefend){
-				if (!Shock_resistance){
-					tmp += d(2, 6);
-				}
-				if (!InvShock_resistance){
-					if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
-					if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
-				}
-				if (!resists_blnd(&youmonst)) {
-					You("are blinded by the flash!");
-					make_blinded((long)d(1, 50), FALSE);
-					if (!Blind) Your1(vision_clears);
-				}
-			} else if (mon){
-				if (!resists_elec(mon)){
-					tmp += d(2, 6); //wand of lightning
-					if (!rn2(3)) (void)destroy_mitem(mon, WAND_CLASS, AD_ELEC);
-					/* not actually possible yet */
-					if (!rn2(3)) (void)destroy_mitem(mon, RING_CLASS, AD_ELEC);
-				}
-				if (!resists_blnd(mon) &&
-					!(!flags.mon_moving && u.uswallow && mon == u.ustuck)) {
-					register unsigned rnd_tmp = rnd(50);
-					mon->mcansee = 0;
-					if ((mon->mblinded + rnd_tmp) > 127)
-						mon->mblinded = 127;
-					else mon->mblinded += rnd_tmp;
-				}
-			}
 		}
 		break;
 	case CRYSTAL_SWORD:
@@ -886,6 +832,9 @@ int spec;
 				((float)u.mh) / u.mhmax :
 				((float)u.uhp) / u.uhpmax;
 		}
+		/* cannot be negative */
+		if (tmp < 0)
+			tmp = 0;
 		/* don't re-add the weapon dice */
 		add_dice = FALSE;
 		break;
@@ -1037,6 +986,8 @@ int spec;
 					bonus += 7; //Quite holy
 			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
 				bonus += rnd(20); //Divinity
+			else if(otmp->oartifact == ART_AMHIMITL)
+				bonus += d(3,4);
 			
 			if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),dsize);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,dsize);
@@ -1087,85 +1038,23 @@ int spec;
 				bonus += 8*bdm; //Extra unholy
 			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
 				bonus += d(bdm, 20); //Tyranny
+			else if(otmp->oartifact == ART_AMHIMITL)
+				bonus += d(3*bdm, 4); //Tyranny
+			else if(otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
+				bonus += d(bdm,4); //Somewhat unholy
 			else if(otyp == KHAKKHARA) bonus += d(rnd(3)*bdm,9);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking*bdm,9);
 			else bonus += d(bdm, 9);
 		}
+		
+		if (hates_unholy(ptr) && otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
+			bonus += d(1, 4); // always counts as unholy regardless, but its' pretty weak
 		
 		if(mon && mon->isminion){
 			if(otmp->oartifact == ART_LIFEHUNT_SCYTHE)
 				bonus += d(4,4) + otmp->spe; //Occult
 		}
 		
-		if(youdefend){
-			if(otmp->otyp == TORCH && otmp->lamplit){
-				if(!Fire_resistance){
-					if(species_resists_cold(&youmonst)) bonus += 1.5*(rnd(6) + otmp->spe);
-					else bonus += rnd(6) + otmp->spe;
-				}
-				if(!InvFire_resistance){
-					if (!rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
-					if (!rn2(3)) destroy_item(SPBOOK_CLASS, AD_FIRE);
-					if (!rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
-				}
-			} else if(otmp->otyp == SHADOWLANDER_S_TORCH && otmp->lamplit){
-				if(!Cold_resistance){
-					if(species_resists_fire(&youmonst)) bonus += 1.5*(rnd(6) + otmp->spe);
-					else bonus += rnd(6) + otmp->spe;
-				}
-				if(!InvCold_resistance){
-					if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
-				}
-			} else if(otmp->otyp == SUNROD && otmp->lamplit){
-				if(!(Shock_resistance && Acid_resistance)){
-					if(!(Shock_resistance || Acid_resistance))
-						bonus += 1.5*(rnd(6) + otmp->spe);
-					else bonus += rnd(6) + otmp->spe;
-				}
-				if(!InvShock_resistance){
-					if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
-					if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
-				}
-				if(!InvAcid_resistance){
-					if (rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
-				}
-				if (!resists_blnd(&youmonst)) {
-					You("are blinded by the flash!");
-					make_blinded((long)d(1,50),FALSE);
-					if (!Blind) Your1(vision_clears);
-				}
-			}
-		} else if(mon){
-			if(otmp->otyp == TORCH && otmp->lamplit && !resists_fire(mon)){
-				if(species_resists_cold(mon)) bonus += 1.5*(rnd(6) + otmp->spe);
-				else bonus += rnd(6) + otmp->spe;
-				if (!rn2(3)) destroy_mitem(mon, SCROLL_CLASS, AD_FIRE);
-				if (!rn2(3)) destroy_mitem(mon, SPBOOK_CLASS, AD_FIRE);
-				if (!rn2(3)) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
-			} else if(otmp->otyp == SHADOWLANDER_S_TORCH && otmp->lamplit && !resists_cold(mon)){
-				if(species_resists_fire(mon)) bonus += 1.5*(rnd(6) + otmp->spe);
-				else bonus += rnd(6) + otmp->spe;
-				if (!rn2(3)) destroy_mitem(mon, POTION_CLASS, AD_COLD);
-			} else if(otmp->otyp == SUNROD && otmp->lamplit && !(resists_elec(mon) && resists_acid(mon))){
-				if(!(resists_elec(mon) || resists_acid(mon)))
-					bonus += 1.5*(rnd(6) + otmp->spe);
-				else bonus += rnd(6) + otmp->spe;
-				if(!resists_acid(mon))
-					if (rn2(3)) destroy_mitem(mon, POTION_CLASS, AD_FIRE);
-				if(!resists_elec(mon)){
-					if (!rn2(3)) destroy_mitem(mon, WAND_CLASS, AD_ELEC);
-					if (!rn2(3)) destroy_mitem(mon, RING_CLASS, AD_ELEC);
-				}
-				if (!resists_blnd(mon) &&
-						!(!flags.mon_moving && u.uswallow && mon == u.ustuck)) {
-					register unsigned rnd_tmp = rnd(50);
-					mon->mcansee = 0;
-					if((mon->mblinded + rnd_tmp) > 127)
-						mon->mblinded = 127;
-					else mon->mblinded += rnd_tmp;
-				}
-			}
-		}
 		
 		if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE
 			&& (otmp->oward & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);

@@ -134,7 +134,7 @@ WEAPON("orcish spear", "crude spear",
 WEAPON("dwarvish spear", "stout spear",
 	0, 1, 0, 12, 30,  3,  9,  9, 0, P,   P_SPEAR, IRON, FALSE, HI_METAL),
 WEAPON("javelin", "throwing spear",
-	0, 1, 0, 10, 20,  3,  6,  6, 0, P,   P_JAVELIN, IRON, FALSE, HI_METAL),
+	0, 1, 0, 10, 20,  3,  6,  6, 0, P,   P_SPEAR, IRON, FALSE, HI_METAL),
 
 WEAPON("trident", (char *)0, /*Needs encyc entry*/
 	1, 0, 0,  8, 25,  5,  6,  4, 0, P,   P_TRIDENT, IRON, FALSE, HI_METAL),
@@ -153,6 +153,8 @@ WEAPON("athame", (char *)0,
 	1, 1, 0,  0, 10,  4,  4,  4, 2, S,   P_DAGGER, IRON, FALSE, HI_METAL),
 WEAPON("set of crow talons", "set of three feather-etched daggers",
 	0, 0, 0,  0,  9,200,  4,  3, 2, S,   P_DAGGER, METAL, FALSE, HI_METAL),
+WEAPON("tecpatl", "notched dagger",
+	0, 1, 0,  0,  5,  12,  8,  6, 4, P,   P_DAGGER, OBSIDIAN_MT, FALSE, CLR_BLACK),
 WEAPON("scalpel", (char *)0,
 	1, 1, 0,  0,  5,  6,  3,  1, 3, S,   P_KNIFE, METAL, FALSE, HI_METAL),
 WEAPON("knife", (char *)0,
@@ -320,6 +322,8 @@ WEAPON("war hammer", (char *)0,
 						/* +1 small */
 WEAPON("club", (char *)0,
 	1, 0, 0, 11, 30,  3,  6,  3, 0, B,   P_CLUB, WOOD, FALSE, HI_WOOD),
+WEAPON("macuahuitl", "obsidian-edged club",
+	0, 0, 0,  0, 40, 10,  8,  6, 0, B|S,   P_CLUB, WOOD, FALSE, HI_WOOD),
 WEAPON("quarterstaff", "staff",
 	0, 0, 1, 10, 40,  5,  6,  6, 0, B,   P_QUARTERSTAFF, WOOD, FALSE, HI_WOOD),
 WEAPON("khakkhara", "monk's staff", /*Needs encyc entry*//*Needs tile*/
@@ -401,6 +405,7 @@ BOW("yumi", "long bow",			0,  0, 0, 30, 60, 0, WOOD, P_BOW, HI_WOOD),
 BOW("sling", (char *)0,			1, 0, 40,  3, 20, -1, LEATHER, P_SLING, HI_LEATHER),
 BOW("crossbow", (char *)0,		1, 0, 45, 50, 40, 1, WOOD, P_CROSSBOW, HI_WOOD),
 BOW("droven crossbow", "spider-legged crossbow",	0, 0, 0, 50, 120, 4, SILVER, P_CROSSBOW, CLR_BLACK), /*Needs encyc entry*/
+BOW("atlatl", "notched stick", 	0, 0, 0, 12, 30, 0, WOOD, P_SPEAR, HI_WOOD), /*Needs encyc entry*/
 
 #undef P
 #undef S
@@ -481,7 +486,7 @@ HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 HELM_MATSPEC("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1,  3,   5, 9, 2, 0, MITHRIL,UNIDED, HI_METAL),
 HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	0, 1, 50,   5, 8, 2, 0, MINERAL, CLR_BLACK),
+		0, 0,  0,	0, 1, 50,   5, 8, 2, 0, SHADOWSTEEL, CLR_BLACK),
 HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
 		0, 1,  INFRAVISION,   0, 2, 25,  50, 8, 2, 2, PLASTIC, CLR_WHITE),
 HELM_MATSPEC("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
@@ -544,11 +549,11 @@ ARMOR("plate mail", (char *)0, /*Needs encyc entry*/
 ARMOR("high-elven plate", "runed plate mail", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 5, 60, 	1200,  5, 5, 3, ARM_SUIT, MITHRIL, HI_METAL),
 ARMOR("droven plate mail", "crested black plate", /*Needs encyc entry*/
-	0, 0, 1, 0,	0, 5, 50, 	2000,  5, 5, 1, ARM_SUIT, MINERAL, CLR_BLACK),
+	0, 0, 1, 0,	0, 5, 50, 	2000,  5, 5, 1, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
 ARMOR("elven toga", (char *)0, /*Needs encyc entry*//*Needs tile*/
 	1, 0, 0, 0,	 0, 5,	 5,  100,10, 1, 2, ARM_SUIT, CLOTH, CLR_GREEN),
 ARMOR("noble's dress", "armored black dress", /*Needs encyc entry*/
-	0, 0, 1, 0,	0, 5,100, 2000,  6, 4, 3, ARM_SUIT, MINERAL, CLR_BLACK),
+	0, 0, 1, 0,	0, 5,100, 2000,  6, 4, 3, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
 ARMOR("black dress", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	0, 5, 50,  500, 10, 0, 2, ARM_SHIRT, CLOTH, CLR_BLACK),
 ARMOR("consort's suit", "loud foppish suit", /*Needs encyc entry*//*Needs tile*/
@@ -559,12 +564,14 @@ ARMOR("gentlewoman's dress", "expensive dress", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 6,150, 1000,  10, 1, 3, ARM_SUIT, BONE, CLR_RED), /*Specifically, whale bone*/
 ARMOR("crystal plate mail", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	10, 5, 250, 2000,  7, 3, 0, ARM_SUIT, GLASS, CLR_CYAN), /*Best armor, AC wise*/
+ARMOR("half plate", (char *)0, /*Needs encyc entry*/
+	1, 0, 1, 0, 0, 5, 200, 400, 6, 4, 3, ARM_SUIT, IRON, HI_METAL),
 #ifdef TOURIST
-ARMOR("bronze plate mail", (char *)0, /*Needs encyc entry*/
-	1, 0, 1, 0,	20, 5, 225, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
+ARMOR("bronze half plate", (char *)0, /*Needs encyc entry*/
+	1, 0, 1, 0,	20, 5, 200, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
 #else
-ARMOR("bronze plate mail", (char *)0,
-	1, 0, 1, 0,	35, 5, 225, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
+ARMOR("bronze half plate", (char *)0,
+	1, 0, 1, 0,	35, 5, 200, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
 #endif
 ARMOR("harmonium plate", "red-lacquered bladed armor",
 	0, 0, 1, 0,	 0, 5, 225,   1,  6, 4, 3, ARM_SUIT, METAL, CLR_RED),
@@ -585,7 +592,7 @@ ARMOR("elven mithril-coat", (char *)0,
 ARMOR("chain mail", (char *)0,
 	1, 0, 0, 0,	72, 5, 150,  75,  8, 3, 1, ARM_SUIT, IRON, HI_METAL),
 ARMOR("droven chain mail", "crested black mail", /*Needs encyc entry*/
-	0, 0, 0, 0,	0, 5, 50,  1000,  8, 3, 2, ARM_SUIT, MINERAL, HI_METAL),
+	0, 0, 0, 0,	0, 5, 50,  1000,  8, 3, 2, ARM_SUIT, SHADOWSTEEL, HI_METAL),
 ARMOR("orcish chain mail", "crude chain mail",
 	0, 0, 0, 0,	20, 5, 150,  75,  8, 2, 1, ARM_SUIT, IRON, CLR_BLACK),
 ARMOR("scale mail", (char *)0,
@@ -613,6 +620,8 @@ ARMOR("Hawaiian shirt", "flowery shirt",
 	0, 0, 0, 0,	 10, 0,	 5,   3, 10, 0, 0, ARM_SHIRT, CLOTH, CLR_MAGENTA),
 ARMOR("T-shirt", (char *)0, /*Needs encyc entry*/
 	1, 0, 0, 0,	 5, 0,	 5,   2, 10, 0, 0, ARM_SHIRT, CLOTH, CLR_WHITE),
+ARMOR("ichcahuipilli", "thick undershirt", /*Needs encyc entry*/
+	1, 0, 0, 0,	 0, 3,	 10,   2, 10, 0, 0, ARM_SHIRT, CLOTH, CLR_WHITE),
 # ifdef CONVICT
 ARMOR("striped shirt", (char *)0, /*Needs encyc entry*/
 	1, 0, 0, 0,	 0, 0,	 5,   2, 10, 0, 0, ARM_SHIRT, CLOTH, CLR_GRAY),
@@ -791,10 +800,10 @@ BOOTS("flying boots", "snow boots",
 RING("wishes", 0, "black",            500, 1, 1, 4, PLATINUM, CLR_BLACK),
 RING("adornment", ADORNED, "wooden",        100, 1, 1, 2, WOOD, HI_WOOD),
 RING("gain strength", 0, "granite",         150, 1, 1, 7, MINERAL, HI_MINERAL),
-RING("gain constitution", 0, "opal",        150, 1, 1, 7, MINERAL,  HI_MINERAL),
+RING("gain constitution", 0, "opal",        150, 1, 1, 7, GEMSTONE,  CLR_WHITE),
 RING("increase accuracy", 0, "clay",        150, 1, 1, 4, MINERAL, CLR_RED),
 RING("increase damage", 0, "coral",         150, 1, 1, 4, MINERAL, CLR_ORANGE),
-RING("protection", PROTECTION, "black onyx",100, 1, 1, 7, MINERAL, CLR_BLACK),
+RING("protection", PROTECTION, "black onyx",100, 1, 1, 7, GEMSTONE, CLR_BLACK),
 RING("regeneration", REGENERATION, "moonstone",
 											200, 1, 0, 6, MINERAL, HI_MINERAL),
 RING("searching", SEARCHING, "tiger eye",   200, 1, 0, 6, GEMSTONE, CLR_BROWN),
@@ -941,7 +950,7 @@ TOOL("tallow candle", "candle", 0, 1, 0, 0,  15,  2,  10, WAX, CLR_WHITE),
 TOOL("wax candle", "candle",    0, 1, 0, 0,   5,  2,  20, WAX, CLR_WHITE),
 TOOL("candle of invocation", "runed candle", 
                                 0, 0, 1, 0,  15,  2,  50, WAX, CLR_ORANGE),
-TOOL("brass lantern", (char *)0,1, 0, 0, 0,  20, 30,  12, COPPER, CLR_YELLOW),
+TOOL_MATSPEC("lantern", (char *)0,1, 0, 0, 0,  20, 30,  12, COPPER, IDED|UNIDED, CLR_YELLOW),
 TOOL("oil lamp", "lamp",        0, 0, 0, 0,  30, 20,  10, COPPER, CLR_YELLOW),
 TOOL("magic lamp", "lamp",      0, 0, 1, 0,  15, 20,  50, COPPER, CLR_YELLOW),
 // TOOL("shadowlander's torch", "black torch",
@@ -994,22 +1003,25 @@ TOOL("beartrap", (char *)0,     1, 0, 0, 0,   0,200,  60, IRON, HI_METAL),
 /* instruments */
 /* some code in invent.c and obj.h requires wooden flute .. drum of earthquake to be
    consecutive, with the wooden flute first and drum of earthquake last */
-TOOL("tin whistle", "whistle",  0, 0, 0, 0,  60,  3,  10, METAL, HI_METAL),
-TOOL("magic whistle", "whistle",0, 0, 1, 0,  30,  3,  10, METAL, HI_METAL),
+/* non-magical instruments always show what they are made of, because that's interesting (ie, a "wooden harp" vs a "harp")
+ *   but for magical instruments that information is very secondary to it being magic
+ *   and also sounds weird (ie, a "wooden magic harp" vs a "magic harp")
+ */
+TOOL_MATSPEC("whistle", "whistle",         0, 0, 0, 0, 60,  3, 10, METAL, IDED, HI_METAL),
+TOOL_MATSPEC("magic whistle", "whistle",   0, 0, 1, 0, 30,  3, 10, METAL, NIDED, HI_METAL),
 /* "If tin whistles are made out of tin, what do they make foghorns out of?" */
-TOOL("wooden flute", "flute",   0, 0, 0, 0,   4,  5,  12, WOOD, HI_WOOD),
-TOOL("magic flute", "flute",    0, 0, 1, 1,   2,  5,  36, WOOD, HI_WOOD),
-TOOL("tooled horn", "horn",     0, 0, 0, 0,   5, 18,  15, BONE, CLR_WHITE),
-TOOL("frost horn", "horn",      0, 0, 1, 1,   2, 18,  50, BONE, CLR_WHITE),
-TOOL("fire horn", "horn",       0, 0, 1, 1,   2, 18,  50, BONE, CLR_WHITE),
-TOOL("horn of plenty", "horn",  0, 0, 1, 1,   2, 18,  50, BONE, CLR_WHITE),
-TOOL("wooden harp", "harp",     0, 0, 0, 0,   4, 30,  50, WOOD, HI_WOOD),
-TOOL("magic harp", "harp",      0, 0, 1, 1,   2, 30,  50, WOOD, HI_WOOD),
-TOOL("bell", (char *)0,         1, 0, 0, 0,   2, 30,  50, COPPER, HI_COPPER),
-TOOL("bugle", (char *)0,        1, 0, 0, 0,   4, 10,  15, COPPER, HI_COPPER),
-TOOL("leather drum", "drum",    0, 0, 0, 0,   4, 25,  25, LEATHER, HI_LEATHER),
-TOOL("drum of earthquake", "drum",
-				0, 0, 1, 1,   2, 25,  25, LEATHER, HI_LEATHER),
+TOOL_MATSPEC("flute", "flute",             0, 0, 0, 0,  4,  5, 12, WOOD, IDED, HI_WOOD),
+TOOL_MATSPEC("magic flute", "flute",       0, 0, 1, 1,  2,  5, 36, WOOD, NIDED, HI_WOOD),
+TOOL_MATSPEC("tooled horn", "horn",        0, 0, 0, 0,  5, 18, 15, BONE, IDED, CLR_WHITE),
+TOOL_MATSPEC("frost horn", "horn",         0, 0, 1, 1,  2, 18, 50, BONE, NIDED, CLR_WHITE),
+TOOL_MATSPEC("fire horn", "horn",          0, 0, 1, 1,  2, 18, 50, BONE, NIDED, CLR_WHITE),
+TOOL_MATSPEC("horn of plenty", "horn",     0, 0, 1, 1,  2, 18, 50, BONE, NIDED, CLR_WHITE),
+TOOL_MATSPEC("harp", "harp",               0, 0, 0, 0,  4, 30, 50, WOOD, IDED, HI_WOOD),
+TOOL_MATSPEC("magic harp", "harp",         0, 0, 1, 1,  2, 30, 50, WOOD, NIDED, HI_WOOD),
+TOOL_MATSPEC("bell", (char *)0,            1, 0, 0, 0,  2, 30, 50, COPPER, IDED, HI_COPPER),
+TOOL_MATSPEC("bugle", (char *)0,           1, 0, 0, 0,  4, 10, 15, COPPER, IDED, HI_COPPER),
+TOOL_MATSPEC("drum", "drum",               0, 0, 0, 0,  4, 25, 25, LEATHER, IDED, HI_LEATHER),
+TOOL_MATSPEC("drum of earthquake", "drum", 0, 0, 1, 1,  2, 25, 25, LEATHER, NIDED, HI_LEATHER),
 /* tools useful as weapons */
 WEPTOOL("pick-axe", (char *)0,
 	1, 0, 0, 0, 20, 80,   50,  6,  3, 0, PIERCE,  P_PICK_AXE, IRON, HI_METAL),
@@ -1302,7 +1314,7 @@ OBJECT(OBJ("secrets", "ragged leather"), BITS(0,0,1,0,1,0,1,1,0,0,0,P_NONE,PAPER
 WAND("light",          "glass",    90, 100, 1, NODIR,     GLASS,    CLR_WHITE),/*Needs tile?*/
 WAND("darkness",       "obsidian", 10, 100, 1, NODIR,     OBSIDIAN_MT,    CLR_BLACK),/*Needs tile*/
 WAND("wishing",        "dragon-bone",
-					0, 500, 1, NODIR,     BONE,     CLR_WHITE),	/* should not exist */
+					0, 500, 1, NODIR,     DRAGON_HIDE,     CLR_WHITE),	/* should not exist */
 WAND("secret door detection", "balsa",
 				   50, 150, 1, NODIR,	  WOOD,     HI_WOOD),
 WAND("enlightenment",  "crystal",  18, 150, 1, NODIR,     GLASS,    HI_GLASS),

@@ -424,11 +424,7 @@ boolean artif;
 	otmp->fromsink = 0;
 	otmp->mp = (struct mask_properties *) 0;
 	
-	if(otyp == find_gcirclet()) otmp->obj_material = GOLD;
-	else if(otyp == SPEAR && !rn2(25)) otmp->obj_material = SILVER;
-	else if(otyp == DAGGER && !rn2(12)) otmp->obj_material = SILVER;
-	else if(otyp == STILETTOS && !rn2(12)) otmp->obj_material = SILVER;
-	else otmp->obj_material = objects[otyp].oc_material;
+	init_obj_material(otmp);
 	
 	if(otyp == VIPERWHIP) otmp->ovar1 = rn2(2) ? 1 : rn2(5) ? rnd(2) : rnd(5);
 	
@@ -614,7 +610,7 @@ boolean artif;
 					otmp->quan = 1L + ((long)(rn2(2) && !Is_grue_level(&u.uz)) ? rn2(7) : 0);
 					blessorcurse(otmp, 5);
 					break;
-		case BRASS_LANTERN:
+		case LANTERN:
 		case OIL_LAMP:		otmp->spe = 1;
 					otmp->age = (long) rn1(500,1000);
 					otmp->lamplit = 0;
@@ -1020,12 +1016,6 @@ boolean artif;
 			otmp->oerodeproof = otmp->rknown = 1;
 #endif
 		}
-		if(is_evaporable(otmp)){
-			start_timer(1, TIMER_OBJECT,
-					LIGHT_DAMAGE, (genericptr_t)otmp);
-		}
-
-		
 		/* MRKR: Mining helmets have lamps */
 		if (otmp->otyp == DWARVISH_HELM) {
 		    otmp->age = (long) rn1(300,300);//Many fewer turns than brass lanterns, as there are so many.
@@ -1486,6 +1476,91 @@ register struct obj *otmp;
 
 #endif /* OVLB */
 #ifdef OVL0
+/* set the size of an object, making sure the object is proper */
+void
+set_obj_size(obj, size)
+struct obj* obj;
+int size;
+{
+	/* check bad cases */
+	if (!obj) {
+		impossible("set_obj_size called without object");
+		return;
+	}
+	/* set quantity */
+	obj->objsize = size;
+	/* update weight */
+	fix_object(obj);
+	return;
+}
+
+/* set the quantity of an object, making sure to update its weight */
+void
+set_obj_quan(obj, quan)
+struct obj* obj;
+int quan;
+{
+	/* check bad cases */
+	if (!obj) {
+		impossible("set_obj_quan called without object");
+		return;
+	}
+	if (!objects[obj->otyp].oc_merge) {
+		impossible("set_obj_quan called for singular quantity object");
+		return;
+	}
+	/* set quantity */
+	obj->quan = quan;
+	/* update weight */
+	fix_object(obj);
+	return;
+}
+
+/* Initialize the material field of an object */
+void
+init_obj_material(obj)
+struct obj* obj;
+{
+	int otyp = obj->otyp;
+
+	/* start by setting the material to its default */
+	obj->obj_material = objects[obj->otyp].oc_material;
+
+	/* special cases from this point down
+	 */
+#define set (obj->obj_material != objects[obj->otyp].oc_material)
+	switch (otyp)
+	{
+	case DAGGER:
+		if (!set && !rn2(12))
+			set_material(obj, SILVER);
+		break;
+	case SPEAR:
+		if (!set && !rn2(25))
+			set_material(obj, SILVER);
+		break;
+	case STILETTOS:
+		if (!set && !rn2(12))
+			set_material(obj, SILVER);
+		break;
+	}
+
+	if (!set && otyp == find_gcirclet())
+		set_material(obj, GOLD);
+#undef set
+	/* start the timer for shadowsteel objects */
+	if (is_evaporable(obj)){
+		start_timer(1, TIMER_OBJECT,
+			LIGHT_DAMAGE, (genericptr_t)obj);
+	}
+	/* set random gemstone type for valid gemstone objects */
+	if (!obj->ovar1 && obj->oclass != GEM_CLASS && obj->obj_material == GEMSTONE && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
+		do{
+			obj->ovar1 = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
+		} while (obj->ovar1 == OBSIDIAN);
+	}
+	return;
+}
 
 void
 set_material(obj, mat)
@@ -1494,6 +1569,7 @@ int mat;
 {
 	struct monst *owner = 0;
 	long mask = 0;
+	int oldmat = obj->obj_material;
 	
 	if(mat == obj->obj_material) return; //Already done!
 	
@@ -1547,7 +1623,7 @@ int mat;
 			obj->otyp = SCALE_MAIL;
 		break;
 		case LEATHER_ARMOR:
-			obj->otyp = PLATE_MAIL;
+			obj->otyp = HALF_PLATE;
 		break;
 		// case LEATHER_CLOAK:
 			// obj->otyp = ;
@@ -1555,7 +1631,6 @@ int mat;
 		// case ROUNDSHIELD:
 			// obj->otyp = ;
 		// break;
-		//Tin whistle, wood harp
 		case GAUNTLETS:
 			if(mat == COPPER) obj->otyp = BRONZE_GAUNTLETS;
 		break;
@@ -1572,15 +1647,14 @@ int mat;
 		case SHOES:
 			obj->otyp = LOW_BOOTS;
 		break;
-		case BRONZE_PLATE_MAIL:
+		case BRONZE_HALF_PLATE:
+			obj->otyp = HALF_PLATE;
+		break;
+		case HIGH_ELVEN_PLATE:
 			obj->otyp = PLATE_MAIL;
 		break;
-		case PLATE_MAIL:
-			if(mat == COPPER) obj->otyp = BRONZE_PLATE_MAIL;
-		break;
 		case CRYSTAL_PLATE_MAIL:
-			if(mat == COPPER) obj->otyp = BRONZE_PLATE_MAIL;
-			else obj->otyp = PLATE_MAIL;
+			obj->otyp = PLATE_MAIL;
 			//BUT, turning plate mail to glass results in glass plate mail.  The magic is lost.
 		break;
 		// case CRYSTAL_HELM:
@@ -1693,6 +1767,10 @@ int mat;
 				if(mat == SILVER) obj->otyp = SILVER_SLINGSTONE;
 				else obj->otyp = ROCK;
 			}
+			else if (mat == GEMSTONE && oldmat == GLASS)
+				obj->otyp = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
+			else if (mat == GLASS && oldmat == GEMSTONE)
+				obj->otyp == LAST_GEM + rnd(9);
 			obj->obj_material = mat;
 		break;
 		default:
@@ -1701,6 +1779,24 @@ int mat;
 	}
 	//Silver bell should resist
 	
+	/* start the timer for shadowsteel objects */
+	if (is_evaporable(obj)){
+		start_timer(1, TIMER_OBJECT,
+			LIGHT_DAMAGE, (genericptr_t)obj);
+	}
+	else if(oldmat == SHADOWSTEEL) {/* or turn it off, if the object used to be made of shadowsteel 
+									 * the asymmetry isn't nice but obj->obj_material was already changed */
+		stop_timer(LIGHT_DAMAGE, (genericptr_t)obj);
+	}
+	/* set random gemstone type for valid gemstone objects */
+	if (!obj->ovar1 && mat == GEMSTONE && obj->oclass != GEM_CLASS && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
+		do{
+			obj->ovar1 = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
+		} while (obj->ovar1 == OBSIDIAN);
+	}
+	else if (obj->ovar1 && oldmat == GEMSTONE && obj->oclass != GEM_CLASS && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
+		obj->ovar1 = 0;	/* and reset if changing away from gemstone*/
+	}
 	fix_object(obj);
 	
 	if(owner == &youmonst){
@@ -1755,57 +1851,7 @@ register struct obj *obj;
 		wt =  50; /* Same as a crystal ball (ie, the Orb of Weight) */
 	} else if(obj->obj_material != objects[obj->otyp].oc_material){
 	//ie, for normal objects and non-special weight artifacts
-	static const double matDensityLookup[] = {
-//	FENCEPOST
-		0.5,
-//  LIQUID
-		1.0,
-//  WAX
-		0.9,
-//  VEGGY very aprox Alfalfa leaf?
-		0.33, 
-//  FLESH
-		1.1,
-//  PAPER
-		1.2,
-//  CLOTH cotton fibre
-		1.5,
-//  LEATHER
-		0.9,
-//  WOOD
-		0.5,
-//  BONE
-		1.7,
-//  DRAGON_HIDE
-		3.4,
-//  IRON
-		7.9,
-//  METAL		12	/* Sn, &c. */
-		7.7,
-//  COPPER		13	/* Cu - includes brass and bronze*/
-		8.9,
-//  SILVER		14	/* Ag */
-		10.5,
-//  GOLD		15	/* Au */
-		19.3,
-//  PLATINUM	16	/* Pt */
-		21.4,
-//  MITHRIL		17 alumninum
-		2.7,
-//  PLASTIC		18 High end estimate for density of old credit card plastic, http://dwb5.unl.edu/chem/smallscale/SmallScale-069.html
-		1.3,
-//  GLASS		19
-		2.4,
-//  GEMSTONE	20 Very rough aprox.
-		3.6,
-//  MINERAL		21 Very rough aprox.
-		2.7,
-//  OBSIDIAN_MT	22
-		2.6,
-//  SHADOWSTUFF	23
-		1,
-	};
-		wt = wt*matDensityLookup[obj->obj_material]/matDensityLookup[objects[obj->otyp].oc_material];
+		wt = wt * materials[obj->obj_material].density / materials[objects[obj->otyp].oc_material].density;
 	}
 	
 	if(obj->otyp == MOON_AXE && obj->oartifact != ART_SCEPTRE_OF_LOLTH){
@@ -2577,7 +2623,7 @@ maid_clean(mon, obj)
 		if(canseemon(mon)) pline("The maid sticks an ofuda to the offending object.");
 		obj->cursed = 0;
 	}
-	if(obj->otyp == DWARVISH_HELM || obj->otyp == OIL_LAMP || obj->otyp == BRASS_LANTERN){
+	if(obj->otyp == DWARVISH_HELM || obj->otyp == OIL_LAMP || obj->otyp == LANTERN){
 		if(obj->age < 750){
 			obj->age += 750;
 			if(canseemon(mon)) pline("The maid adds some oil.");

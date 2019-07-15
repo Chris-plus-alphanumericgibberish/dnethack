@@ -131,9 +131,6 @@ hack_artifacts()
 
 	if(Race_if(PM_HALF_DRAGON) && flags.initgend){
 		int i;
-		
-
-		
 		for(i = 0; i < ART_ROD_OF_SEVEN_PARTS; i++)
 			if(artilist[i].role == Role_switch)
 				artilist[i].role = NON_PM;
@@ -587,6 +584,7 @@ boolean while_carried;
 	const static int KURTULMAK_RES[] = { FIRE_RES, FREE_ACTION, 0 };
 	const static int EREBOR_RES[] = { FIRE_RES, COLD_RES, 0 };
 	const static int DURIN_RES[] = { FIRE_RES, ACID_RES, POISON_RES, 0 };
+	const static int TLALOC_RES[] = { COLD_RES, SHOCK_RES, 0 };
 	const static int REV_PROPS[] = { COLD_RES, REGENERATION, FIXED_ABIL, POISON_RES, SEE_INVIS, 0 };
 	const static int HERMES_PROPS[] = { FAST, 0 };
 	const static int FLY_PROPS[] = { DETECT_MONSTERS, 0 };
@@ -727,6 +725,9 @@ boolean while_carried;
 				break;
 			case ART_WAR_MASK_OF_DURIN:
 				bonus_prop_list = (while_carried ? (NO_RES) : (DURIN_RES));
+				break;
+			case ART_MASK_OF_TLALOC:
+				bonus_prop_list = (while_carried ? (NO_RES) : (TLALOC_RES));
 				break;
 			case ART_CLAWS_OF_THE_REVENANCER:
 				bonus_prop_list = (while_carried ? (NO_RES) : (REV_PROPS));
@@ -2854,6 +2855,155 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	//Add the bonus damage
 	//*dmgptr += otyp_dbon(mdef, otmp, *dmgptr);
 	
+	if (otmp->otyp == TORCH && otmp->lamplit) {
+		if (youdefend) {
+			if (!Fire_resistance){
+				if (species_resists_cold(&youmonst)) (*dmgptr) += 3 * (rnd(6) + otmp->spe) / 2;
+				else (*dmgptr) += rnd(6) + otmp->spe;
+			}
+			if (!InvFire_resistance){
+				if (!rn2(3)) destroy_item(SCROLL_CLASS, AD_FIRE);
+				if (!rn2(3)) destroy_item(SPBOOK_CLASS, AD_FIRE);
+				if (!rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
+			}
+		}
+		else if (mdef){
+			if (!species_resists_fire(mdef)) {
+				if (species_resists_cold(mdef)) (*dmgptr) += 3 * (rnd(6) + otmp->spe) / 2;
+				else (*dmgptr) += rnd(6) + otmp->spe;
+				if (!rn2(3)) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+				if (!rn2(3)) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+				if (!rn2(3)) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+			}
+		}
+	}
+	if (otmp->otyp == SHADOWLANDER_S_TORCH && otmp->lamplit){
+		if (youdefend) {
+			if (!Cold_resistance){
+				if (species_resists_fire(&youmonst)) (*dmgptr) += 3 * (rnd(6) + otmp->spe) / 2;
+				else (*dmgptr) += rnd(6) + otmp->spe;
+			}
+			if (!InvCold_resistance){
+				if (!rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
+			}
+		}
+		else if (mdef){
+			if (!species_resists_cold(mdef)) {
+				if (species_resists_fire(mdef)) (*dmgptr) += 3 * (rnd(6) + otmp->spe) / 2;
+				else (*dmgptr) += rnd(6) + otmp->spe;
+				if (!rn2(3)) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+			}
+		}
+	}
+	if (otmp->otyp == SUNROD && otmp->lamplit) {
+		if (youdefend) {
+			if (!(Shock_resistance && Acid_resistance)){
+				if (!(Shock_resistance || Acid_resistance)) (*dmgptr) += 3 * (rnd(6) + otmp->spe) / 2;
+				else (*dmgptr) += rnd(6) + otmp->spe;
+			}
+			if (!InvShock_resistance){
+				if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
+				if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
+			}
+			if (!InvAcid_resistance){
+				if (rn2(3)) destroy_item(POTION_CLASS, AD_FIRE);
+			}
+			if (!resists_blnd(&youmonst)) {
+				You("are blinded by the flash!");
+				make_blinded((long)d(1, 50), FALSE);
+				if (!Blind) Your1(vision_clears);
+			}
+		}
+		else if (mdef){
+			if (!(resists_elec(mdef) && resists_acid(mdef))) {
+				if (!(resists_elec(mdef) || resists_acid(mdef)))
+					(*dmgptr) += 3 * (rnd(6) + otmp->spe) / 2;
+				else (*dmgptr) += rnd(6) + otmp->spe;
+				if (!resists_acid(mdef))
+					if (rn2(3)) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+				if (!resists_elec(mdef)){
+					if (!rn2(3)) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+					if (!rn2(3)) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+				}
+				if (!resists_blnd(mdef) &&
+					!(!flags.mon_moving && u.uswallow && mdef == u.ustuck)) {
+					register unsigned rnd_tmp = rnd(50);
+					mdef->mcansee = 0;
+					if ((mdef->mblinded + rnd_tmp) > 127)
+						mdef->mblinded = 127;
+					else mdef->mblinded += rnd_tmp;
+				}
+			}
+		}
+	}
+
+	if (otmp->otyp == KAMEREL_VAJRA && litsaber(otmp)) {
+		if (otmp->where == OBJ_MINVENT && otmp->ocarry->data == &mons[PM_ARA_KAMEREL]){
+			if (youdefend){
+				if (!Shock_resistance){
+					(*dmgptr) += d(6, 6);
+				}
+				if (!InvShock_resistance){
+					if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
+					if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
+				}
+				if (!resists_blnd(&youmonst)) {
+					You("are blinded by the flash!");
+					make_blinded((long)d(1, 50), FALSE);
+					if (!Blind) Your1(vision_clears);
+				}
+			}
+			else if (mdef){
+				if (!resists_elec(mdef)){
+					(*dmgptr) += d(6, 6); //wand of lightning
+					if (!rn2(3)) (void)destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+					/* not actually possible yet */
+					if (!rn2(3)) (void)destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+				}
+				if (!resists_blnd(mdef) &&
+					!(!flags.mon_moving && u.uswallow && mdef == u.ustuck)) {
+					register unsigned rnd_tmp = rnd(50);
+					mdef->mcansee = 0;
+					if ((mdef->mblinded + rnd_tmp) > 127)
+						mdef->mblinded = 127;
+					else mdef->mblinded += rnd_tmp;
+				}
+			}
+		}
+		else {
+			if (youdefend){
+				if (!Shock_resistance){
+					(*dmgptr) += d(2, 6);
+				}
+				if (!InvShock_resistance){
+					if (!rn2(3)) destroy_item(WAND_CLASS, AD_ELEC);
+					if (!rn2(3)) destroy_item(RING_CLASS, AD_ELEC);
+				}
+				if (!resists_blnd(&youmonst)) {
+					You("are blinded by the flash!");
+					make_blinded((long)d(1, 50), FALSE);
+					if (!Blind) Your1(vision_clears);
+				}
+			}
+			else if (mdef){
+				if (!resists_elec(mdef)){
+					(*dmgptr) += d(2, 6); //wand of lightning
+					if (!rn2(3)) (void)destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+					/* not actually possible yet */
+					if (!rn2(3)) (void)destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+				}
+				if (!resists_blnd(mdef) &&
+					!(!flags.mon_moving && u.uswallow && mdef == u.ustuck)) {
+					register unsigned rnd_tmp = rnd(50);
+					mdef->mcansee = 0;
+					if ((mdef->mblinded + rnd_tmp) > 127)
+						mdef->mblinded = 127;
+					else mdef->mblinded += rnd_tmp;
+				}
+			}
+		}
+	}
+
 	if(pure_weapon(otmp) && otmp->spe >= 6){
 		if(youattack){
 			if(Upolyd && u.mh == u.mhmax)
@@ -3857,6 +4007,34 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			messaged = TRUE;
 		}
 	}
+	if (otmp->oartifact == ART_TECPATL_OF_HUHETOTL){
+		if (!youdefend) {
+			if (has_blood_mon(mdef) && !noncorporeal(mdef->data)) {
+				if (vis){
+					pline("The sacrificial blade drinks the blood of %s!", mon_nam(mdef));					
+					*dmgptr += d(2,4);
+#define MAXVALUE 24
+					if (mdef->mhp < *dmgptr){
+						extern const int monstr[];
+						int value = min(monstr[monsndx(mdef->data)] + 1,MAXVALUE);
+						if(u.ugangr[Align2gangr(u.ualign.type)]) {
+							u.ugangr[Align2gangr(u.ualign.type)] -= ((value * (u.ualign.type == A_CHAOTIC ? 2 : 3)) / MAXVALUE);
+							if(u.ugangr[Align2gangr(u.ualign.type)] < 0) u.ugangr[Align2gangr(u.ualign.type)] = 0;
+						} else if(u.ualign.record < 0) {
+							if(value > MAXVALUE) value = MAXVALUE;
+							if(value > -u.ualign.record) value = -u.ualign.record;
+							adjalign(value);
+						} else if (u.ublesscnt > 0) {
+							u.ublesscnt -=
+							((value * (u.ualign.type == A_CHAOTIC ? 500 : 300)) / MAXVALUE);
+							if(u.ublesscnt < 0) u.ublesscnt = 0;
+						}
+					}
+					messaged = TRUE;
+				}
+			}
+		}
+	} 
 	if (spec_ability(otmp, SPFX_BEHEAD) && otmp->oartifact != ART_OGRESMASHER) {
 	/* We really want "on a natural 20" but Nethack does it in */
 	/* reverse from AD&D. */
@@ -3868,6 +4046,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			 "%s pierces %s heart!",
 			 "%s punctures %s heart!"
 		};
+		
 	    if (otmp->oartifact == ART_TSURUGI_OF_MURAMASA && dieroll == 1) {
 			wepdesc = "The razor-sharp blade";
 			/* not really beheading, but so close, why add another SPFX */
@@ -4585,6 +4764,8 @@ arti_invoke(obj)
 	int summons[10] = {0, PM_FOG_CLOUD, PM_DUST_VORTEX, PM_STALKER, 
 					  PM_ICE_VORTEX, PM_ENERGY_VORTEX, PM_STEAM_VORTEX, 
 					  PM_FIRE_VORTEX, PM_AIR_ELEMENTAL, PM_LIGHTNING_PARAELEMENTAL};
+	int windpets[8] = {0, PM_FOG_CLOUD, PM_DUST_VORTEX, PM_ICE_PARAELEMENTAL, PM_ICE_VORTEX,
+					   PM_ENERGY_VORTEX, PM_AIR_ELEMENTAL, PM_LIGHTNING_PARAELEMENTAL};
 	coord cc;
 	int n, damage;
 	struct permonst *pm;
@@ -5974,6 +6155,22 @@ arti_invoke(obj)
 				else pline("Your weapon rattles warningly.");
 			}
 		break;
+		case WIND_PETS:
+			pline("You call upon the minions of Quetzalcoatl!");
+			int n = u.ulevel/5 + 1;
+			if (ACURR(A_CHA)/3 < n) n = ACURR(A_CHA)/3;
+			while(n--) {
+				pm = &mons[windpets[d(1,8)]];
+				mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+				if(mtmp){
+					initedog(mtmp);
+					mtmp->m_lev += 7;
+					if(u.ulevel > 12) mtmp->m_lev += u.ulevel / 3;
+					mtmp->mhpmax = (mtmp->m_lev * 8) - 4;
+					mtmp->mhp =  mtmp->mhpmax;
+				}
+			}
+		break;
 		case PETMASTER:{
 			int pet_effect = 0;
 			if(uarm && uarm == obj && yn("Take something out of your pockets?") == 'y'){
@@ -6315,6 +6512,12 @@ arti_invoke(obj)
 					break;
 					case COMMAND_WHIP:
 						uwep->otyp = BULLWHIP;
+						if (uwep->oartifact == ART_XIUHCOATL)
+							uwep->obj_material = LEATHER;
+					break;
+					case COMMAND_ATLATL:
+						uwep->otyp = ATLATL;
+						uwep->obj_material = WOOD;
 					break;
 					/*These effects are limited by timeout*/
 					case COMMAND_LADDER:
@@ -6443,6 +6646,22 @@ arti_invoke(obj)
 							mtmp->mfrozen = max(1, u.ulevel - ((int)(mtmp->m_lev)));
 							pline("%s kneels before you.",Monnam(mtmp));
 						}
+					break;
+					case COMMAND_AMMO:
+						otmp = mksobj(JAVELIN, TRUE, FALSE);
+						if (!otmp) break;
+						otmp->blessed = obj->blessed;
+						otmp->cursed = obj->cursed;
+						otmp->bknown = obj->bknown;
+						if (obj->blessed) {
+							if (otmp->spe < 0) otmp->spe = 0;
+							otmp->quan += rnd(10);
+						} else if (obj->cursed) {
+							if (otmp->spe > 0) otmp->spe = 0;
+						} else otmp->quan += rnd(5);
+						otmp->owt = weight(otmp);
+						otmp = hold_another_object(otmp, "Suddenly %s out.", 
+							aobjnam(otmp, "fall"), (const char *)0);
 					break;
 					default:
 						pline("What is this strange command!?");
@@ -7731,6 +7950,22 @@ struct obj *obj;
 				'w', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		}
+	} else if(obj->oartifact == ART_XIUHCOATL){
+		if(obj->otyp != ATLATL){
+			Sprintf(buf, "Become an atlatl");
+			any.a_int = COMMAND_ATLATL;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'a', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
+		
+		if(obj->otyp != BULLWHIP){
+			Sprintf(buf, "Become a flaming whip");
+			any.a_int = COMMAND_WHIP;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'w', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
 	} else {
 		if(obj->otyp != RAPIER){
 			Sprintf(buf, "Become a rapier");
@@ -7779,6 +8014,12 @@ struct obj *obj;
 			any.a_int = COMMAND_STRIKE;	/* must be non-zero */
 			add_menu(tmpwin, NO_GLYPH, &any,
 				'S', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		} else if(obj->oartifact == ART_XIUHCOATL){
+			Sprintf(buf, "Conjure ammunition");
+			any.a_int = COMMAND_AMMO;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'c', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		} else {
 			if((obj->otyp == MACE || obj->otyp == ELVEN_MACE || obj->otyp == KHAKKHARA) && (

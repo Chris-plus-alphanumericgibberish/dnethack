@@ -1277,6 +1277,8 @@ E void FDECL(replace_object, (struct obj *,struct obj *));
 E void FDECL(bill_dummy_object, (struct obj *));
 E struct obj *FDECL(mksobj, (int,BOOLEAN_P,BOOLEAN_P));
 E int FDECL(bcsign, (struct obj *));
+E void FDECL(set_obj_size, (struct obj *, int));
+E void FDECL(set_obj_quan, (struct obj *, int));
 E void FDECL(set_material, (struct obj *, int));
 E int FDECL(weight, (struct obj *));
 E struct obj *FDECL(mkgold, (long,int,int));
@@ -1708,6 +1710,7 @@ E void FDECL(restnames, (int));
 E void FDECL(discover_object, (int,BOOLEAN_P,BOOLEAN_P));
 E void FDECL(undiscover_object, (int));
 E int NDECL(dodiscovered);
+E int FDECL(object_color, (struct obj *));
 E void FDECL(fix_object, (struct obj *));
 
 /* ### objects.c ### */
@@ -1725,6 +1728,7 @@ E boolean FDECL(obj_is_pname, (struct obj *));
 E char *FDECL(distant_name, (struct obj *,char *(*)(OBJ_P)));
 E char *FDECL(fruitname, (BOOLEAN_P));
 E char *FDECL(xname, (struct obj *));
+E const char *FDECL(material_name, (struct obj *, boolean));
 E char *FDECL(mshot_xname, (struct obj *));
 E boolean FDECL(the_unique_obj, (struct obj *obj));
 E char *FDECL(doname, (struct obj *));

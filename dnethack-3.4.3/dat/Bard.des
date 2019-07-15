@@ -54,16 +54,16 @@ DOOR:closed,(33,09)
 DOOR:closed,(33,10)
 
 REGION:(12,03,17,04),lit,"tool shop"
-OBJECT:'(',"wooden flute",(13,03)
+OBJECT:'(',"flute",(13,03)
 OBJECT:'(',"tooled horn",(14,03)
-OBJECT:'(',"wooden harp",(15,03)
+OBJECT:'(',"harp",(15,03)
 OBJECT:'(',"bugle",(16,03)
-OBJECT:'(',"leather drum",(17,03)
-OBJECT:'(',"wooden flute",(13,04)
+OBJECT:'(',"drum",(17,03)
+OBJECT:'(',"flute",(13,04)
 OBJECT:'(',"tooled horn",(14,04)
-OBJECT:'(',"wooden harp",(15,04)
+OBJECT:'(',"harp",(15,04)
 OBJECT:'(',"bugle",(16,04)
-OBJECT:'(',"leather drum",(17,04)
+OBJECT:'(',"drum",(17,04)
 
 REGION:(12,15,17,16),lit,"food shop"
 OBJECT:'!',"booze",(13,15)

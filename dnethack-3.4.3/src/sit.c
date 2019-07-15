@@ -417,6 +417,9 @@ rndcurse()			/* curse a few inventory items at random! */
 	} else if (uwep && (uwep->oartifact == ART_MAGICBANE) && rn2(20)) {
 	    You(mal_aura, "the magic-absorbing blade");
 	    return;
+	} else if (uwep && (uwep->oartifact == ART_TECPATL_OF_HUHETOTL) && rn2(20)) {
+	    You(mal_aura, "the bloodstained dagger");
+	    return;
 	} else if(uwep && (uwep->oartifact == ART_TENTACLE_ROD) && rn2(20)){
 	    You(mal_aura, "the languid tentacles");
 	    return;

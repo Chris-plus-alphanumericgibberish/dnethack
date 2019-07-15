@@ -192,6 +192,7 @@ enum {
     S_anti_magic_trap,
     S_polymorph_trap,
     S_essence_trap,
+    S_mummy_trap,
 
 /* end traps, begin special effects */
 
@@ -235,8 +236,8 @@ enum {
     MAXPCHARS		/* maximum number of mapped characters */
 };
 #define MAXDCHARS	(S_water+1)	/* maximum of mapped dungeon characters */
-#define MAXTCHARS	(S_essence_trap-S_water)	/* maximum of mapped trap characters */
-#define MAXECHARS	(S_explode9-S_essence_trap)	/* maximum of mapped effects characters */
+#define MAXTCHARS	(S_mummy_trap-S_water)	/* maximum of mapped trap characters */
+#define MAXECHARS	(S_explode9-S_mummy_trap)	/* maximum of mapped effects characters */
 #define MAXEXPCHARS	9	/* number of explosion characters */
 
 struct symdef {

@@ -2450,7 +2450,7 @@ struct monst *mtmp;
 		    typ != STETHOSCOPE && typ != BLINDFOLD && 
 		    typ != ANDROID_VISOR && 
 			typ != TOWEL && typ != R_LYEHIAN_FACEPLATE &&
-		    typ != TIN_WHISTLE && typ != MAGIC_WHISTLE &&
+		    typ != WHISTLE && typ != MAGIC_WHISTLE &&
 		    typ != MAGIC_MARKER && typ != TIN_OPENER &&
 		    typ != SKELETON_KEY && typ != UNIVERSAL_KEY &&
 			typ != LOCK_PICK

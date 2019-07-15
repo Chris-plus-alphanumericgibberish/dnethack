@@ -1347,7 +1347,7 @@ struct obj *obj;
 
 	if (obj->lamplit) {
 	    if (obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
-		    obj->otyp == BRASS_LANTERN || obj->otyp == POT_OIL ||
+		    obj->otyp == LANTERN || obj->otyp == POT_OIL ||
 			obj->otyp == DWARVISH_HELM || obj->otyp == GNOMISH_POINTY_HAT) {
 		(void) get_obj_location(obj, &x, &y, 0);
 		if (obj->where == OBJ_MINVENT ? cansee(x,y) : !Blind)
@@ -1380,7 +1380,7 @@ struct obj *obj;
 	    if (obj->otyp == CANDELABRUM_OF_INVOCATION && obj->cursed)
 		return FALSE;
 	    if ((obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
-		 obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_HELM ||
+		 obj->otyp == LANTERN || obj->otyp == DWARVISH_HELM ||
 		 obj->otyp == GNOMISH_POINTY_HAT) && 
 			obj->cursed && !rn2(2))
 		return FALSE;
@@ -1491,7 +1491,7 @@ struct obj *obj;
 	}
 	if(obj->lamplit) {
 		if(obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
-		   obj->otyp == BRASS_LANTERN ||
+		   obj->otyp == LANTERN ||
 		   obj->otyp == DWARVISH_HELM)
 		    pline("%s lamp is now off.", Shk_Your(buf, obj));
 		else if(is_lightsaber(obj)) {
@@ -1515,7 +1515,7 @@ struct obj *obj;
 			!(is_lightsaber(obj) && obj->oartifact == ART_ATMA_WEAPON && !Drain_resistance))
 			|| (obj->otyp == MAGIC_LAMP && obj->spe == 0)
 		) {
-		if (obj->otyp == BRASS_LANTERN || 
+		if (obj->otyp == LANTERN || 
 			obj->otyp == DWARVISH_HELM || 
 			is_lightsaber(obj)
 		)
@@ -1539,7 +1539,7 @@ struct obj *obj;
 		      Tobjnam(obj, "flicker"), otense(obj, "die"));
 	} else {
 		if(obj->otyp == OIL_LAMP || obj->otyp == MAGIC_LAMP ||
-				obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_HELM) {
+				obj->otyp == LANTERN || obj->otyp == DWARVISH_HELM) {
 		    check_unpaid(obj);
 		    pline("%s lamp is now on.", Shk_Your(buf, obj));
 		} else if (is_lightsaber(obj)) {
@@ -1759,7 +1759,7 @@ dorub()
 	    } else if (rn2(2) && !Blind)
 		You("see a puff of smoke.");
 	    else pline1(nothing_happens);
-	} else if (obj->otyp == BRASS_LANTERN || obj->otyp == DWARVISH_HELM) {
+	} else if (obj->otyp == LANTERN || obj->otyp == DWARVISH_HELM) {
 	    /* message from Adventure */
 	    pline("Rubbing the electric lamp is not particularly rewarding.");
 	    pline("Anyway, nothing exciting happens.");
@@ -2560,6 +2560,26 @@ struct obj *tstone;
 	    do_scratch = TRUE;	/* scratching and streaks */
 	    streak_color = "silvery";
 	    break;
+	case GEMSTONE:
+		if (obj->ovar1 && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
+			/* similare check as above */
+			if (tstone->otyp != TOUCHSTONE) {
+				do_scratch = TRUE;
+			}
+			else if (tstone->blessed || (!tstone->cursed &&
+				(Role_if(PM_ARCHEOLOGIST) || Race_if(PM_GNOME)))) {
+				makeknown(TOUCHSTONE);
+				makeknown(obj->ovar1);
+				prinv((char *)0, obj, 0L);
+				return;
+			}
+			/* the touchstone was not effective */
+			streak_color = c_obj_colors[objects[obj->ovar1].oc_color];
+		}
+		else {
+			do_scratch = (tstone->otyp != TOUCHSTONE);
+		}
+		break;
 	default:
 	    /* Objects passing the is_flimsy() test will not
 	       scratch a stone.  They will leave streaks on
@@ -5227,7 +5247,9 @@ struct obj **optr;
 				break;
 				case ARMOR_PLATING:
 					comp = getobj(apply_armor, "upgrade your armor with");
-					if(!comp || comp->otyp != BRONZE_PLATE_MAIL){
+					if(!comp ||
+						!((comp->otyp == HALF_PLATE || comp->otyp == BRONZE_HALF_PLATE || comp->otyp == PLATE_MAIL) &&
+						(comp->obj_material == COPPER))){
 						pline("Never mind.");
 						return 0;
 					}
@@ -5436,7 +5458,7 @@ doapply()
 	case MAGIC_WHISTLE:
 		use_magic_whistle(obj);
 		break;
-	case TIN_WHISTLE:
+	case WHISTLE:
 		use_whistle(obj);
 		break;
 	case EUCALYPTUS_LEAF:
@@ -5668,7 +5690,7 @@ doapply()
 	case DWARVISH_HELM: 
 	case OIL_LAMP:
 	case MAGIC_LAMP:
-	case BRASS_LANTERN:
+	case LANTERN:
 		use_lamp(obj);
 	break;
 	case POT_OIL:
@@ -5770,15 +5792,15 @@ doapply()
 	case UNICORN_HORN:
 		use_unicorn_horn(obj);
 	break;
-	case WOODEN_FLUTE:
+	case FLUTE:
 	case MAGIC_FLUTE:
 	case TOOLED_HORN:
 	case FROST_HORN:
 	case FIRE_HORN:
-	case WOODEN_HARP:
+	case HARP:
 	case MAGIC_HARP:
 	case BUGLE:
-	case LEATHER_DRUM:
+	case DRUM:
 	case DRUM_OF_EARTHQUAKE:
 		res = do_play_instrument(obj);
 	break;

@@ -851,6 +851,11 @@ gcrownu()
 			verbalize("I crown thee...  The Saint %s!", flags.female ? "Queen" : "King");
 			livelog_write_string("recieved the crown of the Saint King");
 		}
+	} else if(Pantheon_if(PM_ARCHEOLOGIST) || Role_if(PM_ARCHEOLOGIST)){
+		u.uevent.uhand_of_elbereth = 37;
+		in_hand = FALSE;
+		already_exists = exist_artifact(AMULET_OF_MAGICAL_BREATHING, artiname(ART_EHECAILACOCOZCATL));
+		verbalize("I proclaim thee...  The High Priest of Quetzalcoatl!");
 	} else if(Pantheon_if(PM_SAMURAI) || Role_if(PM_SAMURAI)){
 		char crown_msg[BUFSZ];
 		u.uevent.uhand_of_elbereth = 1; /* Alignment of Nasu clan is treated as lawful */
@@ -953,6 +958,12 @@ gcrownu()
 			verbalize("I dub thee...  The Grey Saint!");
 			livelog_write_string("recieved the crown of the Saint King");
 		}
+	} else if(Pantheon_if(PM_ARCHEOLOGIST) || Role_if(PM_ARCHEOLOGIST)){
+		u.uevent.uhand_of_elbereth = 38;
+		in_hand = FALSE;
+		already_exists = exist_artifact(JAVELIN, artiname(ART_AMHIMITL));
+		verbalize("I proclaim thee... The Champion of Camaxtli!");
+		livelog_write_string("became the Champion of Camaxtli!");
 	} else {
 		u.uevent.uhand_of_elbereth = 2;
 		in_hand = (uwep && uwep->oartifact == ART_VORPAL_BLADE);
@@ -1037,6 +1048,12 @@ gcrownu()
 		already_exists = exist_artifact(find_vhelm(), artiname(ART_HELM_OF_THE_DARK_LORD));
 		verbalize("I crown thee...  Dark %s!", flags.female ? "Lady" : "Lord");
 		livelog_write_string("recieved the helm of the Dark Lord");
+	} else if(Pantheon_if(PM_ARCHEOLOGIST) || Role_if(PM_ARCHEOLOGIST)){
+		u.uevent.uhand_of_elbereth = 39;
+		in_hand = FALSE;
+		already_exists = exist_artifact(ROUNDSHIELD, artiname(ART_TECPATL_OF_HUHETOTL));
+		verbalize("I dub thee... The Fire-bearer of Huhetotl!");
+		livelog_write_string("became the Fire-bearer of Huhetotl");
 	} else {
 		u.uevent.uhand_of_elbereth = 3;
 		in_hand = (uwep && uwep->oartifact == ART_STORMBRINGER);

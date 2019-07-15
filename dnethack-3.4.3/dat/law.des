@@ -1671,7 +1671,7 @@ OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,19)
 CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele Eladrin",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze half plate",contained,blessed,+0
 OBJECT:'[',"roundshield",contained,blessed,+0
 OBJECT:'[',"armored boots",contained,blessed,+0
 OBJECT:'[',"bronze helm",contained,blessed,+0
@@ -1698,7 +1698,7 @@ OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,13)
 CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele Eladrin",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze half plate",contained,blessed,+0
 OBJECT:'[',"roundshield",contained,blessed,+0
 OBJECT:'[',"armored boots",contained,blessed,+0
 OBJECT:'[',"bronze helm",contained,blessed,+0
@@ -2078,7 +2078,7 @@ OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,19)
 CONTAINER:'`',"statue",(4,19),uncursed,"Ghaele Eladrin",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze half plate",contained,blessed,+0
 OBJECT:'[',"roundshield",contained,blessed,+0
 OBJECT:'[',"armored boots",contained,blessed,+0
 OBJECT:'[',"bronze helm",contained,blessed,+0
@@ -2105,7 +2105,7 @@ OBJECT:')',"elven broadsword",contained,blessed,+0
 OBJECT:random,random,contained
 TRAP:"statue", (6,13)
 CONTAINER:'`',"statue",(4,13),uncursed,"Ghaele Eladrin",1
-OBJECT:'[',"bronze plate mail",contained,blessed,+0
+OBJECT:'[',"bronze half plate",contained,blessed,+0
 OBJECT:'[',"roundshield",contained,blessed,+0
 OBJECT:'[',"armored boots",contained,blessed,+0
 OBJECT:'[',"bronze helm",contained,blessed,+0

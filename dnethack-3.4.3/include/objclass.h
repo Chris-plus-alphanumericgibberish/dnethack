@@ -64,10 +64,12 @@ struct objclass {
 #define GEMSTONE	20
 #define MINERAL		21
 #define OBSIDIAN_MT	22
-#define SHADOWSTUFF	23
-	Bitfield(oc_showmat,2);
-#define IDED	2
-#define UNIDED	1
+#define SHADOWSTEEL	23
+	Bitfield(oc_showmat,4);
+#define UNIDED	1	/* always show material when base object type is unknown */
+#define IDED	2	/* always show material when base object type is known */
+#define NUNIDED 4	/* never show material when base object type is unknown */
+#define NIDED	8	/* never show material when base object type is known */
 
 #define is_organic(otmp)	((otmp)->obj_material <= WOOD)
 #define is_metallic(otmp)	((otmp)->obj_material >= IRON && \
@@ -81,10 +83,14 @@ struct objclass {
 /* secondary damage: rot/acid/acid */
 #define is_corrodeable(otmp)	((otmp)->obj_material == COPPER || (otmp)->obj_material == IRON)
 
-#define is_evaporable(otmp)	(otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == DROVEN_HELM || otmp->otyp == NOBLE_S_DRESS)
+#define is_evaporable(otmp)	((otmp)->obj_material == SHADOWSTEEL)
+
+/* no partial damage available, but much the same */
+#define is_shatterable(otmp) (((otmp)->obj_material == GLASS || (otmp)->obj_material == OBSIDIAN_MT) && otmp->oclass != GEM_CLASS)
 
 #define is_damageable(otmp) (is_rustprone(otmp) || is_flammable(otmp) || \
-				is_rottable(otmp) || is_corrodeable(otmp) || is_evaporable(otmp))
+				is_rottable(otmp) || is_corrodeable(otmp) || is_evaporable(otmp) || is_shatterable(otmp))
+
 
 #define is_boomerang(otmp) (objects[(otmp)->otyp].oc_skill == -P_BOOMERANG)
 
@@ -139,6 +145,14 @@ struct objdescr {
 struct colorTextClr {
 	const char *colorText;	/* text name of color */
 	const uchar colorClr;	/* displayed color */
+};
+
+struct material {
+	const int id;				/* the #define'd id that this material is for */
+	const int color;			/* default material color */
+	const int density;			/* density (from old dnh) */
+	const int cost;				/* cost multiplier (from xnethack, unused) */
+	const int defense;			/* defense modifier (from xnethack, unused) */
 };
 
 extern NEARDATA struct objclass objects[];

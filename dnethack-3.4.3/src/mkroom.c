@@ -3243,7 +3243,7 @@ int typ;
 		statue = mksobj_at(STATUE, x, y, FALSE, FALSE);
 		if(statue){
 			statue->corpsenm = PM_COLOSSAL_CLOCKWORK_WAR_MACHINE;
-			otmp = mksobj(BRONZE_PLATE_MAIL, TRUE, FALSE);
+			otmp = mksobj(BRONZE_HALF_PLATE, TRUE, FALSE);
 			if(otmp){
 				otmp->cursed = TRUE;
 				otmp->blessed = FALSE;
@@ -3322,7 +3322,7 @@ int typ;
 				smallstatue = mksobj(STATUE, FALSE, FALSE);
 				if(smallstatue){
 					smallstatue->corpsenm = PM_CLOCKWORK_AUTOMATON;
-					otmp = mksobj(BRONZE_PLATE_MAIL, TRUE, FALSE);
+					otmp = mksobj(BRONZE_HALF_PLATE, TRUE, FALSE);
 					if(otmp){
 						if(rn2(5)){
 							otmp->cursed = TRUE;
@@ -3400,7 +3400,7 @@ int typ;
 			otmp = mksobj_at(UPGRADE_KIT, x, y, TRUE, FALSE);
 			for(tries = rn1(3,3); tries > 0; tries--)
 				otmp = mksobj_at(CLOCKWORK_COMPONENT, x, y, TRUE, FALSE);
-			otmp = mksobj_at(BRONZE_PLATE_MAIL, x, y, TRUE, FALSE);
+			otmp = mksobj_at(BRONZE_HALF_PLATE, x, y, TRUE, FALSE);
 			nwep = rnd(6);
 			for(tries = 0; tries < nwep; tries++){
 				otmp = mksobj_at(SCIMITAR, x, y, TRUE, FALSE);
@@ -4212,7 +4212,7 @@ struct mkroom *sroom;
 						case 4:
 							switch(rn2(4)){
 								case 0:
-									otmp = mksobj(TIN_WHISTLE, FALSE, FALSE);
+									otmp = mksobj(WHISTLE, FALSE, FALSE);
 									fix_object(otmp);
 								break;
 								case 1:

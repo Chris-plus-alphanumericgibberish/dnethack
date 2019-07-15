@@ -312,6 +312,14 @@ A("The Singing Sword",	LONG_SWORD,			0,			0,
 	SINGING,		A_NONE, PM_BARD, NON_PM, 5000L,
 	0,0,0),
 
+A("Xiuhcoatl",	ATLATL,			0,			0,/*Needs encyc entry*/
+	(SPFX_RESTR|SPFX_ATTK), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	FIRE(5,10),	FIRE(0, 0),		NO_CARY,
+	LORDLY,	A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 4000L, 
+	0,0,0), 
+
+
 /*
  *	Magicbane is a bit different!  Its magic fanfare
  *	unbalances victims in addition to doing some damage.
@@ -1010,6 +1018,40 @@ A("The Eye of the Oracle", EYEBALL,							0,			0,
 	ORACLE,     A_NEUTRAL, NON_PM, NON_PM, 500L,
 	0,0,0),
 
+A("The Macuahuitl of Quetzalcoatl", MACUAHUITL,				0,0,/*Arc redesign by Riker*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_BEHEAD), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	PHYS(5, 0), NO_DFNS, NO_CARY,
+	0, A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
+	0,0,0),
+
+A("The Mask of Tlaloc",	MASK, 						0,			0,/*Arc redesign by Riker*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL), (SPFX_HSPDAM),
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*+5 attk and damage with axes*/
+	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM), //  Cold and shock resistance, water damage in addition to MR
+	0,	A_LAWFUL,	 PM_ARCHEOLOGIST, PM_DWARF, 2500L,
+	0,0,0),
+
+A("Ehecailacocozcatl", AMULET_OF_MAGICAL_BREATHING,			MINERAL,0,/*Arc redesign by Riker*/
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_EREGEN), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+    NO_ATTK, NO_DFNS, NO_CARY,
+	WIND_PETS, A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
+	0,0,0),
+
+A("Amhimitl", JAVELIN,			BONE,0,/*Arc redesign by Riker*/
+	(SPFX_NOGEN|SPFX_RESTR), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+    FIRE(5,8), NO_DFNS, NO_CARY,
+	0, A_NEUTRAL, PM_ARCHEOLOGIST, NON_PM, 3000L, 
+	0,0,0),
+
+A("The Tecpatl of Huhetotl", TECPATL,					BONE,0,/*Arc redesign by Riker*/
+	(SPFX_NOGEN|SPFX_RESTR), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+    PHYS(5, 8), NO_DFNS, CARY(AD_DRLI),
+	0, A_CHAOTIC, PM_ARCHEOLOGIST, NON_PM, 3000L, 
+	0,0,0),
 
 /*//////////Role-specific Quest Artifacts//////////*/
 /*
@@ -1018,6 +1060,7 @@ A("The Orb of Detection",	CRYSTAL_BALL,
 	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
 	INVIS,		A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 2500L ),
 */
+
 A("Itlachiayaque", ROUNDSHIELD,							OBSIDIAN_MT,0,/*From archeologist patch*/
 	(SPFX_REFLECT|SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_DEFN), (SPFX_ESP|SPFX_HSPDAM),
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,

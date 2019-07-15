@@ -757,11 +757,11 @@ MONSTER:''',"iron golem",(03,18),asleep,hostile
 MONSTER:''',"iron golem",(08,18),asleep,hostile
 # Musicians (should only be present on Sundays)
 MONSTER:'Y',"monkey",(14,02)
-OBJECT:'(',"wooden harp",(14,02)
+OBJECT:'(',"harp",(14,02)
 MONSTER:'Y',"monkey",(24,03)
 OBJECT:'(',"bugle",(24,03)
 MONSTER:'Y',"monkey",(18,06)
-OBJECT:'(',"leather drum",(18,06)
+OBJECT:'(',"drum",(18,06)
 MONSTER:'Y',"monkey",(28,04)
 OBJECT:'(',"tooled horn",(28,04)
 # Loot

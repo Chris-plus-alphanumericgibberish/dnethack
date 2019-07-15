@@ -12,107 +12,122 @@ MAZE: "Arc-strt",' '
 FLAGS: noteleport,hardfloor
 GEOMETRY:center,center
 MAP
-0............................................................................
-1............................................................................
-2............................................................................
-3............................................................................
-4....................}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.................
-5....................}-------------------------------------}.................
-6....................}|..S......+.................+.......|}.................
-7....................}-S---------------+----------|.......|}.................
-8....................}|.|...............|.......+.|.......|}.................
-9....................}|.|...............---------.---------}.................
-0....................}|.S.\.............+.................+..................
-1....................}|.|...............---------.---------}.................
-2....................}|.|...............|.......+.|.......|}.................
-3....................}-S---------------+----------|.......|}.................
-4....................}|..S......+.................+.......|}.................
-5....................}-------------------------------------}.................
-6....................}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}.................
-7............................................................................
-8............................................................................
-9............................................................................
+0,,,,,--------,,,,,,,-----....|..|,,,,,,,,..,,,T,,,,}|,,,,,,,,,,-------------
+1,T,,,|..|...|,,,,,,,|........+..S,,,T,,,,,.,,,,,,,}--,T,,,,,,,,|.....+......
+2,,,---S-|...|,,,,,,,--+--------------,,,......,,,,}|,,,,,,,T,,,|.....|......
+3,,,|....|...|,,,,,,,.....................,---..,,,}|,,,,,,,,|,,|...-+----+--
+4.,,|....|...+.,,,....,,,,,,,--------,,.,,,,,,,.,,}},,,,,,}..|,,|...|...|,...
+5..,----+-+---.....,,,,,,,,,,|......|,..,,,,,,,..,},}},,}}}}.,,,-----...|,,,.
+6,.............,,,..,,,,T,,,,|......|,.,----,,,,.....,}}}}}..,,,,,,|....|,T,.
+7,,,,..,-------,,,,.,,,,,,,,,|......|,T,|..|,,,,,,},..,,,}..,,,,,,,---+--,,,.
+8,,,..,,,,,T,,,,,,,..,,,--------++--|,,,|.\|,,,,,,},,.,,...,,,,,T,,,,..,,,,..
+9,,T.,,,,,,,,,,,,,,,.,,,|....+......-----..|,T,,,,},,..,.,,,,,------,.,,,,..,
+0,,,.,,T,,,,,,,,,,,,....|....|......S...+..|,,,,,,},,,....,----....|........,
+1,,,.,,,,,,,,,T,,,,,....|....------+--------,,,,,},,,,,,,..|..|...K|.,,,,,,.,
+2,,...,,,,,,,,,,,,,,....+......|,,,.,,,,,,,,,,,,,},,,,,....+..|...--.--,,,,..
+3,......................+......|,,,...,,,,,|,,,,,,},,...,..|..S..--...--T,,,,
+4........,,,,,,,..,,,,,.--------,,,,,......|,,,T,.....,,,,,-------.....--,,,,
+5-.........,,----+--,T...,,,,,,,,----+-----|,,,,.....,,,,,,,,,,,|.......|----
+6--...--,,...|.|...|,..,.,,,,,T,,|....+....|,,,..,},..,T,,,,............+....
+7,-----,,---+-.|...|,.,,..,,------S---|....|,,..,}},,........,,,|.......|FFFF
+8,,,,,,,,|.....|...--+--,...+.........------,T.,}}}},,,.,,,,,,,,--.....--,,,,
+9,,T,,,,,|.....|.......|,.,,|...........|,,,,..}}}}}}}}..,,,,,,,T--...--T,,,,
 ENDMAP
+
+RANDOM_PLACES:(67,16),(03,14)
+# Fountain, either bottom left corner or in the center of the room on the right
+FOUNTAIN:(67,16)
+
+
+GEOMETRY:center,center
+MAP
+0,,,,,--------,,,,,,,-----....|..|,,,,,,,,..,,,T,,,,}|,,,,,,,,,,-------------
+1,T,,,|..|...|,,,,,,,|........+..S,,,T,,,,,.,,,,,,,}--,T,,,,,,,,|.....+......
+2,,,---S-|...|,,,,,,,--+--------------,,,......,,,,}|,,,,,,,T,,,|.....|......
+3,,,|....|...|,,,,,,,.....................,---..,,,}|,,,,,,,,|,,|...-+----+--
+4.,,|....|...+.,,,....,,,,,,,--------,,.,,,,,,,.,,}},,,,,,}..|,,|...|...|,...
+5..,----+-+---.....,,,,,,,,,,|......|,..,,,,,,,..,},}},,}}}}.,,,-----...|,,,.
+6,.............,,,..,,,,T,,,,|......|,.,----,,,,.....,}}}}}..,,,,,,|....|,T,.
+7,,,,..,-------,,,,.,,,,,,,,,|......|,T,|..|,,,,,,},..,,,}..,,,,,,,---+--,,,.
+8,,,..,,,,,T,,,,,,,..,,,--------++--|,,,|.\|,,,,,,},,.,,...,,,,,T,,,,..,,,,..
+9,,T.,,,,,,,,,,,,,,,.,,,|....+......-----..|,T,,,,},,..,.,,,,,------,.,,,,..,
+0,,,.,,T,,,,,,,,,,,,....|....|......S...+..|,,,,,,},,,....,----....|........,
+1,,,.,,,,,,,,,T,,,,,....|....------+--------,,,,,},,,,,,,..|..|...K|.,,,,,,.,
+2,,...,,,,,,,,,,,,,,....+......|,,,.,,,,,,,,,,,,,},,,,,....+..|...--.--,,,,..
+3,......................+......|,,,...,,,,,|,,,,,,},,...,..|..S..--...--T,,,,
+4........,,,,,,,..,,,,,.--------,,,,,......|,,,T,.....,,,,,-------.....--,,,,
+5-.........,,----+--,T...,,,,,,,,----+-----|,,,,.....,,,,,,,,,,,|.......|----
+6--...--,,...|.|...|,..,.,,,,,T,,|....+....|,,,..,},..,T,,,,............+....
+7,-----,,---+-.|...|,.,,..,,------S---|....|,,..,}},,........,,,|.......|FFFF
+8,,,,,,,,|.....|...--+--,...+.........------,T.,}}}},,,.,,,,,,,,--.....--,,,,
+9,,T,,,,,|.....|.......|,.,,|...........|,,,,..}}}}}}}}..,,,,,,,T--...--T,,,,
+ENDMAP
+
+RANDOM_PLACES:(31,00),(73,01),(41,17),(11,19),(10,02),(33,19)
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
-REGION: (22,06,23,06),unlit,"ordinary"
-REGION: (25,06,30,06),unlit,"ordinary"
-REGION: (32,06,48,06),unlit,"ordinary"
-REGION: (50,06,56,08),lit,"ordinary"
-REGION: (40,08,46,08),unlit,"ordinary"
-REGION: (22,08,22,12),unlit,"ordinary"
-REGION: (24,08,38,12),lit,"ordinary"
-REGION: (48,08,48,08),lit,"ordinary"
-REGION: (40,10,56,10),lit,"ordinary"
-REGION: (48,12,48,12),lit,"ordinary"
-REGION: (40,12,46,12),unlit,"ordinary"
-REGION: (50,12,56,14),lit,"ordinary"
-REGION: (22,14,23,14),unlit,"ordinary"
-REGION: (25,14,30,14),unlit,"ordinary"
-REGION: (32,14,48,14),unlit,"ordinary"
-# Stairs
-STAIR:(55,07),down
-# Portal arrival point
-BRANCH:(63,06,63,06),(0,0,0,0)
-# Doors
-DOOR:closed,(22,07)
-DOOR:closed,(38,07)
-DOOR:locked,(47,08)
-DOOR:locked,(23,10)
-DOOR:locked,(39,10)
-DOOR:locked,(57,10)
-DOOR:locked,(47,12)
-DOOR:closed,(22,13)
-DOOR:closed,(38,13)
-DOOR:locked,(24,14)
-DOOR:closed,(31,14)
-DOOR:locked,(49,14)
-# Lord Carnarvon
-MONSTER:'@',"Lord Carnarvon",(25,10)
-# The treasure of Lord Carnarvon
-CONTAINER:'(',"chest",(25,10)
-OBJECT:'?',"resistance",contained
-OBJECT:'?',"resistance",contained
-OBJECT:'?',"resistance",contained
-# student guards for the audience chamber
-MONSTER:'@',"student",(26,09)
-MONSTER:'@',"student",(27,09)
-MONSTER:'@',"student",(28,09)
-MONSTER:'@',"student",(26,10)
-MONSTER:'@',"student",(28,10)
-MONSTER:'@',"student",(26,11)
-MONSTER:'@',"student",(27,11)
-MONSTER:'@',"student",(28,11)
-# city watch guards in the antechambers
-MONSTER:'@',"watchman",(50,06)
-MONSTER:'@',"watchman",(50,14)
-# Eels in the moat
-MONSTER:';',"giant eel",(20,10)
-MONSTER:';',"giant eel",(45,04)
-MONSTER:';',"giant eel",(33,16)
+REGION:(72,18,75,19),unlit,"morgue",unfilled
 # Non diggable walls
 NON_DIGGABLE:(00,00,75,19)
-# Random traps
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-# Monsters on siege duty.
-MONSTER: 'S',random,(60,09)
-MONSTER: 'M',random,(60,10)
-MONSTER: 'S',random,(60,11)
-MONSTER: 'S',random,(60,12)
-MONSTER: 'M',random,(60,13)
-MONSTER: 'S',random,(61,10)
-MONSTER: 'S',random,(61,11)
-MONSTER: 'S',random,(61,12)
-MONSTER: 'S',random,(30,03)
-MONSTER: 'M',random,(20,17)
-MONSTER: 'S',random,(67,02)
-MONSTER: 'S',random,(10,19)
-
+# Stairs
+STAIR:(75,05),down
+# Portal arrival point
+BRANCH:(6,15,6,15),(0,0,0,0)
+# Doors
+DOOR:closed,(29,1)
+DOOR:locked,(69,1)
+DOOR:closed,(22,2)
+DOOR:locked,(68,3)
+DOOR:closed,(73,3)
+DOOR:closed,(12,4)
+DOOR:closed,(7,5)
+DOOR:locked,(9,5)
+DOOR:locked,(69,7)
+DOOR:closed,(31,8)
+DOOR:closed,(32,8)
+DOOR:closed,(28,9)
+DOOR:closed,(39,10)
+DOOR:closed,(34,11)
+DOOR:closed,(23,12)
+DOOR:closed,(58,12)
+DOOR:closed,(23,13)
+DOOR:closed,(16,15)
+DOOR:closed,(36,15)
+DOOR:locked,(37,16)
+DOOR:locked,(71,16)
+DOOR:closed,(11,17)
+DOOR:locked,(20,18)
+DOOR:locked,(27,18)
+# Lord Carnarvon
+MONSTER:'@',"Lord Carnarvon",(31,06)
+# student guards scattered around the place
+MONSTER:'@',"student",(06,04)
+MONSTER:'@',"student",(24,03)
+MONSTER:'@',"student",(25,10)
+MONSTER:'@',"student",(32,10)
+MONSTER:'@',"student",(16,18)
+MONSTER:'@',"student",(69,05)
+MONSTER:'@',"student",(59,11)
+MONSTER:'@',"student",(66,15)
+# Throne in the back since it's a priceless relic, along with some ancient scrolls
+CONTAINER:'(',"chest",(41,9)
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+OBJECT:'?',"resistance",contained
+# 3 random spellbooks in some of the empty rooms
+OBJECT:'+',random,place[0]
+OBJECT:'+',random,place[1]
+OBJECT:'+',random,place[2]
+# Some acid next to the sink
+OBJECT:'!',"acid",(64,10)
+# Some armor in the top left hidden room
+OBJECT:'[',random,(06,01)
+OBJECT:'[',random,(07,01)
+# Some mimics
+MONSTER:'m',"large mimic",(64,01)
+MONSTER:'m',"large mimic",(67,01)
+MONSTER:'m',"large mimic",(65,02)
+MONSTER:'m',"large mimic",(64,04)
 #
 #	The "locate" level for the quest.
 #
@@ -121,144 +136,251 @@ MONSTER: 'S',random,(10,19)
 #
 
 MAZE: "Arc-loca",' '
-FLAGS: hardfloor
+FLAGS: nommap
+
 GEOMETRY:center,center
 MAP
-............................................................................
-............................................................................
-............................................................................
-........................-------------------------------.....................
-........................|....|.S......................|.....................
-........................|....|.|.|+------------------.|.....................
-........................|....|.|.|.|.........|......|.|.....................
-........................|....|.|.|.|.........|......|.|.....................
-........................|---+-.|.|.|..---....+......|.|.....................
-........................|....|.|.|.---|.|....|......|.|.....................
-........................|....S.|.|.+..S.|--S-----S--|.|.....................
-........................|....|.|.|.---|.|....|......+.|.....................
-........................|---+-.|.|.|..---....|.------.|.....................
-........................|....|.|.|.|.........|.|....+.|.....................
-........................|....|.|.|.|.........|+|....|-|.....................
-........................|....|.|.|------------+------.S.....................
-........................|....|.S......................|.....................
-........................-------------------------------.....................
-............................................................................
-............................................................................
+0,TT,,,,T,,T,,,T,,,T,,,,T,,,,TTT,,,,..|.--T.....--. -------------------------
+1,TT,,TT,,T,,TT,TT,T,T,T,T,,T,,,TT-.....|....--....HS.|.....|.........|.|.|.|
+2,T,,T,,T,T,,,T,,T,T,,TTTTT,TT,TT,..T......|....-.. |.S.|...S..--S--..|.....|
+3TTTT,,,TTT,T,T,,,,T,,,T,,T,TT,TT,,...|..----T..    ---.|...|.--...--S|.....|
+4,T,,,,T,,,,TTT,,,,,T,,,,,T,,,,,,,|...|......  ------.---S--|.|.....|.S.....|
+5,T,T,T,T,,T,T,,TT,TTT,T,T,,TTT,TT,-------  H  |..S.....|...|.|.....S.|.|.|.|
+6,T,,TT,TT,,,T,,T,,,,,T,,TT,,T,,T,......|.  ##HS..---...|--S-S--...--.---S-S|
+7,,,TT,,T,,T,,T,T,,TT,,TT,,,,T,TT,.........    ----.|...|......-S-S-......S.|
+8,,,,,TT,,TT,,T,,,,,T,,,,,TT,,,,........|.......S#S.|...|......|.|.|S-...--S|
+9,T,,T,T,,,T,,,,T,TT,,TT,TTT,T,,T,......|.....    -----S-......|.|...S...S..|
+0,T,,TT,,,TTT,,,,TTTT,,,,T,TT,T,T,......   ....----..|..S.--S---.-------S-..|
+1,,,,,,T,,TT,,,T,T,,T,,TT,T,T,,,,T-----  .  .. |.....|S-----..|..S.....|.|..|
+2,T,TT,TT,,,TT,,TT,TT,,TT,,,TT,,,T...... .   .HS.....|..|..--S--------S-S-S-|
+3TT,,,,,TT,TTT,T,,,,T,TT,,TT,,,,T..---...   |  |.....S..|.....S..S...|...|# |
+4TT,,,,TT,,,TT,,TT,,TTT,T,,,TTTT,,.|........|..----..|-S|..-----S--.---.--##|
+5,TTT,T,T,T,,,T,,,TT,T,,,TTT,T,T,,....T.|.......  ----..|---......|..|...| #|
+6,T,,,,,,,,TTTTT,,,,,,,T,T,,,T,TT|,..|..|...|....   |...|.|.......S.--...--#|
+7,,TT,TTTTT,T,TT,TTTTT,,,,T,T,,,T...T|..|...|......HS...|.S.......S.|.....S#|
+8,,T,T,,,,,,,,,TT,,TT,TT,,,TTTT,,---....|.....      -----.|.......S.|.....| |
+9,,T,T,,TTT,TT,,T,,TTTT,,,,,T,TT,,...T...T   HH#####S....--......------------
 ENDMAP
-# Dungeon Description
-REGION:(00,00,75,19),lit,"ordinary"
-REGION:(25,04,28,07),lit,"temple"
-REGION:(25,09,28,11),unlit,"temple"
-REGION:(25,13,28,16),lit,"temple"
-REGION:(30,04,30,16),lit,"ordinary"
-REGION:(32,04,32,16),unlit,"ordinary"
-REGION:(33,04,53,04),unlit,"ordinary",unfilled,true
-REGION:(36,10,37,10),unlit,"ordinary"
-REGION:(39,09,39,11),unlit,"ordinary"
-REGION:(36,06,42,08),unlit,"ordinary",unfilled,true
-REGION:(36,12,42,14),unlit,"ordinary",unfilled,true
-REGION:(46,06,51,09),unlit,"ordinary"
-REGION:(46,11,49,11),unlit,"ordinary",unfilled,true
-REGION:(48,13,51,14),unlit,"ordinary"
-# Doors
-DOOR:closed,(31,04)
-DOOR:closed,(28,08)
-DOOR:locked,(29,10)
-DOOR:closed,(28,12)
-DOOR:closed,(31,16)
-DOOR:locked,(34,05)
-DOOR:locked,(35,10)
-DOOR:locked,(38,10)
-DOOR:closed,(43,10)
-DOOR:closed,(45,08)
-DOOR:locked,(46,14)
-DOOR:locked,(46,15)
-DOOR:locked,(49,10)
-DOOR:locked,(52,11)
-DOOR:closed,(52,13)
-DOOR:closed,(54,15)
-# Stairs
-STAIR:(03,17),up
-STAIR:(39,10),down
-# Altars - three types.  All are unattended.
-ALTAR:(26,05),align[0],altar
-ALTAR:(26,10),align[1],altar
-ALTAR:(26,15),align[2],altar
+
+RANDOM_PLACES:(40,11),(67,01),(61,17),(56,01),(73,10),(59,08)
+
+#OBJECT[10%]:')',"club",place[0],uncursed,0,"The Limb of the Black Tree"
+#OBJECT[10%]:')',"boomerang",place[1],uncursed,0,"Windrider"
+#OBJECT[10%]:'[',"orcish shield",place[2],uncursed,0,"The Shield of the All-Seeing"
+#OBJECT[10%]:'[',"elven shield",place[3],uncursed,0,"The Shield of Yggdrasil"
+#OBJECT[10%]:')',"sickle",place[4],uncursed,0,"Gaia's Fate"
+OBJECT:'$',random,place[5]
+
+GEOMETRY:center,center
+MAP
+0,TT,,,,T,,T,,,T,,,T,,,,T,,,,TTT,,,,..|.--T.....--. -------------------------
+1,TT,,TT,,T,,TT,TT,T,T,T,T,,T,,,TT-.....|....--....HS.|.....|.........|.|.|.|
+2,T,,T,,T,T,,,T,,T,T,,TTTTT,TT,TT,..T......|....-.. |.S.|...S..--S--..|.....|
+3TTTT,,,TTT,T,T,,,,T,,,T,,T,TT,TT,,...|..----T..    ---.|...|.--...--S|.....|
+4,T,,,,T,,,,TTT,,,,,T,,,,,T,,,,,,,|...|......  ------.---S--|.|.....|.S.....|
+5,T,T,T,T,,T,T,,TT,TTT,T,T,,TTT,TT,-------  H  |..S.....|...|.|.....S.|.|.|.|
+6,T,,TT,TT,,,T,,T,,,,,T,,TT,,T,,T,......|.  ##HS..---...|--S-S--...--.---S-S|
+7,,,TT,,T,,T,,T,T,,TT,,TT,,,,T,TT,.........    ----.|...|......-S-S-......S.|
+8,,,,,TT,,TT,,T,,,,,T,,,,,TT,,,,........|.......S#S.|...|......|.|.|S-...--S|
+9,T,,T,T,,,T,,,,T,TT,,TT,TTT,T,,T,......|.....    -----S-......|.|...S...S..|
+0,T,,TT,,,TTT,,,,TTTT,,,,T,TT,T,T,......   ....----..|..S.--S---.-------S-..|
+1,,,,,,T,,TT,,,T,T,,T,,TT,T,T,,,,T-----  .  .. |.....|S-----..|..S.....|.|..|
+2,T,TT,TT,,,TT,,TT,TT,,TT,,,TT,,,T...... .   .HS.....|..|..--S--------S-S-S-|
+3TT,,,,,TT,TTT,T,,,,T,TT,,TT,,,,T..---...   |  |.....S..|.....S..S...|...|# |
+4TT,,,,TT,,,TT,,TT,,TTT,T,,,TTTT,,.|........|..----..|-S|..-----S--.---.--##|
+5,TTT,T,T,T,,,T,,,TT,T,,,TTT,T,T,,....T.|.......  ----..|---......|..|...| #|
+6,T,,,,,,,,TTTTT,,,,,,,T,T,,,T,TT|,..|..|...|....   |...|.|.......S.--...--#|
+7,,TT,TTTTT,T,TT,TTTTT,,,,T,T,,,T...T|..|...|......HS...|.S.......S.|.....S#|
+8,,T,T,,,,,,,,,TT,,TT,TT,,,TTTT,,---....|.....      -----.|.......S.|.....| |
+9,,T,T,,TTT,TT,,T,,TTTT,,,,,T,TT,,...T...T   HH#####S....--......------------
+ENDMAP
+RANDOM_PLACES:(72,02),(63,05),(51,12),(67,13),(70,17)
 # Non diggable walls
 NON_DIGGABLE:(00,00,75,19)
-# Objects
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-OBJECT:random,random,random
-# Treasure?
-ENGRAVING:random,engrave,"X marks the spot."
-ENGRAVING:random,engrave,"X marks the spot."
-ENGRAVING:random,engrave,"X marks the spot."
-ENGRAVING:random,engrave,"X marks the spot."
-# Random traps
-TRAP:"spiked pit",(24,02)
-TRAP:"spiked pit",(37,00)
-TRAP:"spiked pit",(23,05)
-TRAP:"spiked pit",(26,19)
-TRAP:"spiked pit",(55,10)
-TRAP:"spiked pit",(55,08)
-TRAP:"pit",(51,01)
-TRAP:"pit",(23,18)
-TRAP:"pit",(31,18)
-TRAP:"pit",(48,19)
-TRAP:"pit",(55,15)
-TRAP:"magic",(60,04)
-TRAP:"statue",(72,07)
-TRAP:"statue",random
-TRAP:"statue",random
-TRAP:"anti magic",(64,12)
-TRAP:"sleep gas",random
-TRAP:"sleep gas",random
-TRAP:"dart",random
-TRAP:"dart",random
-TRAP:"dart",random
-TRAP:"rolling boulder",(32,10)
-TRAP:"rolling boulder",(40,16)
-# Random monsters.
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'S',random,random
-MONSTER:'M',random,random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',random,random
+# The whole level is dark - you start with an oil lamp for a reason!
+REGION:(00,00,75,19),unlit,"ordinary"
+
+# Stair is relatively unobstructed
+STAIR:(00,10),up
+# Three altars are randomly split across 5 places
+ALTAR:place[0],align[0],altar
+ALTAR:place[1],align[1],altar
+ALTAR:place[2],align[2],altar
+# A stair and a mummy trap in the others
+STAIR:place[3],down
+TRAP:"mummy trap",place[4]
+OBJECT:'(',random,place[4]
+OBJECT[50%]:'[',random,place[4]
+OBJECT[10%]:')',random,place[4]
+OBJECT[10%]:'?',random,place[4]
+
+# The room in the center gets plenty of traps
+TRAP[50%]:random,(56,07)
+TRAP[50%]:random,(57,07)
+TRAP[50%]:random,(58,07)
+TRAP[50%]:random,(59,07)
+TRAP[50%]:random,(60,07)
+TRAP[50%]:random,(61,07)
+TRAP[50%]:random,(56,08)
+TRAP[50%]:random,(57,08)
+TRAP[50%]:random,(58,08)
+TRAP[50%]:random,(59,08)
+TRAP[50%]:random,(60,08)
+TRAP[50%]:random,(61,08)
+TRAP[50%]:random,(56,09)
+TRAP[50%]:random,(57,09)
+TRAP[50%]:random,(58,09)
+TRAP[50%]:random,(59,09)
+TRAP[50%]:random,(60,09)
+TRAP[50%]:random,(61,09)
+
+# Some nice items on top of some mummy traps - bait!
+TRAP:"mummy trap",(56,13)
+OBJECT:'(',random,(56,13)
+OBJECT[50%]:'[',random,(56,13)
+OBJECT[10%]:')',random,(56,13)
+OBJECT[10%]:'?',random,(56,13)
+
+TRAP:"mummy trap",(70,8)
+OBJECT:'(',random,(70,08)
+OBJECT[50%]:'[',random,(70,08)
+OBJECT[10%]:')',random,(70,08)
+OBJECT[10%]:'?',random,(70,08)
+
+TRAP:"mummy trap",(53,16)
+OBJECT:'(',random,(53,16)
+OBJECT[50%]:'[',random,(53,16)
+OBJECT[10%]:')',random,(53,16)
+OBJECT[10%]:'?',random,(53,16)
+
+# Some other random traps
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+
+# Scattered stone and clay golem statues around the place
+OBJECT:'`',"statue",(36,00),"clay golem",0
+OBJECT:'`',"statue",(58,01),"clay golem",0
+OBJECT:'`',"statue",(58,03),"clay golem",0
+OBJECT:'`',"statue",(38,04),"clay golem",0
+OBJECT:'`',"statue",(40,8),"clay golem",0
+OBJECT:'`',"statue",(42,10),"clay golem",0
+OBJECT:'`',"statue",(35,16),"clay golem",0
+OBJECT:'`',"statue",(63,03),"stone golem",0
+OBJECT:'`',"statue",(64,03),"stone golem",0
+OBJECT:'`',"statue",(65,03),"stone golem",0
+OBJECT:'`',"statue",(63,06),"stone golem",0
+OBJECT:'`',"statue",(64,06),"stone golem",0
+OBJECT:'`',"statue",(65,06),"stone golem",0
+OBJECT:'`',"statue",(33,07),"stone golem",0
+OBJECT:'`',"statue",(35,07),"stone golem",0
+OBJECT:'`',"statue",(37,07),"stone golem",0
+OBJECT:'`',"statue",(33,09),"stone golem",0
+OBJECT:'`',"statue",(35,09),"stone golem",0
+OBJECT:'`',"statue",(37,09),"stone golem",0
+OBJECT:'`',"statue",(50,10),"stone golem",0
+OBJECT:'`',"statue",(48,11),"stone golem",0
+OBJECT:'`',"statue",(48,13),"stone golem",0
+OBJECT:'`',"statue",(50,14),"stone golem",0
+OBJECT:'`',"statue",(41,15),"stone golem",0
+OBJECT:'`',"statue",(41,17),"stone golem",0
+
+# Boulders
+# 9 in a center room
+OBJECT:'`',"boulder",(52,6)
+OBJECT:'`',"boulder",(53,6)
+OBJECT:'`',"boulder",(54,6)
+OBJECT:'`',"boulder",(52,7)
+OBJECT:'`',"boulder",(53,7)
+OBJECT:'`',"boulder",(54,7)
+OBJECT:'`',"boulder",(52,8)
+OBJECT:'`',"boulder",(53,8)
+OBJECT:'`',"boulder",(54,8)
+
+# Another 3 in a line
+OBJECT:'`',"boulder",(67,7)
+OBJECT:'`',"boulder",(68,7)
+OBJECT:'`',"boulder",(69,7)
+
+# 6 more in 2 lines along the bottom
+OBJECT:'`',"boulder",(60,15)
+OBJECT:'`',"boulder",(62,15)
+OBJECT:'`',"boulder",(64,15)
+
+OBJECT:'`',"boulder",(58,19)
+OBJECT:'`',"boulder",(60,19)
+OBJECT:'`',"boulder",(62,19)
+
+# A bunch of sleeping human mummies scattered around
+MONSTER:'M',"human mummy",(70,1),asleep
+MONSTER:'M',"human mummy",(74,1),asleep
+MONSTER:'M',"human mummy",(54,3),asleep
+MONSTER:'M',"human mummy",(70,3),asleep
+MONSTER:'M',"human mummy",(74,3),asleep
+MONSTER:'M',"human mummy",(52,4),asleep
+MONSTER:'M',"human mummy",(66,4),asleep
+MONSTER:'M',"human mummy",(62,5),asleep
+MONSTER:'M',"human mummy",(70,5),asleep
+MONSTER:'M',"human mummy",(74,5),asleep
+MONSTER:'M',"human mummy",(65,8),asleep
+MONSTER:'M',"human mummy",(74,9),asleep
+MONSTER:'M',"human mummy",(51,10),asleep
+MONSTER:'M',"human mummy",(74,10),asleep
+MONSTER:'M',"human mummy",(68,18),asleep
+MONSTER:'M',"human mummy",(70,18),asleep
+MONSTER:'M',"human mummy",(72,18),asleep
+MONSTER:'M',"human mummy",(56,16),asleep
+MONSTER:'M',"human mummy",(67,15),asleep
+MONSTER:'M',"human mummy",(71,11),asleep
+MONSTER:'M',"human mummy",(74,11),asleep
+MONSTER:'M',"human mummy",(51,14),asleep
+
+# Some serpents to slither around
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER[50%]:'S',"pit viper",random
+MONSTER[50%]:'S',"pit viper",random
+
+# And some spiders to sneak around
+MONSTER:'s',"cave spider", random
+MONSTER:'s',"cave spider", random
+MONSTER:'s',"cave spider", random
+MONSTER:'s',"cave spider", random
+MONSTER:'s',"giant spider", random
+
+# Some nice loot tucked away
+CONTAINER:'(',"chest",(74,7)
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+
+CONTAINER:'(',"chest",(62,11)
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+
+CONTAINER:'(',"chest",(69,15)
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+
+CONTAINER:'(',"chest",(71,15)
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+OBJECT:random,random,contained
+
 
 #
 #	The "goal" level for the quest.
@@ -327,7 +449,7 @@ ALTAR:place[0],chaos,altar
 # Magic chest in another alcove
 OBJECT:'(',"magic chest",place[1]
 # Objects
-OBJECT:'[',"roundshield",place[0],uncursed,1,"Itlachiayaque"
+OBJECT:'[',"roundshield",place[0],uncursed,0,"Itlachiayaque"
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
@@ -392,78 +514,131 @@ MONSTER:'M',random,random
 #	and goal levels.
 #
 
-LEVEL: "Arc-fila"
-#
-ROOM: "ordinary" , random, random, random, random
-STAIR: random, up
-OBJECT: random,random,random
-MONSTER: 'S', random, random
+MAZE: "Arc-fila",' '
+FLAGS: shortsighted,hardfloor
 
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-OBJECT: random,random,random
-MONSTER: 'S', random, random
+GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1----------------------------------------------------------------------------
+2                                                                            
+3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+1 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+8                                                                            
+9----------------------------------------------------------------------------
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+REGION:(00,00,75,19),lit,"ordinary"
+# Stairs
+STAIR:(00,00,20,18),(0,0,0,0), up
+STAIR:(54,00,74,18),(0,0,0,0), down
 
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-OBJECT: random,random,random
-MONSTER: 'S', random, random
+MAZEWALK:(04,10),east
 
-ROOM: "ordinary" , random, random, random, random
-STAIR: random, down
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"pit viper",random
+MONSTER:'S',"pit viper",random
+
+MONSTER:'@',"aztec warrior",random
+MONSTER:'@',"aztec warrior",random
+MONSTER:'@',"aztec warrior",random
+MONSTER:'@',"aztec spearthrower",random
+MONSTER:'@',"aztec spearthrower",random
+MONSTER:'@',"aztec priest",random
+
+MONSTER[50%]:'f',"jaguar",random
+MONSTER[50%]:'f',"tiger",random
+MONSTER[50%]:'f',"panther",random
+
+MONSTER:'s',"cave spider",random
+MONSTER:'s',"giant spider",random
+MONSTER:'s',"scorpion",random
+
+MONSTER:'B',"parrot",random
+MONSTER:'B',"parrot",random
+
+MAZE: "Arc-filb",' '
+FLAGS: shortsighted,hardfloor
+
+GEOMETRY: center, center
+#0          1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                                                                            
+1----------------------------------------------------------------------------
+2                                                                            
+3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+1 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
+7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
+8                                                                            
+9----------------------------------------------------------------------------
+0----------------------------------------------------------------------------
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1         2   	  3	      4	    5		  6	      7
+REGION:(00,00,75,19),unlit,"ordinary"
+# Stairs
+STAIR:(00,00,20,18),(0,0,0,0), up
+STAIR:(54,00,74,18),(0,0,0,0), down
+
+MAZEWALK:(04,10),east
+
+MONSTER:'M',"human mummy",random
+MONSTER:'M',"human mummy",random
+MONSTER:'M',"human mummy",random
+MONSTER:'M',"human mummy",random
 MONSTER: 'M', "human mummy", random
 
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"snake",random
+MONSTER:'S',"pit viper",random
+MONSTER:'S',"pit viper",random
 
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
+MONSTER[50%]:'f',"jaguar",random
+MONSTER[50%]:'f',"tiger",random
+MONSTER[50%]:'f',"panther",random
 
-RANDOM_CORRIDORS
+MONSTER:'s',"cave spider",random
+MONSTER:'s',"cave spider",random
+MONSTER:'s',"giant spider",random
+MONSTER:'s',"giant spider",random
+MONSTER:'s',"scorpion",random
 
-LEVEL: "Arc-filb"
-#
-ROOM: "ordinary" , random, random, random, random
-STAIR: random, up
-OBJECT: random,random,random
-MONSTER: 'M', random, random
-
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-OBJECT: random,random,random
-MONSTER: 'M', random, random
-
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-OBJECT: random,random,random
-MONSTER: 'M', random, random
-
-ROOM: "ordinary" , random, random, random, random
-STAIR: random, down
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
-MONSTER: 'M', "human mummy", random
-
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
-
-ROOM: "ordinary" , random, random, random, random
-OBJECT: random, random, random
-TRAP: random, random
-MONSTER: 'S', random, random
-
-RANDOM_CORRIDORS
+MONSTER:'B',"bat",random
+MONSTER:'B',"giant bat",random
+MONSTER:'B',"battle-bat",random
+MONSTER:'B',"warbat",random
+MONSTER:'B',"warbat",random
+MONSTER:'B',"vampire bat",random

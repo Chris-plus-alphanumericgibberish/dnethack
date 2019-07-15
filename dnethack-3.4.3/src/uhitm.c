@@ -1784,7 +1784,7 @@ int thrown;
 				if (jousting) valid_weapon_attack = TRUE;
 		    }
 #endif
-		    if (thrown && (is_ammo(obj) || is_missile(obj))) {
+		    if (thrown && (is_ammo(obj) || is_spear(obj) || is_missile(obj))) {
 //			if (obj->oartifact == ART_HOUCHOU) {
 //			    pline("There is a bright flash as it hits %s.",
 //				the(mon_nam(mon)));
@@ -2231,7 +2231,7 @@ defaultvalue:
 			|| (wep && wep->oartifact == ART_TENTACLE_ROD)
 		){
 			if((objects[wep->otyp].oc_skill == P_CROSSBOW ||
-				wep->otyp == SNIPER_RIFLE
+				wep->otyp == SNIPER_RIFLE || wep->otyp == ATLATL
 			  ) && !(noncorporeal(mdat) || amorphous(mdat) || ((stationary(mdat) || sessile(mdat)) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT)))
 			){
 				int dambonus = weapon_dam_bonus(wep);

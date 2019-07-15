@@ -70,8 +70,7 @@ struct monst *victim;
 	case 0:
 	    item = (victim == &youmonst) ? uarmh : which_armor(victim, W_ARMH);
 	    if (item) {
-		mat_idx = item->obj_material;
-	    	Sprintf(buf,"%s helmet", materialnm[mat_idx] );
+	    	Sprintf(buf,"%s helmet", material_name(item, FALSE));
 	    }
 	    if (!burn_dmg(item, item ? buf : "helmet")) continue;
 	    break;
@@ -817,6 +816,24 @@ unsigned trflags;
 		}
 		break;
 
+		case MUMMY_TRAP:	    /* step onto the mummy trap */
+			seetrap(trap);
+			register int cnt = rnd(3)+2;
+			pline("Mummies suddenly appear around you!");
+			if (!Free_action) {                        
+				pline("You freeze for a moment, terrified!");
+				nomul(-rnd(2), "frozen by a trap");
+				exercise(A_DEX, FALSE);
+				nomovemsg = You_can_move_again;
+			} else You("are mildly startled.");
+			
+			while(cnt--)
+				(void) makemon(mkclass(S_MUMMY, G_NOHELL), u.ux, u.uy, NO_MM_FLAGS);
+
+			deltrap(trap);
+			
+		break;
+		
 	    case VIVI_TRAP:
 			if(trap->tseen){
 				You("shove through the delicate equipment, ruining it!");
@@ -2415,6 +2432,9 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			}
 		    }
 		    break;
+		case MUMMY_TRAP:
+		// monsters can't activate these bad boys
+		break;
 
 		default:
 			impossible("Some monster encountered a strange trap of type %d.", tt);
@@ -3019,7 +3039,7 @@ struct monst *owner;
 			&& (!uarmc->cursed || rn2(3))
 		   ) || (
 			ublindf
-			&& ublindf->otyp == R_LYEHIAN_FACEPLATE
+			&& (ublindf->otyp == R_LYEHIAN_FACEPLATE || ublindf->oartifact == ART_MASK_OF_TLALOC)
 			&& (!ublindf->cursed || rn2(3))
 		   ) || (
 			uarm
@@ -3161,14 +3181,14 @@ struct monst *owner;
 				// obj->otyp = OIL_LAMP;
 				// break;
 			    // case MAGIC_WHISTLE:
-				// obj->otyp = TIN_WHISTLE;
+				// obj->otyp = WHISTLE;
 				// break;	
 			    // case MAGIC_FLUTE:
-				// obj->otyp = WOODEN_FLUTE;
+				// obj->otyp = FLUTE;
 				// obj->spe  = 0;
 				// break;	
 			    // case MAGIC_HARP:
-				// obj->otyp = WOODEN_HARP;
+				// obj->otyp = HARP;
 				// obj->spe  = 0;
 				// break;
 			    // case FIRE_HORN:
@@ -3178,7 +3198,7 @@ struct monst *owner;
 				// obj->spe  = 0;
 				// break;
 			    // case DRUM_OF_EARTHQUAKE:
-				// obj->otyp = LEATHER_DRUM;
+				// obj->otyp = DRUM;
 				// obj->spe  = 0;
 				// break;
 			    // }
@@ -4604,6 +4624,7 @@ register struct trap *ttmp;
 		     (ttmp->ttyp == PIT) ||
 		     (ttmp->ttyp == SPIKED_PIT) ||
 		     (ttmp->ttyp == VIVI_TRAP) ||
+		     (ttmp->ttyp == MUMMY_TRAP) ||
 		     (ttmp->ttyp == HOLE) ||
 		     (ttmp->ttyp == TRAPDOOR) ||
 		     (ttmp->ttyp == TELEP_TRAP) ||

@@ -525,6 +525,7 @@ const char *name;
 	 * Also trying to create an artifact shouldn't de-artifact
 	 * it (e.g. Excalibur from prayer). In this case the object
 	 * will retain its current name. */
+	
 	if (obj->oartifact || (lth && exist_artifact(obj->otyp, name)))
 		return obj;
 	
@@ -582,6 +583,7 @@ const char *name;
 		obj->owt = weight(obj);
 		
 		if(obj->oartifact == ART_WAR_MASK_OF_DURIN) obj->corpsenm = PM_DWARF;
+		if(obj->oartifact == ART_MASK_OF_TLALOC) obj->corpsenm = PM_GOD;
 		
 		if(obj->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD) obj->owt = 150;
 		

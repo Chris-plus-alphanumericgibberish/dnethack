@@ -489,7 +489,7 @@ E struct c_common_strings {
 #define the_your	   c_common_strings.c_the_your
 
 /* material strings */
-E const char *materialnm[];
+E const struct material materials[];
 
 /* Monster name articles */
 #define ARTICLE_NONE	0
