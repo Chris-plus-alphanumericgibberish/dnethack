@@ -1064,6 +1064,14 @@ struct permonst *ptr;
 	/*	Hooloovoo spawn many dangerous enemies. */
 	if (!strcmp(ptr->mname, "hooloovoo")) n += 10;
 
+/*	Some monsters have nonstandard groups that increase difficulty. */
+	if (!strcmp(ptr->mname, "arcadian avenger")) n += 1;
+	
+	if (!strcmp(ptr->mname, "drow matron")) n += 2;
+	if (!strcmp(ptr->mname, "Elvenking")) n += 2;
+	if (!strcmp(ptr->mname, "Elvenqueen")) n += 2;
+	if (!strcmp(ptr->mname, "chiropteran")) n += 2;
+	
 	/*	Finally, adjust the monster level  0 <= n <= 24 (approx.) */
 	if (n == 0) tmp--;
 	else if (n >= 6) tmp += (n / 2);
