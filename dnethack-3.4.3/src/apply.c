@@ -3652,7 +3652,7 @@ use_pole (obj)
 	    if (mtmp->mhp < oldhp)
 		u.uconduct.weaphit++;
 	} else if(levl[cc.x][cc.y].typ == GRASS){
-		   levl[cc.x][cc.y].typ = ROOM;
+		   levl[cc.x][cc.y].typ = SOIL;
 		   if(!rn2(3)) mksobj_at(SHEAF_OF_HAY,cc.x,cc.y,TRUE,FALSE);
 		   You("cut away the grass!");
 		   newsym(cc.x,cc.y);

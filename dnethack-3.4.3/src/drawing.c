@@ -258,6 +258,8 @@ const struct symdef defsyms[MAXPCHARS] = {
 	{'.', "ice",		C(CLR_CYAN)},	/* ice */
 	{',', "grass",		C(CLR_BRIGHT_GREEN)},	/* lit grass */
 	{',', "grass",		C(CLR_GREEN)},	/* unlit grass */
+	{'.', "soil",		C(CLR_BROWN)},	/* lit soil */
+	{'.', "soil",		C(CLR_BLACK)},	/* unlit soil */
 	{'}', "molten lava",	C(CLR_RED)},	/* lava */
 	{'.', "lowered drawbridge",C(CLR_BROWN)},	/* vodbridge */
 	{'.', "lowered drawbridge",C(CLR_BROWN)},	/* hodbridge */
@@ -378,6 +380,8 @@ static glyph_t ibm_graphics[MAXPCHARS] = {
 	0xfa,	/* S_ice:	meta-z, centered dot */
 	0xfa,	/* S_litgrass:	meta-z, centered dot */
 	0xfa,	/* S_drkgrass:	meta-z, centered dot */
+	0xfa,	/* S_litsoil:	meta-z, centered dot */
+	0xfa,	/* S_drksoil:	meta-z, centered dot */
 	0xf7,	/* S_lava:	meta-w, approx. equals */
 	0xfa,	/* S_vodbridge:	meta-z, centered dot */
 	0xfa,	/* S_hodbridge:	meta-z, centered dot */
@@ -486,6 +490,8 @@ static glyph_t dec_graphics[MAXPCHARS] = {
 	0xfe,	/* S_ice:	meta-~, centered dot */
 	0xfe,	/* S_litgrass:	meta-~, centered dot */
 	0xfe,	/* S_drkgrass:	meta-~, centered dot */
+	0xfe,	/* S_litsoil:	meta-~, centered dot */
+	0xfe,	/* S_drksoil:	meta-~, centered dot */
 	0xe0,	/* S_lava:	meta-\, diamond */
 	0xfe,	/* S_vodbridge:	meta-~, centered dot */
 	0xfe,	/* S_hodbridge:	meta-~, centered dot */
@@ -592,6 +598,8 @@ static glyph_t mac_graphics[MAXPCHARS] = {
 	g_FILLER(S_ice),
 	g_FILLER(S_litgrass),
 	g_FILLER(S_drkgrass),
+	g_FILLER(S_litsoil),
+	g_FILLER(S_drksoil),
 	g_FILLER(S_lava),
 	g_FILLER(S_vodbridge),
 	g_FILLER(S_hodbridge),
@@ -700,6 +708,8 @@ static glyph_t utf8_graphics[MAXPCHARS] = {
 	0x00b7,	/* S_ice:	MIDDLE DOT */
 	0x00b7,	/* S_litgrass:	MIDDLE DOT */
 	0x00b7,	/* S_drkgrass:	MIDDLE DOT */
+	0x00b7,	/* S_litsoil:	MIDDLE DOT */
+	0x00b7,	/* S_drksoil:	MIDDLE DOT */
 	0x224b,	/* S_lava:	TRIPLE TILDE */
 	0x00b7,	/* S_vodbridge:	MIDDLE DOT */
 	0x00b7,	/* S_hodbridge:	MIDDLE DOT */

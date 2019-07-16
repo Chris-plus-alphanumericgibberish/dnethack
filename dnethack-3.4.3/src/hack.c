@@ -2314,6 +2314,7 @@ lookaround()
 	if (IS_ROCK(levl[x][y].typ) 
 		|| (levl[x][y].typ == ROOM) 
 		|| (levl[x][y].typ == GRASS) 
+		|| (levl[x][y].typ == SOIL) 
 		|| IS_AIR(levl[x][y].typ)
 	)
 	    continue;
@@ -2328,6 +2329,7 @@ lookaround()
 bcorr:
 	    if(levl[u.ux][u.uy].typ != ROOM
 		&& levl[u.ux][u.uy].typ != GRASS
+		&& levl[u.ux][u.uy].typ != SOIL
 		) {
 		if(flags.run == 1 || flags.run == 3 || flags.run == 8) {
 		    i = dist2(x,y,u.ux+u.dx,u.uy+u.dy);

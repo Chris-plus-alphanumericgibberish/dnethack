@@ -1317,7 +1317,11 @@ mkkamereltowers()
 		for(j = 0; j < ROWNO; j++){
 			for(i = 0; i < edge; i++){
 				if(isok(x+i,y+j) && 
-					(levl[x+i][y+j].typ == TREE || levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == GRASS || levl[x+i][y+j].typ == PUDDLE)
+					(levl[x+i][y+j].typ == TREE 
+					|| levl[x+i][y+j].typ == ROOM 
+					|| levl[x+i][y+j].typ == GRASS 
+					|| levl[x+i][y+j].typ == SOIL 
+					|| levl[x+i][y+j].typ == PUDDLE)
 				){
 					if(levl[x+i][y+j].typ!=TREE || edge - i > rn2(6)) levl[x+i][y+j].typ = PUDDLE;
 					levl[x+i][y+j].lit = 1;
@@ -1746,7 +1750,10 @@ mkminorspire()
 		for(i=-10;i<=10;i++){
 			for(j=-10;j<=10;j++){
 				if(isok(ix+i,iy+j) && dist2(ix, iy, ix+i, iy+j)<105){
-					if(levl[ix+i][iy+j].typ == ROOM || levl[ix+i][iy+j].typ == GRASS || (dist2(ix, iy, ix+i, iy+j)) < (rnd(8)*rnd(8)+36))
+					if(levl[ix+i][iy+j].typ == ROOM 
+					|| levl[ix+i][iy+j].typ == GRASS 
+					|| levl[ix+i][iy+j].typ == SOIL 
+					|| (dist2(ix, iy, ix+i, iy+j)) < (rnd(8)*rnd(8)+36))
 						levl[ix+i][iy+j].typ = PUDDLE;
 					levl[ix+i][iy+j].lit = 1;
 					if(t_at(x+i, y+j))
@@ -1887,7 +1894,11 @@ mkfishingvillage()
 		for(j = 0; j < ROWNO; j++){
 			for(i = 0; i < edge; i++){
 				if(isok(x+i,y+j) && 
-					(levl[x+i][y+j].typ == TREE || levl[x+i][y+j].typ == ROOM || levl[x+i][y+j].typ == GRASS || levl[x+i][y+j].typ == PUDDLE)
+					(levl[x+i][y+j].typ == TREE 
+					|| levl[x+i][y+j].typ == ROOM 
+					|| levl[x+i][y+j].typ == GRASS 
+					|| levl[x+i][y+j].typ == SOIL 
+					|| levl[x+i][y+j].typ == PUDDLE)
 				){
 					if(i < edge-shelf){
 						levl[x+i][y+j].typ = MOAT;
@@ -1908,6 +1919,7 @@ mkfishingvillage()
 				if(isok(x+i,y+j) && 
 					(levl[x+i][y+j].typ == TREE 
 					|| levl[x+i][y+j].typ == GRASS 
+					|| levl[x+i][y+j].typ == SOIL 
 					|| levl[x+i][y+j].typ == PUDDLE)
 				){
 					if(i > edge + shelf){
@@ -1955,6 +1967,7 @@ mkfishinghut(left)
 					!(levl[x+i][y+j].typ == TREE 
 					|| levl[x+i][y+j].typ == PUDDLE 
 					|| levl[x+i][y+j].typ == GRASS 
+					|| levl[x+i][y+j].typ == SOIL 
 					|| levl[x+i][y+j].typ == MOAT
 					 )
 				) okspot = FALSE;
@@ -2063,20 +2076,25 @@ mkwell(left)
 					!(levl[x+i][y+j].typ == TREE 
 					|| levl[x+i][y+j].typ == PUDDLE 
 					|| levl[x+i][y+j].typ == GRASS
+					|| levl[x+i][y+j].typ == SOIL
 					)
 				) okspot = FALSE;
 			}
 		pathto = 0;
 		if(isok(x,y-2) && (levl[x][y-2].typ == PUDDLE 
+							|| levl[x][y-2].typ == SOIL
 							|| levl[x][y-2].typ == GRASS))
 			pathto++;
 		if(isok(x,y+2) && (levl[x][y+2].typ == PUDDLE 
+							|| levl[x][y+2].typ == SOIL
 							|| levl[x][y+2].typ == GRASS))
 			pathto++;
 		if(isok(x-2,y) && (levl[x-2][y].typ == PUDDLE 
+							|| levl[x-2][y].typ == SOIL
 							|| levl[x-2][y].typ == GRASS))
 			pathto++;
 		if(isok(x+2,y) && (levl[x+2][y].typ == PUDDLE 
+							|| levl[x+2][y].typ == SOIL
 							|| levl[x+2][y].typ == GRASS))
 			pathto++;
 		if(pathto) accessible = TRUE;
@@ -4855,7 +4873,7 @@ register int edge; /* Allows room walls to intrude slightly into river. */
 	if (level.flags.has_shop && *in_rooms(x, y, SHOPBASE)) {return;}
 	
 	/* Don't liquify other level features */
-	if(typ != TREE && typ != GRASS)
+	if(typ != TREE && typ != GRASS && typ != SOIL)
 		return;
 	
 	if (typ!=TREE || (!edge && rn2(6))){

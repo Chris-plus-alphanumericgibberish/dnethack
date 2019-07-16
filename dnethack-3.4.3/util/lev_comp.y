@@ -275,7 +275,7 @@ lev_init	: /* nothing */
 			init_lev.smoothed = $7;
 			init_lev.joined = $9;
 			if (init_lev.joined &&
-			    init_lev.fg != CORR && init_lev.fg != ROOM && init_lev.fg != PUDDLE && init_lev.fg != GRASS)
+			    init_lev.fg != CORR && init_lev.fg != ROOM && init_lev.fg != PUDDLE && init_lev.fg != GRASS && init_lev.fg != SOIL)
 			    yyerror("Invalid foreground type for joined map.");
 			init_lev.lit = $11;
 			init_lev.walled = $13;

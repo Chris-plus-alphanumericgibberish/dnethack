@@ -1558,6 +1558,7 @@ find_branch_room(mp)
 	    (levl[mp->x][mp->y].typ != CORR 
 		&& levl[mp->x][mp->y].typ != ROOM
 		&& levl[mp->x][mp->y].typ != GRASS
+		&& levl[mp->x][mp->y].typ != SOIL
 		&& levl[mp->x][mp->y].typ != PUDDLE) ||
 		tryct++ > 1000);
     }

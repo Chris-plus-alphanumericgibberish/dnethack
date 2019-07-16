@@ -244,6 +244,7 @@ bad_location(x, y, lx, ly, hx, hy)
 		   (Is_waterlevel(&u.uz) && levl[x][y].typ == MOAT) ||
 	       levl[x][y].typ == ROOM || 
 	       levl[x][y].typ == GRASS || 
+	       levl[x][y].typ == SOIL || 
 	       levl[x][y].typ == AIR)));
 }
 

@@ -2132,8 +2132,7 @@ int mode;
 				if (!Blind) {
 				   Sprintf(post_engr_text,
 						"The grass withers and dies!");
-					// levl[u.ux][u.uy].typ = DIRT;
-					levl[u.ux][u.uy].typ = ROOM;
+					levl[u.ux][u.uy].typ = SOIL;
 				}
 			} else if (!Blind) {
 			   Sprintf(post_engr_text,
@@ -2200,7 +2199,7 @@ int mode;
 				Blind ?	"You feel the wand heat up." :
 					"Flames fly from the wand.");
 			if(levl[u.ux][u.uy].typ == GRASS)
-				levl[u.ux][u.uy].typ = ROOM;
+				levl[u.ux][u.uy].typ = SOIL;
 			break;
 		    case WAN_LIGHTNING:
 			ptext = TRUE;
@@ -2250,7 +2249,7 @@ int mode;
 						if (!Blind) Your1(vision_clears);
 					}
 					if(levl[u.ux][u.uy].typ == GRASS)
-						levl[u.ux][u.uy].typ = ROOM;
+						levl[u.ux][u.uy].typ = SOIL;
 					return 1;
 				} else {
 					ptext = TRUE;
@@ -2261,7 +2260,7 @@ int mode;
 						doblind = TRUE;
 					}
 					if(levl[u.ux][u.uy].typ == GRASS)
-						levl[u.ux][u.uy].typ = ROOM;
+						levl[u.ux][u.uy].typ = SOIL;
 				}
 			} else if(otmp->altmode == AD_DEAD && otmp->ovar1 >= 10){
 				otmp->ovar1 -= 10;
@@ -2270,8 +2269,7 @@ int mode;
 					if(levl[u.ux][u.uy].typ == GRASS){
 					   Sprintf(post_engr_text,
 							"The grass withers and dies!");
-						// levl[u.ux][u.uy].typ = DIRT;
-						levl[u.ux][u.uy].typ = ROOM;
+						levl[u.ux][u.uy].typ = SOIL;
 					} else Sprintf(post_engr_text,
 						   "The bugs on the %s stop moving!",
 						   surface(u.ux, u.uy));
@@ -2284,7 +2282,7 @@ int mode;
 					Blind ? "You feel the raygun heat up." :
 						"A heat ray shoots from the raygun.");
 				if(levl[u.ux][u.uy].typ == GRASS)
-					levl[u.ux][u.uy].typ = ROOM;
+					levl[u.ux][u.uy].typ = SOIL;
 			} else if(otmp->ovar1 >= 1){
 				otmp->ovar1 -= 1;
 				ptext = TRUE;
@@ -2776,10 +2774,11 @@ int mode;
 			if ((otmp->oclass == WEAPON_CLASS || spec_ability3(otmp, SPFX3_ENGRV)) 
 				&& ((otmp->otyp != ATHAME && !spec_ability3(otmp, SPFX3_ENGRV)) || otmp->cursed)
 			) {
-				if(levl[u.ux][u.uy].typ == GRASS) multi = -(len/2);
+				if(levl[u.ux][u.uy].typ == GRASS || levl[u.ux][u.uy].typ == SOIL) multi = -(len/2);
 				else multi = -len;
 				if(otmp->otyp == CRYSTAL_SWORD
 				|| levl[u.ux][u.uy].typ == GRASS
+				|| levl[u.ux][u.uy].typ == SOIL
 				) maxelen = len;
 				else maxelen = ((otmp->spe + 3) * 2) + 1;
 				/* -2 = 3, -1 = 5, 0 = 7, +1 = 9, +2 = 11
@@ -2790,6 +2789,7 @@ int mode;
 				 */
 				if(otmp->otyp != CRYSTAL_SWORD
 				&& levl[u.ux][u.uy].typ != GRASS
+				&& levl[u.ux][u.uy].typ != SOIL
 				){
 					Your("%s dull.", aobjnam(otmp,	"get"));
 					if (otmp->unpaid) {

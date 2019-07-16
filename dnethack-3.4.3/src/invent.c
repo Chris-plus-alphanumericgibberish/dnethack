@@ -3713,6 +3713,8 @@ char *buf;
 	    dfeature = "puddle of shallow water";
 	else if (IS_GRASS(ltyp))
 	    cmap = S_litgrass;				/* "grass" */
+	else if (IS_SOIL(ltyp))
+	    cmap = S_litsoil;				/* "soil" */
 #ifdef SINKS
 	else if (IS_SINK(ltyp))
 	    cmap = S_sink;				/* "sink" */
