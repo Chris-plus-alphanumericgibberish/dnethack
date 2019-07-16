@@ -1587,7 +1587,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				"the Great Slave-Vassal of Kurtulmak",	 /*31*/
 				"the Thane of Garl Glittergold",	 /*32*/
 				"the Claw of Urdlen",	 	 /*33*/
-				/* Gnome Ranger */
+				/* Healer */
 				"the Hand of Athena",		 /*34*/
 				"the Messenger of Hermes",	 /*35*/
 				"the Glory of Poseidon",	 /*36*/
