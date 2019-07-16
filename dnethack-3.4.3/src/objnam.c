@@ -523,7 +523,11 @@ char *buf;
 		/* allow 'blessed clear potion' if we don't know it's holy water;
 		* always allow "uncursed potion of water"
 		*/
-		if (obj->cursed)
+		if(obj->oartifact == ART_AVENGER && obj->known){
+			if(!obj->cursed && !obj->blessed)
+				Strcat(buf, "uncursed ");
+		}
+		else if (obj->cursed)
 			Strcat(buf, (obj->known && (obj->oproperties&OPROP_UNHYW || obj->oproperties&OPROP_UNHY)) ? "unholy " : "cursed ");
 		else if (obj->blessed)
 			Strcat(buf, (obj->known && (obj->oproperties&OPROP_HOLYW || obj->oproperties&OPROP_HOLY)) ? "holy " : "blessed ");
@@ -812,6 +816,12 @@ boolean dofull;
 			if (obj->oproperties&OPROP_FLAYW && obj->known)
 				Strcat(buf, "flaying ");
 			/* note: "holy" and "unholy" properties are shown in the BUC part of the name, as they replace "blessed" and "cursed". */
+			
+			/* note: except "Holy Avenger" and "Unholy Avenger" */
+			if (obj->oartifact == ART_AVENGER && obj->cursed && obj->known && obj->oproperties&OPROP_UNHYW)
+				Strcat(buf, "Unholy ");
+			if (obj->oartifact == ART_AVENGER && obj->blessed && obj->known && obj->oproperties&OPROP_HOLYW)
+				Strcat(buf, "Holy ");
 		}
 	}
 }

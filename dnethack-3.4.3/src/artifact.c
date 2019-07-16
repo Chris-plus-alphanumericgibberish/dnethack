@@ -3364,6 +3364,16 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				EXPL_FIERY, 1);
 		}
 	}
+	if(otmp->oartifact == ART_AVENGER && dieroll <= 2){
+		if(cancel_monst(mdef, otmp, youattack, FALSE, FALSE,0)){
+			if(youattack){
+				u.uen += 10;
+			} else {
+				magr->mcan = FALSE;
+				magr->mspec_used = 0;
+			}
+		}
+	}
 	if(otmp->oartifact == ART_GENOCIDE){
 		struct monst *tmpm, *nmon;
 		int genoburn;
