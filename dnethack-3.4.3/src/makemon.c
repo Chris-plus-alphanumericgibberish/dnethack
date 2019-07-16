@@ -527,10 +527,10 @@ register struct monst *mtmp;
 				otmp->quan = 3;
 				otmp->owt = weight(otmp);
 				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(LEATHER_DRUM, TRUE, FALSE);
+				otmp = mksobj(DRUM, TRUE, FALSE);
 				bless(otmp);
 				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(WOODEN_FLUTE, TRUE, FALSE);
+				otmp = mksobj(FLUTE, TRUE, FALSE);
 				bless(otmp);
 				(void) mpickobj(mtmp, otmp);
 				return;//no random stuff!
@@ -1401,7 +1401,7 @@ register struct monst *mtmp;
 					if (rn2(2)) (void)mongets(mtmp, ELVEN_DAGGER);
 #ifdef BARD
 					if ((mm == PM_ELVENKING || mm == PM_ELF_LORD || mm == PM_ELVENQUEEN || mm == PM_ELF_LADY) ? TRUE : !rn2(10))
-						(void)mongets(mtmp, (rn2(2) ? WOODEN_FLUTE : WOODEN_HARP));
+						(void)mongets(mtmp, (rn2(2) ? FLUTE : HARP));
 #endif
 					if (rnd(100) < mtmp->m_lev)
 						(void)mongets(mtmp, POT_STARLIGHT);
@@ -1487,8 +1487,8 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, HIGH_BOOTS);
 				} else if (mm == PM_RHYMER){
 					static int trotyp[] = {
-						WOODEN_FLUTE, TOOLED_HORN, WOODEN_HARP,
-						BELL, BUGLE, LEATHER_DRUM
+						FLUTE, TOOLED_HORN, HARP,
+						BELL, BUGLE, DRUM
 					};
 					(void)mongets(mtmp, trotyp[rn2(SIZE(trotyp))]);
 					(void)mongets(mtmp, !rn2(10) ? ELVEN_MITHRIL_COAT : ELVEN_TOGA);
@@ -1982,7 +1982,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, HEAVY_IRON_BALL);
 			} else if (mm == PM_MINER) {
 				(void)mongets(mtmp, PICK_AXE);
-				otmp = mksobj(BRASS_LANTERN, TRUE, FALSE);
+				otmp = mksobj(LANTERN, TRUE, FALSE);
 				(void) mpickobj(mtmp, otmp);
 				begin_burn(otmp, FALSE);
 // #endif /* CONVICT */
@@ -2618,7 +2618,7 @@ register struct monst *mtmp;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				
-				otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+				otmp = mksobj(BRONZE_HALF_PLATE, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->objsize = MZ_LARGE;
@@ -2740,7 +2740,7 @@ register struct monst *mtmp;
 			    otmp->spe = 9;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
-			    otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+			    otmp = mksobj(BRONZE_HALF_PLATE, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 				otmp->objsize = MZ_LARGE;
@@ -2823,7 +2823,7 @@ register struct monst *mtmp;
 				otmp->objsize = MZ_LARGE;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
-			    otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+			    otmp = mksobj(BRONZE_HALF_PLATE, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
 			    otmp->spe = 7;
@@ -2882,7 +2882,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, CRYSTAL_SWORD);
 				(void)mongets(mtmp, WAN_STRIKING);
 			} else if(ptr == &mons[PM_GHAELE_ELADRIN]){
-				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
+				(void)mongets(mtmp, BRONZE_HALF_PLATE);
 				(void)mongets(mtmp, ROUNDSHIELD);
 				(void)mongets(mtmp, ARMORED_BOOTS);
 				(void)mongets(mtmp, BRONZE_HELM);
@@ -2955,7 +2955,7 @@ register struct monst *mtmp;
 			    otmp->spe = max(otmp->spe, spe2);
 			    (void) mpickobj(mtmp, otmp);
 					m_initthrow(mtmp, ELVEN_ARROW, 12+rnd(30));
-				(void)mongets(mtmp, WOODEN_HARP);
+				(void)mongets(mtmp, HARP);
 				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
 			    bless(otmp);
 			    otmp->oerodeproof = TRUE;
@@ -3042,7 +3042,7 @@ register struct monst *mtmp;
 		} else {
 			if(mm == PM_CLOCKWORK_AUTOMATON){
 				(void) mongets(mtmp, BRONZE_HELM);
-				(void) mongets(mtmp, BRONZE_PLATE_MAIL);
+				(void) mongets(mtmp, BRONZE_HALF_PLATE);
 				(void) mongets(mtmp, BRONZE_GAUNTLETS);
 				otmp = mksobj(ARMORED_BOOTS, TRUE, FALSE);
 				otmp->obj_material = COPPER;
@@ -3459,7 +3459,7 @@ register struct monst *mtmp;
 			otmp->cursed = FALSE;
 			(void) mpickobj(mtmp, otmp);
 			
-			otmp = mksobj(BRONZE_PLATE_MAIL, TRUE, FALSE);
+			otmp = mksobj(BRONZE_HALF_PLATE, TRUE, FALSE);
 			otmp->spe = mm==PM_DEEPER_ONE ? 6 : 3;
 			otmp->blessed = FALSE;
 			otmp->cursed = TRUE;
@@ -3629,7 +3629,7 @@ register struct monst *mtmp;
 				otmp->spe = 3;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(BRONZE_PLATE_MAIL, FALSE, FALSE);
+				otmp = mksobj(BRONZE_HALF_PLATE, FALSE, FALSE);
 				otmp->spe = 3;
 				(void) mpickobj(mtmp, otmp);
 				otmp = mksobj(BRONZE_GAUNTLETS, FALSE, FALSE);
@@ -3646,7 +3646,7 @@ register struct monst *mtmp;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, BRONZE_HELM);
-				(void)mongets(mtmp, BRONZE_PLATE_MAIL);
+				(void)mongets(mtmp, BRONZE_HALF_PLATE);
 				(void)mongets(mtmp, BRONZE_GAUNTLETS);
 				(void)mongets(mtmp, ARMORED_BOOTS);
 			}
@@ -3709,7 +3709,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, ORCISH_CLOAK);
 				(void)mongets(mtmp, HIGH_ELVEN_GAUNTLETS);
 				(void)mongets(mtmp, ELVEN_BOOTS);
-			    (void)mongets(mtmp, LEATHER_DRUM);
+			    (void)mongets(mtmp, DRUM);
 			break;
 		    case PM_ANGBAND_ORC:
 				(void)mongets(mtmp, SCIMITAR);
@@ -3734,7 +3734,7 @@ register struct monst *mtmp;
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_CHAIN_MAIL);
 //ifdef BARD
 			if (mm == PM_ORC_CAPTAIN ? !rn2(10) : !rn2(50)){
-			    (void)mongets(mtmp, LEATHER_DRUM);
+			    (void)mongets(mtmp, DRUM);
 				if(!rn2(3)) {
 					(void)mongets(mtmp, ORCISH_BOW);
 					m_initthrow(mtmp, ORCISH_ARROW, 12);
@@ -3752,7 +3752,7 @@ register struct monst *mtmp;
 						(void)mongets(mtmp, ORCISH_SHORT_SWORD);
 //ifdef BARD
 			if (mm == PM_URUK_CAPTAIN ? !rn2(10) : !rn2(50)){
-			    (void)mongets(mtmp, LEATHER_DRUM);
+			    (void)mongets(mtmp, DRUM);
 				(void)mongets(mtmp, CROSSBOW);
 				m_initthrow(mtmp, CROSSBOW_BOLT, 12);
 			} else {
@@ -3816,7 +3816,7 @@ register struct monst *mtmp;
 				case 4: (void) mongets(mtmp, POT_HEALING);
 				case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
 				}
-				(void)mongets(mtmp, (rn2(2) ? WOODEN_FLUTE : WOODEN_HARP));
+				(void)mongets(mtmp, (rn2(2) ? FLUTE : HARP));
 			} else if(ptr == &mons[PM_INTONER]){
 				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
 				otmp->spe = 4;
@@ -3931,7 +3931,7 @@ register struct monst *mtmp;
 						otmp = mksobj(HIGH_BOOTS, TRUE, TRUE);
 						otmp->spe = 0+rn2(4);
 						(void) mpickobj(mtmp, otmp);
-						mongets(mtmp, WOODEN_HARP);
+						mongets(mtmp, HARP);
 						mongets(mtmp, POT_BOOZE);
 						mongets(mtmp, POT_BOOZE);
 						mongets(mtmp, POT_BOOZE);
@@ -4305,7 +4305,7 @@ register struct monst *mtmp;
 			case 4: (void) mongets(mtmp, POT_HEALING);
 			case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
 			}
-			mongets(mtmp, BRONZE_PLATE_MAIL);
+			mongets(mtmp, BRONZE_HALF_PLATE);
 			mongets(mtmp, BRONZE_GAUNTLETS);
 			mongets(mtmp, BRONZE_HELM);
 			otmp = mksobj(LANCE, TRUE, FALSE);
@@ -4789,7 +4789,7 @@ register struct	monst	*mtmp;
 				(void) mongets(mtmp, BUGLE);
 			} else
 			   if (ptr == &mons[PM_WATCHMAN] && rn2(3))
-				(void) mongets(mtmp, TIN_WHISTLE);
+				(void) mongets(mtmp, WHISTLE);
 		} else if (ptr == &mons[PM_SHOPKEEPER]) {
 		    (void) mongets(mtmp,SKELETON_KEY);
 			if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz)){
@@ -4959,7 +4959,7 @@ register struct	monst	*mtmp;
 			//Escaped war-elephant
 			if(mtmp->data == &mons[PM_MUMAK]){
 				chance = rnd(100);
-				if(chance == 100) mongets(mtmp, BRONZE_PLATE_MAIL);
+				if(chance == 100) mongets(mtmp, BRONZE_HALF_PLATE);
 				else if(chance >= 96) mongets(mtmp, ORCISH_CHAIN_MAIL);
 				else if(chance >= 90) mongets(mtmp, ORCISH_RING_MAIL);
 				if(chance == 100) mongets(mtmp, BRONZE_HELM);
@@ -5341,13 +5341,13 @@ register struct	monst	*mtmp;
 			if(ptr == &mons[PM_ANCIENT_NAGA]){
 				mongets(mtmp, LONG_SWORD);
 				mongets(mtmp, LONG_SWORD);
-				mongets(mtmp, BRONZE_PLATE_MAIL);
+				mongets(mtmp, BRONZE_HALF_PLATE);
 				mongets(mtmp, BRONZE_HELM);
 				mongets(mtmp, BRONZE_GAUNTLETS);
 			} else if(ptr == &mons[PM_GUARDIAN_NAGA] || ptr == &mons[PM_GUARDIAN_NAGA_HATCHLING]){
 				chance = rnd(10);
 				if(chance >= 7){
-					mongets(mtmp, BRONZE_PLATE_MAIL);
+					mongets(mtmp, BRONZE_HALF_PLATE);
 					mongets(mtmp, BRONZE_HELM);
 				}
 			}
