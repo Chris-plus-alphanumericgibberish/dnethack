@@ -777,7 +777,7 @@ int oldlevel, newlevel;
 			break;
 		case PM_DROW:
 			if (flags.initgend)
-				abil = pir_abil;
+				abil = pri_abil;
 			else
 				abil = 0;
 			break;
