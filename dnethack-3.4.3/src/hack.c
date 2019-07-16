@@ -369,7 +369,7 @@ still_chewing(x,y)
 	assign_level(&digging.level, &u.uz);
 	/* solid rock takes more work & time to dig through */
 	digging.effort =
-	    (IS_ROCK(lev->typ) && !IS_TREES(lev->typ) ? 30 : 60) + u.udaminc;
+	    (IS_ROCK(lev->typ) && !IS_TREES(lev->typ) ? 30 : 60) + u.udaminc + aeshbon();
 	You("start chewing %s.",
 	    boulder ? (boulder_at(x,y))->otyp==STATUE ? "on a statue" : "on a boulder" :
 	    lev->typ == IRONBARS ? "on the iron bars" :
@@ -378,7 +378,7 @@ still_chewing(x,y)
 	    "a hole in the door");
 	watch_dig((struct monst *)0, x, y, FALSE);
 	return 1;
-    } else if ((digging.effort += (30 + u.udaminc)) <= 100)  {
+    } else if ((digging.effort += (30 + u.udaminc + aeshbon())) <= 100)  {
 	if (flags.verbose)
 	    You("%s chewing on the %s.",
 		digging.chew ? "continue" : "begin",
@@ -1831,6 +1831,7 @@ stillinwater:;
 				if(((mtmp->m_lev) - 8) > 0){
 				    dmg = d((mtmp->m_lev) - 5,3);
 				    if(Half_physical_damage) dmg = (dmg+1) / 2;
+					if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 				    mdamageu(mtmp, dmg);
 				}
 			}
@@ -1840,6 +1841,7 @@ stillinwater:;
 				if(((mtmp->m_lev) - 8) > 0){
 				    dmg = d((mtmp->m_lev) - 5,3);
 				    if(Half_physical_damage) dmg = (dmg+1) / 2;
+					if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 				    mdamageu(mtmp, dmg);
 				}
 			} else if (u.uac + 3 <= rnd(20))
@@ -1851,6 +1853,7 @@ stillinwater:;
 				x_monnam(mtmp, ARTICLE_A, "falling", 0, TRUE));
 			    dmg = d(mtmp->m_lev,6);
 			    if(Half_physical_damage) dmg = (dmg+1) / 2;
+				if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 			    mdamageu(mtmp, dmg);
 			}
 			break;
