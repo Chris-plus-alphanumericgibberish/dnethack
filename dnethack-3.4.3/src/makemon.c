@@ -846,7 +846,7 @@ register struct monst *mtmp;
 					otmp->spe = 4;
 					otmp->opoisoned = OPOISON_FILTH;
 					otmp->opoisonchrgs = 30;
-					otmp->ovar1 = 3;
+					otmp->ovar1 = 1;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(BUCKLER, TRUE, FALSE);
 					otmp->spe = 0;
