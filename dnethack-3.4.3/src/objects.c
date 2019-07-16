@@ -67,6 +67,12 @@ NEARDATA struct objclass objects[] = {
 		BITS(kn,1,1,0,0,1,0,0,0,0,PIERCE,sub,metal,0), 0, \
 		WEAPON_CLASS, prob, 0, \
 		wt, cost, sdam, ldam, hitbon, WP_GENERIC, 0, wt, color )
+#define PROJECTILE_MATSPEC(name,app,kn,prob,wt,cost,sdam,ldam,hitbon,metal,shwmat,sub,color) \
+	OBJECT( \
+		OBJ(name,app), \
+		BITS(kn,1,1,0,0,1,0,0,0,0,PIERCE,sub,metal,shwmat), 0, \
+		WEAPON_CLASS, prob, 0, \
+		wt, cost, sdam, ldam, hitbon, WP_GENERIC, 0, wt, color )
 #define BOW(name, app, kn, bi, prob, wt, cost, hitbon, metal, sub, color) \
 	OBJECT( \
 		OBJ(name,app), BITS(kn,0,1,0,0,1,0,0,bi,0,0,sub,metal,0), 0, \
@@ -108,8 +114,8 @@ PROJECTILE("ya", "bamboo arrow",
 		0, 15, 1, 4, 7, 7, 1, METAL, -P_BOW, HI_METAL),
 PROJECTILE("crossbow bolt", (char *)0,
 		1, 55, 1, 2, 4, 6, 0, IRON, -P_CROSSBOW, HI_METAL),
-PROJECTILE("droven bolt", "crossbow bolt", /*Needs encyc entry*/
-		0,  0, 1, 2, 9, 6, 2, OBSIDIAN_MT, -P_CROSSBOW, CLR_BLACK),
+PROJECTILE_MATSPEC("droven bolt", "crossbow bolt", /*Needs encyc entry*/
+		0,  0, 1, 2, 9, 6, 2, OBSIDIAN_MT, UNIDED, -P_CROSSBOW, CLR_BLACK),
 
 WEAPON("dart", (char *)0,
 	1, 1, 0, 58,  1,  2,  3,  2, 0, P,   -P_DART, IRON, FALSE, HI_METAL),
@@ -404,7 +410,7 @@ BOW("orcish bow", "crude bow",	0, 0, 12, 30, 60, -2, WOOD, P_BOW, CLR_BLACK),
 BOW("yumi", "long bow",			0,  0, 0, 30, 60, 0, WOOD, P_BOW, HI_WOOD),
 BOW("sling", (char *)0,			1, 0, 40,  3, 20, -1, LEATHER, P_SLING, HI_LEATHER),
 BOW("crossbow", (char *)0,		1, 0, 45, 50, 40, 1, WOOD, P_CROSSBOW, HI_WOOD),
-BOW("droven crossbow", "spider-legged crossbow",	0, 0, 0, 50, 120, 4, SILVER, P_CROSSBOW, CLR_BLACK), /*Needs encyc entry*/
+BOW("droven crossbow", "spider-emblemed crossbow",	0, 0, 0, 50, 120, 4, SILVER, P_CROSSBOW, CLR_BLACK), /*Needs encyc entry*/
 BOW("atlatl", "notched stick", 	0, 0, 0, 12, 30, 0, WOOD, P_SPEAR, HI_WOOD), /*Needs encyc entry*/
 
 #undef P
