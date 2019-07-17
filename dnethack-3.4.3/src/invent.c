@@ -1144,7 +1144,7 @@ register const char *let,*word;
 		|| (!strcmp(word, "upgrade your spring with") &&
 			(otyp != CLOCKWORK_COMPONENT))
 		|| (!strcmp(word, "upgrade your armor with") &&
-		    (otyp != BRONZE_HALF_PLATE))
+		    (otyp != ARCHAIC_PLATE_MAIL))
 		|| (!strcmp(word, "build a phase engine with") &&
 		    (otyp != SUBETHAIC_COMPONENT))
 		|| (!strcmp(word, "build a magic furnace with") &&

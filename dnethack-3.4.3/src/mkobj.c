@@ -1582,117 +1582,149 @@ int mat;
 	} else if(owner && mask){
 		update_mon_intrinsics(owner, obj, FALSE, TRUE);
 	}
+	/* change otyp to be appropriate
+	 * does not set material
+	 */
 	switch(obj->otyp){
+		/* arrows */
 		case ARROW:
-			if(mat == GOLD) obj->otyp = GOLDEN_ARROW;
-			else if(mat == SILVER) obj->otyp = SILVER_ARROW;
-		break;
 		case GOLDEN_ARROW:
-			if(mat == SILVER) obj->otyp = SILVER_ARROW;
-			else obj->otyp = ARROW;
-		break;
 		case SILVER_ARROW:
 			if(mat == GOLD) obj->otyp = GOLDEN_ARROW;
+			else if (mat == SILVER)		obj->otyp = SILVER_ARROW;
 			else obj->otyp = ARROW;
 		break;
+		/* bullets */
 		case BULLET:
-			if(mat == SILVER) obj->otyp = SILVER_BULLET;
-		break;
 		case SILVER_BULLET:
-			obj->otyp = BULLET;
+			if		(mat == SILVER)		obj->otyp = SILVER_BULLET;
+			else						obj->otyp = BULLET;
 		break;
-		case LEATHER_HELM:
-			if(mat == COPPER) obj->otyp = BRONZE_HELM;
-			else obj->otyp = HELMET;
+		/* elven helmets */
+		case ELVEN_HELM:
+		case HIGH_ELVEN_HELM:
+			if		(mat >= IRON)		obj->otyp = HIGH_ELVEN_HELM;
+			else						obj->otyp = ELVEN_HELM;
 		break;
-		case BRONZE_HELM:
-			if(mat == LEATHER) obj->otyp = LEATHER_HELM;
-			else obj->otyp = HELMET;
-		break;
+		/* helmets */
 		case HELMET:
-			if(mat == LEATHER) obj->otyp = LEATHER_HELM;
-			else if(mat == COPPER) obj->otyp = BRONZE_HELM;
+		case LEATHER_HELM:
+		case ARCHAIC_HELM:
+		case DROVEN_HELM:				
+		case HARMONIUM_HELM:			/* irreversible, metal */
+//		case PLASTEEL_HELM:				/* has a unique function of shape -- needs a generic version? */
+//		case CRYSTAL_HELM:				/* has a unique function of shape -- needs a generic version? */
+			if (mat == LEATHER)			obj->otyp = LEATHER_HELM;
+			else if (mat == SHADOWSTEEL)obj->otyp = DROVEN_HELM;
+			else if (obj->otyp != HELMET
+				&& obj->otyp != ARCHAIC_HELM
+			)
+										obj->otyp = HELMET;
+			break;
+		/* gauntlets + gloves */
+		case CRYSTAL_GAUNTLETS:			/* irreversible, glass */
+			if		(mat == GLASS		
+				||   mat == OBSIDIAN_MT	
+				||   mat == GEMSTONE)	break;	// remain as crystal gauntlets
+			else;// fall through to general gauntlets
+		case GLOVES:
+		case GAUNTLETS:
+		case ARCHAIC_GAUNTLETS:
+		case PLASTEEL_GAUNTLETS:		/* irreversible, plastic */
+		case HARMONIUM_GAUNTLETS:		/* irreversible, metal */
+		case ORIHALCYON_GAUNTLETS:		/* irreversible, metal */
+			if		(mat == DRAGON_HIDE)obj->otyp = (is_hard(obj) ? GAUNTLETS : GLOVES);
+			else if	(mat == LEATHER
+				||   mat == CLOTH)		obj->otyp = GLOVES;
+			else if (obj->otyp != GAUNTLETS
+				&& obj->otyp != ARCHAIC_GAUNTLETS
+			)
+										obj->otyp = GAUNTLETS;
+			break;
+		/* boots */
+		case CRYSTAL_BOOTS:				/* irreversible, glass */
+			if		(mat == GLASS		
+				||   mat == OBSIDIAN_MT	
+				||   mat == GEMSTONE)	break;	// remain as crystal boots
+			else;
+				// fall through to general boots
+		case ARMORED_BOOTS:
+		case ARCHAIC_BOOTS:
+		case HIGH_BOOTS:
+		case PLASTEEL_BOOTS:			/* irreversible, plastic */
+		case HARMONIUM_BOOTS:			/* irreversible, metal */
+			if		(mat == DRAGON_HIDE)obj->otyp = (is_hard(obj) ? ARMORED_BOOTS : HIGH_BOOTS);
+			else if	(mat >= WOOD){		
+				if(obj->otyp != ARMORED_BOOTS && 
+					obj->otyp != ARCHAIC_BOOTS
+				) obj->otyp = ARMORED_BOOTS;
+			} else						obj->otyp = HIGH_BOOTS;
 		break;
-		case DWARVISH_MITHRIL_COAT:
+		/* shoes */
+		case SHOES:
+		case LOW_BOOTS:
+			if		(mat == DRAGON_HIDE)obj->otyp = (is_hard(obj) ? SHOES : LOW_BOOTS);
+			else if (mat >= WOOD)		obj->otyp = SHOES;
+			else						obj->otyp = LOW_BOOTS;
+			break;
+		/* chain mail */
+		case CHAIN_MAIL:
+		case DROVEN_CHAIN_MAIL:			/* irreversible, shadowsteel */
+		case DWARVISH_MITHRIL_COAT:		/* irreversible, mithril */
+		case ELVEN_MITHRIL_COAT:		/* irreversible, mithril */
 			obj->otyp = CHAIN_MAIL;
 		break;
-		case ELVEN_MITHRIL_COAT:
-			obj->otyp = CHAIN_MAIL;
-		break;
-		case STUDDED_LEATHER_ARMOR:
+		/* scale mail */
+//		dragon scale mail commented out for now -- metal dragons when?
+//		case GRAY_DRAGON_SCALE_MAIL:
+//		case SILVER_DRAGON_SCALE_MAIL:
+//		case SHIMMERING_DRAGON_SCALE_MAIL:
+//		case RED_DRAGON_SCALE_MAIL:
+//		case WHITE_DRAGON_SCALE_MAIL:
+//		case ORANGE_DRAGON_SCALE_MAIL:
+//		case BLACK_DRAGON_SCALE_MAIL:
+//		case BLUE_DRAGON_SCALE_MAIL:
+//		case GREEN_DRAGON_SCALE_MAIL:
+//		case YELLOW_DRAGON_SCALE_MAIL:
+//			if		(mat == DRAGON_HIDE)break;	// remain as dragon scale mail
+//			else;
+//				// fall through
+		case SCALE_MAIL:
+		case HARMONIUM_SCALE_MAIL:		/* irreversible, metal */
+		case STUDDED_LEATHER_ARMOR:		/* irreversible, leather */
+		case LEATHER_ARMOR:				/* irreversible, leather */
 			obj->otyp = SCALE_MAIL;
 		break;
-		case LEATHER_ARMOR:
-			obj->otyp = HALF_PLATE;
-		break;
-		// case LEATHER_CLOAK:
-			// obj->otyp = ;
-		// break;
-		// case ROUNDSHIELD:
-			// obj->otyp = ;
-		// break;
-		case GAUNTLETS:
-			if(mat == COPPER) obj->otyp = BRONZE_GAUNTLETS;
-		break;
-		case BRONZE_GAUNTLETS:
-			obj->otyp = GAUNTLETS;
-		break;
-		case ORIHALCYON_GAUNTLETS:
-			if(mat == COPPER) obj->otyp = BRONZE_GAUNTLETS;
-			else obj->otyp = GAUNTLETS;
-		break;
-		case LOW_BOOTS:
-			if(mat == IRON) obj->otyp = SHOES;
-		break;
-		case SHOES:
-			obj->otyp = LOW_BOOTS;
-		break;
-		case BRONZE_HALF_PLATE:
-			obj->otyp = HALF_PLATE;
-		break;
-		case HIGH_ELVEN_PLATE:
+		/* plate mail */
+		case CRYSTAL_PLATE_MAIL:		/* irreversible, glass */
+			if		(mat == GLASS		
+				||   mat == OBSIDIAN_MT	
+				||   mat == GEMSTONE)	break;	// remain as crystal plate
+			else;// fall through to general plate mail
+		case PLATE_MAIL:
+		case PLASTEEL_ARMOR:			/* irreversible, plastic */
+		case DROVEN_PLATE_MAIL:			/* irreversible, shadowsteel */
+		case HARMONIUM_PLATE:			/* irreversible, metal */
 			obj->otyp = PLATE_MAIL;
 		break;
-		case CRYSTAL_PLATE_MAIL:
-			obj->otyp = PLATE_MAIL;
-			//BUT, turning plate mail to glass results in glass plate mail.  The magic is lost.
+		/* long swords */
+		case CRYSTAL_SWORD:				/* irreversible, glass */
+			if		(mat == GLASS		
+				||   mat == OBSIDIAN_MT	
+				||   mat == GEMSTONE)	break;	// remain as crystal sword
+			else;// fall through to general long sword
+		case LONG_SWORD:
+										obj->otyp = LONG_SWORD;
 		break;
-		// case CRYSTAL_HELM:
-			//????
-		// break;
-		case CRYSTAL_SWORD:
-			if(mat != OBSIDIAN_MT && mat != GLASS && mat != GEMSTONE) obj->otyp = LONG_SWORD;
-			//Reversing material transformation does not recover a crystal sword.  The magic is lost.
-		break;
-		// case MASSIVE_STONE_CRATE:
-			// obj->otyp = ;
-		// break;
-		// case TALLOW_CANDLE:
-			// obj->otyp = ;
-		// break;
-		// case WAX_CANDLE:
-			// obj->otyp = ;
-		// break;
 		// case CRYSTAL_BALL:
 			// obj->otyp = ;
 		// break;
+		case SILVER_SLINGSTONE:
 		case ROCK:
 			if(mat == SILVER) obj->otyp = SILVER_SLINGSTONE;
-			if(mat == GLASS){
-				obj->otyp = LAST_GEM + rnd(9);
-			}
-			if(mat == GEMSTONE){
-				obj->otyp = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
-			}
-		break;
-		case SILVER_SLINGSTONE:
-			obj->otyp = ROCK;
-			if(mat == GLASS){
-				obj->otyp = LAST_GEM + rnd(9);
-			}
-			if(mat == GEMSTONE){
-				obj->otyp = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
-			}
+			else if (mat == GLASS)		obj->otyp = LAST_GEM + rnd(9);
+			else if (mat == GEMSTONE)	obj->otyp = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
+			else						obj->otyp = ROCK;
 		break;
 		// case HEAVY_IRON_BALL:
 			// obj->otyp = ;

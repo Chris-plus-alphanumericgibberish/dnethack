@@ -494,7 +494,7 @@ HELM("war hat", "wide helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	2, 0, 100,  30, 8, 2, 2, IRON, HI_METAL),
 HELM("flack helmet", "green bowl", /*Needs encyc entry*/
 		0, 0,  0,	0, 0, 10,   50, 9, 2, 1, PLASTIC, CLR_GREEN),
-HELM("bronze helm", "helmet",
+HELM("archaic helm", "helmet",
 		0, 0,  0,   0, 1, 30,  12, 9, 2, 0, COPPER, HI_COPPER),
 HELM("harmonium helm", "red-lacquered spined helm",
 		0, 0,  0,   0, 1, 45,   1, 9, 2, 0, METAL, CLR_RED),
@@ -580,14 +580,12 @@ ARMOR("gentleman's suit", "expensive clothes", /*Needs encyc entry*/
 ARMOR("gentlewoman's dress", "expensive dress", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 6,150, 1000,  10, 1, 3, ARM_SUIT, BONE, CLR_RED), /*Specifically, whale bone*/
 ARMOR("crystal plate mail", (char *)0, /*Needs encyc entry*/
-	1, 0, 1, 0,	10, 5, 250, 2000,  7, 3, 0, ARM_SUIT, GLASS, CLR_CYAN), /*Best armor, AC wise*/
-ARMOR("half plate", (char *)0, /*Needs encyc entry*/
-	1, 0, 1, 0, 0, 5, 200, 400, 6, 4, 3, ARM_SUIT, IRON, HI_METAL),
+	1, 0, 1, 0,	10, 5, 170, 2000,  5, 5, 0, ARM_SUIT, GLASS, HI_GLASS), /*Best armor, AC wise*/
 #ifdef TOURIST
-ARMOR("bronze half plate", (char *)0, /*Needs encyc entry*/
+ARMOR("archaic plate mail", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	20, 5, 200, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
 #else
-ARMOR("bronze half plate", (char *)0,
+ARMOR("archaic plate mail", (char *)0,
 	1, 0, 1, 0,	35, 5, 200, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
 #endif
 ARMOR("harmonium plate", "red-lacquered bladed armor",
@@ -738,7 +736,7 @@ GLOVES_MATSPEC("crystal gauntlets", "gauntlets", /*Needs encyc entry*//*Needs ti
 		0, 0,  0,	   0, 2, 50, 400,  9, 0, 0, GLASS,UNIDED, CLR_CYAN),
 GLOVES_MATSPEC("gauntlets", (char *)0, /*Needs encyc entry*//*Needs tile*/
 		1, 0,  0,	   4, 2, 25, 10, 8, 2, 0, IRON,IDED|UNIDED, HI_METAL),
-GLOVES("bronze gauntlets", (char *)0, /*Needs encyc entry*//*Needs tile*/
+GLOVES("archaic gauntlets", (char *)0, /*Needs encyc entry*//*Needs tile*/
 		1, 0,  0,	   0, 2, 25, 10, 8, 2, 0, COPPER, HI_COPPER),
 GLOVES("long gloves", (char *)0,
 		1, 0,  0,	   0, 1, 15,  8, 10, 2, 1, CLOTH, CLR_WHITE),
@@ -766,8 +764,10 @@ BOOTS("low boots", "walking shoes",
 		0, 0,  0,	  25, 2, 10,  8, 10, 1, 0, LEATHER, HI_LEATHER),
 BOOTS_MATSPEC("shoes", "hard shoes",
 		0, 0,  0,	   7, 2, 50, 16,  9, 1, 0, IRON,IDED, HI_METAL),
-BOOTS_MATSPEC("armored boots", "hard boots",
-		0, 0,  0,	   0, 1, 75, 16,  8, 2, 1, COPPER,IDED, HI_COPPER),
+BOOTS_MATSPEC("armored boots", "boots",
+		0, 0,  0,	   0, 1, 75, 16,  8, 2, 1, IRON,IDED|UNIDED, HI_METAL),
+BOOTS_MATSPEC("archaic boots", "boots",
+		0, 0,  0,	   0, 1, 75, 16,  8, 2, 1, COPPER,UNIDED, HI_COPPER),
 BOOTS("harmonium boots", "red-lacquered boots",
 		0, 0,  0,	   0, 1, 95,  1,  8, 2, 1, METAL, CLR_RED),
 BOOTS("plasteel boots", "hard white boots", /*Needs encyc entry*//*Needs tile*/

@@ -612,9 +612,7 @@ struct weapon_dice {
 			|| (otmp)->otyp == LEATHER_JACKET\
 			|| (otmp)->otyp == ELVEN_TOGA\
 			|| (otmp)->otyp == BLACK_DRESS)
-#define is_medium_armor(otmp)	((otmp)->otyp == BRONZE_HALF_PLATE\
-			|| (otmp)->otyp == HALF_PLATE\
-			|| (otmp)->otyp == HIGH_ELVEN_PLATE \
+#define is_medium_armor(otmp)	((otmp)->otyp == HIGH_ELVEN_PLATE\
 			|| (otmp)->otyp == CHAIN_MAIL\
 			|| (otmp)->otyp == DROVEN_CHAIN_MAIL\
 			|| (otmp)->otyp == SCALE_MAIL\

@@ -2030,7 +2030,7 @@ int thrown;
 	    case GAUNTLETS_OF_FUMBLING:
 		tmp -= 3;
 		break;
-		case BRONZE_GAUNTLETS:
+		case ARCHAIC_GAUNTLETS:
 		case PLASTEEL_GAUNTLETS:
 		tmp -= 1;
 		break;
