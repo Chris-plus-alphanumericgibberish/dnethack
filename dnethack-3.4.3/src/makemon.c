@@ -8218,6 +8218,11 @@ struct monst *mtmp, *victim;
 			max_increase = 0;
 			cur_increase = 0;
 		}
+		//Gynoid pets recover from kills
+		if(mtmp->data == &mons[PM_GYNOID] && mtmp->mhp < mtmp->mhpmax){
+			mtmp->mhp += victim->m_lev;
+			if(mtmp->mhp > mtmp->mhpmax) mtmp->mhp = mtmp->mhpmax;
+		}
 	} else {
 	    /* a gain level potion or wraith corpse; always go up a level
 	       unless already at maximum (49 is hard upper limit except
