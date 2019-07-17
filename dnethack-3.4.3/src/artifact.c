@@ -1850,14 +1850,22 @@ int tmp;
 			if(Fumbling) multiplier++;
 			if(Wounded_legs) multiplier++;
 			return damd ? d(multiplier, damd) : max(multiplier*tmp,multiplier);
-		}
-		else if(otmp && double_bonus_damage_artifact(otmp->oartifact))
-		{
+		} else if(otmp && otmp->oartifact == ART_FIRE_BRAND){
+			if(mon && species_resists_cold(mon))
+				return (damd ? d(((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1)*2, damd) : max(tmp,1)*2);
+			else
+				return damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd) : max(tmp,1);				
+		} else if(otmp && otmp->oartifact == ART_FROST_BRAND){
+			if(mon && species_resists_fire(mon))
+				return (damd ? d(((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1)*2, damd) : max(tmp,1)*2);
+			else
+				return damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd) : max(tmp,1);
+		} else if(otmp && double_bonus_damage_artifact(otmp->oartifact)){
 			return (damd ? d(((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1)*2, damd) : max(tmp,1)*2);
-		}
-		else
+		} else
 			return damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd) : max(tmp,1);
-	}
+	} else if(otmp && (otmp->oartifact == ART_FIRE_BRAND || otmp->oartifact == ART_FROST_BRAND))
+		return damd ? d((is_lightsaber(otmp) && litsaber(otmp)) ? 3 : 1, damd/2+1) : max(tmp/2,1);				
 	return 0;
 }
 
