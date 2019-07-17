@@ -186,6 +186,7 @@ struct obj {
 #define OPOISON_AMNES	0x20 /* Amnesia Poison */
 #define OPOISON_ACID	0x40 /* Acid coating */
 #define OPOISON_SILVER	0x80 /* Silver coating */
+#define NUM_POISONS		8	/* number of specifiable poison coatings */
 
 	long long int oproperties;/* special properties */
 #define OPROP_NONE		0x0000000000000000
@@ -745,8 +746,21 @@ struct weapon_dice {
 				|| (otmp)->otyp == ELVEN_DAGGER\
 				|| (otmp)->otyp == ELVEN_SHORT_SWORD\
 				|| (otmp)->otyp == ELVEN_BROADSWORD\
+				|| (otmp)->otyp == ELVEN_LANCE\
 				|| (otmp)->otyp == ELVEN_BOW)
 #define is_elven_obj(otmp)	(is_elven_armor(otmp) || is_elven_weapon(otmp))
+
+/* Droven gear */
+#define is_droven_weapon(otmp) ((otmp)->otyp == DROVEN_BOLT\
+				|| (otmp)->otyp == DROVEN_CROSSBOW\
+				|| (otmp)->otyp == DROVEN_SPEAR\
+				|| (otmp)->otyp == DROVEN_DAGGER\
+				|| (otmp)->otyp == DROVEN_SHORT_SWORD\
+				|| (otmp)->otyp == DROVEN_GREATSWORD\
+				|| (otmp)->otyp == DROVEN_LANCE\
+				|| (otmp)->otyp == VIPERWHIP)
+#define is_droven_obj(otmp)	(is_droven_armor(otmp) || is_droven_weapon(otmp))
+
 
 /* Orcish gear */
 #define is_orcish_obj(otmp)	(is_orcish_armor(otmp)\

@@ -627,7 +627,7 @@ A("The Cloak of the Unheld One",	OILSKIN_CLOAK, 		0,			0,/*Needs encyc entry*/
 	TELEPORT_SHOES, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,0,(WSFX_PLUSSEV|WSFX_FREEACT)),
 
-A("The Beastmaster's Duster", LEATHER_JACKET, 			0,			0,/*Needs encyc entry*/
+A("The Beastmaster's Duster", JACKET, 			0,			0,/*Needs encyc entry*/
 	(SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
@@ -1262,14 +1262,14 @@ A("Avenger",			LONG_SWORD,			0,			0,
 	0, A_LAWFUL, PM_NOBLEMAN, NON_PM, 1000L,
 	0,0,0),
 
-A("The Mantle of Heaven",	LEATHER_CLOAK, 				0,			0,/*Actually an ornamental cope in game*/
+A("The Mantle of Heaven",	CLOAK, 				0,			0,/*Actually an ornamental cope in game*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HSPDAM),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	NO_ATTK,	ELEC(0,0),	COLD(0,0), /* Plus double AC bonus */
 	0,	A_LAWFUL,	 PM_NOBLEMAN, NON_PM, 2500L,
 	0,0,0),
 
-A("The Vestment of Hell",	LEATHER_CLOAK, 				0,			0,/*Actually an opera cloak in game*/
+A("The Vestment of Hell",	CLOAK, 				0,			0,/*Actually an opera cloak in game*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HPHDAM),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	NO_ATTK,	ACID(0,0),	FIRE(0,0), /* Plus double AC bonus */

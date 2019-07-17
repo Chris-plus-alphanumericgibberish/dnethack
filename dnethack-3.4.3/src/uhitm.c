@@ -7,6 +7,7 @@
 
 STATIC_DCL boolean FDECL(known_hitum, (struct monst *,int *,struct attack *));
 STATIC_DCL boolean FDECL(known_hitum_wepi, (struct monst *,int *,struct attack *, int));
+STATIC_DCL boolean FDECL(pacifist_attack_checks, (struct monst *, struct obj *));
 STATIC_DCL void FDECL(steal_it, (struct monst *, struct attack *));
 STATIC_DCL boolean FDECL(hitum, (struct monst *,int,struct attack *));
 STATIC_DCL boolean FDECL(hmon_hitmon, (struct monst *,struct obj *,int));
@@ -91,17 +92,32 @@ int attk;
 	}
 }
 
+/* Extra pacifist attack checks; FALSE means it's OK to attack. */
+STATIC_OVL boolean
+pacifist_attack_checks(mtmp, wep)
+struct monst *mtmp;
+struct obj *wep; /* uwep for attack(), null for kick_monster() */
+{
+	if (Confusion || Hallucination || Stunned)
+		return FALSE;
+
+	/* Intelligent chaotic weapons (Stormbringer) want blood */
+	if (wep && spec_ability2(wep, SPFX2_BLDTHRST)) {
+		/* Don't show Stormbringer's message unless pacifist. */
+		if (flags.confirm)
+			override_confirmation = TRUE;
+		return FALSE;
+	}
+
+	return FALSE;
+}
+
 /* FALSE means it's OK to attack */
 boolean
 attack_checks(mtmp, wep)
 struct monst *mtmp;
 struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 {
-	char qbuf[QBUFSZ];
-#ifdef PARANOID
-	char buf[BUFSZ];
-#endif
-
 	/* if you're close enough to attack, alert any waiting monster */
 	mtmp->mstrategy &= ~STRAT_WAITMASK;
 
@@ -194,39 +210,44 @@ struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 	    wakeup(mtmp, TRUE);
 	}
 
-	if (flags.confirm && mtmp->mpeaceful
-	    && !Confusion && !Hallucination && !Stunned) {
+	if (mtmp->mpeaceful && !Confusion && !Hallucination && !Stunned) {
 		/* Intelligent chaotic weapons (Stormbringer) want blood */
 		/* NOTE:  now generalized to a flag, also, more lawful weapons than chaotic weps have it now :) */
 		if (wep && spec_ability2(wep, SPFX2_BLDTHRST)) {
-			override_confirmation = TRUE;
+			/* Don't show Stormbringer's message if attack is intended. */
+			if (flags.confirm)
+				override_confirmation = TRUE;
 			return(FALSE);
 		}
 		if (canspotmon(mtmp)) {
+			if(flags.confirm){
+				char qbuf[QBUFSZ];
 #ifdef PARANOID
-			Sprintf(qbuf, "Really attack %s? [no/yes]",
-				mon_nam(mtmp));
-			if (iflags.paranoid_hit) {
-				getlin (qbuf, buf);
-				(void) lcase (buf);
-				if (strcmp (buf, "yes")) {
-				  flags.move = 0;
-				  return(TRUE);
+				char buf[BUFSZ];
+				if (iflags.paranoid_hit) {
+					Sprintf(qbuf, "Really attack %s? [no/yes]",
+						mon_nam(mtmp));
+					getlin (qbuf, buf);
+					(void) lcase (buf);
+					if (strcmp (buf, "yes")) {
+					  flags.move = 0;
+					  return(TRUE);
+					}
+				} else {
+#endif
+					Sprintf(qbuf, "Really attack %s?", mon_nam(mtmp));
+					if (yn(qbuf) != 'y') {
+						flags.move = 0;
+						return(TRUE);
+					}
+#ifdef PARANOID
 				}
-			} else {
 #endif
-			Sprintf(qbuf, "Really attack %s?", mon_nam(mtmp));
-			if (yn(qbuf) != 'y') {
-				flags.move = 0;
-				return(TRUE);
 			}
-#ifdef PARANOID
-			}
-#endif
 		}
 	}
 
-	return(FALSE);
+	return pacifist_attack_checks(mtmp, wep);
 }
 
 /*
@@ -1037,26 +1058,50 @@ int thrown;
 	if(!helpless(mon)) wake_nearto(mon->mx, mon->my, Stealth ? combatNoise(youracedata)/2 : combatNoise(youracedata)); //Nearby monsters may be awakened
 	wakeup(mon, TRUE);
 	if(!obj) {	/* attack with bare hands */
-	    if (insubstantial(mdat) && !insubstantial_aware(mon, obj, FALSE)) tmp = 0;
-		else if (martial_bonus()){
-			if(uarmc && uarmc->oartifact == ART_GRANDMASTER_S_ROBE){
-				if(u.sealsActive&SEAL_EURYNOME) tmp = rn2(2) ? 
-											exploding_d(1,max_ints(4*unarmedMult,rnd(5)*2+2*unarmedMult),0)
-												+exploding_d(1,max_ints(4*unarmedMult,rnd(5)*2+2*unarmedMult),0) : 
-											exploding_d(1,max_ints(4*unarmedMult,rnd(5)*2+2*unarmedMult),0);
-				else tmp = rn2(2) ? exploding_d(2,4*unarmedMult,0) : exploding_d(1,4*unarmedMult,0);
-			}
-			else{
-				tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,max_ints(4*unarmedMult,rnd(5)*2+2*unarmedMult),0) : rnd(4*unarmedMult);	/* bonus for martial arts */
-			}
-			if(uarmg && uarmg->otyp == tgloves) tmp += 2;
+		if (insubstantial(mdat) && !insubstantial_aware(mon, obj, FALSE)) {
+			/* no base damage */
+			tmp = 0;
 		}
-	    else {
-			tmp = u.sealsActive&SEAL_EURYNOME ? exploding_d(1,max_ints(2*unarmedMult,rnd(5)*2),0) : rnd(2*unarmedMult);
+		else
+		{
+			struct weapon_dice unarmed_dice;
+			/* initialize struct */
+			dmgval_core(&unarmed_dice, bigmonst(mon->data), obj, 0);
+
+			/* base unarmed dice */
+			if (martial_bonus())
+				unarmed_dice.oc.damd = 4*unarmedMult;
+			else
+				unarmed_dice.oc.damd = 2*unarmedMult;
+
+			/* Eurynome causes exploding dice, sometimes larger dice */
+			if (u.sealsActive&SEAL_EURYNOME) {
+				unarmed_dice.oc.aatyp = AT_EXPL;
+				unarmed_dice.oc.damd = max(unarmed_dice.oc.damd,
+											2*rnd(5) + (martial_bonus() ? 2*unarmedMult : 0 ));
+			}
+			/* Grandmaster's robe causes exploding dice, 50% chance of doubled dice */
+			if (uarmc && uarmc->oartifact == ART_GRANDMASTER_S_ROBE) {
+				unarmed_dice.oc.aatyp = AT_EXPL;
+				if (rn2(2)) {
+					unarmed_dice.oc.damn *= 2;
+				}
+			}
+			/* calculate dice and set tmp */
+			tmp = weapon_dmg_roll(&(unarmed_dice.oc), FALSE);
+
+			/* fighting gloves give bonus damage */
+			if (uarmg && uarmg->otyp == tgloves)
+				tmp += (martial_bonus() ? 3 : 1);
+
+			/* some artifact gloves give enchantment */
+			if (uarmg && (uarmg->oartifact == ART_PREMIUM_HEART || uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN))
+				tmp += uarmg->spe;
+
+			/* dahlver nar gives bonus damage*/
+			if (u.specialSealsActive&SEAL_DAHLVER_NAR)
+				tmp += d(2, 6) + min(u.ulevel / 2, (u.uhpmax - u.uhp) / 10);
 		}
-		if(uarmg && (uarmg->oartifact == ART_PREMIUM_HEART || uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN)) tmp += uarmg->spe;
-		if(u.specialSealsActive&SEAL_DAHLVER_NAR) tmp += d(2,6)+min(u.ulevel/2,(u.uhpmax - u.uhp)/10);
-		if(uarmg && uarmg->otyp == tgloves) tmp += 1;
 	    valid_weapon_attack = (tmp > 1);
 		
 		//The Annulus is very heavy
@@ -3821,10 +3866,10 @@ register struct attack *mattk;
 		case AD_SIMURGH:{
 			int i;
 			if(rn2(5)){
-			if(hates_iron(mdef->data)){
+				if(hates_iron(mdef->data)){
 					Your("Cold iron quills brush %s.",mon_nam(mdef));
 					tmp+=d(rnd(5), (mdef->m_lev+1)/2);
-			}
+				}
 				break;
 			} // else
 			pline("Radiant feathers slice through %s.",mon_nam(mdef));

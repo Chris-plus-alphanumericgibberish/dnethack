@@ -331,6 +331,59 @@ int otyp;
 			dmod += 2;
 		else if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD && obj->lamplit)
 			dmod += 2;
+
+		/* material-based dmod modifiers */
+		if (obj->obj_material != objects[obj->otyp].oc_material)
+		{
+			/* if something is made of an especially effective material 
+			 * and it normally isn't, it gets a dmod bonus 
+			 */
+			int mat;	/* material being contemplated */
+			int mod;	/* mat modifier sign: -1 for base, +1 for current*/
+			for (mod = -1; mod<2; mod+=2){
+				if (mod == -1)
+					mat = objects[obj->otyp].oc_material;
+				else
+					mat = obj->obj_material;
+				switch (mat)
+				{
+				/* flimsy weapons are bad damage */
+				case LIQUID:
+				case WAX:
+				case VEGGY:
+				case FLESH:
+				case PAPER:
+				case CLOTH:
+				case LEATHER:
+					dmod -= mod;
+					break;
+				/* gold and platinum are heavy
+				 * ...regardless that the elven mace is wooden, 
+				 *   and is _better_ than a standard iron mace */
+				case GOLD:
+				case PLATINUM:
+					if (is_bludgeon(obj))
+						dmod += mod;
+					break;
+				/* glass and obsidian have sharp edges and points 
+				 * shadowsteel ??? but gameplay-wise, droven weapons
+				 *   made out of this troublesome-to-maintain material
+				 *   shouldn't be weaker than their obsidian counterparts
+				 */
+				case GLASS:
+				case OBSIDIAN_MT:
+				case SHADOWSTEEL:
+					if (is_slashing(obj) || is_stabbing(obj))
+						dmod += mod;
+					break;
+				/* dragon teeth are good at piercing */
+				case DRAGON_HIDE:
+					if (is_stabbing(obj))
+						dmod += mod;
+					break;
+				}
+			}
+		}
 	}
 	/* apply dmod to ocd */
 	ocd = max(2, ocd + dmod * 2);
@@ -358,17 +411,17 @@ int otyp;
 			ocaa = AT_EXPL;					// exploding
 			ocad = AD_LUCK;					// lucky
 			ocn = obj->quan;				// 1 die per octahedron
-			ocd = 8;
+			ocd = 8;						// They are eight-sided dice
 		}
 		else if (obj->oartifact == ART_GIANTSLAYER)
 		{
 			bonn = (large ? 2 : 1);
-			bond = 4;
+			bond = 4 + 2 * dmod;
 		}
 		else if (obj->oartifact == ART_MJOLLNIR)
 		{
 			bonn = 2;
-			bond = 4;
+			bond = 4 + 2 * dmod;
 			if (!large)
 				flat += 2;
 		}
@@ -379,7 +432,7 @@ int otyp;
 		else if (obj->oartifact == ART_REAVER)
 		{
 			bonn = 1;
-			bond = 8;
+			bond = 8 + 2 * dmod;
 		}
 		else if (obj->oartifact == ART_TOBIUME)
 		{
@@ -411,12 +464,12 @@ int otyp;
 			bonn = 1;
 			bond = 4;
 		}
-		else if (otyp == MOON_AXE && obj->ovar1)
+		else if (otyp == MOON_AXE)
 		{
 			ocn = 2;
-			ocd = ocd + 2 * (obj->ovar1 - 1);	// die size is based on axe's phase of moon (0 <= ovar1 <= 4)
+			ocd = ocd + 2 * (obj->ovar1 - 1) + 2 * dmod;	// die size is based on axe's phase of moon (0 <= ovar1 <= 4)
 			if (!large && !obj->ovar1)			// eclipse moon axe is surprisingly effective against small creatures (2d12)
-				ocd = 12;
+				ocd = 12 + 2 * dmod;
 		}
 		else if (otyp == HEAVY_IRON_BALL) {
 			int wt = (int)objects[HEAVY_IRON_BALL].oc_weight;

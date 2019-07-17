@@ -1409,13 +1409,13 @@ struct obj *obj;
 	if(obj->owornmask){
 		You("must take %s off to modify it.", the(xname(obj)));
 		return 0;
-	} else if(obj->otyp == LEATHER_CLOAK){
+	} else if(obj->otyp == CLOAK){
 		You("wrap %s up, making a serviceable shield.", the(xname(obj)));
 		obj->otyp = ROUNDSHIELD;
 		return 1;
 	} else if(obj->otyp == ROUNDSHIELD){
 		You("unwrap %s, making a cloak.", the(xname(obj)));
-		obj->otyp = LEATHER_CLOAK;
+		obj->otyp = CLOAK;
 		return 1;
 	} else {
 		pline("Aegis in unexpected state?");

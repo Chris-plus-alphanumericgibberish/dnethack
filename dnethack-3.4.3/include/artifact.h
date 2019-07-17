@@ -408,6 +408,9 @@ struct artifact {
 							||  u.ualign.type == A_CHAOTIC ) \
 				)\
 			)
+/* artifact has no specific material or size, eg "silver Grimtooth" */
+#define is_malleable_artifact(a) (is_nameable_artifact((a)) || (a) == &artilist[ART_EXCALIBUR])
+
 #define is_mastery_artifact_nameable(a) (\
             /* Mastery artifacts */\
             /* Archeologist */\

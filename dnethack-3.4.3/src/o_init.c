@@ -1482,6 +1482,8 @@ int
 object_color(otmp)
 struct obj *otmp;
 {
+	const char * s;
+
 	/* should never happen */
 	if (!otmp)
 	{
@@ -1497,17 +1499,37 @@ struct obj *otmp;
 	}
 
 
-	/* artifacts with set colors, currently none */
-//	switch (otmp->oartifact)
-//	{
-//	case ART_BLACK_CRYSTAL:		return CLR_BLACK;
-//	}
+	/* artifacts with set colors */
+	switch (otmp->oartifact)
+	{
+	case ART_BLACK_CRYSTAL:		return CLR_BLACK;
+	}
+	/* gold pieces are yellow */
+	if (otmp->otyp == GOLD_PIECE)
+		return CLR_YELLOW;
+
+	/* plumed helmets and etched helmets get fancy colors, but only if their material is boring (iron/metal) */
+	if ((otmp->obj_material == IRON || otmp->obj_material == METAL)
+		&& ((s = OBJ_DESCR(objects[otmp->otyp])) != (char *)0 && !strncmpi(s, "plumed", 6)))
+		return CLR_RED;
+	if ((otmp->obj_material == IRON || otmp->obj_material == METAL)
+		&& ((s = OBJ_DESCR(objects[otmp->otyp])) != (char *)0 && !strncmpi(s, "etched", 6)))
+		return CLR_BRIGHT_GREEN;
+
 	/* objects with non-standard materials whose base color is that of their material */
 	if (otmp->obj_material != objects[otmp->otyp].oc_material
 		&& materials[objects[otmp->otyp].oc_material].color == objects[otmp->otyp].oc_color)
 	{
+		/* Fancy gem colors */
 		if (otmp->obj_material == GEMSTONE && otmp->ovar1 && !obj_type_uses_ovar1(otmp) && !obj_art_uses_ovar1(otmp))
 			return objects[otmp->ovar1].oc_color;
+		/* Dragon hide/bone discrepancy -- dragonhide should be leather colored, not bone colored.
+		 * We are neglecting dragon scales, since there currently no circumstances where that happens
+		 * as it requires the base material to be dragonhide, and this code-block applies to modified mats
+		 */
+		if (otmp->obj_material == DRAGON_HIDE && !strncmpi(material_name(otmp, TRUE), "dragonhide", 10))
+				return HI_LEATHER;
+		
 		return materials[otmp->obj_material].color;
 	}
 	/* default color */

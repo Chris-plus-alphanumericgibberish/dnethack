@@ -7,6 +7,7 @@
 
 STATIC_DCL void FDECL(mkbox_cnts,(struct obj *));
 STATIC_DCL void FDECL(obj_timer_checks,(struct obj *, XCHAR_P, XCHAR_P, int));
+STATIC_DCL void FDECL(init_obj_material, (struct obj *));
 #ifdef OVL1
 STATIC_DCL void FDECL(container_weight, (struct obj *));
 STATIC_DCL struct obj *FDECL(save_mtraits, (struct obj *, struct monst *));
@@ -78,6 +79,144 @@ const struct icp hellprobs[] = {
 { 8, RING_CLASS},
 { 4, AMULET_CLASS}
 };
+
+/* Object material probabilities.*/
+/* for objects which are normally iron or metal */
+static const struct icp metal_materials[] = {
+	{75, 0 }, /* default to base type, iron or metal */
+	{ 5, IRON },
+	{ 5, WOOD },
+	{ 5, SILVER },
+	{ 3, COPPER },
+	{ 3, MITHRIL },
+	{ 1, GOLD },
+	{ 1, BONE },
+	{ 1, GLASS },
+	{ 1, PLATINUM }
+};
+
+/* for objects which are normally wooden */
+static const struct icp wood_materials[] = {
+	{80, WOOD },
+	{10, MINERAL },
+	{ 5, IRON },
+	{ 3, BONE },
+	{ 1, COPPER },
+	{ 1, SILVER }
+};
+
+/* for objects which are normally cloth */
+static const struct icp cloth_materials[] = {
+    {80, CLOTH },
+    {20, LEATHER }
+};
+
+/* for objects which are normally leather */
+static const struct icp leather_materials[] = {
+    {75, LEATHER },
+    {24, CLOTH },
+	{ 1, DRAGON_HIDE }
+};
+
+/* for objects of dwarvish make */
+static const struct icp dwarvish_materials[] = {
+	{80, IRON },
+	{10, MITHRIL },
+	{ 5, COPPER },
+	{ 2, SILVER },
+	{ 1, GOLD },
+	{ 1, PLATINUM },
+	{ 1, GEMSTONE }
+};
+
+/* for objects of high-elven make (which is currently specified as elven equipment normally made of mithril) */
+static const struct icp high_elven_materials[] = {
+    {90, MITHRIL },
+    { 6, SILVER },
+    { 3, GOLD },
+	{ 1, GEMSTONE }
+};
+/* for armor-y objects of elven make - no iron!
+* Does not cover clothy items; those use the regular cloth probs. */
+static const struct icp elven_materials[] = {
+	{60, 0 }, /* use base material */
+	{15, COPPER },
+	{10, BONE },
+	{ 5, LEATHER },
+	{ 5, MITHRIL },
+	{ 3, SILVER },
+	{ 2, GOLD }
+};
+
+/* for weapons of droven make -- armor is all shadowsteel */
+static const struct icp droven_materials[] = {
+	{80, 0 }, /* use base material */
+	{10, SHADOWSTEEL },
+	{ 5, MITHRIL },
+	{ 5, SILVER }
+};
+
+/* for objects of orcish make */
+static const struct icp orcish_materials[] = {
+	{50, 0 }, /* use base material */
+	{20, IRON },
+	{15, BONE },
+	{10, MINERAL },
+	{ 4, OBSIDIAN_MT },
+	{ 1, GOLD }
+};
+
+/* Reflectable items - for the shield of reflection; anything that can hold a
+ * polish. Amulets also arbitrarily use this list. */
+static const struct icp shiny_materials[] = {
+	{50, 0 }, /* use base material */
+	{15, SILVER },
+	{11, COPPER },
+	{ 6, GOLD },
+	{ 6, IRON }, /* stainless steel */
+	{ 5, GLASS },
+	{ 3, MITHRIL },
+	{ 3, METAL }, /* aluminum, or similar */
+	{ 1, PLATINUM }
+};
+
+/* for bells and other tools, especially instruments, which are normally copper
+ * or metal.  Wood and glass in other lists precludes us from using those. */
+static const struct icp resonant_materials[] = {
+	{70, 0 }, /* use base material */
+	{10, COPPER },
+	{ 6, SILVER },
+	{ 5, IRON },
+	{ 5, MITHRIL },
+	{ 3, GOLD },
+	{ 1, PLATINUM }
+};
+
+/* for horns, currently. */
+static const struct icp horn_materials[] = {
+	{70, BONE },
+	{10, COPPER },
+	{ 7, MITHRIL },
+	{ 5, WOOD },
+	{ 5, SILVER },
+	{ 2, GOLD },
+	{ 1, DRAGON_HIDE }
+};
+
+/* hacks for specific objects... not great because it's a lot of data, but it's
+ * a relatively clean solution */
+static const struct icp bow_materials[] = {
+    /* assumes all bows will be wood by default, fairly safe assumption */
+    {75, WOOD },
+    { 7, IRON },
+    { 5, MITHRIL },
+    { 4, COPPER },
+    { 4, BONE },
+    { 2, SILVER },
+	{ 2, METAL },
+    { 1, GOLD }
+};
+
 
 struct obj *
 mkobj_at(let, x, y, artif)
@@ -1516,38 +1655,185 @@ int quan;
 	return;
 }
 
-/* Initialize the material field of an object */
+/* Return the appropriate random material list for a given object,
+ * or NULL if there isn't an appropriate list. */
+const struct icp*
+material_list(obj)
+struct obj* obj;
+{
+    unsigned short otyp = obj->otyp;
+    int default_material = objects[otyp].oc_material;
+
+    /* Cases for specific object types. */
+	switch (otyp) {
+	/* Special exceptions to the whole randomized materials system - where
+	 * we ALWAYS want an object to use its base material regardless of
+	 * other cases in this function - go here.
+	 * Return NULL so that init_obj_material and valid_obj_material both
+	 * work properly. */
+	case BULLWHIP:
+	case WORM_TOOTH:
+	case CRYSKNIFE:
+	case LEATHER_ARMOR:
+	case STUDDED_LEATHER_ARMOR:
+	case YA:
+	case ORIHALCYON_GAUNTLETS:
+	case HARMONIUM_HELM:
+	case HARMONIUM_PLATE:
+	case HARMONIUM_SCALE_MAIL:
+	case HARMONIUM_GAUNTLETS:
+	case HARMONIUM_BOOTS:
+	case ELVEN_MITHRIL_COAT:
+	case DWARVISH_MITHRIL_COAT:
+		return NULL;
+		/* Any other cases for specific object types go here. */
+	case SHIELD_OF_REFLECTION:
+		return shiny_materials;
+	case BOW:
+	case ELVEN_BOW:
+	case ORCISH_BOW:
+	case YUMI:
+	case BOOMERANG: /* wooden base, similar shape */
+		return bow_materials;
+	case CHEST:
+	case BOX:
+		return wood_materials;
+	case SKELETON_KEY:
+	case LOCK_PICK:
+	case TIN_OPENER:
+		return metal_materials;
+	case BELL:
+	case BUGLE:
+	case LANTERN:
+	case OIL_LAMP:
+	case MAGIC_LAMP:
+	case MAGIC_WHISTLE:
+	case FLUTE:
+	case MAGIC_FLUTE:
+	case HARP:
+	case MAGIC_HARP:
+		return resonant_materials;
+	case TOOLED_HORN:
+	case FIRE_HORN:
+	case FROST_HORN:
+	case HORN_OF_PLENTY:
+		return horn_materials;
+	default:
+		break;
+	}
+
+    /* Otherwise, select an appropriate list, or return NULL if no appropriate
+     * list exists. */
+	if (otyp == find_gcirclet()) {
+		return shiny_materials;
+	}
+	else if (is_firearm(obj) && (default_material == IRON || default_material == METAL)) {
+		return resonant_materials;	// guns and bells are surprisingly similar (see: Wheel of Time)
+	}
+	else if (obj->oclass == WEAPON_CLASS && objects[otyp].oc_skill == -P_FIREARM) {
+		return NULL;	// do not attempt to randomize the material of bullets/shells/grenades
+	}
+    else if (is_elven_obj(obj) && default_material == MITHRIL) {
+        return high_elven_materials;
+    }
+	else if (is_elven_obj(obj) && default_material != CLOTH) {
+		return elven_materials;
+	}
+    else if (is_dwarvish_obj(obj) && default_material != CLOTH) {
+        return dwarvish_materials;
+    }
+	else if (is_droven_weapon(obj)) {
+		return droven_materials;
+	}
+	else if (is_orcish_obj(obj) && default_material != CLOTH) {
+		return orcish_materials;
+	}
+    else if (obj->oclass == AMULET_CLASS && otyp != AMULET_OF_YENDOR
+             && otyp != FAKE_AMULET_OF_YENDOR) {
+        /* could use metal_materials too */
+        return shiny_materials;
+    }
+    else if (obj->oclass == WEAPON_CLASS || is_weptool(obj)
+             || obj->oclass == ARMOR_CLASS) {
+        if (default_material == IRON || default_material == METAL) {
+            return metal_materials;
+        }
+        else if (default_material == WOOD) {
+            return wood_materials;
+        }
+        else if (default_material == CLOTH) {
+            return cloth_materials;
+        }
+		else if (default_material == LEATHER) {
+            return leather_materials;
+        }
+    }
+    return NULL;
+}
+
+/* Tries to set obj's material to mat
+ * Is limited by material lists and probabilities
+ * If check_all is true, go through the object's whole mat list;
+ *   otherwise, limited by probability
+ * Used by wishing code
+ */
+void
+maybe_set_material(obj, mat, check_all)
+struct obj *obj;
+int mat;
+boolean check_all;
+{
+	const struct icp* random_mat_list;
+
+	/* check that the item isn't currently of mat */
+	if (obj->obj_material == mat)
+		return;	// already done
+
+	/* randomized materials */
+	random_mat_list = material_list(obj);
+	/* check that the object can have a random material */
+	if (!random_mat_list)
+		return;
+
+	int i = (check_all ? 100 : rnd(100));
+	while (i > 0) {
+		if ((i <= random_mat_list->iprob) || (random_mat_list->iclass == mat))
+			break;
+		i -= random_mat_list->iprob;
+		random_mat_list++;
+	}
+	if (random_mat_list->iclass) /* a 0 indicates to use default material */
+		set_material(obj, random_mat_list->iclass);
+}
+
+/* Initialize the material field of an object
+ * Called on object creation, and can be called during
+ *   wishing to re-randomize the material of an object
+ */
 void
 init_obj_material(obj)
 struct obj* obj;
 {
 	int otyp = obj->otyp;
+	const struct icp* random_mat_list;
 
 	/* start by setting the material to its default */
 	obj->obj_material = objects[obj->otyp].oc_material;
 
-	/* special cases from this point down
-	 */
-#define set (obj->obj_material != objects[obj->otyp].oc_material)
-	switch (otyp)
-	{
-	case DAGGER:
-		if (!set && !rn2(12))
-			set_material(obj, SILVER);
+	/* randomized materials */
+	random_mat_list = material_list(obj);
+	if (random_mat_list) {
+		int i = rnd(100);
+		while (i > 0) {
+			if (i <= random_mat_list->iprob)
 		break;
-	case SPEAR:
-		if (!set && !rn2(25))
-			set_material(obj, SILVER);
-		break;
-	case STILETTOS:
-		if (!set && !rn2(12))
-			set_material(obj, SILVER);
-		break;
+			i -= random_mat_list->iprob;
+			random_mat_list++;
+		}
+		if (random_mat_list->iclass) /* a 0 indicates to use default material */
+			set_material(obj, random_mat_list->iclass);
 	}
 
-	if (!set && otyp == find_gcirclet())
-		set_material(obj, GOLD);
-#undef set
 	/* start the timer for shadowsteel objects */
 	if (is_evaporable(obj)){
 		start_timer(1, TIMER_OBJECT,
@@ -1736,6 +2022,10 @@ int mat;
 			// obj->otyp = ;
 		// break;
 	}
+	/* switch based on class
+	 * this will actually set the material
+	 *   some exceptions exist where material purposefully not changed
+	 */
 	switch(objects[obj->otyp].oc_class){
 		case POTION_CLASS:
 			switch(mat){
@@ -1860,7 +2150,7 @@ register struct obj *obj;
 	else if(obj->oartifact == ART_ROD_OF_THE_ELVISH_LORDS) wt = objects[ELVEN_MACE].oc_weight;
 	else if(obj->oartifact == ART_VAMPIRE_KILLER) wt = 2*objects[BULLWHIP].oc_weight;
 	else if(obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA) wt = 2*objects[SCIMITAR].oc_weight;
-	else if(obj->oartifact == ART_AEGIS) wt = objects[LEATHER_CLOAK].oc_weight;
+	else if(obj->oartifact == ART_AEGIS) wt = objects[CLOAK].oc_weight;
 	else if(obj->oartifact == ART_HERMES_S_SANDALS) wt = objects[FLYING_BOOTS].oc_weight;
 	else if(obj->oartifact == ART_EARTH_CRYSTAL){
 		wt = 160;

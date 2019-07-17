@@ -283,6 +283,69 @@ register int x, y, typ;
 	    case ROLLING_BOULDER_TRAP:	/* boulder will roll towards trigger */
 		(void) mkroll_launch(ttmp, x, y, BOULDER, 1L);
 		break;
+		case DART_TRAP:
+		case ARROW_TRAP:
+		{
+		// create a fake ammo representative of what the trap holds
+		struct obj* otmp = mksobj(typ == DART_TRAP ? DART : ARROW, TRUE, FALSE);
+		// set blessed/cursed/enchanted status to be consistent across fired ammo
+		ttmp->launch_blessed = otmp->blessed;
+		ttmp->launch_cursed = otmp->cursed;
+		ttmp->launch_enchant = !!(otmp->spe);
+
+		// set the material to be consistent across all fired ammunition
+		ttmp->launch_mat = otmp->obj_material;
+		if (ttmp->launch_mat == GEMSTONE) ttmp->launch_mat = MINERAL;	// no space to store specific gem type
+		// special cases: role quests
+		if (In_quest(&u.uz))
+		{
+			if (Race_if(PM_DROW))
+				ttmp->launch_mat = OBSIDIAN_MT;
+			else if (Role_if(PM_ARCHEOLOGIST) && !Is_qstart(&u.uz))
+				ttmp->launch_mat = !rn2(3) ? BONE : rn2(2) ? OBSIDIAN_MT : MINERAL;
+			else if (Role_if(PM_ANACHRONONAUT))
+				ttmp->launch_mat = PLASTIC;
+			else if (!rn2(3) && (Race_if(PM_ELF) && (Role_if(PM_RANGER) || Role_if(PM_WIZARD) || Role_if(PM_PRIEST) || Role_if(PM_NOBLEMAN))))
+				ttmp->launch_mat = BONE;
+			else if (!rn2(3) && (Race_if(PM_GNOME) && Role_if(PM_RANGER)))
+				ttmp->launch_mat = MINERAL;
+		}
+		// special cases: demon lairs
+		if		(Is_mammon_level(&u.uz))		ttmp->launch_mat = GOLD;
+		else if (Is_lolth_level(&u.uz))			ttmp->launch_mat = OBSIDIAN_MT;
+		else if (Is_orcus_level(&u.uz))			ttmp->launch_mat = BONE;
+		else if (Is_night_level(&u.uz))			ttmp->launch_mat = BONE;
+		// special cases: other
+		if		(In_outlands(&u.uz))					ttmp->launch_mat = rn2(3) ? METAL : rn2(2) ? IRON : rn2(2) ? COPPER : rn2(4) ? SILVER : GOLD;
+		else if (!rn2(3) && Is_sunsea(&u.uz))			ttmp->launch_mat = GOLD;
+		else if (!rn2(3) && Is_knox(&u.uz))				ttmp->launch_mat = !rn2(3) ? GOLD : !rn2(2) ? PLATINUM : SILVER;
+		else if (!rn2(3) && In_moloch_temple(&u.uz))	ttmp->launch_mat = BONE;
+		else if (!rn2(3) && In_mines(&u.uz))			ttmp->launch_mat = MINERAL;
+
+
+		// set the poison status to be consistent across all fired ammunition
+		ttmp->launch_pois = otmp->opoisoned;
+		// special cases: demon lairs
+		if		(Is_juiblex_level(&u.uz))		ttmp->launch_pois = OPOISON_ACID;
+		else if (Is_zuggtmoy_level(&u.uz))		ttmp->launch_pois = OPOISON_FILTH;
+		else if (Is_baphomet_level(&u.uz))		ttmp->launch_pois = OPOISON_ACID;
+		else if (Is_grazzt_level(&u.uz))		ttmp->launch_pois = OPOISON_ACID;
+		else if (Is_malcanthet_level(&u.uz))	ttmp->launch_pois = OPOISON_BASIC;
+		else if (Is_lolth_level(&u.uz))			ttmp->launch_pois = OPOISON_SLEEP;
+		else if (Is_leviathan_level(&u.uz))		ttmp->launch_pois = OPOISON_AMNES;
+		else if (Is_lilith_level(&u.uz))		ttmp->launch_pois = OPOISON_BASIC;
+		else if (Is_baalzebub_level(&u.uz))		ttmp->launch_pois = OPOISON_BASIC;
+		else if (Is_demogorgon_level(&u.uz))	ttmp->launch_pois = OPOISON_FILTH;
+		else if (Is_lamashtu_level(&u.uz))		ttmp->launch_pois = OPOISON_FILTH;
+		// special cases: alignment quests
+		else if (Is_arcadia_woods(&u.uz))		ttmp->launch_pois = OPOISON_ACID;
+		else if (In_depths(&u.uz) && !rn2(10))	ttmp->launch_pois = OPOISON_AMNES;
+		else if (Is_rlyeh(&u.uz) && !rn2(3))	ttmp->launch_pois = OPOISON_AMNES;
+		// free the temporary object
+		obfree(otmp, (struct obj*)0);
+		}
+		break;
+
 	    case RUST_TRAP:
 		if (!rn2(4)) {
 		    del_engr_at(x, y);
@@ -701,9 +764,12 @@ unsigned trflags;
 		seetrap(trap);
 		pline("An arrow shoots out at you!");
 		otmp = mksobj(ARROW, TRUE, FALSE);
-		otmp->quan = 1L;
-		otmp->owt = weight(otmp);
-		otmp->opoisoned = 0;
+		set_obj_quan(otmp, 1);
+		set_material(otmp, trap->launch_mat);
+		otmp->opoisoned = trap->launch_pois;
+		otmp->blessed = trap->launch_blessed;
+		otmp->cursed = trap->launch_cursed;
+		otmp->spe = trap->launch_enchant * (trap->launch_cursed ? -1 : 1);
 #ifdef STEED
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
@@ -711,10 +777,15 @@ unsigned trflags;
 		if (thitu(8, dmgval(otmp, &youmonst, 0), otmp, "arrow", shienuse) || shienuse) {
 		    obfree(otmp, (struct obj *)0);
 		} else {
-		    place_object(otmp, u.ux, u.uy);
-		    if (!Blind) otmp->dknown = 1;
-		    stackobj(otmp);
-		    newsym(u.ux, u.uy);
+			if (is_shatterable(otmp)){
+				breaks(otmp, u.ux, u.uy);
+			}
+			else {
+				place_object(otmp, u.ux, u.uy);
+				if (!Blind) otmp->dknown = 1;
+				stackobj(otmp);
+				newsym(u.ux, u.uy);
+			}
 		}
 		break;
 	    case DART_TRAP:
@@ -728,29 +799,30 @@ unsigned trflags;
 		seetrap(trap);
 		pline("A little dart shoots out at you!");
 		otmp = mksobj(DART, TRUE, FALSE);
-		otmp->quan = 1L;
-		otmp->owt = weight(otmp);
-		if (!rn2(6)) otmp->opoisoned = rn2(4) ? OPOISON_BASIC : 
-										!rn2(3) ? OPOISON_SLEEP : 
-										rn2 (2) ? OPOISON_PARAL :
-										OPOISON_BLIND;
+		set_obj_quan(otmp, 1);
+		set_material(otmp, trap->launch_mat);
+		otmp->opoisoned = trap->launch_pois;
+		otmp->blessed = trap->launch_blessed;
+		otmp->cursed = trap->launch_cursed;
+		otmp->spe = trap->launch_enchant * (trap->launch_cursed ? -1 : 1);
 #ifdef STEED
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
 		if (thitu(7, dmgval(otmp, &youmonst, 0), otmp, "little dart", shienuse) || shienuse) {
 		    if (otmp->opoisoned && !shienuse)
-			poisoned("dart", A_CON, "little dart", -10, rn2(10) ? OPOISON_BASIC :
-														!rn2(4) ? OPOISON_SLEEP :
-														!rn2(3) ? OPOISON_BLIND :
-														!rn2(2) ? OPOISON_PARAL :
-																  OPOISON_AMNES);
+			poisoned("dart", A_CON, "little dart", -10, otmp->opoisoned);
 		    obfree(otmp, (struct obj *)0);
 		} else {
-		    place_object(otmp, u.ux, u.uy);
-		    if (!Blind) otmp->dknown = 1;
-		    stackobj(otmp);
-		    newsym(u.ux, u.uy);
+			if (is_shatterable(otmp)){
+				breaks(otmp, u.ux, u.uy);
+			}
+			else {
+				place_object(otmp, u.ux, u.uy);
+				if (!Blind) otmp->dknown = 1;
+				stackobj(otmp);
+				newsym(u.ux, u.uy);
+			}
 		}
 		break;
 	    case ROCKTRAP:
@@ -1933,9 +2005,12 @@ register struct monst *mtmp;
 			}
 			trap->once = 1;
 			otmp = mksobj(ARROW, TRUE, FALSE);
-			otmp->quan = 1L;
-			otmp->owt = weight(otmp);
-			otmp->opoisoned = 0;
+			set_obj_quan(otmp, 1);
+			set_material(otmp, trap->launch_mat);
+			otmp->opoisoned = trap->launch_pois;
+			otmp->blessed = trap->launch_blessed;
+			otmp->cursed = trap->launch_cursed;
+			otmp->spe = trap->launch_enchant * (trap->launch_cursed ? -1 : 1);
 			if (in_sight) seetrap(trap);
 			if (thitm(8, mtmp, otmp, 0, FALSE)) trapkilled = TRUE;
 			break;
@@ -1950,12 +2025,12 @@ register struct monst *mtmp;
 			}
 			trap->once = 1;
 			otmp = mksobj(DART, TRUE, FALSE);
-			otmp->quan = 1L;
-			otmp->owt = weight(otmp);
-			if (!rn2(6)) otmp->opoisoned = rn2(4) ? OPOISON_BASIC : 
-										!rn2(3) ? OPOISON_SLEEP : 
-										rn2 (2) ? OPOISON_PARAL :
-										OPOISON_BLIND;
+			set_obj_quan(otmp, 1);
+			set_material(otmp, trap->launch_mat);
+			otmp->opoisoned = trap->launch_pois;
+			otmp->blessed = trap->launch_blessed;
+			otmp->cursed = trap->launch_cursed;
+			otmp->spe = trap->launch_enchant * (trap->launch_cursed ? -1 : 1);
 			if (in_sight) seetrap(trap);
 			if (thitm(7, mtmp, otmp, 0, FALSE)) trapkilled = TRUE;
 			break;
@@ -3627,11 +3702,14 @@ int cnt;
 struct trap *ttmp;
 {
 	struct obj *otmp = mksobj(otyp, TRUE, FALSE);
-	otmp->quan=cnt;
-	otmp->owt = weight(otmp);
-	/* Only dart traps are capable of being poisonous */
-	if (otyp != DART)
-	    otmp->opoisoned = 0;
+	set_obj_quan(otmp, cnt);
+	if (ttmp->ttyp == DART_TRAP || ttmp->ttyp == ARROW_TRAP){
+		set_material(otmp, ttmp->launch_mat);
+		otmp->opoisoned = ttmp->launch_pois;
+		otmp->blessed = ttmp->launch_blessed;
+		otmp->cursed = ttmp->launch_cursed;
+		otmp->spe = ttmp->launch_enchant * (ttmp->launch_cursed ? -1 : 1);
+	}
 	place_object(otmp, ttmp->tx, ttmp->ty);
 	/* Sell your own traps only... */
 	if (ttmp->madeby_u) sellobj(otmp, ttmp->tx, ttmp->ty);

@@ -1220,7 +1220,13 @@ register const char *let,*word;
 			bp[foo++] = otmp->invlet;
 			allowall = TRUE;
 		}
-
+		//Make exceptions for gemstone items made of specific gems
+		if (otmp->obj_material == GEMSTONE && otmp->ovar1 && !obj_type_uses_ovar1(otmp) && !obj_art_uses_ovar1(otmp)
+			&& (!objects[otmp->ovar1].oc_name_known || !otmp->dknown)
+			&& !strncmp(word, "rub on the stone", 16)) {
+			bp[foo++] = otmp->invlet;
+			allowall = TRUE;
+		}
 	    if(ilet == 'z') ilet = 'A'; else ilet++;
 	}
 	bp[foo] = 0;
@@ -1966,7 +1972,7 @@ ddoinv()
 		if (otmp->invlet == c) break;
 		if (otmp)
 		{
-			if (iflags.item_use_menu)
+			if (TRUE)
 				return itemactions(otmp);
 			else
 			{

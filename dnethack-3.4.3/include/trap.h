@@ -7,7 +7,17 @@
 #ifndef TRAP_H
 #define TRAP_H
 
+struct trap_loaded_obj {
+	unsigned short o_pois : 8;		/* poison type(s) */
+	unsigned short o_mat : 5;		/* object material */
+	unsigned short o_blessed : 1;	/* blessed */
+	unsigned short o_cursed : 1;	/* cursed */
+	unsigned short o_pm_one : 1;	/* +1 if non-cursed, -1 if cursed */
+	// no remaining bits -- if more are needed, cannibalize o_pois and assume only 1 poison type?
+};
+
 union vlaunchinfo {
+	struct trap_loaded_obj v_loaded_obj;	/* bitfield struct to make projectiles consistent from launcher traps */
 	short v_launch_otyp;	/* type of object to be triggered */
 	coord v_launch2;	/* secondary launch point (for boulders) */
 };
@@ -28,6 +38,11 @@ struct trap {
 				 easy to make a monster peaceful if you could
 				 set a trap for it and then untrap it. */
 	union vlaunchinfo vl;
+#define launch_pois    vl.v_loaded_obj.o_pois
+#define launch_mat     vl.v_loaded_obj.o_mat
+#define launch_blessed vl.v_loaded_obj.o_blessed
+#define launch_cursed  vl.v_loaded_obj.o_cursed
+#define launch_enchant vl.v_loaded_obj.o_pm_one
 #define launch_otyp	vl.v_launch_otyp
 #define launch2		vl.v_launch2
 };

@@ -232,7 +232,7 @@ Cloak_on()
 	case DWARVISH_CLOAK:
 	case CLOAK_OF_MAGIC_RESISTANCE:
 	case ROBE:
-	case LEATHER_CLOAK:
+	case CLOAK:
 	case LEO_NEMAEUS_HIDE:
 	case WHITE_FACELESS_ROBE:
 	case BLACK_FACELESS_ROBE:
@@ -308,7 +308,7 @@ Cloak_off()
 	case CLOAK_OF_DISPLACEMENT:
 	case OILSKIN_CLOAK:
 	case ROBE:
-	case LEATHER_CLOAK:
+	case CLOAK:
 	case LEO_NEMAEUS_HIDE:
 	case WHITE_FACELESS_ROBE:
 	case BLACK_FACELESS_ROBE:
@@ -1931,28 +1931,63 @@ struct obj * otmp;
 	return greatest;
 }
 
+/* 
+ * Material defense bonuses are multiplicative to the armor's base
+ * protection. Slots other than body armor see little or no change
+ * in their effectiveness, and even body armor tends to only change
+ * by +- 1 AC and DR. Partly, this is due to most commonly-subsititable
+ * materials being very close in their defense ratings; see decl.c
+ */
+int
+material_def_bonus(otmp, def)
+struct obj * otmp;
+int def;
+{
+	int curr = materials[otmp->obj_material].defense;
+	int base = materials[objects[otmp->otyp].oc_material].defense;
+	return ((def * curr) + base / 2) / base - def;
+}
+
 int arm_ac_bonus(otmp)
 struct obj * otmp;
 {
+	/* no armor, no defense! */
+	if (!otmp)
+		return 0;
+
 	int def = objects[otmp->otyp].a_ac;
 	
-	// reduce by erosion
-	def -= min((int)greatest_erosion(otmp), objects[otmp->otyp].a_ac);
+	// add material bonus
+	def += material_def_bonus(otmp, def);
 
+	// reduce by erosion
+	def -= min((int)greatest_erosion(otmp), def);
+
+	// cloak of protection's magic is not reduced by erosion or multiplied by mat
+	if (otmp->otyp == CLOAK_OF_PROTECTION)
+		def += 2;
 	// combat boots
 	static int cbootsd = 0;
 	if (!cbootsd) cbootsd = find_cboots();
 	if (otmp->otyp == cbootsd) def += 1;
 
 	// add enchantment
-	// crystal armor bonus enchantment
-	if (otmp->otyp == CRYSTAL_PLATE_MAIL)	def += otmp->spe;
-	else if (otmp->otyp == CRYSTAL_HELM)			def += otmp->spe;
-	else if (otmp->otyp == CRYSTAL_BOOTS)		def += otmp->spe;
-	else if (otmp->otyp == CRYSTAL_SHIELD)		def += 1.5*otmp->spe;
-	else if (otmp->otyp == CRYSTAL_GAUNTLETS)	def += otmp->spe;
-	else if (is_shield(otmp)) def += otmp->spe;
-	else def += (otmp->spe)/2;
+	if (otmp->spe)
+	{
+		int spemult = 6; // out of 12
+		// shields get full enchantment to AC
+		if (is_shield(otmp))
+			spemult += 6;
+		// crystal armor bonus enchantment
+		if (otmp->otyp == CRYSTAL_PLATE_MAIL ||
+			otmp->otyp == CRYSTAL_HELM ||
+			otmp->otyp == CRYSTAL_BOOTS ||
+			otmp->otyp == CRYSTAL_SHIELD ||
+			otmp->otyp == CRYSTAL_GAUNTLETS)
+			spemult += 3;
+
+		def += (otmp->spe * spemult + 0) / 12;
+	}
 
 	// artifact bonus def
 	switch (otmp->oartifact)
@@ -1988,14 +2023,24 @@ int
 arm_dr_bonus(otmp)
 struct obj * otmp;
 {
+	/* no armor, no defense! */
+	if (!otmp)
+		return 0;
+
 	int def = objects[otmp->otyp].a_dr;
 	
 	if(is_shield(otmp))
 		return 0;
 
-	// reduce by erosion
-	def -= min((int)greatest_erosion(otmp), objects[otmp->otyp].a_dr);
+	// add material bonus
+	def += material_def_bonus(otmp, def);
 
+	// reduce by erosion
+	def -= min((int)greatest_erosion(otmp), def);
+
+	// cloak of protection's magic is not reduced by erosion or multiplied by mat
+	if (otmp->otyp == CLOAK_OF_PROTECTION)
+		def += 2;
 	// padded gloves
 	static int pgloves = 0;
 	if (!pgloves) pgloves = find_pgloves();
@@ -2015,12 +2060,21 @@ struct obj * otmp;
 
 
 	// add enchantment
-	// crystal armor bonus enchantment
-	if (otmp->otyp == CRYSTAL_PLATE_MAIL)	def += otmp->spe;
-	else if (otmp->otyp == CRYSTAL_HELM)			def += otmp->spe;
-	else if (otmp->otyp == CRYSTAL_BOOTS)		def += otmp->spe;
-	else if (otmp->otyp == CRYSTAL_GAUNTLETS)	def += otmp->spe;
-	else def += (otmp->spe+1)/2;
+	if (otmp->spe)
+	{
+		int spemult = 6; // out of 12
+		// shields get no enchantment to DR
+		if (is_shield(otmp))
+			spemult = 0;
+		// crystal armor bonus enchantment
+		if (otmp->otyp == CRYSTAL_PLATE_MAIL ||
+			otmp->otyp == CRYSTAL_HELM ||
+			otmp->otyp == CRYSTAL_BOOTS ||
+			otmp->otyp == CRYSTAL_GAUNTLETS)
+			spemult += 4;
+
+		def += (otmp->spe * spemult + 6) / 12;
+	}
 
 	// artifact bonus def
 	switch (otmp->oartifact)

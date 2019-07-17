@@ -2431,7 +2431,7 @@ struct monst *mtmp;
 		    !(typ >= DAGGER && typ <= CRYSKNIFE) &&
 		    typ != SLING &&
 		    !is_cloak(obj) && typ != FEDORA &&
-		    !is_gloves(obj) && typ != LEATHER_JACKET &&
+		    !is_gloves(obj) && typ != JACKET &&
 #ifdef TOURIST
 		    typ != CREDIT_CARD && !is_shirt(obj) &&
 #endif

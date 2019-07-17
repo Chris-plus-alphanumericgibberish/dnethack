@@ -1388,7 +1388,7 @@ do_monstr()
     }
     Fprintf(ofp,Dont_Edit_Code);
     Fprintf(ofp,"#include \"config.h\"\n");
-    Fprintf(ofp,"\nconst int monstr[] = {\n");
+    Fprintf(ofp,"\nint monstr[] = {\n");
     for (ptr = &mons[0], j = 0; ptr->mlet; ptr++) {
 
 	SpinCursor(3);

@@ -30,7 +30,7 @@ STATIC_DCL void NDECL(scatter_weapons);
 static struct trobj Archeologist[] = {
 	/* if adventure has a name...  idea from tan@uvm-gen */
 	{ BULLWHIP, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ FEDORA, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
@@ -174,7 +174,7 @@ static struct trobj Anachrononaut_Fem_Clk[] = {
 static struct trobj Anachrononaut_Mal_Clk[] = {
 	{ GOLD_BLADED_VIBROSWORD, 0, WEAPON_CLASS, 1, 0 },
 	{ BATTLE_AXE, 0, WEAPON_CLASS, 1, 0 },
-	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, 0 },
+	{ JACKET, 0, ARMOR_CLASS, 1, 0 },
 	{ GLOVES, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ ANDROID_VISOR, 0, ARMOR_CLASS, 1, 0 },
@@ -196,7 +196,7 @@ static struct trobj Bard[] = {
 #define BARD_INSTR 0
 	{ HARP, UNDEF_SPE, TOOL_CLASS, 1, UNDEF_BLESS },
 #define BARD_CLOAK 1
-	{ LEATHER_CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 3, 0 },
 	{ ORANGE, 0, FOOD_CLASS, 3, 0 },
@@ -213,7 +213,7 @@ static struct trobj Binder[] = {
 	{ SICKLE, 0, WEAPON_CLASS, 1, 0 },
 	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
 	{ FLINT, 0, GEM_CLASS, 1, 0 },
-	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, 0 },
+	{ CLOAK, 0, ARMOR_CLASS, 1, 0 },
 	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
 	{ APPLE, 0, FOOD_CLASS, 2, 0 },
 	{ TRIPE_RATION, 0, FOOD_CLASS, 2, 0 },
@@ -240,7 +240,7 @@ static struct trobj Binder_Dwarf[] = {
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
 	{ CHAIN_MAIL, 0, ARMOR_CLASS, 1, 0 },
 	{ GLOVES, 0, ARMOR_CLASS, 1, 0 },
-	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, 0 },
+	{ CLOAK, 0, ARMOR_CLASS, 1, 0 },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, 0 },
 	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
 	{ APPLE, 0, FOOD_CLASS, 2, 0 },
@@ -352,7 +352,7 @@ static struct trobj Noble[] = {
 	{ GENTLEMAN_S_SUIT, 2, ARMOR_CLASS, 1, UNDEF_BLESS },
 #define NOB_SHOES	3
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 	{ APPLE, 0, FOOD_CLASS, 10, 0 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
@@ -366,7 +366,7 @@ static struct trobj DNoble[] = {
 	{ DROVEN_HELM, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ BOW, 1, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 #define DNB_TWO_ARROWS	9
@@ -382,7 +382,7 @@ static struct trobj DwarfNoble[] = {
 	{ BATTLE_AXE, 2, WEAPON_CLASS, 1, UNDEF_BLESS },
 	{ CHAIN_MAIL, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ GLOVES, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ CLOAK, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 1, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ UNDEF_TYP, UNDEF_SPE, RING_CLASS, 1, UNDEF_BLESS },
 	{ TRIPE_RATION, 0, FOOD_CLASS, 3, 0 },
@@ -397,7 +397,7 @@ static struct trobj HDNobleF[] = {
 	{ LEATHER_HELM, 1, ARMOR_CLASS, 1, 1 },
 	{ CHAIN_MAIL, 1, ARMOR_CLASS, 1, 1 },
 	{ GLOVES, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
-	{ LEATHER_CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ CLOAK, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ SPE_HEALING, 0, SPBOOK_CLASS, 1, 1 },
 	{ FOOD_RATION, 0, FOOD_CLASS, 3, 0 },
 	{ TORCH, 0, TOOL_CLASS, 3, 0 },
@@ -420,7 +420,7 @@ static struct trobj Pirate[] = {
 #define PIR_KNIVES	2
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
 	{ CRAM_RATION, 0, FOOD_CLASS, 2, UNDEF_BLESS },
-	{ LEATHER_JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
+	{ JACKET, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 	{ HIGH_BOOTS, 0, ARMOR_CLASS, 1, UNDEF_BLESS },
 #define PIR_SNACK 6
 	{ BANANA, 0, FOOD_CLASS, 3, 0 },
@@ -690,7 +690,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
 	{ PM_ELF,	BUCKLER,				ELVEN_SHIELD	      },
 	{ PM_ELF,	KITE_SHIELD,			ELVEN_SHIELD	      },
     { PM_ELF,	CLOAK_OF_DISPLACEMENT,	ELVEN_CLOAK	      },
-    { PM_ELF,	LEATHER_CLOAK,			ELVEN_CLOAK	      },
+    { PM_ELF,	CLOAK,			ELVEN_CLOAK	      },
     { PM_ELF,	CRAM_RATION,			LEMBAS_WAFER	      },
     { PM_ELF,	FOOD_RATION,			LEMBAS_WAFER	      },
     { PM_ELF,	GENTLEWOMAN_S_DRESS,	ELVEN_TOGA  },
@@ -721,7 +721,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
 	{ PM_DWARF, KITE_SHIELD,		DWARVISH_ROUNDSHIELD  }, 
     { PM_DWARF, PICK_AXE,			DWARVISH_MATTOCK      },
     { PM_DWARF, TWO_HANDED_SWORD,	BATTLE_AXE    },
-    { PM_DWARF,	LEATHER_CLOAK,		DWARVISH_CLOAK  },
+    { PM_DWARF,	CLOAK,		DWARVISH_CLOAK  },
     { PM_GNOME, FEDORA,			GNOMISH_POINTY_HAT    },
     { PM_GNOME, BULLWHIP,		AKLYS    },
     { PM_GNOME, CLUB,			AKLYS    },
@@ -739,7 +739,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_DROW,	SPEAR,						DROVEN_SHORT_SWORD	      },
     { PM_DROW,	BOW,						DROVEN_CROSSBOW	      },
     { PM_DROW,	ARROW,						DROVEN_BOLT	      },
-    { PM_DROW,	LEATHER_CLOAK,				DROVEN_CLOAK  },
+    { PM_DROW,	CLOAK,				DROVEN_CLOAK  },
     { PM_DROW,	MACE,						KHAKKHARA  },
     { PM_DROW,	BUCKLER,					DROVEN_HELM  },
     { PM_DROW,	GENTLEWOMAN_S_DRESS,		NOBLE_S_DRESS  },
@@ -755,7 +755,7 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_INCANTIFIER, CLOAK_OF_MAGIC_RESISTANCE,		ROBE  },
     { PM_INCANTIFIER, CLOAK_OF_DISPLACEMENT,			ROBE  },
     { PM_INCANTIFIER,	LEATHER_ARMOR,				ROBE  },
-    { PM_INCANTIFIER,	LEATHER_JACKET,				ROBE  },
+    { PM_INCANTIFIER,	JACKET,				ROBE  },
     { PM_INCANTIFIER,	RING_MAIL,					ROBE  },
     { PM_INCANTIFIER,	SPLINT_MAIL,				ROBE  },
     { PM_INCANTIFIER,	FOOD_RATION,				SCR_FOOD_DETECTION    	  },
@@ -2877,9 +2877,12 @@ register struct trobj *trop;
 				}
 			}
 			obj = mksobj(otyp, TRUE, FALSE);
+			set_material(obj, objects[otyp].oc_material);
+
 			if(obj->otyp == POT_BLOOD) 
 				obj->corpsenm = PM_HUMAN;
-			if(obj->oclass == WEAPON_CLASS || obj->oclass == ARMOR_CLASS) obj->objsize = youracedata->msize;
+			if(obj->oclass == WEAPON_CLASS || obj->oclass == ARMOR_CLASS)
+				set_obj_size(obj, youracedata->msize);
 			if(obj->oclass == ARMOR_CLASS){
 				if(is_suit(obj)) obj->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
 				else if(is_helmet(obj)) obj->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
@@ -2887,37 +2890,30 @@ register struct trobj *trop;
 			}
 			if(obj->otyp == BULLWHIP && Race_if(PM_DROW) && flags.initgend){
 				obj->otyp = VIPERWHIP;
-				obj->obj_material = SILVER;
+				set_material(obj, SILVER);
 				obj->ovar1 = 1;
-				fix_object(obj);
 			}
 			if(obj->otyp == SLIME_MOLD && Race_if(PM_DROW)){
 				obj->spe = fruitadd("mushroom cake");
 			}
 			if(obj->otyp == HEAVY_MACHINE_GUN && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
-				obj->obj_material = MITHRIL;
-				fix_object(obj);
+				set_material(obj, MITHRIL);
 			}
 			if(obj->otyp == BATTLE_AXE && Role_if(PM_ANACHRONONAUT) && Race_if(PM_ANDROID)){
-				obj->objsize = MZ_LARGE;
+				set_obj_size(obj, MZ_LARGE);
 				obj->oeroded = 1;
-				fix_object(obj);
 			}
 			if(obj->otyp == SCALE_MAIL && Role_if(PM_ANACHRONONAUT)){
-				obj->obj_material = COPPER;
-				fix_object(obj);
+				set_material(obj, COPPER);
 			}
 			if(obj->otyp == GAUNTLETS && Role_if(PM_ANACHRONONAUT)){
-				obj->obj_material = COPPER;
-				fix_object(obj);
+				set_material(obj, COPPER);
 			}
 			if(obj->otyp == PISTOL && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
-				obj->obj_material = MITHRIL;
-				fix_object(obj);
+				set_material(obj, MITHRIL);
 			}
 			if(obj->otyp == SEISMIC_HAMMER && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
-				obj->obj_material = MITHRIL;
-				fix_object(obj);
+				set_material(obj, MITHRIL);
 			}
 			
 			/* Don't start with +0 or negative rings */
@@ -2948,6 +2944,7 @@ register struct trobj *trop;
 			if((Race_if(PM_DROW) || Race_if(PM_MYRKALFR)) && trop->trclass == RING_CLASS) obj = mksobj(find_signet_ring(),TRUE,FALSE);
 			else obj = mkobj(trop->trclass, FALSE);
 			otyp = obj->otyp;
+			set_material(obj, objects[otyp].oc_material);
 			while (otyp == WAN_WISHING
 				|| otyp == RIN_WISHES
 				|| otyp == nocreate
@@ -2995,6 +2992,7 @@ register struct trobj *trop;
 				dealloc_obj(obj);
 				obj = mkobj(trop->trclass, FALSE);
 				otyp = obj->otyp;
+				set_material(obj, objects[otyp].oc_material);
 			}
 
 			/* Don't start with +0 or negative rings */
@@ -3046,8 +3044,7 @@ register struct trobj *trop;
 					knows_object(obj->otyp);
 					if(obj->oclass == WEAPON_CLASS){
 						if(obj->obj_material == METAL){
-							obj->obj_material = IRON;
-							fix_object(obj);
+							set_material(obj, IRON);
 						}
 						if(obj->obj_material != WOOD) obj->oeroded = 1;
 						else obj->oeroded2 = 1;
@@ -3090,17 +3087,14 @@ register struct trobj *trop;
 				if(Role_if(PM_PIRATE) && obj->obj_material == IRON) obj->oerodeproof = 1;
 				if(Role_if(PM_SAMURAI) && obj->oclass == ARMOR_CLASS && obj->obj_material == IRON) obj->oerodeproof = 1;
 				if(Role_if(PM_SAMURAI) && obj->otyp == MASK){
-					obj->obj_material = IRON;
+					set_material(obj, IRON);
 //					obj->oerodeproof = 1;
 					obj->corpsenm = PM_HUMAN;
 				}
 			}
 			obj->cursed = 0;
-			if(obj->otyp == DROVEN_PLATE_MAIL  ||
-				obj->otyp == NOBLE_S_DRESS 	  ||
-				obj->otyp == DROVEN_CHAIN_MAIL ||
-				obj->otyp == DROVEN_HELM
-			) obj->oerodeproof = 1;
+			if(is_evaporable(obj))
+				obj->oerodeproof = 1;
 			if (obj->opoisoned && u.ualign.type != A_CHAOTIC)
 			    obj->opoisoned = 0;
 			if (obj->oward){
@@ -3137,8 +3131,7 @@ register struct trobj *trop;
 				&& !is_ammo(obj)
 			){
 				if(obj->obj_material == SILVER){
-					obj->obj_material = GOLD;
-					fix_object(obj);
+					set_material(obj, GOLD);
 				}
 			}
 			if(hates_iron(youracedata)
@@ -3146,8 +3139,7 @@ register struct trobj *trop;
 				&& !is_ammo(obj)
 			){
 				if(obj->obj_material == IRON){
-					obj->obj_material = Race_if(PM_DROW) ? OBSIDIAN_MT : MITHRIL;
-					fix_object(obj);
+					set_material(obj, Race_if(PM_DROW) ? OBSIDIAN_MT : MITHRIL);
 				}
 			}
 #ifdef GOLDOBJ

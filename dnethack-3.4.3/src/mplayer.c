@@ -164,7 +164,7 @@ register boolean special;
 			rweapon = STRANGE_OBJECT;
 			rwammo = STRANGE_OBJECT;
 			armor = armtyp[rn2(SIZE(armtyp))];
-			cloak = rn2(8) ? STRANGE_OBJECT : LEATHER_CLOAK;
+			cloak = rn2(8) ? STRANGE_OBJECT : CLOAK;
 			helm = !rn2(4) ? STRANGE_OBJECT : hlmtyp[rn2(SIZE(hlmtyp))];
 			shield = !rn2(4) ? STRANGE_OBJECT : rnd_class(BUCKLER, CRYSTAL_SHIELD);
 		}
@@ -228,7 +228,7 @@ register boolean special;
 		case PM_EXILE:
 			weapon = SCYTHE;
 			armor = ELVEN_MITHRIL_COAT;
-			cloak = LEATHER_CLOAK;
+			cloak = CLOAK;
 			shield = STRANGE_OBJECT;
 	    break;
 		case PM_HEALER:
@@ -259,13 +259,13 @@ register boolean special;
 		case PM_NOBLEMAN:
 		    weapon = special ? LONG_SWORD : RAPIER;
 		    armor = special ? NOBLE_S_DRESS : GENTLEWOMAN_S_DRESS;
-		    cloak = special ? find_opera_cloak() : LEATHER_CLOAK;
+		    cloak = special ? find_opera_cloak() : CLOAK;
 		    shield = STRANGE_OBJECT;
 		break;
 		case PM_NOBLEWOMAN:
 		    weapon = special ? RAKUYO : RAPIER;
 		    armor = special ? CRYSTAL_PLATE_MAIL : GENTLEMAN_S_SUIT;
-		    cloak = special ? find_opera_cloak() : LEATHER_CLOAK;
+		    cloak = special ? find_opera_cloak() : CLOAK;
 		    shield = STRANGE_OBJECT;
 		break;
 		case PM_PRIEST:
@@ -278,7 +278,7 @@ register boolean special;
 		break;
 		case PM_PIRATE:
 			weapon = SCIMITAR;
-			armor = LEATHER_JACKET;
+			armor = JACKET;
 			shield = BUCKLER;
 			rweapon = FLINTLOCK;
 			rwammo = BULLET;
@@ -320,7 +320,7 @@ register boolean special;
 		    	armor = rn2(2) ? BLACK_DRAGON_SCALE_MAIL :
 		    			SILVER_DRAGON_SCALE_MAIL;
 		    }
-	    	cloak = special ? CLOAK_OF_MAGIC_RESISTANCE : LEATHER_CLOAK;
+	    	cloak = special ? CLOAK_OF_MAGIC_RESISTANCE : CLOAK;
 			if(special){
 				if (rn2(4)) helm = rn2(2) ? CORNUTHAUM : HELM_OF_BRILLIANCE;
 			} else {

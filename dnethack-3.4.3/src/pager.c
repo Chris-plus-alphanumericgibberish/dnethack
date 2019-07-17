@@ -737,6 +737,7 @@ static const char * const bogusobjects[] = {
        "pair of muddy boots",
        "gnomerang",
        "gnagger",
+       "hipospray ampule",
 	   
 	   "can of Greece",
 	   "can of crease",
