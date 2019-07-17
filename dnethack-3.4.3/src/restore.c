@@ -856,27 +856,6 @@ boolean ghostly;
 	restore_light_sources(fd);
 	fmon = restmonchn(fd, ghostly);
 
-	/* regenerate animals while on another level */
-	if (u.uz.dlevel) {
-	    register struct monst *mtmp2;
-
-	    for (mtmp = fmon; mtmp; mtmp = mtmp2) {
-		mtmp2 = mtmp->nmon;
-		if (ghostly) {
-			/* reset peaceful/malign relative to new character */
-			if(!mtmp->isshk)
-				/* shopkeepers will reset based on name */
-				mtmp->mpeaceful = peace_minded(mtmp->data);
-			set_malign(mtmp);
-		} else if (monstermoves > omoves)
-			mon_catchup_elapsed_time(mtmp, monstermoves - omoves);
-
-		/* update shape-changers in case protection against
-		   them is different now than when the level was saved */
-		restore_cham(mtmp);
-	    }
-	}
-
 	rest_worm(fd);	/* restore worm information */
 	ftrap = 0;
 	while (trap = newtrap(),
@@ -962,6 +941,27 @@ boolean ghostly;
 	relink_timers(ghostly);
 	relink_light_sources(ghostly);
 	reset_oattached_mids(ghostly);
+
+	/* regenerate animals while on another level */
+	if (u.uz.dlevel) {
+	    register struct monst *mtmp2;
+
+	    for (mtmp = fmon; mtmp; mtmp = mtmp2) {
+		mtmp2 = mtmp->nmon;
+		if (ghostly) {
+			/* reset peaceful/malign relative to new character */
+			if(!mtmp->isshk)
+				/* shopkeepers will reset based on name */
+				mtmp->mpeaceful = peace_minded(mtmp->data);
+			set_malign(mtmp);
+		} else if (monstermoves > omoves)
+			mon_catchup_elapsed_time(mtmp, monstermoves - omoves);
+
+		/* update shape-changers in case protection against
+		   them is different now than when the level was saved */
+		restore_cham(mtmp);
+	    }
+	}
 
 	if (ghostly)
 	    clear_id_mapping();

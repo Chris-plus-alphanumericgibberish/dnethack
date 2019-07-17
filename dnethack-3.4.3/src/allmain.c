@@ -1017,6 +1017,11 @@ moveloop()
 					impossible("Hostile+tame monster state detected (and fixed)");
 					mtmp->mpeaceful = TRUE;
 				}
+				//Remove after testing (can cause "re-trapping" of untrapped monsters)
+				if(!mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+					impossible("Re-trapping mon %s in vivi trap",noit_mon_nam(mtmp));
+					mtmp->mtrapped = TRUE;
+				}
 				/* Possibly vanish */
 				if(mtmp->mvanishes>-1){
 					if(--mtmp->mvanishes == 0){

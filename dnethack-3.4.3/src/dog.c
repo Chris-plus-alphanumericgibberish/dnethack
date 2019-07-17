@@ -532,6 +532,7 @@ struct monst *mtmp;
 long nmv;		/* number of moves */
 {
 	int imv = 0;	/* avoid zillions of casts and lint warnings */
+	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return;
 
 #if defined(DEBUG) || defined(BETA)
 	if (nmv < 0L) {			/* crash likely... */
