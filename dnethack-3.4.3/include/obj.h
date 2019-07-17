@@ -513,7 +513,7 @@ struct weapon_dice {
 							 (otmp)->otyp == KAMEREL_VAJRA || \
 							 (otmp)->otyp == BEAMSWORD || \
 							 (otmp)->otyp == DOUBLE_LIGHTSABER)
-#define is_vibroweapon(otmp) ((otmp)->otyp == VIBROBLADE || \
+#define is_vibroweapon(otmp) (force_weapon(otmp) || \
 							  is_vibrosword(otmp) || \
 							  is_vibropike(otmp))
 #define is_vibrosword(otmp)	 ((otmp)->otyp == WHITE_VIBROSWORD || \
@@ -530,6 +530,11 @@ struct weapon_dice {
 						  (otmp)->otyp == GOLD_BLADED_VIBROZANBATO || \
 						  (otmp)->otyp ==  WHITE_VIBROSPEAR || \
 						  (otmp)->otyp == GOLD_BLADED_VIBROSPEAR)
+#define force_weapon(otmp)	 ((otmp)->otyp == FORCE_PIKE || \
+						  (otmp)->otyp == DOUBLE_FORCE_BLADE || \
+						  (otmp)->otyp == FORCE_BLADE || \
+						  (otmp)->otyp == FORCE_SWORD || \
+						  (otmp)->otyp ==  FORCE_WHIP)
 #define pure_weapon(otmp)	 ((otmp)->otyp == WHITE_VIBROSWORD || \
 						  (otmp)->otyp == WHITE_VIBROZANBATO || \
 						  (otmp)->otyp ==  WHITE_VIBROSPEAR)

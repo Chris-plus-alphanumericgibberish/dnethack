@@ -1888,7 +1888,10 @@ hitmu(mtmp, mattk)
 				) dmg += rnd(9);
 			} else {
 				dmg += dmgval(uwep, &youmonst, 0);
-				if(uwep && uwep->otyp == RAKUYO && !u.twoweap){
+				if(uwep 
+					&& (uwep->otyp == RAKUYO || uwep->otyp == DOUBLE_FORCE_BLADE)
+					&& !u.twoweap
+				){
 					mtmp->movement -= NORMAL_SPEED/4;
 				}
 				if(uwep && ((is_lightsaber(uwep) && litsaber(uwep)) || arti_shining(uwep))) phasearmor = TRUE;
@@ -2029,7 +2032,10 @@ hitmu(mtmp, mattk)
 				) dmg += rnd(9);
 			} else {
 				dmg += dmgval(otmp, &youmonst, 0);
-				if(otmp && mcarried(otmp) && otmp->owornmask&W_WEP && otmp->otyp == RAKUYO){
+				if(otmp && mcarried(otmp) 
+					&& otmp->owornmask&W_WEP 
+					&& (otmp->otyp == RAKUYO || otmp->otyp == DOUBLE_FORCE_BLADE)
+				){
 					mtmp->movement -= NORMAL_SPEED/4;
 				}
 				if(otmp && ((is_lightsaber(otmp) && litsaber(otmp)) || arti_shining(otmp))) phasearmor = TRUE;

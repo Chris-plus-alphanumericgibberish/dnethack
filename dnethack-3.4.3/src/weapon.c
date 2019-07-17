@@ -325,8 +325,7 @@ int otyp;
 	ocd = (large ? objects[otyp].oc_wldam : objects[otyp].oc_wsdam);
 
 	/* set dmod, if possible*/
-	if (obj)
-	{
+	if (obj){
 		dmod = obj->objsize - MZ_MEDIUM;
 		if (obj->oartifact == ART_FRIEDE_S_SCYTHE)
 			dmod += 2;
@@ -450,7 +449,33 @@ int otyp;
 	case GOLD_BLADED_VIBROZANBATO:
 	case WHITE_VIBROSPEAR:
 	case GOLD_BLADED_VIBROSPEAR:
+	case FORCE_PIKE:
+	case DOUBLE_FORCE_BLADE:// external special case: wielded without twoweaponing
+	case FORCE_BLADE:
+	case FORCE_SWORD:
 								if(chrgd){ocn++;flat+=ocd/2;} break;
+	case FORCE_WHIP:
+								if(chrgd){
+									ocn++;
+									flat+=ocd/2;
+									if(large){
+										plus(2,4);
+										add(2);
+									} else {
+										add(2); //Base
+										add(1); //Bonus (applies size mod to both)
+									}
+								} else {
+									//As flail
+									if(large){
+										pls(4);
+									} else {
+										add(1); //Base
+									}
+								}
+		break;
+	case RED_EYED_VIBROSWORD:
+								if(chrgd){ocn+=2;flat+=ocd;} break;
 	case MIRRORBLADE:			break;	// external special case: depends on defender's weapon
 	case RAPIER:				break;	// external special case: Silver Starlight vs plants
 	case RAKUYO:				break;	// external special case: wielded without twoweaponing
@@ -463,9 +488,6 @@ int otyp;
 	case PARTISAN:				if(large){add(1);} else {;} break;
 	case RANSEUR:				pls(4); break;
 	case SPETUM:				if(large){pls(6);} else {add(1);} break;
-	case FORCE_PIKE:			
-	case RED_EYED_VIBROSWORD:
-								if(chrgd){ocn+=2;flat+=ocd;} break;
 	case HALBERD:				if(large){pls(6);} else {;} break;
 	case BARDICHE:				if(large){plus(2,4);} else {pls(4);} break;
 	case VOULGE:				pls(4); break;
@@ -687,6 +709,7 @@ int spec;
 
 	/* special cases of otyp not covered by dmgval_core:
 	 *  - rakuyo					- add bonus damage
+	 *  - double vibro blade		- double all damage
 	 *  - viperwhips				- add ostriking
 	 *  - mirrorblades				- total replacement
 	 *  - crystal sword				- bonus enchantment damage
@@ -710,7 +733,7 @@ int spec;
 			wdice.bon.damn = 1;
 			wdice.bon.damd = max(2, ((bigmonst(ptr) ? 3 : 4) + 2 * (otmp->objsize - MZ_MEDIUM + !!(spec & SPEC_MARIONETTE))));
 			// doubled enchantment
-			spe_mult += 1;
+			spe_mult *= 2;
 		}
 		break;
 	case VIPERWHIP:
@@ -794,9 +817,27 @@ int spec;
 	case RED_EYED_VIBROSWORD:
 	case WHITE_VIBROZANBATO:
 	case GOLD_BLADED_VIBROZANBATO:
-	case FORCE_PIKE:
 	case WHITE_VIBROSPEAR:
 	case GOLD_BLADED_VIBROSPEAR:
+	case FORCE_PIKE:
+	case FORCE_BLADE:
+	case FORCE_SWORD:
+	case FORCE_WHIP:
+		// drain charge on future-tech powered weapons
+		if (otmp->ovar1)
+			otmp->ovar1--;
+		break;
+	case DOUBLE_FORCE_BLADE:
+		// deals bonus damage when not twoweaponing
+		if((otmp == uwep && !u.twoweap) || (mcarried(otmp) && otmp->owornmask&W_WEP))
+		{
+			// doubled
+			wdice.oc.damn *= 2;
+			wdice.oc.damd *= 2;
+			wdice.bon.damn *= 2;
+			wdice.bon.damd *= 2;
+			spe_mult *= 2;
+	    }
 		// drain charge on future-tech powered weapons
 		if (otmp->ovar1)
 			otmp->ovar1--;
@@ -1092,7 +1133,11 @@ int spec;
 			if(is_slashing(otmp)){
 				weaponmask |= SLASH;
 			}
-			if(is_blasting(otmp) || otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD){
+			if(is_blasting(otmp) 
+				|| (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit)
+				|| otmp->oartifact == ART_FIRE_BRAND
+				|| otmp->oartifact == ART_FROST_BRAND
+			){
 				weaponmask |= EXPLOSION;
 			}
 			
@@ -1554,10 +1599,14 @@ static const NEARDATA short hwep[] = {
 	  KAMEREL_VAJRA /*quite a lot plus elect plus blindness*/,
 	  GOLD_BLADED_VIBROZANBATO,/*2d16+8/2d8+4d6+10*/
 	  WHITE_VIBROZANBATO,/*2d16+8/2d8+4d6+10*/
+	  DOUBLE_FORCE_BLADE,/*6d6+12/6d4+8*/
 	  DOUBLE_LIGHTSABER/*6d8*/, 
-	  RED_EYED_VIBROSWORD,/*2d8+8/2d12+12*/
+	  RED_EYED_VIBROSWORD,/*3d8+8/3d12+12*/
+	  FORCE_SWORD,/*3d8+8/3d6+6*/
+	  FORCE_WHIP,/*3d6+6+3/3d4+6+3d4+4*/
+	  FORCE_PIKE,/*3d6+6/3d8+8*/
+	  FORCE_BLADE,/*3d6+6/3d4+4*/
 	  BEAMSWORD/*3d10*/,
-	  FORCE_PIKE,/*2d6+6/2d8+8*/
 	  GOLD_BLADED_VIBROSWORD,/*2d8+4/2d12+6*/
 	  WHITE_VIBROSWORD,/*2d8+4/2d12+6*/
 	  GOLD_BLADED_VIBROSPEAR,/*2d6+3/2d8+3*/
@@ -2169,6 +2218,8 @@ struct obj *otmp;
 			bonus *= 1.5;
 		else if(is_vibrosword(otmp) && !uarms && !u.twoweap)
 			bonus *= 1.5;
+		else if(otmp->otyp == FORCE_SWORD && !uarms && !u.twoweap)
+			bonus *= 2;
 		
 		if(otmp==uwep 
 		&& (is_rapier(otmp)

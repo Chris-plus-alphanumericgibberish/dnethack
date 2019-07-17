@@ -537,6 +537,13 @@ OBJECT:')',"force pike",random
 OBJECT:')',"vibroblade",random
 OBJECT:')',"vibroblade",random
 
+OBJECT:')',"double force-blade",random
+OBJECT:')',"force blade",random
+OBJECT:')',"force blade",random
+
+OBJECT:')',"force sword",random
+OBJECT:')',"force whip",random
+
 OBJECT:'(',"lightsaber",random
 OBJECT:'(',"lightsaber",random
 

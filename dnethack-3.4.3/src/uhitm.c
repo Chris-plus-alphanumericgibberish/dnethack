@@ -1602,7 +1602,7 @@ int thrown;
 				
 				if(uwep 
 					&& obj == uwep 
-					&& uwep->otyp == RAKUYO
+					&& (uwep->otyp == RAKUYO || uwep->otyp == DOUBLE_FORCE_BLADE)
 					&& !u.twoweap
 				){
 					youmonst.movement -= NORMAL_SPEED/4;

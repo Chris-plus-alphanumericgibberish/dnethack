@@ -254,6 +254,17 @@ WEAPON("gold-bladed vibrozanbato", "curved black and gold sword",
 	0, 0, 1,  0, 60,16000, 16,  8, 2, S,   P_TWO_HANDED_SWORD, GOLD, FALSE, CLR_BLACK),
 						    /* +2d6 large */
 
+WEAPON("double force-blade", "double-bladed weapon",
+	0, 0, 1,  0, 40,1000,  6,  4, 2, S,   P_QUARTERSTAFF, PLASTIC, FALSE, HI_METAL),
+						    /* 2x, but slower */
+WEAPON("force blade", "latch-ended blade",
+	0, 0, 0,  0, 20,500,  6,  4, 2, S,   P_SHORT_SWORD, PLASTIC, FALSE, HI_METAL),
+
+WEAPON("force sword", "hard segmented sword",
+	0, 0, 0,  0, 40,1000,  8,  6, 2, P|B,   P_BROAD_SWORD, PLASTIC, FALSE, HI_METAL),
+WEAPON("force whip", "segmented whip",
+	0, 0, 0,  0, 40,1000,  6,  4, 2, P|S,   P_WHIP, PLASTIC, FALSE, HI_METAL),
+						/* +1 small, +1d4 large */
 /* polearms */
 /* spear-type */
 WEAPON("partisan", "vulgar polearm",

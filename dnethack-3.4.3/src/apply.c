@@ -29,6 +29,8 @@ STATIC_DCL void FDECL(use_candle, (struct obj **));
 STATIC_DCL void FDECL(use_lamp, (struct obj *));
 STATIC_DCL int FDECL(swap_aegis, (struct obj *));
 STATIC_DCL int FDECL(use_rakuyo, (struct obj *));
+STATIC_DCL int FDECL(use_force_blade, (struct obj *));
+STATIC_DCL int FDECL(use_force_sword, (struct obj *));
 STATIC_DCL void FDECL(light_cocktail, (struct obj *));
 STATIC_DCL void FDECL(light_torch, (struct obj *));
 STATIC_DCL void FDECL(use_tinning_kit, (struct obj *));
@@ -1472,6 +1474,82 @@ struct obj *obj;
 		fix_object(obj);
 		You("latch %s.",the(xname(obj)));
 	}
+	return 0;
+}
+
+STATIC_OVL int
+use_force_blade(obj)
+struct obj *obj;
+{
+	struct obj *dagger;
+	if(obj != uwep){
+		if(obj->otyp == DOUBLE_FORCE_BLADE) You("must wield %s to unlatch it.", the(xname(obj)));
+		else You("must wield %s to latch it.", the(xname(obj)));
+		return 0;
+	}
+	
+	if(obj->unpaid 
+	|| (obj->otyp == FORCE_BLADE && uswapwep && uswapwep->otyp == FORCE_BLADE && uswapwep->unpaid)
+	){
+		You("need to buy it.");
+		return 0;
+	}
+	
+	if(obj->otyp == DOUBLE_FORCE_BLADE){
+		You("unlatch %s.",the(xname(obj)));
+		obj->otyp = FORCE_BLADE;
+		fix_object(obj);
+		obj->quan += 1;
+	    dagger = splitobj(obj, 1L);
+		obj_extract_self(dagger);
+		fix_object(obj);
+		dagger = hold_another_object(dagger, "You drop %s!",
+				      doname(obj), (const char *)0); /*shouldn't merge, but may drop*/
+		if(dagger && !uswapwep && carried(dagger)){
+			setuswapwep(dagger);
+			dotwoweapon();
+		}
+	} else {
+		if(!uswapwep || uswapwep->otyp != FORCE_BLADE){
+			You("need the matching blade.");
+			return 0;
+		}
+		if(!mergable_traits(obj, uswapwep)){
+			pline("They don't fit together!");
+			return 0;
+		}
+		if (u.twoweap) {
+			u.twoweap = 0;
+			update_inventory();
+		}
+		obj->ovar1 = (obj->ovar1 + uswapwep->ovar1)/2;
+		useupall(uswapwep);
+		obj->otyp = DOUBLE_FORCE_BLADE;
+		fix_object(obj);
+		You("latch %s.",the(xname(obj)));
+		update_inventory();
+	}
+	return 0;
+}
+
+STATIC_OVL int
+use_force_sword(obj)
+struct obj *obj;
+{
+	if(obj->unpaid){
+		You("need to buy it.");
+		return 0;
+	}
+	
+	if(obj->otyp == FORCE_SWORD){
+		You("unlock %s.",the(xname(obj)));
+		obj->otyp = FORCE_WHIP;
+	} else {
+		You("lock %s.",the(xname(obj)));
+		obj->otyp = FORCE_SWORD;
+	}
+	fix_object(obj);
+	update_inventory();
 	return 0;
 }
 
@@ -3341,7 +3419,7 @@ struct obj *obj;
     struct monst *mtmp;
     struct obj *otmp;
     int rx, ry, proficient, res = 0;
-    const char *msg_slipsfree = "The bullwhip slips free.";
+    const char *msg_slipsfree = "The whip slips free.";
     const char *msg_snap = "Snap!";
 
     if (obj != uwep) {
@@ -3349,6 +3427,10 @@ struct obj *obj;
 	else res = 1;
     }
     if (!getdir((char *)0)) return res;
+
+	if(obj->otyp == FORCE_WHIP && !u.dx && !u.dy){
+		return use_force_sword(obj);
+	}
 
     if (Stunned || (Confusion && !rn2(5))) confdir();
     rx = u.ux + u.dx;
@@ -3365,10 +3447,10 @@ struct obj *obj;
     if (proficient < 0) proficient = 0;
 
     if (u.uswallow && attack(u.ustuck)) {
-	There("is not enough room to flick your bullwhip.");
+	There("is not enough room to flick your whip.");
 
     } else if (Underwater) {
-	There("is too much resistance to flick your bullwhip.");
+	There("is too much resistance to flick your whip.");
 
     } else if (u.dz < 0) {
 	You("flick a bug off of the %s.",ceiling(u.ux,u.uy));
@@ -3396,7 +3478,7 @@ struct obj *obj;
 			return 1;
 			}
 			if (otmp && proficient) {
-			You("wrap your bullwhip around %s on the %s.",
+			You("wrap your whip around %s on the %s.",
 				an(singular(otmp, xname)), surface(u.ux, u.uy));
 			if (rnl(100) >= 16 || pickup_object(otmp, 1L, TRUE) < 1)
 				pline("%s", msg_slipsfree);
@@ -3405,14 +3487,14 @@ struct obj *obj;
 		}
 		dam = rnd(2) + dbon(obj) + obj->spe;
 		if (dam <= 0) dam = 1;
-		You("hit your %s with your bullwhip.", body_part(FOOT));
-		Sprintf(buf, "killed %sself with %s bullwhip", uhim(), uhis());
+		You("hit your %s with your whip.", body_part(FOOT));
+		Sprintf(buf, "killed %sself with %s whip", uhim(), uhis());
 		losehp(dam, buf, NO_KILLER_PREFIX);
 		flags.botl = 1;
 		return 1;
 
     } else if ((Fumbling || Glib) && !rn2(5)) {
-		pline_The("bullwhip slips out of your %s.", body_part(HAND));
+		pline_The("whip slips out of your %s.", body_part(HAND));
 		dropx(obj);
 
     } else if (u.utrap && u.utraptype == TT_PIT) {
@@ -3453,7 +3535,7 @@ struct obj *obj;
 			coord cc;
 
 			cc.x = rx; cc.y = ry;
-			You("wrap your bullwhip around %s.", wrapped_what);
+			You("wrap your whip around %s.", wrapped_what);
 			if (proficient && rn2(proficient + 2)) {
 			if (!mtmp || enexto(&cc, rx, ry, youracedata)) {
 				You("yank yourself out of the pit!");
@@ -3486,7 +3568,7 @@ struct obj *obj;
 			} else
 			mon_hand = 0;	/* lint suppression */
 
-			You("wrap your bullwhip around %s %s.",
+			You("wrap your whip around %s %s.",
 			s_suffix(mon_nam(mtmp)), onambuf);
 			if (gotit && otmp->cursed && !is_weldproof_mon(mtmp)) {
 			pline("%s welded to %s %s%c",
@@ -3564,7 +3646,7 @@ struct obj *obj;
 			if (mtmp->m_ap_type &&
 			!Protection_from_shape_changers && !sensemon(mtmp))
 			stumble_onto_mimic(mtmp);
-			else You("flick your bullwhip towards %s.", mon_nam(mtmp));
+			else You("flick your whip towards %s.", mon_nam(mtmp));
 			if (proficient) {
 			if (attack(mtmp)) return 1;
 			else pline("%s", msg_snap);
@@ -5379,13 +5461,16 @@ doapply()
 	    return do_flip_coin(obj);
 	else if (obj->oclass == RING_CLASS)
 	    return do_present_ring(obj);
-	else if(is_knife(obj) && !(obj->oartifact==ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_MARIONETTE)) return do_carve_obj(obj);
+	else if(is_knife(obj) && !(obj->oartifact==ART_PEN_OF_THE_VOID && obj->ovar1&SEAL_MARIONETTE)) 
+		return do_carve_obj(obj);
 	
 	if(obj->oartifact == ART_SILVER_STARLIGHT) res = do_play_instrument(obj);
 	else if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) use_lamp(obj);
 	else if(obj->oartifact == ART_AEGIS) res = swap_aegis(obj);
 	else if(obj->otyp == RAKUYO || obj->otyp == RAKUYO_SABER){
 		return use_rakuyo(obj);
+	} else if(obj->otyp == DOUBLE_FORCE_BLADE || obj->otyp == FORCE_BLADE){
+		return use_force_blade(obj);
 	} else switch(obj->otyp){
 	case BLINDFOLD:
 	case ANDROID_VISOR:
@@ -5405,6 +5490,11 @@ doapply()
 	case CREAM_PIE:
 		res = use_cream_pie(obj);
 		break;
+	case FORCE_SWORD:
+		res = use_force_sword(obj);
+		break;
+	case FORCE_WHIP:
+	case VIPERWHIP:
 	case BULLWHIP:
 		res = use_whip(obj);
 		break;

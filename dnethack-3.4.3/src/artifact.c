@@ -3004,6 +3004,28 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		}
 	}
 
+	if(force_weapon(otmp) && otmp->ovar1){
+		int bonus = 0;
+		//Non-elemental energy attack: 1 die plus the remaining half die
+		bonus += rnd((mdef && bigmonst(mdef->data)) ? 
+						objects[otmp->otyp].oc_wldam : 
+						objects[otmp->otyp].oc_wsdam);
+		bonus += (mdef && bigmonst(mdef->data)) ? 
+					(objects[otmp->otyp].oc_wldam+1)/2 : 
+					(objects[otmp->otyp].oc_wsdam+1)/2;
+		if(otmp->otyp == FORCE_WHIP){
+			bonus += (mdef && bigmonst(mdef->data)) ? 
+							rnd(4)+2 : 
+							2;
+		}
+		if(otmp->otyp == DOUBLE_FORCE_BLADE &&
+			((otmp == uwep && !u.twoweap) || (mcarried(otmp) && otmp->owornmask&W_WEP))
+		){
+			bonus *= 2;
+		}
+		*dmgptr += bonus;
+	}
+	
 	if(pure_weapon(otmp) && otmp->spe >= 6){
 		if(youattack){
 			if(Upolyd && u.mh == u.mhmax)

@@ -1096,10 +1096,12 @@ register const char *let,*word;
 		      otyp != GAS_GRENADE &&
 		      otyp != STICK_OF_DYNAMITE &&
 //endif
-		      !is_axe(otmp) && !is_pole(otmp) && otyp != BULLWHIP &&
+		      !is_axe(otmp) && !is_pole(otmp) && 
+			  otyp != BULLWHIP && otyp != VIPERWHIP && otyp != FORCE_WHIP &&
 			  !is_knife(otmp) && otmp->oartifact != ART_SILVER_STARLIGHT &&
 			  otmp->oartifact != ART_HOLY_MOONLIGHT_SWORD &&
-			  otmp->otyp != RAKUYO && otmp->otyp != RAKUYO_SABER
+			  otmp->otyp != RAKUYO && otmp->otyp != RAKUYO_SABER && 
+			  otmp->otyp != DOUBLE_FORCE_BLADE && otmp->otyp != FORCE_BLADE
 			 ) ||
 			 (otmp->oclass == CHAIN_CLASS && 
 				(otyp == CHAIN || otyp == SHEAF_OF_HAY)
@@ -2009,9 +2011,12 @@ struct obj *obj;
 	if (obj->otyp == CREAM_PIE)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Hit yourself with this cream pie", MENU_UNSELECTED);
-	else if (obj->otyp == BULLWHIP)
+	else if (obj->otyp == BULLWHIP || obj->otyp == VIPERWHIP)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Lash out with this whip", MENU_UNSELECTED);
+	else if (obj->otyp == FORCE_WHIP)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Lock or lash out with this whip", MENU_UNSELECTED);
 	else if (obj->otyp == GRAPPLING_HOOK)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Grapple something with this hook", MENU_UNSELECTED);
@@ -2127,9 +2132,15 @@ struct obj *obj;
 	else if (obj->oartifact == ART_AEGIS)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Change Aegis' form", MENU_UNSELECTED);
-	else if (obj->otyp == RAKUYO || obj->otyp == RAKUYO_SABER || obj->otyp == RAKUYO_DAGGER)
+	else if (obj->otyp == RAKUYO || obj->otyp == RAKUYO_SABER)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Latch or unlatch your rakuyo", MENU_UNSELECTED);
+	else if (obj->otyp == DOUBLE_FORCE_BLADE || obj->otyp == FORCE_BLADE)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Latch or unlatch your force blade", MENU_UNSELECTED);
+	else if (obj->otyp == FORCE_SWORD)
+		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
+				"Unlock your force whip", MENU_UNSELECTED);
 	else if (obj->otyp == TORCH || obj->otyp == SHADOWLANDER_S_TORCH)
 		add_menu(win, NO_GLYPH, &any, 'a', 0, ATR_NONE,
 				"Light or snuff this torch", MENU_UNSELECTED);

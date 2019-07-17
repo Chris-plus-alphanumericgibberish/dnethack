@@ -3053,6 +3053,7 @@ register struct monst *mtmp;
 			} else if(mm == PM_GYNOID){
 				otmp = mksobj(WHITE_VIBROSWORD, TRUE, FALSE);
 				fully_identify_obj(otmp);
+				otmp->spe = abs(otmp->spe);
 				(void) mpickobj(mtmp, otmp);
 				(void) mongets(mtmp, BLACK_DRESS);
 				(void) mongets(mtmp, LONG_GLOVES);
@@ -3061,13 +3062,14 @@ register struct monst *mtmp;
 			} else if(mm == PM_ANDROID){
 				otmp = mksobj(GOLD_BLADED_VIBROSWORD, TRUE, FALSE);
 				fully_identify_obj(otmp);
+				otmp->spe = abs(otmp->spe);
 				(void) mpickobj(mtmp, otmp);
 				(void) mongets(mtmp, LEATHER_JACKET);
 				(void) mongets(mtmp, GLOVES);
 				(void) mongets(mtmp, HIGH_BOOTS);
 				(void) mongets(mtmp, ANDROID_VISOR);
 			} else if(mm == PM_PARASITIZED_GYNOID){
-				switch(rn2(6)){
+				switch(rn2(8)){
 					case 0:
 					(void) mongets(mtmp, VIBROBLADE);
 					(void) mongets(mtmp, FORCE_PIKE);
@@ -3128,6 +3130,14 @@ register struct monst *mtmp;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					break;
+					case 6:
+					(void) mongets(mtmp, VIBROBLADE);
+					(void) mongets(mtmp, DOUBLE_FORCE_BLADE);
+					break;
+					case 7:
+					(void) mongets(mtmp, rn2(2) ? FORCE_WHIP : FORCE_SWORD);
+					(void) mongets(mtmp, FORCE_PIKE);
+					break;
 				}
 				switch(rn2(6)){
 					case 0:
@@ -3154,6 +3164,7 @@ register struct monst *mtmp;
 					rn2(2) ? mongets(mtmp, LOW_BOOTS) : rn2(2) ? mongets(mtmp, HIGH_BOOTS) : mongets(mtmp, HEELED_BOOTS);
 					break;
 					case 5:
+					(void) mongets(mtmp, PLASTEEL_HELM);
 					(void) mongets(mtmp, PLASTEEL_ARMOR);
 					(void) mongets(mtmp, PLASTEEL_BOOTS);
 					(void) mongets(mtmp, PLASTEEL_GAUNTLETS);
@@ -3161,7 +3172,7 @@ register struct monst *mtmp;
 				}
 				(void) mongets(mtmp, ANDROID_VISOR);
 			} else if(mm == PM_PARASITIZED_ANDROID){
-				switch(rn2(5)){
+				switch(rn2(6)){
 					case 0:
 					(void) mongets(mtmp, VIBROBLADE);
 					break;
@@ -3188,6 +3199,9 @@ register struct monst *mtmp;
 					otmp->oproperties = OPROP_ELECW|OPROP_LESSW;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
+					break;
+					case 5:
+					(void) mongets(mtmp, DOUBLE_FORCE_BLADE);
 					break;
 				}
 				switch(rn2(4)){

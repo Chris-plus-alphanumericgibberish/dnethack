@@ -1949,8 +1949,10 @@ struct monst *mtmp;
 			m.has_misc = MUSE_POT_GAIN_ENERGY;
 		}
 		nomore(MUSE_BULLWHIP);
-		if(obj->otyp == BULLWHIP && (MON_WEP(mtmp) == obj || MON_SWEP(mtmp) == obj) &&
-		   distu(mtmp->mx,mtmp->my)==1 && uwep && !mtmp->mpeaceful) {
+		if((obj->otyp == BULLWHIP || obj->otyp == VIPERWHIP || obj->otyp == FORCE_WHIP) 
+			&& (MON_WEP(mtmp) == obj || MON_SWEP(mtmp) == obj) &&
+			distu(mtmp->mx,mtmp->my)==1 && uwep && !mtmp->mpeaceful
+		) {
 			m.misc = obj;
 			m.has_misc = MUSE_BULLWHIP;
 		}
@@ -2274,7 +2276,7 @@ museamnesia:
 	case MUSE_BULLWHIP:
 		/* attempt to disarm hero */
 		if (uwep && !rn2(5)) {
-		    const char *The_whip = vismon ? "The bullwhip" : "A whip";
+		    const char *The_whip = vismon ? "The whip" : "A whip";
 		    int where_to = rn2(4);
 		    struct obj *obj = uwep;
 		    const char *hand;
@@ -2285,7 +2287,7 @@ museamnesia:
 		    if (bimanual(obj,youracedata)) hand = makeplural(hand);
 
 		    if (vismon)
-			pline("%s flicks a bullwhip towards your %s!",
+			pline("%s flicks a whip towards your %s!",
 			      Monnam(mtmp), hand);
 		    if (obj->otyp == HEAVY_IRON_BALL) {
 			pline("%s fails to wrap around %s.",

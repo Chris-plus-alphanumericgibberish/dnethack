@@ -932,6 +932,10 @@ int curse_bless;
 	    case WHITE_VIBROSPEAR:
 	    case GOLD_BLADED_VIBROSPEAR:
 	    case FORCE_PIKE:
+	    case FORCE_BLADE:
+	    case DOUBLE_FORCE_BLADE:
+	    case FORCE_SWORD:
+	    case FORCE_WHIP:
 	    case SEISMIC_HAMMER:
 			if(is_blessed) obj->ovar1 = 100L;
 			else if(is_cursed) obj->ovar1 = 10L;
