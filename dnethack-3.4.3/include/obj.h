@@ -610,7 +610,7 @@ struct weapon_dice {
 #define is_light_armor(otmp)	((otmp)->otyp == DWARVISH_MITHRIL_COAT\
 			|| (otmp)->otyp == ELVEN_MITHRIL_COAT\
 			|| (otmp)->otyp == JUMPSUIT\
-			|| (otmp)->otyp == LEATHER_JACKET\
+			|| (otmp)->otyp == JACKET\
 			|| (otmp)->otyp == ELVEN_TOGA\
 			|| (otmp)->otyp == BLACK_DRESS)
 #define is_medium_armor(otmp)	((otmp)->otyp == HIGH_ELVEN_PLATE\

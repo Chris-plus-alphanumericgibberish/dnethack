@@ -36,6 +36,7 @@
 /* these can be configured */
 #define HI_OBJ		CLR_MAGENTA
 #define HI_METAL	CLR_CYAN
+#define HI_MITHRIL	CLR_GRAY
 #define HI_COPPER	CLR_YELLOW
 #define HI_SILVER	CLR_GRAY
 #define HI_GOLD		CLR_YELLOW

@@ -195,7 +195,7 @@ REGION:(39,10,47,13),lit,"morgue"
 
 # Objects
 # Notes: This will be replaced when the object is created
-OBJECT:'[',"leather cloak",(25,03),blessed,0,"The Mantle of Heaven"
+OBJECT:'[',"cloak",(25,03),blessed,0,"The Mantle of Heaven"
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
