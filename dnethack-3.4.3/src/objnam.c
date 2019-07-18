@@ -3488,7 +3488,7 @@ int wishflags;
 			&& strncmpi(bp, "silver arrow", 12) && strncmpi(bp, "silver bullet", 13)
 			&& strncmpi(bp, "silver pellet", 13) && strncmpi(bp, "silver dragon", 13)
 			&& strncmpi(bp, "silver clothes", 14) && strncmpi(bp, "silver ring", 11)
-			&& strncmpi(bp, "silver bell", 11) && strncmpi(bp, "silver spellbook", 16)
+			&& strncmpi(bp, "silver spellbook", 16)
 			&& strncmpi(bp, "silver wand", 11) && strncmpi(bp, "silver slingstone", 17)
 			&& strncmpi(bp, "silver stone", 12) && strncmpi(bp, "Silver Key", 10)
 			&& strncmpi(bp, "Silver Starlight", 16)
