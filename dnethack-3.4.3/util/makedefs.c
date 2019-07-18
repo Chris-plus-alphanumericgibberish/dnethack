@@ -62,8 +62,18 @@ static	const char	SCCS_Id[] = "@(#)makedefs.c\t3.4\t2002/02/03";
 #define ORACLE_FILE	"oracles"
 #define DATA_FILE	"data"
 #define RUMOR_FILE	"rumors"
-#define DGN_I_FILE	"dungeon.def"
-#define DGN_O_FILE	"dungeon.pdf"
+
+#define	N_DGNS	3
+const char *DGN_I_FILES[] = {
+	"dngnch1.def",
+	"dngnch2.def",
+	"dngnch3.def"
+};
+const char *DGN_O_FILES[] = {
+	"dngnch1.pdf",
+	"dngnch2.pdf",
+	"dngnch3.pdf"
+};
 #define MON_STR_C	"monstr.c"
 #define QTXT_I_FILE	"quest.txt"
 #define QTXT_O_FILE	"quest.dat"
@@ -1233,47 +1243,50 @@ void
 do_dungeon()
 {
 	int rcnt = 0;
+	int i;
 
-	Sprintf(filename, DATA_IN_TEMPLATE, DGN_I_FILE);
-	if (!(ifp = fopen(filename, RDTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-	filename[0]='\0';
-#ifdef FILE_PREFIX
-	Strcat(filename, file_prefix);
-#endif
-	Sprintf(eos(filename), DGN_TEMPLATE, DGN_O_FILE);
-	if (!(ofp = fopen(filename, WRTMODE))) {
-		perror(filename);
-		exit(EXIT_FAILURE);
-	}
-	Fprintf(ofp,Dont_Edit_Data);
-
-	while (fgets(in_line, sizeof in_line, ifp) != 0) {
-	    SpinCursor(3);
-
-	    rcnt++;
-	    if(in_line[0] == '#') continue;	/* discard comments */
-recheck:
-	    if(in_line[0] == '%') {
-		int i = check_control(in_line);
-		if(i >= 0) {
-		    if(!deflist[i].true_or_false)  {
-			while (fgets(in_line, sizeof in_line, ifp) != 0)
-			    if(check_control(in_line) != i) goto recheck;
-		    } else
-			(void) fputs(without_control(in_line),ofp);
-		} else {
-		    Fprintf(stderr, "Unknown control option '%s' in file %s at line %d.\n",
-			    in_line, DGN_I_FILE, rcnt);
-		    exit(EXIT_FAILURE);
+	for(i = 0; i <  N_DGNS; i++){
+		Sprintf(filename, DATA_IN_TEMPLATE, DGN_I_FILES[i]);
+		if (!(ifp = fopen(filename, RDTMODE))) {
+			perror(filename);
+			exit(EXIT_FAILURE);
 		}
-	    } else
-		(void) fputs(in_line,ofp);
+		filename[0]='\0';
+#ifdef FILE_PREFIX
+		Strcat(filename, file_prefix);
+#endif
+		Sprintf(eos(filename), DGN_TEMPLATE, DGN_O_FILES[i]);
+		if (!(ofp = fopen(filename, WRTMODE))) {
+			perror(filename);
+			exit(EXIT_FAILURE);
+		}
+		Fprintf(ofp,Dont_Edit_Data);
+
+		while (fgets(in_line, sizeof in_line, ifp) != 0) {
+			SpinCursor(3);
+
+			rcnt++;
+			if(in_line[0] == '#') continue;	/* discard comments */
+recheck:
+			if(in_line[0] == '%') {
+			int i = check_control(in_line);
+			if(i >= 0) {
+				if(!deflist[i].true_or_false)  {
+				while (fgets(in_line, sizeof in_line, ifp) != 0)
+					if(check_control(in_line) != i) goto recheck;
+				} else
+				(void) fputs(without_control(in_line),ofp);
+			} else {
+				Fprintf(stderr, "Unknown control option '%s' in file %s at line %d.\n",
+					in_line, DGN_I_FILES[i], rcnt);
+				exit(EXIT_FAILURE);
+			}
+			} else
+			(void) fputs(in_line,ofp);
+		}
+		Fclose(ifp);
+		Fclose(ofp);
 	}
-	Fclose(ifp);
-	Fclose(ofp);
 
 	return;
 }

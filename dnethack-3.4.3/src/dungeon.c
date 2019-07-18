@@ -9,7 +9,13 @@
 
 #ifdef OVL1
 
-#define DUNGEON_FILE	"dungeon"
+//define DUNGEON_FILE	"dungeon"
+
+const char *DUNGEON_FILES[] = {
+	"dngnch1", //Temple of Chaos (FF1)
+	"dngnch2", //Aquallor->Mithardir (D&D)
+	"dngnch3"  //Mordor
+};
 
 #define X_START		"x-strt"
 #define X_LOCATE	"x-loca"
@@ -737,14 +743,15 @@ init_dungeons()		/* initialize the "dungeon" structs */
 	struct proto_dungeon pd;
 	struct level_map *lev_map;
 	struct version_info vers_info;
+	int dungeonversion = rn2(3);
 
 	pd.n_levs = pd.n_brs = 0;
 
-	dgn_file = dlb_fopen(DUNGEON_FILE, RDBMODE);
+	dgn_file = dlb_fopen(DUNGEON_FILES[dungeonversion], RDBMODE);
 	if (!dgn_file) {
 	    char tbuf[BUFSZ];
 	    Sprintf(tbuf, "Cannot open dungeon description - \"%s",
-		DUNGEON_FILE);
+		DUNGEON_FILES[dungeonversion]);
 #ifdef DLBRSRC /* using a resource from the executable */
 	    Strcat(tbuf, "\" resource!");
 #else /* using a file or DLB file */
@@ -774,8 +781,10 @@ init_dungeons()		/* initialize the "dungeon" structs */
 	 * mix with the raw messages that might be already on the screen
 	 */
 	if (iflags.window_inited) clear_nhwindow(WIN_MAP);
-	if (!check_version(&vers_info, DUNGEON_FILE, TRUE))
+	for(dungeonversion = 0; dungeonversion < SIZE(DUNGEON_FILES); dungeonversion++){
+		if (!check_version(&vers_info, DUNGEON_FILES[dungeonversion], TRUE))
 	    panic("Dungeon description not valid.");
+	}
 
 	/*
 	 * Read in each dungeon and transfer the results to the internal
