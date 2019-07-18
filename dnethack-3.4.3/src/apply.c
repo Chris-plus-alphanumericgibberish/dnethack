@@ -30,7 +30,6 @@ STATIC_DCL void FDECL(use_lamp, (struct obj *));
 STATIC_DCL int FDECL(swap_aegis, (struct obj *));
 STATIC_DCL int FDECL(use_rakuyo, (struct obj *));
 STATIC_DCL int FDECL(use_force_blade, (struct obj *));
-STATIC_DCL int FDECL(use_force_sword, (struct obj *));
 STATIC_DCL void FDECL(light_cocktail, (struct obj *));
 STATIC_DCL void FDECL(light_torch, (struct obj *));
 STATIC_DCL void FDECL(use_tinning_kit, (struct obj *));
@@ -44,7 +43,6 @@ STATIC_DCL int FDECL(use_hypospray, (struct obj *));
 STATIC_DCL int FDECL(use_droven_cloak, (struct obj **));
 STATIC_DCL int FDECL(use_darkweavers_cloak, (struct obj *));
 STATIC_PTR int NDECL(set_trap);		/* occupation callback */
-STATIC_DCL int FDECL(use_whip, (struct obj *));
 STATIC_DCL int FDECL(use_pole, (struct obj *));
 STATIC_DCL int FDECL(use_cream_pie, (struct obj *));
 STATIC_DCL int FDECL(use_grapple, (struct obj *));
@@ -1532,7 +1530,7 @@ struct obj *obj;
 	return 0;
 }
 
-STATIC_OVL int
+int
 use_force_sword(obj)
 struct obj *obj;
 {
@@ -3411,7 +3409,7 @@ struct obj *otmp;
 	return 1;
 }
 
-STATIC_OVL int
+int
 use_whip(obj)
 struct obj *obj;
 {

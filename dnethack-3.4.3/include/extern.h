@@ -51,6 +51,8 @@ E void FDECL(use_bell, (struct obj **, int));
 E boolean FDECL(tinnable, (struct obj *));
 E void NDECL(reset_trapset);
 E void FDECL(fig_transform, (genericptr_t, long));
+E int FDECL(use_whip, (struct obj *));
+E int FDECL(use_force_sword, (struct obj *));
 E boolean FDECL(use_ring_of_wishes, (struct obj *));
 E boolean FDECL(use_candle_of_invocation, (struct obj *));
 E void FDECL(use_magic_whistle, (struct obj *));

@@ -1497,7 +1497,13 @@ doandroid()
 				u.uen--;
 			}
 			return 1;
-		} else if(!bimanual(uwep,youracedata)){ //!uwep handled above
+		} else if(objects[uwep->otyp].oc_skill == P_WHIP){ //!uwep handled above
+			static struct attack whipcombo[] = 
+			{
+				{AT_WEAP,AD_PHYS,0,0},
+				{AT_WEAP,AD_PHYS,0,0},
+				{0,0,0,0}
+			};
 			if(!getdir((char *)0)) return 0;
 			if(u.ustuck && u.uswallow)
 				mon = u.ustuck;
@@ -1505,12 +1511,49 @@ doandroid()
 			if(fast_weapon(uwep)) youmonst.movement+=2;
 			if(!mon) You("swing wildly!");
 			else {
-				static struct attack onehandercombo[] = 
-				{
-					{AT_WEAP,AD_PHYS,0,0},
-					{AT_WEAP,AD_PHYS,0,0},
-					{0,0,0,0}
-				};
+				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+				hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 2);
+			}
+			u.uen--;
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
+				if(!use_whip(uwep)) return 1;
+				u.uen--;
+				if(u.ustuck && u.uswallow)
+					mon = u.ustuck;
+				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(mon){
+					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+					hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 1);
+				}
+			}
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
+				if(!use_whip(uwep)) return 1;
+				u.uen--;
+				if(!uwep) return 1;
+				use_force_sword(uwep);
+				if(u.ustuck && u.uswallow)
+					mon = u.ustuck;
+				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(mon){
+					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+					hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 2);
+				}
+			}
+			return 1;
+		} else if(!bimanual(uwep,youracedata)){ //!uwep handled above
+			static struct attack onehandercombo[] = 
+			{
+				{AT_WEAP,AD_PHYS,0,0},
+				{AT_WEAP,AD_PHYS,0,0},
+				{0,0,0,0}
+			};
+			if(!getdir((char *)0)) return 0;
+			if(u.ustuck && u.uswallow)
+				mon = u.ustuck;
+			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+			if(fast_weapon(uwep)) youmonst.movement+=2;
+			if(!mon) You("swing wildly!");
+			else {
 				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
 				hmonwith(mon, tmp, weptmp, tchtmp, onehandercombo, 2);
 			}
@@ -1523,6 +1566,15 @@ doandroid()
 			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
 				if(dofire()){
 					u.uen--;
+					if(uwep){
+						if(u.ustuck && u.uswallow)
+							mon = u.ustuck;
+						else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+						if(mon){
+							find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+							hmonwith(mon, tmp, weptmp, tchtmp, onehandercombo, 1);
+						}
+					}
 				} else return 1;
 			}
 			return 1;
@@ -1571,6 +1623,13 @@ doandroid()
 			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
 				if(dofire()){
 					u.uen--;
+					if(u.ustuck && u.uswallow)
+						mon = u.ustuck;
+					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+					if(mon){
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, twohandercombo, 1);
+					}
 				} else return 1;
 			}
 			return 1;
