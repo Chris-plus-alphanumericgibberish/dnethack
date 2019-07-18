@@ -3426,7 +3426,7 @@ struct obj *obj;
     }
     if (!getdir((char *)0)) return res;
 
-	if(obj->otyp == FORCE_WHIP && !u.dx && !u.dy){
+	if(obj->otyp == FORCE_WHIP && !u.dx && !u.dy && !u.dz){
 		return use_force_sword(obj);
 	}
 
