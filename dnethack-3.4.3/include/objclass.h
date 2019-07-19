@@ -41,7 +41,7 @@ struct objclass {
 
 	/*Bitfield(oc_subtyp,3);*/	/* Now too big for a bitfield... see below */
 
-	Bitfield(oc_material,5);
+	Bitfield(oc_material,5); //32 max
 #define LIQUID		1	/* currently only for venom */
 #define WAX			2
 #define VEGGY		3	/* foodstuffs */
@@ -51,20 +51,22 @@ struct objclass {
 #define LEATHER		7
 #define WOOD		8
 #define BONE		9
-#define DRAGON_HIDE	10	/* not leather! */
-#define IRON		11	/* Fe - includes steel */
-#define METAL		12	/* Sn, &c. */
-#define COPPER		13	/* Cu - includes brass and bronze*/
-#define SILVER		14	/* Ag */
-#define GOLD		15	/* Au */
-#define PLATINUM	16	/* Pt */
-#define MITHRIL		17
-#define PLASTIC		18
-#define GLASS		19
-#define GEMSTONE	20
-#define MINERAL		21
-#define OBSIDIAN_MT	22
-#define SHADOWSTEEL	23
+#define SHELL		10
+#define DRAGON_HIDE	11	/* not leather! */
+#define IRON		12	/* Fe - includes steel */
+#define METAL		13	/* Sn, &c. */
+#define COPPER		14	/* Cu - includes brass and bronze*/
+#define SILVER		15	/* Ag */
+#define GOLD		16	/* Au */
+#define PLATINUM	17	/* Pt */
+#define MITHRIL		18
+#define PLASTIC		19
+#define GLASS		20
+#define GEMSTONE	21
+#define MINERAL		22
+#define OBSIDIAN_MT	23
+#define SHADOWSTEEL	24
+ //Note: 32 max
 	Bitfield(oc_showmat,4);
 #define UNIDED	1	/* always show material when base object type is unknown */
 #define IDED	2	/* always show material when base object type is known */

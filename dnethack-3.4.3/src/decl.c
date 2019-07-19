@@ -269,35 +269,43 @@ struct c_common_strings c_common_strings = {
 	"vision quickly clears.", {"the", "your"}
 };
 
-/* struct defined in objclass.h, the master list of materials */
+/* struct defined in objclass.h, the master list of materials
+ *
+ * Densities used to be an attempt at making them super realistic, being in
+ * terms of their kg/m^3 and as close to real life as possible, but that just
+ * doesn't work because it makes materials infeasible to use. Nobody wants
+ * anything gold or platinum if it weighs three times as much as its iron
+ * counterpart, and things such as wooden plate mails were incredibly
+ * overpowered by weighing about one-tenth as much as the iron counterpart.
+ * Instead, use arbitrary units.
+ */
 const struct material materials[] = {
-/*   id             color       density        cost    defense  */
-/*                            [old dnh]       [xnh]      [xnh]  */
-/*   USED           USED           USED      UNUSED     UNUSED  */
-	{0,				CLR_BLACK,		  5,		  0,		 0	},
-	{LIQUID,		HI_ORGANIC,		 10,		  1, 		 0	},
-	{WAX,			CLR_WHITE,		  9,		  1, 		 1	},
-	{VEGGY,			HI_ORGANIC,		  3,		  1, 		 1	},
-	{FLESH,			CLR_RED,		 11,		  3, 		 3	},
-	{PAPER,			CLR_WHITE,		 12,		  2, 		 1	},
-	{CLOTH,			HI_CLOTH,		 15,		  3, 		 2	},
-	{LEATHER,		HI_LEATHER,		  9,		  5, 		 3	},
-	{WOOD,			HI_WOOD,		  5,		  8, 		 4	},
-	{BONE,			CLR_WHITE,		 17,		 20,		 4	},
-	{DRAGON_HIDE,	CLR_WHITE,		 34,		200,		10	},
-	{IRON,			HI_METAL,		 79,		 10,		 5	},
-	{METAL,			HI_METAL,		 77,		 10,		 5	},
-	{COPPER,		HI_COPPER,		 89,		 10,		 4	},
-	{SILVER,		HI_SILVER,		105,		 30,		 5	},
-	{GOLD,			HI_GOLD,		193,		 60,		 3	},
-	{PLATINUM,		CLR_WHITE,		214,		 80,		 4	},
-	{MITHRIL,		HI_SILVER,		 27,		 50,		 6	},
-	{PLASTIC,		CLR_WHITE,		 13,		 10,		 3	},
-	{GLASS,			HI_GLASS,		 24,		 20,		 5	},
-	{GEMSTONE,		CLR_RED,		 36,		500,		 7	},
-	{MINERAL,		CLR_GRAY,		 27,		 10,		 6	},
-	{OBSIDIAN_MT,	CLR_BLACK,		 26,		 10,		 4	},
-	{SHADOWSTEEL,	CLR_BLACK,		 27,		 50,		 6	}
+/*   id             color       density                    cost   defense  */
+	{0,				CLR_BLACK,		  5,/*old:   5*/		  0,		0	},
+	{LIQUID,		HI_ORGANIC,		 10,/*old:  10*/		  1, 		1	},
+	{WAX,			CLR_WHITE,		 15,/*old:   9*/		  1, 		1	},
+	{VEGGY,			HI_ORGANIC,		 10,/*old:   3*/		  1, 		1	},
+	{FLESH,			CLR_RED,		 10,/*old:  11*/		  3, 		3	},
+	{PAPER,			CLR_WHITE,		 10,/*old:  12*/		  2, 		1	},
+	{CLOTH,			HI_CLOTH,		 10,/*old:  15*/		  3, 		2	},
+	{LEATHER,		HI_LEATHER,		 15,/*old:   9*/		  5, 		3	},
+	{WOOD,			HI_WOOD,		 30,/*old:   5*/		  8, 		4	},
+	{BONE,			CLR_WHITE,		 25,/*old:  17*/		 20,		4	},
+	{SHELL,			CLR_WHITE,		 25,/*old:  25*/		 30,		5	},
+	{DRAGON_HIDE,	CLR_WHITE,		 35,/*old:  34*/		200,		8	},	/*note: color variable */
+	{IRON,			HI_METAL,		 80,/*old:  79*/		 10,		5	},
+	{METAL,			HI_METAL,		 70,/*old:  77*/		 10,		5	},
+	{COPPER,		HI_COPPER,		 80,/*old:  89*/		 10,		5	},
+	{SILVER,		HI_SILVER,		 90,/*old: 105*/		 30,		5	},
+	{GOLD,			HI_GOLD,		120,/*old: 193*/		 60,		3	},
+	{PLATINUM,		CLR_WHITE,		120,/*old: 214*/		 80,		4	},
+	{MITHRIL,		HI_MITHRIL,		 40,/*old:  27*/		 50,		6	},
+	{PLASTIC,		CLR_WHITE,		 20,/*old:  13*/		 10,		3	},
+	{GLASS,			HI_GLASS,		 60,/*old:  24*/		 20,		5	},
+	{GEMSTONE,		CLR_RED,		 55,/*old:  36*/		100,		7	},	/*note: color and cost variable */
+	{MINERAL,		CLR_GRAY,		 70,/*old:  27*/		 15,		6	},
+	{OBSIDIAN_MT,	CLR_BLACK,		 60,/*old:  26*/		 20,		4	},
+	{SHADOWSTEEL,	CLR_BLACK,		 30,/*old:  27*/		 50,		6	}
 };
 
 /* Vision */
