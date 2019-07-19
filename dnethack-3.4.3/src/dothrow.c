@@ -2229,7 +2229,7 @@ int thrown;
 	) {
 	    if (is_ammo(obj) || is_spear(obj)) {
 		if (!ammo_and_launcher(obj, launcher)) {
-			if (is_spear(obj) && launcher->otyp != ATLATL){
+				if (is_spear(obj)){
 				tmp += 2; // throwing weapon bonus
 			} else {
 			    tmp -= 4;
