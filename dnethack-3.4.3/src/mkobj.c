@@ -1674,6 +1674,7 @@ struct obj* obj;
 	case BULLWHIP:
 	case WORM_TOOTH:
 	case CRYSKNIFE:
+	case LEATHER_HELM:
 	case LEATHER_ARMOR:
 	case STUDDED_LEATHER_ARMOR:
 	case YA:
