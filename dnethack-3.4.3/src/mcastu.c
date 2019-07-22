@@ -33,7 +33,7 @@ boolean undirected;
 
 	    if (undirected)
 		point_msg = "all around, then curses";
-	    else if ((Invis && !perceives(mtmp->data) &&
+	    else if ((Invis && !mon_resistance(mtmp,SEE_INVIS) &&
 			(mtmp->mux != u.ux || mtmp->muy != u.uy)) ||
 		    (youmonst.m_ap_type == M_AP_OBJECT &&
 			youmonst.mappearance == STRANGE_OBJECT) ||
@@ -1084,6 +1084,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	int dmd, dmn;
 	struct obj *mirror;
 
+	if(mon_resistance(mtmp, NULLMAGIC)) return 0;
+
 	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
 	
 	if(is_derived_undead_mon(mtmp) && mtmp->mfaction != FRACTURED) return 0;
@@ -1183,7 +1185,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	    pline("%s casts a spell%s!",
 		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
 		  is_undirected_spell(spellnum) ? "" :
-		  (Invisible && !perceives(mtmp->data) && 
+		  (Invisible && !mon_resistance(mtmp,SEE_INVIS) && 
 		   (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
 		  " at a spot near you" :
 		  (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
@@ -2121,7 +2123,7 @@ summon_alien:
 
 	    /* messages not quite right if plural monsters created but
 	       only a single monster is seen */
-	    if (Invisible && !perceives(mtmp->data) &&
+	    if (Invisible && !mon_resistance(mtmp,SEE_INVIS) &&
 				    (mtmp->mux != u.ux || mtmp->muy != u.uy))
 		pline("%s around a spot near you!", mappear);
 	    else if (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy))
@@ -2194,7 +2196,7 @@ summon_alien:
 	else if (let == S_SNAKE)
 	    pline("%s transforms a clump of sticks into snakes!",
 		Monnam(mtmp));
-	else if (Invisible && !perceives(mtmp->data) &&
+	else if (Invisible && !mon_resistance(mtmp,SEE_INVIS) &&
 				(mtmp->mux != u.ux || mtmp->muy != u.uy))
 	    pline("%s summons %s around a spot near you!",
 		Monnam(mtmp), let == S_SPIDER ? "arachnids" : "insects");
@@ -3149,7 +3151,7 @@ int spellnum;
 	    return TRUE;
        /* make visible spell by spellcaster with see invisible. */
        /* also won't cast it if your invisibility isn't intrinsic. */
-	if ((!(HInvis & INTRINSIC) || perceives(mtmp->data))
+	if ((!(HInvis & INTRINSIC) || mon_resistance(mtmp,SEE_INVIS))
 		   && spellnum == MAKE_VISIBLE)
 		return TRUE;
 	/* blindness spell on blinded player */

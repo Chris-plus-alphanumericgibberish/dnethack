@@ -115,7 +115,7 @@
  * This function is true if the player can see a monster using earthsense.
  * The caller must NOT check for invisibility.
  */
-#define see_with_earthsense(mon) (Earthsense && !(is_flyer((mon)->data) || is_floater((mon)->data) || unsolid((mon)->data)))
+#define see_with_earthsense(mon) (Earthsense && !(mon_resistance((mon),FLYING) || mon_resistance((mon),LEVITATION) || unsolid((mon)->data)))
 
 
 /*

@@ -680,7 +680,7 @@ struct obj *obj;
 char *buf;
 {
 	boolean iscrys = (obj->otyp == CRYSKNIFE);
-	if (!is_damageable(obj) && !iscrys) return;
+	if (!is_damageable(obj) && !iscrys && !(obj->oclass == POTION_CLASS && obj->odiluted)) return;
 
 	/* The only cases where any of these bits do double duty are for
 	* rotted food and diluted potions, which are all not is_damageable().
@@ -690,8 +690,11 @@ char *buf;
 		case 2:	Strcat(buf, "very "); break;
 		case 3:	Strcat(buf, "thoroughly "); break;
 		}
-		Strcat(buf, is_rustprone(obj) ? "rusty " :
-			is_evaporable(obj) ? "tenuous " : "burnt ");
+		Strcat(buf, 
+			obj->oclass == POTION_CLASS ? "diluted " :
+			is_rustprone(obj) ? "rusty " :
+			is_evaporable(obj) ? "tenuous " :
+			is_flammable(obj) ? "burnt " : "eroded ");
 	}
 	if (obj->oeroded2 && !iscrys) {
 		switch (obj->oeroded2) {
@@ -1080,6 +1083,9 @@ char *buf;
 		if(artilist[obj->oartifact].material && obj->obj_material == artilist[obj->oartifact].material)
 			return;
 	} else {
+		/*Special case: circlets should always show their material, but oc_showmat is tied to otyp, not appearance */
+		if (obj->otyp == find_gcirclet())
+			goto force_add_material_name;
 		/*Item is made from standard material, and isn't of a type for which the material is always shown*/
 		if(objects[obj->otyp].oc_name_known && !(objects[obj->otyp].oc_showmat&IDED) && obj->obj_material == objects[obj->otyp].oc_material)
 			return;
@@ -1093,6 +1099,7 @@ char *buf;
 		if (objects[obj->otyp].oc_name_known && (objects[obj->otyp].oc_showmat&NUNIDED))
 			return;
 	}
+force_add_material_name:
 	/* add on the adjective form of the object's material */
 	Strcat(buf, material_name(obj, TRUE));
 	Strcat(buf, " ");
@@ -1368,8 +1375,6 @@ boolean with_price;
 				(obj->owt > ocl->oc_weight) ? "very " : "");
 			break;
 		case POTION_CLASS:
-			if (obj->dknown && obj->odiluted)
-				Strcat(buf, "diluted ");
 			if (typ == POT_BLOOD && (obj->known || is_vampire(youracedata))) {
 				Strcat(buf, "potion");
 				Sprintf(eos(buf), " of %s blood", mons[obj->corpsenm].mname);
@@ -2844,6 +2849,7 @@ const char *oldstr;
 				return bp;
 
 		} else if (!BSTRCMPI(bp, p-5, "boots") ||
+			   !BSTRCMPI(bp, p-7, "sandals") ||
 			   !BSTRCMPI(bp, p-9, "gauntlets") ||
 			   !BSTRCMPI(bp, p-6, "tricks") ||
 			   !BSTRCMPI(bp, p-9, "paralysis") ||
@@ -3121,6 +3127,7 @@ int wishflags;
 	boolean from_user = !(wishflags & WISH_QUIET);
 	boolean wizwish = !!(wishflags & WISH_WIZARD);
 	boolean allow_artifact = !!(wishflags & WISH_ARTALLOW);
+	
 	int halfeaten, halfdrained, mntmp, contents;
 	int islit, unlabeled, ishistoric, isdiluted;
 	struct fruit *f;
@@ -3539,6 +3546,9 @@ int wishflags;
 		} else if (!strncmpi(bp, "lesser ", l=7)
 			) {
 			oproperties |= OPROP_LESSW;
+		} else if (!strncmpi(bp, "magic-resistant ", l=16)
+			) {
+			oproperties |= OPROP_MAGC;
 		} else if (!strncmpi(bp, "flaming ", l=8)
 			) {
 			oproperties |= OPROP_FIREW;
@@ -3779,6 +3789,7 @@ int wishflags;
 	if (strncmpi(bp, "scroll of stinking cloud", 10)) /* not the "stinking cloud" monster */
 	if (strncmpi(bp, "rod of lordly might", 19)) /* not the "lord" rank */
 	if (strncmpi(bp, "magenta", 7)) /* not the "mage" rank */
+	if (strncmpi(bp, "band", 4)) /* not the "ban" rank */
 	if (strncmpi(bp, "chromatic dragon scales", 23)) /* not a "dragon" */
 	if (strncmpi(bp, "platinum dragon plate", 22)) /* not a "dragon" */
 	if (mntmp < LOW_PM && strlen(bp) > 2 &&
@@ -4717,7 +4728,7 @@ typfnd:
 		}
 
 		otmp = oname(otmp, name);
-		if (otmp->oartifact) {
+		if (otmp->oartifact && from_user) {
 			u.uconduct.wisharti++;	/* KMH, conduct */
 		}
 	}
@@ -4739,7 +4750,7 @@ typfnd:
 	
 	/* more wishing abuse: don't allow wishing for certain artifacts */
 	/* and make them pay; charge them for the wish anyway! */
-	if (otmp->oartifact && !wizwish &&
+	if (otmp->oartifact && !wizwish && from_user &&
 		(is_quest_artifact(otmp) //redundant failsafe.  You can't wish for ANY quest artifacts
 		 || otmp->oartifact >= ART_ROD_OF_SEVEN_PARTS //No wishing for quest artifacts, unique monster artifacts, etc.
 		 || !touch_artifact(otmp, &youmonst, TRUE) //Auto-fail a wish for an artifact you wouldn't be able to touch (mercy rule)

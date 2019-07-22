@@ -490,7 +490,7 @@ dosinkfall()
 {
 	register struct obj *obj;
 
-	if (is_floater(youracedata) || (HLevitation & FROMOUTSIDE)) {
+	if (mon_resistance(&youmonst,LEVITATION) || (HLevitation & FROMOUTSIDE)) {
 	    You("wobble unsteadily for a moment.");
 	} else {
 	    long save_ELev = ELevitation, save_HLev = HLevitation;
@@ -558,14 +558,15 @@ register xchar x,y;
 #ifdef OVL1
 
 boolean
-bad_rock(mdat,x,y)
-struct permonst *mdat;
+bad_rock(mon,x,y)
+struct monst *mon;
 register xchar x,y;
 {
+	struct permonst *mdat = mon->data;
 	return((boolean) ((In_sokoban(&u.uz) && boulder_at(x,y)) ||
 	       (IS_ROCK(levl[x][y].typ)
 		    && (!tunnels(mdat) || needspick(mdat) || !may_dig(x,y))
-		    && !(passes_walls(mdat) && may_passwall(x,y)))));
+		    && !(mon_resistance(mon,PASSES_WALLS) && may_passwall(x,y)))));
 }
 
 boolean
@@ -617,7 +618,7 @@ int mode;
 			if(youracedata == &mons[PM_RUST_MONSTER])
 				lesshungry(objects[BAR].oc_nutrition);
 	    }
-	    if (!(Passes_walls || passes_bars(youracedata)))
+	    if (!(Passes_walls || passes_bars(&youmonst)))
 		return FALSE;
 	} else if (tunnels(youracedata) && !needspick(youracedata)) {
 	    /* Eat the rock. */
@@ -704,7 +705,7 @@ int mode;
 	}
     }
     if (dx && dy
-	    && bad_rock(youracedata,ux,y) && bad_rock(youracedata,x,uy)) {
+	    && bad_rock(&youmonst,ux,y) && bad_rock(&youmonst,x,uy)) {
 	/* Move at a diagonal. */
 	if (In_sokoban(&u.uz)) {
 	    if (mode == DO_MOVE)
@@ -1021,7 +1022,7 @@ domove()
 		    if (!skates) skates = find_skates();
 		    if ((uarmf && uarmf->otyp == skates)
 			    || resists_cold(&youmonst) || Flying
-			    || is_floater(youracedata) || is_clinger(youracedata)
+			    || mon_resistance(&youmonst,LEVITATION) || is_clinger(youracedata)
 			    || is_whirly(youracedata))
 			on_ice = FALSE;
 		    else if (!rn2(Cold_resistance ? 3 : 2)) {
@@ -1046,7 +1047,7 @@ domove()
 				confdir();
 				x = u.ux + u.dx;
 				y = u.uy + u.dy;
-			} while(!isok(x, y) || bad_rock(youracedata, x, y));
+			} while(!isok(x, y) || bad_rock(&youmonst, x, y));
 		}
 		/* turbulence might alter your actual destination */
 		if (u.uinwater && !(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20)) {
@@ -1189,7 +1190,7 @@ domove()
 		/* sometimes, instead of attacking, you displace it. */
 		/* Good joke, huh? */
 		/* Good joke, but players find it irritating */
-		// if (is_displacer(mtmp->data) && !rn2(2)) displacer = TRUE;
+		// if (mon_resistance(mtmp,DISPLACED) && !rn2(2)) displacer = TRUE;
 		if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) displacer = TRUE;
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
@@ -1543,8 +1544,8 @@ domove()
 		/* can't swap places with pet pinned in a pit by a boulder */
 		u.ux = u.ux0,  u.uy = u.uy0;	/* didn't move after all */
 	    } else if (u.ux0 != x && u.uy0 != y &&
-		       bad_rock(mtmp->data, x, u.uy0) &&
-		       bad_rock(mtmp->data, u.ux0, y) &&
+		       bad_rock(mtmp, x, u.uy0) &&
+		       bad_rock(mtmp, u.ux0, y) &&
 		       (bigmonst(mtmp->data) || (curr_mon_load(mtmp) > 600))) {
 		/* can't swap places when pet won't fit thru the opening */
 		u.ux = u.ux0,  u.uy = u.uy0;	/* didn't move after all */
@@ -1760,8 +1761,8 @@ stillinwater:;
 	    /* limit recursive calls through teleds() */
 	    if (is_pool(u.ux, u.uy, FALSE) || is_lava(u.ux, u.uy)) {
 #ifdef STEED
-		if (u.usteed && !is_flyer(u.usteed->data) &&
-			!is_floater(u.usteed->data) &&
+		if (u.usteed && !mon_resistance(u.usteed,FLYING) &&
+			!mon_resistance(u.usteed,LEVITATION) &&
 			!is_clinger(u.usteed->data)) {
 		    dismount_steed(Underwater ?
 			    DISMOUNT_FELL : DISMOUNT_GENERIC);
@@ -2085,7 +2086,7 @@ register boolean newlev;
 	    break;
 		case MORGUE:
 		    if(midnight()) {
-				const char *run = locomotion(youracedata, "Run");
+				const char *run = locomotion(&youmonst, "Run");
 				pline("%s away!  %s away!", run, run);
 		    } else
 				You("have an uncanny feeling...");
@@ -2222,7 +2223,7 @@ dopickup()
 	    }
 	}
 	if(is_pool(u.ux, u.uy, FALSE) && !is_3dwater(u.ux, u.uy) && !Is_waterlevel(&u.uz)) {//pools (bubble interior) on water level are special
-	    if (Wwalking || is_floater(youracedata) || is_clinger(youracedata)
+	    if (Wwalking || mon_resistance(&youmonst,LEVITATION) || is_clinger(youracedata)
 			|| (Flying && !Breathless)) {
 		You("cannot dive into the water to pick things up.");
 		return(0);
@@ -2233,7 +2234,7 @@ dopickup()
 	    }
 	}
 	if (is_lava(u.ux, u.uy)) {
-	    if (Wwalking || is_floater(youracedata) || is_clinger(youracedata)
+	    if (Wwalking || mon_resistance(&youmonst,LEVITATION) || is_clinger(youracedata)
 			|| (Flying && !Breathless)) {
 		You_cant("reach the bottom to pick things up.");
 		return(0);

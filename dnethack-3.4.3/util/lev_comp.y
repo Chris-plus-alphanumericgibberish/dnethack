@@ -910,13 +910,20 @@ object_detail	: OBJECT_ID object_desc
 object_desc	: chance ':' object_c ',' o_name
 		  {
 			tmpobj[nobj] = New(object);
+			tmpobj[nobj]->chance = $1;
 			tmpobj[nobj]->class = $<i>3;
 			tmpobj[nobj]->corpsenm = NON_PM;
 			tmpobj[nobj]->curse_state = -1;
 			tmpobj[nobj]->name.str = 0;
-			tmpobj[nobj]->chance = $1;
 			tmpobj[nobj]->id = -1;
+			
 			if ($5) {
+				if($3=='#')
+				{
+					tmpobj[nobj]->name.str = $5;
+					tmpobj[nobj]->class = '#';
+				}
+				else{
 			    int token = get_object_id($5, $<i>3);
 			    if (token == ERR)
 				yywarning(
@@ -925,6 +932,9 @@ object_desc	: chance ':' object_c ',' o_name
 				tmpobj[nobj]->id = token;
 			    Free($5);
 			}
+		  }
+			
+
 		  }
 		 ',' object_where object_infos
 		  {
@@ -1011,7 +1021,10 @@ optional_name	: /* nothing */
 		  }
 		| ',' STRING
 		  {
-			tmpobj[nobj]->name.str = $2;
+			if(tmpobj[nobj]->class==(int)'#')
+				yyerror("Name given for externally-parsed object");
+			else
+				tmpobj[nobj]->name.str = $2;
 		  }
 		;
 
@@ -1647,7 +1660,7 @@ monster		: CHAR
 object		: CHAR
 		  {
 			char c = $1;
-			if (check_object_char(c))
+			if (check_object_char(c)||c=='#')
 				$<i>$ = c;
 			else {
 				yyerror("Unknown char class!");

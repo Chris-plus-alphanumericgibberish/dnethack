@@ -70,18 +70,10 @@
 #define MR_SICK			0x0200	/* resists sickness */
 #define MR_MAGIC		0x0400	/* has player-style magic resistance */
 #define MR_REFLECT		0x0800	/* reflects */
+#define MR_MASK			0x0FFF	/* mask that covers all MR resistances */
 #define MR_ALL		(MR_STONE|MR_ACID|MR_POISON|MR_ELEC|MR_DISINT|MR_SLEEP|MR_COLD|MR_FIRE|MR_DRAIN|MR_SICK)
 /* other resistances: sickness */
 /* other conveyances: teleport, teleport control, telepathy */
-
-/* individual resistances */
-//#define MR2_SEE_INVIS	0x0100	/* slot taken by MR_DRAIN see invisible */
-//#define MR2_LEVITATE	0x0200	/* slot taken by MR_SICK levitation */
-#define MR2_WATERWALK	0x0400	/* water walking */
-#define MR2_MAGBREATH	0x0800	/* magical breathing */
-#define MR2_DISPLACED	0x1000	/* displaced */
-#define MR2_STRENGTH	0x2000	/* gauntlets of power */
-#define MR2_FUMBLING	0x4000	/* clumsy */
 
 //MM_ Monster Motility
 #define MM_FLY			0x00000001L	/* can fly or float */

@@ -220,7 +220,7 @@ struct monst *mon;
 	    ptr->mlet == S_PLANT) tmp += 6;
 
 	/* trident is highly effective against swimmers */
-	if (otmp->otyp == TRIDENT && is_swimmer(ptr)) {
+	if (otmp->otyp == TRIDENT && species_swims(ptr)) {
 	   if (is_pool(mon->mx, mon->my, FALSE)) tmp += 4;
 	   else if (ptr->mlet == S_EEL || ptr->mlet == S_SNAKE) tmp += 2;
 	}
@@ -231,11 +231,11 @@ struct monst *mon;
 	
 	/* Picks used against xorns and earth elementals */
 	if (is_pick(otmp) &&
-	   (passes_walls(ptr) && thick_skinned(ptr))) tmp += 2;
+	   (mon_resistance(mon,PASSES_WALLS) && thick_skinned(ptr))) tmp += 2;
 
 #ifdef INVISIBLE_OBJECTS
 	/* Invisible weapons against monsters who can't see invisible */
-	if (otmp->oinvis && !perceives(ptr)) tmp += 3;
+	if (otmp->oinvis && !mon_resistance(mon,SEE_INVIS)) tmp += 3;
 #endif
 
 	/* Check specially named weapon "to hit" bonuses */
@@ -799,11 +799,12 @@ int spec;
 			spe_mult += otmp->ostriking;
 		}
 		break;
-	case MIRRORBLADE:
-		if ((youdefend ? uwep : MON_WEP(mon))->otyp == MIRRORBLADE)
+	case MIRRORBLADE:{
+		struct obj * otmp2 = (youdefend ? uwep : MON_WEP(mon));
+		if (otmp2 && otmp2->otyp == MIRRORBLADE)
 		{// clashing mirrorblades are quite deadly
 			// 2 dice, exploding, with a flat explosion bonus of the average of attacker's and defender's weapons
-			wdice.oc.aatyp = AT_EXPL + ((youdefend ? uwep : MON_WEP(mon))->spe + otmp->spe) / 2;
+			wdice.oc.aatyp = AT_EXPL + (otmp2->spe + otmp->spe) / 2;
 			wdice.oc.damn = 2;
 		}
 		else
@@ -818,7 +819,7 @@ int spec;
 			int mir = 0;
 			struct weapon_dice mirdice;
 			/* grab the weapon dice from dmgval_core */
-			(void) dmgval_core(&mirdice, bigmonst(ptr), (youdefend ? uwep : MON_WEP(mon)), 0);	//note: dmgval_core handles zero weapons gracefully
+			(void) dmgval_core(&mirdice, bigmonst(ptr), otmp2, 0);	//note: dmgval_core handles zero weapons gracefully
 			if (spec & SPEC_MARIONETTE)
 			{
 				mirdice.oc.damd += 2;
@@ -837,7 +838,7 @@ int spec;
 			/* signal to NOT add normal dice */
 			add_dice = FALSE;
 		}
-		break;
+	}break;
 	case CRYSTAL_SWORD:
 		// small bonus enchantment damage
 		wdice.flat += otmp->spe/3;
@@ -1304,7 +1305,7 @@ struct monst *mon;
 	}
 	if(pen->ovar1&SEAL_OSE){
 		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,15);
-		else if(!youdef && !mindless_mon(mon) && (telepathic(mon->data) || !rn2(5))) dmg += d(dnum,15);
+		else if(!youdef && !mindless_mon(mon) && (mon_resistance(mon,TELEPAT) || !rn2(5))) dmg += d(dnum,15);
 	}
 	if(pen->ovar1&SEAL_NABERIUS){
 		if(youdef && (Upolyd ? u.mh < .25*u.mhmax : u.uhp < .25*u.uhpmax)) dmg += d(dnum,4);
@@ -2062,6 +2063,7 @@ register struct monst *mon;
 					s_suffix(mon_nam(mon)), mbodypart(mon, HAND));
 			}
 			obj->owornmask = W_WEP;
+			update_mon_intrinsics(mon, obj, TRUE, FALSE);
 			if (is_lightsaber(obj))
 				mon_ignite_lightsaber(obj, mon);
 			time_taken = TRUE;
@@ -2102,6 +2104,7 @@ register struct monst *mon;
 							s_suffix(mon_nam(mon)), mbodypart(mon, HAND));
 					}
 					sobj->owornmask = W_SWAPWEP;
+					update_mon_intrinsics(mon, sobj, TRUE, FALSE);
 					if (is_lightsaber(sobj))
 						mon_ignite_lightsaber(sobj, mon);
 					time_taken = TRUE;
@@ -2149,6 +2152,7 @@ register struct monst *mon;
 		    begin_burn(obj, FALSE);
 		}
 		obj->owornmask = W_WEP;
+		update_mon_intrinsics(mon, obj, TRUE, FALSE);
 		if (is_lightsaber(obj))
 		    mon_ignite_lightsaber(obj, mon);
 		toreturn = 1;
@@ -2164,6 +2168,7 @@ register struct monst *mon;
 				begin_burn(sobj, FALSE);
 			}
 			sobj->owornmask = W_SWAPWEP;
+			update_mon_intrinsics(mon, sobj, TRUE, FALSE);
 			if (is_lightsaber(sobj))
 				mon_ignite_lightsaber(sobj, mon);
 			toreturn = 1;
@@ -3583,6 +3588,7 @@ register struct obj *obj;
     }
     obj->owornmask &= ~W_WEP;
 	obj->owornmask &= ~W_SWAPWEP;
+	update_mon_intrinsics(mon, obj, FALSE, FALSE);
 }
 
 int

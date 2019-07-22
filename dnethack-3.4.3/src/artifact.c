@@ -228,7 +228,9 @@ hack_artifacts()
 				artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
 				artilist[ART_SCEPTRE_OF_LOLTH].spfx &= ~(SPFX_NOGEN);
 			} else {
-				artilist[ART_ROD_OF_LORDLY_MIGHT].alignment = A_NEUTRAL;
+				artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN;
+				artilist[ART_ROD_OF_LORDLY_MIGHT].role = NON_PM;
+				artilist[ART_DEATH_SPEAR_OF_VHAERUN].spfx &= ~(SPFX_NOGEN);
 			}
 		} else if(Race_if(PM_DWARF) && urole.ldrnum == PM_DAIN_II_IRONFOOT){
 			artilist[ART_ROD_OF_LORDLY_MIGHT].spfx |= SPFX_NOGEN;
@@ -366,32 +368,35 @@ struct obj *otmp;	/* existing object */
 	int prop = rnd(13);
 	
 	if(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)){
-		if(!(--prop))
-			otmp->oproperties |= OPROP_FIREW; //1
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_COLDW; //2
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_ELECW; //3
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_ACIDW; //4
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_MAGCW; //5
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_ANARW; //6
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_CONCW; //7
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_AXIOW; //8
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_HOLYW; //9
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_UNHYW; //10
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_WATRW; //11
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_DEEPW; //12
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_PSIOW; //13
+		switch(prop)
+		{
+		case 1:
+			otmp->oproperties |= OPROP_FIREW; break;
+		case 2:
+			otmp->oproperties |= OPROP_COLDW; break;
+		case 3:
+			otmp->oproperties |= OPROP_ELECW; break;
+		case 4:
+			otmp->oproperties |= OPROP_ACIDW; break;
+		case 5:
+			otmp->oproperties |= OPROP_MAGCW; break;
+		case 6:
+			otmp->oproperties |= OPROP_ANARW; break;
+		case 7:
+			otmp->oproperties |= OPROP_CONCW; break;
+		case 8:
+			otmp->oproperties |= OPROP_AXIOW; break;
+		case 9:
+			otmp->oproperties |= OPROP_HOLYW; break;
+		case 10:
+			otmp->oproperties |= OPROP_UNHYW; break;
+		case 11:
+			otmp->oproperties |= OPROP_WATRW; break;
+		case 12:
+			otmp->oproperties |= OPROP_DEEPW; break;
+		case 13:
+			otmp->oproperties |= OPROP_PSIOW; break;
+		}
 	}
 	
 	return otmp;
@@ -408,31 +413,33 @@ struct obj *otmp;	/* existing object */
 	int prop = rnd(12);
 	
 	if(otmp->oclass == WEAPON_CLASS || is_weptool(otmp)){
-		otmp->oproperties |= OPROP_LESSW;
-		if(!(--prop))
-			otmp->oproperties |= OPROP_FIREW; //1
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_COLDW; //2
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_ELECW; //3
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_ACIDW; //4
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_MAGCW; //5
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_ANARW; //6
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_CONCW; //7
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_AXIOW; //8
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_HOLYW; //9
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_UNHYW; //10
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_WATRW; //11
-		else if(!(--prop))
-			otmp->oproperties |= OPROP_PSIOW; //12
+		switch(prop)
+		{
+		case 1:
+			otmp->oproperties |= OPROP_FIREW; break;
+		case 2:
+			otmp->oproperties |= OPROP_COLDW; break;
+		case 3:
+			otmp->oproperties |= OPROP_ELECW; break;
+		case 4:
+			otmp->oproperties |= OPROP_ACIDW; break;
+		case 5:
+			otmp->oproperties |= OPROP_MAGCW; break;
+		case 6:
+			otmp->oproperties |= OPROP_ANARW; break;
+		case 7:
+			otmp->oproperties |= OPROP_CONCW; break;
+		case 8:
+			otmp->oproperties |= OPROP_AXIOW; break;
+		case 9:
+			otmp->oproperties |= OPROP_HOLYW; break;
+		case 10:
+			otmp->oproperties |= OPROP_UNHYW; break;
+		case 11:
+			otmp->oproperties |= OPROP_WATRW; break;
+		case 12:
+			otmp->oproperties |= OPROP_PSIOW; break;
+		}
 	}
 	
 	return otmp;
@@ -628,6 +635,9 @@ boolean while_carried;
 			break;
 		case AD_SLEE:
 			if (cur_prop == SLEEP_RES) got_prop = TRUE; 
+			break;
+		case AD_DISE:
+			if (cur_prop == SICK_RES) got_prop = TRUE;
 			break;
 		}
 
@@ -2795,7 +2805,7 @@ int basedmg;
 			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
 			else bonus += basedmg;
 		}
-		else if(!youdefend && !mindless_mon(mdef) && (telepathic(mdef->data) || !rn2(5))){
+		else if(!youdefend && !mindless_mon(mdef) && (mon_resistance(mdef,TELEPAT) || !rn2(5))){
 			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
 			else bonus += basedmg;
 		}
@@ -2804,7 +2814,7 @@ int basedmg;
 		if(otmp->spe < 8){
 		if(youdefend && (Blind_telepat || !rn2(5)))
 			bonus += d(1,15-(otmp->spe)*2);
-		else if(!youdefend && !mindless_mon(mdef) && (telepathic(mdef->data) || !rn2(5)))
+		else if(!youdefend && !mindless_mon(mdef) && (mon_resistance(mdef,TELEPAT) || !rn2(5)))
 			bonus += d(1,15-(otmp->spe)*2);
 		}
 	}
@@ -4405,7 +4415,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		monAC += magr->m_lev;
 		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) monAC += u.chokhmah;
 		if(multi < 0) monAC += 4;
-		if((Invis && !perceives(magr->data)) || is_blind(magr))
+		if((Invis && !mon_resistance(magr,SEE_INVIS)) || is_blind(magr))
 			monAC -= 2;
 		if(magr->mtrapped) monAC -= 2;
 		if(monAC <= 0) monAC = 1;
@@ -4514,7 +4524,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		tmp += magr->m_lev;
 		if(magr->data == &mons[PM_CHOKHMAH_SEPHIRAH]) tmp += u.chokhmah;
 		if(multi < 0) tmp += 4;
-		if((Invis && !perceives(magr->data)) || is_blind(magr))
+		if((Invis && !mon_resistance(magr,SEE_INVIS)) || is_blind(magr))
 			tmp -= 2;
 		if(magr->mtrapped) tmp -= 2;
 		if(tmp <= 0) tmp = 1;
@@ -6211,6 +6221,21 @@ arti_invoke(obj)
 				}
 			}
 		break;
+		case DEATH_TCH:
+			getdir((char *)0);
+			if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
+			mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+			
+			pline("You reach out and stab at %s's very soul.", mon_nam(mtmp));
+			if (nonliving_mon(mtmp) || is_demon(mtmp->data) || is_angel(mtmp->data)) 
+				pline("... but %s seems to lack one!", mon_nam(mtmp));
+			else if (ward_at(mtmp->mx,mtmp->my) == CIRCLE_OF_ACHERON)
+				pline("But %s is already beyond Acheron.", mon_nam(mtmp));
+			else 
+				xkilled(mtmp, 1);
+			
+			 
+		break;
 		case PETMASTER:{
 			int pet_effect = 0;
 			if(uarm && uarm == obj && yn("Take something out of your pockets?") == 'y'){
@@ -6886,7 +6911,7 @@ arti_invoke(obj)
 							You("raise the Annulus into the %s, and it releases a rapidly-expanding ring of cerulean energy.", Underwater ? "water" : "air");
 							for(; mtmp; mtmp = ntmp){
 								ntmp = mtmp->nmon;
-								if(telepathic(mtmp->data) && couldsee(mtmp->mx,mtmp->my)){
+								if(mon_resistance(mtmp,TELEPAT) && couldsee(mtmp->mx,mtmp->my)){
 									if(mtmp->data == &mons[PM_LUGRIBOSSK]) maanze = TRUE;
 									killed(mtmp);
 								} else if(is_magical(mtmp->data) && couldsee(mtmp->mx,mtmp->my) 
@@ -9546,17 +9571,6 @@ char *name;	/* target alignment, or A_NONE */
 			break;
 		}
 	}
-	if(!strcmp(name, "Mask of Waterdeep")){
-		otmp->otyp = find_vhelm();
-		otmp->obj_material = IRON;
-		otmp->oproperties = OPROP_MAGC;
-	}
-	if(!strcmp(name, "Masked Lord's Cope")){
-		otmp->otyp = find_cope();
-	}
-	if(!strcmp(name,  "The Sword of the Deeps")){
-		otmp->oproperties = OPROP_DEEPW;
-	}
 	fix_object(otmp);
 	return otmp;
 }
@@ -9691,7 +9705,7 @@ int spe;
 		if(dnum >= 3){
 			for (m2 = fmon; m2; m2 = nmon2) {
 				nmon2 = m2->nmon;
-				if (!DEADMONSTER(m2) && !m2->mpeaceful && (telepathic(m2->data) || rn2(2)))
+				if (!DEADMONSTER(m2) && !m2->mpeaceful && (mon_resistance(m2,TELEPAT) || rn2(2)))
 				{
 					m2->msleeping = 0;
 					if (!m2->mcanmove && !rn2(5)) {
@@ -9711,7 +9725,7 @@ int spe;
 		nmon2 = m2->nmon;
 		if (DEADMONSTER(m2)) continue;
 		if (mindless_mon(m2)) continue;
-		if ((telepathic(m2->data) &&
+		if ((mon_resistance(m2,TELEPAT) &&
 			(rn2(2) || m2->mblinded)) || !rn2(10)) {
 			if (cansee(m2->mx, m2->my))
 				pline("It locks on to %s.", mon_nam(m2));

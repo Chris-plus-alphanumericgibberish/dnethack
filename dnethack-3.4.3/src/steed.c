@@ -184,7 +184,7 @@ can_ride(mtmp)
 {
 	return (mtmp->mtame && humanoid(youracedata) &&
 			!verysmall(youracedata) && !bigmonst(youracedata) &&
-			(!Underwater || is_swimmer(mtmp->data)));
+			(!Underwater || mon_resistance(mtmp,SWIMMING)));
 }
 
 
@@ -312,7 +312,7 @@ mount_steed(mtmp, force)
 	    if (mtmp->mleashed) m_unleash(mtmp, FALSE);
 	    return (FALSE);
 	}
-	if (!force && Underwater && !is_swimmer(ptr)) {
+	if (!force && Underwater && !mon_resistance(mtmp,SWIMMING)) {
 	    You_cant("ride that creature while under water.");
 	    return (FALSE);
 	}
@@ -322,7 +322,7 @@ mount_steed(mtmp, force)
 	}
 
 	/* Is the player impaired? */
-	if (!force && !is_floater(ptr) && !is_flyer(ptr) &&
+	if (!force && !mon_resistance(mtmp,LEVITATION) && !mon_resistance(mtmp,FLYING) &&
 			Levitation && !Lev_at_will) {
 	    You("cannot reach %s.", mon_nam(mtmp));
 	    return (FALSE);
@@ -369,7 +369,7 @@ mount_steed(mtmp, force)
 
 	/* Success */
 	if (!force) {
-	    if (Levitation && !is_floater(ptr) && !is_flyer(ptr))
+	    if (Levitation && !mon_resistance(mtmp,LEVITATION) && !mon_resistance(mtmp,FLYING))
 	    	/* Must have Lev_at_will at this point */
 	    	pline("%s magically floats up!", Monnam(mtmp));
 	    You("mount %s.", mon_nam(mtmp));
@@ -586,12 +586,12 @@ dismount_steed(reason)
 		struct permonst *mdat = mtmp->data;
 
 		/* The steed may drop into water/lava */
-		if (!is_flyer(mdat) && !is_floater(mdat) && !is_clinger(mdat)) {
+		if (!mon_resistance(mtmp,FLYING) && !mon_resistance(mtmp,LEVITATION) && !is_clinger(mdat)) {
 		    if (is_pool(u.ux, u.uy, FALSE)) {
 			if (!Underwater)
 			    pline("%s falls into the %s!", Monnam(mtmp),
 							surface(u.ux, u.uy));
-			if (!is_swimmer(mdat) && !amphibious_mon(mtmp)) {
+			if (!mon_resistance(mtmp,SWIMMING) && !amphibious_mon(mtmp)) {
 			    killed(mtmp);
 			    adjalign(-1);
 			}
@@ -675,7 +675,7 @@ int x, y;
     mon->mx = x, mon->my = y;
     level.monsters[x][y] = mon;
 //	pline("%d",u.umonster); O_o that was a strange series of bugs....
-//	if (opaque(mon->data) && (!mon->minvis || HSee_invisible || ESee_invisible || ((!Race_if(PM_INCANTIFIER) || Upolyd) && perceives(youracedata)) ))
+//	if (opaque(mon->data) && (!mon->minvis || HSee_invisible || ESee_invisible || ((!Race_if(PM_INCANTIFIER) || Upolyd) && mon_resistance(&youmonst,SEE_INVIS)) ))
 	if (opaque(mon->data) && (!mon->minvis || (See_invisible(mon->mx,mon->my))))
 		block_point(x,y);
 }

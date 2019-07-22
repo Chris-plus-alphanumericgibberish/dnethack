@@ -277,7 +277,7 @@ nothing_to_steal:
 	for(otmp = invent; otmp; otmp = otmp->nobj)
 	    if ((!uarm || otmp != uarmc) && otmp != uskin
 #ifdef INVISIBLE_OBJECTS
-				&& (!otmp->oinvis || perceives(mtmp->data))
+				&& (!otmp->oinvis || mon_resistance(mtmp,SEE_INVIS))
 #endif
 				)
 		tmp += ((otmp->owornmask &
@@ -287,7 +287,7 @@ nothing_to_steal:
 	for(otmp = invent; otmp; otmp = otmp->nobj)
 	    if ((!uarm || otmp != uarmc) && otmp != uskin
 #ifdef INVISIBLE_OBJECTS
-				&& (!otmp->oinvis || perceives(mtmp->data))
+				&& (!otmp->oinvis || mon_resistance(mtmp,SEE_INVIS))
 #endif
 			)
 		if((tmp -= ((otmp->owornmask &
@@ -526,7 +526,7 @@ struct monst *mtmp;
 	   to steal are mergable */
 	(void) mpickobj(mtmp,otmp);	/* may merge and free otmp */
 	pline("%s stole %s!", Monnam(mtmp), doname(otmp));
-	if (can_teleport(mtmp->data) && !tele_restrict(mtmp))
+	if (mon_resistance(mtmp,TELEPORT) && !tele_restrict(mtmp))
 	    (void) rloc(mtmp, FALSE);
     }
 }
@@ -570,7 +570,7 @@ struct monst *mtmp;
 	   to steal are mergable */
 	(void) mpickobj(mtmp,otmp);	/* may merge and free otmp */
 	pline("%s stole %s!", Monnam(mtmp), doname(otmp));
-	if (can_teleport(mtmp->data) && !tele_restrict(mtmp))
+	if (mon_resistance(mtmp,TELEPORT) && !tele_restrict(mtmp))
 	    (void) rloc(mtmp, FALSE);
     }
 }
@@ -591,7 +591,7 @@ boolean verbosely;
 	/* perform worn item handling if the monster is still alive */
 	if (mon->mhp > 0) {
 	    mon->misc_worn_check &= ~obj->owornmask;
-	    update_mon_intrinsics(mon, obj, FALSE, TRUE);
+	    update_mon_intrinsics(mon, obj, FALSE, FALSE);
 	 /* obj_no_longer_held(obj); -- done by place_object */
 		if (obj->owornmask & W_WEP){
 			setmnotwielded(mon,obj);
@@ -651,8 +651,9 @@ register int show;
 boolean is_pet;		/* If true, pet should keep wielded/worn items */
 {
 	register struct obj *otmp;
+	register struct obj *nobj;
 	register int omx = mtmp->mx, omy = mtmp->my;
-	struct obj *keepobj = 0;
+	boolean keepobj = FALSE;
 	struct obj *wep = MON_WEP(mtmp),
 	           *hwep = attacktype(mtmp->data, AT_WEAP)
 		           ? select_hwep(mtmp) : (struct obj *)0,
@@ -673,8 +674,10 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 	if (!tunnels(mtmp->data) || !needspick(mtmp->data))
 		item1 = TRUE;
 
-	while ((otmp = mtmp->minvent) != 0) {
-		obj_extract_self(otmp);
+	for (otmp = mtmp->minvent; otmp; otmp = nobj) {
+		keepobj = FALSE;
+		/* since otmp might be freed, we need to get nobj before it is unlinked */
+		nobj = otmp->nobj;
 		/* special case: pick-axe and unicorn horn are non-worn */
 		/* items that we also want pets to keep 1 of */
 		/* (It is a coincidence that these can also be wielded.) */
@@ -709,19 +712,16 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 					item1 = TRUE;
 				if (otmp->otyp == UNICORN_HORN && !otmp->cursed)
 					item2 = TRUE;
-				otmp->nobj = keepobj;
-				keepobj = otmp;
-				continue;
+				keepobj = TRUE;
 			}
 		}
+		/* only extract the object if it is being dropped */
+		if (!keepobj) {
+			obj_extract_self(otmp);
 		mdrop_obj(mtmp, otmp, is_pet && flags.verbose);
 	}
-
-	/* put kept objects back */
-	while ((otmp = keepobj) != (struct obj *)0) {
-	    keepobj = otmp->nobj;
-	    (void) add_to_minv(mtmp, otmp);
 	}
+
 #ifndef GOLDOBJ
 	if (mtmp->mgold) {
 		register long g = mtmp->mgold;

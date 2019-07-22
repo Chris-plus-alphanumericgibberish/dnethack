@@ -159,7 +159,7 @@ const char *verb;
 				vtense((const char *)0, verb),
 				(mtmp) ? "" : " with you");
 		    if (mtmp) {
-			if (!passes_walls(mtmp->data) &&
+			if (!mon_resistance(mtmp,PASSES_WALLS) &&
 				!throws_rocks(mtmp->data)) {
 			    if (hmon(mtmp, obj, TRUE) && !is_whirly(mtmp->data))
 				return FALSE;	/* still alive */
@@ -877,7 +877,7 @@ dodown()
 	}
 
 	if (trap)
-	    You("%s %s.", locomotion(youracedata, "jump"),
+	    You("%s %s.", locomotion(&youmonst, "jump"),
 		trap->ttyp == HOLE ? "down the hole" : "through the trap door");
 
 	if (trap && Is_stronghold(&u.uz)) {
@@ -1784,7 +1784,7 @@ int different;
 		        Strcpy(sackname, an(xname(container)));
 	   		pline("%s %s out of %s in your pack!",
 	   			Blind ? Something : Amonnam(mtmp),
-				locomotion(mtmp->data,"writhes"),
+				locomotion(mtmp,"writhes"),
 	   			sackname);
 	   	} else if (container_where == OBJ_FLOOR && container &&
 		            cansee(mtmp->mx, mtmp->my)) {

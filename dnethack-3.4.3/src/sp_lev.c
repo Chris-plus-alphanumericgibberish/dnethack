@@ -876,7 +876,7 @@ struct mkroom	*croom;
 	if (croom)
 	    get_room_loc(&x, &y, croom);
 	else {
-	    if (!pm || !is_swimmer(pm))
+	    if (!pm || !species_swims(pm))
 			get_location(&x, &y, DRY);
 	    else if (pm->mlet == S_EEL)
 			get_location(&x, &y, WET);
@@ -991,7 +991,7 @@ struct mkroom	*croom;
     schar x, y;
     char c;
     boolean named;	/* has a name been supplied in level description? */
-
+	boolean parsed = o->class=='#';
     if (rn2(100) < o->chance) {
 	named = o->name.str ? TRUE : FALSE;
 
@@ -1001,34 +1001,43 @@ struct mkroom	*croom;
 	else
 	    get_location(&x, &y, DRY);
 
-	if (o->class >= 0)
-	    c = o->class;
-	else if (o->class > -11)
-	    c = robjects[ -(o->class+1)];
-	else
-	    c = 0;
-
-	if (!c)
-	    otmp = mkobj_at(RANDOM_CLASS, x, y, !named);
-	else if (o->id != -1)
-	    otmp = mksobj_at(o->id, x, y, TRUE, !named);
-	else {
-	    /*
-	     * The special levels are compiled with the default "text" object
-	     * class characters.  We must convert them to the internal format.
-	     */
-	    char oclass = (char) def_char_to_objclass(c);
-
-	    if (oclass == MAXOCLASSES)
-		panic("create_object:  unexpected object class '%c'",c);
-
-	    /* KMH -- Create piles of gold properly */
-	    if (oclass == COIN_CLASS)
-		otmp = mkgold(0L, x, y);
-	    else
-		otmp = mkobj_at(oclass, x, y, !named);
+	
+	if(parsed)
+	{
+		int dummy=0;//we don't care about wish returns
+		otmp = readobjnam(o->name.str,&dummy,WISH_MKLEV);
+		place_object(otmp,x,y);
 	}
-
+	else
+	{
+		if (o->class >= 0)
+		    c = o->class;
+		else if (o->class > -11)
+		    c = robjects[ -(o->class+1)];
+		else
+		    c = 0;
+	
+		if (!c)
+		    otmp = mkobj_at(RANDOM_CLASS, x, y, !named);
+		else if (o->id != -1)
+		    otmp = mksobj_at(o->id, x, y, TRUE, !named);
+		else {
+		    /*
+		     * The special levels are compiled with the default "text" object
+		     * class characters.  We must convert them to the internal format.
+		     */
+		    char oclass = (char) def_char_to_objclass(c);
+	
+		    if (oclass == MAXOCLASSES)
+			panic("create_object:  unexpected object class '%c'",c);
+	
+		    /* KMH -- Create piles of gold properly */
+		    if (oclass == COIN_CLASS)
+			otmp = mkgold(0L, x, y);
+		    else
+			otmp = mkobj_at(oclass, x, y, !named);
+		}
+	}
 	if(In_quest(&u.uz) && !Role_if(PM_CONVICT)){
 		if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
 		if(otmp->oclass == ARMOR_CLASS){
@@ -1050,9 +1059,11 @@ struct mkroom	*croom;
 	}
 
 	/*	corpsenm is "empty" if -1, random if -2, otherwise specific */
-	if (o->corpsenm == NON_PM - 1) otmp->corpsenm = rndmonnum();
-	else if (o->corpsenm != NON_PM) otmp->corpsenm = o->corpsenm;
-	
+	if(!parsed)
+	{
+		if (o->corpsenm == NON_PM - 1) otmp->corpsenm = rndmonnum();
+		else if (o->corpsenm != NON_PM) otmp->corpsenm = o->corpsenm;
+	}
 	if(otmp->corpsenm == PM_CROW_WINGED_HALF_DRAGON){
 		struct obj *tmpo;
 		
@@ -1089,7 +1100,7 @@ struct mkroom	*croom;
 		attach_egg_hatch_timeout(otmp);	/* attach new hatch timeout */
 	}
 
-	if (named){
+	if (named && !parsed){
 	    otmp = oname(otmp, o->name.str);
 		//Catch and spiffyfy any non-artifact special items from the level editor (anything to avoid touching the lexer I guess)
 		otmp = minor_artifact(otmp, o->name.str);

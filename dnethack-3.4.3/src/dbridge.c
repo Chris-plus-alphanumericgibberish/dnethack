@@ -378,20 +378,20 @@ int x, y;
 		return(TRUE);
 	if(is_3dwater(x, y))
         return (boolean) ((is_u(etmp) && Amphibious)
-                          || is_swimmer(etmp->edata));
+                          || mon_resistance(etmp->emon,SWIMMING));
 	if (is_pool(x, y, FALSE))
 		return (boolean)((is_u(etmp) &&
 				(Wwalking || Amphibious || Swimming ||
 				Flying || Levitation)) ||
-			is_swimmer(etmp->edata) || is_flyer(etmp->edata) ||
-			is_floater(etmp->edata));
+			mon_resistance(etmp->emon,SWIMMING) || mon_resistance(etmp->emon,FLYING) ||
+			mon_resistance(etmp->emon,LEVITATION));
 	/* must force call to lava_effects in e_died if is_u */
 	if (is_lava(x, y))
 		return (boolean)((is_u(etmp) && (Levitation || Flying)) ||
-			    likes_lava(etmp->edata) || is_flyer(etmp->edata));
+			    likes_lava(etmp->edata) || mon_resistance(etmp->emon,FLYING));
 	if (is_db_wall(x, y))
 		return((boolean)(is_u(etmp) ? Passes_walls :
-			passes_walls(etmp->edata)));
+			mon_resistance(etmp->emon,PASSES_WALLS)));
 	return(TRUE);
 }
 
@@ -465,7 +465,7 @@ automiss(etmp)
 struct entity *etmp;
 {
 	return (boolean)((is_u(etmp) ? Passes_walls :
-			passes_walls(etmp->edata)) || noncorporeal(etmp->edata));
+			mon_resistance(etmp->emon,PASSES_WALLS)) || noncorporeal(etmp->edata));
 }
 
 /*
@@ -486,12 +486,12 @@ boolean chunks;
 	if (automiss(etmp))
 		return(TRUE);
 
-	if (is_flyer(etmp->edata) &&
+	if (mon_resistance(etmp->emon,FLYING) &&
 	    (is_u(etmp)? !Sleeping :
 	     (etmp->emon->mcanmove && !etmp->emon->msleeping)))
 						 /* flying requires mobility */
 		misses = 5;	/* out of 8 */
-	else if (is_floater(etmp->edata) ||
+	else if (mon_resistance(etmp->emon,LEVITATION) ||
 		    (is_u(etmp) && Levitation))	 /* doesn't require mobility */
 		misses = 3;
 	else if (chunks && is_pool(etmp->ex, etmp->ey, FALSE))
@@ -728,8 +728,8 @@ struct entity *etmp;
 			if (flags.soundok)
 				You_hear("a splash.");
 		if (e_survives_at(etmp, etmp->ex, etmp->ey)) {
-			if (e_inview && !is_flyer(etmp->edata) &&
-			    !is_floater(etmp->edata))
+			if (e_inview && !mon_resistance(etmp->emon,FLYING) &&
+			    !mon_resistance(etmp->emon,LEVITATION))
 				pline("%s from the bridge.",
 				      E_phrase(etmp, "fall"));
 			return;

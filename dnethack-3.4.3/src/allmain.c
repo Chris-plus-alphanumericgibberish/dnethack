@@ -725,7 +725,7 @@ moveloop()
 			if(u.umoved){
 				youmonst.movement -= 3;
 			} else {
-					u.ucspeed = NORMAL_SPEED;
+				u.ucspeed = NORMAL_SPEED;
 				youmonst.movement -= NORMAL_SPEED;
 			}
 		} else youmonst.movement -= NORMAL_SPEED;
@@ -2540,10 +2540,10 @@ printMons(){
 			Sprintf(eos(pbuf)," |resistances conveyed=%s\n", convbuf);
 			Sprintf(eos(pbuf)," |attributes={{attributes\n");
 				Sprintf(eos(pbuf)," |%s|=\n", Aptrnam(ptr));
-			if(is_flyer(&mons[i]))	Sprintf(eos(pbuf)," |fly=%s\n", is_flyer(&mons[i]) ? "1":"");
-			if(is_swimmer(&mons[i]))	Sprintf(eos(pbuf)," |swim=%s\n", is_swimmer(&mons[i]) ? "1":"");
+			if(species_flies(&mons[i]))	Sprintf(eos(pbuf)," |fly=%s\n", species_flies(&mons[i]) ? "1":"");
+			if(species_swims(&mons[i]))	Sprintf(eos(pbuf)," |swim=%s\n", species_swims(&mons[i]) ? "1":"");
 			if(amorphous(ptr))	Sprintf(eos(pbuf)," |amorphous=%s\n", amorphous(ptr) ? "1":"");
-			if(passes_walls(ptr))	Sprintf(eos(pbuf)," |wallwalk=%s\n", passes_walls(ptr) ? "1":"");
+			if(species_passes_walls(ptr))	Sprintf(eos(pbuf)," |wallwalk=%s\n", species_passes_walls(ptr) ? "1":"");
 			if(is_clinger(ptr))	Sprintf(eos(pbuf)," |cling=%s\n", is_clinger(ptr) ? "1":"");
 			if(tunnels(ptr))	Sprintf(eos(pbuf)," |tunnel=%s\n", tunnels(ptr) ? "1":"");
 			if(needspick(ptr))	Sprintf(eos(pbuf)," |needpick=%s\n", needspick(ptr) ? "1":"");
@@ -2563,10 +2563,10 @@ printMons(){
 			if(unsolid(ptr))	Sprintf(eos(pbuf)," |unsolid=%s\n", unsolid(ptr) ? "1":"");
 			if(thick_skinned(ptr))	Sprintf(eos(pbuf)," |thick=%s\n", thick_skinned(ptr) ? "1":"");
 			if(lays_eggs(ptr))	Sprintf(eos(pbuf)," |oviparous=%s\n", lays_eggs(ptr) ? "1":"");
-			if(regenerates(ptr))	Sprintf(eos(pbuf)," |regen=%s\n", regenerates(ptr) ? "1":"");
-			if(perceives(ptr))	Sprintf(eos(pbuf)," |seeinvis=%s\n", perceives(ptr) ? "1":"");
-			if(can_teleport(ptr))	Sprintf(eos(pbuf)," |tport=%s\n", can_teleport(ptr) ? "1":"");
-			if(control_teleport(ptr))	Sprintf(eos(pbuf)," |tportcntrl=%s\n", control_teleport(ptr) ? "1":"");
+			if(species_regenerates(ptr))	Sprintf(eos(pbuf)," |regen=%s\n", species_regenerates(ptr) ? "1":"");
+			if(species_perceives(ptr))	Sprintf(eos(pbuf)," |seeinvis=%s\n", species_perceives(ptr) ? "1":"");
+			if(species_teleports(ptr))	Sprintf(eos(pbuf)," |tport=%s\n", species_teleports(ptr) ? "1":"");
+			if(species_controls_teleports(ptr))	Sprintf(eos(pbuf)," |tportcntrl=%s\n", species_controls_teleports(ptr) ? "1":"");
 			if(acidic(ptr))	Sprintf(eos(pbuf)," |acid=%s\n", acidic(ptr) ? "1":"");
 			if(poisonous(ptr) )	Sprintf(eos(pbuf)," |pois=%s\n", poisonous(ptr) ? "1":"");
 			if(carnivorous(ptr)&&!herbivorous(ptr))	Sprintf(eos(pbuf)," |carnivore=%s\n", carnivorous(ptr)&&!herbivorous(ptr) ? "1":"");
@@ -2640,7 +2640,7 @@ printMons(){
 			if((emits_light(ptr) == 3))	Sprintf(eos(pbuf)," |light3=%s\n", (emits_light(ptr) == 3) ? "1":"");
 			// if()	Sprintf(eos(pbuf)," |groupattack=\n");
 			// if()	Sprintf(eos(pbuf)," |blinker=\n");
-			if((!regenerates(ptr) && nonliving(ptr)))	Sprintf(eos(pbuf)," |noregen=%s\n", (!regenerates(ptr) && nonliving(ptr)) ? "1":"");
+			if((!species_regenerates(ptr) && nonliving(ptr)))	Sprintf(eos(pbuf)," |noregen=%s\n", (!species_regenerates(ptr) && nonliving(ptr)) ? "1":"");
 			if(stationary(ptr))	Sprintf(eos(pbuf)," |stationary=%s\n", stationary(ptr) ? "1":"");
 			Sprintf(eos(pbuf)," }}\n");
 			Sprintf(eos(pbuf)," |refline=\n");

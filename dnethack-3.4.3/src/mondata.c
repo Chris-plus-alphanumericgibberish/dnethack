@@ -20,10 +20,11 @@ int flag;
     mon->data = ptr;
     if (flag == -1) return;		/* "don't care" */
 
+	/* resistances */
     if (flag == 1)
-		mon->mintrinsics[0] |= (ptr->mresists & 0x03FF);
+		mon->mintrinsics[0] |= (ptr->mresists & MR_MASK);
     else
-		mon->mintrinsics[0] = (ptr->mresists & 0x03FF);
+		mon->mintrinsics[0] = (ptr->mresists & MR_MASK);
 	if(is_half_dragon(ptr) && (mon->mvar1 == 0 || flag != 1)){
 		/*
 			Store half dragon breath type in mvar1
@@ -66,15 +67,32 @@ int flag;
 					mon->mintrinsics[(FIRE_RES-1)/32] |= (1 << (FIRE_RES-1)%32);
 				break;
 				case 3:
-					// mon->mvar1 = AD_MAGM;
-				// break;
+					mon->mvar1 = AD_MAGM;
+					mon->mintrinsics[(ANTIMAGIC-1)/32] |= (1 << (ANTIMAGIC-1)%32);
+				break;
 				case 4:
 					mon->mvar1 = AD_PHYS;
 				break;
 			}
 		}
 	}
+#define set_mintrinsic(ptr_condition, intrinsic) if((ptr_condition))\
+	{if(flag==1) mon->mintrinsics[((intrinsic)-1)/32] |= (1<<((intrinsic)-1)%32);\
+	else mon->mintrinsics[((intrinsic)-1)/32] = (1<<((intrinsic)-1)%32);}
+	/* other intrinsics */
+	set_mintrinsic(species_flies(mon->data), FLYING);
+	set_mintrinsic(species_floats(mon->data), LEVITATION);
+	set_mintrinsic(species_swims(mon->data), SWIMMING);
+	set_mintrinsic(species_displaces(mon->data), DISPLACED);
+	set_mintrinsic(species_passes_walls(mon->data), PASSES_WALLS);
+	set_mintrinsic(species_regenerates(mon->data), REGENERATION);
+	set_mintrinsic(species_perceives(mon->data), SEE_INVIS);
+	set_mintrinsic(species_teleports(mon->data), TELEPORT);
+	set_mintrinsic(species_controls_teleports(mon->data), TELEPORT_CONTROL);
+	set_mintrinsic(species_is_telepathic(mon->data), TELEPAT);
+#undef set_mintrinsic
     return;
+#
 }
 
 #endif /* OVLB */
@@ -253,17 +271,14 @@ resists_drli(mon)	/* returns TRUE if monster is drain-life resistant */
 struct monst *mon;
 {
 	struct permonst *ptr;
-	struct obj *wep;
 	
 	if(!mon) return FALSE;
 	ptr = mon->data;
-	wep = ((mon == &youmonst) ? uwep : MON_WEP(mon));
 
 	return (boolean)(is_undead_mon(mon) || is_demon(ptr) || is_were(ptr) ||
 			 species_resists_drain(mon) || 
 			 ptr == &mons[PM_DEATH] ||
 			 mon_resistance(mon, DRAIN_RES) ||
-			 (wep && wep->oartifact && defends(AD_DRLI, wep))  || 
 			 (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
 }
 
@@ -271,31 +286,10 @@ boolean
 resists_magm(mon)	/* TRUE if monster is magic-missile resistant */
 struct monst *mon;
 {
-	struct permonst *ptr;
-	struct obj *o;
-	
 	if(!mon) return FALSE;
-	ptr = mon->data;
 	
-	if(mon == u.usteed && u.sealsActive&SEAL_BERITH && Antimagic) return TRUE;
-	
-	if (species_resists_magic(mon))
-	    return TRUE;
-	
-	if (is_boreal_dragoon(ptr) && mon->mvar1 == AD_MAGM)
-	    return TRUE;
-	/* check for magic resistance granted by wielded weapon */
-	o = (mon == &youmonst) ? uwep : MON_WEP(mon);
-	if (o && o->oartifact && defends(AD_MAGM, o))
-	    return TRUE;
-	/* check for magic resistance granted by worn or carried items */
-	o = (mon == &youmonst) ? invent : mon->minvent;
-	for ( ; o; o = o->nobj)
-	    if ((o->owornmask && objects[o->otyp].oc_oprop == ANTIMAGIC) ||
-		    (o->owornmask && objects[o->otyp].oc_oprop == NULLMAGIC) ||
-		    (o->oartifact && protects(AD_MAGM, o)))
-		return TRUE;
-	return FALSE;
+	return (species_resists_magic(mon) || mon_resistance(mon, ANTIMAGIC) ||  mon_resistance(mon, NULLMAGIC) ||
+		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Antimagic));
 }
 
 boolean
@@ -303,7 +297,6 @@ resists_death(mon)	/* TRUE if monster resists death magic */
 struct monst *mon;
 {
 	struct permonst *ptr;
-	struct obj *o;
 	
 	if(!mon) return FALSE;
 	ptr = mon->data;
@@ -465,10 +458,12 @@ struct permonst *ptr;
 
 /* true iff the type of monster pass through iron bars */
 boolean
-passes_bars(mptr)
-struct permonst *mptr;
+passes_bars(mon)
+struct monst *mon;
 {
-    return (boolean) (passes_walls(mptr) || amorphous(mptr) ||
+	struct permonst *mptr = mon->data;
+
+    return (boolean) (mon_resistance(mon,PASSES_WALLS) || amorphous(mptr) ||
 		      is_whirly(mptr) || verysmall(mptr) ||
 			  dmgtype(mptr, AD_CORR) || (dmgtype(mptr, AD_RUST) && mptr != &mons[PM_NAIAD] ) ||
 		      (slithy(mptr) && !bigmonst(mptr)));
@@ -923,16 +918,16 @@ static const char *immobile[4]	= { "wiggle", "Wiggle", "pulsate", "Pulsate" };
 static const char *crawl[4]	= { "crawl", "Crawl", "falter", "Falter" };
 
 const char *
-locomotion(ptr, def)
-const struct permonst *ptr;
+locomotion(mon, def)
+struct monst *mon;
 const char *def;
 {
 	int capitalize = (*def == highc(*def));
-
+	const struct permonst *ptr = mon->data;
 	return (
-		is_floater(ptr) ? levitate[capitalize] :
-		(is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
-		(is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
+		mon_resistance(mon,LEVITATION) ? levitate[capitalize] :
+		(mon_resistance(mon,FLYING) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
+		(mon_resistance(mon,FLYING) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
 		slithy(ptr)     ? slither[capitalize] :
 		amorphous(ptr)  ? ooze[capitalize] :
 		!ptr->mmove	? immobile[capitalize] :
@@ -943,16 +938,16 @@ const char *def;
 }
 
 const char *
-stagger(ptr, def)
-const struct permonst *ptr;
+stagger(mon, def)
+struct monst *mon;
 const char *def;
 {
 	int capitalize = 2 + (*def == highc(*def));
-
+	const struct permonst *ptr = mon->data;
 	return (
-		is_floater(ptr) ? levitate[capitalize] :
-		(is_flyer(ptr) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
-		(is_flyer(ptr) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
+		mon_resistance(mon,LEVITATION) ? levitate[capitalize] :
+		(mon_resistance(mon,FLYING) && ptr->msize <= MZ_SMALL) ? flys[capitalize] :
+		(mon_resistance(mon,FLYING) && ptr->msize > MZ_SMALL)  ? flyl[capitalize] :
 		slithy(ptr)     ? slither[capitalize] :
 		amorphous(ptr)  ? ooze[capitalize] :
 		!ptr->mmove	? immobile[capitalize] :

@@ -329,7 +329,7 @@ dosounds()
     if (level.flags.has_beehive && !rn2(200)) {
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 	    if (DEADMONSTER(mtmp)) continue;
-	    if ((mtmp->data->mlet == S_ANT && is_flyer(mtmp->data)) &&
+	    if ((mtmp->data->mlet == S_ANT && mon_resistance(mtmp,FLYING)) &&
 		mon_in_room(mtmp, BEEHIVE)) {
 		switch (rn2(2)+hallu) {
 		    case 0:

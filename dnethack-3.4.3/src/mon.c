@@ -990,12 +990,12 @@ register struct monst *mtmp;
 	boolean inpool, inlava, infountain, inshallow;
 
 	inpool = is_pool(mtmp->mx,mtmp->my, FALSE) &&
-	     ((!is_flyer(mtmp->data) && !is_floater(mtmp->data)) || is_3dwater(mtmp->mx,mtmp->my));
+	     ((!mon_resistance(mtmp,FLYING) && !mon_resistance(mtmp,LEVITATION)) || is_3dwater(mtmp->mx,mtmp->my));
 	inlava = is_lava(mtmp->mx,mtmp->my) &&
-	     !is_flyer(mtmp->data) && !is_floater(mtmp->data);
+	     !mon_resistance(mtmp,FLYING) && !mon_resistance(mtmp,LEVITATION);
 	infountain = IS_FOUNTAIN(levl[mtmp->mx][mtmp->my].typ);
 	inshallow = IS_PUDDLE(levl[mtmp->mx][mtmp->my].typ) &&
-	     (!is_flyer(mtmp->data) && !is_floater(mtmp->data));
+	     (!mon_resistance(mtmp,FLYING) && !mon_resistance(mtmp,LEVITATION));
 
 #ifdef STEED
 	/* Flying and levitation keeps our steed out of the liquid */
@@ -1071,7 +1071,7 @@ register struct monst *mtmp;
 	 * be handled here.  Swimmers are able to protect their stuff...
 	 */
 	if (!is_clinger(mtmp->data)
-	    && !is_swimmer(mtmp->data) && !amphibious_mon(mtmp)) {
+	    && !mon_resistance(mtmp,SWIMMING) && !amphibious_mon(mtmp)) {
 	    if (cansee(mtmp->mx,mtmp->my)) {
 		    if(mtmp->data == &mons[PM_ACID_PARAELEMENTAL]){
 				int tx = mtmp->mx, ty = mtmp->my, dn = mtmp->m_lev;
@@ -2245,7 +2245,7 @@ mpickstuff(mtmp, str)
 		if (!can_carry(mtmp,otmp)) continue;
 		if (is_pool(mtmp->mx,mtmp->my, FALSE)) continue;
 #ifdef INVISIBLE_OBJECTS
-		if (otmp->oinvis && !perceives(mtmp->data)) continue;
+		if (otmp->oinvis && !mon_resistance(mtmp,SEE_INVIS)) continue;
 #endif
 		if (cansee(mtmp->mx,mtmp->my) && flags.verbose)
 			pline("%s picks up %s.", Monnam(mtmp),
@@ -2357,7 +2357,7 @@ mon_can_see_mon(looker, lookie)
 	if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1 && !rn2(8)) return TRUE;
 	if((darksight(looker->data) || (catsight(looker->data) && catsightdark)) && !is_blind(looker)){
 		if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1) return TRUE;
-		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(levl[lookie->mx][lookie->my].lit){
 				if(viz_array[lookie->my][lookie->mx]&TEMP_DRK1 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT1))
 					return TRUE;
@@ -2368,7 +2368,7 @@ mon_can_see_mon(looker, lookie)
 		}
 	}
 	if(lowlightsight3(looker->data) && !is_blind(looker)){
-		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(dist2(looker->mx,looker->my,lookie->mx,lookie->my) <= 3*3) return TRUE;
 			else if(levl[lookie->mx][lookie->my].lit){
 				if(!(viz_array[lookie->my][lookie->mx]&TEMP_DRK3 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT3)))
@@ -2384,7 +2384,7 @@ mon_can_see_mon(looker, lookie)
 		}
 	}
 	if(lowlightsight2(looker->data) && !is_blind(looker)){
-		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(dist2(looker->mx,looker->my,lookie->mx,lookie->my) <= 2*2) return TRUE;
 			else if(levl[lookie->mx][lookie->my].lit){
 				if(!(viz_array[lookie->my][lookie->mx]&TEMP_DRK2 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT2)) &&
@@ -2400,7 +2400,7 @@ mon_can_see_mon(looker, lookie)
 		}
 	}
 	if((normalvision(looker->data) || (catsight(looker->data) && !catsightdark)) && !is_blind(looker)){
-		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(distmin(looker->mx,looker->my,lookie->mx,lookie->my) <= 1) return TRUE;
 			else if(levl[lookie->mx][lookie->my].lit){
 				if(!(viz_array[lookie->my][lookie->mx]&TEMP_DRK1 && !(viz_array[lookie->my][lookie->mx]&TEMP_LIT1)) &&
@@ -2419,34 +2419,34 @@ mon_can_see_mon(looker, lookie)
 		}
 	}
 	if(extramission(looker->data)){
-		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(clear_path(looker->mx, looker->my, lookie->mx, lookie->my) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(infravision(looker->data) && infravisible(youracedata) && !is_blind(looker)){
-		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(bloodsense(looker->data) && has_blood(youracedata)){
-		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(lifesense(looker->data) && !nonliving(youracedata)){
-		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(senseall(looker->data)){
-		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((clear_path(looker->mx, looker->my, lookie->mx, lookie->my) || ominsense(looker->data)) && !(lookie->minvis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
-	if(earthsense(looker->data) && !(is_flyer(lookie->data) || is_floater(lookie->data) || unsolid(lookie->data))){
+	if(earthsense(looker->data) && !(mon_resistance(lookie,FLYING) || mon_resistance(lookie,LEVITATION) || unsolid(lookie->data))){
 		return TRUE;
 	}
-	if(telepathic(looker->data)){
+	if(mon_resistance(looker,TELEPAT)){
 		return TRUE;
 	}
 	if(goodsmeller(looker->data) && distmin(lookie->mx, lookie->my, looker->mx, looker->my) <= 6){
@@ -2506,7 +2506,7 @@ mon_can_see_you(looker)
 	if(distmin(looker->mx,looker->my,u.ux,u.uy) <= 1 && !rn2(8)) return TRUE;
 	
 	if((darksight(looker->data) || (catsight(looker->data) && catsightdark)) && !is_blind(looker)){
-		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(levl[u.ux][u.uy].lit){
 				if(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1))
 					return TRUE;
@@ -2517,7 +2517,7 @@ mon_can_see_you(looker)
 		}
 	}
 	if(lowlightsight3(looker->data) && !is_blind(looker)){
-		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(dist2(looker->mx,looker->my,u.ux,u.uy) <= 3*3) return TRUE;
 			else if(levl[u.ux][u.uy].lit){
 				if(!(viz_array[u.uy][u.ux]&TEMP_DRK3 && !(viz_array[u.uy][u.ux]&TEMP_LIT3)))
@@ -2533,7 +2533,7 @@ mon_can_see_you(looker)
 		}
 	}
 	if(lowlightsight2(looker->data) && !is_blind(looker)){
-		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(dist2(looker->mx,looker->my,u.ux,u.uy) <= 2*2) return TRUE;
 			else if(levl[u.ux][u.uy].lit){
 				if(!(viz_array[u.uy][u.ux]&TEMP_DRK2 && !(viz_array[u.uy][u.ux]&TEMP_LIT2)) &&
@@ -2549,7 +2549,7 @@ mon_can_see_you(looker)
 		}
 	}
 	if((normalvision(looker->data) || (catsight(looker->data) && !catsightdark)) && !is_blind(looker)){
-		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			if(distmin(looker->mx,looker->my,u.ux,u.uy) <= 1) return TRUE;
 			else if(levl[u.ux][u.uy].lit){
 				if(!(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)) &&
@@ -2568,34 +2568,34 @@ mon_can_see_you(looker)
 		}
 	}
 	if(extramission(looker->data)){
-		if(couldsee(looker->mx, looker->my) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if(couldsee(looker->mx, looker->my) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(infravision(looker->data) && infravisible(youracedata) && !is_blind(looker)){
-		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(bloodsense(looker->data) && has_blood(youracedata)){
-		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(lifesense(looker->data) && !nonliving(youracedata)){
-		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(senseall(looker->data)){
-		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !perceives(looker->data) && !can_track(looker->data) && rn2(11))){
+		if((couldsee(looker->mx, looker->my) || ominsense(looker->data)) && !(Invis && !mon_resistance(looker,SEE_INVIS) && !can_track(looker->data) && rn2(11))){
 			return TRUE;
 		}
 	}
 	if(earthsense(looker->data) && !(Flying || Levitation || unsolid(youracedata) || Stealth)){
 		return TRUE;
 	}
-	if(telepathic(looker->data)){
+	if(mon_resistance(looker,TELEPAT)){
 		return TRUE;
 	}
 	if(goodsmeller(looker->data) && distmin(u.ux, u.uy, looker->mx, looker->my) <= 6){
@@ -2718,10 +2718,10 @@ mfndpos(mon, poss, info, flag)
 	nodiag = (mdat == &mons[PM_GRID_BUG]) || (mdat == &mons[PM_BEBELITH]);
 	wantpool = mdat->mlet == S_EEL;
 	wantpuddle = wantpool && mdat->msize == MZ_TINY;
-	cubewaterok = (is_swimmer(mdat) || breathless_mon(mon) || amphibious_mon(mon));
-	poolok = is_flyer(mdat) || is_clinger(mdat) ||
-		 (is_swimmer(mdat) && !wantpool);
-	lavaok = is_flyer(mdat) || is_clinger(mdat) || likes_lava(mdat);
+	cubewaterok = (mon_resistance(mon,SWIMMING) || breathless_mon(mon) || amphibious_mon(mon));
+	poolok = mon_resistance(mon,FLYING) || is_clinger(mdat) ||
+		 (mon_resistance(mon,SWIMMING) && !wantpool);
+	lavaok = mon_resistance(mon,FLYING) || is_clinger(mdat) || likes_lava(mdat);
 	quantumlock = (is_weeping(mdat) && !u.uevent.invoked);
 	thrudoor = ((flag & (ALLOW_WALL|BUSTDOOR)) != 0L);
 	if (flag & ALLOW_DIG) {
@@ -2813,7 +2813,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			(cubewaterok || !is_3dwater(nx,ny)) && 
 			(lavaok || !is_lava(nx,ny))) {
 		int dispx, dispy;
-		boolean monseeu = (!is_blind(mon) && (!Invis || perceives(mdat)));
+		boolean monseeu = (!is_blind(mon) && (!Invis || mon_resistance(mon,SEE_INVIS)));
 		boolean checkobj = OBJ_AT(nx,ny);
 		
 		/* Displacement also displaces the Elbereth/scare monster,
@@ -2884,8 +2884,8 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 			if(!(flag & ALLOW_TRAPS)) continue;
 			info[cnt] |= ALLOW_TRAPS;
 		}
-		if (nx != x && ny != y && bad_rock(mdat, x, ny)
-			    && bad_rock(mdat, nx, y)
+		if (nx != x && ny != y && bad_rock(mon, x, ny)
+			    && bad_rock(mon, nx, y)
 			    && ((bigmonst(mdat) && !amorphous(mdat)) || (curr_mon_load(mon) > 600)))
 			continue;
 		/* The monster avoids a particular type of trap if it's familiar
@@ -2908,18 +2908,18 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 				    && ttmp->ttyp != SPIKED_PIT
 				    && ttmp->ttyp != TRAPDOOR
 				    && ttmp->ttyp != HOLE)
-				      || (!is_flyer(mdat)
-				    && !is_floater(mdat)
+				      || (!mon_resistance(mon,FLYING)
+				    && !mon_resistance(mon,LEVITATION)
 				    && !is_clinger(mdat))
 				      || In_sokoban(&u.uz))
 				&& (ttmp->ttyp != SLP_GAS_TRAP ||
 				    !resists_sleep(mon))
 				&& (ttmp->ttyp != BEAR_TRAP ||
 				    (mdat->msize > MZ_SMALL &&
-				     !amorphous(mdat) && !is_flyer(mdat)))
+				     !amorphous(mdat) && !mon_resistance(mon,FLYING)))
 				&& (ttmp->ttyp != FIRE_TRAP ||
 				    !resists_fire(mon) || distmin(mon->mx, mon->my, mon->mux, mon->muy) > 2) /*Cuts down on plane of fire message spam*/
-				&& (ttmp->ttyp != SQKY_BOARD || !is_flyer(mdat))
+				&& (ttmp->ttyp != SQKY_BOARD || !mon_resistance(mon,FLYING))
 				&& (ttmp->ttyp != WEB || (!amorphous(mdat) &&
 				    !(webmaker(mdat) || (Is_lolth_level(&u.uz) && !mon->mpeaceful)) && !(
 						 mdat->mlet == S_GIANT ||
@@ -4441,7 +4441,7 @@ register struct monst *mdef;
 	if (wasinside) {
 		if (is_animal(mdef->data))
 			You("%s through an opening in the new %s.",
-				locomotion(youracedata, "jump"),
+				locomotion(&youmonst, "jump"),
 				xname(otmp));
 	}
 }
@@ -4573,7 +4573,7 @@ register struct monst *mdef;
 	if (wasinside) {
 		if (is_animal(mdef->data))
 			You("%s through an opening in the new %s.",
-				locomotion(youracedata, "jump"),
+				locomotion(&youmonst, "jump"),
 				xname(otmp));
 	}
 }
@@ -4703,7 +4703,7 @@ register struct monst *mdef;
 	if (wasinside) {
 		if (is_animal(mdef->data))
 			You("%s through an opening in the new %s.",
-				locomotion(youracedata, "jump"),
+				locomotion(&youmonst, "jump"),
 				xname(otmp));
 	}
 }

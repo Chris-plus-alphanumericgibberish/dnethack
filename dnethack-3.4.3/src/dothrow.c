@@ -202,6 +202,7 @@ int thrown;
 	if(ammo_and_launcher(obj, launcher) && launcher->oartifact){
 		if(launcher->oartifact == ART_WRATHFUL_SPIDER) multishot += rn2(8);
 		else if(launcher->oartifact == ART_ROGUE_GEAR_SPIRITS) multishot = 2;
+		else if(launcher->oartifact == ART_PEN_OF_THE_VOID) multishot += 3;
 	}
 	
 	if ((long)multishot > obj->quan && obj->oartifact != ART_WINDRIDER 
@@ -212,10 +213,11 @@ int thrown;
 //#ifdef FIREARMS
 	    /* Rate of fire is intrinsic to the weapon - cannot be user selected
 	     * except via altmode
-	     * Only for valid launchers 
+	     * Only for firearms
 	     * (currently oc_rof conflicts with wsdam)
 	     */
-    if (launcher && ammo_and_launcher(obj,launcher)) {
+		
+    if (launcher && is_firearm(launcher) && ammo_and_launcher(obj,launcher)) {
 		if(launcher->otyp == BFG){
 			if(objects[(obj)->otyp].w_ammotyp == WP_BULLET) multishot += 2*(objects[(launcher->otyp)].oc_rof);
 			else if(objects[(obj)->otyp].w_ammotyp == WP_SHELL) multishot += 1.5*(objects[(launcher->otyp)].oc_rof);
@@ -1032,7 +1034,7 @@ hurtle_step(arg, x, y)
 	    return FALSE;
 	}
 	if ((u.ux - x) && (u.uy - y) &&
-		bad_rock(youracedata,u.ux,y) && bad_rock(youracedata,x,u.uy)) {
+		bad_rock(&youmonst,u.ux,y) && bad_rock(&youmonst,x,u.uy)) {
 	    boolean too_much = (invent && (inv_weight() + weight_cap() > 600));
 	    /* Move at a diagonal. */
 	    if (bigmonst(youracedata) || too_much) {
@@ -1050,7 +1052,7 @@ hurtle_step(arg, x, y)
 	return FALSE;
     }
     if ((u.ux - x) && (u.uy - y) &&
-	bad_rock(youracedata,u.ux,y) && bad_rock(youracedata,x,u.uy)) {
+	bad_rock(&youmonst,u.ux,y) && bad_rock(&youmonst,x,u.uy)) {
 	/* Move at a diagonal. */
 	if (In_sokoban(&u.uz)) {
 	    You("come to an abrupt halt!");

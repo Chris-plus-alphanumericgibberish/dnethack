@@ -1848,7 +1848,7 @@ int mode;
 	const char *everb;	/* Present tense of engraving type */
 	const char *eloc;	/* Where the engraving is (ie dust/floor/...) */
 	char *sp;		/* Place holder for space count of engr text */
-	int len;		/* # of nonspace chars of new engraving text */
+	int len = 0;	/* # of nonspace chars of new engraving text */
 	int ward = 0;	/* ID number of the ward to be engraved */
 	int perc;		/*percent of ward that could be drawn*/
 	int maxelen;		/* Max allowable length of engraving text */

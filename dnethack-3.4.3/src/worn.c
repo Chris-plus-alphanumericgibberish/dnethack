@@ -3,7 +3,8 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
-
+void FDECL(mon_block_extrinsic, (struct monst *, struct obj *, int, boolean, boolean));
+boolean FDECL(mon_gets_extrinsic, (struct monst *, int, struct obj *));
 STATIC_DCL void FDECL(update_mon_intrinsic, (struct monst *,struct obj *,int,BOOLEAN_P,BOOLEAN_P));
 STATIC_DCL void FDECL(m_lose_armor, (struct monst *,struct obj *));
 STATIC_DCL void FDECL(m_dowear_type, (struct monst *,long, BOOLEAN_P, BOOLEAN_P));
@@ -336,7 +337,6 @@ struct monst *mon;
 int adjust;	/* positive => increase speed, negative => decrease */
 struct obj *obj;	/* item to make known if effect can be seen */
 {
-    struct obj *otmp;
     boolean give_msg = !in_mklev, petrify = FALSE;
     unsigned int oldspeed = mon->mspeed;
 
@@ -366,10 +366,7 @@ struct obj *obj;	/* item to make known if effect can be seen */
 	break;
     }
 
-    for (otmp = mon->minvent; otmp; otmp = otmp->nobj)
-	if (otmp->owornmask && objects[otmp->otyp].oc_oprop == FAST)
-	    break;
-    if (otmp)		/* speed boots */
+    if (mon_extrinsic(mon, FAST))		/* speed boots or other extrinsic source */
 	mon->mspeed = MFAST;
     else
 	mon->mspeed = mon->permspeed;
@@ -404,6 +401,96 @@ struct obj *obj;	/* item to make known if effect can be seen */
     }
 }
 
+/* update a blocked extrinsic
+ * assumes single source of each blocked extrinsic
+ */
+void
+mon_block_extrinsic(mon, obj, which, on, silently)
+struct monst *mon;
+struct obj *obj;
+int which;
+boolean on, silently;
+{
+	if (on) {
+		switch (which)
+		{
+		case INVIS:
+			if (mon->data != &mons[PM_HELLCAT]){
+				mon->invis_blkd = TRUE;
+				update_mon_intrinsic(mon, obj, which, !on, silently);
+			}
+			break;
+		default:
+			update_mon_intrinsic(mon, obj, which, !on, silently);
+			break;
+		}
+	}
+	else { /* off */
+		switch (which)
+		{
+		case INVIS:
+			if (mon->data != &mons[PM_HELLCAT]){
+				mon->invis_blkd = FALSE;
+				update_mon_intrinsic(mon, obj, which, !on, silently);
+			}
+			break;
+		default:
+			update_mon_intrinsic(mon, obj, which, !on, silently);
+			break;
+		}
+	}
+}
+
+/* find out if a monster gets a certain extrinsic from its equipment 
+ * if given an ignored_obj, does not consider it to give any extrinsics
+ */
+boolean
+mon_gets_extrinsic(mon, which, ignored_obj)
+struct monst *mon;
+int which;
+struct obj *ignored_obj;
+{
+	struct obj *otmp;			/* item in mon's inventory */
+	boolean got_prop = FALSE;	/* property to find */
+	int * tmp_property_list;	/* list of item/artifact properties */
+	int i;						/* loop counter */
+
+	for (otmp = mon->minvent; (otmp && !got_prop); otmp = otmp->nobj){
+		/* ignore one object in particular */
+		if (otmp == ignored_obj)
+			continue;
+
+		/* worn items */
+		if (otmp->owornmask) {
+			tmp_property_list = item_property_list(otmp, otmp->otyp);
+			for (i = 0; tmp_property_list[i]; i++)
+			{
+				if (tmp_property_list[i] == which)
+					got_prop = TRUE;
+			}
+		}
+		/* worn artifacts */
+		if (otmp->owornmask && otmp->oartifact){
+			tmp_property_list = art_property_list(otmp->oartifact, FALSE);
+			for (i = 0; tmp_property_list[i]; i++)
+			{
+				if (tmp_property_list[i] == which)
+					got_prop = TRUE;
+			}
+		}
+		/* carried artifacts */
+		if (otmp->oartifact){
+			tmp_property_list = art_property_list(otmp->oartifact, TRUE);
+			for (i = 0; tmp_property_list[i]; i++)
+			{
+				if (tmp_property_list[i] == which)
+					got_prop = TRUE;
+			}
+		}
+	}
+	return got_prop;
+}
+
 STATIC_OVL void
 update_mon_intrinsic(mon, obj, which, on, silently)
 struct monst *mon;
@@ -413,75 +500,97 @@ boolean on, silently;
 {
     uchar mask;
     struct obj *otmp;
+	boolean oldprop = mon_resistance(mon, which);;
+
     if (on) {
-	switch (which) {
+		/* some properties need special handling */
+		switch (which)
+		{
 	 case INVIS:
 	 if(mon->data != &mons[PM_HELLCAT]){
+				mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
 	    mon->minvis = !mon->invis_blkd;
 	}
 	 break;
 	 case FAST:
 	  {
+			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
 	    boolean save_in_mklev = in_mklev;
 	    if (silently) in_mklev = TRUE;
 	    mon_adjust_speed(mon, 0, obj);
 	    in_mklev = save_in_mklev;
+			
 	    break;
 	  }
-	/* properties handled elsewhere */
-	 case ANTIMAGIC:
-	 case REFLECTING:
-	    break;
-	/* properties which have no effect for monsters */
-	 // case CLAIRVOYANT:
-	 // case STEALTH:
-	 // case TELEPAT:
-	    // break;
-	/* properties which should have an effect but aren't implemented */
 	 case LEVITATION:
-	 case WWALKING:
+		case FLYING:
+			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
+			if (!oldprop && (mon_resistance(mon,LEVITATION) || mon_resistance(mon,FLYING))) {
+				m_float_up(mon, silently);
+			}
 	    break;
-	/* properties which maybe should have an effect but don't */
 	 case DISPLACED:
-	 case FUMBLING:
-	 case JUMPING:
-	 case PROTECTION:
+			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
+			if (!oldprop && mon_resistance(mon,DISPLACED) && !silently && canseemon(mon)) {
+				pline("%s outline begins shimmering!", s_suffix(Monnam(mon)));
+			}
+			break;
+		case SWIMMING:
+			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
+			if (!oldprop && mon_resistance(mon,SWIMMING)) {
+				minliquid(mon);
+			}
 	    break;
 	 default:
-		/* FIRE,COLD,SLEEP,DISINT,SHOCK,POISON,ACID,STONE */
 		mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
 	    break;
 	}
-    } else {	    /* off */
-	switch (which) {
+    }
+	else { /* off */
+		/* we need to check that this property isn't being granted by any other equipment */
+		if (!mon_gets_extrinsic(mon, which, obj)) {
+			/* again, some properties need special handling */
+			switch (which)
+			{
 	 case INVIS:
-	    mon->minvis = mon->perminvis;
+				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
+				mon->minvis = (mon->invis_blkd ? FALSE : mon->perminvis);
 	    break;
 	 case FAST:
 	  {
+				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
 	    boolean save_in_mklev = in_mklev;
 	    if (silently) in_mklev = TRUE;
 	    mon_adjust_speed(mon, 0, obj);
 	    in_mklev = save_in_mklev;
 	    break;
 	  }
-	 default:
-	    /* If the monster doesn't have this resistance intrinsically,
-	       check whether any other worn item confers it.  Note that
-	       we don't currently check for anything conferred via simply
-	       carrying an object. */
-		if(which <=10 && pm_resistance(mon->data, (uchar) (1 << (which - 1))))
+			case LEVITATION:
+			case FLYING:
+				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
+				if (oldprop && !mon_resistance(mon,LEVITATION) && !mon_resistance(mon,FLYING)) {
+					m_float_down(mon, silently);
+				}
 			break;
-		for (otmp = mon->minvent; otmp; otmp = otmp->nobj){
-		    if (otmp->owornmask &&
-			    (int) objects[otmp->otyp].oc_oprop == which)
+			case DISPLACED:
+				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
+				if (oldprop && !mon_resistance(mon,DISPLACED) && !silently && canseemon(mon)) {
+					pline("%s outline stops shimmering.", s_suffix(Monnam(mon)));
+				}
 			break;
+			case SWIMMING:
+				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
+				if (oldprop && !mon_resistance(mon,SWIMMING)) {
+					minliquid(mon);
 		}
-		if (!otmp)
+				break;
+			default:
 			mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
 	    break;
 	}
     }
+}
+	return;
 }
 
 /* armor put on or taken off; might be magical variety */
@@ -491,12 +600,9 @@ struct monst *mon;
 struct obj *obj;
 boolean on, silently;
 {
-    int unseen;
-    int which = (int) objects[obj->otyp].oc_oprop;
+	int unseen = !canseemon(mon);
+    int which;
     long all_worn = ~0L; /* clang lint */
-	
-    unseen = !canseemon(mon);
-    if (!which) goto maybe_blocks;
 	
 	int * property_list = item_property_list(obj, obj->otyp);
 	which = 0;
@@ -506,28 +612,23 @@ boolean on, silently;
 	}
 	if (obj->oartifact)
 	{
-		property_list = art_property_list(obj->oartifact, FALSE);	// do not give monsters on-carry properties here
+		property_list = art_property_list(obj->oartifact, FALSE);
 		which = 0;
 		while (property_list[which] != 0)	{
 			update_mon_intrinsic(mon, obj, property_list[which], on, silently);
 			which++;
 		}
+		property_list = art_property_list(obj->oartifact, TRUE);
+		which = 0;
+		while (property_list[which] != 0)	{
+			update_mon_intrinsic(mon, obj, property_list[which], on, silently);
+			which++;
 	}
-
- maybe_blocks:
-    /* obj->owornmask has been cleared by this point, so we can't use it.
-       However, since monsters don't wield armor, we don't have to guard
-       against that and can get away with a blanket worn-mask value. */
-    switch (w_blocks(obj,all_worn)) {
-     case INVIS:
-	 if(mon->data != &mons[PM_HELLCAT]){
-		mon->invis_blkd = on ? 1 : 0;
-		mon->minvis = on ? 0 : mon->perminvis;
-	}
-	break;
-     default:
-	break;
     }
+	/* if the object blocks an extrinsic, recalculate if the monster should get that extrinsic */
+	/* use all_worn because the owornmask may have been cleared already and monsters will not wield armor */
+	if (which = w_blocks(obj, all_worn))
+		mon_block_extrinsic(mon, obj, which, on, silently);
 
 #ifdef STEED
 	if (!on && mon == u.usteed && obj->otyp == SADDLE)
@@ -937,19 +1038,6 @@ mon_lowertorso:
  * already worn body armor is too obviously buggy...
  */
 
-int m_wearing_white_DSA(mon)
-struct monst *mon;
-{
-	struct obj *cur;
-	cur = which_armor(mon, W_ARM);
-	if(cur && (cur->otyp == WHITE_DRAGON_SCALES || cur->otyp == WHITE_DRAGON_SCALE_MAIL))
-		return TRUE;
-	cur = which_armor(mon, W_ARMS);
-	if(cur && (cur->otyp == WHITE_DRAGON_SCALE_SHIELD))
-		return TRUE;
-	return FALSE;
-}
-
 void
 m_dowear(mon, creation)
 register struct monst *mon;
@@ -1345,16 +1433,107 @@ boolean polyspot;
 }
 
 /* bias a monster's preferences towards armor that has special benefits. */
-/* currently only does speed boots, but might be expanded if monsters get to
-   use more armor abilities */
 int
 extra_pref(mon, obj)
 struct monst *mon;
 struct obj *obj;
 {
-    if (obj) {
-	if (obj->otyp == SPEED_BOOTS && mon->permspeed != MFAST)
+	if (!obj)
+		return 0;
+
+	/* specific item types that are more than their oc_oprop */
+	switch (obj->otyp)
+	{
+		/* gloves */
+	case GAUNTLETS_OF_POWER:
+		return 2;
+		break;
+	case GAUNTLETS_OF_DEXTERITY:
+		return (obj->spe / 2);
+		break;
+		/* cloaks */
+	case ALCHEMY_SMOCK:
+		if (!resists_acid(mon) || !resists_poison(mon))
+			return 5;
+		break;
+	case MUMMY_WRAPPING:
+		if (mon->data->mlet == S_MUMMY)
+			return 30;
+		else if (mon->mtame && mon->minvis && !See_invisible_old)
+			return 10;
+		else if (mon->minvis)
+			return -5;
+		break;
+	}
+
+	/* oc_oprop -- does not include extra properties
+	 * such as the alchemy smock or object properties */
+	switch (objects[obj->otyp].oc_oprop)
+	{
+	case ANTIMAGIC:
+		if (!resists_magm(mon))
 	    return 20;
+		break;
+	case REFLECTING:
+		if (!mon_reflects(mon, (char *)0))
+			return 18;
+		break;
+	case FAST:
+		if (mon->permspeed != MFAST)
+			return 15;
+		break;
+	case FLYING:
+		if (!mon_resistance(mon, FLYING))
+			return 10;
+		break;
+	case DISPLACED:
+		if (!mon_resistance(mon, DISPLACED))
+			return 8;
+		break;
+	case STONE_RES:
+		if (!resists_ston(mon))
+			return 7;
+		break;
+	case SICK_RES:
+		if (!resists_sickness(mon))
+			return 5;
+		break;
+	case FIRE_RES:
+		if (!resists_fire(mon))
+			return 3;
+	case COLD_RES:
+		if (!resists_cold(mon))
+			return 3;
+	case SHOCK_RES:
+		if (!resists_elec(mon))
+			return 3;
+	case ACID_RES:
+		if (!resists_acid(mon))
+			return 3;
+	case POISON_RES:
+		if (!resists_poison(mon))
+			return 3;
+	case SLEEP_RES:
+		if (!resists_sleep(mon))
+			return 3;
+	case DRAIN_RES:
+		if (!resists_drli(mon))
+			return 3;
+		break;
+	case TELEPAT:
+		if (!mon_resistance(mon, TELEPAT))
+			return 1;
+		break;
+	case FUMBLING:
+		return -20;
+		break;
+	/* pets prefer not to wear items that make themselves invisible to you */
+	case INVIS:
+		if (mon->mtame && !See_invisible_old)
+			return -20;
+		else if (!mon->minvis)
+			return 5;
+		break;
     }
     return 0;
 }

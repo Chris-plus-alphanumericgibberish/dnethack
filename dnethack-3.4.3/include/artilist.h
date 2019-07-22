@@ -718,13 +718,12 @@ A("Stormhelm",		HELM_OF_BRILLIANCE,		0,			0,
 	0, A_CHAOTIC, NON_PM, NON_PM, 3000L, 
 	0,0,WSFX_PLUSSEV),
 
-/*	Doesn't Work...
 A("Hellrider's Saddle",			SADDLE,		0,			0,
-	(SPFX_RESTR), SPFX_REFLECT, 0,
-	NO_ATTK,	NO_DFNS,	CARY(AD_MAGM),
+	(SPFX_RESTR|SPFX_REFLECT), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
 	INVIS, A_NONE, NON_PM, NON_PM, 4000L, 
-	0,0),
-	*/
+	0,0,0),
 /*
  *	The artifacts for the quest dungeon, all self-willed.
  */
@@ -1158,7 +1157,7 @@ A("Spidersilk",	ELVEN_MITHRIL_COAT, 					0,			0,/*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY, 
-	0,	A_CHAOTIC,	 NON_PM, PM_DROW, 5000L,
+	0,	A_NONE,	 NON_PM, PM_DROW, 5000L,
 	SPFX2_SPELLUP,0,WSFX_PLUSSEV), /*Adds sleep poison to unarmed attacks*/
 
 A("The Webweaver's Crook",	FAUCHARD, 					BONE,		0,/*Needs encyc entry*/
@@ -1320,7 +1319,7 @@ A("The Armor of Erebor",	PLATE_MAIL, 				0,			0,/*Lonely Mountain dwarf noble */
 
 /*Arkenstone*/ /*Lonely Mountain dwarf noble crown*/
 
-A("The Sceptre of Lolth", KHAKKHARA, 					0,			0,/* Drow noble first gift (hedrow get lordly might) */
+A("The Sceptre of Lolth", KHAKKHARA, 					0,			0,/* Drow noble first gift (hedrow get death-spear) */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	PHYS(1,0),	NO_DFNS,	NO_CARY,
@@ -1333,6 +1332,13 @@ A("The Web of the Chosen",	DROVEN_CLOAK, 				0,			0,/* Drow noble quest */
 	NO_ATTK,	ACID(0,0),	ELEC(0,0), /* Plus double AC bonus */
 	0,	A_CHAOTIC,	 PM_NOBLEMAN, PM_DROW, 2500L,
 	SPFX2_SILVERED,0,0),
+
+A("The Death-Spear of Vhaerun", DROVEN_SPEAR, 					0,			0,/* Hedrow noble first gift */
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_DEFN|SPFX_INTEL),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
+	PHYS(10,12),	DFNS(AD_MAGM),	NO_CARY,
+	DEATH_TCH, A_NEUTRAL, PM_NOBLEMAN, PM_DROW, 4000L, 
+	SPFX2_SILVERED,0,0), 
 
 A("The Cloak of the Consort",	DROVEN_CLOAK, 			0,			0,/* Hedrow noble quest */
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_HPHDAM),0,

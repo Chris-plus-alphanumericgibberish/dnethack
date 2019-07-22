@@ -303,7 +303,7 @@ register xchar x, y;
 	}
 
 	if(Levitation && !rn2(3) && verysmall(mon->data) &&
-	   !is_flyer(mon->data)) {
+	   !mon_resistance(mon,FLYING)) {
 		pline("Floating in the air, you miss wildly!");
 		exercise(A_DEX, FALSE);
 		(void) passive(mon, FALSE, 1, AT_KICK, AD_PHYS);
@@ -348,9 +348,9 @@ doit:
 			    newsym(x, y);
 			}
 			pline("%s %s, %s evading your %skick.", Monnam(mon),
-				(can_teleport(mon->data) ? "teleports" :
-				 is_floater(mon->data) ? "floats" :
-				 is_flyer(mon->data) ? "swoops" :
+				(mon_resistance(mon,TELEPORT) ? "teleports" :
+				 mon_resistance(mon,LEVITATION) ? "floats" :
+				 mon_resistance(mon,FLYING) ? "swoops" :
 				 (nolimbs(mon->data) || slithy(mon->data)) ?
 					"slides" : "jumps"),
 				clumsy ? "easily" : "nimbly",

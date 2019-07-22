@@ -2245,7 +2245,8 @@ MONSTER:'h',"deep one",(20,09),asleep
 MONSTER:'h',"deep one",(21,09),asleep
 MONSTER:'h',"deep one",(22,09),asleep
 MONSTER:'h',"deeper one",(20,07),asleep
-OBJECT:')',"long sword",(20,07),cursed,+12,"The Sword of the Deeps"
+OBJECT:'#',"cursed +12 deep long sword named The Sword of the Deeps",(20,07)
+
 # Garrison 2
 MONSTER:'h',"deep one",(19,11),asleep 
 MONSTER:'h',"deep one",(21,12),asleep 

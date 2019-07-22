@@ -349,7 +349,7 @@ struct monst *mtmp;
 	}
 
 	if (levl[x][y].typ == STAIRS && !stuck && !immobile) {
-		if (x == xdnstair && y == ydnstair && !is_floater(mtmp->data) && mtmp->data != &mons[PM_SMAUG])
+		if (x == xdnstair && y == ydnstair && !mon_resistance(mtmp,LEVITATION) && mtmp->data != &mons[PM_SMAUG])
 			m.has_defense = MUSE_DOWNSTAIRS;
 		if (x == xupstair && y == yupstair && ledger_no(&u.uz) != 1)
 	/* Unfair to let the monsters leave the dungeon with the Amulet */
@@ -358,7 +358,7 @@ struct monst *mtmp;
 	} else if (levl[x][y].typ == LADDER && !stuck && !immobile) {
 		if (x == xupladder && y == yupladder)
 			m.has_defense = MUSE_UP_LADDER;
-		if (x == xdnladder && y == ydnladder && !is_floater(mtmp->data))
+		if (x == xdnladder && y == ydnladder && !mon_resistance(mtmp,LEVITATION))
 			m.has_defense = MUSE_DN_LADDER;
 	} else if (sstairs.sx && sstairs.sx == x && sstairs.sy == y) {
 		m.has_defense = MUSE_SSTAIRS;
@@ -380,10 +380,10 @@ struct monst *mtmp;
 		if ((xx==x && yy==y) || !level.monsters[xx][yy])
 		if ((t = t_at(xx,yy)) != 0)
 		if ((verysmall(mtmp->data) || throws_rocks(mtmp->data) ||
-		     passes_walls(mtmp->data)) || !boulder_at(xx, yy))
+		     mon_resistance(mtmp,PASSES_WALLS)) || !boulder_at(xx, yy))
 		if (!onscary(xx,yy,mtmp)) {
 			if ((t->ttyp == TRAPDOOR || t->ttyp == HOLE)
-				&& !is_floater(mtmp->data)
+				&& !mon_resistance(mtmp,LEVITATION)
 				&& !mtmp->isshk && !mtmp->isgd
 				&& !mtmp->ispriest
 				&& Can_fall_thru(&u.uz)
@@ -439,7 +439,7 @@ struct monst *mtmp;
 		if (m.has_defense == MUSE_WAN_DIGGING) break;
 		if (obj->otyp == WAN_DIGGING && obj->spe > 0 && !stuck && !t
 		    && !mtmp->isshk && !mtmp->isgd && !mtmp->ispriest
-		    && !is_floater(mtmp->data)
+		    && !mon_resistance(mtmp,LEVITATION)
 		    /* monsters digging in Sokoban can ruin things */
 		    && !In_sokoban(&u.uz)
 		    /* digging wouldn't be effective; assume they know that */
@@ -675,7 +675,7 @@ mon_tele:
 		    pline("%s has made a hole in the %s.", Monnam(mtmp),
 				surface(mtmp->mx, mtmp->my));
 		    pline("%s %s through...", Monnam(mtmp),
-			  is_flyer(mtmp->data) ? "dives" : "falls");
+			  mon_resistance(mtmp,FLYING) ? "dives" : "falls");
 		} else if (flags.soundok)
 			You_hear("%s crash through the %s.", something,
 				surface(mtmp->mx, mtmp->my));
@@ -743,7 +743,7 @@ mon_tele:
 			struct trap *t;
 			t = t_at(trapx,trapy);
 			pline("%s %s into a %s!", Monnam(mtmp),
-			makeplural(is_weeping(mtmp->data) ? "tips over" : locomotion(mtmp->data, "jump")),
+			makeplural(is_weeping(mtmp->data) ? "tips over" : locomotion(mtmp, "jump")),
 			t->ttyp == TRAPDOOR ? "trap door" : "hole");
 			if (levl[trapx][trapy].typ == SCORR) {
 			    levl[trapx][trapy].typ = CORR;
@@ -837,7 +837,7 @@ mon_tele:
 		m_flee(mtmp);
 		if (vis) {
 			pline("%s %s onto a teleport trap!", Monnam(mtmp),
-				is_weeping(mtmp->data) ? "tips over" : makeplural(locomotion(mtmp->data, "jump")));
+				is_weeping(mtmp->data) ? "tips over" : makeplural(locomotion(mtmp, "jump")));
 			if (levl[trapx][trapy].typ == SCORR) {
 			    levl[trapx][trapy].typ = CORR;
 			    unblock_point(trapx, trapy);
@@ -955,7 +955,7 @@ struct monst *mtmp;
 		case 4: return POT_EXTRA_HEALING;
 		case 5: return (mtmp->data != &mons[PM_PESTILENCE]) ?
 				POT_FULL_HEALING : POT_SICKNESS;
-		case 7: if (is_floater(pm) || mtmp->isshk || mtmp->isgd
+		case 7: if (mon_resistance(mtmp,LEVITATION) || mtmp->isshk || mtmp->isgd
 						|| mtmp->ispriest
 									)
 				return 0;
@@ -1169,7 +1169,7 @@ struct monst *mtmp;
 		if (obj->otyp == SCR_EARTH
 		       && ((helmet && is_hard(helmet)) ||
 				mtmp->mconf || amorphous(mtmp->data) ||
-				passes_walls(mtmp->data) ||
+				mon_resistance(mtmp,PASSES_WALLS) ||
 				noncorporeal(mtmp->data) ||
 				unsolid(mtmp->data) || !rn2(10))
 		       && dist2(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy) <= 2
@@ -1523,7 +1523,7 @@ struct monst *mtmp;
 	    	    	    /* Find the monster here (might be same as mtmp) */
 	    	    	    mtmp2 = m_at(x, y);
 	    	    	    if (mtmp2 && !amorphous(mtmp2->data) &&
-	    	    	    		!passes_walls(mtmp2->data) &&
+	    	    	    		!mon_resistance(mtmp2,PASSES_WALLS) &&
 	    	    	    		!noncorporeal(mtmp2->data) &&
 	    	    	    		!unsolid(mtmp2->data)) {
 				struct obj *helmet = which_armor(mtmp2, W_ARMH);
@@ -1703,7 +1703,7 @@ struct monst *mtmp;
 		case 0: {
 		    struct obj *helmet = which_armor(mtmp, W_ARMH);
 
-		    if ((helmet && is_hard(helmet)) || amorphous(pm) || passes_walls(pm) || noncorporeal(pm) || unsolid(pm))
+		    if ((helmet && is_hard(helmet)) || amorphous(pm) || species_passes_walls(pm) || noncorporeal(pm) || unsolid(pm))
 			return SCR_EARTH;
 		} /* fall through */
 		case 1: return WAN_MAGIC_MISSILE;
@@ -1901,7 +1901,7 @@ struct monst *mtmp;
 	) {
 	  boolean ignore_boulders = (verysmall(mdat) ||
 				     throws_rocks(mdat) ||
-				     passes_walls(mdat));
+				     mon_resistance(mtmp,PASSES_WALLS));
 	  for(xx = x-1; xx <= x+1; xx++)
 	    for(yy = y-1; yy <= y+1; yy++)
 		if (isok(xx,yy) && (xx != u.ux || yy != u.uy))
@@ -2260,7 +2260,7 @@ museamnesia:
 		if (vismon)
 		    pline("%s deliberately %s onto a polymorph trap!",
 			Monnam(mtmp),
-			makeplural(locomotion(mtmp->data, "jump")));
+			makeplural(locomotion(mtmp, "jump")));
 		if (vis) seetrap(t_at(trapx,trapy));
 
 		/*  don't use rloc() due to worms */
@@ -2481,7 +2481,7 @@ struct obj *obj;
 	    if (obj->spe <= 0)
 		return FALSE;
 	    if (typ == WAN_DIGGING)
-		return (boolean)(!is_floater(mon->data));
+		return (boolean)(!mon_resistance(mon,LEVITATION));
 	    if (typ == WAN_POLYMORPH)
 		return (boolean)(monstr[monsndx(mon->data)] < 6);
 	    if (objects[typ].oc_dir == RAY ||
@@ -2777,9 +2777,13 @@ const char *fmt, *str;
 	    if (fmt && str)
 	    	pline(fmt, str, "scales");
 	    return TRUE;
-	} else if (u.sealsActive&SEAL_EDEN) {
+	} else if (u.sealsActive&SEAL_EDEN || species_reflects(&youmonst)) {
 	    if (fmt && str)
-	    	pline(fmt, str, "skin");
+			pline(fmt, str, mbodypart(&youmonst, BODY_SKIN));
+	    return TRUE;
+	} else if (u.usteed && u.usteed->misc_worn_check & W_SADDLE  && which_armor(u.usteed, W_SADDLE)->oartifact == ART_HELLRIDER_S_SADDLE) {
+		if (fmt && str)
+			pline(fmt, str, "steed's saddle");
 	    return TRUE;
 	} else if (EReflecting) {
 	    /* Catchall */

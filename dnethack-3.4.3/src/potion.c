@@ -88,7 +88,7 @@ boolean talk;
 				You("wobble in the saddle.");
 			else
 #endif
-			You("%s...", stagger(youracedata, "stagger"));
+			You("%s...", stagger(&youmonst, "stagger"));
 		}
 	}
 	if ((!xtime && old) || (xtime && !old)) flags.botl = TRUE;
@@ -2354,7 +2354,7 @@ dodip()
 		    if (Levitation) {
 			floating_above(tmp);
 #ifdef STEED
-		    } else if (u.usteed && !is_swimmer(u.usteed->data) &&
+		    } else if (u.usteed && !mon_resistance(u.usteed,SWIMMING) &&
 			    P_SKILL(P_RIDING) < P_BASIC) {
 			rider_cant_reach(); /* not skilled enough to reach */
 #endif

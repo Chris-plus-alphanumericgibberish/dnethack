@@ -659,7 +659,7 @@ boolean digest_meal;
 	if(mon->data == &mons[PM_UVUUDAUM]){
 		mon->mhp += 25; //Fast healing
 	} else {
-		if(mon->mhp < mon->mhpmax && regenerates(mon->data)) mon->mhp++;
+		if(mon->mhp < mon->mhpmax && mon_resistance(mon,REGENERATION)) mon->mhp++;
 		if(!nonliving_mon(mon)){
 			if (mon->mhp < mon->mhpmax){
 				//recover 1/30th hp per turn:
@@ -798,7 +798,7 @@ int *inrange, *nearby, *scared;
 	 * running into you by accident but possibly attacking the spot
 	 * where it guesses you are.
 	 */
-	if (is_blind(mtmp) || (Invis && !perceives(mtmp->data))) {
+	if (is_blind(mtmp) || (Invis && !mon_resistance(mtmp,SEE_INVIS))) {
 		seescaryx = mtmp->mux;
 		seescaryy = mtmp->muy;
 	} else {
@@ -966,7 +966,7 @@ register struct monst *mtmp;
 	if (mtmp->mstun && !rn2(10)) mtmp->mstun = 0;
 
 	/* some monsters teleport */
-	if (can_teleport(mdat) && (mtmp->mflee || !rn2(5)) && !rn2(40) && !mtmp->iswiz &&
+	if (mon_resistance(mtmp,TELEPORT) && (mtmp->mflee || !rn2(5)) && !rn2(40) && !mtmp->iswiz &&
 	    !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP)) &&
 	    !level.flags.noteleport) {
 		(void) rloc(mtmp, FALSE);
@@ -1251,7 +1251,7 @@ register struct monst *mtmp;
 				if (mdat == &mons[PM_ELDER_BRAIN]) {
 					for (m2 = fmon; m2; m2 = nmon) {
 						nmon = m2->nmon;
-						if (!DEADMONSTER(m2) && (m2->mpeaceful == mtmp->mpeaceful) && telepathic(m2->data) && (m2!=mtmp))
+						if (!DEADMONSTER(m2) && (m2->mpeaceful == mtmp->mpeaceful) && mon_resistance(m2,TELEPAT) && (m2!=mtmp))
 						{
 							m2->msleeping = 0;
 							if (!m2->mcanmove && !rn2(5)) {
@@ -1273,7 +1273,7 @@ register struct monst *mtmp;
 			if (m2->mpeaceful == mtmp->mpeaceful) continue;
 			if (mindless_mon(m2)) continue;
 			if (m2 == mtmp) continue;
-			if ((telepathic(m2->data) &&
+			if ((mon_resistance(m2,TELEPAT) &&
 			    (rn2(2) || m2->mblinded)) || !rn2(10)) {
 				if (cansee(m2->mx, m2->my))
 				    pline("It locks on to %s.", mon_nam(m2));
@@ -1365,7 +1365,8 @@ toofar:
 			mon_ranged_gazeonly = 1;//State variable
 			res = (mtmp2 == &youmonst) ? mattacku(mtmp)
 		                           : mattackm(mtmp, mtmp2);
-	        if (res & MM_AGR_DIED) return 1; /* Oops. */
+			/* note: mattacku and mattackm have different returns */
+			if ((mtmp2 == &youmonst) ? (res == 1) : (res & MM_AGR_DIED)) return 1; /* Oops. */
 
 			if(!(mon_ranged_gazeonly))
 				return 0; /* that was our move for the round */
@@ -1826,9 +1827,9 @@ not_special:
 	else flag |= ALLOW_U;
 	if (is_minion(ptr) || is_rider(ptr)) flag |= ALLOW_SANCT;
 	/* unicorn may not be able to avoid hero on a noteleport level */
-	if (notonline(ptr) && ((can_teleport(ptr) || is_unicorn(ptr)) && !level.flags.noteleport)) flag |= NOTONL;
-	if (passes_walls(ptr)) flag |= (ALLOW_WALL | ALLOW_ROCK);
-	if (passes_bars(ptr) && !Is_illregrd(&u.uz) ) flag |= ALLOW_BARS;
+	if (notonline(ptr) && ((mon_resistance(mtmp,TELEPORT) || is_unicorn(ptr)) && !level.flags.noteleport)) flag |= NOTONL;
+	if (mon_resistance(mtmp,PASSES_WALLS)) flag |= (ALLOW_WALL | ALLOW_ROCK);
+	if (passes_bars(mtmp) && !Is_illregrd(&u.uz) ) flag |= ALLOW_BARS;
 	if (can_tunnel) flag |= ALLOW_DIG;
 	if (is_human(ptr) || ptr == &mons[PM_MINOTAUR]) flag |= ALLOW_SSM;
 	if (is_undead_mon(mtmp) && ptr->mlet != S_GHOST && ptr->mlet != S_SHADE) flag |= NOGARLIC;
@@ -2116,7 +2117,7 @@ postmov:
 
 		/* open a door, or crash through it, if you can */
 		if(IS_DOOR(levl[mtmp->mx][mtmp->my].typ)
-			&& !passes_walls(ptr) /* doesn't need to open doors */
+			&& !mon_resistance(mtmp,PASSES_WALLS) /* doesn't need to open doors */
 			&& !can_tunnel /* taken care of below */
 		      ) {
 		    struct rm *here = &levl[mtmp->mx][mtmp->my];
@@ -2200,8 +2201,8 @@ postmov:
 		    else if (flags.verbose && canseemon(mtmp))
 				Norep("%s %s %s the iron bars.", Monnam(mtmp),
 				  /* pluralization fakes verb conjugation */
-				  makeplural(locomotion(ptr, "pass")),
-				  passes_walls(ptr) ? "through" : "between");
+				  makeplural(locomotion(mtmp, "pass")),
+				  mon_resistance(mtmp,PASSES_WALLS) ? "through" : "between");
 		}
 
 		/* possibly dig */
@@ -2388,7 +2389,7 @@ register struct monst *mtmp;
 	    } while (!isok(mx,my)
 		  || (disp != 2 && mx == mtmp->mx && my == mtmp->my)
 		  || ((mx != u.ux || my != u.uy) &&
-		      !passes_walls(mtmp->data) &&
+		      !mon_resistance(mtmp,PASSES_WALLS) &&
 		      (!ACCESSIBLE(levl[mx][my].typ) ||
 		       (closed_door(mx, my) && !can_ooze(mtmp))))
 		  || !couldsee(mx, my));

@@ -1026,7 +1026,10 @@ int menutype;
 	int nspells, idx;
 	char ilet, lets[BUFSZ], qbuf[QBUFSZ];
 
-	if (spellid(0) == NO_SPELL)  {
+	if (spellid(0) == NO_SPELL && !((uarmh && uarmh->oartifact == ART_STORMHELM) || 
+		(uwep && uwep->oartifact == ART_DEATH_SPEAR_OF_VHAERUN) ||
+		(uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM))
+	){
 	    You("don't know any spells right now.");
 	    return FALSE;
 	}
@@ -1309,6 +1312,20 @@ update_alternate_spells()
 			if (spellid(i) == NO_SPELL)  {
 				spl_book[i].sp_id = SPE_LIGHTNING_STORM;
 				spl_book[i].sp_lev = objects[SPE_LIGHTNING_STORM].oc_level;
+				spl_book[i].sp_know = 1;
+				break;
+			}
+		}
+	}
+	if (uwep && uwep->oartifact == ART_DEATH_SPEAR_OF_VHAERUN){
+		for (i = 0; i < MAXSPELL; i++) {
+			if (spellid(i) == SPE_DRAIN_LIFE) {
+				if (spl_book[i].sp_know < 1) spl_book[i].sp_know = 1;
+				break;
+			}
+			if (spellid(i) == NO_SPELL)  {
+				spl_book[i].sp_id = SPE_DRAIN_LIFE;
+				spl_book[i].sp_lev = objects[SPE_DRAIN_LIFE].oc_level;
 				spl_book[i].sp_know = 1;
 				break;
 			}
@@ -3218,7 +3235,7 @@ spiriteffects(power, atme)
 				if (DEADMONSTER(mon)) continue;
 				if (mon->mpeaceful) continue;
 				if (mindless_mon(mon)) continue;
-				if (telepathic(mon->data) || !rn2(5)){
+				if (mon_resistance(mon,TELEPAT) || !rn2(5)){
 					mon->mhp -= d(5,15);
 					if (mon->mhp <= 0) xkilled(mon, 1);
 					else {
@@ -4911,6 +4928,14 @@ int spell;
 			|| uwep->oartifact == ART_PROFANED_GREATSCYTHE
 			|| uwep->oartifact == ART_GARNET_ROD
 		) splcaster -= urole.spelarmr;
+
+		if (uwep->otyp == ART_DEATH_SPEAR_OF_VHAERUN
+			&& spell_skilltype(spellid(spell)) == P_ATTACK_SPELL
+			&& Race_if(PM_DROW)
+			&& !flags.initgend
+		) {	// Bonus to attack spells, including granted drain life
+			splcaster -= urole.spelarmr;
+		}
 
 		if (uwep->otyp == KHAKKHARA) {	// a priestly channeling tool
 			cast_bon = 0;

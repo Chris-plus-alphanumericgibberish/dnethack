@@ -134,7 +134,7 @@ Boots_on()
 			incr_itimeout(&HFumbling, rnd(20));
 		break;
 	case FLYING_BOOTS:
-		if (!oldprop && !(is_flyer(youracedata) || (u.usteed && is_flyer(u.usteed->data))) && !HLevitation) {
+		if (!oldprop && !(mon_resistance(&youmonst,FLYING) || (u.usteed && mon_resistance(u.usteed,FLYING))) && !HLevitation) {
 			makeknown(uarmf->otyp);
 			float_up();
 			spoteffects(FALSE);
@@ -188,7 +188,7 @@ Boots_off()
 			HFumbling = EFumbling = 0;
 		break;
 	case FLYING_BOOTS:
-		if (!oldprop && !is_flyer(youracedata) && !(u.usteed && is_flyer(u.usteed->data)) && !Levitation && !cancelled_don) {
+		if (!oldprop && !mon_resistance(&youmonst,FLYING) && !(u.usteed && mon_resistance(u.usteed,FLYING)) && !Levitation && !cancelled_don) {
 			(void) float_down(0L, 0L);
 			makeknown(otyp);
 		}
@@ -934,7 +934,7 @@ register struct obj *obj;
 #endif
 
 		if (Invis && !oldprop && !HSee_invisible &&
-				!perceives(youracedata) && !Blind) {
+				!mon_resistance(&youmonst,SEE_INVIS) && !Blind) {
 		    newsym(u.ux,u.uy);
 		    pline("Suddenly you are transparent, but there!");
 		    makeknown(RIN_SEE_INVISIBLE);
@@ -2218,7 +2218,11 @@ int base_uac()
 		uac -= 10;
 	uac -= u.uuur/2;
 	if(u.edenshield > moves) uac -= 7;
-	if(u.specialSealsActive&SEAL_BLACK_WEB && u.utrap && u.utraptype == TT_WEB)
+	if(u.specialSealsActive&SEAL_BLACK_WEB && (
+		(u.utrap && u.utraptype == TT_WEB) ||
+			(t_at(u.ux, u.uy) && t_at(u.ux, u.uy)->ttyp == WEB && (uarm && uarm->oartifact==ART_SPIDERSILK))
+		)
+	)
 		 uac -= 8;
 	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
 	if(multi < 0){

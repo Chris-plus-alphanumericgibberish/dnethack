@@ -1552,7 +1552,7 @@ do_pit:		    chasm = maketrap(x,y,PIT);
 		       falls in a chasm... */
 
 		    if (mtmp) {
-				if(!is_flyer(mtmp->data) && !is_clinger(mtmp->data)) {
+				if(!mon_resistance(mtmp,FLYING) && !is_clinger(mtmp->data)) {
 					mtmp->mtrapped = 1;
 					if(cansee(x,y))
 					pline("%s falls into a chasm!", Monnam(mtmp));

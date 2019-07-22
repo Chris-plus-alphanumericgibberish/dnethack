@@ -1147,7 +1147,7 @@ dogaze()
 		if(ward_at(mtmp->mx,mtmp->my) == HAMSA) continue;
 	    if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my)) {
 		looked++;
-		if (Invis && !perceives(mtmp->data))
+		if (Invis && !mon_resistance(mtmp,SEE_INVIS))
 		    pline("%s seems not to notice your gaze.", Monnam(mtmp));
 		else if (mtmp->minvis && !See_invisible(mtmp->mx,mtmp->my))
 		    You_cant("see where to gaze at %s.", Monnam(mtmp));
@@ -1283,11 +1283,11 @@ domindblast()
 			continue;
 		if(mindless_mon(mtmp))
 			continue;
-		u_sen = telepathic(mtmp->data) && is_blind(mtmp);
-		if (u_sen || (telepathic(mtmp->data) && rn2(2)) || !rn2(10)) {
+		u_sen = mon_resistance(mtmp,TELEPAT) && is_blind(mtmp);
+		if (u_sen || (mon_resistance(mtmp,TELEPAT) && rn2(2)) || !rn2(10)) {
 			You("lock in on %s %s.", s_suffix(mon_nam(mtmp)),
 				u_sen ? "telepathy" :
-				telepathic(mtmp->data) ? "latent telepathy" :
+				mon_resistance(mtmp,TELEPAT) ? "latent telepathy" :
 				"mind");
 			mtmp->mhp -= rnd(15);
 			if (mtmp->mhp <= 0)

@@ -1094,12 +1094,12 @@ gazemm(magr, mdef, mattk)
 	}
 
 	if (mattk->aatyp == AT_GAZE){
-		if ((mdef->minvis && !perceives(magr->data))
+		if ((mdef->minvis && !mon_resistance(magr,SEE_INVIS))
 			|| is_blind(magr))
 			return MM_MISS;
 	}
 	else if (mattk->aatyp == AT_WDGZ){
-		if ((magr->minvis && !perceives(mdef->data))
+		if ((magr->minvis && !mon_resistance(mdef,SEE_INVIS))
 			|| is_blind(mdef) || mdef->msleeping)
 			return MM_MISS;
 	}
@@ -1120,7 +1120,7 @@ gazemm(magr, mdef, mattk)
 						"The image is reflected away by %s %s.");
 				return (MM_MISS);
 			}
-			if (mdef->minvis && (!perceives(magr->data) || is_blind(magr))) {
+			if (mdef->minvis && (!mon_resistance(magr,SEE_INVIS) || is_blind(magr))) {
 				if (canseemon(magr)) {
 				pline("%s doesn't seem to notice that %s image was reflected.",
 					  Monnam(magr), mhis(magr));
@@ -1383,7 +1383,7 @@ mdamagem(magr, mdef, mattk)
 			Sprintf(buf, "for a moment");
 		if (canseemon(mdef))
 		    pline("%s %s %s.", Monnam(mdef),
-			  makeplural(stagger(mdef->data, "stagger")), buf);
+			  makeplural(stagger(mdef, "stagger")), buf);
 		mdef->mstun = 1;
 		goto physical;
 	    case AD_LEGS:
@@ -2238,7 +2238,7 @@ physical:{
 
 		if (is_angel(magr->data) && !mdef->mstun){	// angelic blinding also stuns
 			if (canseemon(mdef))
-				pline("%s %s.", Monnam(mdef), makeplural(stagger(mdef->data, "stagger")));
+				pline("%s %s.", Monnam(mdef), makeplural(stagger(mdef, "stagger")));
 			mdef->mstun = 1;
 		}
 
@@ -3097,7 +3097,7 @@ struct attack *mattk;
 		if (mddat == &mons[PM_FLOATING_EYE]) {
 		    if (!rn2(4)) tmp = 127;
 		    if (!is_blind(magr) && haseyes(madat) && !is_blind(mdef) &&
-			(perceives(madat) || !mdef->minvis)) {
+			(mon_resistance(magr,SEE_INVIS) || !mdef->minvis)) {
 			Sprintf(buf, "%s gaze is reflected by %%s %%s.",
 				s_suffix(mon_nam(mdef)));
 			if (mon_reflects(magr,
@@ -3141,7 +3141,7 @@ struct attack *mattk;
 		    magr->mstun = 1;
 		    if (canseemon(magr))
 			pline("%s %s...", Monnam(magr),
-			      makeplural(stagger(magr->data, "stagger")));
+			      makeplural(stagger(magr, "stagger")));
 		}
 		tmp = 0;
 		break;

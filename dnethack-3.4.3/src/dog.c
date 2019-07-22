@@ -634,7 +634,7 @@ long nmv;		/* number of moves */
 	}
 
 	/* recover lost hit points */
-	if (regenerates(mtmp->data)){
+	if (mon_resistance(mtmp,REGENERATION)){
 		if (mtmp->mhp + imv >= mtmp->mhpmax)
 			mtmp->mhp = mtmp->mhpmax;
 		else mtmp->mhp += imv;

@@ -55,7 +55,7 @@ extern char *viz_rmax;			/* max could see indices */
  */
 #define m_cansee(mtmp,x2,y2)	clear_path((mtmp)->mx,(mtmp)->my,(x2),(y2))
 
-#define m_canseeu(m)	((!Invis || perceives((m)->data)) && \
+#define m_canseeu(m)	((!Invis || mon_resistance((m),SEE_INVIS)) && \
 			  !(Underwater || u.uburied || (m)->mburied) ? \
 			     couldsee((m)->mx,(m)->my) : 0)
 

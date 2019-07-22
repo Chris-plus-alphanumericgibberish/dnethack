@@ -3660,7 +3660,7 @@ boolean catchup;	/* restoring a level */
 		    return(0);
 	    if (x == shkp->mx && y == shkp->my)
 		return(0);
-	    if ((mtmp = m_at(x, y)) && (!passes_walls(mtmp->data)))
+	    if ((mtmp = m_at(x, y)) && (!mon_resistance(mtmp,PASSES_WALLS)))
 		return(0);
 	}
 	if ((ttmp = t_at(x, y)) != 0) {
@@ -3987,7 +3987,7 @@ register int fall;
 		} else
 		    pline("%s %s, and %s your backpack!",
 			  shkname(shkp),
-			  makeplural(locomotion(shkp->data,"leap")), grabs);
+			  makeplural(locomotion(shkp,"leap")), grabs);
 	    } else
 		pline("%s %s your backpack!", shkname(shkp), grabs);
 

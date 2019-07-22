@@ -118,6 +118,7 @@ register struct obj *obj;
 				&& obj->oartifact != ART_HEARTCLEAVER
 				&& obj->oartifact != ART_SOL_VALTIVA
 				&& obj->oartifact != ART_SHADOWLOCK
+				&& obj->oartifact != ART_DEATH_SPEAR_OF_VHAERUN
 				  && obj->oartifact != ART_PEN_OF_THE_VOID)) :
 				!is_weptool(obj);
 	} else

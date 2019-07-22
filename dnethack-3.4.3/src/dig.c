@@ -64,7 +64,7 @@ mkcavepos(x, y, dist, waslit, rockit)
 	if(IS_ROCK(lev->typ)) return;
 	if(t_at(x, y)) return; /* don't cover the portal */
 	if ((mtmp = m_at(x, y)) != 0)	/* make sure crucial monsters survive */
-	    if(!passes_walls(mtmp->data)) (void) rloc(mtmp, FALSE);
+	    if(!mon_resistance(mtmp,PASSES_WALLS)) (void) rloc(mtmp, FALSE);
     } else if(lev->typ == ROOM) return;
 
     unblock_point(x,y);	/* make sure vision knows this location is open */
@@ -710,10 +710,10 @@ boolean msgs;
 		if (oldobjs != newobjs)	/* something unearthed */
 			(void) pickup(1);	/* detects pit */
 	    } else if(mtmp) {
-		if(is_flyer(mtmp->data) || is_floater(mtmp->data)) {
+		if(mon_resistance(mtmp,FLYING) || mon_resistance(mtmp,LEVITATION)) {
 		    if(canseemon(mtmp))
 			pline("%s %s over the pit.", Monnam(mtmp),
-						     (is_flyer(mtmp->data)) ?
+						     (mon_resistance(mtmp,FLYING)) ?
 						     "flies" : "floats");
 		} else if(mtmp != madeby)
 		    (void) mintrap(mtmp);
@@ -764,7 +764,7 @@ boolean msgs;
 		    impact_drop((struct obj *)0, x, y, 0);
 		if (mtmp) {
 		     /*[don't we need special sokoban handling here?]*/
-		    if (is_flyer(mtmp->data) || is_floater(mtmp->data) ||
+		    if (mon_resistance(mtmp,FLYING) || mon_resistance(mtmp,LEVITATION) ||
 		        mtmp->data == &mons[PM_WUMPUS] ||
 			(mtmp->wormno && count_wsegs(mtmp) > 5) ||
 			mtmp->data->msize >= MZ_HUGE) return;
@@ -849,10 +849,10 @@ int ttyp;
 		if (oldobjs != newobjs)	/* something unearthed */
 			(void) pickup(1);	/* detects pit */
 	    } else if(mtmp) {
-		if(is_flyer(mtmp->data) || is_floater(mtmp->data)) {
+		if(mon_resistance(mtmp,FLYING) || mon_resistance(mtmp,LEVITATION)) {
 		    if(canseemon(mtmp))
 			pline("%s %s over the trapdoor.", Monnam(mtmp),
-						     (is_flyer(mtmp->data)) ?
+						     (mon_resistance(mtmp,FLYING)) ?
 						     "flies" : "floats");
 		} else if(mtmp != madeby)
 		    (void) mintrap(mtmp);
@@ -900,7 +900,7 @@ int ttyp;
 		    impact_drop((struct obj *)0, x, y, 0);
 		if (mtmp) {
 		     /*[don't we need special sokoban handling here?]*/
-		    if (is_flyer(mtmp->data) || is_floater(mtmp->data) ||
+		    if (mon_resistance(mtmp,FLYING) || mon_resistance(mtmp,LEVITATION) ||
 		        mtmp->data == &mons[PM_WUMPUS] ||
 			(mtmp->wormno && count_wsegs(mtmp) > 5) ||
 			mtmp->data->msize >= MZ_HUGE) return;
@@ -2396,7 +2396,7 @@ struct monst *mtmp;
 	pline("bury_monst: %s", mon_nam(mtmp));
 #endif
 	if(canseemon(mtmp)) {
-	    if(is_flyer(mtmp->data) || is_floater(mtmp->data)) {
+	    if(mon_resistance(mtmp,FLYING) || mon_resistance(mtmp,LEVITATION)) {
 		pline_The("%s opens up, but %s is not swallowed!",
 			surface(mtmp->mx, mtmp->my), mon_nam(mtmp));
 		return;
@@ -2448,7 +2448,7 @@ escape_tomb()
 #ifdef DEBUG
 	pline("escape_tomb");
 #endif
-	if ((Teleportation || can_teleport(youracedata)) &&
+	if ((Teleportation || mon_resistance(&youmonst,TELEPORT)) &&
 	    (Teleport_control || rn2(3) < Luck+2)) {
 		You("attempt a teleport spell.");
 		(void) dotele();	/* calls unearth_you() */

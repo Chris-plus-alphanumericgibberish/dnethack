@@ -399,6 +399,7 @@ struct weapon_dice {
 #define WISH_WIZARD     0x0000002L
 #define WISH_VERBOSE	0x0000004L
 #define WISH_ARTALLOW	0x0000008L
+#define WISH_MKLEV		(WISH_QUIET|WISH_WIZARD|WISH_ARTALLOW)
 
 #define WISH_NOTHING	0x0000100L
 #define WISH_SUCCESS	0x0000200L
@@ -458,6 +459,7 @@ struct weapon_dice {
 			  otmp->otyp==AKLYS || \
 			  otmp->oartifact==ART_SOL_VALTIVA || \
 			  otmp->oartifact==ART_SHADOWLOCK || \
+			  otmp->oartifact==ART_DEATH_SPEAR_OF_VHAERUN || \
 			  (otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE ) \
 			 ))
 #define is_spear(otmp)	(otmp->oclass == WEAPON_CLASS && \
@@ -480,7 +482,6 @@ struct weapon_dice {
 			   (ltmp->oartifact == ART_PEN_OF_THE_VOID && ltmp->ovar1&SEAL_EVE) ||\
 			   (ltmp->otyp == MASS_SHADOW_PISTOL && (otmp->otyp == ltmp->cobj->otyp)) ||\
 			   (ltmp->otyp == ATLATL && is_spear(otmp)) ||\
-			   (!ltmp && is_spear(otmp)) ||\
 			   (otmp->objsize == (ltmp)->objsize || objects[(ltmp)->otyp].oc_skill == P_SLING) &&\
 			    (objects[(otmp)->otyp].w_ammotyp & objects[(ltmp)->otyp].w_ammotyp) && \
 			    (objects[(otmp)->otyp].oc_skill == -objects[(ltmp)->otyp].oc_skill))\

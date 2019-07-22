@@ -72,11 +72,11 @@ wrong_elem_type(ptr)
 	/* no restrictions? */
     } else if (Is_waterlevel(&u.uz)) {
 	/* just monsters that can swim */
-	if(!is_swimmer(ptr)) return TRUE;
+	if(!species_swims(ptr)) return TRUE;
     } else if (Is_firelevel(&u.uz)) {
 	if (!pm_resistance(ptr,MR_FIRE)) return TRUE;
     } else if (Is_airlevel(&u.uz)) {
-	if(!(is_flyer(ptr) && ptr->mlet != S_TRAPPER) && !is_floater(ptr)
+	if(!(species_flies(ptr) && ptr->mlet != S_TRAPPER) && !species_floats(ptr)
 	   && !amorphous(ptr) && !noncorporeal(ptr) && !is_whirly(ptr))
 	    return TRUE;
     }

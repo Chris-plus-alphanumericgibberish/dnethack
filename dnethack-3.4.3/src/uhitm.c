@@ -536,7 +536,7 @@ register struct monst *mtmp;
 
 		if (inshop || foo ||
 			(IS_ROCK(levl[u.ux][u.uy].typ) &&
-					!passes_walls(mtmp->data))) {
+					!mon_resistance(mtmp,PASSES_WALLS))) {
 		    char buf[BUFSZ];
 
 		    monflee(mtmp, rnd(6), FALSE, FALSE);
@@ -964,7 +964,7 @@ struct attack *uattk;
 	boolean malive;
 	int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 	
-	if(mhit && is_displacer(mon->data) && rn2(2)){
+	if(mhit && mon_resistance(mon,DISPLACED) && rn2(2)){
 		You("hit a displaced image!");
 		return TRUE;
 	}
@@ -1098,6 +1098,12 @@ int thrown;
 			if (uarmg && (uarmg->oartifact == ART_PREMIUM_HEART || uarmg->oartifact == ART_GREAT_CLAWS_OF_URDLEN))
 				tmp += uarmg->spe;
 
+			/*Spidersilk grants sleep poisoning*/
+			if (uarm && uarm->oartifact==ART_SPIDERSILK && !rn2(5)){
+				if (resists_sleep(mon))
+					needdrugmsg = TRUE;
+				else if(sleep_monst(mon, rnd(12), ARMOR_CLASS)) druggedmon = TRUE;
+			}
 			/* dahlver nar gives bonus damage*/
 			if (u.specialSealsActive&SEAL_DAHLVER_NAR)
 				tmp += d(2, 6) + min(u.ulevel / 2, (u.uhpmax - u.uhp) / 10);
@@ -1393,6 +1399,7 @@ int thrown;
 				obj->oartifact != ART_SILENCE_GLAIVE && 
 				obj->oartifact != ART_HEARTCLEAVER && 
 				obj->oartifact != ART_SOL_VALTIVA && 
+				obj->oartifact != ART_DEATH_SPEAR_OF_VHAERUN && 
 				obj->oartifact != ART_SHADOWLOCK && 
 				obj->oartifact != ART_PEN_OF_THE_VOID
 			) ||
@@ -1602,7 +1609,7 @@ int thrown;
 							if(rnd(20) < min(P_SKILL(FFORM_JUYO), P_SKILL(weapon_type(uwep)))){
 								if (canspotmon(mon))
 									pline("%s %s from your powerful strikes!", Monnam(mon),
-									  makeplural(stagger(mon->data, "stagger")));
+									  makeplural(stagger(mon, "stagger")));
 								/* avoid migrating a dead monster */
 								if (mon->mhp > tmp) {
 									mhurtle(mon, u.dx, u.dy, 1);
@@ -1618,7 +1625,7 @@ int thrown;
 					){
 						if (canspotmon(mon))
 							pline("%s %s from your powerful strike!", Monnam(mon),
-							  makeplural(stagger(mon->data, "stagger")));
+							  makeplural(stagger(mon, "stagger")));
 						/* avoid migrating a dead monster */
 						if (mon->mhp > tmp) {
 							mhurtle(mon, u.dx, u.dy, 1);
@@ -1632,7 +1639,7 @@ int thrown;
 						if(rnd(mon->mattackedu ? 20 : 100) < min(P_SKILL(FFORM_DJEM_SO), P_SKILL(weapon_type(uwep)))){
 							if (canspotmon(mon))
 								pline("%s %s from your powerful strike!", Monnam(mon),
-								  makeplural(stagger(mon->data, "stagger")));
+								  makeplural(stagger(mon, "stagger")));
 							/* avoid migrating a dead monster */
 							if (mon->mhp > tmp) {
 								mhurtle(mon, u.dx, u.dy, 1);
@@ -1678,7 +1685,7 @@ int thrown;
 					if(rnd(20) < P_SKILL(weapon_type(uwep))){
 						if (canspotmon(mon))
 							pline("%s %s from your powerful blow!", Monnam(mon),
-							  makeplural(stagger(mon->data, "stagger")));
+							  makeplural(stagger(mon, "stagger")));
 						/* avoid migrating a dead monster */
 						if (mon->mhp > tmp) {
 							mhurtle(mon, sgn(mon->mx - u.ux), sgn(mon->my - u.uy), 1);
@@ -2541,7 +2548,7 @@ defaultvalue:
 				rnd(100) < P_SKILL(P_BARE_HANDED_COMBAT)){
 				if (canspotmon(mon))
 					pline("%s %s from your powerful strike!", Monnam(mon),
-					  makeplural(stagger(mon->data, "stagger")));
+					  makeplural(stagger(mon, "stagger")));
 				/* avoid migrating a dead monster */
 				if (mon->mhp > tmp) {
 					mhurtle(mon, u.dx, u.dy, 1);
@@ -3125,7 +3132,7 @@ register struct attack *mattk;
 	    case AD_STUN:
 		if(!Blind)
 		    pline("%s %s for a moment.", Monnam(mdef),
-			  makeplural(stagger(mdef->data, "stagger")));
+			  makeplural(stagger(mdef, "stagger")));
 		mdef->mstun = 1;
 		goto physical;
 	    case AD_LEGS:
@@ -3644,8 +3651,8 @@ register struct attack *mattk;
 			}
 		    } else if(u.ustuck == mdef) {
 			/* Monsters don't wear amulets of magical breathing */
-			if (is_pool(u.ux,u.uy, FALSE) && !is_swimmer(mdef->data) &&
-			    !amphibious_mon(mdef)) {
+			if (is_pool(u.ux,u.uy, FALSE) && !mon_resistance(mdef,SWIMMING) &&
+			    !amphibious_mon(mdef) && !breathless_mon(mdef)) {
 			    You("drown %s...", mon_nam(mdef));
 			    tmp = mdef->mhp;
 			} else if(mattk->aatyp == AT_HUGS)
@@ -4400,7 +4407,7 @@ register int tmp, weptmp, tchtmp;
 	int	dhit = 0;
 	boolean Old_Upolyd = Upolyd, wepused;
 	
-	if(is_displacer(mon->data) && rn2(2)){
+	if(mon_resistance(mon,DISPLACED) && rn2(2)){
 		You("attack a displaced image!");
 		return TRUE;
 	}
@@ -4717,7 +4724,7 @@ int nattk;
 	struct attack *mattk;
 	boolean Old_Upolyd = Upolyd;
 	
-	if(is_displacer(mon->data) && rn2(2)){
+	if(mon_resistance(mon,DISPLACED) && rn2(2)){
 		You("attack a displaced image!");
 		return TRUE;
 	}

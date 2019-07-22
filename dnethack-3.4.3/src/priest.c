@@ -48,7 +48,7 @@ register xchar omx,omy,gx,gy;
 	niy = omy;
 	if (mtmp->isshk) allowflags = ALLOW_SSM;
 	else allowflags = ALLOW_SSM | ALLOW_SANCT;
-	if (passes_walls(mtmp->data)) allowflags |= (ALLOW_ROCK|ALLOW_WALL);
+	if (mon_resistance(mtmp,PASSES_WALLS)) allowflags |= (ALLOW_ROCK|ALLOW_WALL);
 	if (throws_rocks(mtmp->data)) allowflags |= ALLOW_ROCK;
 	if (tunnels(mtmp->data)) allowflags |= ALLOW_DIG;
 	if (!nohands(mtmp->data) && !verysmall(mtmp->data)) {
