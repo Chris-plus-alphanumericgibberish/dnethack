@@ -3884,7 +3884,7 @@ register struct attack *mattk;
 				pline("The cold iron rachises sear %s.",mon_nam(mdef));
 				tmp+=d(5, mdef->m_lev);
 			}
-			for(i = 0; i<5;i++) switch(rn2(15)){
+			for(i = 0; i<5;i++) switch(rn2(18)){
 				case 0:
 					if(!resists_fire(mdef)){
 						tmp+= rnd(spiritDsize());
@@ -3946,7 +3946,25 @@ register struct attack *mattk;
 					else shieldeff(mdef->mx, mdef->my);
 				break;
 				case 14:
-					if(breathless_mon(mdef)) tmp+= rnd(spiritDsize());
+					if(!breathless_mon(mdef)) tmp+= rnd(spiritDsize());
+					else shieldeff(mdef->mx, mdef->my);
+				break;
+				case 15:
+					if(!insubstantial(mdef->data) 
+						&& !mon_resistance(mdef,PASSES_WALLS)
+						&& !noncorporeal(mdef->data)
+					) 
+						tmp+= rnd(spiritDsize());
+					else shieldeff(mdef->mx, mdef->my);
+				break;
+				case 16:
+					if(is_whirly(mdef->data)) 
+						tmp+= rnd(spiritDsize());
+					else shieldeff(mdef->mx, mdef->my);
+				break;
+				case 17:
+					if(!mindless_mon(mdef)) 
+						tmp+= rnd(spiritDsize());
 					else shieldeff(mdef->mx, mdef->my);
 				break;
 			}
