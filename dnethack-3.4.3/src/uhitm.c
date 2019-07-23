@@ -728,14 +728,14 @@ register struct monst *mtmp;
 			if(u.twoweap || (uwep && bimanual(uwep,youracedata))) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
 			if(u.specialSealsActive&SEAL_MISKA && u.ulevel >= 26){
 				curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
-				if(u.twoweap || (uwep && bimanual(uwep,youracedata))) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+				curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
 			}
-		}
-		if(youracedata == &mons[PM_MARILITH]){
-			curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
-			curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
-			curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
-			curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+			if(youracedata == &mons[PM_MARILITH]){
+				curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+				curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+				curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+				curspiritattacks[nspiritattacks++] = spiritattack[ATTK_IRIS];
+			}
 		}
 		if(u.sealsActive&SEAL_NABERIUS) curspiritattacks[nspiritattacks++] = spiritattack[ATTK_NABERIUS];
 		if(u.sealsActive&SEAL_OTIAX){
