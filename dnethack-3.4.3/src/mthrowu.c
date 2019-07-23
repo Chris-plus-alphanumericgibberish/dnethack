@@ -1007,6 +1007,7 @@ struct obj *obj;
 	} else {
 		obj_extract_self(obj);
 		possibly_unwield(mon, FALSE);
+		if (obj->timed) obj_stop_timers(obj);
 		if (obj->owornmask) {
 		    mon->misc_worn_check &= ~obj->owornmask;
 		    update_mon_intrinsics(mon, obj, FALSE, FALSE);
