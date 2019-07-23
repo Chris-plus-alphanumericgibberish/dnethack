@@ -2260,6 +2260,20 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 				}
 			}
+			if(ptr == &mons[PM_CENTER_OF_ALL]){
+				struct obj *otmp = mksobj(BARDICHE, TRUE, FALSE);
+				otmp->blessed = TRUE;
+				otmp->cursed = FALSE;
+				otmp->spe = 8;
+				(void) mpickobj(mtmp,otmp);
+
+				otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
+				otmp = oname(otmp, artiname(ART_FIRST_KEY_OF_NEUTRALITY));
+				otmp->blessed = FALSE;
+				otmp->cursed = FALSE;
+				(void) mpickobj(mtmp,otmp);
+				return;
+			}
 			if(ptr == &mons[PM_AMM_KAMEREL]){
 				if(rn2(10)){//Physical fighter, no magic
 					mtmp->mcan = 1;
@@ -6022,20 +6036,6 @@ register struct	monst	*mtmp;
 			}
 		break;
 		case S_GOLEM:
-			if(ptr == &mons[PM_CENTER_OF_ALL]){
-				struct obj *otmp = mksobj(BARDICHE, TRUE, FALSE);
-				otmp->blessed = TRUE;
-				otmp->cursed = FALSE;
-				otmp->spe = 8;
-				(void) mpickobj(mtmp,otmp);
-
-				otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
-				otmp = oname(otmp, artiname(ART_FIRST_KEY_OF_NEUTRALITY));
-				otmp->blessed = FALSE;
-				otmp->cursed = FALSE;
-				(void) mpickobj(mtmp,otmp);
-				return;
-			}
 			if(ptr == &mons[PM_ARSENAL]){
 				struct obj *otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_SECOND_KEY_OF_LAW));
@@ -7021,10 +7021,6 @@ register int	mmflags;
 			    mon_adjust_speed(mtmp, 2, (struct obj *)0);
 		break;
 		case S_GOLEM:
-			if(mndx == PM_CENTER_OF_ALL){
-			    mtmp->minvis = TRUE;
-			    mtmp->perminvis = TRUE;
-			}
 			if(mndx == PM_GROVE_GUARDIAN){
 				if(!(mmflags & MM_EDOG)){
 					if (anymon){
@@ -7037,6 +7033,10 @@ register int	mmflags;
 			}
 		break;
 		case S_NEU_OUTSIDER:
+			if(mndx == PM_CENTER_OF_ALL){
+			    mtmp->minvis = TRUE;
+			    mtmp->perminvis = TRUE;
+			}
 			if(mndx == PM_SHARAB_KAMEREL){
 				set_mimic_sym(mtmp);
 			}
