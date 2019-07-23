@@ -73,7 +73,7 @@ doread()
 					case(-2):
 					case(-1):
 					case(0):
-						pline("It seems that at one point, an inscription spiralled around the Rod, but it can no longer be read.");
+						pline("It seems that at one point, an inscription spiraled around the Rod, but it can no longer be read.");
 					break;
 					case(1):
 						pline("The damage is lighter further from the point, and looking close you can just make out the word \"Ruat\" near the pommel.");
