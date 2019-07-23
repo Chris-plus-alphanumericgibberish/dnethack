@@ -87,6 +87,10 @@ boolean burn;
 		You("burn %s out of the %s!", onm, (Underwater || Is_waterlevel(&u.uz)) ? "water" : "air");
 		return 0;
 	}
+	if(uwep && uwep->oartifact == ART_SANSARA_MIRROR && rn2(2)){
+		pline("Sansara twists and reflects.");
+		return -1;
+	}
 	
 	if((bypassDR && (AC_VALUE(base_uac()+u.uspellprot) - u.uspellprot + tlev <= rnd(20))) || 
 	   (!bypassDR && (AC_VALUE(u.uac+u.uspellprot)-u.uspellprot + tlev <= rnd(20)))
@@ -484,6 +488,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 	struct obj *singleobj;
 	char sym = obj->oclass;
 	int hitu, blindinc = 0;
+	int initrange = range;
 
 	bhitpos.x = x;
 	bhitpos.y = y;
@@ -646,7 +651,11 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 		bhitpos.x += dx;
 		bhitpos.y += dy;
 		if ((mtmp = m_at(bhitpos.x, bhitpos.y)) != 0) {
-			if((singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT) && mon_reflects(mtmp, (char *)0)){
+		    if (MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_SANSARA_MIRROR && rn2(2)){
+				dx *= -1;
+				dy *= -1;
+				range = initrange;
+			} else if((singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT) && mon_reflects(mtmp, (char *)0)){
 				if(mtmp->mfaction != FRACTURED){
 					dx *= -1;
 					dy *= -1;
@@ -819,9 +828,11 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 				if(uwep && is_lightsaber(uwep) && litsaber(uwep) && shienuse && getdir((char *)0) && (u.dx || u.dy)){
 					dx = u.dx;
 					dy = u.dy;
+					range = initrange;
 				} else {
 					dx *= -1;
 					dy *= -1;
+					range = initrange;
 				}
 			}
 		    if (hitu>0 && singleobj->opoisoned &&
