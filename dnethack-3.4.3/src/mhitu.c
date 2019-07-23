@@ -376,7 +376,7 @@ struct attack *alt_attk_buf;
 			)
 			|| (!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
 			|| (!derundspec && indx == NATTK - 1 && (mtmp->mfaction == CRYSTALFIED || mtmp->mfaction == SKELIFIED))
-		){
+			){
 			// yes, replace the current attack
 			if (indx == 0){
 				attk->aatyp = AT_CLAW;
@@ -2372,6 +2372,20 @@ hitmu(mtmp, mattk)
 		dmg *= mult;
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AD_DESC:
+			if(nonliving(youracedata) || is_anhydrous(youracedata)){
+				shieldeff(u.ux, u.uy);
+				dmg = 0;
+			} else {
+				You("are dehydrated!");
+				if(is_watery(youracedata))
+					dmg *= 2;
+				mtmp->mhp += dmg;
+				if(mtmp->mhp > mtmp->mhpmax)
+					mtmp->mhp = mtmp->mhpmax;
+			}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case AD_DISN:{
 			struct obj *obj;
 			int i = 0;
@@ -4213,6 +4227,19 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			You_feel("mildly warm.");
 		}
 		}break;
+		case AD_DESC:
+			if(nonliving(youracedata) || is_anhydrous(youracedata)){
+				shieldeff(u.ux, u.uy);
+				tmp = 0;
+			} else {
+				You("dehydrate!");
+				if(is_watery(youracedata))
+					tmp *= 2;
+				mtmp->mhp += tmp;
+				if(mtmp->mhp > mtmp->mhpmax)
+					mtmp->mhp = mtmp->mhpmax;
+			}
+		break;
 		case AD_DISE:
 		    if (!diseasemu(mtmp->data)) tmp = 0;
 		break;
@@ -4272,6 +4299,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				}
 			} else if(!is_anhydrous(youracedata)){
 				pline("A mist of water is drawn through your %s and swept into the cloud!", body_part(BODY_SKIN));
+				if(is_watery(youracedata)) tmp *= 2;
 				if(u.sealsActive&SEAL_HUGINN_MUNINN){
 					unbind(SEAL_HUGINN_MUNINN,TRUE);
 				} else {
@@ -4396,6 +4424,9 @@ boolean ufound;
 			goto common;
 	    case AD_ACFR:
 			not_affected |= (Fire_resistance && !hates_holy(youracedata));
+			goto common;
+	    case AD_DESC:
+			not_affected |= (is_anhydrous(youracedata) || is_undead(youracedata));
 			goto common;
 	    case AD_ELEC:
 			not_affected |= Shock_resistance;
@@ -8483,6 +8514,17 @@ register struct attack *mattk;
 		    pline("%s is mildly warm.", Monnam(mtmp));
 		}
 		}break;
+		case AD_DESC:
+			if(nonliving(mtmp->data) || is_anhydrous(mtmp->data)){
+				shieldeff(mtmp->mx, mtmp->my);
+				tmp = 0;
+			} else {
+				pline("%s is dehydrated!", Monnam(mtmp));
+				if(is_watery(mtmp->data))
+					tmp *= 2;
+				healup(tmp, 0, FALSE, FALSE);
+			}
+		break;
 	    case AD_ELEC:
 		if (resists_elec(mtmp)) {
 		    shieldeff(mtmp->mx, mtmp->my);

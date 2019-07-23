@@ -138,6 +138,11 @@ struct flag {
 	
 	boolean goldka_level;		/* the current level has a gold kamerel golem on it */
 	
+	boolean silence_level;		/* the current level has an avatar of The Silence on it */
+	boolean made_first;			/* the first word slab has been created */
+	boolean made_divide;		/* the dividing word slab has been created */
+	boolean made_life;			/* the nurturing word slab has been created */
+	
 	/* KMH, role patch -- Variables used during startup.
 	 *
 	 * If the user wishes to select a role, race, gender, and/or alignment

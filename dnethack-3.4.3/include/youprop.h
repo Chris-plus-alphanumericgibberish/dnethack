@@ -373,7 +373,7 @@
 #define EFlying			u.uprops[FLYING].extrinsic
 #ifdef STEED
 # define Flying			(EFlying || HFlying || species_flies(youracedata) || \
-				 (u.usteed && mon_resistance(u.usteed,FLYING)))
+				 u.ufirst_light || (u.usteed && mon_resistance(u.usteed,FLYING)))
 #else
 # define Flying			(EFlying || HFlying || species_flies(youracedata))
 #endif

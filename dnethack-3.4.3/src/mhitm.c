@@ -1781,11 +1781,25 @@ physical:{
 			(void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		}
 		if(hates_holy_mon(mdef)){
-			if (vis) pline("%s seared by the holy flames!", Monnam(mdef));
+			if (vis) pline("%s is seared by the holy flames!", Monnam(mdef));
 			mult++;
 		}
 		tmp *= mult;
 		}break;
+/////////////////////////////////////////////////
+		case AD_DESC:
+			if(nonliving(mdef->data) || is_anhydrous(mdef->data)){
+				shieldeff(mdef->mx, mdef->my);
+				tmp = 0;
+			} else {
+				if (vis) pline("%s is dehydrated!", Monnam(mdef));
+				if(is_watery(mdef->data))
+					tmp *= 2;
+				magr->mhp += tmp;
+				if(magr->mhp > magr->mhpmax)
+					magr->mhp = magr->mhpmax;
+			}
+		break;
 /////////////////////////////////////////////////
 		case AD_STDY:
 		if (magr->mcan || is_blind(magr)){
@@ -3176,6 +3190,19 @@ struct attack *mattk;
 		    }
 		}
 		}break;
+		case AD_DESC:
+			if(nonliving(magr->data) || is_anhydrous(magr->data)){
+				shieldeff(magr->mx, magr->my);
+				tmp = 0;
+			} else {
+				if (vis) pline("%s is dehydrated!", Monnam(magr));
+				if(is_watery(magr->data))
+					tmp *= 2;
+				mdef->mhp += tmp;
+				if(mdef->mhp > mdef->mhpmax)
+					mdef->mhp = mdef->mhpmax;
+			}
+		break;
 	    case AD_ELEC:
 	    case AD_EELC:
 		if (resists_elec(magr)) {

@@ -1532,6 +1532,7 @@ int randMeleeDamageTypes[] =
 						 AD_TELE,
 						 AD_CHRN,
 						 AD_LVLT,
+						 AD_DESC,
 						 AD_WEEP };
 
 int randBreathDamageTypes[] = 
@@ -1580,6 +1581,7 @@ int randBeamDamageTypes[] =
 						 AD_VAMP,
 						 AD_WEBS,
 						 AD_SHDW,
+						 AD_DESC,
 						 AD_STTP };
 
 int randSpitDamageTypes[] = 
@@ -1617,6 +1619,7 @@ int randEngulfDamageTypes[] =
 						 AD_BLND, 
 						 AD_COLD, 
 						 AD_ELEC, 
+						 AD_DESC, 
 						 AD_FIRE };
 
 int randArrowDamageTypes[] = 

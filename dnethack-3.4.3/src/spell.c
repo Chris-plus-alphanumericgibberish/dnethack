@@ -3879,9 +3879,16 @@ int x, y;
 			dmod++;
 		if(is_demon(mon->data))
 			dmod++;
+		if(is_primordial(mon->data))
+			dmod++;
 		if(dmgtype(mon->data, AD_DRLI) || dmgtype(mon->data, AD_VAMP))
 			dmod++;
-		if(mon->data->mlet == S_SHADE || mon->data->mlet == S_WRAITH)
+		if(dmgtype(mon->data, AD_DISN) && !dmgtype(mon->data, AD_ACFR))
+			dmod++;
+		if(mon->data->mlet == S_SHADE 
+		|| mon->data->mlet == S_WRAITH
+		|| mon->data->mlet == S_UMBER
+		)
 			dmod++;
 		mon->mhp -= d(nd, 3*dmod);
 		pline("%s is seared by the Light.", Monnam(mon));
@@ -3893,9 +3900,8 @@ int x, y;
 }
 
 int
-wordeffects(spell, atme)
+wordeffects(spell)
 int spell;
-boolean atme;
 {
 	int sx = u.ux, sy = u.uy, nd = max(u.ulevel/2, 1);
 	struct monst *mon;
@@ -3907,6 +3913,7 @@ boolean atme;
 				}
 			}
 			vision_full_recalc = 1;	/* lighting changed */
+			if(u.sealsActive&SEAL_TENEBROUS) unbind(SEAL_TENEBROUS,TRUE); /* First Word vs Last Word */
 			doredraw();
 			u.ufirst_light_timeout = moves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
 		break;
@@ -3979,6 +3986,7 @@ boolean atme;
 						if(mon && !mon->mpeaceful){
 							if(is_elemental(mon->data) 
 								|| is_undead_mon(mon) 
+								|| mon->data == &mons[PM_ASPECT_OF_THE_SILENCE] 
 								|| mon->data == &mons[PM_STONE_GOLEM] 
 								|| mon->data == &mons[PM_CLAY_GOLEM] 
 								|| mon->data == &mons[PM_FLESH_GOLEM]
@@ -4041,8 +4049,8 @@ boolean atme;
 	int rad = 0;
 	
 	if(spell > MAXSPELL || (!spell && spelltyp > MAXSPELL)){
-		if(spell) return wordeffects(spell, atme);
-		else if(spelltyp) return wordeffects(spell, atme);
+		if(spell) return wordeffects(spell);
+		else if(spelltyp) return wordeffects(spell);
 	}
 
 	if(!spelltyp){
@@ -5357,6 +5365,19 @@ int spell;
 	 * and no matter how able, learning is always required.
 	 */
 	chance = chance * (20-splcaster) / 15 - splcaster;
+	
+	if(flags.silence_level){
+		struct monst *cmon;
+		int dist = 0;
+		for(cmon = fmon; cmon; cmon = cmon->nmon){
+			if(cmon->data == &mons[PM_ASPECT_OF_THE_SILENCE]){
+				dist = (int) (3*sqrt(dist2(u.ux,u.uy,cmon->mx,cmon->my)));
+				break;
+			}
+		}
+		chance = min(100, chance);
+		if(dist < 100) chance -= 100-dist;
+	}
 	
 	//While the Naen syllable is active, the only spell failure chance comes from the Spire 
 	if(u.unaen_duration)

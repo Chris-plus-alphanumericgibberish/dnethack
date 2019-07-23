@@ -2760,6 +2760,7 @@ STATIC_OVL NEARDATA const struct o_range o_ranges[] = {
 #ifdef WIZARD
 	{ "venom",	VENOM_CLASS,  BLINDING_VENOM, ACID_VENOM },
 #endif
+	{ "slab",	TILE_CLASS,    FIRST_WORD,      NURTURING_WORD },
 	{ "gray stone",	GEM_CLASS,    LUCKSTONE,      FLINT },
 	{ "grey stone",	GEM_CLASS,    LUCKSTONE,      FLINT },
 };
@@ -3956,7 +3957,29 @@ int wishflags;
 			else if (mat && !strcmpi(bp, "gauntlets"))	typ = GAUNTLETS;
 			else if (mat && !strcmpi(bp, "shoes"))		typ = SHOES;
 			/* otherwise, actually use the o_range */
-			else typ = rnd_class(o_ranges[i].f_o_range, o_ranges[i].l_o_range);
+			else {
+				if(o_ranges[i].f_o_range == FIRST_WORD){
+					int remaining = 0;
+					if(!flags.made_first)
+						remaining++;
+					if(!flags.made_divide)
+						remaining++;
+					if(!flags.made_life)
+						remaining++;
+					if(!remaining)
+						typ = ROCK;
+					else {
+						remaining = rnd(remaining);
+						if(!flags.made_first && !(--remaining))
+							typ = FIRST_WORD;
+						else if(!flags.made_divide && !(--remaining))
+							typ = DIVIDING_WORD;
+						else if(!flags.made_life && !(--remaining))
+							typ = NURTURING_WORD;
+					}
+				}
+				else typ = rnd_class(o_ranges[i].f_o_range, o_ranges[i].l_o_range);
+			}
 
 		goto typfnd;
 	    }

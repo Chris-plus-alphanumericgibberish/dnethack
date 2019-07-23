@@ -995,6 +995,7 @@ moveloop()
 
 		    /* reallocate movement rations to monsters */
 			flags.goldka_level=0;
+			flags.silence_level=0;
 			flags.spore_level=0;
 			flags.slime_level=0;
 			flags.walky_level=0;
@@ -1066,6 +1067,12 @@ moveloop()
 				if(mtmp->zombify && is_kamerel(mtmp->data)) mtmp->zombify = 0;
 				
 				if(mtmp->data == &mons[PM_ARA_KAMEREL]) flags.goldka_level=1;
+				if(mtmp->data == &mons[PM_ASPECT_OF_THE_SILENCE]){
+					flags.silence_level=1;
+					u.uen -= 3;
+					if(!Race_if(PM_INCANTIFIER))
+						u.uen = max(u.uen, 0);
+				}
 				if(mtmp->data == &mons[PM_ZUGGTMOY]) flags.spore_level=1;
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
 				if(mtmp->data == &mons[PM_PALE_NIGHT] || mtmp->data == &mons[PM_DREAD_SERAPH] || mtmp->data == &mons[PM_LEGION]) flags.walky_level=1;

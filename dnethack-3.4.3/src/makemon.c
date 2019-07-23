@@ -7011,6 +7011,10 @@ register int	mmflags;
 					mtmp->mhpmax = (int)(38*4.5);
 				mtmp->mhp = mtmp->mhpmax;
 			}
+			else if(mndx == PM_ASPECT_OF_THE_SILENCE){
+			    mtmp->minvis = TRUE;
+			    mtmp->perminvis = TRUE;
+			}
 		break;
 		case S_BAT:
 			if (Inhell && is_bat(ptr))
@@ -7049,6 +7053,11 @@ register int	mmflags;
 				mtmp->mhp = mtmp->mhpmax;
 			    mtmp->minvis = TRUE;
 			    mtmp->perminvis = TRUE;
+			}
+			if(mndx == PM_LIVING_MIRAGE){
+			    mtmp->minvis = TRUE;
+			    mtmp->perminvis = TRUE;
+				set_mimic_sym(mtmp);
 			}
 		break;
 		case S_DRAGON:
@@ -8625,6 +8634,9 @@ register struct monst *mtmp;
 		ap_type = M_AP_FURNITURE;
 		appear = S_deadtree;
 	} else if (mtmp->data == &mons[PM_SHARAB_KAMEREL]) {
+		ap_type = M_AP_FURNITURE;
+		appear = S_puddle;
+	} else if (mtmp->data == &mons[PM_LIVING_MIRAGE]) {
 		ap_type = M_AP_FURNITURE;
 		appear = S_puddle;
 	} else if (OBJ_AT(mx, my)) {

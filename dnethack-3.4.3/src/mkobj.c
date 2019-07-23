@@ -1299,6 +1299,15 @@ boolean artif;
 	/* unique objects may have an associated artifact entry */
 	if (objects[otyp].oc_unique && !otmp->oartifact)
 	    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
+	
+	/* track words */
+	if (otyp == FIRST_WORD)
+	    flags.made_first = TRUE;
+	if (otyp == DIVIDING_WORD)
+	    flags.made_divide = TRUE;
+	if (otyp == NURTURING_WORD)
+	    flags.made_life = TRUE;
+	
 	otmp->owt = weight(otmp);
 	return(otmp);
 }

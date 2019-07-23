@@ -122,6 +122,15 @@
 				 (ptr)->mlet == S_KETER || \
 				 (ptr) == &mons[PM_AOA] || \
 				 (ptr) == &mons[PM_AOA_DROPLET])
+#define is_watery(ptr)	((ptr) == &mons[PM_WATER_ELEMENTAL] \
+				 || (ptr) == &mons[PM_WATER_DOLPHIN] \
+				 || (ptr) == &mons[PM_FOG_CLOUD] \
+				 || (ptr) == &mons[PM_STEAM_VORTEX] \
+				 || (ptr) == &mons[PM_ANCIENT_TEMPEST] \
+				 || (ptr) == &mons[PM_MORTAI] \
+				 || (ptr) == &mons[PM_HUDOR_KAMEREL] \
+				 || (ptr) == &mons[PM_LETHE_ELEMENTAL] \
+				 )
 #define removed_innards(ptr)	(((ptr) == &mons[PM_HUNGRY_DEAD]) || \
 						 ((ptr) == &mons[PM_KOBOLD_MUMMY]) || \
 						 ((ptr) == &mons[PM_GNOME_MUMMY]) || \
@@ -506,13 +515,15 @@
 				  (ptr) == &mons[PM_DANCING_FLAME] ||\
 				  (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
 				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
+				 ((ptr) == &mons[PM_ASPECT_OF_THE_SILENCE]) ? 3 : \
 				 ((ptr) == &mons[PM_LIGHT_ARCHON]|| \
 				  (ptr) == &mons[PM_LUCIFER]) ? 7 : \
 				 ((ptr) == &mons[PM_EDDERKOP]) ? 8 : \
 				 ((ptr) == &mons[PM_SURYA_DEVA]) ? 9 : \
 				 0)
-#define Is_darklight_monster(ptr)	((ptr) == &mons[PM_EDDERKOP] ||\
-					(ptr) == &mons[PM_DARK_WORM]\
+#define Is_darklight_monster(ptr)	((ptr) == &mons[PM_EDDERKOP]\
+					|| (ptr) == &mons[PM_DARK_WORM]\
+					|| (ptr) == &mons[PM_ASPECT_OF_THE_SILENCE]\
 					)
 /*	[note: the light ranges above were reduced to 1 for performance...] */
 #define likes_lava(ptr)		(ptr == &mons[PM_FIRE_ELEMENTAL] || \

@@ -3308,6 +3308,18 @@ register struct attack *mattk;
 		tmp *= mult;
 		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////
+		case AD_DESC:
+			if(nonliving(mdef->data) || is_anhydrous(mdef->data)){
+				shieldeff(mdef->mx, mdef->my);
+				tmp = 0;
+			} else {
+				pline("%s is dehydrated!", Monnam(mdef));
+				if(is_watery(mdef->data))
+					tmp *= 2;
+				healup(tmp, 0, FALSE, FALSE);
+			}
+		break;
+///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_COLD:
 		if (negated) {
 		    tmp = 0;
@@ -4098,6 +4110,8 @@ common:
 		goto ecommon;
 	    case AD_ACFR:
 		resistance = resists_fire(mdef) && !hates_holy_mon(mdef);
+	    case AD_DESC:
+		resistance = is_anhydrous(mdef->data) || is_undead_mon(mdef);
 		goto ecommon;
 	    case AD_EELC:
 		resistance = resists_elec(mdef);
@@ -4373,6 +4387,17 @@ register struct attack *mattk;
 					pline("%s seems mildly warm.", Monnam(mdef));
 				}
 			}break;
+			case AD_DESC:
+				if(nonliving(mdef->data) || is_anhydrous(mdef->data)){
+					shieldeff(mdef->mx, mdef->my);
+					dam = 0;
+				} else {
+					pline("%s is dehydrated!", Monnam(mdef));
+					if(is_watery(mdef->data))
+						dam *= 2;
+					healup(dam, 0, FALSE, FALSE);
+				}
+			break;
 		}
 		end_engulf();
 		if ((mdef->mhp -= dam) <= 0) {
