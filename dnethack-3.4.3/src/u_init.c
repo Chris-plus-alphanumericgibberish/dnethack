@@ -852,6 +852,7 @@ static const struct def_skill Skill_Droid_Ana[] = {
     { P_DIVINATION_SPELL, P_SKILLED },	{ P_ENCHANTMENT_SPELL, P_SKILLED },
     { P_CLERIC_SPELL, P_SKILLED },	{ P_ESCAPE_SPELL, P_SKILLED },
     { P_MATTER_SPELL, P_SKILLED }, { P_WAND_POWER, P_SKILLED },
+	{ P_BEAST_MASTERY, P_SKILLED },
 #ifdef STEED
     { P_RIDING, P_BASIC },
 #endif
