@@ -1031,7 +1031,7 @@ A("The Mask of Tlaloc",	MASK, 						0,			0,/*Arc redesign by Riker*/
 	0,	A_LAWFUL,	 PM_ARCHEOLOGIST, PM_DWARF, 2500L,
 	0,0,0),
 
-A("Ehecailacocozcatl", AMULET_OF_MAGICAL_BREATHING,			MINERAL,0,/*Arc redesign by Riker*/
+A("Ehecailacocozcatl", AMULET_OF_MAGICAL_BREATHING,			SHELL,0,/*Arc redesign by Riker*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_REFLECT|SPFX_EREGEN), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
     NO_ATTK, NO_DFNS, NO_CARY,
@@ -1153,7 +1153,7 @@ A("The Darkweaver's Cloak",	DROVEN_CLOAK, 				0,			0,/*Needs encyc entry*/
 	0,	A_NONE,	 NON_PM, PM_DROW, 5000L,
 	0,0,WSFX_PLUSSEV),
 
-A("Spidersilk",	ELVEN_MITHRIL_COAT, 					0,			0,/*Needs encyc entry*/
+A("Spidersilk",	DROVEN_CHAIN_MAIL, 				 CLOTH,			0,/*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY, 
