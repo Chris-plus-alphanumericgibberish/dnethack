@@ -1796,18 +1796,18 @@ u_init()
 	u.wisSpirits = 0;
 	u.intSpirits = 0;
 	
-	if(FALSE){
+	if(rn2(10)){
 		if(flags.female) Sprintf(u.osepro,"he");
 		else Sprintf(u.osepro,"she");
 		
-	if(rn2(20)){
+		if(rn2(10)){
 			if(urace.individual.m){
 				if(flags.female) Sprintf1(u.osegen,urace.individual.m);
 				else Sprintf1(u.osegen,urace.individual.f);
 			} else {
 				Sprintf1(u.osegen,urace.noun);
 			}
-		} else {
+		} else if(10){
 			int rndI = randrace(flags.initrole);
 			if(races[rndI].individual.m){
 				if(flags.female) Sprintf1(u.osegen,races[rndI].individual.m);
@@ -1815,19 +1815,26 @@ u_init()
 			} else {
 				Sprintf1(u.osegen,races[rndI].noun);
 			}
+		} else {
+			int i, lets = 2+rnd(5);
+			Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
+			for(i=0; i<lets;i++){
+				if(i%2) Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
+				else Strcat(u.osegen, oseVowels[rn2(SIZE(oseVowels))]);
+			}
 		}
-	} else if(rn2(20)){
+	} else if(rn2(10)){
 		if(!flags.female) Sprintf(u.osepro,"he");
 		else Sprintf(u.osepro,"she");
 		
-		if(rn2(20)){
+		if(rn2(10)){
 			if(urace.individual.m){
 				if(flags.female) Sprintf1(u.osegen,urace.individual.f);
 				else Sprintf1(u.osegen,urace.individual.m);
 			} else {
 				Sprintf1(u.osegen,urace.noun);
 			}
-		} else {
+		} else if(10){
 			int rndI = randrace(flags.initrole);
 			if(races[rndI].individual.m){
 				if(flags.female) Sprintf1(u.osegen,races[rndI].individual.f);
@@ -1835,15 +1842,22 @@ u_init()
 			} else {
 				Sprintf1(u.osegen,races[rndI].noun);
 			}
+		} else {
+			int i, lets = 2+rnd(5);
+			Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
+			for(i=0; i<lets;i++){
+				if(i%2) Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
+				else Strcat(u.osegen, oseVowels[rn2(SIZE(oseVowels))]);
+			}
 		}
 	} else{
-		int i, lets = rnd(2) + rn2(2);
+		int i, lets = rnd(2) + rnd(2);
 		Strcat(u.osepro, oseConsonants[rn2(SIZE(oseConsonants))]);
 		for(i=0; i<lets;i++){
 			if(i%2) Strcat(u.osepro, oseConsonants[rn2(SIZE(oseConsonants))]);
 			else Strcat(u.osepro, oseVowels[rn2(SIZE(oseVowels))]);
 		}
-		lets = rnd(5);
+		lets = 2+rnd(5);
 		Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
 		for(i=0; i<lets;i++){
 			if(i%2) Strcat(u.osegen, oseConsonants[rn2(SIZE(oseConsonants))]);
