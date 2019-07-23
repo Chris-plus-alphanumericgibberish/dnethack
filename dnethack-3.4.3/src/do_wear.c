@@ -2255,6 +2255,8 @@ int base_uac()
 		}
 	}
 	uac -= dexbonus;
+	if(u.ufirst_sky)
+		uac -= 3;
 	if(u.uspellprot > 0 && uac > 0) uac = 0;
 	uac -= u.uspellprot;
 	if (uac < -128) uac = -128;	/* u.uac is an schar */

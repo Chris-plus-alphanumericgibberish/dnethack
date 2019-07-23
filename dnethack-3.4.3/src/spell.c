@@ -1026,10 +1026,13 @@ int menutype;
 	int nspells, idx;
 	char ilet, lets[BUFSZ], qbuf[QBUFSZ];
 
-	if (spellid(0) == NO_SPELL && !((uarmh && uarmh->oartifact == ART_STORMHELM) || 
-		(uwep && uwep->oartifact == ART_DEATH_SPEAR_OF_VHAERUN) ||
-		(uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM))
-	){
+	if (spellid(0) == NO_SPELL && !((uarmh && uarmh->oartifact == ART_STORMHELM)  
+		|| (uwep && uwep->oartifact == ART_DEATH_SPEAR_OF_VHAERUN) 
+		|| (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM)
+		|| u.ufirst_light
+		|| u.ufirst_sky
+		|| u.ufirst_life
+	)){
 	    You("don't know any spells right now.");
 	    return FALSE;
 	}
@@ -3859,6 +3862,161 @@ choose_crystal_summon()
 }
 
 
+void
+blessedlight(x,y)
+int x, y;
+{
+	int nd;
+	int dmod = 1;
+	nd = max(u.ulevel/2, 1);
+	struct monst *mon=m_at(x,y);
+	if (!levl[x][y].lit){
+	    levl[x][y].lit = 1;
+		newsym(x,y);
+	}
+	if(mon && !mon->mpeaceful){
+		if(is_undead_mon(mon))
+			dmod++;
+		if(is_demon(mon->data))
+			dmod++;
+		if(dmgtype(mon->data, AD_DRLI) || dmgtype(mon->data, AD_VAMP))
+			dmod++;
+		if(mon->data->mlet == S_SHADE || mon->data->mlet == S_WRAITH)
+			dmod++;
+		mon->mhp -= d(nd, 3);
+		pline("%s is seared by the Light.", Monnam(mon));
+	}
+	if (mon && mon->mhp <= 0){
+		mon->mhp = 0;
+		xkilled(mon, 1);
+	}
+}
+
+int
+wordeffects(spell, atme)
+int spell;
+boolean atme;
+{
+	int sx = u.ux, sy = u.uy, nd = max(u.ulevel/2, 1);
+	struct monst *mon;
+	switch(spell){
+		case FIRST_LIGHT:
+			for(sy = 0; sy < ROWNO; sy++){
+				for(sx = 0; sx < COLNO; sx++){
+					if(isok(sx,sy) && couldsee(sx,sy)) blessedlight(sx, sy);
+				}
+			}
+			vision_full_recalc = 1;	/* lighting changed */
+			doredraw();
+			u.ufirst_light_timeout = moves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
+		break;
+		case PART_WATER:{
+			boolean parted = FALSE;
+			struct trap *ttmp;
+			if (!getdir((char *)0) || !(u.dx || u.dy)) return(0);
+			if(u.uswallow){
+				mon = u.ustuck;
+				pline("%s splits in half!",Monnam(mon));
+				expels(mon, u.ustuck->data, TRUE);
+				mon->mhp = 0;
+				xkilled(mon, 1);
+			}
+			sx += u.dx, sy += u.dy;
+			while(isok(sx,sy) && ZAP_POS(levl[sx][sy].typ)){
+				if(levl[sx][sy].typ == POOL 
+				|| levl[sx][sy].typ == MOAT 
+				|| levl[sx][sy].typ == PUDDLE
+				){
+					if((levl[sx][sy].typ == POOL
+						|| levl[sx][sy].typ == MOAT)
+					&& !t_at(sx, sy)
+					){
+						levl[sx][sy].typ = ROOM;
+						ttmp = maketrap(sx, sy, PIT);
+						ttmp->tseen = 1;
+					} else levl[sx][sy].typ = ROOM;
+					if(!parted)
+						pline("The waters part.");
+					parted = TRUE;
+					newsym(sx,sy);
+				}
+				mon = m_at(sx, sy);
+				if(mon && !mon->mpeaceful){
+					if(!rn2(20)){
+						pline("%s is bisected!", Monnam(mon));
+						mon->mhp = 0;
+						xkilled(mon, 1);
+					} else if(rn2(2)){
+						pline("%s is thrown to the side.", Monnam(mon));
+						mon->mhp -= d(nd,3);
+						if (mon->mhp <= 0){
+							mon->mhp = 0;
+							xkilled(mon, 1);
+						} else mhurtle(mon, -1*u.dy, u.dx, 33);
+					} else {
+						pline("%s is thrown to the side.", Monnam(mon));
+						mon->mhp -= d(nd,3);
+						if (mon->mhp <= 0){
+							mon->mhp = 0;
+							xkilled(mon, 1);
+						} else mhurtle(mon, u.dy, -1*u.dx, 33);
+					}
+				}
+				//Update
+				sx += u.dx, sy += u.dy;
+			}
+			u.ufirst_sky_timeout = moves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
+		}break;
+		case OVERGROW:
+			for(sy = 0; sy < ROWNO; sy++){
+				for(sx = 0; sx < COLNO; sx++){
+					if(isok(sx,sy) && couldsee(sx,sy)){
+						mon = m_at(sx, sy);
+						if(levl[sx][sy].typ == ROOM || levl[sx][sy].typ == SOIL){
+							levl[sx][sy].typ = GRASS;
+							newsym(sx,sy);
+						}
+						if(mon && !mon->mpeaceful){
+							if(is_elemental(mon->data) 
+								|| is_undead_mon(mon) 
+								|| mon->data == &mons[PM_STONE_GOLEM] 
+								|| mon->data == &mons[PM_CLAY_GOLEM] 
+								|| mon->data == &mons[PM_FLESH_GOLEM]
+							) {
+								mon->mhp -= d(nd,12);
+								if (mon->mhp <= 0){
+									mon->mhp = 0;
+									xkilled(mon, 1);
+									if(levl[sx][sy].typ == ROOM 
+									|| levl[sx][sy].typ == SOIL
+									|| levl[sx][sy].typ == GRASS
+									|| levl[sx][sy].typ == PUDDLE
+									){
+										levl[sx][sy].typ = TREE;
+										bury_objs(sx, sy);
+										newsym(sx,sy);
+									}
+								} else {
+									mon->movement -= 12;//Vines etc.
+								}
+							}
+						}
+						if(levl[sx][sy].typ == TREE)
+							levl[sx][sy].looted &= ~TREE_LOOTED;
+					}
+				}
+			}
+			vision_full_recalc = 1;	/* trees may have sprouted */
+			doredraw();
+			u.ufirst_life_timeout = moves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .8 : 1));
+		break;
+		default:
+			pline("Unknown word of power!");
+			return 0;
+		break;
+	}
+	return 1;
+}
 int
 spelleffects(spell, atme, spelltyp)
 int spell, spelltyp;
@@ -3875,6 +4033,10 @@ boolean atme;
 	int dam = 0;
 	int rad = 0;
 	
+	if(spell > MAXSPELL || (!spell && spelltyp > MAXSPELL)){
+		if(spell) return wordeffects(spell, atme);
+		else if(spelltyp) return wordeffects(spell, atme);
+	}
 
 	if(!spelltyp){
 		/*
@@ -4368,6 +4530,33 @@ int *spell_no;
 	 * To do it right would require that we implement columns
 	 * in the window-ports (say via a tab character).
 	 */
+	//Special Spells
+	if((splaction == SPELLMENU_CAST || splaction == SPELLMENU_DESCRIBE)
+	&& (u.ufirst_light || u.ufirst_sky || u.ufirst_life)
+	){
+		Sprintf(buf, "Words of Power");
+		add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+		if(u.ufirst_light && u.ufirst_light_timeout <= moves){
+			Sprintf(buf, "speak the First Word");
+			any.a_int = FIRST_LIGHT+1;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				 'z', 0, ATR_NONE, buf, MENU_UNSELECTED);
+		}
+		if(u.ufirst_sky && u.ufirst_sky_timeout <= moves){
+			Sprintf(buf, "speak the Dividing Word");
+			any.a_int = PART_WATER+1;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				 'y', 0, ATR_NONE, buf, MENU_UNSELECTED);
+		}
+		if(u.ufirst_life && u.ufirst_life_timeout <= moves){
+			Sprintf(buf, "speak the Nurturing Word");
+			any.a_int = OVERGROW+1;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				 'x', 0, ATR_NONE, buf, MENU_UNSELECTED);
+		}
+	}
+	any.a_void = 0;		/* zero out all bits */
+	//Standard Spells
 	if (!iflags.menu_tab_sep)
 		Sprintf(buf, "%-20s     Level  %-12s Fail   Memory", "    Name", "Category");
 	else
@@ -4397,6 +4586,7 @@ int *spell_no;
 			 spellet(i), 0, ATR_NONE, buf,
 			 (i == splaction) ? MENU_SELECTED : MENU_UNSELECTED);
 	}
+	//Other menu options
 	if (splaction != SPELLMENU_CAST && splaction < 0) {
 		Sprintf(buf, "Cast a spell instead");
 		any.a_int = SPELLMENU_CAST;

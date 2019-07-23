@@ -15,6 +15,10 @@ struct spell {
 #define spellid(spell)		spl_book[spell].sp_id
 #define spellknow(spell)	spl_book[spell].sp_know
 
+#define FIRST_LIGHT	MAXSPELL+1
+#define PART_WATER	MAXSPELL+2
+#define OVERGROW	MAXSPELL+3
+
 #define MAX_BONUS_DICE	10
 
 #endif /* SPELL_H */

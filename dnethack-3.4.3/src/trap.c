@@ -3176,7 +3176,8 @@ struct monst *owner;
 //	int is_lethe = level.flags.lethe || lethe;
 	int is_lethe = lethe;
 	if(owner == &youmonst){
-		if((uarmc
+		if(u.ufirst_sky ||
+		  (uarmc
 			&& (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased)
 			&& (!uarmc->cursed || rn2(3))
 		   ) || (

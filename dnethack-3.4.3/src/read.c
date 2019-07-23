@@ -34,6 +34,8 @@ static void FDECL(forget_single_object, (int));
 static void FDECL(maybe_tame, (struct monst *,struct obj *));
 static void FDECL(ranged_set_lightsources, (int, int, genericptr_t));
 static int FDECL(read_tile, (struct obj *));
+static int FDECL(study_word, (struct obj *));
+static int NDECL(learn_word);
 
 int
 doread()
@@ -562,6 +564,10 @@ struct obj *scroll;
 		You("have never seen it!");
 		return 0;
 	}
+	if(objects[scroll->otyp].oc_unique){
+		study_word(scroll);
+		return 1;
+	}
 	if(!objects[scroll->otyp].oc_name_known){
 		You("don't know how to pronounce the glyph!");
 		return 0;
@@ -653,6 +659,64 @@ struct obj *scroll;
 	}
 	useup(scroll);
 	return res;
+}
+
+static int delay = 0;
+static struct obj *curslab = 0;
+
+STATIC_PTR int
+study_word(slab)
+struct obj *slab;
+{
+	if (delay && !Confusion && slab == curslab) {
+		You("continue your efforts to memorize the %s.", OBJ_DESCR(objects[slab->otyp]));
+	} else {
+		delay = -99;
+		You("begin to study the %s.", OBJ_DESCR(objects[slab->otyp]));
+	}
+	curslab = slab;
+	set_occupation(learn_word, "studying", 0);
+	return 1;
+}
+
+STATIC_PTR int
+learn_word()
+{
+	if (Confusion) {		/* became confused while learning */
+	    curslab = 0;			/* no longer studying */
+	    nomul(delay, "studying a word");		/* remaining delay is uninterrupted */
+	    delay = 0;
+	    return(0);
+	}
+	if (delay) {	/* not if (delay++), so at end delay == 0 */
+	    delay++;
+	    return(1); /* still busy */
+	}
+	exercise(A_WIS, TRUE);		/* you're studying. */
+	switch(curslab->otyp){
+		default:
+			impossible("bad slab.");
+			return 0;
+		case FIRST_WORD:
+			You("learn the First Word of Creation!");
+			u.ufirst_light = TRUE;
+			u.ufirst_light_timeout = 0;
+			float_up();
+			spoteffects(FALSE);
+		break;
+		case DIVIDING_WORD:
+			You("learn the Dividing Word of Creation!");
+			u.ufirst_sky = TRUE;
+			u.ufirst_sky_timeout = 0;
+		break;
+		case NURTURING_WORD:
+			You("learn the Nurturing Word of Creation!");
+			u.ufirst_life = TRUE;
+			u.ufirst_life_timeout = 0;
+		break;
+	}
+	useupall(curslab);
+	return 0;
 }
 
 static void

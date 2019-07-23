@@ -602,6 +602,10 @@ boolean digest_meal;
 	if(mon->mtrapped && t_at(mon->mx, mon->my) && t_at(mon->mx, mon->my)->ttyp == VIVI_TRAP)
 		return;
 	
+	if(mon->mtame && u.ufirst_life)
+		mon->mhp++;
+		
+	
 	if(!DEADMONSTER(mon) && mon->mhp < mon->mhpmax/2 && (mon->data == &mons[PM_CHANGED] || mon->data == &mons[PM_WARRIOR_CHANGED])){
 		mon->mhp -= 1;
 		flags.cth_attk=TRUE;//state machine stuff.
