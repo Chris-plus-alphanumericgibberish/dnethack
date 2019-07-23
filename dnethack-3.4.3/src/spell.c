@@ -3883,7 +3883,7 @@ int x, y;
 			dmod++;
 		if(mon->data->mlet == S_SHADE || mon->data->mlet == S_WRAITH)
 			dmod++;
-		mon->mhp -= d(nd, 3);
+		mon->mhp -= d(nd, 3*dmod);
 		pline("%s is seared by the Light.", Monnam(mon));
 	}
 	if (mon && mon->mhp <= 0){
