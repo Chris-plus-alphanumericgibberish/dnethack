@@ -1,0 +1,130 @@
+#	SCCS Id: @(#)chaos.des	3.4	2012/10/07
+# NetHack may be freely redistributed.  See license for details.
+#
+# Chaos Quest branch
+#
+MAZE: "chalv2",' '
+FLAGS: nommap, shortsighted
+INIT_MAP: '.' , ' ' , true , true , unlit , false
+
+NOMAP
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+MONSTER: 'b', "acid blob", random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+GEOMETRY:center,top
+#0         1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0   ..........wwwwwwwwwwwwwwwwwwwww.......   
+1..........wwwwPPPPPPPPwPPPPPPPPPPwwww.......
+2........wwPPPPPPPPPPPPwPPPPPPPPPPPPPPww.....
+3........wwPPPPP|---|PPwPP|-----|PPPPPww.....
+4.......wwwwPP|--...--|w|--.....--|PPwwww....
+5.......wwwwPP|.......|w|..  .....|PPwwww....
+6.......wwwwwP|.......|.|.. ......|Pwwwww....
+7.......wwwwwP|.......|w|..  .....|Pwwwww....
+8........wwwwP|--...--|w|--.....--|Pwwww.....
+9........wwwwPPP|-+-|PPwPP|---+-|PPPwwww.....
+0..........wwwwPPPPPPPPwPPPPPPPPPPwwww.......
+1 ..........wwwwwwwwwwwwwwwwwwwwwwwww....... 
+2   ..........wwwwwwwwwwwwwwwwwwwww.......   
+3    ............wwwwwwwwwwwwwwww........    
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2         3         4         5         6         7
+
+BRANCH:(22,06,22,06),(0,0,0,0)
+
+DOOR:closed,(17,09)
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+#STAIR: levregion(01,01,74,19), up
+#STAIR: levregion(01,01,74,19), down
+
+GEOMETRY:right,bottom
+MAP
+...
+..-
+.--
+ENDMAP
+
+MAZEWALK:(00,02),west
+
+STAIR: (01,01), down
+
+GEOMETRY:left,bottom
+MAP
+...
+-..
+--.
+ENDMAP
+
+MAZEWALK:(02,02),east
+
+STAIR: (01,01), up
+
+MAZE: "ossa1",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '}' , 'w' , false, false, lit , false
+
+NOMAP
+
+PORTAL:(00,00,35,20),(20,00,50,20),"mith1"
+
+GEOMETRY:center,top
+#0         1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0wwww---------wwwww
+1-----.......-----w
+2|.....|-+-|.....|w
+3|.--+-|...|---|.|w
+4|.|...|...|...|.|w
+5|.|...|...|...+.|w
+6|.|...----|...|.|w
+7|.|---|...|---|.|w
+8|.|...|...+.....|w
+9|.+...|...|-------
+0|.|...----|..|...|
+1|.-----...|..|...|
+2|.....+...|..|...|
+3-----.|...|..|...|
+4wwww|.-----+---+--
+5wwww|...........ww
+6wwww-------------w
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2         3         4         5         6         7
+
+BRANCH:(15,08,15,08),(0,0,0,0)
+

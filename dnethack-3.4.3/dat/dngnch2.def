@@ -43,9 +43,9 @@ CHAINBRANCH:	"Law Quest" "lawlev" + (0, 0) portal
 LEVEL:		"neulev" "none" @ (12, 8)
 LEVALIGN:	neutral
 CHAINBRANCH:	"Neutral Quest" "neulev" + (0, 0) portal
-LEVEL:		"chalev" "none" @ (12, 8)
+LEVEL:		"chalv2" "none" @ (12, 8)
 LEVALIGN:	chaotic
-CHAINBRANCH:	"Chaos Quest" "chalev" + (0, 0) portal
+CHAINBRANCH:	"Chaos Quest" "chalv2" + (0, 0) portal
 BRANCH:		"The Elemental Planes" @ (1, 0) no_down up
 
 #
@@ -180,7 +180,7 @@ ENTRY:		2
 DUNGEON:		"Chaos Quest" "C" (9, 0)
 DESCRIPTION:    mazelike
 ALIGNMENT:      chaotic
-LEVEL:		"chaosf" "none" @ (1, 0)
+LEVEL:		"ossa1" "none" @ (1, 0)
 LEVEL:		"chaoss" "A" @ (2, 0)
 LEVEL:		"chaost" "B" @ (3, 0)
 LEVEL:		"chaosm" "M" @ (4, 0)

@@ -245,6 +245,7 @@ bad_location(x, y, lx, ly, hx, hy)
 	       levl[x][y].typ == ROOM || 
 	       levl[x][y].typ == GRASS || 
 	       levl[x][y].typ == SOIL || 
+	       levl[x][y].typ == PUDDLE || 
 	       levl[x][y].typ == AIR)));
 }
 
