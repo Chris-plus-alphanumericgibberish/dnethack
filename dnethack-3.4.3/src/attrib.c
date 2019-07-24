@@ -844,16 +844,18 @@ int oldlevel, newlevel;
 			if(!(*(abil->ability) & INTRINSIC & ~mask)) {
 			    if(*(abil->gainstr)){
 					if(Race_if(PM_ANDROID) && mask == FROMRACE)
-						pline("");
+						pline("%s", abil->gainstr);
 					else You_feel("%s!", abil->gainstr);
 				}
 			}
 		} else if (oldlevel >= abil->ulevel && newlevel < abil->ulevel) {
 			*(abil->ability) &= ~mask;
 			if(!(*(abil->ability) & INTRINSIC)) {
-			    if(*(abil->losestr))
-				You_feel("%s!", abil->losestr);
-			    else if(*(abil->gainstr))
+			    if(*(abil->losestr)){
+					if(Race_if(PM_ANDROID) && mask == FROMRACE)
+						pline("%s", abil->losestr);
+					else You_feel("%s!", abil->losestr);
+			    } else if(*(abil->gainstr))
 				You_feel("less %s!", abil->gainstr);
 			}
 		}
