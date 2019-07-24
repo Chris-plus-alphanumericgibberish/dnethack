@@ -4870,13 +4870,6 @@ register struct	monst	*mtmp;
 		 }
 		} else if(ptr == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] && !(u.uevent.ukilled_illurien)){
 			otmp = mksobj(SPE_SECRETS, TRUE, FALSE);
-			if(!rn2(3)){
-				otmp = oname(otmp, artiname(ART_BOOK_OF_LOST_NAMES));
-			} else if(!rn2(2)){
-				otmp = oname(otmp, artiname(ART_BOOK_OF_INFINITE_SPELLS));		
-			} else {
-				otmp = oname(otmp, artiname(ART_NECRONOMICON));		
-			}
 			otmp->blessed = FALSE;
 			otmp->cursed = FALSE;
 			(void) mpickobj(mtmp, otmp);
