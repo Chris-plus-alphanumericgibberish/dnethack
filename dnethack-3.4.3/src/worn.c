@@ -233,7 +233,7 @@ long mask;
 		    oobj->owornmask &= ~wp->w_mask;
 		    if (wp->w_mask & ~(W_SWAPWEP|W_QUIVER)) {
 			/* leave as "x = x <op> y", here and below, for broken
-			 * compilers */
+			 * compilers */			
 			int * property_list = item_property_list(oobj, oobj->otyp);
 			p = 0;
 			while (property_list[p] != 0)	{
@@ -431,11 +431,15 @@ boolean on, silently;
 		case INVIS:
 			if (mon->data != &mons[PM_HELLCAT]){
 				mon->invis_blkd = FALSE;
-				update_mon_intrinsic(mon, obj, which, !on, silently);
+				if (mon_gets_extrinsic(mon, which, obj))
+					update_mon_intrinsic(mon, obj, which, !on, silently);
+				if (mon->perminvis)
+					mon->minvis = TRUE;
 			}
 			break;
 		default:
-			update_mon_intrinsic(mon, obj, which, !on, silently);
+			if (mon_gets_extrinsic(mon, which, obj))
+				update_mon_intrinsic(mon, obj, which, !on, silently);
 			break;
 		}
 	}
@@ -506,30 +510,30 @@ boolean on, silently;
 		/* some properties need special handling */
 		switch (which)
 		{
-	 case INVIS:
-	 if(mon->data != &mons[PM_HELLCAT]){
+		case INVIS:
+			if (mon->data != &mons[PM_HELLCAT]){
 				mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
-	    mon->minvis = !mon->invis_blkd;
-	}
-	 break;
-	 case FAST:
-	  {
+				mon->minvis = !mon->invis_blkd;
+			}
+			break;
+		case FAST:
+			{
 			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
-	    boolean save_in_mklev = in_mklev;
-	    if (silently) in_mklev = TRUE;
-	    mon_adjust_speed(mon, 0, obj);
-	    in_mklev = save_in_mklev;
+			boolean save_in_mklev = in_mklev;
+			if (silently) in_mklev = TRUE;
+			mon_adjust_speed(mon, 0, obj);
+			in_mklev = save_in_mklev;
 			
-	    break;
-	  }
-	 case LEVITATION:
+			break;
+			}
+		case LEVITATION:
 		case FLYING:
 			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
 			if (!oldprop && (mon_resistance(mon,LEVITATION) || mon_resistance(mon,FLYING))) {
 				m_float_up(mon, silently);
 			}
-	    break;
-	 case DISPLACED:
+			break;
+		case DISPLACED:
 			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
 			if (!oldprop && mon_resistance(mon,DISPLACED) && !silently && canseemon(mon)) {
 				pline("%s outline begins shimmering!", s_suffix(Monnam(mon)));
@@ -540,11 +544,11 @@ boolean on, silently;
 			if (!oldprop && mon_resistance(mon,SWIMMING)) {
 				minliquid(mon);
 			}
-	    break;
-	 default:
-		mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
-	    break;
-	}
+			break;
+		default:
+			mon->mextrinsics[(which-1)/32] |= (1 << (which-1)%32);
+			break;
+		}
     }
 	else { /* off */
 		/* we need to check that this property isn't being granted by any other equipment */
@@ -552,79 +556,90 @@ boolean on, silently;
 			/* again, some properties need special handling */
 			switch (which)
 			{
-	 case INVIS:
+			case INVIS:
 				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
 				mon->minvis = (mon->invis_blkd ? FALSE : mon->perminvis);
-	    break;
-	 case FAST:
-	  {
+				break;
+			case FAST:
+				{
 				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
-	    boolean save_in_mklev = in_mklev;
-	    if (silently) in_mklev = TRUE;
-	    mon_adjust_speed(mon, 0, obj);
-	    in_mklev = save_in_mklev;
-	    break;
-	  }
+				boolean save_in_mklev = in_mklev;
+				if (silently) in_mklev = TRUE;
+				mon_adjust_speed(mon, 0, obj);
+				in_mklev = save_in_mklev;
+				break;
+				}
 			case LEVITATION:
 			case FLYING:
 				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
 				if (oldprop && !mon_resistance(mon,LEVITATION) && !mon_resistance(mon,FLYING)) {
 					m_float_down(mon, silently);
 				}
-			break;
+				break;
 			case DISPLACED:
 				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
 				if (oldprop && !mon_resistance(mon,DISPLACED) && !silently && canseemon(mon)) {
 					pline("%s outline stops shimmering.", s_suffix(Monnam(mon)));
 				}
-			break;
+				break;
 			case SWIMMING:
 				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
 				if (oldprop && !mon_resistance(mon,SWIMMING)) {
 					minliquid(mon);
-		}
+				}
 				break;
 			default:
-			mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
-	    break;
-	}
+				mon->mextrinsics[(which-1)/32] &= ~(1 << (which-1)%32);
+				break;
+			}
+		}
     }
-}
 	return;
 }
 
-/* armor put on or taken off; might be magical variety */
+/* armor put on, taken off, grabbed, or dropped; might be magical variety */
 void
 update_mon_intrinsics(mon, obj, on, silently)
 struct monst *mon;
 struct obj *obj;
 boolean on, silently;
 {
+	/* don't bother with dead monsters -- at best nothing will happen, at worst we get bad messages */
+	if (DEADMONSTER(mon))
+		return;
+
 	int unseen = !canseemon(mon);
     int which;
     long all_worn = ~0L; /* clang lint */
 	
 	int * property_list = item_property_list(obj, obj->otyp);
-	which = 0;
-	while (property_list[which] != 0)	{
-		update_mon_intrinsic(mon, obj, property_list[which], on, silently);
-		which++;
-	}
-	if (obj->oartifact)
-	{
-		property_list = art_property_list(obj->oartifact, FALSE);
+	/* only turn on properties from this list if obj is worn */
+	if (!on || obj->owornmask) {
 		which = 0;
 		while (property_list[which] != 0)	{
 			update_mon_intrinsic(mon, obj, property_list[which], on, silently);
 			which++;
 		}
+	}
+	if (obj->oartifact)
+	{
+		/* only turn on properties from this list if obj is worn */
+		if (!on || obj->owornmask) {
+			property_list = art_property_list(obj->oartifact, FALSE);
+			which = 0;
+			while (property_list[which] != 0)	{
+				update_mon_intrinsic(mon, obj, property_list[which], on, silently);
+				which++;
+			}
+		}
+		/* while-carried properties */
 		property_list = art_property_list(obj->oartifact, TRUE);
 		which = 0;
 		while (property_list[which] != 0)	{
 			update_mon_intrinsic(mon, obj, property_list[which], on, silently);
 			which++;
+		}
 	}
-    }
 	/* if the object blocks an extrinsic, recalculate if the monster should get that extrinsic */
 	/* use all_worn because the owornmask may have been cleared already and monsters will not wield armor */
 	if (which = w_blocks(obj, all_worn))
@@ -637,7 +652,7 @@ boolean on, silently;
 
     /* if couldn't see it but now can, or vice versa, update display */
     if (!silently && (unseen ^ !canseemon(mon)))
-	newsym(mon->mx, mon->my);
+		newsym(mon->mx, mon->my);
 }
 
 int 
@@ -1481,7 +1496,7 @@ struct obj *obj;
 	{
 	case ANTIMAGIC:
 		if (!resists_magm(mon))
-	    return 20;
+			return 20;
 		break;
 	case REFLECTING:
 		if (!mon_reflects(mon, (char *)0))
@@ -1543,7 +1558,7 @@ struct obj *obj;
 		else if (!mon->minvis)
 			return 5;
 		break;
-    }
+	}
     return 0;
 }
 

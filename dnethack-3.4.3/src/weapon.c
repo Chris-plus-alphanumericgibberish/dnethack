@@ -1632,8 +1632,11 @@ register struct monst *mtmp;
 			 */
 			if (rwep[i] != LOADSTONE) {
 				/* Don't throw a cursed weapon-in-hand or an artifact */
-				if ((otmp = oselect(mtmp, rwep[i], W_QUIVER)) && !otmp->oartifact
-					&& (!otmp->cursed || otmp != MON_WEP(mtmp)))
+				/* nor throw the last one (for stacks) of a wielded weapon */
+				if ((otmp = oselect(mtmp, rwep[i], W_QUIVER))
+					&& !otmp->oartifact
+					&& (!otmp->cursed || otmp != MON_WEP(mtmp))
+					&& !((otmp->quan == 1) && (otmp->owornmask & (W_WEP|W_SWAPWEP))))
 					return(otmp);
 			} else for(otmp=mtmp->minvent; otmp; otmp=otmp->nobj) {
 				if (otmp->otyp == LOADSTONE && !otmp->cursed)
@@ -1838,6 +1841,41 @@ register struct monst *mtmp;
 	/* failure */
 	return (struct obj *)0;
 }
+struct obj *
+select_pick(mtmp)
+struct monst *mtmp;
+{
+	struct obj * otmp;
+
+	/* preference to any artifacts (and checks for arti_digs) */
+	for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj){
+		if (is_pick(otmp) && otmp->oartifact)
+			Oselect(otmp->otyp, W_WEP);
+	}
+
+	Oselect(DWARVISH_MATTOCK, W_WEP);
+	Oselect(PICK_AXE, W_WEP);
+	/* failure */
+	return (struct obj *)0;
+}
+struct obj *
+select_axe(mtmp)
+struct monst *mtmp;
+{
+	struct obj * otmp;
+
+	/* preference to any artifacts */
+	for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj){
+		if (is_axe(otmp) && otmp->oartifact)
+			Oselect(otmp->otyp, W_WEP);
+	}
+
+	Oselect(MOON_AXE, W_WEP);
+	Oselect(BATTLE_AXE, W_WEP);
+	Oselect(AXE, W_WEP);
+	/* failure */
+	return (struct obj *)0;
+}
 
 /* Called after polymorphing a monster, robbing it, etc....  Monsters
  * otherwise never unwield stuff on their own.  Might print message.
@@ -1849,7 +1887,6 @@ boolean polyspot;
 {
 	struct obj *obj, *mw_tmp;
 	struct obj *sobj, *msw_tmp;
-	boolean doreturn = FALSE;
 	mw_tmp = MON_WEP(mon);
 	msw_tmp = MON_SWEP(mon);
 	if (!(mw_tmp || msw_tmp))
@@ -1862,16 +1899,13 @@ boolean polyspot;
 	if (mw_tmp && !obj) { /* The mainhand weapon was stolen or destroyed */
 		MON_NOWEP(mon);
 		mon->weapon_check = NEED_WEAPON;
-		doreturn = TRUE;
 	}
 	if (msw_tmp && !sobj) { /* The offhand weapon was stolen or destroyed */
 		MON_NOSWEP(mon);
 		mon->weapon_check = NEED_WEAPON;
-		doreturn = TRUE;
 	}
-	if (doreturn)
-		return;
 
+	/* monster can no longer wield any weapons */
 	if (!attacktype(mon->data, AT_WEAP)) {
 		if (mw_tmp) {
 			setmnotwielded(mon, mw_tmp);
@@ -1890,9 +1924,10 @@ boolean polyspot;
 				stackobj(obj);
 			}
 		}
+		/* can't wield any weapons -> none wanted */
 		mon->weapon_check = NO_WEAPON_WANTED;
-		doreturn = TRUE;
 	}
+	/* monster can no longer twoweapon */
 	if (!could_twoweap(mon->data))
 	{
 		if (msw_tmp) {
@@ -1912,11 +1947,9 @@ boolean polyspot;
 				stackobj(sobj);
 			}
 		}
-		mon->weapon_check = NO_WEAPON_WANTED;
-		doreturn = TRUE;
+		/* Do not set weapon_check */
+		/* We may still want a mainhand weapon. Or not. */
 	}
-	if (doreturn)
-		return;
 	/* The remaining case where there is a change is where a monster
 	 * is polymorphed into a stronger/weaker monster with a different
 	 * choice of weapons.  This has no parallel for players.  It can
@@ -1930,7 +1963,7 @@ boolean polyspot;
 	 * polymorphed into little monster.  But it's not quite clear how to
 	 * handle this anyway....
 	 */
-	if (!(mw_tmp && mw_tmp->cursed && mon->weapon_check == NO_WEAPON_WANTED))
+	if (!(mw_tmp && (mw_tmp->cursed && !is_weldproof_mon(mon)) && mon->weapon_check == NO_WEAPON_WANTED))
 	    mon->weapon_check = NEED_WEAPON;
 	return;
 }
@@ -1968,27 +2001,16 @@ register struct monst *mon;
 			obj = propellor;
 			break;
 		case NEED_PICK_AXE:
-			obj = m_carrying(mon, DWARVISH_MATTOCK);
-			if (!obj || bimanual(obj, mon->data))
-				obj = m_carrying(mon, PICK_AXE);
+			obj = select_pick(mon);
 			break;
 		case NEED_AXE:
-			/* currently, only 3 types of axe */
-			obj = m_carrying(mon, MOON_AXE);
-			if (!obj)
-				obj = m_carrying(mon, BATTLE_AXE);
-			if (!obj || bimanual(obj, mon->data))
-			    obj = m_carrying(mon, AXE);
+			obj = select_axe(mon);
 			break;
 		case NEED_PICK_OR_AXE:
 			/* prefer pick for fewer switches on most levels */
-			obj = m_carrying(mon, DWARVISH_MATTOCK);
-			if (!obj) obj = m_carrying(mon, MOON_AXE);
-			if (!obj) obj = m_carrying(mon, BATTLE_AXE);
-			if (!obj || bimanual(obj, mon->data)) {
-			    obj = m_carrying(mon, PICK_AXE);
-			    if (!obj) obj = m_carrying(mon, AXE);
-			}
+			obj = select_pick(mon);
+			if (!obj)
+				obj = select_axe(mon);
 			break;
 		default: impossible("weapon_check %d for %s?",
 				mon->weapon_check, mon_nam(mon));
@@ -2011,6 +2033,7 @@ register struct monst *mon;
 			* Still....
 			*/
 			if (mw_tmp && mw_tmp->cursed && !is_weldproof_mon(mon) && mw_tmp->otyp != CORPSE) {
+				/* the monster's weapon is visibly wielded to it's hand */
 				if (canseemon(mon)) {
 					char welded_buf[BUFSZ];
 					const char *mon_hand = mbodypart(mon, HAND);
@@ -2021,59 +2044,43 @@ register struct monst *mon;
 						mhis(mon), mon_hand);
 					if (obj->otyp == PICK_AXE) {
 						pline("Since %s weapon%s %s,",
-						  s_suffix(mon_nam(mon)),
-						  plur(mw_tmp->quan), welded_buf);
+							s_suffix(mon_nam(mon)),
+							plur(mw_tmp->quan), welded_buf);
 						pline("%s cannot wield that %s.",
-						mon_nam(mon), xname(obj));
-					} else {
+							mon_nam(mon), xname(obj));
+					}
+					else {
 						pline("%s tries to wield %s.", Monnam(mon),
-						doname(obj));
+							doname(obj));
 						pline("%s %s %s!",
-						  s_suffix(Monnam(mon)),
-						  xname(mw_tmp), welded_buf);
+							s_suffix(Monnam(mon)),
+							xname(mw_tmp), welded_buf);
 					}
 					mw_tmp->bknown = 1;
-					}
+				}
+				/* the monster will now not try that again */
 				mon->weapon_check = NO_WEAPON_WANTED;
+				/* that took time */
 				time_taken = TRUE;
 				toreturn = TRUE;
 			}
-
-			mon->mw = obj;		/* wield obj */
-			setmnotwielded(mon, mw_tmp);
-			mon->weapon_check = NEED_WEAPON;
-			if (canseemon(mon)) {
-				pline("%s wields %s%s", Monnam(mon), doname(obj),
-					mon->mtame ? "." : "!");
-				if (obj->cursed && obj->otyp != CORPSE) {
-					pline("%s %s to %s %s!",
-						Tobjnam(obj, "weld"),
-						is_plural(obj) ? "themselves" : "itself",
-						s_suffix(mon_nam(mon)), mbodypart(mon, HAND));
-					obj->bknown = 1;
-				}
+			else
+			{
+				/* unwield old object */
+				setmnotwielded(mon, mw_tmp);
+				/* wield the new object*/
+				mon->weapon_check = NEED_WEAPON;
+				setmwielded(mon, obj, W_WEP);
+				/* that took time */
+				time_taken = TRUE;
+				toreturn = TRUE;
 			}
-			if (artifact_light(obj) && !obj->lamplit) {
-				begin_burn(obj, FALSE);
-				if (canseemon(mon))
-					pline("%s %s%s in %s %s!",
-					Tobjnam(obj, (obj->blessed ? "shine" : "glow")),
-					(obj->blessed ? " very" : ""),
-					(obj->cursed ? "" : " brilliantly"),
-					s_suffix(mon_nam(mon)), mbodypart(mon, HAND));
-			}
-			obj->owornmask = W_WEP;
-			update_mon_intrinsics(mon, obj, TRUE, FALSE);
-			if (is_lightsaber(obj))
-				mon_ignite_lightsaber(obj, mon);
-			time_taken = TRUE;
-			toreturn = TRUE;
 		}
 	}
 	/* possibly wield an off-hand weapon */
 	if (old_weapon_check == NEED_HTH_WEAPON)
 	{
-		if (could_twoweap(mon->data) && !which_armor(mon, W_ARMS) && !bimanual(obj, mon->data))
+		if (could_twoweap(mon->data) && !which_armor(mon, W_ARMS) && !bimanual(MON_WEP(mon), mon->data))
 		{
 			sobj = select_shwep(mon);
 			if (sobj && sobj != &zeroobj) {
@@ -2086,27 +2093,12 @@ register struct monst *mon;
 				}
 				else {
 					/* already-wielding-a-cursed-item check unnecessary here */
-
-					mon->msw = sobj;		/* wield sobj */
+					/* unwield old object */
 					setmnotwielded(mon, msw_tmp);
+					/* wield the new object*/
 					mon->weapon_check = NEED_WEAPON;
-					if (canseemon(mon)) {
-						pline("%s offhands %s%s", Monnam(mon), doname(sobj),
-							mon->mtame ? "." : "!");
-					}
-					if (artifact_light(sobj) && !sobj->lamplit) {
-						begin_burn(sobj, FALSE);
-						if (canseemon(mon))
-							pline("%s %s%s in %s %s!",
-							Tobjnam(sobj, (obj->blessed ? "shine" : "glow")),
-							(sobj->blessed ? " very" : ""),
-							(sobj->cursed ? "" : " brilliantly"),
-							s_suffix(mon_nam(mon)), mbodypart(mon, HAND));
-					}
-					sobj->owornmask = W_SWAPWEP;
-					update_mon_intrinsics(mon, sobj, TRUE, FALSE);
-					if (is_lightsaber(sobj))
-						mon_ignite_lightsaber(sobj, mon);
+					setmwielded(mon, sobj, W_SWAPWEP);
+					/* that took time */
 					time_taken = TRUE;
 					toreturn = TRUE;
 				}
@@ -2118,6 +2110,75 @@ register struct monst *mon;
 
 	mon->weapon_check = NEED_WEAPON;
 	return 0;
+}
+
+void
+setmwielded(mon, obj, slot)
+register struct monst *mon;
+register struct obj *obj;
+long slot;
+{
+	if (!obj) return;
+	/* visible effects */
+	if (canseemon(mon)) {
+		pline("%s %s %s%s",
+			Monnam(mon),
+			(slot == W_WEP) ? "wields" : (slot == W_SWAPWEP) ? "offhands" : "telekinetically brandishes",
+			doname(obj),
+			mon->mtame ? "." : "!");
+		if (obj->cursed && !is_weldproof_mon(mon) && obj->otyp != CORPSE) {
+			pline("%s %s to %s %s!",
+				Tobjnam(obj, "weld"),
+				is_plural(obj) ? "themselves" : "itself",
+				s_suffix(mon_nam(mon)), mbodypart(mon, HAND));
+			obj->bknown = 1;
+		}
+	}
+	if (artifact_light(obj) && !obj->lamplit) {
+		begin_burn(obj, FALSE);
+		if (canseemon(mon))
+			pline("%s %s%s in %s %s!",
+			Tobjnam(obj, (obj->blessed ? "shine" : "glow")),
+			(obj->blessed ? " very" : ""),
+			(obj->cursed ? "" : " brilliantly"),
+			s_suffix(mon_nam(mon)), mbodypart(mon, HAND));
+	}
+	/* set pointers, masks, and do other backend */
+	if (slot == W_WEP)
+		MON_WEP(mon) = obj;
+	else if (slot == W_SWAPWEP)
+		MON_SWEP(mon) = obj;
+	else
+		impossible("bad slot for weapon (%s)[%d]!", xname(obj), (int)slot);
+	obj->owornmask = slot;
+	update_mon_intrinsics(mon, obj, TRUE, FALSE);
+	/* ignite lightsabers*/
+	if (is_lightsaber(obj))
+		mon_ignite_lightsaber(obj, mon);
+}
+
+void
+setmnotwielded(mon, obj)
+register struct monst *mon;
+register struct obj *obj;
+{
+	if (!obj) return;
+	/* visible effects */
+	if (artifact_light(obj) && obj->lamplit) {
+		end_burn(obj, FALSE);
+		if (canseemon(mon))
+			pline("%s in %s %s %s glowing.", The(xname(obj)),
+			s_suffix(mon_nam(mon)), mbodypart(mon, HAND),
+			otense(obj, "stop"));
+	}
+	/* set pointers, masks, and do other backend */
+	if (MON_WEP(mon) == obj)
+		MON_NOWEP(mon);
+	if (MON_SWEP(mon) == obj)
+		MON_NOSWEP(mon);
+	obj->owornmask &= ~W_WEP;
+	obj->owornmask &= ~W_SWAPWEP;
+	update_mon_intrinsics(mon, obj, FALSE, FALSE);
 }
 
 void
@@ -3571,24 +3632,6 @@ const struct def_skill *class_skill;
 		P_ADVANCE(skill) = practice_needed_to_advance(OLD_P_SKILL(skill)-1);
 	    }
 	}
-}
-
-void
-setmnotwielded(mon,obj)
-register struct monst *mon;
-register struct obj *obj;
-{
-    if (!obj) return;
-    if (artifact_light(obj) && obj->lamplit) {
-	end_burn(obj, FALSE);
-	if (canseemon(mon))
-	    pline("%s in %s %s %s glowing.", The(xname(obj)),
-		  s_suffix(mon_nam(mon)), mbodypart(mon,HAND),
-		  otense(obj, "stop"));
-    }
-    obj->owornmask &= ~W_WEP;
-	obj->owornmask &= ~W_SWAPWEP;
-	update_mon_intrinsics(mon, obj, FALSE, FALSE);
 }
 
 int

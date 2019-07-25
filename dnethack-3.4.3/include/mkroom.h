@@ -22,7 +22,7 @@ struct mkroom {
 
 struct shclass {
 	const char *name;	/* name of the shop type */
-	char	symb;		/* this identifies the shop type */
+	char	shoptype;		/* this identifies the shop type */
 	int	prob;		/* the shop type probability in % */
 	schar	shdist;		/* object placement type */
 #define D_SCATTER	0	/* normal placement */
@@ -76,7 +76,8 @@ extern NEARDATA struct door doors[DOORMAX];
 #define POOLROOM	20	/*  */
 #define JOINEDROOM	21  /* is actually 2+ ordinary rooms joined together, and should have fewer corridors leading to it */
 #define SHOPBASE	22	/* everything above this is a shop */
-#define ARMORSHOP	SHOPBASE+1	/* specific shop defines for level compiler */
+#define GENERALSHOP	SHOPBASE	/* specific shop defines for level compiler */
+#define ARMORSHOP	SHOPBASE+1	
 #define SCROLLSHOP	SHOPBASE+2
 #define POTIONSHOP	SHOPBASE+3
 #define WEAPONSHOP 	SHOPBASE+4
@@ -85,18 +86,19 @@ extern NEARDATA struct door doors[DOORMAX];
 #define WANDSHOP	SHOPBASE+7
 #define TOOLSHOP	SHOPBASE+8
 #define BOOKSHOP	SHOPBASE+9
-#define UNIQUESHOP	SHOPBASE+10	/* shops here & above not randomly gen'd. */
-#define CANDLESHOP	UNIQUESHOP
-#define MAXRTYPE	UNIQUESHOP	/* maximum valid room type */
 #ifdef BARD
 #define MUSICSHOP	SHOPBASE+10
-#undef UNIQUESHOP
-#undef CANDLESHOP
-#undef MAXRTYPE
-#define UNIQUESHOP	SHOPBASE+11
-#define CANDLESHOP	UNIQUESHOP
-#define MAXRTYPE	UNIQUESHOP
+#define UNIQUESHOP	SHOPBASE+11	/* shops here & above not randomly gen'd. */
+#else
+#define UNIQUESHOP	SHOPBASE+10	/* shops here & above not randomly gen'd. */
 #endif
+#define CANDLESHOP	UNIQUESHOP
+#define JELLYSHOP	UNIQUESHOP+1
+#define ACIDSHOP	UNIQUESHOP+2
+#define PETSHOP		UNIQUESHOP+3
+#define CERAMICSHOP	UNIQUESHOP+4
+#define MAXRTYPE	CERAMICSHOP	/* maximum valid room type */
+
 /* NOTE: rtype is a char, so if go above 124 or so need to fix that*/
 
 /* Special type for search_special() */

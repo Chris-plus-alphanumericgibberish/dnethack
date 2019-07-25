@@ -79,7 +79,6 @@ static void FDECL(shk_weapon_works, (char *, struct monst *));
 static void FDECL(shk_armor_works, (char *, struct monst *));
 static void FDECL(shk_charge, (char *, struct monst *));
 static boolean FDECL(shk_obj_match, (struct obj *, struct monst *));
-/*static int FDECL(shk_class_match, (long class, struct monst *shkp));*/
 static boolean FDECL(shk_offer_price, (char *, long, struct monst *));
 static void FDECL(shk_smooth_charge, (int *, int, int));
 #endif
@@ -1888,7 +1887,7 @@ shk_other_services()
   	/* Weapon appraisals.  Weapon & general stores can do this. */
 		/* Disabled due to being potentially misleading */
 /*	if ((ESHK(shkp)->services & (SHK_UNCURSE)) &&
-			(shk_class_match(WEAPON_CLASS, shkp))) {
+			(ESHK(shkp)->shoptype == WEAPONSHOP || ESHK(shkp)->shoptype == GENERALSHOP)) {
 		any.a_int = 3;
 		add_menu(tmpwin, NO_GLYPH, &any , 'a', 0, ATR_NONE,
 				"Appraise", MENU_UNSELECTED);
@@ -1896,7 +1895,7 @@ shk_other_services()
 */
   	/* Weapon-works!  Only a weapon store. */
 	if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B|SHK_SPECIAL_C))
-			&& (shk_class_match(WEAPON_CLASS, shkp) == SHK_MATCH)
+			&& (ESHK(shkp)->shoptype == WEAPONSHOP)
 	) {
 		any.a_int = 4;
 		if (ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B))
@@ -1909,7 +1908,7 @@ shk_other_services()
   
   	/* Armor-works */
 	if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B))
-			 && (shk_class_match(ARMOR_CLASS, shkp) == SHK_MATCH)
+			 &&(ESHK(shkp)->shoptype == ARMORSHOP)
 	) {
 		any.a_int = 5;
 		add_menu(tmpwin, NO_GLYPH, &any , 'r', 0, ATR_NONE,
@@ -1918,10 +1917,11 @@ shk_other_services()
   
   	/* Charging: / ( = */
 	if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B)) &&
-			((shk_class_match(WAND_CLASS, shkp) == SHK_MATCH) ||
-			(shk_class_match(TOOL_CLASS, shkp) == SHK_MATCH) ||
-			(shk_class_match(SPBOOK_CLASS, shkp) == SHK_MATCH) ||
-			(shk_class_match(RING_CLASS, shkp) == SHK_MATCH))
+			((ESHK(shkp)->shoptype == WANDSHOP) ||
+			(ESHK(shkp)->shoptype == TOOLSHOP) ||
+			(ESHK(shkp)->shoptype == CANDLESHOP) ||
+			(ESHK(shkp)->shoptype == BOOKSHOP) ||
+			(ESHK(shkp)->shoptype == RINGSHOP))
 	) {
 		any.a_int = 6;
 		add_menu(tmpwin, NO_GLYPH, &any , 'c', 0, ATR_NONE,
@@ -4985,7 +4985,7 @@ shk_appraisal(slang, shkp)
 		verbalize("This weapon needs to be identified first!");
 		return;
 	} else */
-	if (shk_class_match(WEAPON_CLASS, shkp) == SHK_MATCH)
+	if (ESHK(shkp)->shoptype == WEAPONSHOP)
 	{
 		verbalize("Ok, %s, let's see what we have here.", slang);
 		guesswork = FALSE;
@@ -5400,13 +5400,13 @@ shk_charge(slang, shkp)
 	char invlet;            /* Inventory letter             */
 
 	/* What type of shop are we? */
-	if (shk_class_match(WAND_CLASS, shkp) == SHK_MATCH)
+	if (ESHK(shkp)->shoptype == WANDSHOP)
 		obj = getobj(wand_types, "charge");
-	else if (shk_class_match(TOOL_CLASS, shkp) == SHK_MATCH)
+	else if (ESHK(shkp)->shoptype == TOOLSHOP || ESHK(shkp)->shoptype == CANDLESHOP)
 		obj = getobj(tool_types, "charge");
-	else if (shk_class_match(RING_CLASS, shkp) == SHK_MATCH)
+	else if (ESHK(shkp)->shoptype == RINGSHOP)
 		obj = getobj(ring_types, "charge");
-	else if (shk_class_match(SPBOOK_CLASS, shkp) == SHK_MATCH)
+	else if (ESHK(shkp)->shoptype == BOOKSHOP)
 		obj = getobj(spbook_types, "charge");
 	if (!obj) return;
 

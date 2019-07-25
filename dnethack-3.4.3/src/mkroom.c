@@ -2247,13 +2247,13 @@ mkcamp(type)
 		
 		flood_fill_rm(x, y, nroom+ROOMOFFSET, TRUE, TRUE);
 		if(type == VALAVI_CAMP)
-			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, ARMORSHOP, TRUE);
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, CERAMICSHOP, TRUE);
 		else if(type == FORMIAN_CAMP1)
-			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, TOOLSHOP, TRUE);
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, PETSHOP, TRUE);
 		else if(type == FORMIAN_CAMP2)
-			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, POTIONSHOP, TRUE);
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, ACIDSHOP, TRUE);
 		else if(type == THRIAE_CAMP)
-			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, FOODSHOP, TRUE);
+			add_room(x-r+1, y-r+1, x+r-1, y+r-1, TRUE, JELLYSHOP, TRUE);
 		rooms[nroom - 1].irregular = TRUE;
 		
 		pathto = rn2(pathto);
@@ -3853,8 +3853,10 @@ mkshop()
 				mkisland();
 				return;
 			}
-			for(i=0; shtypes[i].name; i++)
-				if(*ep == def_oc_syms[(int)shtypes[i].symb])
+			/* note: shops >= UNIQUESHOP don't have valid class symbols, nor are generated randomly */
+			for(i=0; shtypes[i].name && i < (UNIQUESHOP - SHOPBASE); i++)
+				if(shtypes[i].iprobs[0].itype >= 0)
+				if(*ep == def_oc_syms[(int)shtypes[i].iprobs[0].itype])
 				    goto gottype;
 			if(*ep == 'g' || *ep == 'G')
 				i = 0;
@@ -3901,8 +3903,8 @@ gottype:
 	    /* big rooms cannot be wand or book shops,
 	     * - so make them general stores
 	     */
-	    if(isbig(sroom) && (shtypes[i].symb == WAND_CLASS
-				|| shtypes[i].symb == SPBOOK_CLASS)) i = 0;
+	    if(isbig(sroom) && (shtypes[i].shoptype == WANDSHOP
+				|| shtypes[i].shoptype == BOOKSHOP)) i = 0;
 	}
 	sroom->rtype = SHOPBASE + i;
 

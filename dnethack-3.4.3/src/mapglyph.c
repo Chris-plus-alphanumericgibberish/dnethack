@@ -291,22 +291,22 @@ unsigned *ospecial;
 							
 						}
 						if (offset >= S_vwall && offset <= S_hcdoor) {
-							if (*in_rooms(x,y,POTIONSHOP))
+							if (*in_rooms(x,y,JELLYSHOP))
 								color = CLR_YELLOW;
-							else if (*in_rooms(x,y,ARMORSHOP))
+							else if (*in_rooms(x,y,CERAMICSHOP))
 								color = CLR_BROWN;
-							else if (*in_rooms(x,y,TOOLSHOP))
+							else if (*in_rooms(x,y,PETSHOP))
 								color = CLR_BROWN;
-							else if (*in_rooms(x,y,FOODSHOP))
+							else if (*in_rooms(x,y,ACIDSHOP))
 								color = CLR_BROWN;
 						} else if (offset == S_drkroom || offset == S_litroom) {
-							if (*in_rooms(x,y,POTIONSHOP))
+							if (*in_rooms(x,y,JELLYSHOP))
 								color = (offset == S_drkroom) ? CLR_BROWN : CLR_YELLOW;
-							else if (*in_rooms(x,y,ARMORSHOP))
+							else if (*in_rooms(x,y,CERAMICSHOP))
 								color = (offset == S_drkroom) ? CLR_BLACK : CLR_BROWN;
-							else if (*in_rooms(x,y,TOOLSHOP))
+							else if (*in_rooms(x,y,PETSHOP))
 								color = (offset == S_drkroom) ? CLR_BLACK : CLR_BROWN;
-							else if (*in_rooms(x,y,FOODSHOP))
+							else if (*in_rooms(x,y,ACIDSHOP))
 								color = (offset == S_drkroom) ? CLR_BLACK : CLR_BROWN;
 						}
 					}

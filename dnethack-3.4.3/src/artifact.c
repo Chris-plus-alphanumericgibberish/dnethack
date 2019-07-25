@@ -5341,16 +5341,7 @@ arti_invoke(obj)
 				    typ = levl[bhitpos.x][bhitpos.y].typ;
 					
 				    if (typ == IRONBARS){
-						char numbars;
-						struct obj *obj;
-						You_hear("a sharp crack!");
-					    levl[bhitpos.x][bhitpos.y].typ = CORR;
-						for(numbars = d(2,4)-1; numbars > 0; numbars--){
-							obj = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
-						    obj->spe = 0;
-						    obj->cursed = obj->blessed = FALSE;
-						}
-					    newsym(bhitpos.x, bhitpos.y);
+						break_iron_bars(bhitpos.x, bhitpos.y, TRUE);
 				    }
 
 				    if (find_drawbridge(&x,&y))

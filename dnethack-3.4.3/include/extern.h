@@ -1491,6 +1491,7 @@ E boolean FDECL(onscary, (int,int,struct monst *));
 E void FDECL(monflee, (struct monst *, int, BOOLEAN_P, BOOLEAN_P));
 E int FDECL(dochug, (struct monst *));
 E int FDECL(m_move, (struct monst *,int));
+E void FDECL(break_iron_bars, (int, int, boolean));
 E void FDECL(dissolve_bars, (int,int));
 E boolean FDECL(closed_door, (int,int));
 E boolean FDECL(accessible, (int,int));
@@ -2720,8 +2721,12 @@ E int FDECL(weapon_dmg_roll, (struct attack *, boolean));
 E int FDECL(dmgval, (struct obj *,struct monst *, int));
 E struct obj *FDECL(select_rwep, (struct monst *));
 E struct obj *FDECL(select_hwep, (struct monst *));
+E struct obj *FDECL(select_pick, (struct monst *));
+E struct obj *FDECL(select_axe, (struct monst *));
 E void FDECL(possibly_unwield, (struct monst *,BOOLEAN_P));
 E int FDECL(mon_wield_item, (struct monst *));
+E void FDECL(setmwielded, (struct monst *, struct obj *, long));
+E void FDECL(setmnotwielded, (struct monst *, struct obj *));
 E void FDECL(init_mon_wield_item, (struct monst *));
 E int NDECL(abon);
 E int FDECL(dbon, (struct obj *));
@@ -2772,7 +2777,6 @@ E void FDECL(erode_obj, (struct obj *,BOOLEAN_P,BOOLEAN_P));
 E int FDECL(chwepon, (struct obj *,int));
 E int FDECL(welded, (struct obj *));
 E void FDECL(weldmsg, (struct obj *));
-E void FDECL(setmnotwielded, (struct monst *,struct obj *));
 
 /* ### windows.c ### */
 

@@ -1183,6 +1183,13 @@ candelabrum*
 	But ah, my foes, and oh, my friends -
 	It gives a lovely light. 
 		[ A Few Figs from Thistles, by Edna St. Vincent Millay ]
+candle of invocation
+	A magical candle that can be invoked while lit to open an
+	extra-planar gate. Said gate lasts only seconds once opened,
+	allowing for a single creature to pass through. The best-known
+	use for this gate is to seek audience from an angelic being,
+	though rumors exist of fools chasing their hearts' desires
+	or disturbing storied demons from their fortresses.
 candy bar
 	Only once a year, on his birthday, did Charlie Bucket ever
 	get to taste a bit of chocolate.  The whole family saved up
@@ -2500,6 +2507,16 @@ giant eel
 	rather than dead creatures and are not habitual eaters of
 	carrion.
 	    [ Freshwater Fishes of Canada, by Scott and Crossman ]
+effigy
+	An effigy is a representation of a specific person in the form of
+	sculpture or some other three-dimensional medium. The use of the
+	term is normally restricted to certain contexts in a somewhat
+	arbitrary way: recumbent effigies on tombs are so called, but
+	standing statues of individuals, or busts, are usually not.
+		[ Wikipedia, the free encyclopedia ]
+
+	This effigy is magical, and its self-immolation will cleanse
+	all varieties of curses afflicting the invoker.
 egg
 	But I asked why not keep it and let the hen sit on it till it
 	hatched, and then we could see what would come out of it.
@@ -5896,7 +5913,8 @@ mit*ra*
 		[ The Encyclopaedia of Myths and Legends of All
 			Nations, by Herbert Spencer Robinson and
 			Knox Wilson ]
-*mithril*
+*mithril coat*
+*mithril-coat*
 	_Mithril_!  All folk desired it.  It could be beaten like
 	copper, and polished like glass; and the Dwarves could make
 	of it a metal, light and yet harder than tempered steel.
@@ -7467,6 +7485,7 @@ razor vine
 	town of the stuff.
 		[ Planescape Monstrous Compendium II, by Rich Baker ]
 ~*invisibility
+~ring of wishes
 *ring
 ring of *
 	Three Rings for the Elven-kings under the sky,
@@ -7496,6 +7515,10 @@ ring of invisibility
 	his wife, with her help, he laid a hand on the king, murdered
 	him and took hold of the leadership."
 		[ The Republic, by Plato, translated by James Adam ]
+ring of wishes
+	A simple black ring, decorated only by a cluster of stars. Each
+	star is an indicator of the magics enchanted into the ring, 
+	which the wearer can then invoke to summon a djinni. 
 robe
 	Robes are the only garments, apart from Shirts, ever to have
 	sleeves.  They have three uses:
@@ -9078,6 +9101,11 @@ unicorn horn
 	Shall hear an awful voice, and find
 	Foam in the courts of heaven.
 		[ The Ballad of the White Horse, by G. K. Chesterton ]
+upgrade kit
+	An assortment of tools, components, and other miscellaneous things
+	that can be used to do anything from upgrading clockwork automatons 
+	to tripling the size of some plate mail armor. No prior skill is
+	required -- just open up the kit and go!
 uranium imp
 	Despite being imbued with reality-warping powers, these trouble-
 	making servants of darkness seem unaware of their true power, and

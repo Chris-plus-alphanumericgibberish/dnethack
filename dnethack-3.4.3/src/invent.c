@@ -2440,12 +2440,14 @@ winid *datawin;
 
 		/* Object classes currently with no special messages here: amulets. */
 	if (olet == WEAPON_CLASS || (olet == TOOL_CLASS && oc.oc_skill)) {
-		boolean otyp_is_launcher = ((oc.oc_skill >= P_BOW && oc.oc_skill <= P_CROSSBOW) || otyp != ATLATL);
+		boolean otyp_is_launcher = (((oc.oc_skill >= P_BOW && oc.oc_skill <= P_CROSSBOW) || otyp == ATLATL) &&
+			(otyp != HAND_BLASTER && otyp != ARM_BLASTER && otyp != MASS_SHADOW_PISTOL && otyp != CUTTING_LASER && otyp != RAYGUN));
 		if (oc.oc_skill >= 0) {
 			if (obj) {
 				Sprintf(buf, "%s-handed %s%s%s",
-					(oc.oc_bimanual ? "Two" : "Single"), (is_weptool(obj) ? "-tool" : ""),
+					(oc.oc_bimanual ? "Two" : "Single"), 
 					(otyp_is_launcher ? "launcher" : "weapon"),
+					(is_weptool(obj) && !otyp_is_launcher ? "-tool" : ""),
 					(oc.oc_bimanual == bimanual(obj, youmonst.data) ? "." :
 					bimanual(obj, youmonst.data) ? ", but large enough you actually need two hands."
 					: ", but you can wield it one-handed.")

@@ -1367,19 +1367,7 @@ struct obj *obj;			/* 2nd arg to fhitm/fhito */
 		}
 		typ = levl[bhitpos.x][bhitpos.y].typ;
 		if (typ == IRONBARS && obj->otyp==WAN_STRIKING){
-			char numbars;
-			struct obj *obj;
-			You_hear("a sharp crack!");
-		    levl[bhitpos.x][bhitpos.y].typ = CORR;
-			for(numbars = d(2,4)-1; numbars > 0; numbars--){
-				obj = mksobj_at(BAR, bhitpos.x, bhitpos.y, FALSE, FALSE);
-				if(Is_illregrd(&u.uz))
-					obj->obj_material = METAL;
-			    obj->spe = 0;
-			    obj->cursed = obj->blessed = FALSE;
-				fix_object(obj);
-			}
-		    newsym(bhitpos.x, bhitpos.y);
+			break_iron_bars(bhitpos.x, bhitpos.y, TRUE);
 		}
 		if(IS_DOOR(typ) || typ == SDOOR) {
 		    switch (obj->otyp) {
@@ -2369,6 +2357,9 @@ museamnesia:
 			     obj->otyp == LOADSTONE) {
 			    if(mtmp->mconf) blessorcurse(obj, 2);
 			    else uncurse(obj);
+				/* the monster thinks its weapon is uncursed now, which might not be true */
+				if (obj == MON_WEP(mtmp))
+					mtmp->weapon_check = NEED_WEAPON;
 			}
 		    }
 		}

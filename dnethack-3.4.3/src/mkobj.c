@@ -7,6 +7,7 @@
 
 STATIC_DCL void FDECL(mkbox_cnts,(struct obj *));
 STATIC_DCL void FDECL(obj_timer_checks,(struct obj *, XCHAR_P, XCHAR_P, int));
+STATIC_DCL void FDECL(handle_material_specials, (struct obj *, int, int));
 STATIC_DCL void FDECL(init_obj_material, (struct obj *));
 #ifdef OVL1
 STATIC_DCL void FDECL(container_weight, (struct obj *));
@@ -1695,6 +1696,8 @@ struct obj* obj;
 	case HARMONIUM_BOOTS:
 	case ELVEN_MITHRIL_COAT:
 	case DWARVISH_MITHRIL_COAT:
+	case BROKEN_ANDROID:
+	case BROKEN_GYNOID:
 		return NULL;
 		/* Any other cases for specific object types go here. */
 	case SHIELD_OF_REFLECTION:
@@ -1816,6 +1819,37 @@ boolean check_all;
 		set_material(obj, random_mat_list->iclass);
 }
 
+
+/* Some variables of objects are special because of its material
+ * Called in init_obj_material to initialize objects, and in
+ * set_material to handle changes to material
+ * 
+ */
+void
+handle_material_specials(obj, oldmat, newmat)
+struct obj* obj;
+int oldmat, newmat;
+{
+	/* start the timer for shadowsteel objects */
+	/* is_evaporable() is no good because we also need to ask using the previous material state */
+	if (newmat == SHADOWSTEEL && oldmat != SHADOWSTEEL){
+		start_timer(1, TIMER_OBJECT,
+			LIGHT_DAMAGE, (genericptr_t)obj);
+	}
+	else if (oldmat == SHADOWSTEEL) {/* Or turn it off, if the object used to be made of shadowsteel.*/
+		stop_timer(LIGHT_DAMAGE, (genericptr_t)obj);
+	}
+	/* set random gemstone type for valid gemstone objects */
+	if (!obj->ovar1 && newmat == GEMSTONE && oldmat != GEMSTONE && obj->oclass != GEM_CLASS && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
+		do{
+			obj->ovar1 = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
+		} while (obj->ovar1 == OBSIDIAN);
+	}
+	else if (oldmat == GEMSTONE && newmat != GEMSTONE && obj->oclass != GEM_CLASS && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
+		obj->ovar1 = 0;	/* and reset if changing away from gemstone*/
+	}
+}
+
 /* Initialize the material field of an object
  * Called on object creation, and can be called during
  *   wishing to re-randomize the material of an object
@@ -1830,6 +1864,9 @@ struct obj* obj;
 	/* start by setting the material to its default */
 	obj->obj_material = objects[obj->otyp].oc_material;
 
+	/* initialize special properties of materials like shadowsteel timer and gemstone type */
+	handle_material_specials(obj, 0, obj->obj_material);
+
 	/* randomized materials */
 	random_mat_list = material_list(obj);
 	if (random_mat_list) {
@@ -1842,18 +1879,6 @@ struct obj* obj;
 		}
 		if (random_mat_list->iclass) /* a 0 indicates to use default material */
 			set_material(obj, random_mat_list->iclass);
-	}
-
-	/* start the timer for shadowsteel objects */
-	if (is_evaporable(obj)){
-		start_timer(1, TIMER_OBJECT,
-			LIGHT_DAMAGE, (genericptr_t)obj);
-	}
-	/* set random gemstone type for valid gemstone objects */
-	if (!obj->ovar1 && obj->oclass != GEM_CLASS && obj->obj_material == GEMSTONE && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
-		do{
-			obj->ovar1 = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
-		} while (obj->ovar1 == OBSIDIAN);
 	}
 	return;
 }
@@ -2111,24 +2136,9 @@ int mat;
 	}
 	//Silver bell should resist
 	
-	/* start the timer for shadowsteel objects */
-	if (is_evaporable(obj)){
-		start_timer(1, TIMER_OBJECT,
-			LIGHT_DAMAGE, (genericptr_t)obj);
-	}
-	else if(oldmat == SHADOWSTEEL) {/* or turn it off, if the object used to be made of shadowsteel 
-									 * the asymmetry isn't nice but obj->obj_material was already changed */
-		stop_timer(LIGHT_DAMAGE, (genericptr_t)obj);
-	}
-	/* set random gemstone type for valid gemstone objects */
-	if (!obj->ovar1 && mat == GEMSTONE && obj->oclass != GEM_CLASS && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
-		do{
-			obj->ovar1 = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
-		} while (obj->ovar1 == OBSIDIAN);
-	}
-	else if (obj->ovar1 && oldmat == GEMSTONE && obj->oclass != GEM_CLASS && !obj_type_uses_ovar1(obj) && !obj_art_uses_ovar1(obj)) {
-		obj->ovar1 = 0;	/* and reset if changing away from gemstone*/
-	}
+	/* cover special properties of materials like shadowsteel timer and gemstone type */
+	handle_material_specials(obj, oldmat, obj->obj_material);
+
 	fix_object(obj);
 	
 	if(owner == &youmonst){

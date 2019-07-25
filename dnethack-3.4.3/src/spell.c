@@ -4655,8 +4655,6 @@ int *spell_no;
 	end_menu(tmpwin, buf);
 
 	how = PICK_ONE;
-	if (splaction == SPELLMENU_VIEW && spellid(1) == NO_SPELL)
-	    how = PICK_NONE;	/* only one spell => nothing to swap with */
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
 
@@ -4666,7 +4664,8 @@ int *spell_no;
 		if (selected[0].item.a_int < 0){
 			return dospellmenu(selected[0].item.a_int, spell_no);
 		}
-		else {
+		else if (!(splaction == SPELLMENU_VIEW && spellid(1) == NO_SPELL)) {
+			/* we aren't attempting to rearrange spells with only 1 spell known */
 			switch (splaction)
 			{
 			case SPELLMENU_VIEW:
@@ -4702,9 +4701,9 @@ int *spell_no;
 				spl_book[s_no] = spl_tmp;
 				return dospellmenu(SPELLMENU_VIEW, spell_no);
 			}
-			}
-		}
-	}
+			} // switch(splaction)
+		} // doing something allowable
+	} // menu item was selected
 	return FALSE;
 }
 

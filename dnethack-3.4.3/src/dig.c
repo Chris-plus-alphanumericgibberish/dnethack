@@ -437,23 +437,17 @@ dig()
 				}
 				for(numsticks = d(2,4)-1; numsticks > 0; numsticks--){
 					staff = mksobj_at(rn2(2) ? QUARTERSTAFF : CLUB, dpx, dpy, FALSE, FALSE);
+					set_material(staff, WOOD);
 					staff->spe = 0;
 					staff->cursed = staff->blessed = FALSE;
 				}
 				if(!flags.mon_moving && u.sealsActive&SEAL_EDEN) unbind(SEAL_EDEN,TRUE);
 			} else if (lev->typ == IRONBARS) {
-				int numbars;
-				struct obj *bars;
 				if(digitem->otyp == SEISMIC_HAMMER)
 					digtxt = "You shatter the bars.";
 				else
 					digtxt = "You cut through the bars.";
-			    lev->typ = ROOM;
-				for(numbars = d(2,4)-1; numbars > 0; numbars--){
-					bars = mksobj_at(BAR, dpx, dpy, FALSE, FALSE);
-					bars->spe = 0;
-					bars->cursed = bars->blessed = FALSE;
-				}
+				break_iron_bars(dpx, dpy, FALSE);
 			} else {
 				struct obj *otmp;
 				if(!is_lightsaber(digitem)){
@@ -463,11 +457,11 @@ dig()
 					} else {
 						if(Is_belial_level(&u.uz)){
 							otmp = mksobj_at(DROVEN_DAGGER, dpx, dpy, FALSE, FALSE);
+							set_material(otmp, OBSIDIAN_MT);
 						} else {
 							otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
 						}
-						otmp->quan = 20L+rnd(20);
-						otmp->owt = weight(otmp);
+						set_obj_quan(otmp, rn1(20, 20));
 					}
 				}
 				if(digitem->otyp == SEISMIC_HAMMER)
@@ -495,11 +489,11 @@ dig()
 			if(!is_lightsaber(digitem)){
 				if(Is_belial_level(&u.uz)){
 					otmp = mksobj_at(DROVEN_DAGGER, dpx, dpy, FALSE, FALSE);
+					set_material(otmp, OBSIDIAN_MT);
 				} else {
 					otmp = mksobj_at(ROCK, dpx, dpy, FALSE, FALSE);
 				}
-				otmp->quan = 20L+rnd(20);
-				otmp->owt = weight(otmp);
+				set_obj_quan(otmp, rn1(20, 20));
 			}
 			digtxt = "You make an opening in the wall.";
 		} else if(lev->typ == SDOOR) {
@@ -1356,8 +1350,7 @@ fakerocktrap()
 	struct obj *otmp;
 
 	otmp = mksobj_at(ROCK, u.ux, u.uy, TRUE, FALSE);
-	otmp->quan = 1L;
-	otmp->owt = weight(otmp);
+	set_obj_quan(otmp, 1);
 
 	pline("A trap door in %s opens and %s falls on your %s!",
 	  the(ceiling(u.ux,u.uy)),
@@ -1885,16 +1878,17 @@ register struct monst *mtmp;
 	    }
 		if(Is_belial_level(&u.uz)){
 			otmp = mksobj_at(DROVEN_DAGGER, mtmp->mx, mtmp->my, FALSE, FALSE);
+			set_material(otmp, OBSIDIAN_MT);
 		} else {
 			otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
 		}
-		otmp->quan = 20L+rnd(20);
-		otmp->owt = weight(otmp);
+		set_obj_quan(otmp, rn1(20, 20));
 	} else if (IS_TREE(here->typ)) {
 		int numsticks;
 	    here->typ = ROOM;
 		for(numsticks = d(2,4)-1; numsticks > 0; numsticks--){
 			otmp = mksobj_at(rn2(2) ? QUARTERSTAFF : CLUB, mtmp->mx, mtmp->my, FALSE, FALSE);
+			set_material(otmp, WOOD);
 			otmp->spe = 0;
 			otmp->cursed = otmp->blessed = FALSE;
 		}
@@ -1904,11 +1898,11 @@ register struct monst *mtmp;
 		else {
 			if(Is_belial_level(&u.uz)){
 				otmp = mksobj_at(DROVEN_DAGGER, mtmp->mx, mtmp->my, FALSE, FALSE);
+				set_material(otmp, OBSIDIAN_MT);
 			} else {
 				otmp = mksobj_at(ROCK, mtmp->mx, mtmp->my, FALSE, FALSE);
 			}
-			otmp->quan = 20L+rnd(20);
-			otmp->owt = weight(otmp);
+			set_obj_quan(otmp, rn1(20, 20));
 		}
 	}
 	newsym(mtmp->mx, mtmp->my);

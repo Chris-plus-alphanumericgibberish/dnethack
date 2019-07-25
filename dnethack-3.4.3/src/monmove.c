@@ -2022,8 +2022,12 @@ not_special:
 		} else if (!(mw_tmp = MON_WEP(mtmp)) || !is_pick(mw_tmp)) {
 		    mtmp->weapon_check = NEED_PICK_AXE;
 		}
-		if (mtmp->weapon_check >= NEED_PICK_AXE && mon_wield_item(mtmp))
-		    return(3);
+		if (mtmp->weapon_check >= NEED_PICK_AXE) {
+			if (mon_wield_item(mtmp))
+				return(3);	/* did not move, spent turn wielding item */
+			else
+				return(0);	/* can't move into that position, but didn't take time wielding item */
+		}
 	    }
 	    /* If ALLOW_U is set, either it's trying to attack you, or it
 	     * thinks it is.  In either case, attack this spot in preference to
@@ -2298,6 +2302,34 @@ postmov:
 
 #endif /* OVL0 */
 #ifdef OVL2
+
+/* break iron bars at the given location */
+void
+break_iron_bars(x, y, heard)
+int x, y;			/* coordinates of iron bars */
+boolean heard;		/* print You_hear() message? */
+{
+	int numbars;
+	struct obj *obj;
+
+	if (levl[x][y].typ != IRONBARS) {
+		impossible("Breaking non-existant iron bars @ (%d,%d)", x, y);
+		return;
+	}
+
+	if (heard)
+		You_hear("a sharp crack!");
+	levl[x][y].typ = (Is_special(&u.uz) || *in_rooms(x, y, 0)) ? ROOM : CORR;
+
+	for (numbars = d(2, 4) - 1; numbars > 0; numbars--){
+		obj = mksobj_at(BAR, x, y, FALSE, FALSE);
+		set_material(obj, Is_illregrd(&u.uz) ? METAL : IRON);
+		obj->spe = 0;
+		obj->cursed = obj->blessed = FALSE;
+	}
+	newsym(x, y);
+	return;
+}
 
 //Malcolm Ryan's bar eating patch
 void

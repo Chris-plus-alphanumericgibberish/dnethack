@@ -1205,7 +1205,6 @@ newdogpos:
 		    return 1;
 		if (((IS_ROCK(levl[nix][niy].typ) && may_dig(nix,niy)) ||
 		     closed_door(nix, niy)) &&
-		    mtmp->weapon_check != NO_WEAPON_WANTED &&
 		    tunnels(mtmp->data) && needspick(mtmp->data)) {
 		    if (closed_door(nix, niy)) {
 			if (!(mw_tmp = MON_WEP(mtmp)) ||
@@ -1217,9 +1216,11 @@ newdogpos:
 		    } else if (!(mw_tmp = MON_WEP(mtmp)) || !is_pick(mw_tmp)) {
 			mtmp->weapon_check = NEED_PICK_AXE;
 		    }
-		    if (mtmp->weapon_check >= NEED_PICK_AXE &&
-			mon_wield_item(mtmp))
-			return 0;
+			if (mtmp->weapon_check >= NEED_PICK_AXE) {
+				mon_wield_item(mtmp);
+				return 0;	/* did not move. Maybe spent time wielding,
+							but definitely does not just move without required item */
+			}
 		}
 		/* insert a worm_move() if worms ever begin to eat things */
 		remove_monster(omx, omy);

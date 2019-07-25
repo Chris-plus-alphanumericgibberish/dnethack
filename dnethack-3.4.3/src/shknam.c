@@ -199,39 +199,39 @@ static const char * const shkmusic[] = {
 
 const struct shclass shtypes[] = {
 #ifdef BARD
-	{"general store", RANDOM_CLASS, 41,
+	{"general store", GENERALSHOP, 41,
 #else
-	{"general store", RANDOM_CLASS, 44,
+	{"general store", GENERALSHOP, 44,
 #endif
 	    D_SHOP, {{100, RANDOM_CLASS}, {0, 0}, {0, 0}}, shkgeneral},
-	{"used armor dealership", ARMOR_CLASS, 14,
+	{"used armor dealership", ARMORSHOP, 14,
 	    D_SHOP, {{90, ARMOR_CLASS}, {10, WEAPON_CLASS}, {0, 0}},
 	     shkarmors},
-	{"second-hand bookstore", SCROLL_CLASS, 10, D_SHOP,
+	{"second-hand bookstore", SCROLLSHOP, 10, D_SHOP,
 	    {{90, SCROLL_CLASS}, {10, SPBOOK_CLASS}, {0, 0}}, shkbooks},
-	{"liquor emporium", POTION_CLASS, 10, D_SHOP,
+	{"liquor emporium", POTIONSHOP, 10, D_SHOP,
 	    {{100, POTION_CLASS}, {0, 0}, {0, 0}}, shkliquors},
-	{"antique weapons outlet", WEAPON_CLASS, 5, D_SHOP,
+	{"antique weapons outlet", WEAPONSHOP, 5, D_SHOP,
 	    {{90, WEAPON_CLASS}, {10, ARMOR_CLASS}, {0, 0}}, shkweapons},
-	{"delicatessen", FOOD_CLASS, 5, D_SHOP,
+	{"delicatessen", FOODSHOP, 5, D_SHOP,
 	    {{83, FOOD_CLASS}, {5, -POT_FRUIT_JUICE}, {4, -POT_BOOZE},
 	     {5, -POT_WATER}, {3, -ICE_BOX}}, shkfoods},
-	{"jewelers", RING_CLASS, 3, D_SHOP,
+	{"jewelers", RINGSHOP, 3, D_SHOP,
 	    {{85, RING_CLASS}, {10, GEM_CLASS}, {5, AMULET_CLASS}, {0, 0}},
 	    shkrings},
-	{"quality apparel and accessories", WAND_CLASS, 3, D_SHOP,
+	{"quality apparel and accessories", WANDSHOP, 3, D_SHOP,
 	    {{90, WAND_CLASS}, {5, -GLOVES}, {5, -ELVEN_CLOAK}, {0, 0}},
 	     shkwands},
-	{"hardware store", TOOL_CLASS, 3, D_SHOP,
+	{"hardware store", TOOLSHOP, 3, D_SHOP,
 	    {{100, TOOL_CLASS}, {0, 0}, {0, 0}}, shktools},
 	/* Actually shktools is ignored; the code specifically chooses a
 	 * random implementor name (along with candle shops having
 	 * random shopkeepers)
 	 */
-	{"rare books", SPBOOK_CLASS, 3, D_SHOP,
+	{"rare books", BOOKSHOP, 3, D_SHOP,
 	    {{90, SPBOOK_CLASS}, {10, SCROLL_CLASS}, {0, 0}}, shkbooks},
 #ifdef BARD
-	{"music shop", TOOL_CLASS, 3, D_SHOP,
+	{"music shop", MUSICSHOP, 3, D_SHOP,
 	    {{32, -FLUTE}, {32, -HARP}, {32, -DRUM}, 
 	     {2, -MAGIC_HARP}, {2, -MAGIC_FLUTE}},
 	     shkmusic},
@@ -240,33 +240,26 @@ const struct shclass shtypes[] = {
 	 * probability of zero.  They are only created via the special level
 	 * loader.
 	 */
-	{"lighting store", TOOL_CLASS, 0, D_SHOP,
+	{"lighting store", CANDLESHOP, 0, D_SHOP,
 	    {{32, -WAX_CANDLE}, {50, -TALLOW_CANDLE},
 	     {5, -LANTERN}, {10, -OIL_LAMP}, {3, -MAGIC_LAMP}}, shklight},
-	{(char *)0, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
-};
-
-#define JELLY_SHOP 0
-#define ACID_SHOP 1
-#define PET_SHOP 2
-#define CERAMIC_SHOP 3
-const struct shclass special_shtypes[] = {
-	{"hive outpost", FOOD_CLASS, 0, D_SHOP, 
+	/* Arcadian outposts */
+	{"hive outpost", JELLYSHOP, 0, D_SHOP, 
 	    {{12, -LUMP_OF_ROYAL_JELLY}, {12, -LUMP_OF_SOLDIER_S_JELLY}, 
 		 {12, -LUMP_OF_DANCER_S_JELLY},
 	     {12, -LUMP_OF_PHILOSOPHER_S_JELLY}, {12, -LUMP_OF_PRIESTESS_S_JELLY}, 
 		 {12, -LUMP_OF_RHETOR_S_JELLY}, 
 		 {14, -HONEYCOMB}, {14, -POT_GAIN_ABILITY}},
 	shkfoods},
-	{"nest outpost", POTION_CLASS, 10, D_SHOP,
+	{"nest outpost", ACIDSHOP, 0, D_SHOP,
 	    {{40, -POT_ACID}, {40, -POT_OIL}, 
 		 {20, -POT_BOOZE}},
 	shkliquors},
-	{"garrison outpost", TOOL_CLASS, 10, D_SHOP,
+	{"garrison outpost", PETSHOP, 0, D_SHOP,
 	    {{95, -FIGURINE}, {5, -LEASH}},
 	shktools},
-	{"mound outpost", ARMOR_CLASS, 10, D_SHOP,
-	    {{40, ARMOR_CLASS}, {20, -SHEPHERD_S_CROOK}, 
+	{"mound outpost", CERAMICSHOP, 0, D_SHOP,
+	    {{40, ARMOR_CLASS}, {20, -SHEPHERD_S_CROOK}, /* note: uses custom list for armor_class */
 		 {20, -SLIME_MOLD}, {20, -FIGURINE}
 		},
 	shkarmors},
@@ -326,94 +319,65 @@ int sx, sy;
 	struct obj *curobj = 0;
 
 	if (rn2(100) < depth(&u.uz) && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)) &&
-		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC,Inhell ? G_HELL : G_NOHELL)) &&
-		(mtmp = makemon(ptr,sx,sy,NO_MM_FLAGS)) != 0) {
-	    /* note: makemon will set the mimic symbol to a shop item */
-	    if (rn2(10) >= depth(&u.uz)) {
-		mtmp->m_ap_type = M_AP_OBJECT;
-		mtmp->mappearance = STRANGE_OBJECT;
-	    }
-	} else if(In_law(&u.uz ) && (shp->symb == POTION_CLASS || shp->symb == FOOD_CLASS || shp->symb == TOOL_CLASS || shp->symb == ARMOR_CLASS)){
-		if(shp->symb == POTION_CLASS){
-			atype = get_special_shop_item(JELLY_SHOP);
-			if (atype < 0)
-				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
-			else
-				curobj = mkobj_at(atype, sx, sy, TRUE);
-			
-			if(curobj){
-				curobj->shopOwned = TRUE;
+		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC, Inhell ? G_HELL : G_NOHELL)) &&
+		(mtmp = makemon(ptr, sx, sy, NO_MM_FLAGS)) != 0) {
+		/* note: makemon will set the mimic symbol to a shop item */
+		if (rn2(10) >= depth(&u.uz)) {
+			mtmp->m_ap_type = M_AP_OBJECT;
+			mtmp->mappearance = STRANGE_OBJECT;
+		}
+	}
+	else {
+		atype = get_shop_item(shp - shtypes);
+		if (atype < 0){
+			curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
+		}
+		else {
+			curobj = mkobj_at(atype, sx, sy, TRUE);
+		}
+
+		if (curobj){
+			curobj->shopOwned = TRUE;
+
+			/* special cases below... */
+			if (shp->shoptype == PETSHOP && curobj->otyp == FIGURINE){
+				curobj->corpsenm = rn2(100) < 40 ? PM_MYRMIDON_HOPLITE :
+					rn2(60) < 30 ? PM_MYRMIDON_LOCHIAS :
+					rn2(30) < 10 ? PM_MYRMIDON_YPOLOCHAGOS :
+					rn2(20) < 5 ? PM_MYRMIDON_LOCHAGOS :
+					PM_FORMIAN_CRUSHER;
+				bless(curobj);
 			}
-		} else if(shp->symb == FOOD_CLASS){
-			atype = get_special_shop_item(ACID_SHOP);
-			if (atype < 0)
-				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
-			else
-				curobj = mkobj_at(atype, sx, sy, TRUE);
-			
-			if(curobj){
-				curobj->shopOwned = TRUE;
-			}
-		} else if(shp->symb == TOOL_CLASS){
-			atype = get_special_shop_item(PET_SHOP);
-			if (atype < 0)
-				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
-			else
-				curobj = mkobj_at(atype, sx, sy, TRUE);
-			
-			if(curobj){
-				curobj->shopOwned = TRUE;
-				if(curobj->otyp == FIGURINE){
-					curobj->corpsenm = rn2(100) < 40 ? PM_MYRMIDON_HOPLITE : 
-										rn2(60) < 30 ? PM_MYRMIDON_LOCHIAS :
-										rn2(30) < 10 ? PM_MYRMIDON_YPOLOCHAGOS : 
-										rn2(20) < 5 ? PM_MYRMIDON_LOCHAGOS :
-										PM_FORMIAN_CRUSHER;
-					bless(curobj);
-				}
-			}
-		} else if(shp->symb == ARMOR_CLASS){
-			atype = get_special_shop_item(CERAMIC_SHOP);
-			if (atype < 0){
-				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
-			} else {
-				if(atype != ARMOR_CLASS)
-					curobj = mkobj_at(atype, sx, sy, TRUE);
-				else {
-					curobj = mksobj_at(valavi_armors[rn2(SIZE(valavi_armors))], sx, sy, TRUE, TRUE);
-					if(curobj){
-						if(curobj->obj_material == IRON || curobj->obj_material == GOLD)
-							curobj->obj_material = MINERAL;
-						else if(curobj->obj_material == CLOTH)
-							curobj->oproperties = OPROP_WOOL;
-						
-						if(curobj->otyp == PLATE_MAIL)
-							curobj->oproperties = OPROP_WOOL;
+			if (shp->shoptype == CERAMICSHOP) {
+				if (curobj->oclass == ARMOR_CLASS && !curobj->oartifact) {
+					/* we actually want to completely replace that object. */
+					struct obj * newobj = mksobj_at(valavi_armors[rn2(SIZE(valavi_armors))], sx, sy, TRUE, TRUE);
+					newobj->shopOwned = TRUE;
+					if (newobj) {
+						if (is_metallic(newobj) && !newobj->oartifact)
+							set_material(newobj, MINERAL);
+						else if (newobj->obj_material == CLOTH)
+							newobj->oproperties = OPROP_WOOL;
+
+						if (newobj->otyp == PLATE_MAIL)
+							newobj->oproperties = OPROP_WOOL;
+
+						/* replace curobj with newobj */
+						delobj(curobj);
+						/* assign the new object to the curobj pointer */
+						curobj = newobj;
 					}
 				}
-			}
-			
-			if(curobj){
-				curobj->shopOwned = TRUE;
-				if(curobj->otyp == SLIME_MOLD){
+				else if (curobj->otyp == SLIME_MOLD){
 					if(rn2(2)) curobj->spe = fruitadd("lump of wood");
 					else curobj->spe = fruitadd("mutton roast");
 				}
-				if(curobj->otyp == FIGURINE){
-					curobj->corpsenm = !rn2(3) ? PM_LAMB : rn2(2) ? PM_SHEEP : PM_DIRE_SHEEP; 
+				else if (curobj->otyp == FIGURINE){
+					curobj->corpsenm = !rn2(3) ? PM_LAMB : rn2(2) ? PM_SHEEP : PM_DIRE_SHEEP;
 					bless(curobj);
 				}
 			}
-		}
-	} else {
-	    atype = get_shop_item(shp - shtypes);
-	    if (atype < 0)
-			curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
-	    else
-			curobj = mkobj_at(atype, sx, sy, TRUE);
-		
-		if(curobj){
-			curobj->shopOwned = TRUE;
+			/*end special cases*/
 		}
 	}
 }
@@ -574,13 +538,13 @@ struct mkroom	*sroom;
 	if(In_outlands(&u.uz) && !Is_gatetown(&u.uz))
 		newcham(shk, &mons[PM_PLUMACH_RILMANI], FALSE, FALSE);
 	else if(In_law(&u.uz)){
-		if((shk_class_match(FOOD_CLASS, shk)) == SHK_MATCH)
-			newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
-		else if((shk_class_match(POTION_CLASS, shk)) == SHK_MATCH)
+		if (ESHK(shk)->shoptype == JELLYSHOP)
 			newcham(shk, &mons[PM_THRIAE], FALSE, FALSE);
-		else if((shk_class_match(TOOL_CLASS, shk)) == SHK_MATCH)
+		else if (ESHK(shk)->shoptype == ACIDSHOP)
 			newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
-		else if((shk_class_match(ARMOR_CLASS, shk)) == SHK_MATCH)
+		else if (ESHK(shk)->shoptype == PETSHOP)
+			newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
+		else if (ESHK(shk)->shoptype == CERAMICSHOP)
 			newcham(shk, &mons[PM_VALAVI], FALSE, FALSE);
 	}
 	
@@ -679,19 +643,20 @@ struct monst *shk;
 
 	if (!rn2(3)) ESHK(shk)->services |= SHK_UNCURSE;
 
-	if (!rn2(3) && shk_class_match(WEAPON_CLASS, shk))
+	if (!rn2(3) && (ESHK(shk)->shoptype == WEAPONSHOP || ESHK(shk)->shoptype == GENERALSHOP))
 		ESHK(shk)->services |= SHK_APPRAISE;
 
-	if ((shk_class_match(WEAPON_CLASS, shk) == SHK_MATCH) ||
-	(shk_class_match(ARMOR_CLASS, shk) == SHK_MATCH) ||
-	(shk_class_match(WAND_CLASS, shk) == SHK_MATCH) ||
-	(shk_class_match(TOOL_CLASS, shk) == SHK_MATCH) ||
-	(shk_class_match(SPBOOK_CLASS, shk) == SHK_MATCH) ||
-	(shk_class_match(RING_CLASS, shk) == SHK_MATCH)) {
+	if ((ESHK(shk)->shoptype == WEAPONSHOP) ||
+		(ESHK(shk)->shoptype == ARMORSHOP) ||
+		(ESHK(shk)->shoptype == WANDSHOP) ||
+		(ESHK(shk)->shoptype == TOOLSHOP) ||
+		(ESHK(shk)->shoptype == CANDLESHOP) ||
+		(ESHK(shk)->shoptype == BOOKSHOP) ||
+		(ESHK(shk)->shoptype == RINGSHOP)) {
 		if (!rn2(4/*5*/)) ESHK(shk)->services |= SHK_SPECIAL_A;
 		if (!rn2(4/*5*/)) ESHK(shk)->services |= SHK_SPECIAL_B;
 	}
-	if (!rn2(4/*5*/) && (shk_class_match(WEAPON_CLASS, shk) == SHK_MATCH))
+	if (!rn2(4/*5*/) && (ESHK(shk)->shoptype == WEAPONSHOP))
 	 ESHK(shk)->services |= SHK_SPECIAL_C;
 
 	return;
@@ -712,7 +677,7 @@ struct obj *obj;
 	
 	if(obj->ostolen || ESHK(shkp)->pbanned) return FALSE;
 
-    if (shp->symb == RANDOM_CLASS) return TRUE;
+    if (shp->shoptype == GENERALSHOP) return TRUE;
     else for (i = 0; i < SIZE(shtypes[0].iprobs) && shp->iprobs[i].iprob; i++){
 		if (shp->iprobs[i].itype < 0 ?
 			shp->iprobs[i].itype == - obj->otyp :
@@ -738,21 +703,6 @@ get_shop_item(type)
 int type;
 {
 	const struct shclass *shp = shtypes+type;
-	register int i,j;
-
-	/* select an appropriate object type at random */
-	for(j = rnd(100), i = 0; (j -= shp->iprobs[i].iprob) > 0; i++)
-		continue;
-
-	return shp->iprobs[i].itype;
-}
-
-/* positive value: class; negative value: specific object type */
-int
-get_special_shop_item(type)
-int type;
-{
-	const struct shclass *shp = &(special_shtypes[type]);
 	register int i,j;
 
 	/* select an appropriate object type at random */

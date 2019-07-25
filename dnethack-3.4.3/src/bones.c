@@ -75,6 +75,11 @@ boolean restore;
 			*ONAME(otmp) = '\0';
 		} else if (otmp->oartifact && restore)
 			artifact_exists(otmp,ONAME(otmp),TRUE);
+		if (restore) {
+			/* rings and wands' material should always match their description */
+			if (otmp->oclass == RING_CLASS || otmp->oclass == WAND_CLASS)
+				otmp->obj_material = objects[otmp->otyp].oc_material;
+		}
 		if (!restore) {
 			/* do not zero out o_ids for ghost levels anymore */
 
