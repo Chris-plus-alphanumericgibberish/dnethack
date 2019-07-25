@@ -600,8 +600,14 @@ you_regen_pw()
 			u.uen = u.uenmax;
 	}
 	
-	//Naen passive bonus only partially applies to androids
-	per30 += u.unaen;
+	//Naen passive bonus only partially applies to androids and incantifiers
+	if(Race_if(PM_INCANTIFIER)){
+		if(per30 < 0)
+			per30 += u.unaen;
+		if(per30 > 0)
+			per30 = 0;
+	}
+	else per30 += u.unaen;
 	
 	//Androids only regen power while asleep, but allow their rate to offset spell maintenance
 	if(uandroid && !u.usleep && per30 > 0)
