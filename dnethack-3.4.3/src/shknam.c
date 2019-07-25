@@ -181,6 +181,30 @@ static const char * const shkmusic[] = {
 };
 #endif
 
+static const char * const shkbee[] = {
+    /* Bee scientific names */
+    "Apis", "Mellifera", "Cerana", "Dorsata", "Andreniformis",
+	"Florea", "Nearctica","Nigrocincta",
+    0
+};
+static const char * const shkant[] = {
+    /* Ant */
+    "Crematogaster", "Linepithema", "Humile", "Pheidole", "Nylanderia",
+	"Pubens", "Camponotus","Lasius","Alienus" /*Aliens in the cornfield, huh <_<*/, 
+	"Paratrechina", "Longicornis", "Solenopsis", "Invicta", "Tapinoma",
+	"Melanocephalum", "Monomorium", "Minimum", "Tetramorium", "Caespitum",
+	"Paraonis", "Dorymyrmex", "Brachymyrmex", "Technomyrmex", "Albipes", 
+    0
+};
+static const char * const shkvalavi[] = {
+    /* Marathi */
+	"Punita", "Shakuntala", "Richa", "Ninad", "Nikhil", "Sumeet",
+	"Roshni", "Mohan", "Ranjeet", "Bipin", "Madhuri", "Abhijeet",
+	"Purnima", "Radha", "Grishma", "Satish", "Aparna", "Reena",
+	"Shrinivas", "Arjun", "Shekhar", "Deep", "Sameer", "Sunil", "Apoorva",
+    0
+};
+
 /*
  * To add new shop types, all that is necessary is to edit the shtypes[] array.
  * See mkroom.h for the structure definition.  Typically, you'll have to lower
@@ -250,19 +274,19 @@ const struct shclass shtypes[] = {
 	     {12, -LUMP_OF_PHILOSOPHER_S_JELLY}, {12, -LUMP_OF_PRIESTESS_S_JELLY}, 
 		 {12, -LUMP_OF_RHETOR_S_JELLY}, 
 		 {14, -HONEYCOMB}, {14, -POT_GAIN_ABILITY}},
-	shkfoods},
+	shkbee},
 	{"nest outpost", ACIDSHOP, 0, D_SHOP,
 	    {{40, -POT_ACID}, {40, -POT_OIL}, 
 		 {20, -POT_BOOZE}},
-	shkliquors},
+	shkant},
 	{"garrison outpost", PETSHOP, 0, D_SHOP,
 	    {{95, -FIGURINE}, {5, -LEASH}},
-	shktools},
+	shkant},
 	{"mound outpost", CERAMICSHOP, 0, D_SHOP,
 	    {{40, ARMOR_CLASS}, {20, -SHEPHERD_S_CROOK}, /* note: uses custom list for armor_class */
 		 {20, -SLIME_MOLD}, {20, -FIGURINE}
 		},
-	shkarmors},
+	shkvalavi},
 	{(char *)0, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
 };
 
@@ -537,16 +561,14 @@ struct mkroom	*sroom;
 	
 	if(In_outlands(&u.uz) && !Is_gatetown(&u.uz))
 		newcham(shk, &mons[PM_PLUMACH_RILMANI], FALSE, FALSE);
-	else if(In_law(&u.uz)){
-		if (ESHK(shk)->shoptype == JELLYSHOP)
-			newcham(shk, &mons[PM_THRIAE], FALSE, FALSE);
-		else if (ESHK(shk)->shoptype == ACIDSHOP)
-			newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
-		else if (ESHK(shk)->shoptype == PETSHOP)
-			newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
-		else if (ESHK(shk)->shoptype == CERAMICSHOP)
-			newcham(shk, &mons[PM_VALAVI], FALSE, FALSE);
-	}
+	if (ESHK(shk)->shoptype == JELLYSHOP)
+		newcham(shk, &mons[PM_THRIAE], FALSE, FALSE);
+	else if (ESHK(shk)->shoptype == ACIDSHOP)
+		newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
+	else if (ESHK(shk)->shoptype == PETSHOP)
+		newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
+	else if (ESHK(shk)->shoptype == CERAMICSHOP)
+		newcham(shk, &mons[PM_VALAVI], FALSE, FALSE);
 	
 	return(sh);
 }
