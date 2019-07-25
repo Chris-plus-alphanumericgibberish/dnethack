@@ -71,6 +71,7 @@ enum {
     AIR,
     CLOUD,
     FOG,
+    DUST_CLOUD,
     PUDDLE,
     MAX_TYPE
 };
@@ -168,6 +169,7 @@ enum {
     S_air,
     S_cloud,
     S_fog,
+    S_dust,
     S_puddle,
     S_water,
 

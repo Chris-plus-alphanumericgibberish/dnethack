@@ -2079,6 +2079,7 @@ E void NDECL(run_regions);
 E boolean FDECL(In_fog_cloud, (struct monst *));
 E boolean FDECL(check_solid_fog_region, (XCHAR_P,XCHAR_P));
 E boolean FDECL(check_stinking_cloud_region, (XCHAR_P,XCHAR_P));
+E boolean FDECL(check_dust_cloud_region, (XCHAR_P,XCHAR_P));
 E boolean FDECL(in_out_region, (XCHAR_P,XCHAR_P));
 E boolean FDECL(m_in_out_region, (struct monst *,XCHAR_P,XCHAR_P));
 E void NDECL(update_player_regions);
@@ -2089,6 +2090,7 @@ E void FDECL(save_regions, (int,int));
 E void FDECL(rest_regions, (int,BOOLEAN_P));
 E NhRegion* FDECL(create_gas_cloud, (XCHAR_P, XCHAR_P, int, int));
 E NhRegion* FDECL(create_fog_cloud, (XCHAR_P, XCHAR_P, int, int));
+E NhRegion* FDECL(create_dust_cloud, (XCHAR_P, XCHAR_P, int, int));
 
 /* ### restore.c ### */
 

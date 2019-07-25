@@ -448,7 +448,11 @@ lookat(x, y, buf, monbuf, shapebuff)
 	    Strcpy(buf,"doorway");
 	break;
     case S_cloud:
+    case S_fog:
 	Strcpy(buf, Is_airlevel(&u.uz) ? "cloudy area" : "fog/vapor cloud");
+	break;
+    case S_dust:
+	Strcpy(buf, "dust storm");
 	break;
 	//Lethe patch by way of Slashem
     case S_water:

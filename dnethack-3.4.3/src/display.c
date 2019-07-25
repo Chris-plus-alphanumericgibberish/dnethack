@@ -1620,6 +1620,7 @@ back_to_glyph(x,y)
 	case CLOUD:		idx = S_cloud;	  break;
 	case PUDDLE:		idx = S_puddle;	  break;
 	case FOG:		idx = S_fog;	  break;
+	case DUST_CLOUD:		idx = S_dust;	  break;
 	case WATER:		idx = S_water;	  break;
 	case DBWALL:
 	    idx = (ptr->horizontal) ? S_hcdbridge : S_vcdbridge;
@@ -1733,7 +1734,7 @@ static const char *type_names[MAX_TYPE] = {
 	"DEADTREE", "DOOR",		"CORR",		"ROOM",		"STAIRS",
 	"LADDER",	"FOUNTAIN",	"THRONE",	"SINK",
 	"ALTAR",	"ICE",		"GRASS",	"SOIL",	
-	"DRAWBRIDGE_DOWN","AIR", "CLOUD", "FOG", "PUDDLE"
+	"DRAWBRIDGE_DOWN","AIR", "CLOUD", "FOG", "DUST_CLOUD", "PUDDLE"
 };
 
 

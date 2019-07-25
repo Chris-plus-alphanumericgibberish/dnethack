@@ -23,6 +23,8 @@ boolean FDECL(inside_gas_cloud, (genericptr,genericptr));
 boolean FDECL(expire_gas_cloud, (genericptr,genericptr));
 boolean FDECL(inside_fog_cloud, (genericptr,genericptr));
 boolean FDECL(expire_fog_cloud, (genericptr,genericptr));
+boolean FDECL(inside_dust_cloud, (genericptr,genericptr));
+boolean FDECL(expire_dust_cloud, (genericptr,genericptr));
 boolean FDECL(inside_rect, (NhRect *,int,int));
 boolean FDECL(inside_region, (NhRegion *,int,int));
 NhRegion *FDECL(create_region, (NhRect *,int));
@@ -57,7 +59,11 @@ static callback_proc callbacks[] = {
 #define INSIDE_FOG_CLOUD 2
     inside_fog_cloud,
 #define EXPIRE_FOG_CLOUD 3
-    expire_fog_cloud
+    expire_fog_cloud,
+#define INSIDE_DUST_CLOUD 4
+    inside_dust_cloud,
+#define EXPIRE_DUST_CLOUD 5
+    expire_dust_cloud
 };
 
 /* Should be inlined. */
@@ -524,6 +530,21 @@ xchar x, y;
     for (i = 0; i < n_regions; i++) {
 		if (regions[i]->inside_f == INSIDE_FOG_CLOUD &&
 			inside_region(regions[i], x, y)
+		) {
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+boolean
+check_dust_cloud_region(x, y)
+xchar x, y;
+{
+	int i;
+    for (i = 0; i < n_regions; i++) {
+		if (inside_region(regions[i], x, y) &&
+			regions[i]->inside_f == INSIDE_DUST_CLOUD
 		) {
 			return TRUE;
 		}
@@ -1102,6 +1123,146 @@ int damage;
     cloud->arg = (genericptr_t)(intptr_t)damage;
     cloud->visible = TRUE;
     cloud->glyph = cmap_to_glyph(S_fog);
+    add_region(cloud);
+    return cloud;
+}
+
+boolean
+expire_dust_cloud(p1, p2)
+genericptr_t p1;
+genericptr_t p2;
+{
+    return TRUE;		/* OK, it's gone, you can free it! */
+}
+
+boolean
+inside_dust_cloud(p1, p2)
+genericptr_t p1;
+genericptr_t p2;
+{
+    NhRegion *reg;
+    struct monst *mtmp;
+    int dam;
+
+    reg = (NhRegion *) p1;
+    dam = (int)(intptr_t)reg->arg;
+    if (p2 == NULL) {		/* This means *YOU* Bozo! */
+		if (youracedata == &mons[PM_SENTINEL_OF_MITHARDIR]){
+			healup(dam, 0, FALSE, FALSE);
+		}
+		if (nonliving(youracedata) || Breathless)
+			return FALSE;
+		if (!Blind)
+			make_blinded(1L, FALSE);
+		if(!rn2(20) && !Sick_resistance){
+			//Dormant spores
+			make_sick(Sick ? Sick/2L + 1L : ACURR(A_CON)*300L, //~3000 turns
+				"white spores", TRUE, SICK_NONVOMITABLE);
+			You("are covered with dust and can barely breath!");
+			losehp(rnd(dam), "dust storm", KILLED_BY_AN);
+		} else if(!rn2(10) && !is_anhydrous(youracedata)){
+			//Salt
+			You("are covered with dust and can barely breath!");
+			pline("Salt dust burns your %s!", makeplural(body_part(LUNG)));
+			You("cough and spit blood!");
+			losehp(rnd(dam)+5, "dust storm", KILLED_BY_AN);
+		} else {
+			You("are covered with dust and can barely breath!");
+			losehp(rnd(dam), "dust storm", KILLED_BY_AN);
+		}
+		return FALSE;
+    } else {			/* A monster is inside the cloud */
+		mtmp = (struct monst *) p2;
+
+		if (mtmp->data == &mons[PM_SENTINEL_OF_MITHARDIR]){
+			mtmp->mhp = min(mtmp->mhp+dam, mtmp->mhpmax);
+		}
+		/* Non living or non breathing are not concerned */
+		if (!nonliving(mtmp->data) && !breathless_mon(mtmp)) {
+			if(heros_fault(reg)) setmangry(mtmp);
+			if (haseyes(mtmp->data) && mtmp->mcansee) {
+				mtmp->mblinded = 1;
+				mtmp->mcansee = 0;
+			}
+			if(!rn2(20) && !resists_sickness(mtmp)){
+				//Dormant spores
+				if (cansee(mtmp->mx, mtmp->my))
+					pline("%s looks sick!", Monnam(mtmp));
+				mtmp->mhp -= rnd(dam)+5+mtmp->m_lev;
+				if (mtmp->mhp <= 0) {
+					if (heros_fault(reg))
+						killed(mtmp);
+					else
+						monkilled(mtmp, "gas cloud", AD_DRST);
+					if (mtmp->mhp <= 0) {	/* not lifesaved */
+						return TRUE;
+					}
+				}
+			} else if(!rn2(10) && !is_anhydrous(mtmp->data)){
+				//Salt
+				if (cansee(mtmp->mx, mtmp->my))
+					pline("%s coughs!", Monnam(mtmp));
+				mtmp->mhp -= rnd(dam) + 5;
+				if (mtmp->mhp <= 0) {
+					if (heros_fault(reg))
+						killed(mtmp);
+					else
+						monkilled(mtmp, "gas cloud", AD_DRST);
+					if (mtmp->mhp <= 0) {	/* not lifesaved */
+						return TRUE;
+					}
+				}
+			} else {
+				if (cansee(mtmp->mx, mtmp->my))
+					pline("%s struggles to breath!", Monnam(mtmp));
+				mtmp->mhp -= rnd(dam);
+				if (mtmp->mhp <= 0) {
+					if (heros_fault(reg))
+						killed(mtmp);
+					else
+						monkilled(mtmp, "gas cloud", AD_DRST);
+					if (mtmp->mhp <= 0) {	/* not lifesaved */
+						return TRUE;
+					}
+				}
+			}
+		}
+    }
+    return FALSE;		/* Monster is still alive */
+}
+
+NhRegion *
+create_dust_cloud(x, y, radius, damage)
+xchar x, y;
+int radius;
+int damage;
+{
+    NhRegion *cloud;
+    int i, nrect;
+    NhRect tmprect;
+
+    cloud = create_region((NhRect *) 0, 0);
+    nrect = radius;
+    tmprect.lx = x;
+    tmprect.hx = x;
+    tmprect.ly = y - (radius - 1);
+    tmprect.hy = y + (radius - 1);
+    for (i = 0; i < nrect; i++) {
+	add_rect_to_reg(cloud, &tmprect);
+	tmprect.lx--;
+	tmprect.hx++;
+	tmprect.ly++;
+	tmprect.hy--;
+    }
+    cloud->ttl = damage;
+    if (!in_mklev && !flags.mon_moving && !flags.cth_attk)
+		set_heros_fault(cloud);		/* assume player has created it */
+	else clear_heros_fault(cloud);
+    cloud->inside_f = INSIDE_DUST_CLOUD;
+    cloud->expire_f = EXPIRE_DUST_CLOUD;
+    cloud->arg = (genericptr_t)(intptr_t)damage;
+    cloud->visible = TRUE;
+    cloud->glyph = cmap_to_glyph(S_dust);
     add_region(cloud);
     return cloud;
 }
