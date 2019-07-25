@@ -1309,6 +1309,43 @@ register struct monst *mtmp;
 					otmp->oerodeproof = TRUE;
 					otmp->spe = 0;
 					(void) mpickobj(mtmp, otmp);
+				} else if(mm == PM_ALABASTER_ELF){
+					if(rn2(3)){
+						otmp = mksobj(ELVEN_SICKLE, TRUE, FALSE);
+						otmp->obj_material = METAL;
+						otmp->objsize = MZ_LARGE;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					} else if(rn2(3)){
+						otmp = mksobj(ELVEN_DAGGER, TRUE, FALSE);
+						otmp->obj_material = METAL;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						
+						otmp = mksobj(ELVEN_SICKLE, TRUE, FALSE);
+						otmp->obj_material = METAL;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					} else {
+						otmp = mksobj(ELVEN_BROADSWORD, TRUE, FALSE);
+						otmp->obj_material = METAL;
+						if(rn2(2)) otmp->objsize = MZ_LARGE;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					}
+					
+					(void)mongets(mtmp, ELVEN_BOW);
+					m_initthrow(mtmp, ELVEN_ARROW, 12);
+					
+					(void)mongets(mtmp, LEATHER_HELM);
+					(void)mongets(mtmp, LEATHER_ARMOR);
+					(void)mongets(mtmp, GLOVES);
+					(void)mongets(mtmp, ELVEN_BOOTS);
+				} else if(mm == PM_ALABASTER_ELF_ELDER){
+					(void)mongets(mtmp, QUARTERSTAFF);
+					
+					(void)mongets(mtmp, ELVEN_TOGA);
+					(void)mongets(mtmp, ELVEN_BOOTS);
 				} else if(mm == PM_MYRKALFAR_WARRIOR){
 					otmp = mksobj(SNIPER_RIFLE, TRUE, FALSE);
 					otmp->spe = 4;
@@ -5503,6 +5540,35 @@ register struct	monst	*mtmp;
 			fix_object(otmp);
 			curse(otmp);
 			(void) mpickobj(mtmp, otmp);
+		} else if(ptr == &mons[PM_ALABASTER_MUMMY]){
+			otmp = mksobj(MASK, TRUE, FALSE);
+			otmp->corpsenm = PM_ALABASTER_ELF;
+			otmp->obj_material = MINERAL;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			
+			switch(rnd(6)){
+				case 1:
+					mtmp->mvar1 = SYLLABLE_OF_STRENGTH__AESH;
+				break;
+				case 2:
+					mtmp->mvar1 = SYLLABLE_OF_GRACE__UUR;
+				break;
+				case 3:
+					mtmp->mvar1 = SYLLABLE_OF_LIFE__HOON;
+				break;
+				case 4:
+					mtmp->mvar1 = SYLLABLE_OF_SPIRIT__VAUL;
+					mtmp->mintrinsics[(DISPLACED-1)/32] |= (1 << (DISPLACED-1)%32);
+				break;
+				case 5:
+					mtmp->mvar1 = SYLLABLE_OF_POWER__KRAU;
+				break;
+				case 6:
+					mtmp->mvar1 = SYLLABLE_OF_THOUGHT__NAEN;
+				break;
+			}
 		}
 		break;
 		case S_ZOMBIE:
@@ -6797,6 +6863,13 @@ register int	mmflags;
 					} else if (mndx == PM_ELVENKING || mndx == PM_ELVENQUEEN){
 						for(num = rnd(2); num >= 0; num--) makemon(&mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 						for(num = rn1(6,3); num >= 0; num--) makemon(&mons[PM_GREY_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+					} else if (mndx == PM_ALABASTER_ELF_ELDER){
+						if(rn2(2)){
+							tmpm = makemon(&mons[PM_ALABASTER_ELF_ELDER], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+							if(tmpm) m_initsgrp(tmpm, mtmp->mx, mtmp->my);
+						}
+						tmpm = makemon(&mons[PM_ALABASTER_ELF], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+						if(tmpm) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
 					} else if (mndx == PM_CHIROPTERAN){
 						tmpm = makemon(&mons[PM_WARBAT], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 						if(tmpm && !rn2(3)) m_initlgrp(tmpm, mtmp->mx, mtmp->my);
@@ -8413,12 +8486,12 @@ int type;
 		case PM_CHAIN_GOLEM: return 50;
 		case PM_TREASURY_GOLEM: return 60;
 		case PM_STONE_GOLEM: return 60;
+		case PM_SENTINEL_OF_MITHARDIR: return 60;
 		case PM_GLASS_GOLEM: return 60;
 		case PM_ARGENTUM_GOLEM: return 70;
 		case PM_IRON_GOLEM: return 80;
 		case PM_SEMBLANCE: return 80;
 		case PM_ARSENAL: return 88;
-		case PM_CENTER_OF_ALL: return 88;
 		case PM_RETRIEVER: return 120;
 //		case PM_HEAD_OF_THE_UNKNOWN_GOD: return 65;
 //		case PM_BODY_OF_THE_UNKNOWN_GOD: return 65;

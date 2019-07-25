@@ -120,6 +120,7 @@ int mndx;
 	case PM_GIANT_MUMMY:	mndx = PM_GIANT;  break;
 	// case PM_ETTIN_ZOMBIE:
 	case PM_ETTIN_MUMMY:	mndx = PM_ETTIN;  break;
+	case PM_ALABASTER_MUMMY: mndx = PM_ALABASTER_ELF_ELDER;  break;
 	default:  break;
 	}
 	return mndx;
@@ -472,6 +473,13 @@ register struct monst *mtmp;
 	    // case PM_HALF_DRAGON_ZOMBIE:
 	    // case PM_GIANT_ZOMBIE:
 	    // case PM_ETTIN_ZOMBIE:
+	    case PM_ALABASTER_MUMMY:
+		if(is_alabaster_mummy(mtmp->data) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
+			mksobj_at(mtmp->mvar1, x, y, TRUE, FALSE);
+			if(mtmp->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
+				mtmp->mintrinsics[(DISPLACED-1)/32] &= ~(1 << (DISPLACED-1)%32);
+			mtmp->mvar1 = 0; //Lose the bonus if resurrected
+		}
 		num = undead_to_corpse(mndx);
 		obj = mkcorpstat(CORPSE, mtmp, &mons[num], x, y, TRUE);
 		break;
@@ -700,6 +708,14 @@ register struct monst *mtmp;
 	    case PM_STONE_GOLEM:
 			obj = mkcorpstat(STATUE, (struct monst *)0,
 				mdat, x, y, FALSE);
+		break;
+	    case PM_SENTINEL_OF_MITHARDIR:
+			obj = mkcorpstat(STATUE, (struct monst *)0,
+				mdat, x, y, FALSE);
+			if(obj){
+				obj->corpsenm = PM_ALABASTER_ELF;
+				fix_object(obj);
+			}
 		break;
 	    case PM_WOOD_GOLEM:
 			num = d(2,4);
@@ -1166,6 +1182,9 @@ struct monst *mon;
 	}
     }
 #endif
+	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_GRACE__UUR)
+		mmove += 6;
+	
 	if(u.sealsActive&SEAL_CHUPOCLOPS && distmin(mon->mx, mon->my, u.ux, u.uy) <= u.ulevel/5+1){
 		mmove = max(mmove-(u.ulevel/10+1),1);
 	}
@@ -3414,6 +3433,28 @@ struct monst *mtmp;
 		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
 		mtmp->mhp = mtmp->mhpmax;
 		return;
+	} else if(!rn2(20) && (mtmp->data == &mons[PM_ALABASTER_ELF]
+		|| mtmp->data == &mons[PM_ALABASTER_ELF_ELDER]
+		|| is_alabaster_mummy(mtmp->data)
+	)){
+		if (cansee(mtmp->mx, mtmp->my)) {
+			pline("%s putrefies with impossible speed!",Monnam(mtmp));
+			mtmp->mcanmove = 1;
+			mtmp->mfrozen = 0;
+			if (mtmp->mtame && !mtmp->isminion) {
+				wary_dog(mtmp, FALSE);
+			}
+			mtmp->mhp = mtmp->mhpmax;
+			mtmp->mspec_used = 0;
+			if(is_alabaster_mummy(mtmp->data) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
+				mksobj_at(mtmp->mvar1, mtmp->mx, mtmp->my, TRUE, FALSE);
+				if(mtmp->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
+					mtmp->mintrinsics[(DISPLACED-1)/32] &= ~(1 << (DISPLACED-1)%32);
+				mtmp->mvar1 = 0; //Lose the bonus if resurrected
+			}
+			newcham(mtmp, &mons[rn2(4) ? PM_ACID_BLOB : PM_BLACK_PUDDING], FALSE, FALSE);
+			return;
+		}
 	} else if(mtmp->mspec_used == 0 && mtmp->data == &mons[PM_UVUUDAUM]){
 		if (cansee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
@@ -4220,6 +4261,7 @@ boolean was_swallowed;			/* digestion */
 		   || is_rider(mdat)
 		   || mon->m_id == quest_status.leader_m_id
 		   || mon->data->msound == MS_NEMESIS
+		   || is_alabaster_mummy(mon->data)
 		   || (uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_LIFE && mon->mtame)
 		   || mdat == &mons[PM_UNDEAD_KNIGHT]
 		   || mdat == &mons[PM_WARRIOR_OF_SUNLIGHT]

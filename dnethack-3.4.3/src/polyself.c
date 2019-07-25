@@ -1774,6 +1774,7 @@ int part;
 	    if (humanoid(mptr) && attacktype(mptr, AT_CLAW) &&
 		    !index(not_claws, mptr->mlet) &&
 		    mptr != &mons[PM_STONE_GOLEM] &&
+		    mptr != &mons[PM_SENTINEL_OF_MITHARDIR] &&
 		    mptr != &mons[PM_INCUBUS] && mptr != &mons[PM_SUCCUBUS])
 		return part == HAND ? "claw" : "clawed";
 	}

@@ -433,6 +433,31 @@ struct attack *alt_attk_buf;
 		}
 	}
 
+	// Alabaster mummies: Spell glyphs result in spellcasting,
+	//  physical glyphs result in melee, non-specific glyphs result in random choice
+	if (indx==1 && is_alabaster_mummy(mtmp->data) && mtmp->mvar1){
+		switch(mtmp->mvar1){
+			case SYLLABLE_OF_STRENGTH__AESH:
+			case SYLLABLE_OF_GRACE__UUR:
+				//default
+			break;
+			case SYLLABLE_OF_POWER__KRAU:
+			case SYLLABLE_OF_THOUGHT__NAEN:
+				attk->aatyp = AT_MAGC;
+				attk->adtyp = AD_SPEL;
+				attk->damn = 0;
+				attk->damd = 4;
+			break;
+			default:
+				if(mtmp->m_id%2){
+					attk->aatyp = AT_MAGC;
+					attk->adtyp = AD_SPEL;
+					attk->damn = 0;
+					attk->damd = 4;
+				}
+			break;
+		}
+	}
 	//Five fiends' spellcasting routines
 	if(
 		(mptr == &mons[PM_LICH__THE_FIEND_OF_EARTH]) ||
@@ -3844,6 +3869,12 @@ dopois:
 	if(mtmp->data == &mons[PM_LONG_WORM] && mtmp->wormno && mattk->aatyp == AT_BITE){
 		if(wormline(mtmp, u.ux, u.uy))
 			dmg += d(2,4); //Add segment damage
+	}
+	
+	if(is_alabaster_mummy(mtmp->data) 
+		&& mtmp->mvar1 == SYLLABLE_OF_STRENGTH__AESH
+	){
+		dmg += 10;
 	}
 	
 	if(dmg > 0 && u.ustdy){

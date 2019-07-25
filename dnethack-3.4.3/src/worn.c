@@ -665,6 +665,9 @@ struct monst *mon;
 	if(mon->mfaction == SKELIFIED) base -= 2;
 	if(mon->mfaction == CRYSTALFIED) base -= 6;
 	
+	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_GRACE__UUR)
+		base -= 10;
+	
 	if(mon->mtame){
 		base -= rnd(def_beastmastery());
 		if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
@@ -782,6 +785,9 @@ struct monst *mon;
 	if(mon->mfaction == SKELIFIED) base -= 6;
 	if(mon->mfaction == CRYSTALFIED) base -= 16;
 	
+	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_GRACE__UUR)
+		base -= 10;
+	
 	if(mon->mtame){
 		base -= def_beastmastery();
 		if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
@@ -873,6 +879,9 @@ struct monst *mon;
 	if(is_true_dragon(mon->data)){
 		base += 5;
 	}
+	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
+		base += 10;
+	
 	if(mon->mfaction == ZOMBIFIED) base += 2;
 	if(mon->mfaction == CRYSTALFIED) base += 8;
 	

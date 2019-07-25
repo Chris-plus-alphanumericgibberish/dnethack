@@ -886,6 +886,10 @@ boolean called;
 					}
 			}
 		}
+		if(is_alabaster_mummy(mdat) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
+			Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar1]));
+			name_at_start = FALSE;
+		}
 	    Strcat(buf, mdat->mname);
 		if(mtmp->mfaction == ZOMBIFIED) Strcat(buf, "'s zombie");
 		else if(mtmp->mfaction == SKELIFIED) Strcat(buf, "'s skeleton");
@@ -950,6 +954,10 @@ boolean called;
 							name_at_start = FALSE;
 						}
 				}
+			}
+			if(is_alabaster_mummy(mdat) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
+				Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar1]));
+				name_at_start = FALSE;
 			}
 			
 			Sprintf(eos(buf), "%s", mdat->mname);
@@ -1021,6 +1029,10 @@ boolean called;
 						name_at_start = FALSE;
 					}
 			}
+		}
+		if(is_alabaster_mummy(mdat) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
+			Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar1]));
+			name_at_start = FALSE;
 		}
 	    Strcat(buf, mdat->mname);
 		if(type_is_pname(mdat)){

@@ -3987,6 +3987,7 @@ int spell;
 							if(is_elemental(mon->data) 
 								|| is_undead_mon(mon) 
 								|| mon->data == &mons[PM_ASPECT_OF_THE_SILENCE] 
+								|| mon->data == &mons[PM_SENTINEL_OF_MITHARDIR] 
 								|| mon->data == &mons[PM_STONE_GOLEM] 
 								|| mon->data == &mons[PM_CLAY_GOLEM] 
 								|| mon->data == &mons[PM_FLESH_GOLEM]

@@ -141,7 +141,7 @@ boolean
 poly_when_stoned(ptr)
     struct permonst *ptr;
 {
-    return((boolean)(is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] &&
+    return((boolean)(is_golem(ptr) && ptr != &mons[PM_STONE_GOLEM] && ptr != &mons[PM_SENTINEL_OF_MITHARDIR] &&
 	    !(mvitals[PM_STONE_GOLEM].mvflags & G_GENOD && !In_quest(&u.uz))));
 	    /* allow G_EXTINCT */
 }
@@ -985,6 +985,7 @@ struct attack *mattk;
 	what = "melting";
 	break;
     case PM_STONE_GOLEM:
+    case PM_SENTINEL_OF_MITHARDIR:
     case PM_CLAY_GOLEM:
     case PM_GOLD_GOLEM:
     case PM_AIR_ELEMENTAL:

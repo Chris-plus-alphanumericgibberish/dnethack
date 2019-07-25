@@ -39,13 +39,15 @@
 #define is_blind(mon)		(!((mon)->mcansee) || (darksight((mon)->data) && !(\
 													(!levl[(mon)->mx][(mon)->my].lit && !(viz_array[(mon)->my][(mon)->mx]&TEMP_LIT1 && !(viz_array[(mon)->my][(mon)->mx]&TEMP_DRK1)))\
 													|| (levl[(mon)->mx][(mon)->my].lit &&  (viz_array[(mon)->my][(mon)->mx]&TEMP_DRK1 && !(viz_array[(mon)->my][(mon)->mx]&TEMP_LIT1))))))
-#define is_deaf(mon)		(!((mon)->mcanhear))
+#define is_deaf(mon)		(!((mon)->mcanhear) || (mon)->data == &mons[PM_ALABASTER_ELF] || (mon)->data == &mons[PM_ALABASTER_ELF_ELDER])
 
 #define is_molochan(ptr)	((ptr)->maligntyp == A_NONE)
 #define is_voidalign(ptr)	((ptr)->maligntyp == A_VOID)
 #define is_lawful(ptr)		((ptr)->maligntyp > A_NEUTRAL && !is_molochan(ptr) && !is_voidalign(ptr))
 #define is_neutral(ptr)		((ptr)->maligntyp == A_NEUTRAL)
 #define is_chaotic(ptr)		((ptr)->maligntyp < A_NEUTRAL && !is_molochan(ptr) && !is_voidalign(ptr))
+
+#define is_alabaster_mummy(ptr)	((ptr) == &mons[PM_ALABASTER_MUMMY])
 
 #define is_lminion(mon)		(is_minion((mon)->data) && \
 				 (mon)->data->maligntyp > A_NEUTRAL && \
@@ -112,6 +114,7 @@
 				 (ptr) == &mons[PM_EARTH_ELEMENTAL] || \
 				 (ptr) == &mons[PM_TERRACOTTA_SOLDIER] || \
 				 (ptr) == &mons[PM_STONE_GOLEM] || \
+				 (ptr) == &mons[PM_SENTINEL_OF_MITHARDIR] || \
 				 (ptr) == &mons[PM_GARGOYLE] || \
 				 (ptr) == &mons[PM_WINGED_GARGOYLE] || \
 				 (ptr) == &mons[PM_XORN])
@@ -430,6 +433,7 @@
 #define is_thief(ptr)		( dmgtype(ptr, AD_SGLD)  || dmgtype(ptr, AD_SITM) || dmgtype(ptr, AD_SEDU) )
 #define is_magical(ptr)		( attacktype(ptr, AT_MMGC) || attacktype(ptr, AT_MAGC) )
 #define nospellcooldowns(ptr)	(((ptr)->mflagsg & MG_NOSPELLCOOLDOWN) != 0L)
+#define nospellcooldowns_mon(mtmp)	(nospellcooldowns((mtmp)->data) || (is_alabaster_mummy((mtmp)->data) && (mtmp)->mvar1 == SYLLABLE_OF_THOUGHT__NAEN))
 #define is_lord(ptr)		(((ptr)->mflagsg & MG_LORD) != 0L)
 #define is_prince(ptr)		(((ptr)->mflagsg & MG_PRINCE) != 0L)
 #define is_ndemon(ptr)		(is_demon(ptr) && \

@@ -605,6 +605,11 @@ boolean digest_meal;
 	if(mon->mtame && u.ufirst_life)
 		mon->mhp++;
 		
+	if(is_alabaster_mummy(mon->data) 
+		&& mon->mvar1 == SYLLABLE_OF_LIFE__HOON
+	){
+		mon->mhp += 10;
+	}
 	
 	if(!DEADMONSTER(mon) && mon->mhp < mon->mhpmax/2 && (mon->data == &mons[PM_CHANGED] || mon->data == &mons[PM_WARRIOR_CHANGED])){
 		mon->mhp -= 1;

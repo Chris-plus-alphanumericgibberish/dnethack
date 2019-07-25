@@ -513,6 +513,34 @@ unsigned int type;
 				case 6: return CONFUSE_YOU;
 			}
 	   break;
+	   case PM_ALABASTER_ELF_ELDER:
+			switch (rnd(8)) {
+				case 8:
+				return MASS_CURE_FAR;
+				break;
+				case 7:
+				return AGGRAVATION;
+				break;
+				case 6:
+				return MASS_CURE_CLOSE;
+				break;
+				case 5:
+				return MASS_CURE_FAR;
+				break;
+				case 4:
+				return SLEEP;
+				break;
+				case 3:
+				return BLIND_YOU;
+				break;
+				case 2:
+				return CONFUSE_YOU;
+				break;
+				case 1:
+				return DISAPPEAR;
+				break;
+			}
+	   break;
        case PM_PRIEST_OF_GHAUNADAUR:
            if (rn2(2)) return FIRE_PILLAR;
 		   else if(rn2(2)) return MON_FIRAGA;
@@ -1130,12 +1158,12 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns(mtmp->data)) || !ml || u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
+	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns_mon(mtmp)) || !ml || u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
 	    cursetxt(mtmp, is_undirected_spell(spellnum));
 	    return(0);
 	}
 
-	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && !nospellcooldowns(mtmp->data)) {
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && !nospellcooldowns_mon(mtmp)) {
 	    if(mtmp->data == &mons[PM_HEDROW_WARRIOR]) mtmp->mspec_used = d(4,4);
 		else mtmp->mspec_used = 10 - mtmp->m_lev;
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
@@ -1164,7 +1192,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 	
 	if(!is_kamerel(mtmp->data) || !mirror){
-		chance = 2;
+		chance = (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_THOUGHT__NAEN) ? 0 : 2;
 		if(mtmp->mconf) chance += 8;
 		if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
 			if(u.uz.dlevel == sum_of_all_level.dlevel) chance -= 1;
@@ -1202,6 +1230,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			dmd = 6;
 			dmn = min(MAX_BONUS_DICE, ml/3+1);
 			if (mattk->damd) dmd = (int)(mattk->damd);
+			if (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_POWER__KRAU)
+				dmd *= 1.5;
 			
 			if (mattk->damn) dmn+= (int)(mattk->damn);
 			
@@ -1223,6 +1253,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		if (dmn > 15) dmn = 15;
 		
 		if (mattk->damd) dmd = (int)(mattk->damd);
+		if (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_POWER__KRAU)
+			dmd *= 1.5;
 		
 		if (mattk->damn) dmn+= (int)(mattk->damn);
 		
@@ -3191,7 +3223,7 @@ castmm(mtmp, mdef, mattk)
 	}
 
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns(mtmp->data)) || !ml) {
+	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns_mon(mtmp)) || !ml) {
 	    if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my))
 	    {
                 char buf[BUFSZ];
@@ -3209,7 +3241,7 @@ castmm(mtmp, mdef, mattk)
 	    return(0);
 	}
 
-	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && !nospellcooldowns(mtmp->data)) {
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && !nospellcooldowns_mon(mtmp)) {
 	    mtmp->mspec_used = 10 - mtmp->m_lev;
 	    if (mtmp->mspec_used < 2) mtmp->mspec_used = 2;
 	}
@@ -3258,6 +3290,8 @@ castmm(mtmp, mdef, mattk)
 		if(dmn > 15) dmn = 15;
 		
 		if (mattk->damd) dmd = (int)(mattk->damd);
+		if (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_POWER__KRAU)
+			dmd *= 1.5;
 		
 		if (mattk->damn) dmn+= (int)(mattk->damn);
 
