@@ -3671,11 +3671,11 @@ register struct monst *mtmp;
 		if(remaining){
 			remaining = rnd(remaining);
 			if(!flags.made_first && !(--remaining))
-				mksobj(FIRST_WORD, TRUE, FALSE);
+				mksobj_at(FIRST_WORD, mtmp->mx, mtmp->my, TRUE, FALSE);
 			else if(!flags.made_divide && !(--remaining))
-				mksobj(DIVIDING_WORD, TRUE, FALSE);
+				mksobj_at(DIVIDING_WORD, mtmp->mx, mtmp->my, TRUE, FALSE);
 			else if(!flags.made_life && !(--remaining))
-				mksobj(NURTURING_WORD, TRUE, FALSE);
+				mksobj_at(NURTURING_WORD, mtmp->mx, mtmp->my, TRUE, FALSE);
 		}
 	}
 	if(mtmp->data == &mons[PM_GARLAND]){

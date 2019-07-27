@@ -112,6 +112,7 @@ typedef struct branch {
 
 #define Is_oracle_level(x)	(on_level(x, &oracle_level))
 
+//Law quest
 #define Is_path(x)		(on_level(x, &path1_level) || on_level(x, &path2_level) || on_level(x, &path3_level))
 #define Is_illregrd(x)	(on_level(x, &illregrd_level))
 #define Is_arcadia(x)	(on_level(x, &arcadia1_level) ||\
@@ -135,12 +136,18 @@ typedef struct branch {
 #define Is_arcadiatower3(x)	(on_level(x, &tower3_level))
 #define Is_arcadiadonjon(x)	(on_level(x, &towertop_level))
 
+//Chaos quest 1
 #define Is_lich_level(x)	(on_level(x, &chaosfrh_level))
 #define Is_marilith_level(x)	(on_level(x, &chaosffh_level))
 #define Is_kraken_level(x)	(on_level(x, &chaossth_level))
 #define Is_tiamat_level(x)	(on_level(x, &chaosvth_level))
 #define Is_chaos_level(x)	(on_level(x, &chaose_level))
 
+//Chaos quest 2
+#define Is_elshava(x)		(on_level(x,&elshava_level))
+#define Is_last_spire(x)		(on_level(x,&lastspire_level))
+
+//Neutral quest
 #define In_depths(x)		((x)->dnum == rlyeh_dnum)
 #define Is_gatetown(x)		(on_level(x,&gatetown_level))
 #define Is_sumall(x)		(on_level(x,&sum_of_all_level))

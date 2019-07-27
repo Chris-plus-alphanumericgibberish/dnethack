@@ -245,6 +245,7 @@ bad_location(x, y, lx, ly, hx, hy)
 	       levl[x][y].typ == ROOM || 
 	       levl[x][y].typ == GRASS || 
 	       levl[x][y].typ == SOIL || 
+	       levl[x][y].typ == SAND || 
 	       levl[x][y].typ == PUDDLE || 
 	       levl[x][y].typ == AIR)));
 }
@@ -510,6 +511,16 @@ fixup_special()
 			fill_dungeon_of_ill_regard();
 		}
 		place_law_features();
+	}
+	/* CHAOS QUEST 2: various features */
+	if (In_mithardir_quest(&u.uz)){
+		if (In_mithardir_desert(&u.uz)){
+			for (x = 0; x<COLNO; x++){
+				for (y = 0; y<ROWNO; y++){
+					levl[x][y].lit = TRUE;
+				}
+			}
+		}
 	}
 	/* NEUTRAL QUEST: various features */
 	if (In_outlands(&u.uz)){

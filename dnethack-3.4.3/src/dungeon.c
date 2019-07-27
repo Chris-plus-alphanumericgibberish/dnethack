@@ -729,6 +729,9 @@ struct level_map {
 	{ "chaossth",	&chaossth_level },
 	{ "chaosvth",	&chaosvth_level },
 	{ "chaose",		&chaose_level },
+	/*Chaos 2 levels*/
+	{ "elshava",&elshava_level },
+	{ "mith3",&lastspire_level },
 	/*Fort Knox*/
 	{ "knox",	&knox_level },
 	{ "",		(d_level *)0 }
@@ -745,6 +748,9 @@ init_dungeons()		/* initialize the "dungeon" structs */
 	struct version_info vers_info;
 	int dungeonversion = rn2(3);
 
+	//Record chaos quest version (note: in the future not all dungeonversions will relate to the chaos quest)
+	chaos_dvariant = dungeonversion;
+	
 	pd.n_levs = pd.n_brs = 0;
 
 	dgn_file = dlb_fopen(DUNGEON_FILES[dungeonversion], RDBMODE);
@@ -1485,6 +1491,34 @@ In_cha(lev)	/* are you on the chaotic quest? */
 d_level	*lev;
 {
 	return((boolean)(lev->dnum == chaos_dnum));
+}
+
+boolean
+In_mithardir_desert(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MITHARDIR && lev->dlevel <= lastspire_level.dlevel));
+}
+
+boolean
+In_mithardir_catacombs(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MITHARDIR && lev->dlevel > lastspire_level.dlevel));
+}
+
+boolean
+In_mithardir_terminus(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MITHARDIR && lev->dlevel == dungeons[lev->dnum].num_dunlevs));
+}
+
+boolean
+In_mithardir_quest(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MITHARDIR));
 }
 
 boolean
@@ -2570,6 +2604,31 @@ boolean printdun;
 		if (mptr->br->end1_up && !In_endgame(&(mptr->br->end2)))
 			Sprintf(eos(buf), ", level %d", depth(&(mptr->br->end2)));
 		putstr(win, 0, buf);
+	}
+}
+
+void
+dust_storm()
+{
+	int x, y;
+	for (x = 0; x < COLNO; x++) {
+		for (y = 0; y < ROWNO; y++) {
+			if(IS_SAND(levl[x][y].typ)){
+				wipe_engr_at(x, y, rnd(3));
+				if(!rn2(6000)){ //1/3rd the bury rate (objects tend to get buried)
+					unearth_objs(x, y);
+					newsym(x,y);
+				} else if(!rn2(2000)){ //Somewhat less than 1 square per turn in a full map of sand.
+					bury_objs(x, y);
+					newsym(x,y);
+				}
+				if(In_mithardir_desert(&u.uz)){
+					if(!rn2(6000)){ //Dust clouds last many turns
+						create_dust_cloud(x, y, 1, 1);
+					}
+				}
+			}
+		}
 	}
 }
 

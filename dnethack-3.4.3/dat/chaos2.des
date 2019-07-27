@@ -128,3 +128,207 @@ ENDMAP
 
 BRANCH:(15,08,15,08),(0,0,0,0)
 
+MAZE: "mith1",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: ' ' , 's' , false, false, lit , false
+
+NOMAP
+
+PORTAL:(00,00,25,20),(00,00,00,00),"ossa1"
+PORTAL:(50,00,75,20),(00,00,00,00),"mith2"
+
+MONSTER[25%]:'A', "Bralani Eladrin", random
+MONSTER[25%]:'A', "Bralani Eladrin", random
+
+MONSTER[25%]:'P', "living mirage", random
+MONSTER[25%]:'P', "living mirage", random
+
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+
+OBJECT[75%]:'-',random,random
+OBJECT[50%]:'-',random,random
+OBJECT[25%]:'-',random,random
+
+MAZE: "mith2",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: ' ' , 's' , false, false, lit , false
+
+NOMAP
+
+PORTAL:(00,00,25,20),(00,00,00,00),"mith1"
+PORTAL:(50,00,75,20),(00,00,00,00),"mith3"
+
+
+MONSTER[25%]:'A', "Bralani Eladrin", random
+MONSTER[25%]:'A', "Bralani Eladrin", random
+
+MONSTER[25%]:'P', "living mirage", random
+MONSTER[25%]:'P', "living mirage", random
+
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+MONSTER:'@', "Alabaster elf", random
+
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+
+OBJECT[75%]:'-',random,random
+OBJECT[50%]:'-',random,random
+OBJECT[25%]:'-',random,random
+
+MAZE: "mith3",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '-' , 's' , false, false, lit , false
+
+NOMAP
+
+PORTAL:(00,00,75,20),(25,00,50,20),"mith2"
+
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+OBJECT:'-',random,random
+
+OBJECT[75%]:'-',random,random
+OBJECT[75%]:'-',random,random
+OBJECT[50%]:'-',random,random
+OBJECT[50%]:'-',random,random
+OBJECT[25%]:'-',random,random
+OBJECT[25%]:'-',random,random
+
+
+GEOMETRY:center,center
+#0         1         2   	  3	      4	    5		  6	      7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0sssssssssssssssssss
+1ssssseeeeeeeeesssss
+2ss||eeeeeeeeeee||ss
+3ss|eeeeeeeeeeeee|ss
+4sseeeeeeeeeeeeeeess
+5seeeee|||||||eeeees
+6|eeee||.....||eeee|
+7|eeee|.......|eeee|
+8|eeee|.......|eeee|
+9|eeee|.......|eeee|
+0|eeee|.......|eeee|
+1|eeee|.......|eeee|
+2|eeee||.....||eeee|
+3seeeee|||||||eeeees
+4sseeeeeeeeeeeeeeess
+5ss|eeeeeeeeeeeee|ss
+6ss||eeeeeeeeeee||ss
+7ssssseeeeeeeeesssss
+8sssssssssssssssssss
+9sssssssssssssssssss
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	  3	      4	    5		  6	      7
+
+STAIR:(09,09),down
+
+MAZE: "cat1",' '
+FLAGS: shortsighted,hardfloor
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0   |||||||                  -------------
+1 |||.....|||                |...........|
+2 |.........|                |...........|
+3||..PPPPP..||               |...........|
+4|..PPPPPPP..|               |...........|
+5|..PPPPPPP..|---------------|...........|
+6|..PPP.PPP..S###############S.....-.....|
+7|..PPPPPPP..|---------------|...........|
+8|..PPPPPPP..|               |...........|
+9||..PPPPP..||               |...........|
+0 |.........|                |...........|
+1 |||.....|||                |...........|
+2   |||||||                  -------------
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+STAIR:(06,06),up
+
+CONTAINER:'`',"statue",(04,01),"titan",9
+CONTAINER:'`',"statue",(05,01),"titan",9
+CONTAINER:'`',"statue",(06,01),"titan",9
+CONTAINER:'`',"statue",(07,01),"titan",9
+CONTAINER:'`',"statue",(08,01),"titan",9
+CONTAINER:'`',"statue",(09,02),"titan",9
+CONTAINER:'`',"statue",(10,02),"titan",9
+CONTAINER:'`',"statue",(10,03),"titan",9
+CONTAINER:'`',"statue",(11,04),"titan",9
+CONTAINER:'`',"statue",(11,05),"titan",9
+
+CONTAINER:'`',"statue",(11,07),"titan",9
+CONTAINER:'`',"statue",(11,08),"titan",9
+CONTAINER:'`',"statue",(10,09),"titan",9
+CONTAINER:'`',"statue",(10,08),"titan",9
+CONTAINER:'`',"statue",(09,08),"titan",9
+CONTAINER:'`',"statue",(08,07),"titan",9
+CONTAINER:'`',"statue",(07,07),"titan",9
+CONTAINER:'`',"statue",(06,07),"titan",9
+CONTAINER:'`',"statue",(05,07),"titan",9
+CONTAINER:'`',"statue",(04,07),"titan",9
+
+PORTAL:(34,00,40,12),(00,00,00,00),"cat2"
+
+MAZE: "cat2",' '
+FLAGS: shortsighted,hardfloor
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0     |||||||     
+1   |||.-.-.|||   
+2   |-.-...-.-|   
+3  ||.-.....-.||  
+4  |.-.......-.|  
+5--|-.........-|--
+6|.S...........S.|
+7--|-.........-|--
+8  |.-.......-.|  
+9  ||.-.....-.||  
+0   |-.-...-.-|   
+1   |||.-.-.|||   
+2     |||||||     
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+#RANDOM_PLACES:(03,04),(05,02),(08,01),(03,08),(05,10),(08,11),(13,04),(11,02),(08,01),(13,08),(11,10)
+RANDOM_PLACES:(03,04),(05,02),(03,08),(05,10),(13,04),(11,02),(08,01),(13,08),(11,10)
+
+PORTAL:(01,06,01,06),(00,00,00,00),"cat1"
+STAIR:(15,06),down
+
+OBJECT:'#',"slab",place[0]
+
+OBJECT:'-',random,place[1]
+OBJECT:'-',random,place[2]
+OBJECT:'-',random,place[3]
+
+OBJECT[75%]:'-',random,place[4]
+OBJECT[50%]:'-',random,place[5]
+OBJECT[25%]:'-',random,place[6]
+

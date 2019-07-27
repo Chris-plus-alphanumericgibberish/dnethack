@@ -525,6 +525,8 @@ char c;
 			      return(GRASS);
 		  case 'e'  : 
 			      return(SOIL);
+		  case 's'  : 
+			      return(SAND);
 		  case 'W'  : return(WATER);
 		  case 'w'  : return(PUDDLE);
 		  case 'T'	: return (TREE);

@@ -7584,7 +7584,11 @@ rndmonst()
 		else return (struct permonst *)0;/*NOTE: ugly method to stop monster generation during level creation, since I can't find a better way*/
 	}
 	else if (In_cha(&u.uz)){
-	    return chaos_montype();
+		if(In_mithardir_quest(&u.uz)){
+			return chaos2_montype();
+		} else {
+	 	   return chaos_montype();
+		}
 	}
 	else if (In_law(&u.uz)){
 	    return law_montype();

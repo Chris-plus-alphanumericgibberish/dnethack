@@ -71,7 +71,11 @@ pick_move:
 	for(i=0; i<cnt; i++) {
 		nx = poss[i].x;
 		ny = poss[i].y;
-		if((levl[nx][ny].typ == ROOM || levl[nx][ny].typ == GRASS || levl[nx][ny].typ == SOIL ) ||
+		if((levl[nx][ny].typ == ROOM 
+			|| levl[nx][ny].typ == GRASS 
+			|| levl[nx][ny].typ == SOIL 
+			|| levl[nx][ny].typ == SAND 
+			) ||
 			(mtmp->ispriest &&
 			    levl[nx][ny].typ == ALTAR) ||
 			(mtmp->isshk &&

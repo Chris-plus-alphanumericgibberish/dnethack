@@ -1247,13 +1247,13 @@ POTION("blood", "blood-red",            0, 0,          18, 50,  CLR_RED),
 	CERAMIC_TILE("syllable of thought: Naen", "dotted glyph",    167),
 	CERAMIC_TILE("syllable of spirit: Vaul",  "hanging glyph",   166),
 #undef CERAMIC_TILE
-#define METALIC_SLAB(name,text) OBJECT( \
+#define METALIC_SLAB(name,text, clr) OBJECT( \
 		OBJ(name,text), BITS(0,0,0,0,1,0,1,1,1,0,0,P_NONE,METAL, IDED|UNIDED), 0, \
-		TILE_CLASS, 0, 0, 3, 3000, 0, 0, 0, 0, 0, 6, CLR_BLACK )
+		TILE_CLASS, 0, 0, 3, 3000, 0, 0, 0, 0, 0, 6, clr )
 	/* Fixed descriptions (also, artifact base-items only) */
-	METALIC_SLAB("First Word",  "blinding glyph"),
-	METALIC_SLAB("Dividing Word",  "cerulean glyph"),
-	METALIC_SLAB("Nurturing Word",  "verdant glyph"),
+	METALIC_SLAB("First Word",  "blinding glyph", CLR_YELLOW),
+	METALIC_SLAB("Dividing Word",  "cerulean glyph", HI_ZAP),
+	METALIC_SLAB("Nurturing Word",  "verdant glyph", CLR_GREEN),
 #undef METALIC_SLAB
 
 /* spellbooks ... */

@@ -226,7 +226,15 @@ makerooms()
 	/* rnd_rect() will returns 0 if no more rects are available... */
 	wantanmivault = !rn2(8);
 	wantasepulcher = (depth(&u.uz) > 12 && !rn2(8));
-	while(nroom < MAXNROFROOMS && rnd_rect() && (nroom<6 || rn2(12-nroom))) {
+	if(In_mithardir_terminus(&u.uz)){
+		create_room(-1, -1, 7, 7, -1, -1, OROOM, 0);
+		mkroom(SLABROOM);
+	}
+		// create_room(ROWNO/2-3, COLNO/2-3, 7, 7, 1, 1, ISLAND, 0);
+	while(nroom < MAXNROFROOMS && rnd_rect() && 
+			(In_mithardir_quest(&u.uz) ? (nroom<9 || rn2(MAXNROFROOMS-nroom)) : (nroom<6 || rn2(12-nroom)))
+	){
+	// while(nroom < MAXNROFROOMS && rnd_rect() && (nroom<6 || )) {
 		if(nroom >= (MAXNROFROOMS/6) && rn2(2) && !tried_vault && !wantanmivault && !wantasepulcher) {
 			tried_vault = TRUE;
 			if (create_vault()) {
@@ -234,6 +242,9 @@ makerooms()
 				vault_y = rooms[nroom].ly;
 				rooms[nroom].hx = -1;
 			}
+		} else if(In_mithardir_quest(&u.uz)){
+			 if (!create_room(-1, -1, 2+rnd(4), 2+rnd(4), -1, -1, OROOM, -1))
+				continue;
 		} else
 		    if (!create_room(-1, -1, -1, -1, -1, -1, OROOM, -1))
 			return;
@@ -682,62 +693,75 @@ int trap_type;
 	register struct trap *ttmp;
 
 	if(doorindex < DOORMAX)
-	  while(vct--) {
-	    aroom = &rooms[rn2(nroom)];
-	    if(aroom->rtype != OROOM && aroom->rtype != JOINEDROOM) continue;	/* not an ordinary room */
-	    if(aroom->doorct == 1 && rn2(5)) continue;
-	    if(!place_niche(aroom,&dy,&xx,&yy)) continue;
+		while(vct--) {
+			aroom = &rooms[rn2(nroom)];
+			if(aroom->rtype != OROOM && aroom->rtype != JOINEDROOM) continue;	/* not an ordinary room */
+			if(aroom->doorct == 1 && rn2(5)) continue;
+			if(!place_niche(aroom,&dy,&xx,&yy)) continue;
 
-	    rm = &levl[xx][yy+dy];
-	    if(trap_type || !rn2(4)) {
+			rm = &levl[xx][yy+dy];
+			if(trap_type || !rn2(4)) {
 
-		rm->typ = SCORR;
-		if(trap_type) {
-		    if((trap_type == HOLE || trap_type == TRAPDOOR)
-			&& !Can_fall_thru(&u.uz))
-			trap_type = ROCKTRAP;
-		    ttmp = maketrap(xx, yy+dy, trap_type);
-		    if (ttmp) {
-			if (trap_type != ROCKTRAP) ttmp->once = 1;
-			if (trap_engravings[trap_type]) {
-			    make_engr_at(xx, yy-dy,
-				     trap_engravings[trap_type], 0L, DUST);
-			    wipe_engr_at(xx, yy-dy, 5); /* age it a little */
+				rm->typ = SCORR;
+				if(trap_type) {
+					if((trap_type == HOLE || trap_type == TRAPDOOR)
+					&& !Can_fall_thru(&u.uz))
+					trap_type = ROCKTRAP;
+					ttmp = maketrap(xx, yy+dy, trap_type);
+					if (ttmp) {
+					if (trap_type != ROCKTRAP) ttmp->once = 1;
+					if (trap_engravings[trap_type]) {
+						make_engr_at(xx, yy-dy,
+							 trap_engravings[trap_type], 0L, DUST);
+						wipe_engr_at(xx, yy-dy, 5); /* age it a little */
+					}
+					}
+				}
+				dosdoor(xx, yy, aroom, SDOOR);
+			} else {
+				rm->typ = CORR;
+				if(rn2(7))
+					dosdoor(xx, yy, aroom, rn2(5) ? SDOOR : DOOR);
+				else {
+					if (!level.flags.noteleport)
+					(void) mksobj_at(SCR_TELEPORTATION,
+							 xx, yy+dy, TRUE, FALSE);
+					if (!rn2(3)) (void) mkobj_at(0, xx, yy+dy, TRUE);
+				}
 			}
-		    }
+			if(In_mithardir_catacombs(&u.uz)){
+				if(!rn2(2))
+					makemon(&mons[PM_ALABASTER_MUMMY], xx, yy+dy,NO_MM_FLAGS);
+				else
+					mkobj_at(TILE_CLASS, xx, yy+dy, TRUE);
+			}
+			return;
 		}
-		dosdoor(xx, yy, aroom, SDOOR);
-	    } else {
-		rm->typ = CORR;
-		if(rn2(7))
-		    dosdoor(xx, yy, aroom, rn2(5) ? SDOOR : DOOR);
-		else {
-		    if (!level.flags.noteleport)
-			(void) mksobj_at(SCR_TELEPORTATION,
-					 xx, yy+dy, TRUE, FALSE);
-		    if (!rn2(3)) (void) mkobj_at(0, xx, yy+dy, TRUE);
-		}
-	    }
-	    return;
-	}
 }
 
 STATIC_OVL void
 make_niches()
 {
-	register int ct = rnd((nroom>>1) + 1), dep = depth(&u.uz);
+	register int ct, dep;
+	if(In_mithardir_catacombs(&u.uz)){
+		ct = 6+rn2(3);
+		while(ct--)
+			makeniche(NO_TRAP);
+	} else {
+		ct = rnd((nroom>>1) + 1), dep = depth(&u.uz);
+		
+		boolean	ltptr = (!level.flags.noteleport && dep > 15),
+			vamp = (dep > 5 && dep < 25);
 
-	boolean	ltptr = (!level.flags.noteleport && dep > 15),
-		vamp = (dep > 5 && dep < 25);
-
-	while(ct--) {
-		if (ltptr && !rn2(6)) {
-			ltptr = FALSE;
-			makeniche(LEVEL_TELEP);
-		} else if (vamp && !rn2(6)) {
-			vamp = FALSE;
-			makeniche(TRAPDOOR);
-		} else	makeniche(NO_TRAP);
+		while(ct--) {
+			if (ltptr && !rn2(6)) {
+				ltptr = FALSE;
+				makeniche(LEVEL_TELEP);
+			} else if (vamp && !rn2(6)) {
+				vamp = FALSE;
+				makeniche(TRAPDOOR);
+			} else	makeniche(NO_TRAP);
+		}
 	}
 }
 
@@ -1000,12 +1024,12 @@ makelevel()
 			   (u.uz.dlevel < loc_lev->dlevel.dlevel) ? "a" : "b");
 		    makemaz(fillname);
 		    return;
-	    } else if(In_hell(&u.uz) ||
+	    } else if(In_hell(&u.uz) || 
 		  (rn2(5) && u.uz.dnum == challenge_level.dnum
 			  && depth(&u.uz) > depth(&challenge_level))) {
 		    makemaz("");
 		    return;
-	    }
+		}
 	}
 
 	/* otherwise, fall through - it's a "regular" level. */
@@ -1017,7 +1041,7 @@ makelevel()
 	} else
 #endif
 	/* probably use the 'claustrophobic' room generation, since we aren't doing a special level */
-	if (rn2(7))
+	if (In_mithardir_catacombs(&u.uz) || rn2(7))
 		flags.makelev_closerooms = TRUE;
 	makerooms();
 	sort_rooms();
@@ -1058,7 +1082,28 @@ makelevel()
 		croom = &rooms[tryct];
 		wallification(croom->lx - 1, croom->ly - 1, croom->hx + 1, croom->hy + 1);
 	}
-
+	
+	if(In_mithardir_catacombs(&u.uz)){
+		//Mini-level level setup
+		int i = rn2(7);
+		while(i-- > 0) mkroom(POOLROOM);
+		for(croom = rooms; croom->hx > 0; croom++) {
+			if(croom->rtype != OROOM && croom->rtype != JOINEDROOM) continue;
+			if(!rn2(3)) {
+				x = somex(croom); y = somey(croom);
+				tmonst = makemon(rn2(2) ? &mons[PM_ALABASTER_MUMMY] : 0, x,y,NO_MM_FLAGS);
+			}
+			if(!rn2(nroom * 5 / 2))
+				(void) mksobj_at((rn2(3)) ? BOX : CHEST,
+						 somex(croom), somey(croom), TRUE, FALSE);
+			if(!rn2(9))
+				(void) mkobj_at(TILE_CLASS,
+						 somex(croom), somey(croom), TRUE);
+		}
+		if(In_mithardir_terminus(&u.uz)) mkroom(RIVER);
+		goto mithardir_end;
+	}
+	
 	/* make a secret treasure vault, not connected to the rest */
 	if(do_vault()) {
 		xchar w,h;
@@ -1251,7 +1296,26 @@ skip0:
 		    }
 		}
 	}
-	if (flags.makelev_closerooms)			
+mithardir_end:
+	if(In_mithardir_catacombs(&u.uz)){
+		for (x = 0; x<COLNO; x++){
+			for (y = 0; y<ROWNO; y++){
+				levl[x][y].lit = FALSE;
+				if(levl[x][y].typ == CORR)
+					levl[x][y].typ = ROOM;
+				else if(levl[x][y].typ == SCORR)
+					levl[x][y].typ = ROOM;
+				else if(levl[x][y].typ == SDOOR){
+					levl[x][y].typ = DOOR;
+					levl[x][y].doormask = D_LOCKED;
+				}
+				else if(IS_ROCK(levl[x][y].typ))
+					levl[x][y].typ = VWALL;
+			}
+		}
+		wallification(1, 0, COLNO - 1, ROWNO - 1);
+	}
+	if (flags.makelev_closerooms)
 		flags.makelev_closerooms = FALSE;
 }
 
@@ -1416,23 +1480,6 @@ wallwalk_right(x,y,fgtyp,fglit,bgtyp,chance)
     } while ((x != sx) || (y != sy));
 }
 
-///Old
-// void
-// mkpoolroom()
-// {
-    // struct mkroom *sroom;
-    // schar typ;
-
-    // if (!(sroom = pick_room(TRUE))) return;
-
-    // if (sroom->hx - sroom->lx < 3 || sroom->hy - sroom->ly < 3) return;
-
-    // sroom->rtype = POOLROOM;
-    // typ = !rn2(5) ? POOL : LAVAPOOL;
-
-    // wallwalk_right(sroom->lx, sroom->ly, typ, sroom->rlit, ROOM, 96);
-// }
-
 void
 mklev()
 {
@@ -1559,6 +1606,7 @@ find_branch_room(mp)
 		&& levl[mp->x][mp->y].typ != ROOM
 		&& levl[mp->x][mp->y].typ != GRASS
 		&& levl[mp->x][mp->y].typ != SOIL
+		&& levl[mp->x][mp->y].typ != SAND
 		&& levl[mp->x][mp->y].typ != PUDDLE) ||
 		tryct++ > 1000);
     }

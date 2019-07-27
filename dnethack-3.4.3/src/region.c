@@ -1063,6 +1063,8 @@ int damage;
 	tmprect.hy--;
     }
     cloud->ttl = rn1(3,4);
+	cloud->rx = x;
+	cloud->ry = y;
     if (!in_mklev && !flags.mon_moving && !flags.cth_attk)
 		set_heros_fault(cloud);		/* assume player has created it */
 	else clear_heros_fault(cloud);
@@ -1115,6 +1117,8 @@ int damage;
 	tmprect.hy--;
     }
     cloud->ttl = damage;
+	cloud->rx = x;
+	cloud->ry = y;
     if (!in_mklev && !flags.mon_moving && !flags.cth_attk)
 		set_heros_fault(cloud);		/* assume player has created it */
 	else clear_heros_fault(cloud);
@@ -1132,6 +1136,32 @@ expire_dust_cloud(p1, p2)
 genericptr_t p1;
 genericptr_t p2;
 {
+    NhRegion *reg;
+    int damage;
+	int nx, ny;
+
+    reg = (NhRegion *) p1;
+    damage = (int)(intptr_t)reg->arg;
+	
+	nx = reg->rx - 1 + rn2(3);
+	ny = reg->ry - 1 + rn2(3);
+	
+	if(!isok(nx, ny) || !ZAP_POS(levl[nx][ny].typ)){
+		nx = reg->rx;
+		ny = reg->ry;
+	}
+	
+    /* Small storms may grow.  Odd damage == growing, low damage == shrinking */
+    if (damage%2) {//Odd
+		if(damage < 5) damage += rn2(3);//0, 1, or 2
+		else damage += rn2(2);//0 or 1, caps growth
+		create_dust_cloud(nx, ny, damage, damage);
+    } else {//Even
+		if(damage > 2){
+			damage -= rn2(2)*2;//0 or 2
+			create_dust_cloud(nx, ny, damage, damage);
+		}
+	}
     return TRUE;		/* OK, it's gone, you can free it! */
 }
 
@@ -1154,7 +1184,7 @@ genericptr_t p2;
 			return FALSE;
 		if (!Blind)
 			make_blinded(1L, FALSE);
-		if(!rn2(20) && !Sick_resistance){
+		if(dam > 3 && !rn2(20) && !Sick_resistance){ //Only a large dust storm
 			//Dormant spores
 			make_sick(Sick ? Sick/2L + 1L : ACURR(A_CON)*300L, //~3000 turns
 				"white spores", TRUE, SICK_NONVOMITABLE);
@@ -1254,10 +1284,10 @@ int damage;
 	tmprect.ly++;
 	tmprect.hy--;
     }
-    cloud->ttl = damage;
-    if (!in_mklev && !flags.mon_moving && !flags.cth_attk)
-		set_heros_fault(cloud);		/* assume player has created it */
-	else clear_heros_fault(cloud);
+    cloud->ttl = rnd(3)+rnd(3)+rnd(3);//3 - 9, normalish distribution
+	cloud->rx = x;
+	cloud->ry = y;
+	clear_heros_fault(cloud);/* assumes never the player's fault */
     cloud->inside_f = INSIDE_DUST_CLOUD;
     cloud->expire_f = EXPIRE_DUST_CLOUD;
     cloud->arg = (genericptr_t)(intptr_t)damage;

@@ -1356,8 +1356,9 @@ boolean with_price;
 			break;
 		case ROCK_CLASS:
 			if (typ == STATUE)
-				Sprintf(eos(buf), "%s%s of %s%s",
+		    Sprintf(eos(buf), "%s%s%s of %s%s",
 				(Role_if(PM_ARCHEOLOGIST) && (obj->spe & STATUE_HISTORIC)) ? "historic " : "",
+				((obj->spe & STATUE_FACELESS)) ? "faceless " : "",
 				actualn,
 				type_is_pname(&mons[obj->corpsenm]) ? "" :
 				(mons[obj->corpsenm].geno & G_UNIQ) ? "the " :
@@ -2107,6 +2108,7 @@ register const char *str;
 	    strcmp(str, "iron bars") &&
 	    strcmp(str, "grass") &&
 	    strcmp(str, "soil") &&
+	    strcmp(str, "sand") &&
 	    strcmp(str, "ice")) {
 		if (index(vowels, *str) &&
 		    strncmp(str, "one-", 4) &&
@@ -2857,6 +2859,7 @@ const char *oldstr;
 			   !BSTRCMPI(bp, p-5, "glass") ||
 			   !BSTRCMPI(bp, p-5, "grass") ||
 			   !BSTRCMPI(bp, p-4, "soil") ||
+			   !BSTRCMPI(bp, p-4, "sand") ||
 			   !BSTRCMP(bp, p-4, "ness") ||
 			   !BSTRCMPI(bp, p-14, "shape changers") ||
 			   !BSTRCMPI(bp, p-15, "detect monsters") ||
@@ -4294,9 +4297,16 @@ srch:
 			*wishreturn = WISH_SUCCESS;
 			return &zeroobj;
 		}
-		if (!BSTRCMP(bp, p-5, "soil")) {
+		if (!BSTRCMP(bp, p-4, "soil")) {
 			levl[u.ux][u.uy].typ = SOIL;
 			pline("A patch of soil.");
+			newsym(u.ux, u.uy);
+			*wishreturn = WISH_SUCCESS;
+			return &zeroobj;
+		}
+		if (!BSTRCMP(bp, p-4, "sand")) {
+			levl[u.ux][u.uy].typ = SAND;
+			pline("A patch of sand.");
 			newsym(u.ux, u.uy);
 			*wishreturn = WISH_SUCCESS;
 			return &zeroobj;

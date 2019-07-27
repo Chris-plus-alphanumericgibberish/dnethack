@@ -185,6 +185,8 @@ magic_map_background(x, y, show)
 	    glyph = cmap_to_glyph(S_drkgrass);
 	else if (lev->typ == SOIL && glyph == cmap_to_glyph(S_litsoil))
 	    glyph = cmap_to_glyph(S_drksoil);
+	else if (lev->typ == SAND && glyph == cmap_to_glyph(S_litsand))
+	    glyph = cmap_to_glyph(S_drksand);
 	else if (lev->typ == CORR && glyph == cmap_to_glyph(S_litcorr))
 	    glyph = cmap_to_glyph(S_corr);
     }
@@ -319,6 +321,9 @@ unmap_object(x, y)
 	else if (!lev->waslit && lev->glyph == cmap_to_glyph(S_litsoil) &&
 							    lev->typ == SOIL)
 	    lev->glyph = cmap_to_glyph(S_drksoil);
+	else if (!lev->waslit && lev->glyph == cmap_to_glyph(S_litsand) &&
+							    lev->typ == SAND)
+	    lev->glyph = cmap_to_glyph(S_drksand);
     } else
 	levl[x][y].glyph = cmap_to_glyph(S_stone);	/* default val */
 }
@@ -642,6 +647,9 @@ feel_location(x, y)
 	else if (lev->typ == SOIL &&
 		    lev->glyph == cmap_to_glyph(S_litsoil) && !lev->waslit)
 	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_drksoil));
+	else if (lev->typ == SAND &&
+		    lev->glyph == cmap_to_glyph(S_litsand) && !lev->waslit)
+	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_drksand));
 	else if (lev->typ == CORR &&
 		    lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
 	    show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
@@ -709,6 +717,9 @@ echo_location(x, y)
 		else if (lev->typ == SOIL &&
 				lev->glyph == cmap_to_glyph(S_litsoil) && !lev->waslit)
 			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_drksoil));
+		else if (lev->typ == SAND &&
+				lev->glyph == cmap_to_glyph(S_litsand) && !lev->waslit)
+			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_drksand));
 		else if (lev->typ == CORR &&
 				lev->glyph == cmap_to_glyph(S_litcorr) && !lev->waslit)
 			show_glyph(x,y, lev->glyph = cmap_to_glyph(S_corr));
@@ -869,6 +880,8 @@ newsym(x,y)
 		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_drkgrass));
 	    else if (lev->glyph == cmap_to_glyph(S_litsoil) && lev->typ == SOIL)
 		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_drksoil));
+	    else if (lev->glyph == cmap_to_glyph(S_litsand) && lev->typ == SAND)
+		show_glyph(x, y, lev->glyph = cmap_to_glyph(S_drksand));
 	    else
 		goto show_mem;
 	} else {
@@ -1616,6 +1629,9 @@ back_to_glyph(x,y)
 	case SOIL:
 	    idx = (!cansee(x,y) && !ptr->waslit) ? S_drksoil : S_litsoil;
 	    break;
+	case SAND:
+	    idx = (!cansee(x,y) && !ptr->waslit) ? S_drksand : S_litsand;
+	    break;
 	case AIR:		idx = S_air;	  break;
 	case CLOUD:		idx = S_cloud;	  break;
 	case PUDDLE:		idx = S_puddle;	  break;
@@ -1733,7 +1749,7 @@ static const char *type_names[MAX_TYPE] = {
 	"MOAT",		"WATER",	"DRAWBRIDGE_UP","LAVAPOOL",
 	"DEADTREE", "DOOR",		"CORR",		"ROOM",		"STAIRS",
 	"LADDER",	"FOUNTAIN",	"THRONE",	"SINK",
-	"ALTAR",	"ICE",		"GRASS",	"SOIL",	
+	"ALTAR",	"ICE",		"GRASS",	"SOIL",	"SAND",	
 	"DRAWBRIDGE_DOWN","AIR", "CLOUD", "FOG", "DUST_CLOUD", "PUDDLE"
 };
 

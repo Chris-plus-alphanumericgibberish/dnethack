@@ -613,6 +613,10 @@ E boolean FDECL(In_neu, (d_level *));
 E boolean FDECL(In_outlands, (d_level *));
 E boolean FDECL(In_lost_cities, (d_level *));
 E boolean FDECL(In_cha, (d_level *));
+E boolean FDECL(In_mithardir_desert, (d_level *));
+E boolean FDECL(In_mithardir_catacombs, (d_level *));
+E boolean FDECL(In_mithardir_terminus, (d_level *));
+E boolean FDECL(In_mithardir_quest, (d_level *));
 E boolean FDECL(In_law, (d_level *));
 E branch *FDECL(dungeon_branch, (const char *));
 E boolean FDECL(at_dgn_entrance, (const char *));
@@ -638,6 +642,7 @@ E void FDECL(init_mapseen, (d_level *));
 E void NDECL(recalc_mapseen);
 E void FDECL(recbranch_mapseen, (d_level *, d_level *));
 E void FDECL(remdun_mapseen, (int));
+E void NDECL(dust_storm);
 
 /* ### eat.c ### */
 
@@ -1223,6 +1228,7 @@ E void NDECL(makecorridors);
 E int FDECL(add_door, (int,int,struct mkroom *));
 E int NDECL(random_special_room);
 E void NDECL(mkpoolroom);
+E void NDECL(mkslabroom);
 E void NDECL(mklev);
 #ifdef SPECIALIZATION
 E void FDECL(topologize, (struct mkroom *,BOOLEAN_P));
@@ -2032,6 +2038,7 @@ E void FDECL(com_pager, (int));
 E void FDECL(qt_pager, (int));
 E struct permonst *NDECL(qt_montype);
 E struct permonst *NDECL(chaos_montype);
+E struct permonst *NDECL(chaos2_montype);
 E struct permonst *NDECL(neutral_montype);
 E struct permonst *NDECL(law_montype);
 

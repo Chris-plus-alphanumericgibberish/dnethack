@@ -1321,6 +1321,7 @@ mkkamereltowers()
 					|| levl[x+i][y+j].typ == ROOM 
 					|| levl[x+i][y+j].typ == GRASS 
 					|| levl[x+i][y+j].typ == SOIL 
+					|| levl[x+i][y+j].typ == SAND 
 					|| levl[x+i][y+j].typ == PUDDLE)
 				){
 					if(levl[x+i][y+j].typ!=TREE || edge - i > rn2(6)) levl[x+i][y+j].typ = PUDDLE;
@@ -1753,6 +1754,7 @@ mkminorspire()
 					if(levl[ix+i][iy+j].typ == ROOM 
 					|| levl[ix+i][iy+j].typ == GRASS 
 					|| levl[ix+i][iy+j].typ == SOIL 
+					|| levl[ix+i][iy+j].typ == SAND 
 					|| (dist2(ix, iy, ix+i, iy+j)) < (rnd(8)*rnd(8)+36))
 						levl[ix+i][iy+j].typ = PUDDLE;
 					levl[ix+i][iy+j].lit = 1;
@@ -1898,6 +1900,7 @@ mkfishingvillage()
 					|| levl[x+i][y+j].typ == ROOM 
 					|| levl[x+i][y+j].typ == GRASS 
 					|| levl[x+i][y+j].typ == SOIL 
+					|| levl[x+i][y+j].typ == SAND 
 					|| levl[x+i][y+j].typ == PUDDLE)
 				){
 					if(i < edge-shelf){
@@ -1920,6 +1923,7 @@ mkfishingvillage()
 					(levl[x+i][y+j].typ == TREE 
 					|| levl[x+i][y+j].typ == GRASS 
 					|| levl[x+i][y+j].typ == SOIL 
+					|| levl[x+i][y+j].typ == SAND 
 					|| levl[x+i][y+j].typ == PUDDLE)
 				){
 					if(i > edge + shelf){
@@ -1968,6 +1972,7 @@ mkfishinghut(left)
 					|| levl[x+i][y+j].typ == PUDDLE 
 					|| levl[x+i][y+j].typ == GRASS 
 					|| levl[x+i][y+j].typ == SOIL 
+					|| levl[x+i][y+j].typ == SAND 
 					|| levl[x+i][y+j].typ == MOAT
 					 )
 				) okspot = FALSE;
@@ -2077,24 +2082,29 @@ mkwell(left)
 					|| levl[x+i][y+j].typ == PUDDLE 
 					|| levl[x+i][y+j].typ == GRASS
 					|| levl[x+i][y+j].typ == SOIL
+					|| levl[x+i][y+j].typ == SAND
 					)
 				) okspot = FALSE;
 			}
 		pathto = 0;
 		if(isok(x,y-2) && (levl[x][y-2].typ == PUDDLE 
 							|| levl[x][y-2].typ == SOIL
+							|| levl[x][y-2].typ == SAND
 							|| levl[x][y-2].typ == GRASS))
 			pathto++;
 		if(isok(x,y+2) && (levl[x][y+2].typ == PUDDLE 
 							|| levl[x][y+2].typ == SOIL
+							|| levl[x][y+2].typ == SAND
 							|| levl[x][y+2].typ == GRASS))
 			pathto++;
 		if(isok(x-2,y) && (levl[x-2][y].typ == PUDDLE 
 							|| levl[x-2][y].typ == SOIL
+							|| levl[x-2][y].typ == SAND
 							|| levl[x-2][y].typ == GRASS))
 			pathto++;
 		if(isok(x+2,y) && (levl[x+2][y].typ == PUDDLE 
 							|| levl[x+2][y].typ == SOIL
+							|| levl[x+2][y].typ == SAND
 							|| levl[x+2][y].typ == GRASS))
 			pathto++;
 		if(pathto) accessible = TRUE;
@@ -3780,6 +3790,7 @@ int	roomtype;
 	case STATUEGRDN: mksgarden(); break;
 	case RIVER: mkriver(); break;
 	case POOLROOM:	mkpoolroom(); break;
+	case SLABROOM:	mkslabroom(); break;
 	default:	impossible("Tried to make a room of type %d.", roomtype);
     }
 }
@@ -3971,6 +3982,7 @@ int type;
 	case ARMORY:
 	case RIVER:
 	case POOLROOM:
+	case SLABROOM:
 	case JOINEDROOM:
 		return FALSE;
 	default:
@@ -4875,7 +4887,7 @@ register int edge; /* Allows room walls to intrude slightly into river. */
 	if (level.flags.has_shop && *in_rooms(x, y, SHOPBASE)) {return;}
 	
 	/* Don't liquify other level features */
-	if(typ != TREE && typ != GRASS && typ != SOIL)
+	if(typ != TREE && typ != GRASS && typ != SOIL && typ != SAND)
 		return;
 	
 	if (typ!=TREE || (!edge && rn2(6))){
@@ -5073,7 +5085,6 @@ mkpoolroom()
 	for(x = sroom->lx+1; x <= sroom->hx-1; x++) {
 		for(y = (sroom->ly)+1; y <= (sroom->hy)-1; y++) {
 			levl[x][y].typ = POOL;
-			levl[x][y].typ = POOL;
 			if (u_depth > 8) {
 				if (!rn2(16)) {
 					(void) makemon(rn2(2) ? &mons[PM_GIANT_EEL]
@@ -5083,6 +5094,65 @@ mkpoolroom()
 		}
 	}
 	
+}
+
+void
+mkslabroom()
+{
+	struct mkroom *sroom;
+	int x, y, lx, ly;
+	
+	for(sroom = &rooms[level.flags.sp_lev_nroom]; ; sroom++){
+		if(sroom->hx < 0) return;  /* from mkshop: Signifies out of rooms? */
+		if(sroom - rooms >= nroom) {
+			pline("rooms not closed by -1?");
+			return;
+		}
+
+		if(sroom->rtype != OROOM || !isspacious(sroom))
+				continue;
+		else break;
+	}
+	
+	sroom->rtype = SLABROOM;
+	
+	lx = sroom->lx;
+	ly = sroom->ly;
+	for(x = sroom->lx+2; x < sroom->lx+5; x++) {
+		for(y = (sroom->ly)+2; y < (sroom->ly)+5; y++) {
+			levl[x][y].typ = VWALL;
+		}
+	}
+	x = lx+3; y = ly+3;
+	levl[x][y].typ = ROOM;
+	{
+		int remaining = 0;
+		if(!flags.made_first)
+			remaining++;
+		if(!flags.made_divide)
+			remaining++;
+		if(!flags.made_life)
+			remaining++;
+		if(remaining){
+			remaining = rnd(remaining);
+			if(!flags.made_first && !(--remaining))
+				mksobj_at(FIRST_WORD, x, y, TRUE, FALSE);
+			else if(!flags.made_divide && !(--remaining))
+				mksobj_at(DIVIDING_WORD, x, y, TRUE, FALSE);
+			else if(!flags.made_life && !(--remaining))
+				mksobj_at(NURTURING_WORD, x, y, TRUE, FALSE);
+		}
+	}
+	
+	x = lx+2; y = ly+3;
+	levl[x][y].typ = DOOR;
+	x = lx+3; y = ly+2;
+	levl[x][y].typ = DOOR;
+	x = lx+4; y = ly+3;
+	levl[x][y].typ = DOOR;
+	x = lx+3; y = ly+4;
+	levl[x][y].typ = DOOR;
+	wallification(sroom->lx, sroom->ly, sroom->hx, sroom->hy);
 }
 
 STATIC_OVL void

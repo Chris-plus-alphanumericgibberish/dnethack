@@ -36,6 +36,7 @@ typedef struct {
   short  nrects;		/* Number of rectangles  */
   boolean attach_2_u;		/* Region attached to player ? */
   unsigned int attach_2_m;	/* Region attached to monster ? */
+  int rx, ry; 				/* x and y coordinates the region was started at (used for dust clouds)*/
   /*struct obj *attach_2_o;*/	/* Region attached to object ? UNUSED YET */
   const char* enter_msg;	/* Message when entering */
   const char* leave_msg;	/* Message when leaving */

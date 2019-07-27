@@ -1459,6 +1459,8 @@ karemade:
 		      /********************************/
 		     /* once-per-turn things go here */
 		    /********************************/
+			/* Environment effects */
+			dust_storm();
 			/* Item attacks */
 			mind_blast_items();
 			/* Clouds on Lolth's level deal damage */

@@ -219,27 +219,85 @@ unsigned *ospecial;
 					color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
 				}
 			} else if(In_cha(&u.uz)){
-				if(offset >= S_vwall && offset <= S_trwall){
-					color = CLR_BLACK;
-				}
-				if(offset >= S_drkroom && offset <= S_dnladder){
-					color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
-				}
-				if(Is_lich_level(&u.uz)){
-					if(offset >= S_vwall && offset <= S_trwall){
-						color = CLR_BROWN;
+				if(In_mithardir_quest(&u.uz)){
+					if(In_mithardir_desert(&u.uz)){
+						if((offset >= S_vwall && offset <= S_trwall)
+							|| offset == S_litroom
+							|| offset == S_brightrm
+							|| offset == S_litcorr
+							|| (offset >= S_upstair && offset <= S_dnladder)
+							|| offset == S_litsoil
+							|| offset == S_litsand
+						){
+							color = CLR_WHITE;
+						}
+						if(offset == S_drkroom
+							|| offset == S_corr
+							|| offset == S_drksoil
+							|| offset == S_drksand
+						){
+							color = CLR_BLACK;
+						}
+					} else if(In_mithardir_terminus(&u.uz)){
+						if(offset == S_litroom
+							|| offset == S_brightrm
+							|| offset == S_litcorr
+							|| offset == S_litsoil
+							|| offset == S_litsand
+						){
+							color = CLR_GRAY;
+						}
+						if((offset >= S_vwall && offset <= S_trwall)
+							|| offset == S_drkroom
+							|| offset == S_corr
+							|| offset == S_drksoil
+							|| offset == S_drksand
+							|| (offset >= S_upstair && offset <= S_dnladder)
+						){
+							color = CLR_BLACK;
+						}
+					} else {
+						if((offset >= S_vwall && offset <= S_trwall)
+							|| offset == S_litroom
+							|| offset == S_brightrm
+							|| offset == S_litcorr
+							|| (offset >= S_upstair && offset <= S_dnladder)
+							|| offset == S_litsoil
+							|| offset == S_litsand
+						){
+							color = CLR_GRAY;
+						}
+						if(offset == S_drkroom
+							|| offset == S_corr
+							|| offset == S_drksoil
+							|| offset == S_drksand
+						){
+							color = CLR_BLACK;
+						}
 					}
-				} else if(Is_marilith_level(&u.uz)){
+				} else {
 					if(offset >= S_vwall && offset <= S_trwall){
-						color = CLR_ORANGE;
+						color = CLR_BLACK;
 					}
-				} else if(Is_kraken_level(&u.uz)){
-					if(offset >= S_vwall && offset <= S_trwall){
-						color = CLR_BRIGHT_BLUE;
+					if(offset >= S_drkroom && offset <= S_dnladder){
+						color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
 					}
-				} else if(Is_tiamat_level(&u.uz)){
-					if(offset >= S_vwall && offset <= S_trwall){
-						color = CLR_CYAN;
+					if(Is_lich_level(&u.uz)){
+						if(offset >= S_vwall && offset <= S_trwall){
+							color = CLR_BROWN;
+						}
+					} else if(Is_marilith_level(&u.uz)){
+						if(offset >= S_vwall && offset <= S_trwall){
+							color = CLR_ORANGE;
+						}
+					} else if(Is_kraken_level(&u.uz)){
+						if(offset >= S_vwall && offset <= S_trwall){
+							color = CLR_BRIGHT_BLUE;
+						}
+					} else if(Is_tiamat_level(&u.uz)){
+						if(offset >= S_vwall && offset <= S_trwall){
+							color = CLR_CYAN;
+						}
 					}
 				}
 			} else if(In_neu(&u.uz)){

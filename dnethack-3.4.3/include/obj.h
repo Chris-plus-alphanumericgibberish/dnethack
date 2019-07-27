@@ -47,6 +47,7 @@ struct obj {
 #define STATUE_HISTORIC 0x01
 #define STATUE_MALE     0x02
 #define STATUE_FEMALE   0x04
+#define STATUE_FACELESS 0x08
 	char	oclass;		/* object class */
 	char	invlet;		/* designation in inventory */
 	int		oartifact;	/* artifact array index */

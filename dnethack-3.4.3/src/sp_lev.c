@@ -225,6 +225,7 @@ register int humidity;
 			|| typ == PUDDLE 
 			|| typ == GRASS
 			|| typ == SOIL
+			|| typ == SAND
 		)
 		return TRUE;
 	}

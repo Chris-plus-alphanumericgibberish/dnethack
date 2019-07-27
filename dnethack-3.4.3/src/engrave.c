@@ -2774,11 +2774,15 @@ int mode;
 			if ((otmp->oclass == WEAPON_CLASS || spec_ability3(otmp, SPFX3_ENGRV)) 
 				&& ((otmp->otyp != ATHAME && !spec_ability3(otmp, SPFX3_ENGRV)) || otmp->cursed)
 			) {
-				if(levl[u.ux][u.uy].typ == GRASS || levl[u.ux][u.uy].typ == SOIL) multi = -(len/2);
+				if(levl[u.ux][u.uy].typ == GRASS 
+				|| levl[u.ux][u.uy].typ == SOIL
+				|| levl[u.ux][u.uy].typ == SAND
+				) multi = -(len/2);
 				else multi = -len;
 				if(otmp->otyp == CRYSTAL_SWORD
 				|| levl[u.ux][u.uy].typ == GRASS
 				|| levl[u.ux][u.uy].typ == SOIL
+				|| levl[u.ux][u.uy].typ == SAND
 				) maxelen = len;
 				else maxelen = ((otmp->spe + 3) * 2) + 1;
 				/* -2 = 3, -1 = 5, 0 = 7, +1 = 9, +2 = 11
@@ -2790,6 +2794,7 @@ int mode;
 				if(otmp->otyp != CRYSTAL_SWORD
 				&& levl[u.ux][u.uy].typ != GRASS
 				&& levl[u.ux][u.uy].typ != SOIL
+				&& levl[u.ux][u.uy].typ != SAND
 				){
 					Your("%s dull.", aobjnam(otmp,	"get"));
 					if (otmp->unpaid) {

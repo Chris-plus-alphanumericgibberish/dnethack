@@ -147,10 +147,14 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 	xchar	d_rlyeh_dnum;
     d_level	d_gatetown_level, d_spire_level, d_sum_of_all_level, d_rlyeh_level;
 	/*Chaos Quest*/
+	xchar	d_chaos_dvariant;
 	xchar	d_chaos_dnum;
     d_level	d_chaosf_level, d_chaoss_level, d_chaost_level, d_chaosm_level,
 		d_chaosfrh_level, d_chaosffh_level, d_chaossth_level,
 		d_chaosvth_level, d_chaose_level;
+	/*Chaos Quest 2*/
+    d_level	d_elshava_level;
+    d_level	d_lastspire_level;
 	/*Law Quest*/
 	xchar	d_law_dnum;
 	d_level d_path1, d_path2, d_path3, d_illregrd, 
@@ -229,6 +233,10 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define sum_of_all_level		(dungeon_topology.d_sum_of_all_level)
 #define rlyeh_level		(dungeon_topology.d_rlyeh_level)
 	/*Chaos Quest*/
+#define chaos_dvariant		(dungeon_topology.d_chaos_dvariant)
+#define TEMPLE_OF_CHAOS	0
+#define MITHARDIR		1
+#define MORDOR			2
 #define chaos_dnum		(dungeon_topology.d_chaos_dnum)
 #define chaosf_level		(dungeon_topology.d_chaosf_level)
 #define chaoss_level		(dungeon_topology.d_chaoss_level)
@@ -239,6 +247,9 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define chaossth_level		(dungeon_topology.d_chaossth_level)
 #define chaosvth_level		(dungeon_topology.d_chaosvth_level)
 #define chaose_level		(dungeon_topology.d_chaose_level)
+	/*Chaos Quest 2*/
+#define elshava_level		(dungeon_topology.d_elshava_level)
+#define lastspire_level		(dungeon_topology.d_lastspire_level)
 	/*Law Quest*/
 #define law_dnum		(dungeon_topology.d_law_dnum)
 #define path1_level		(dungeon_topology.d_path1)
