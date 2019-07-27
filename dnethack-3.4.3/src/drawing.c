@@ -73,7 +73,8 @@ const char * const objexplain[] = {	/* these match def_oc_syms, above */
 	"boulder or statue",
 /*15*/	"iron ball",
 	"iron chain",
-	"splash of venom"
+	"splash of venom",
+	"tile shard or slab"
 };
 
 /* Object class names.  Used in object_detect(). */
@@ -95,7 +96,8 @@ const char * const oclass_names[] = {
 	"large stones",
 /*15*/	"iron balls",
 	"chains",
-	"venoms"
+	"venoms",
+	"tiles"
 };
 
 /* Default monster class symbols.  See monsym.h. */
