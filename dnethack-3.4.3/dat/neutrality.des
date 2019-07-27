@@ -220,8 +220,8 @@ INIT_MAP: 'T' , 'G' , false, false, lit , false
 
 NOMAP
 
-PORTAL:(00,00,35,20),(00,00,00,00),"gatetwn"
-PORTAL:(00,00,35,20),(00,00,00,00),"out2"
+PORTAL:(00,00,75,20),(00,00,00,00),"gatetwn"
+PORTAL:(00,00,75,20),(00,00,00,00),"out2"
 
 MONSTER[10%]:'u', "gray unicorn", random
 
@@ -241,8 +241,8 @@ INIT_MAP: 'G' , 'T' , true, true , lit , false
 
 NOMAP
 
-PORTAL:(00,00,35,20),(00,00,00,00),"out1"
-PORTAL:(00,00,35,20),(00,00,00,00),"out3"
+PORTAL:(00,00,75,20),(00,00,00,00),"out1"
+PORTAL:(00,00,75,20),(00,00,00,00),"out3"
 
 MONSTER[10%]:'u', "gray unicorn", random
 
@@ -265,8 +265,8 @@ INIT_MAP: 'G' , 'T' , false, true , unlit , false
 
 NOMAP
 
-PORTAL:(00,00,35,20),(00,00,00,00),"out2"
-PORTAL:(00,00,35,20),(00,00,00,00),"out4"
+PORTAL:(00,00,75,20),(00,00,00,00),"out2"
+PORTAL:(00,00,75,20),(00,00,00,00),"out4"
 
 MONSTER[10%]:'u', "gray unicorn", random
 
@@ -291,8 +291,8 @@ INIT_MAP: 'G' , 'T' , false, true , unlit , false
 
 NOMAP
 
-PORTAL:(00,00,35,20),(00,00,00,00),"out3"
-PORTAL:(00,00,35,20),(00,00,00,00),"spire"
+PORTAL:(00,00,75,20),(00,00,00,00),"out3"
+PORTAL:(00,00,75,20),(00,00,00,00),"spire"
 
 MONSTER[10%]:'u', "gray unicorn", random
 
