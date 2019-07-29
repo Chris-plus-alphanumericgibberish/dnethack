@@ -5173,23 +5173,29 @@ int damage, tell;
 	return(resisted);
 }
 
-// returns WISH_ARTALLOW if the player is eligible to wish for an artifact at this time, otherwise 0
+/* returns WISH_ARTALLOW if the player is eligible to wish for an artifact at this time, otherwise 0
+ * Although there is an ARTWISH_SPENT flag for the uevents, don't use it here -- just use how many
+ *   artifacts the player has wished for, and keep track of how many (total) have been earned.
+ */
 int
 allow_artwish()
 {
-	int n = 0;
+	int n = 1;
 	
 	// n += u.uevent.qcalled;		// reaching the main dungeon branch of the quest
-	if(u.ulevel >= 7) n++;		// enough levels to be intimidating to marids/djinni
-	n += u.uevent.utook_castle;	// sitting on the castle throne
-	n += u.uevent.uunknowngod;	// sacrificing five artifacts to the priests of the unknown god
+	//if(u.ulevel >= 7) n++;		// enough levels to be intimidating to marids/djinni
+	n += (u.uevent.utook_castle & ARTWISH_EARNED);	// sitting on the castle throne
+	n += (u.uevent.uunknowngod & ARTWISH_EARNED);	// sacrificing five artifacts to the priests of the unknown god
+
+	if (Race_if(PM_INHERITOR))	// you started with an artifact, you don't get an artifact wish for free!
+		n--;
 
 	n -= u.uconduct.wisharti;	// how many artifacts the player has wished for
 
 	return ((n > 0) ? WISH_ARTALLOW : 0);
 }
 
-void
+boolean
 makewish(wishflags)
 int wishflags;		// flags to change messages / effects
 {
@@ -5219,7 +5225,7 @@ retry:
 		/* explicitly wished for "nothing", presumeably attempting to retain wishless conduct */
 		if (wishflags & WISH_VERBOSE)
 			verbalize("As you wish.");
-		return;
+		return FALSE;
 	}
 	if (wishreturn & WISH_FAILURE)
 	{
@@ -5252,7 +5258,7 @@ retry:
 		/* no more tries, give a random item */
 		pline1(thats_enough_tries);
 		otmp = readobjnam((char *)0, &wishreturn, wishflags);
-		if (!otmp) return;	/* for safety; should never happen */
+		if (!otmp) return TRUE;	/* for safety; should never happen */
 	}
 
 	/* KMH, conduct */
@@ -5281,6 +5287,7 @@ retry:
 				       (const char *)0);
 	    u.ublesscnt += rn1(100,50);  /* the gods take notice */
 	}
+	return TRUE;
 }
 
 #endif /*OVL2*/

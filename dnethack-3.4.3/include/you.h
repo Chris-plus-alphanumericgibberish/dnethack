@@ -56,8 +56,10 @@ struct u_event {
 	Bitfield(ukilled_illurien,1);		/* Harassment */
 	Bitfield(sum_entered,1);		/* entered Sum-of-All */
 	Bitfield(uaxus_foe,1);		/* enemy of the modrons */
-	Bitfield(utook_castle, 1);	/* sat on the castle throne */
-	Bitfield(uunknowngod, 1);	/* given five artifacts to the priests of the unknown god */
+	Bitfield(utook_castle, 2);	/* sat on the castle throne, used artifact wish */
+	Bitfield(uunknowngod, 2);	/* given five artifacts to the priests of the unknown god, used artifact wish */
+#define ARTWISH_EARNED	1
+#define ARTWISH_SPENT	2
 	Bitfield(ascended,1);		/* has offered the Amulet */
 };
 

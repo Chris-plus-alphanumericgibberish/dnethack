@@ -48,7 +48,6 @@ STATIC_DCL int FDECL(dopayobj, (struct monst *, struct bill_x *,
 			    struct obj **, int, BOOLEAN_P));
 STATIC_DCL long FDECL(stolen_container, (struct obj *, struct monst *, long,
 				     BOOLEAN_P));
-STATIC_DCL long FDECL(getprice, (struct obj *,BOOLEAN_P));
 STATIC_DCL void FDECL(shk_names_obj,
 		 (struct monst *,struct obj *,const char *,long,const char *));
 STATIC_DCL struct obj *FDECL(bp_to_obj, (struct bill_x *));
@@ -1667,7 +1666,10 @@ proceed:
 	}
 	/* now check items on bill */
 	if (eshkp->billct) {
-	    register boolean itemize;
+	    boolean itemize = FALSE;
+	    /* get item selected by inventory menu */
+	    struct obj* payme_item = getnextgetobj();
+
 #ifndef GOLDOBJ
 	    if (!u.ugold && !eshkp->credit) {
 #else
@@ -1693,7 +1695,9 @@ proceed:
 
 	    /* this isn't quite right; it itemizes without asking if the
 	     * single item on the bill is partly used up and partly unpaid */
-	    itemize = (eshkp->billct > 1 ? yn("Itemized billing?") == 'y' : 1);
+	    if (!payme_item) {
+		    itemize = (eshkp->billct > 1 ? yn("Itemized billing?") == 'y' : 1);
+	    }
 
 	    for (pass = 0; pass <= 1; pass++) {
 		tmp = 0;
@@ -1719,25 +1723,29 @@ proceed:
 			 * are processed on both passes */
 			tmp++;
 		    } else {
-			switch (dopayobj(shkp, bp, &otmp, pass, itemize)) {
-			  case PAY_CANT:
-				return 1;	/*break*/
-			  case PAY_BROKE:
-				paid = TRUE;
-				goto thanks;	/*break*/
-			  case PAY_SKIP:
-				tmp++;
-				continue;	/*break*/
-			  case PAY_SOME:
-				paid = TRUE;
+			if (payme_item == NULL || payme_item == otmp) {
+				switch (dopayobj(shkp, bp, &otmp, pass, itemize)) {
+					case PAY_CANT:
+						return 1;	/*break*/
+					case PAY_BROKE:
+						paid = TRUE;
+						goto thanks;	/*break*/
+					case PAY_SKIP:
+						tmp++;
+						continue;	/*break*/
+					case PAY_SOME:
+						paid = TRUE;
+						if (itemize) bot();
+						continue;	/*break*/
+					case PAY_BUY:
+						paid = TRUE;
+						break;
+				}
 				if (itemize) bot();
-				continue;	/*break*/
-			  case PAY_BUY:
-				paid = TRUE;
-				break;
+				*bp = eshkp->bill_p[--eshkp->billct];
+			} else {
+				tmp++;
 			}
-			if (itemize) bot();
-			*bp = eshkp->bill_p[--eshkp->billct];
 		    }
 		}
 	    }
@@ -2375,7 +2383,7 @@ get_cost(obj, shkp)
 register struct obj *obj;
 register struct monst *shkp;	/* if angry, impose a surcharge */
 {
-	register long tmp = getprice(obj, FALSE);
+	register long tmp = getprice(obj, FALSE, TRUE);
 
 	if (!tmp) tmp = 5L;
 	/* shopkeeper may notice if the player isn't very knowledgeable -
@@ -2548,7 +2556,7 @@ set_cost(obj, shkp)
 register struct obj *obj;
 register struct monst *shkp;
 {
-	long tmp = getprice(obj, TRUE) * obj->quan;
+	long tmp = getprice(obj, TRUE, FALSE) * obj->quan;
 
 	obj->sknown = TRUE;
 	
@@ -3385,10 +3393,10 @@ int mode;		/* 0: deliver count 1: paged */
 
 #define HUNGRY	2
 
-STATIC_OVL long
-getprice(obj, shk_buying)
+long
+getprice(obj, shk_buying, shk_selling)
 register struct obj *obj;
-boolean shk_buying;
+boolean shk_buying, shk_selling;
 {
 	register long tmp = (long) objects[obj->otyp].oc_cost;
 	
@@ -3408,9 +3416,12 @@ boolean shk_buying;
 				if (shk_buying)
 					/* shopkeepers insist your gem armor is fluorite or equally inexpensive and you don't know otherwise */
 					numerator = materials[obj->obj_material].cost;	// 100
-				else
+				else if (shk_selling)
 					/* of course, *their* merchandise must be expensive stuff */
 					numerator = max(250, numerator);	// 250+
+				else
+					/* your own appraisal of what it's worth... but you don't know it well enough */
+					numerator = materials[obj->obj_material].cost;	// 100
 			}
 		}
 
@@ -3431,26 +3442,29 @@ boolean shk_buying;
 	switch(obj->oclass) {
 	case FOOD_CLASS:
 		/* simpler hunger check, (2-4)*cost */
-		if (u.uhs >= HUNGRY && !shk_buying) tmp *= (long) u.uhs;
-		if (obj->oeaten) tmp = 0L;
+		if (u.uhs >= HUNGRY && shk_selling) tmp *= (long) u.uhs;
+		if (obj->oeaten && (shk_buying || shk_selling)) tmp = 0L;
 		break;
 	case WAND_CLASS:
-		if (obj->spe == -1) tmp = 0L;
+		if (obj->spe == -1 && (shk_buying || shk_selling)) tmp = 0L;
 		break;
 	case POTION_CLASS:
-		if (obj->otyp == POT_WATER && !obj->blessed && !obj->cursed)
+		if (obj->otyp == POT_WATER && 
+			(((!obj->blessed && !obj->cursed) && (shk_buying || shk_selling))
+			|| (!(shk_buying || shk_selling) && !obj->bknown)))
 			tmp = 0L;
 		break;
 	case ARMOR_CLASS:
 	case WEAPON_CLASS:
-		if (obj->spe > 0) tmp += 10L * (long) obj->spe;
+		if (obj->spe > 0 && (shk_buying || shk_selling || obj->known))
+			tmp += 10L * (long)obj->spe;
 //#ifdef FIREARMS
 		/* Don't buy activated explosives! */
-		if (is_grenade(obj) && obj->oarmed) tmp = 0L;
+		if (is_grenade(obj) && obj->oarmed && (shk_buying || shk_selling)) tmp = 0L;
 //#endif
 		break;
 	case TOOL_CLASS:
-		if (Is_candle(obj) &&
+		if (Is_candle(obj) && (shk_buying || shk_selling) &&
 			obj->age < 20L * (long)objects[obj->otyp].oc_cost)
 		    tmp /= 2L;
 		break;

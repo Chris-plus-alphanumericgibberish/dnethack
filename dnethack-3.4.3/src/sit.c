@@ -201,12 +201,23 @@ dosit()
 				}break;
 				case NOBLE_WISH:{
 					struct monst *mtmp;
+					struct monst *mtmp2 = (struct monst*)0;
+					struct monst *mtmp3 = (struct monst*)0;
 					if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))){
 						pline("Nothing appears to your summon!");
 						break;
 					}
+					if ((u.uevent.utook_castle & ARTWISH_EARNED) && !(u.uevent.utook_castle & ARTWISH_SPENT))
+						mtmp2 = makemon(&mons[PM_PSYCHOPOMP], u.ux, u.uy, NO_MM_FLAGS);
+					if ((u.uevent.uunknowngod & ARTWISH_EARNED) && !(u.uevent.uunknowngod & ARTWISH_SPENT))
+						mtmp3 = makemon(&mons[PM_PRIEST_OF_AN_UNKNOWN_GOD], u.ux, u.uy, NO_MM_FLAGS);
 					if (!Blind) {
 						pline("%s appears in a cloud of smoke!", Amonnam(mtmp));
+						if (mtmp2 || mtmp3)
+							pline("It is accompanied by %s%s%s.",
+							mtmp2 ? a_monnam(mtmp2) : "",
+							(mtmp2 && mtmp3) ? " and " : "",
+							mtmp3 ? a_monnam(mtmp3) : "");
 						pline("%s speaks.", Monnam(mtmp));
 					}
 					else {
@@ -214,8 +225,22 @@ dosit()
 						pline("%s speaks.", Something);
 					}
 					verbalize("You have summoned me.  I will grant one wish!");
+					int artwishes = u.uconduct.wisharti;
 					makewish(allow_artwish() | WISH_VERBOSE);
+					if (u.uconduct.wisharti > artwishes) {
+						/* made artifact wish */
+						if (mtmp2) {
+							pline("You feel %s presence fade.", s_suffix(mon_nam(mtmp2)));
+							u.uevent.utook_castle |= ARTWISH_SPENT;
+						}
+						else if (mtmp3) {
+							pline("You feel %s presence fade.", s_suffix(mon_nam(mtmp3)));
+							u.uevent.uunknowngod |= ARTWISH_SPENT;
+						}
+					}
 					mongone(mtmp);
+					if (mtmp2)	mongone(mtmp2);
+					if (mtmp3)	mongone(mtmp3);
 					levl[u.ux][u.uy].looted |= NOBLE_WISH;
 				}break;
 				default:
@@ -270,12 +295,23 @@ dosit()
 				else
 				{
 				struct monst *mtmp;
+				struct monst *mtmp2 = (struct monst*)0;
+				struct monst *mtmp3 = (struct monst*)0;
 				if (!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))){
 					pline1(nothing_happens);
 					break;
 				}
+				if ((u.uevent.utook_castle & ARTWISH_EARNED) && !(u.uevent.utook_castle & ARTWISH_SPENT))
+					mtmp2 = makemon(&mons[PM_PSYCHOPOMP], u.ux, u.uy, NO_MM_FLAGS);
+				if ((u.uevent.uunknowngod & ARTWISH_EARNED) && !(u.uevent.uunknowngod & ARTWISH_SPENT))
+					mtmp3 = makemon(&mons[PM_PRIEST_OF_AN_UNKNOWN_GOD], u.ux, u.uy, NO_MM_FLAGS);
 				if (!Blind) {
 					pline("%s appears in a cloud of smoke!", Amonnam(mtmp));
+					if (mtmp2 || mtmp3)
+						pline("It is accompanied by %s%s%s.",
+						mtmp2 ? a_monnam(mtmp2) : "",
+						(mtmp2 && mtmp3) ? " and " : "",
+						mtmp3 ? a_monnam(mtmp3) : "");
 					pline("%s speaks.", Monnam(mtmp));
 				}
 				else {
@@ -283,8 +319,22 @@ dosit()
 					pline("%s speaks.", Something);
 				}
 				verbalize("You have summoned me.  I will grant one wish!");
+				int artwishes = u.uconduct.wisharti;
 				makewish(allow_artwish() | WISH_VERBOSE);
+				if (u.uconduct.wisharti > artwishes) {
+					/* made artifact wish */
+					if (mtmp2) {
+						pline("You feel %s presence fade.", s_suffix(mon_nam(mtmp2)));
+						u.uevent.utook_castle |= ARTWISH_SPENT;
+					}
+					else if (mtmp3) {
+						pline("You feel %s presence fade.", s_suffix(mon_nam(mtmp3)));
+						u.uevent.uunknowngod |= ARTWISH_SPENT;
+					}
+				}
 				mongone(mtmp);
+				if (mtmp2)	mongone(mtmp2);
+				if (mtmp3)	mongone(mtmp3);
 				}
 				break;
 				case 7:

@@ -2017,6 +2017,9 @@ register struct monst *mon;
 			return 0;
 	}
 
+	/* reset mw_tmp to be sure */
+	mw_tmp = MON_WEP(mon);
+
 	/* attempt to wield weapon */
 	if (obj && obj != &zeroobj) {
 		if (mw_tmp && mw_tmp->otyp == obj->otyp) {
@@ -2077,6 +2080,9 @@ register struct monst *mon;
 			}
 		}
 	}
+	/* update msw_tmp, since it could have been wielded in the mainhand (above) */
+	msw_tmp = MON_SWEP(mon);
+
 	/* possibly wield an off-hand weapon */
 	if (old_weapon_check == NEED_HTH_WEAPON)
 	{
@@ -2119,6 +2125,14 @@ register struct obj *obj;
 long slot;
 {
 	if (!obj) return;
+	/* silently unwield the weapon if it's already wielded */
+	if (MON_WEP(mon) == obj)
+		MON_NOWEP(mon);
+	else if (MON_SWEP(mon) == obj)
+		MON_NOSWEP(mon);
+	if (obj->owornmask)
+		obj->owornmask = 0;
+
 	/* visible effects */
 	if (canseemon(mon)) {
 		pline("%s %s %s%s",

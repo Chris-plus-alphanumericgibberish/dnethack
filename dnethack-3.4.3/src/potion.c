@@ -3058,6 +3058,9 @@ djinni_from_bottle(obj)
 register struct obj *obj;
 {
 	struct monst *mtmp;
+	struct monst *mtmp2 = (struct monst*)0;
+	struct monst *mtmp3 = (struct monst*)0;
+
 	int chance;
 
 	if(!(mtmp = makemon(&mons[PM_DJINNI], u.ux, u.uy, NO_MM_FLAGS))){
@@ -3080,8 +3083,32 @@ register struct obj *obj;
 
 	switch (chance) {
 	case 0 : verbalize("I am in your debt.  I will grant one wish!");
+		if (u.uevent.utook_castle & ARTWISH_EARNED)
+			mtmp2 = makemon(&mons[PM_PSYCHOPOMP], u.ux, u.uy, NO_MM_FLAGS);
+		if (u.uevent.uunknowngod & ARTWISH_EARNED)
+			mtmp3 = makemon(&mons[PM_PRIEST_OF_AN_UNKNOWN_GOD], u.ux, u.uy, NO_MM_FLAGS);
+		if ((mtmp2 && canseemon(mtmp2)) || (mtmp3 && canseemon(mtmp3))) {
+			You("See %s%s%s appear at the djinni's words.",
+				(mtmp2 && canseemon(mtmp2)) ? a_monnam(mtmp2) : "",
+				((mtmp2 && canseemon(mtmp2)) && (mtmp3 && canseemon(mtmp3))) ? " and " : "",
+				(mtmp3 && canseemon(mtmp3)) ? a_monnam(mtmp3) : "");
+		}
+		int artwishes = u.uconduct.wisharti;
 		makewish(allow_artwish()|WISH_VERBOSE);
+		if (u.uconduct.wisharti > artwishes) {
+			/* made artifact wish */
+			if (mtmp2) {
+				pline("You feel %s presence fade.", s_suffix(mon_nam(mtmp2)));
+				u.uevent.utook_castle |= ARTWISH_SPENT;
+			}
+			else if (mtmp3) {
+				pline("You feel %s presence fade.", s_suffix(mon_nam(mtmp3)));
+				u.uevent.uunknowngod |= ARTWISH_SPENT;
+			}
+		}
 		mongone(mtmp);
+		if (mtmp2)	mongone(mtmp2);
+		if (mtmp3)	mongone(mtmp3);
 		break;
 	case 1 : verbalize("Thank you for freeing me!");
 		(void) tamedog(mtmp, (struct obj *)0);

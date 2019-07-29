@@ -2972,10 +2972,18 @@ winid *datawin;
 	}
 
 	/* cost, wt should go next */
-	Sprintf(buf, "Base cost %d. Weighs %d aum.%s",
-		(int)((obj && oartifact) ? artilist[oartifact].cost : oc.oc_cost),
-		(int)(obj ? (weight(obj) / max(1, obj->quan)) : oc.oc_weight),
-		((obj && obj->quan != 1) ? " (per item)" : ""));
+	if (obj) {
+		Sprintf(buf, "Costs %d zorkmid%s. Weighs %d aum.%s",
+			(int)getprice(obj, FALSE, FALSE),
+			(int)getprice(obj, FALSE, FALSE) != 1 ? "s" : "",
+			(int)(weight(obj) / max(1, obj->quan)),
+			((obj->quan != 1) ? " (per item)" : ""));
+	}
+	else {
+		Sprintf(buf, "Base cost %d. Base weight %d aum.",
+			(int)((oartifact) ? artilist[oartifact].cost : oc.oc_cost),
+			(int)(oc.oc_weight));
+	}
 	OBJPUTSTR(buf);
 
 	/* powers conferred */
@@ -3132,10 +3140,6 @@ winid *datawin;
 		otyp == WHITE_FACELESS_ROBE ||
 		otyp == BLACK_FACELESS_ROBE ||
 		otyp == SMOKY_VIOLET_FACELESS_ROBE)		OBJPUTSTR("Covers the face entirely.");
-	/* and some obscure usage mechanics of fixed-appearance items */
-	else if (otyp == RIN_WISHES)				OBJPUTSTR("Can be invoked while worn.");
-	else if (otyp == CANDLE_OF_INVOCATION)		OBJPUTSTR("Can be invoked while lit.");
-
 
 	buf[0] = '\0';
 	ADDCLASSPROP(oartifact, "an artifact");
@@ -3162,6 +3166,9 @@ winid *datawin;
 
 		Sprintf(buf, "Made of %s.", buf2);
 		OBJPUTSTR(buf);
+	}
+	if (obj && is_evaporable(obj)) {
+		OBJPUTSTR("Evaporates in light.");
 	}
 
 	/* Full-line remarks */

@@ -1447,15 +1447,16 @@ schar ftyp, btyp;
 	cct = 0;
 	while(xx != tx || yy != ty) {
 	    /* loop: dig corridor at [xx,yy] and find new [xx,yy] */
-	    if(cct++ > 500 || (nxcor && !rn2(35)))
-		return FALSE;
+		if (cct++ > 500 || (nxcor && !rn2(35))){
+			return FALSE;
+		}
 
 	    xx += dx;
 	    yy += dy;
 
-	    if(xx >= COLNO-1 || xx <= 0 || yy <= 0 || yy >= ROWNO-1)
-		return FALSE;		/* impossible */
-
+		if (xx >= COLNO - 1 || xx <= 0 || yy <= 0 || yy >= ROWNO - 1) {
+			return FALSE;		/* impossible */
+		}
 	    crm = &levl[xx][yy];
 	    if(crm->typ == btyp) {
 		if(ftyp != CORR || rn2(100)) {
@@ -1474,26 +1475,56 @@ schar ftyp, btyp;
 	    /* find next corridor position */
 	    dix = abs(xx-tx);
 	    diy = abs(yy-ty);
+		register int ddx = (xx == tx) ? 0 : (xx > tx) ? -1 : 1;
+		register int ddy = (yy == ty) ? 0 : (yy > ty) ? -1 : 1;
 
 	    /* do we have to change direction ? */
 	    if(dy && dix > diy) {
-		register int ddx = (xx > tx) ? -1 : 1;
-
 		crm = &levl[xx+ddx][yy];
 		if(crm->typ == btyp || crm->typ == ftyp || crm->typ == SCORR) {
 		    dx = ddx;
 		    dy = 0;
-		    continue;
 		}
-	    } else if(dx && diy > dix) {
-		register int ddy = (yy > ty) ? -1 : 1;
-
+		}
+		else if (dx && diy > dix) {
 		crm = &levl[xx][yy+ddy];
 		if(crm->typ == btyp || crm->typ == ftyp || crm->typ == SCORR) {
 		    dy = ddy;
 		    dx = 0;
-		    continue;
+			}
 		}
+
+		/* prefer to use existing corridors over digging new paths 
+		 * but not if it takes us away from our goal too much */
+		if (levl[xx+dx][yy+dy].typ != ftyp) {
+			if (dx) {
+				if(levl[xx][yy+1].typ == ftyp && levl[xx+dx][yy+1].typ == ftyp
+					&& (ddy != -1 || abs(dix-diy)>2)) {
+					dx = 0;
+					dy = 1;
+					continue;
+				}
+				if(levl[xx][yy-1].typ == ftyp && levl[xx+dx][yy-1].typ == ftyp
+					&& (ddy != 1 || abs(dix-diy)>2)) {
+					dx = 0;
+					dy = -1;
+					continue;
+				}
+			}
+			else if (dy){
+				if(levl[xx+1][yy].typ == ftyp && levl[xx+1][yy+dy].typ == ftyp
+					&& (ddx != -1 || abs(dix-diy)>2)) {
+					dx = 1;
+					dy = 0;
+			    continue;
+			}
+				if(levl[xx-1][yy].typ == ftyp && levl[xx-1][yy+dy].typ == ftyp
+					&& (ddx != 1 || abs(dix-diy)>2)) {
+					dx = -1;
+					dy = 0;
+					continue;
+				}
+			}
 	    }
 
 	    /* continue straight on? */
@@ -1512,8 +1543,9 @@ schar ftyp, btyp;
 	    crm = &levl[xx+dx][yy+dy];
 	    if(crm->typ == btyp || crm->typ == ftyp || crm->typ == SCORR)
 		continue;
-	    dy = -dy;
-	    dx = -dx;
+
+		/* dead end */
+		return FALSE;
 	}
 	return TRUE;
 }

@@ -82,6 +82,7 @@ struct flag {
 	boolean  soundok;	/* ok to tell about sounds heard */
 	boolean  sparkle;	/* show "resisting" special FX (Scott Bigham) */
 	boolean  standout;	/* use standout for --More-- */
+	boolean  suppress_hurtness;	/* hides "uninjured" "bloody" "damaged" monster prefixes */
 	boolean  time;		/* display elapsed 'time' */
 	boolean  timeoutOrder;	/* display spirits and powers in order of timeout */
 	boolean  tombstone;	/* print tombstone */
