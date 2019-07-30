@@ -7132,8 +7132,8 @@ register int	mmflags;
 			    mtmp->perminvis = TRUE;
 			}
 			if(mndx == PM_LIVING_MIRAGE){
-			    mtmp->minvis = TRUE;
-			    mtmp->perminvis = TRUE;
+			    // mtmp->minvis = TRUE;
+			    // mtmp->perminvis = TRUE;
 				set_mimic_sym(mtmp);
 			}
 		break;
