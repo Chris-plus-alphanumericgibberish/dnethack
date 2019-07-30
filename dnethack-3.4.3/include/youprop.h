@@ -141,9 +141,9 @@
 							|| (levl[u.ux][u.uy].lit &&\
 								!(viz_array[u.uy][u.ux]&TEMP_DRK1 && !(viz_array[u.uy][u.ux]&TEMP_LIT1)) &&\
 								!(viz_array[u.uy][u.ux]&TEMP_DRK2)\
-						&& !(ublindf && (ublindf->otyp == LENSES || ublindf->otyp == MASK)) && !Is_waterlevel(&u.uz)))))
+						&& !(ublindf && (ublindf->otyp == LENSES || ublindf->otyp == MASK || ublindf->otyp == LIVING_MASK)) && !Is_waterlevel(&u.uz)))))
 #define Blinded			u.uprops[BLINDED].intrinsic
-#define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK && ublindf->otyp != ANDROID_VISOR)
+#define Blindfolded		(ublindf && ublindf->otyp != LENSES && ublindf->otyp != MASK && ublindf->otyp != ANDROID_VISOR && ublindf->otyp != LIVING_MASK)
 		/* ...means blind because of a cover */
 #define NoLightBlind	((Blinded || Blindfolded || !haseyes(youracedata)) && \
 		 !(u.sealsActive&SEAL_DANTALION && !((uarm && uarm->obj_material != GLASS) || (uarmu && uarmu->obj_material != GLASS))) && \

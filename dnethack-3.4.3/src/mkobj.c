@@ -1687,6 +1687,7 @@ struct obj* obj;
 	case LEATHER_HELM:
 	case LEATHER_ARMOR:
 	case STUDDED_LEATHER_ARMOR:
+	case BARNACLE_ARMOR:
 	case YA:
 	case ORIHALCYON_GAUNTLETS:
 	case HARMONIUM_HELM:

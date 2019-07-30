@@ -128,6 +128,27 @@ ENDMAP
 
 BRANCH:(15,08,15,08),(0,0,0,0)
 
+DOOR:closed,(04,03)
+DOOR:closed,(02,09)
+DOOR:closed,(10,08)
+DOOR:closed,(08,02)
+DOOR:closed,(06,12)
+DOOR:closed,(14,05)
+DOOR:closed,(11,14)
+DOOR:closed,(15,14)
+
+REGION:(03,04,05,06),lit,"shop"
+REGION:(07,03,09,05),lit,"shop"
+REGION:(11,04,13,06),lit,"shop"
+
+REGION:(07,07,09,09),lit,"shop"
+
+REGION:(03,08,05,10),lit,"shop"
+REGION:(07,11,09,13),lit,"shop"
+REGION:(11,10,12,13),lit,"shop"
+REGION:(14,10,16,13),lit,"shop"
+
+
 MAZE: "mith1",' '
 FLAGS: shortsighted,hardfloor
 INIT_MAP: ' ' , 's' , false, false, lit , false

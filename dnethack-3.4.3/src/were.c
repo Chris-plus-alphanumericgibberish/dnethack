@@ -10,18 +10,32 @@ void
 were_change(mon)
 register struct monst *mon;
 {
-	if( !is_were(mon->data) && 
-		!(is_heladrin(mon->data) && mon->mhp < .5*mon->mhpmax && rn2(2)) && 
-		!(is_eeladrin(mon->data) && mon->mhp > .5*mon->mhpmax) &&
-		!(is_yochlol(mon->data) && mon->mhp < .5*mon->mhpmax)
+	if( !is_were(mon->data)
+		&& !(is_heladrin(mon->data) && mon->mhp < .5*mon->mhpmax && rn2(2))
+		&& !(is_eeladrin(mon->data) && mon->mhp > .5*mon->mhpmax)
+		&& !(is_yochlol(mon->data) && mon->mhp < .5*mon->mhpmax)
+		&& !(mon->data == &mons[PM_SELKIE] || mon->data == &mons[PM_SEAL])
+		&& !(mon->data == &mons[PM_INCUBUS] || mon->data == &mons[PM_SUCCUBUS])
 	) return;
 
 	if(mon->data == &mons[PM_NOVIERE_ELADRIN] && !is_pool(mon->mx, mon->my, FALSE)) return;
 	
-	if (is_human(mon->data)) {
-	    if (!Protection_from_shape_changers &&
+	if (humanoid_torso(mon->data)) {
+		if ((mon->data == &mons[PM_INCUBUS] || mon->data == &mons[PM_SUCCUBUS])
+			&& mon->mfaction != INCUBUS_FACTION
+			&& mon->mfaction != SUCCUBUS_FACTION
+			&& !canseemon(mon)
+			&& !Protection_from_shape_changers
+			&& !rn2(300)
+		){
+			mon->female = !mon->female;
+			new_were(mon);
+	    } else if (!Protection_from_shape_changers && is_heladrin(mon->data)){
+			new_were(mon);
+	    } else if (!Protection_from_shape_changers &&
 		!rn2(night() ? (flags.moonphase == FULL_MOON ?  3 : 30)
-			     : (flags.moonphase == FULL_MOON ? 10 : 50))) {
+					 : (flags.moonphase == FULL_MOON ? 10 : 50))
+		){
 		new_were(mon);		/* change into animal form */
 		if (flags.soundok && !canseemon(mon)) {
 		    const char *howler;
@@ -37,8 +51,7 @@ register struct monst *mon;
 		}
 	    }
 	} else if (!rn2(30) || (is_were(mon->data) && Protection_from_shape_changers) 
-		|| is_heladrin(mon->data) 
-		|| is_yochlol(mon->data) 
+		|| (is_yochlol(mon->data) && !Protection_from_shape_changers)
 		|| (is_eeladrin(mon->data) && mon->mhp >= mon->mhpmax)
 	) {
 		if(mon->data == &mons[PM_BALL_OF_LIGHT]){
@@ -96,6 +109,10 @@ int pm;
 		case PM_ETERNAL_LIGHT:	  return(PM_QUEEN_OF_STARS);
 		case PM_ALRUNES:		  return(PM_HATEFUL_WHISPERS);
 		case PM_HATEFUL_WHISPERS: return(PM_ALRUNES);
+		case PM_SUCCUBUS: return(PM_INCUBUS);
+		case PM_INCUBUS: return(PM_SUCCUBUS);
+		case PM_SELKIE: return(PM_SEAL);
+		case PM_SEAL: return(PM_SELKIE);
 		
 		case PM_YOCHLOL: 
 			switch(rnd(3)){
@@ -143,8 +160,9 @@ struct monst *mon;
 		return;
 	
 	if(canseemon(mon) && !Hallucination) {
-		if(mon->data != &mons[PM_ANUBITE] && mon->data != &mons[PM_ANUBAN_JACKAL] &&
-		  !is_eladrin(mon->data) && !is_yochlol(mon->data)
+		if(mon->data != &mons[PM_ANUBITE] && mon->data != &mons[PM_ANUBAN_JACKAL]
+		  && !is_eladrin(mon->data) && !is_yochlol(mon->data)
+		  && !(mon->data == &mons[PM_SELKIE] || mon->data == &mons[PM_SEAL])
 		  && !(mon->data == &mons[PM_INCUBUS] || mon->data == &mons[PM_SUCCUBUS])
 		) pline("%s changes into %s.", Monnam(mon),
 			is_human(&mons[pm]) ? "a human" :

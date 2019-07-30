@@ -75,8 +75,9 @@ extern NEARDATA struct door doors[DOORMAX];
 #define RIVER 		19 /* "room" is really a river running through the level*/
 #define POOLROOM	20	/*  */
 #define SLABROOM	21	/* Mithardir terminus room.  Special room with a slab */
-#define JOINEDROOM	22  /* is actually 2+ ordinary rooms joined together, and should have fewer corridors leading to it */
-#define SHOPBASE	23	/* everything above this is a shop */
+#define ELSHAROOM	22	/* Generic Elshava room.  Couple of sea folk */
+#define JOINEDROOM	23  /* is actually 2+ ordinary rooms joined together, and should have fewer corridors leading to it */
+#define SHOPBASE	24	/* everything above this is a shop */
 #define GENERALSHOP	SHOPBASE	/* specific shop defines for level compiler */
 #define ARMORSHOP	SHOPBASE+1	
 #define SCROLLSHOP	SHOPBASE+2
@@ -98,7 +99,11 @@ extern NEARDATA struct door doors[DOORMAX];
 #define ACIDSHOP	UNIQUESHOP+2
 #define PETSHOP		UNIQUESHOP+3
 #define CERAMICSHOP	UNIQUESHOP+4
-#define MAXRTYPE	CERAMICSHOP	/* maximum valid room type */
+#define SEAGARDEN	UNIQUESHOP+5	/* ??? */
+#define SEAFOOD		UNIQUESHOP+6	/* Deep One */
+#define SANDWALKER	UNIQUESHOP+7	/* ??? */
+#define NAIADSHOP	UNIQUESHOP+8	/* Naiad */
+#define MAXRTYPE	NAIADSHOP	/* maximum valid room type */
 
 /* NOTE: rtype is a char, so if go above 124 or so need to fix that*/
 

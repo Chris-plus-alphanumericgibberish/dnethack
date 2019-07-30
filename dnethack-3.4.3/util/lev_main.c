@@ -170,6 +170,14 @@ static struct {
 	{ "tool shop",	 TOOLSHOP },
 	{ "book shop",	 BOOKSHOP },
 	{ "candle shop", CANDLESHOP },
+	{ "hive outpost", JELLYSHOP },
+	{ "nest outpost", ACIDSHOP },
+	{ "garrison outpost", PETSHOP },
+	{ "mound outpost", CERAMICSHOP },
+	{ "sea garden", SEAGARDEN },
+	{ "fish shop", SEAFOOD },
+	{ "explorer shop", SANDWALKER },
+	{ "naiad shop", NAIADSHOP },
 	{ 0, 0 }
 };
 

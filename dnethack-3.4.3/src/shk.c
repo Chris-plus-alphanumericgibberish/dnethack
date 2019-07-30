@@ -5685,7 +5685,7 @@ struct monst *mon;
 		if(u.sealsActive&SEAL_AMON && !Invis && !(uarmh && is_metallic(uarmh))) count ++;
 		// if(u.sealsActive&SEAL_ANDREALPHUS);
 		// if(u.sealsActive&SEAL_ANDROMALIUS);
-		if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES)) count++;
+		if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES && ublindf->otyp != LIVING_MASK)) count++;
 		if(u.sealsActive&SEAL_BALAM && !Invis && !(uarmc || uarm)) count++;
 		if(u.sealsActive&SEAL_BERITH && !Invis && (u.usteed || !(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))) count++;
 		if(u.sealsActive&SEAL_BUER && !Invis && !uarmf) count++;
@@ -5743,7 +5743,7 @@ struct monst *mon;
 			 || (uarmc && (uarmc->otyp==WHITE_FACELESS_ROBE || uarmc->otyp==BLACK_FACELESS_ROBE || uarmc->otyp==SMOKY_VIOLET_FACELESS_ROBE))//face-covering robe
 		  )
 		) count++;
-		// if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES)) count++;
+		// if(u.sealsActive&SEAL_ASTAROTH && !Invis && !(ublindf && ublindf->otyp != LENSES && ublindf->otyp != LIVING_MASK)) count++;
 		if(u.sealsActive&SEAL_BALAM && !Invis && (uarmc || uarm) && !(uarmg && uarmf)) count++;
 		// if(u.sealsActive&SEAL_BERITH && !Invis && (u.usteed || !(uarm && is_metallic(uarm) && uarmg && uarmf && uarmh))) count++;
 		// if(u.sealsActive&SEAL_BUER && !Invis && !uarmf) count++;

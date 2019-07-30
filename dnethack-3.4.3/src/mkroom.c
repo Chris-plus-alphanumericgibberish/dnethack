@@ -3791,6 +3791,7 @@ int	roomtype;
 	case RIVER: mkriver(); break;
 	case POOLROOM:	mkpoolroom(); break;
 	case SLABROOM:	mkslabroom(); break;
+	case ELSHAROOM:	mkzoo(ELSHAROOM); break;
 	default:	impossible("Tried to make a room of type %d.", roomtype);
     }
 }
@@ -4039,6 +4040,30 @@ struct mkroom *sroom;
 			mkarmory(sroom);
 			/* mkarmory() sets flags and we don't want other fillings */
 		return;
+	    case ELSHAROOM:{
+			coord pos;
+			struct permonst *pmon;
+			struct monst *mtmp;
+			int i = rnd(3), tried = 0;
+			while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
+				if (!MON_AT(pos.x, pos.y)) {
+					switch(rnd(4)){
+						case 1: pmon = &mons[PM_NAIAD]; break;
+						case 2: pmon = &mons[PM_NOVIERE_ELADRIN]; break;
+						case 3: pmon = &mons[PM_COURE_ELADRIN]; break;
+						case 4: pmon = &mons[PM_DEEP_ONE]; break;
+					}
+					mtmp = makemon(pmon, pos.x,pos.y, NO_MM_FLAGS);
+					if (mtmp){
+						mtmp->msleeping = 0;
+						mtmp->mcanmove = 1;
+						mtmp->mpeaceful = 1;
+						set_malign(mtmp);
+					}
+					i--;
+				}
+			}
+		}return;
 	    case COURT:
 		if(level.flags.is_maze_lev) {
 		    for(tx = sroom->lx; tx <= sroom->hx; tx++)

@@ -1168,7 +1168,7 @@ register struct obj *otmp;
 	    if (was_blind) {
 		/* "still cannot see" makes no sense when removing lenses
 		   since they can't have been the cause of your blindness */
-		if (otmp->otyp != LENSES && otmp->otyp != MASK && otmp->otyp != R_LYEHIAN_FACEPLATE)
+		if (otmp->otyp != LENSES && otmp->otyp != LIVING_MASK && otmp->otyp != MASK && otmp->otyp != R_LYEHIAN_FACEPLATE)
 		    You("still cannot see.");
 	    } else {
 		changed = TRUE;	/* !was_blind */
@@ -1785,7 +1785,7 @@ doputon()
 		Your("%s%s are full, and you're already wearing an amulet and %s.",
 			humanoid(youracedata) ? "ring-" : "",
 			makeplural(body_part(FINGER)),
-			ublindf->otyp==LENSES ? "some lenses" : (ublindf->otyp==MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE) ? "a mask" : "a blindfold");
+			ublindf->otyp==LENSES ? "some lenses" : (ublindf->otyp==MASK || ublindf->otyp==LIVING_MASK || ublindf->otyp==R_LYEHIAN_FACEPLATE) ? "a mask" : "a blindfold");
 		return(0);
 	}
 	otmp = getobj(accessories, "put on");
@@ -1875,13 +1875,13 @@ doputon()
 			if (ublindf->otyp == TOWEL)
 				Your("%s is already covered by a towel.",
 					body_part(FACE));
-			else if (ublindf->otyp == BLINDFOLD || ublindf->otyp == ANDROID_VISOR) {
+			else if (ublindf->otyp == BLINDFOLD || ublindf->otyp == LIVING_MASK || ublindf->otyp == ANDROID_VISOR) {
 				if (otmp->otyp == LENSES)
 					already_wearing2("lenses", "a blindfold");
 				else
 					already_wearing("a blindfold");
 			} else if (ublindf->otyp == LENSES) {
-				if (otmp->otyp == BLINDFOLD || otmp->otyp == ANDROID_VISOR)
+				if (otmp->otyp == BLINDFOLD || otmp->otyp == LIVING_MASK || otmp->otyp == ANDROID_VISOR)
 					already_wearing2("a blindfold", "some lenses");
 				else
 					already_wearing("some lenses");
@@ -1891,7 +1891,7 @@ doputon()
 		}
 		if (otmp->otyp != MASK && otmp->otyp != R_LYEHIAN_FACEPLATE && 
 			otmp->otyp != BLINDFOLD && otmp->otyp != ANDROID_VISOR && 
-			otmp->otyp != TOWEL && otmp->otyp != LENSES
+			otmp->otyp != TOWEL && otmp->otyp != LENSES && otmp->otyp != LIVING_MASK
 		) {
 			You_cant("wear that!");
 			return(0);

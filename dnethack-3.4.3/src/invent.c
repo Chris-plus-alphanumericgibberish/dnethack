@@ -1057,7 +1057,7 @@ register const char *let,*word;
 		    ((otmp->oclass == FOOD_CLASS && otmp->otyp != MEAT_RING) ||
 		    (otmp->oclass == TOOL_CLASS &&
 		     otyp != BLINDFOLD && otyp != MASK && otyp != R_LYEHIAN_FACEPLATE && 
-			 otyp != TOWEL && otyp != ANDROID_VISOR && otyp != LENSES) ||
+			 otyp != TOWEL && otyp != ANDROID_VISOR && otyp != LIVING_MASK && otyp != LENSES) ||
 			 (otmp->oclass == CHAIN_CLASS)
 			))
 		|| (!strcmp(word, "wield") &&
@@ -1429,7 +1429,7 @@ struct obj *otmp;
 	} else if ((ocls == RING_CLASS || otyp == MEAT_RING) ||
 		ocls == AMULET_CLASS ||
 		(otyp == BLINDFOLD || otyp == ANDROID_VISOR || otyp == TOWEL ||
-		otyp == LENSES || otyp == MASK || otyp == R_LYEHIAN_FACEPLATE)) {
+		otyp == LENSES || otyp == LIVING_MASK || otyp == MASK || otyp == R_LYEHIAN_FACEPLATE)) {
 	    if (!strcmp(word, "wear"))
 		s1 = "P", s2 = "put", s3 = " on";
 	    else if (!strcmp(word, "take off"))
@@ -2327,6 +2327,10 @@ struct obj *obj;
 		any.a_void = (genericptr_t)doputon;
 		add_menu(win, NO_GLYPH, &any, 'W', 0, ATR_NONE,
 				"Put these lenses on", MENU_UNSELECTED);
+	    } else if (obj->otyp == MASK || obj->otyp == LIVING_MASK) {
+		any.a_void = (genericptr_t)doputon;
+		add_menu(win, NO_GLYPH, &any, 'W', 0, ATR_NONE,
+				"Put this mask on", MENU_UNSELECTED);
 	    }
 	}
 	/* x: Swap main and readied weapon */
@@ -2904,6 +2908,7 @@ winid *datawin;
 		case R_LYEHIAN_FACEPLATE:
 		case MASK:
 		case LENSES:
+		case LIVING_MASK:
 			subclass = "facial accessory";
 			break;
 		case BOX:

@@ -903,6 +903,11 @@ OBJECT(OBJ("Amulet of Yendor",	/* note: description == name */
 		BITS(kn,mrg,chg,0,mgc,chg,0,0,0,0,0,P_NONE,mat,0), \
 		0, TOOL_CLASS, prob, 0, \
 		wt, cost, 0, 0, 0, 0, 0, wt, color )
+#define TOOL_ABILITY(name,desc,kn,mrg,mgc,power,chg,prob,wt,cost,mat,color) \
+	OBJECT( OBJ(name,desc), \
+		BITS(kn,mrg,chg,0,mgc,chg,0,0,0,0,0,P_NONE,mat,0), \
+		power, TOOL_CLASS, prob, 0, \
+		wt, cost, 0, 0, 0, 0, 0, wt, color )
 #define TOOL_MATSPEC(name,desc,kn,mrg,mgc,chg,prob,wt,cost,mat, shwmat,color) \
 	OBJECT( OBJ(name,desc), \
 		BITS(kn,mrg,chg,0,mgc,chg,0,0,0,0,0,P_NONE,mat,shwmat), \
@@ -997,6 +1002,9 @@ TOOL("hypospray ampule", "hard grey bottle", /*Needs encyc entry*//*Needs tile*/
 TOOL("mask", (char *)0,			1, 0, 0, 0,  10, 10,  80, LEATHER, CLR_WHITE),
 TOOLMASK("R'lyehian faceplate", "ebon pane", POISON_RES,/*Needs tile*/
 								0, 0, 1, 0,   0, 15, 200, GLASS, CLR_BLACK),
+//define TOOL_ABILITY(name,desc,kn,mrg,mgc,power,chg,prob,wt,cost,mat,color)
+TOOL_ABILITY("living mask", "gilled jellyfish",  
+								0, 0, 1, MAGICAL_BREATHING, 0,  0,  5, 200, FLESH, CLR_BLUE),
 TOOL("lenses", (char *)0,		1, 0, 0, 0,   5,  3,  80, GLASS, HI_GLASS), /*Needs encyc entry*/
 TOOL("blindfold", (char *)0,    1, 0, 0, 0,  45,  2,  20, CLOTH, CLR_GRAY),
 TOOL("android visor", "black blindfold",

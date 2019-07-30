@@ -195,6 +195,13 @@ struct monst {
 #define	VAMPIRIC	5	/* vampirified 'faction' */
 #define	ILLUMINATED	6	/* illuminated 'faction' */
 /*Note: first drow house is 8*/
+#define	FACTION_PADDING	1000
+//define	HALF_DEMON	FACTION_PADDING+1	/* half-demon */
+//define	HALF_DEVIL	FACTION_PADDING+2	/* half-devil */
+//define	HALF_DRAGON	FACTION_PADDING+3	/* half-dragon */
+#define	INCUBUS_FACTION	FACTION_PADDING+4	/* male foocubus */
+#define	SUCCUBUS_FACTION	FACTION_PADDING+5	/* female foocubus */
+//define	LAMASHTU_FACTION	FACTION_PADDING+6	/* Lamashtu's faction */
 	int mvanishes;
 	//hatching situation
 	//AT_LAYEGG, PM_HATCHLING_NAME, x, d

@@ -7193,6 +7193,20 @@ register int	mmflags;
 			else if(mndx == PM_PALE_NIGHT){
 				mtmp->mvar1 = 0;
 			}
+			if(mndx == PM_INCUBUS){
+				if(Is_grazzt_level(&u.uz)){
+					if(rn2(2)){
+						mtmp->mfaction = INCUBUS_FACTION;
+					}
+				}
+			}
+			if(mndx == PM_SUCCUBUS){
+				if(Is_malcanthet_level(&u.uz)){
+					if(rn2(2)){
+						mtmp->mfaction = SUCCUBUS_FACTION;
+					}
+				}
+			}
 			if(mndx == PM_ANCIENT_OF_DEATH){
 			    mtmp->minvis = TRUE;
 			    mtmp->perminvis = TRUE;

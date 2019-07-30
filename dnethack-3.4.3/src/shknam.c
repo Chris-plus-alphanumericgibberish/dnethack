@@ -204,6 +204,37 @@ static const char * const shkvalavi[] = {
 	"Shrinivas", "Arjun", "Shekhar", "Deep", "Sameer", "Sunil", "Apoorva",
     0
 };
+static const char * const shkcrab[] = {
+    /* Crab scientific names */
+	"Potamon", "Ibericum", "Parathelphusa", "Convexa", "Johongarthia", "Lagostoma",
+	"Gecarcoidea", "Natalis", 
+    0
+};
+static const char * const shkselkie[] = {
+    /* Orkney http://www.contrib.andrew.cmu.edu/~grm/orkney.html */
+	"Crystie", "Marie", "Hector", "Inggagarth", "Cuthbert", "Marion",
+	"Ninian", "Margret", "Edduard", "Alisoun", "Androw", "Christeane",
+	"Henrie", "Sonneta", "Brandam", "Anne", "Malcolm", "Gelis", "Magnus",
+	"Katherein", "Edwart", "Katherine", "Johnne", "Cristiane", "Troelius",
+	"Helline", "Robertt", "Elspet", "Criste", "Alesoun", "Adam", "Helene",
+	"Williame", "Margrete", "Gibboun", "Mariota", "Niniane", "Margarete",
+	"Hugh", "Effe",
+    0
+};
+static const char * const shknaiad[] = {
+    /* Mythology */
+	"Aganippe", "Appias", "Bolbe", "Limnaee", "Pallas", "Tritonis",
+	"Abarbarea", "Aegina", "Asopis", "Chalcis", "Cleone", "Combe",
+	"Corcyra", "Euboea", "Gargaphia", "Harpina", "Ismene", "Nemea",
+	"Ornea", "Peirene", "Salamis", "Sinope", "Tanagra", "Thebe",
+	"Thespeia",
+    0
+};
+static const char * const shkdeep[] = {
+    /* Deep Ones */
+	"Gilman", "Marsh", "Banks", "Waite", "Eliot", "Olmstead",
+    0
+};
 
 /*
  * To add new shop types, all that is necessary is to edit the shtypes[] array.
@@ -287,6 +318,30 @@ const struct shclass shtypes[] = {
 		 {20, -SLIME_MOLD}, {20, -FIGURINE}
 		},
 	shkvalavi},
+	{"sea garden", SEAGARDEN, 0, D_SHOP,
+	    {{40, ARMOR_CLASS}, {30, WEAPON_CLASS}, /* note: uses custom list for armor_class and weapon_class*/
+		 {19, -SLIME_MOLD}, {10, -LIVING_MASK},
+		 {1, TILE_CLASS}
+		},
+	shkcrab},
+	{"fishery", SEAFOOD, 0, D_SHOP,
+	    {{64, -SLIME_MOLD}, {15, -CRAM_RATION},
+		 {10, -POT_BOOZE}, {10, AMULET_CLASS},
+		 {1, TILE_CLASS}},
+	shkdeep},
+	{"sand-walker's shop", SANDWALKER, 0, D_SHOP,
+	    {{30, ARMOR_CLASS}, {20, WEAPON_CLASS}, /* note: uses custom list for armor_class and weapon_class */
+		 {5, -TINNING_KIT}, {5, -STETHOSCOPE},
+		 {5, -CRYSTAL_BALL}, {5, -CAN_OF_GREASE},
+		 {25, TILE_CLASS}, {5, -AMULET_OF_MAGICAL_BREATHING}
+		},
+	shkselkie},
+	{"spa", NAIADSHOP, 0, D_SHOP,
+	    {{20, -POT_OBJECT_DETECTION}, {20, -MIRROR}, 
+		 {15, -TOWEL}, {40, ARMOR_CLASS}, /* note: uses custom list for armor_class */
+		 {5, TILE_CLASS}
+		},
+	shknaiad},
 	{(char *)0, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
 };
 
@@ -308,6 +363,76 @@ const int valavi_armors[] = {
 	CLOAK_OF_INVISIBILITY,
 	CLOAK_OF_MAGIC_RESISTANCE,
 	CLOAK_OF_DISPLACEMENT
+};
+
+const int garden_armors[] = {
+	WAR_HAT,
+	PLATE_MAIL,
+	SCALE_MAIL,
+	SCALE_MAIL,
+	KITE_SHIELD,
+	KITE_SHIELD,
+	CLOAK,
+	CLOAK,
+	LEATHER_ARMOR,
+	LEATHER_ARMOR,
+	LIVING_ARMOR,
+	LIVING_ARMOR,
+	BARNACLE_ARMOR
+};
+
+const int garden_weapons[] = {
+	SPIKE,
+	SPEAR,
+	JAVELIN,
+	TRIDENT,
+	ELVEN_DAGGER,
+	RANSEUR
+};
+
+const int sand_armors[] = {
+	ELVEN_HELM,
+	HIGH_ELVEN_HELM,
+	ARCHAIC_HELM,
+	LEATHER_ARMOR,
+	LEATHER_ARMOR,
+	ARCHAIC_PLATE_MAIL,
+	ELVEN_MITHRIL_COAT,
+	HIGH_ELVEN_PLATE,
+	ELVEN_CLOAK,
+	OILSKIN_CLOAK,
+	CLOAK_OF_INVISIBILITY,
+	BUCKLER,
+	ARCHAIC_GAUNTLETS,
+	GLOVES,
+	HIGH_ELVEN_GAUNTLETS,
+	ARCHAIC_BOOTS,
+	ELVEN_BOOTS
+};
+
+const int sand_weapons[] = {
+	SPEAR,
+	PICK_AXE,
+	DWARVISH_MATTOCK,
+	TWO_HANDED_SWORD,
+	TRIDENT,
+	RAPIER,
+	LONG_SWORD,
+	CRYSTAL_SWORD,
+	ELVEN_BROADSWORD
+};
+
+const int fancy_clothes[] = {
+	ELVEN_TOGA,
+	GENTLEMAN_S_SUIT,
+	GENTLEWOMAN_S_DRESS,
+	JACKET,
+	FEDORA,
+	STILETTOS,
+	HAWAIIAN_SHIRT,
+	T_SHIRT,
+	VICTORIAN_UNDERWEAR,
+	BLACK_DRESS
 };
 
 #if 0
@@ -343,34 +468,34 @@ int sx, sy;
 	struct obj *curobj = 0;
 
 	if (rn2(100) < depth(&u.uz) && !(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && Is_qstart(&u.uz)) &&
-		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC, Inhell ? G_HELL : G_NOHELL)) &&
-		(mtmp = makemon(ptr, sx, sy, NO_MM_FLAGS)) != 0) {
-		/* note: makemon will set the mimic symbol to a shop item */
-		if (rn2(10) >= depth(&u.uz)) {
-			mtmp->m_ap_type = M_AP_OBJECT;
-			mtmp->mappearance = STRANGE_OBJECT;
-		}
-	}
+		!MON_AT(sx, sy) && (ptr = mkclass(S_MIMIC,Inhell ? G_HELL : G_NOHELL)) &&
+		(mtmp = makemon(ptr,sx,sy,NO_MM_FLAGS)) != 0) {
+	    /* note: makemon will set the mimic symbol to a shop item */
+	    if (rn2(10) >= depth(&u.uz)) {
+		mtmp->m_ap_type = M_AP_OBJECT;
+		mtmp->mappearance = STRANGE_OBJECT;
+	    }
+			}
 	else {
 		atype = get_shop_item(shp - shtypes);
 		if (atype < 0){
-			curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
-		}
+				curobj = mksobj_at(-atype, sx, sy, TRUE, TRUE);
+			}
 		else {
-			curobj = mkobj_at(atype, sx, sy, TRUE);
+				curobj = mkobj_at(atype, sx, sy, TRUE);
 		}
-
-		if (curobj){
-			curobj->shopOwned = TRUE;
+			
+			if(curobj){
+				curobj->shopOwned = TRUE;
 
 			/* special cases below... */
 			if (shp->shoptype == PETSHOP && curobj->otyp == FIGURINE){
-				curobj->corpsenm = rn2(100) < 40 ? PM_MYRMIDON_HOPLITE :
-					rn2(60) < 30 ? PM_MYRMIDON_LOCHIAS :
-					rn2(30) < 10 ? PM_MYRMIDON_YPOLOCHAGOS :
-					rn2(20) < 5 ? PM_MYRMIDON_LOCHAGOS :
-					PM_FORMIAN_CRUSHER;
-				bless(curobj);
+					curobj->corpsenm = rn2(100) < 40 ? PM_MYRMIDON_HOPLITE : 
+										rn2(60) < 30 ? PM_MYRMIDON_LOCHIAS :
+										rn2(30) < 10 ? PM_MYRMIDON_YPOLOCHAGOS : 
+										rn2(20) < 5 ? PM_MYRMIDON_LOCHAGOS :
+										PM_FORMIAN_CRUSHER;
+					bless(curobj);
 			}
 			if (shp->shoptype == CERAMICSHOP) {
 				if (curobj->oclass == ARMOR_CLASS && !curobj->oartifact) {
@@ -399,6 +524,96 @@ int sx, sy;
 				else if (curobj->otyp == FIGURINE){
 					curobj->corpsenm = !rn2(3) ? PM_LAMB : rn2(2) ? PM_SHEEP : PM_DIRE_SHEEP;
 					bless(curobj);
+				}
+			}
+			if (shp->shoptype == SEAGARDEN) {
+				if (curobj->oclass == ARMOR_CLASS && !curobj->oartifact) {
+					/* we actually want to completely replace that object. */
+					struct obj * newobj = mksobj_at(garden_armors[rn2(SIZE(garden_armors))], sx, sy, TRUE, TRUE);
+					if (newobj) {
+						newobj->shopOwned = TRUE;
+						if (is_metallic(newobj) && !newobj->oartifact)
+							set_material(newobj, SHELL);
+
+						/* replace curobj with newobj */
+						delobj(curobj);
+						/* assign the new object to the curobj pointer */
+						curobj = newobj;
+					}
+				}
+				else if (curobj->oclass == WEAPON_CLASS && !curobj->oartifact){
+					/* we actually want to completely replace that object. */
+					struct obj * newobj = mksobj_at(garden_weapons[rn2(SIZE(garden_weapons))], sx, sy, TRUE, TRUE);
+					if (newobj) {
+						newobj->shopOwned = TRUE;
+						set_material(newobj, SHELL);
+						newobj->opoisoned = rn2(3) ? OPOISON_BASIC : OPOISON_ACID;
+
+						/* replace curobj with newobj */
+						delobj(curobj);
+						/* assign the new object to the curobj pointer */
+						curobj = newobj;
+					}
+				}
+				else if (curobj->otyp == SLIME_MOLD){
+					if(rn2(2)) curobj->spe = fruitadd("algae mat");
+					else curobj->spe = fruitadd("seaweed");
+				}
+			}
+			if (shp->shoptype == SEAFOOD) {
+				if (curobj->oclass == AMULET_CLASS) {
+					set_material(curobj, GOLD);
+				}
+				else if (curobj->otyp == SLIME_MOLD){
+					switch(rnd(6)){
+					case 1: curobj->spe = fruitadd("salted fish");break;
+					case 2: curobj->spe = fruitadd("pickled fish");break;
+					case 3: curobj->spe = fruitadd("fried squid");break;
+					case 4: curobj->spe = fruitadd("baked clam");break;
+					case 5: curobj->spe = fruitadd("live oyster");break;
+					case 6: curobj->spe = fruitadd("sea cucumber");break;
+					}
+				}
+			}
+			if (shp->shoptype == SANDWALKER) {
+				if (curobj->oclass == ARMOR_CLASS && !curobj->oartifact) {
+					/* we actually want to completely replace that object. */
+					struct obj * newobj = mksobj_at(sand_armors[rn2(SIZE(sand_armors))], sx, sy, TRUE, TRUE);
+					if (newobj) {
+						newobj->shopOwned = TRUE;
+						/* replace curobj with newobj */
+						delobj(curobj);
+						/* assign the new object to the curobj pointer */
+						curobj = newobj;
+					}
+				}
+				else if (curobj->oclass == WEAPON_CLASS && !curobj->oartifact){
+					/* we actually want to completely replace that object. */
+					struct obj * newobj = mksobj_at(sand_weapons[rn2(SIZE(sand_weapons))], sx, sy, TRUE, TRUE);
+					if (newobj) {
+						newobj->shopOwned = TRUE;
+						if(!newobj->oartifact && newobj->otyp != CRYSTAL_SWORD)
+							set_material(newobj, SILVER);
+						newobj->opoisoned = rn2(3) ? OPOISON_ACID : OPOISON_SILVER;
+
+						/* replace curobj with newobj */
+						delobj(curobj);
+						/* assign the new object to the curobj pointer */
+						curobj = newobj;
+					}
+				}
+			}
+			if (shp->shoptype == NAIADSHOP) {
+				if (curobj->oclass == ARMOR_CLASS && !curobj->oartifact) {
+					/* we actually want to completely replace that object. */
+					struct obj * newobj = mksobj_at(fancy_clothes[rn2(SIZE(fancy_clothes))], sx, sy, TRUE, TRUE);
+					if (newobj) {
+						newobj->shopOwned = TRUE;
+						/* replace curobj with newobj */
+						delobj(curobj);
+						/* assign the new object to the curobj pointer */
+						curobj = newobj;
+					}
 				}
 			}
 			/*end special cases*/
@@ -438,30 +653,32 @@ const char * const *nlp;
 		continue;
 
 	    for (trycnt = 0; trycnt < 50; trycnt++) {
-		if (nlp == shktools) {
-		    shname = shktools[rn2(names_avail)];
-		    shk->female = (*shname == '_');
-		    if (shk->female) shname++;
-		} else if (name_wanted < names_avail) {
-		    shname = nlp[name_wanted];
-		} else if ((i = rn2(names_avail)) != 0) {
-		    shname = nlp[i - 1];
-		} else if (nlp != shkgeneral) {
-		    nlp = shkgeneral;	/* try general names */
-		    for (names_avail = 0; nlp[names_avail]; names_avail++)
-			continue;
-		    continue;		/* next `trycnt' iteration */
-		} else {
-		    shname = shk->female ? "Lucrezia" : "Dirk";
-		}
+			if (nlp == shktools) {
+				shname = shktools[rn2(names_avail)];
+				shk->female = (*shname == '_');
+				if (shk->female) shname++;
+			} else if (name_wanted < names_avail) {
+				shname = nlp[name_wanted];
+			} else if (names_avail) {
+				i = rn2(names_avail);
+				shname = nlp[i];
+				shk->female = i & 1;
+			} else if (nlp != shkgeneral) {
+				nlp = shkgeneral;	/* try general names */
+				for (names_avail = 0; nlp[names_avail]; names_avail++)
+					continue;
+				continue;		/* next `trycnt' iteration */
+			} else {
+				shname = shk->female ? "Lucrezia" : "Dirk";
+			}
 
-		/* is name already in use on this level? */
-		for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
-		    if (DEADMONSTER(mtmp) || (mtmp == shk) || !mtmp->isshk) continue;
-		    if (strcmp(ESHK(mtmp)->shknam, shname)) continue;
-		    break;
-		}
-		if (!mtmp) break;	/* new name */
+			/* is name already in use on this level? */
+			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+				if (DEADMONSTER(mtmp) || (mtmp == shk) || !mtmp->isshk) continue;
+				if (strcmp(ESHK(mtmp)->shknam, shname)) continue;
+				break;
+			}
+			if (!mtmp) break;	/* new name */
 	    }
 	}
 	(void) strncpy(ESHK(shk)->shknam, shname, PL_NSIZ);
@@ -569,6 +786,14 @@ struct mkroom	*sroom;
 		newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
 	else if (ESHK(shk)->shoptype == CERAMICSHOP)
 		newcham(shk, &mons[PM_VALAVI], FALSE, FALSE);
+	else if (ESHK(shk)->shoptype == SEAGARDEN)
+		newcham(shk, &mons[PM_YURIAN], FALSE, FALSE);
+	else if (ESHK(shk)->shoptype == SEAFOOD)
+		newcham(shk, &mons[PM_DEEP_ONE], FALSE, FALSE);
+	else if (ESHK(shk)->shoptype == SANDWALKER)
+		newcham(shk, &mons[PM_SEAL], FALSE, FALSE);
+	else if (ESHK(shk)->shoptype == NAIADSHOP)
+		newcham(shk, &mons[PM_OCEANID], FALSE, FALSE);
 	
 	return(sh);
 }

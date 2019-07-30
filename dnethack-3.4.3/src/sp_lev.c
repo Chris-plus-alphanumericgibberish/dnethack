@@ -1666,6 +1666,18 @@ boolean prefilled;
 	if (!prefilled) {
 	    int x,y;
 
+		if(on_level(&elshava_level,&u.uz) && croom->rtype == GENERALSHOP){
+			// if(rn2(3)){
+				switch(rnd(4)){
+					case 1: croom->rtype = SEAGARDEN; break;
+					case 2: croom->rtype = SEAFOOD; break;
+					case 3: croom->rtype = SANDWALKER; break;
+					case 4: croom->rtype = NAIADSHOP; break;
+				}
+			// } else {
+				// croom->rtype = ELSHAROOM;
+			// }
+		}
 	    /* Shop ? */
 	    if (croom->rtype >= SHOPBASE) {
 		    stock_room(croom->rtype - SHOPBASE, croom);
@@ -1687,6 +1699,7 @@ boolean prefilled;
 		case MORGUE:
 		case BARRACKS:
 		case ANTHOLE:
+		case ELSHAROOM:
 		    fill_zoo(croom);
 		    break;
 	    }
