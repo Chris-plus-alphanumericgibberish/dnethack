@@ -648,13 +648,13 @@ autoquiver()
 	    } else if (otmp->oclass == GEM_CLASS) {
 		;	/* skip non-rock gems--they're ammo but
 			   player has to select them explicitly */
-	    } else if (is_ammo(otmp) || is_spear(otmp)) {
-		if (ammo_and_launcher(otmp, uwep) || is_spear(otmp))
+	    } else if (ammo_and_launcher(otmp, uwep)) {
 		    /* Ammo matched with launcher (bow and arrow, crossbow and bolt) */
 		    oammo = otmp;
-		else if (ammo_and_launcher(otmp, uswapwep))
+		} else if (ammo_and_launcher(otmp, uswapwep)) {
+			/* Ammo matched with launcher in swapwep */
 		    altammo = otmp;
-		else
+		} else if (is_ammo(otmp)) {
 		    /* Mismatched ammo (no better than an ordinary weapon) */
 		    omisc = otmp;
 	    } else if (is_missile(otmp)) {
@@ -662,7 +662,8 @@ autoquiver()
 		omissile = otmp;
 	    } else if (otmp->oclass == WEAPON_CLASS && throwing_weapon(otmp)) {
 		/* Ordinary weapon */
-		if (objects[otmp->otyp].oc_skill == P_DAGGER
+		if ((objects[otmp->otyp].oc_skill == P_DAGGER ||
+			objects[otmp->otyp].oc_skill == P_SPEAR)
 			&& !omissile) 
 		    omissile = otmp;
 		else
@@ -2229,14 +2230,8 @@ int thrown;
 	else if (obj->oclass == WEAPON_CLASS || is_weptool(obj) ||
 		obj->oclass == GEM_CLASS
 	) {
-	    if (is_ammo(obj) || is_spear(obj)) {
-		if (!ammo_and_launcher(obj, launcher)) {
-				if (is_spear(obj)){
-				tmp += 2; // throwing weapon bonus
-			} else {
-			    tmp -= 4;
-			}
-		} else {
+		if (ammo_and_launcher(obj, launcher)) {
+			/* ammo and launcher */
 		    tmp += launcher->spe - greatest_erosion(launcher);
 		    tmp += weapon_hit_bonus(launcher);
 		    if (launcher->oartifact){
@@ -2259,7 +2254,11 @@ int thrown;
 			    tmp++;
 		    }
 		}
-	    } else {
+		else if (is_ammo(obj)) {
+			/* ammo without a launcher */
+			tmp -= 4;
+		}
+		else {
 		if (is_boomerang(obj))		/* arbitrary */
 		    tmp += 4;
 		else if (throwing_weapon(obj))	/* meant to be thrown */
