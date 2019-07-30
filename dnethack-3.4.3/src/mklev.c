@@ -1100,7 +1100,6 @@ makelevel()
 				(void) mkobj_at(TILE_CLASS,
 						 somex(croom), somey(croom), TRUE);
 		}
-		if(In_mithardir_terminus(&u.uz)) mkroom(RIVER);
 		goto mithardir_end;
 	}
 	
@@ -1314,6 +1313,7 @@ mithardir_end:
 			}
 		}
 		wallification(1, 0, COLNO - 1, ROWNO - 1);
+		if(In_mithardir_terminus(&u.uz)) mkroom(RIVER);
 	}
 	if (flags.makelev_closerooms)
 		flags.makelev_closerooms = FALSE;
