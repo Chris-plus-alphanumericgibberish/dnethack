@@ -106,6 +106,8 @@
 				 (ptr) == &mons[PM_AIR_ELEMENTAL] ||\
 				 (ptr) == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] ||\
 				 (ptr) == &mons[PM_DREADBLOSSOM_SWARM])
+#define has_passthrough_displacement(ptr)	((ptr) == &mons[PM_WRAITHWORM] ||\
+				 (ptr) == &mons[PM_FIRST_WRAITHWORM])
 #define flaming(ptr)		((ptr) == &mons[PM_FIRE_VORTEX] || \
 				 (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				 (ptr) == &mons[PM_FIRE_ELEMENTAL] || \
@@ -134,6 +136,7 @@
 				 || (ptr) == &mons[PM_HUDOR_KAMEREL] \
 				 || (ptr) == &mons[PM_LETHE_ELEMENTAL] \
 				 )
+#define is_uvuudaum(ptr)	(ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_MASKED_QUEEN])
 #define removed_innards(ptr)	(((ptr) == &mons[PM_HUNGRY_DEAD]) || \
 						 ((ptr) == &mons[PM_KOBOLD_MUMMY]) || \
 						 ((ptr) == &mons[PM_GNOME_MUMMY]) || \
@@ -207,8 +210,10 @@
 #define crpsdanger(ptr)		(acidic(ptr) || poisonous(ptr) ||\
 							 freezing(ptr) || burning(ptr))
 #define hideablewidegaze(ptr)	(ptr == &mons[PM_MEDUSA] || ptr == &mons[PM_GREAT_CTHULHU] || ptr == &mons[PM_DAGON] ||\
-									ptr == &mons[PM_PALE_NIGHT] || ptr == &mons[PM_OBOX_OB] || ptr == &mons[PM_UVUUDAUM])
+									ptr == &mons[PM_PALE_NIGHT] || ptr == &mons[PM_OBOX_OB] || ptr == &mons[PM_UVUUDAUM] ||\
+									ptr == &mons[PM_MASKED_QUEEN])
 #define controlledwidegaze(ptr)		(is_angel(ptr) || is_auton(ptr))
+#define controlledwidegaze_mon(mon)		(mon->mfaction == ILLUMINATED || controlledwidegaze((mon)->data))
 #define acidic(ptr)			(((ptr)->mflagsb & MB_ACID) != 0L)
 #define poisonous(ptr)		(((ptr)->mflagsb & MB_POIS) != 0L)
 #define freezing(ptr)		(((ptr)->mflagsb & MB_CHILL) != 0L)
@@ -422,9 +427,10 @@
 #define helm_match(ptr,obj)	(((ptr->mflagsb&MB_HEADMODIMASK) == (obj->bodytypeflag&MB_HEADMODIMASK)))
 /*Note: No-modifier helms are "normal"*/
 
-#define hates_holy_mon(mon)	(is_demon((mon)->data) || is_undead_mon(mon) || (((mon)->data->mflagsg&MG_HATESHOLY) != 0))
+#define hates_holy_mon(mon)	((is_demon((mon)->data) || is_undead_mon(mon) || (((mon)->data->mflagsg&MG_HATESHOLY) != 0)) && (mon)->mfaction != ILLUMINATED)
 #define hates_holy(ptr)		(is_demon(ptr) || is_undead(ptr) || (((ptr)->mflagsg&MG_HATESHOLY) != 0))
 #define hates_unholy(ptr)	((ptr->mflagsg&MG_HATESUNHOLY) != 0)
+#define hates_unholy_mon(mon)	((mon)->mfaction == ILLUMINATED || hates_unholy((mon)->data))
 #define hates_silver(ptr)	((ptr->mflagsg&MG_HATESSILVER) != 0)
 #define hates_iron(ptr)		((ptr->mflagsg&MG_HATESIRON) != 0)
 
@@ -525,6 +531,9 @@
 				 ((ptr) == &mons[PM_EDDERKOP]) ? 8 : \
 				 ((ptr) == &mons[PM_SURYA_DEVA]) ? 9 : \
 				 0)
+#define emits_light_mon(mon) (mon->mfaction == ILLUMINATED ? \
+							 max(3, emits_light((mon)->data)) : \
+							 emits_light((mon)->data))
 #define Is_darklight_monster(ptr)	((ptr) == &mons[PM_EDDERKOP]\
 					|| (ptr) == &mons[PM_DARK_WORM]\
 					|| (ptr) == &mons[PM_ASPECT_OF_THE_SILENCE]\

@@ -2419,11 +2419,11 @@ struct monst *magr;
 			else if(hates_unholy(youracedata))
 				agrmoral = 1;
 		} else {
-		if(hates_holy_mon(magr))
-			agrmoral = -1;
-		else if(hates_unholy(magr->data))
-			agrmoral = 1;
-	}
+			if(hates_holy_mon(magr))
+				agrmoral = -1;
+			else if(hates_unholy_mon(magr))
+				agrmoral = 1;
+		}
 	}
 	
 	udr = base_udr();

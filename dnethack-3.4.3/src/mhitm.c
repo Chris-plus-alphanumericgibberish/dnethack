@@ -261,7 +261,7 @@ mattackm(magr, mdef)
 			tchtmp += oarmor->spe;
 		}
 	}
-	if(magr->data == &mons[PM_UVUUDAUM] || magr->data == &mons[PM_CLAIRVOYANT_CHANGED]){
+	if(is_uvuudaum(magr->data) || magr->data == &mons[PM_CLAIRVOYANT_CHANGED]){
 		tmp += 20;
 		tchtmp += 20;
 	}
@@ -358,11 +358,11 @@ mattackm(magr, mdef)
 	/*Plasteel helms cover the face and prevent bite attacks*/
 	if((magr->misc_worn_check & W_ARMH) && which_armor(magr, W_ARMH) &&
 		(((which_armor(magr, W_ARMH))->otyp) == PLASTEEL_HELM || ((which_armor(magr, W_ARMH))->otyp) == CRYSTAL_HELM || ((which_armor(magr, W_ARMH))->otyp) == PONTIFF_S_CROWN) && 
-		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
+		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
 	) continue;
 	if((magr->misc_worn_check & W_ARMC) && which_armor(magr, W_ARMC) &&
 		(((which_armor(magr, W_ARMC))->otyp) == WHITE_FACELESS_ROBE || ((which_armor(magr, W_ARMC))->otyp) == BLACK_FACELESS_ROBE || ((which_armor(magr, W_ARMC))->otyp) == SMOKY_VIOLET_FACELESS_ROBE) && 
-		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
+		(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT || (mattk->aatyp == AT_TENT && is_mind_flayer(magr->data)))
 	) continue;
 	
 	switch (mattk->aatyp) {
@@ -494,6 +494,7 @@ mattackm(magr, mdef)
 #endif /* TAME_RANGED_ATTACKS */
 		} goto meleeattack;
 		case AT_5SQR:
+		case AT_5SBT:
 		if (distmin(magr->mx,magr->my,mdef->mx,mdef->my) > 5)
 		{
 #ifdef TAME_RANGED_ATTACKS
@@ -1011,6 +1012,7 @@ hitmm(magr, mdef, mattk)
 				break;
 			case AT_LNCK:
 			case AT_BITE:
+			case AT_5SBT:
 				Sprintf(buf,"%s bites", magr_name);
 				break;
 			case AT_STNG:
@@ -1469,7 +1471,7 @@ physical:{
 						!(is_lightsaber(otmp) && litsaber(otmp))
 					)
 						tmp += rnd(mdef->m_lev);
-					if(otmp && is_unholy(otmp) && hates_unholy(pd))
+					if(otmp && is_unholy(otmp) && hates_unholy_mon(mdef))
 						tmp += rnd(9);
 				} else {
 					tmp += dmgval(otmp, mdef, 0);
@@ -1497,7 +1499,7 @@ physical:{
 				) {
 					if (vis) pline("The cold-iron sears %s!", mon_nam(mdef));
 				}
-				if(otmp && is_unholy(otmp) && hates_unholy(pd)) {
+				if(otmp && is_unholy(otmp) && hates_unholy_mon(mdef)) {
 					if (vis) pline("The curse sears %s!", mon_nam(mdef));
 				}
 				if(oarm && tmp && oarm->otyp == GAUNTLETS_OF_POWER){
@@ -1613,6 +1615,7 @@ physical:{
 				int i = 0;
 				switch (mattk->aatyp) {
 					case AT_LNCK:
+					case AT_5SBT:
 					case AT_BITE:
 						pline("%s's teeth catch on %s armor!", Monnam(magr), s_suffix(mon_nam(mdef)));
 					break;
@@ -2195,7 +2198,7 @@ physical:{
 		 */
 		if (mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ)
 			tmp = 0;
-		if (magr->mcan || mdef->mconf || (magr->mspec_used && magr->data != &mons[PM_UVUUDAUM]) || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr, mdef)))
+		if (magr->mcan || mdef->mconf || (magr->mspec_used && is_uvuudaum(magr->data)) || ((mattk->aatyp == AT_GAZE || mattk->aatyp == AT_WDGZ) && !mmetgaze(magr, mdef)))
 			break;
 		
 		if (canseemon(magr)) {
@@ -2664,8 +2667,8 @@ physical:{
 	    default:	tmp = 0;
 			break;
 	}
-	if(magr->data == &mons[PM_UVUUDAUM] && !weaponhit && mdef->data != &mons[PM_UVUUDAUM]){
-		if(hates_unholy(mdef->data)){
+	if(magr->data == &mons[PM_UVUUDAUM] && !weaponhit && !is_uvuudaum(mdef->data)){
+		if(hates_unholy_mon(mdef)){
 			if (vis){
 				Strcpy(buf, Monnam(magr));
 				pline("%s's glory sears %s!", buf, mon_nam(mdef));
@@ -2677,6 +2680,24 @@ physical:{
 				pline("%s's glory sears %s!", buf, mon_nam(mdef));
 			}
 			tmp += d(4,9);
+		}
+	}
+	if(magr->data == &mons[PM_MASKED_QUEEN] && !is_uvuudaum(mdef->data)){
+		if(hates_holy(mdef->data)){
+			if (vis){
+				Strcpy(buf, Monnam(magr));
+				pline("%s's glory sears %s!", buf, mon_nam(mdef));
+			}
+			tmp += d(3,7);
+		}
+	}
+	if(magr->mfaction == ILLUMINATED){
+		if(hates_holy(mdef->data)){
+			if (vis){
+				Strcpy(buf, Monnam(magr));
+				pline("%s's holy glory sears %s!", buf, mon_nam(mdef));
+			}
+			tmp += d(3,7);
 		}
 	}
 	
@@ -3280,6 +3301,7 @@ int aatyp;
 	break;
     case AT_BITE:
     case AT_LNCK:
+    case AT_5SBT:
     case AT_STNG:
     case AT_ENGL:
     case AT_TENT:

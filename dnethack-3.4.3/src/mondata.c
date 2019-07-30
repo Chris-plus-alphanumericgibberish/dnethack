@@ -439,7 +439,8 @@ struct permonst *ptr;
 {
 	register int i, atyp;
 	long atk_mask = (1L << AT_BREA) | (1L << AT_SPIT) | (1L << AT_GAZE) | (1L << AT_LRCH) | (1L << AT_LNCK)
-					| (1L << AT_MMGC) | (1L << AT_TNKR) | (1L << AT_ARRW) | (1L << AT_BEAM) | (1L << AT_5SQR);
+					| (1L << AT_MMGC) | (1L << AT_TNKR) | (1L << AT_ARRW) | (1L << AT_BEAM) | (1L << AT_5SQR)
+					| (1L << AT_5SBT);
 
 	/* was: (attacktype(ptr, AT_BREA) || attacktype(ptr, AT_WEAP) ||
 		attacktype(ptr, AT_SPIT) || attacktype(ptr, AT_GAZE) ||

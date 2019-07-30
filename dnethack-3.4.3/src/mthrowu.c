@@ -424,7 +424,7 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 			else if (verbose) pline("Its flesh is seared!");
 	    }
 	    if ( is_unholy(otmp) &&
-		    hates_unholy(mtmp->data)
+		    hates_unholy_mon(mtmp)
 		) {
 			if (vis) pline_The("curse sears %s flesh!",
 					s_suffix(mon_nam(mtmp)));
@@ -1284,6 +1284,7 @@ int force_linedup;
 			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 2)
 			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 2)
 			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 5)
+			|| (attacktype(mtmp->data, AT_5SBT) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 5)
 			|| (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_SPEL) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
@@ -1326,6 +1327,7 @@ int force_linedup;
 			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2)
 			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2)
 			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 5)
+			|| (attacktype(mtmp->data, AT_5SBT) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 5)
 			|| (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_SPEL) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
@@ -1392,9 +1394,10 @@ int force_linedup;
 				&& lined_up(mtmp)
 			  )
 			|| (is_commander(mtmp->data) && distmin(mtmp->mux, mtmp->muy, mtmp->mx, mtmp->my) < BOLT_LIM)
-			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < 6)
+			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 5)
+			|| (attacktype(mtmp->data, AT_5SBT) && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) <= 5)
 			|| (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_SPEL) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && !mtmp->mcan && distmin(mtmp->mux,mtmp->muy,mtmp->mx,mtmp->my) < BOLT_LIM)
@@ -1486,9 +1489,10 @@ int force_linedup;
 			!mlined_up(mtmp, mtmp2, FALSE) && //Note: must be something we don't want to hit in the way.
 			(
 			   (is_commander(mtmp->data) && distmin(mtmp2->mx, mtmp2->my, mtmp->mx, mtmp->my) < BOLT_LIM)
-			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 2)
-			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < 6)
+			|| (attacktype(mtmp->data, AT_LRCH) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_LNCK) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 2)
+			|| (attacktype(mtmp->data, AT_5SQR) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 5)
+			|| (attacktype(mtmp->data, AT_5SBT) && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) <= 5)
 			|| (attacktype(mtmp->data, AT_GAZE) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_SPEL) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)
 			|| (attacktype_fordmg(mtmp->data, AT_MAGC, AD_CLRC) && !mtmp->mcan && distmin(mtmp2->mx,mtmp2->my,mtmp->mx,mtmp->my) < BOLT_LIM)

@@ -965,7 +965,11 @@ struct attack *uattk;
 	int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 	
 	if(mhit && mon_resistance(mon,DISPLACED) && rn2(2)){
-		You("hit a displaced image!");
+		if(has_passthrough_displacement(mon->data)){
+			Your("attack passes harmlessly through %s!", the(mon_nam(mon)));
+		} else {
+			You("hit a displaced image!");
+		}
 		return TRUE;
 	}
 
@@ -1119,7 +1123,7 @@ int thrown;
 		// }
 		if(uarmg){
 			/* blessed gloves give bonuses when fighting 'bare-handed' */
-			if (uarmg->blessed && (is_undead_mon(mon) || is_demon(mdat))) tmp += rnd(4);
+			if (uarmg->blessed && hates_holy_mon(mon)) tmp += rnd(4);
 			/* silver gloves give sliver bonus -CM */
 			if ((uarmg->obj_material == SILVER || arti_silvered(uarmg)) &&
 				hates_silver(mdat)){
@@ -1132,7 +1136,7 @@ int thrown;
 					ironmsg = TRUE;
 			}
 			if (is_unholy(uarmg) &&
-				hates_unholy(mdat)){
+				hates_unholy_mon(mon)){
 					tmp += rnd(9);
 					unholymsg = TRUE;
 			}
@@ -1222,7 +1226,7 @@ int thrown;
 				&& (is_unholy(uright))
 			) barehand_unholy_rings++;
 			
-			if ((barehand_unholy_rings) && hates_unholy(mdat)) {
+			if ((barehand_unholy_rings) && hates_unholy_mon(mon)) {
 			    tmp += d(barehand_unholy_rings,9);
 			    ironmsg = TRUE;
 			}
@@ -1493,7 +1497,7 @@ int thrown;
 				ironmsg = TRUE;
 				ironobj = TRUE;
 			}
-			if (is_unholy(obj) && hates_unholy(mdat)) {
+			if (is_unholy(obj) && hates_unholy_mon(mon)) {
 				tmp += rnd(9);	//I think this is the right thing to do here.  I don't think it enters the main unholy section
 				unholymsg = TRUE;
 				unholyobj = TRUE;
@@ -1817,7 +1821,7 @@ int thrown;
 				ironmsg = TRUE;
 				ironobj = TRUE;
 		    }
-		    if (is_unholy(obj) && hates_unholy(mdat)) {
+		    if (is_unholy(obj) && hates_unholy_mon(mon)) {
 				unholymsg = TRUE;
 				unholyobj = TRUE;
 		    }
@@ -2176,7 +2180,7 @@ defaultvalue:
 						ironmsg = TRUE;
 						ironobj = TRUE;
 					}
-					if (obj && is_unholy(obj) && hates_unholy(mdat)) {
+					if (obj && is_unholy(obj) && hates_unholy_mon(mon)) {
 						tmp += rnd(9);
 						unholymsg = TRUE;
 						unholyobj = TRUE;
@@ -2844,7 +2848,7 @@ int you;
 		return TRUE;
 	if(hates_iron(ptr) && obj->obj_material == IRON)
 		return TRUE;
-	if(hates_unholy(ptr) && is_unholy(obj))
+	if(hates_unholy_mon(mon) && is_unholy(obj))
 		return TRUE;
 	if(hates_holy_mon(mon) && obj->blessed)
 		return TRUE;
@@ -2880,7 +2884,7 @@ int you;
 		return rnd(20);
 	if(hates_iron(ptr) && obj->obj_material == IRON)
 		return rnd(mon->m_lev);
-	if(hates_unholy(ptr) && is_unholy(obj))
+	if(hates_unholy_mon(mon) && is_unholy(obj))
 		return rnd(9);
 	if(hates_holy_mon(mon) && obj->blessed)
 		return rnd(4);
@@ -3746,6 +3750,7 @@ register struct attack *mattk;
 			 // switch (mattk->aatyp) {
 				// case AT_LNCK:
 				// case AT_BITE:
+				// case AT_5SBT:
 					// Your("teeth catch on %s's armor!", mon_nam(mdef));
 				// break;
 				// case AT_STNG:
@@ -4451,7 +4456,11 @@ register int tmp, weptmp, tchtmp;
 	boolean Old_Upolyd = Upolyd, wepused;
 	
 	if(mon_resistance(mon,DISPLACED) && rn2(2)){
-		You("attack a displaced image!");
+		if(has_passthrough_displacement(mon->data)){
+			Your("attack passes harmlessly through %s!", the(mon_nam(mon)));
+		} else {
+			You("attack a displaced image!");
+		}
 		return TRUE;
 	}
 	
@@ -4467,14 +4476,14 @@ register int tmp, weptmp, tchtmp;
 		/*Plasteel helms cover the face and prevent bite attacks*/
 		if(uarmh && 
 			(uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || uarmh->otyp == PONTIFF_S_CROWN) && 
-			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || 
+			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT || 
 				(mattk->aatyp == AT_TENT && is_mind_flayer((&youmonst)->data)))
 		) continue;
 		if(uarmc && 
 			(uarmc->otyp == WHITE_FACELESS_ROBE
 			|| uarmc->otyp == BLACK_FACELESS_ROBE
 			|| uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE) && 
-			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || 
+			(mattk->aatyp == AT_BITE || mattk->aatyp == AT_ENGL || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT || 
 				(mattk->aatyp == AT_TENT && is_mind_flayer((&youmonst)->data)))
 		) continue;
 		
@@ -4556,6 +4565,7 @@ use_weapon:
 #endif
 		case AT_KICK:
 		case AT_BITE:
+		case AT_5SBT:
 		case AT_LNCK: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
 			/* [ALI] Vampires are also smart. They avoid biting
 			   monsters if doing so would be fatal */
@@ -4613,7 +4623,7 @@ wisp_shdw_dhit:
 			    }
 			    if (mattk->aatyp == AT_KICK)
 				    You("kick %s.", mon_nam(mon));
-			    else if (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK)
+			    else if (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT)
 				    You("bite %s.", mon_nam(mon));
 			    else if (mattk->aatyp == AT_STNG)
 				    You("sting %s.", mon_nam(mon));
@@ -4768,7 +4778,11 @@ int nattk;
 	boolean Old_Upolyd = Upolyd;
 	
 	if(mon_resistance(mon,DISPLACED) && rn2(2)){
-		You("attack a displaced image!");
+		if(has_passthrough_displacement(mon->data)){
+			Your("attack passes harmlessly through %s!", the(mon_nam(mon)));
+		} else {
+			You("attack a displaced image!");
+		}
 		return TRUE;
 	}
 	
@@ -4853,6 +4867,7 @@ use_weapon:
 #endif
 	case AT_KICK:
 	case AT_BITE:
+	case AT_5SBT:
 	case AT_LNCK: /*Note: long reach attacks are being treated as melee only for polymorph purposes*/
 		/* [ALI] Vampires are also smart. They avoid biting
 		   monsters if doing so would be fatal */
@@ -4908,7 +4923,7 @@ wisp_shdw_dhit2:
 			}
 			if (mattk->aatyp == AT_KICK)
 				You("kick %s.", mon_nam(mon));
-			else if (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK)
+			else if (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT)
 				You("bite %s.", mon_nam(mon));
 			else if (mattk->aatyp == AT_STNG)
 				You("sting %s.", mon_nam(mon));
@@ -5215,7 +5230,7 @@ uchar aatyp, adtyp;
 		if (aatyp == AT_KICK) {
 		    obj = uarmf;
 		    if (!obj) break;
-		} else if (aatyp == AT_BITE || aatyp == AT_LNCK || aatyp == AT_LRCH || aatyp == AT_BUTT ||
+		} else if (aatyp == AT_BITE || aatyp == AT_LNCK || aatyp == AT_5SBT || aatyp == AT_LRCH || aatyp == AT_BUTT ||
 			   (aatyp >= AT_STNG && aatyp < AT_WEAP)) {
 		    break;		/* no object involved */
 		}

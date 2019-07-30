@@ -567,6 +567,11 @@ register struct monst *mtmp;
 
 	boolean resists = resist(mtmp, 0, 0, FALSE);
 
+	if(mtmp->mfaction == ILLUMINATED){
+	    You("feel a malignant aura burn away in the Light.");
+	    return;
+	}
+	
 	if (MON_WEP(mtmp) &&
 	    (MON_WEP(mtmp)->oartifact == ART_MAGICBANE) && rn2(20)) {
 	    You(mal_aura, "the magic-absorbing blade");

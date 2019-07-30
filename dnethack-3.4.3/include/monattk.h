@@ -38,8 +38,9 @@
 #define AT_BEAM		28	/* non-contact ranged beam attack */
 #define AT_DEVA		29	/* million-arm weapon attack */
 #define AT_5SQR		30	/* five square reach touch */
-#define AT_WDGZ		31	/* wide gaze - passive, like medusa */
-#define AT_REND		32	/* hits if the previous two attacks hit, otherwise does nothing */
+#define AT_5SBT		31	/* five square reach bite */
+#define AT_WDGZ		32	/* wide gaze - passive, like medusa */
+#define AT_REND		33	/* hits if the previous two attacks hit, otherwise does nothing */
 
 #define AT_WEAP		252	/* uses weapon */
 #define AT_XWEP		253	/* uses offhanded weapon */

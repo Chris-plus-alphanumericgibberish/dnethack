@@ -923,7 +923,7 @@ struct monst *magr;
 		} else {
 			if(hates_holy_mon(magr))
 				agrmoral = -1;
-			else if(hates_unholy(magr->data))
+			else if(hates_unholy_mon(magr))
 				agrmoral = 1;
 		}
 	}
@@ -934,7 +934,7 @@ struct monst *magr;
 		if(mon->mflee || rn2(2))
 			base += 5;
 	}
-	if(mon->data == &mons[PM_UVUUDAUM]){
+	if(is_uvuudaum(mon->data)){
 		base += 10;//stoneskin
 	}
 	

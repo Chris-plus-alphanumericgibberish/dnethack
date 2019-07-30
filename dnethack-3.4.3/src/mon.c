@@ -1233,6 +1233,17 @@ mcalcdistress()
 		flags.cth_attk=FALSE;
 	}
 	
+	if(mtmp->data == &mons[PM_FIRST_WRAITHWORM] && distmin(u.ux, u.uy, mtmp->mx, mtmp->my) < 6){
+		struct monst *tmpm;
+		You("are thrown by a blast of wind!");
+		hurtle(rn2(3)-1, rn2(3)-1, rnd(6), FALSE);
+		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
+			if(tmpm != mtmp && !DEADMONSTER(tmpm) && distmin(tmpm->mx, tmpm->my, mtmp->mx, mtmp->my) < 6){
+				mhurtle(tmpm, rn2(3)-1, rn2(3)-1, rnd(6));
+			}
+		}
+	}
+	
 	if(mtmp->data == &mons[PM_ANCIENT_OF_ICE]){
 		struct monst *tmpm;
 		int targets = 0, damage = 0;
@@ -3132,6 +3143,17 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 			return ALLOW_M|ALLOW_TM;
 	}
 	
+	/* Alabaster elves vs. oozes */
+	if((ma == &mons[PM_ALABASTER_ELF] || ma == &mons[PM_ALABASTER_ELF_ELDER] || ma == &mons[PM_SENTINEL_OF_MITHARDIR]) 
+		&& (md->mlet == S_PUDDING || md->mlet == S_BLOB || md->mlet == S_UMBER)
+				&&	!(is_undead_mon(magr)))
+		return ALLOW_M|ALLOW_TM;
+	/* and vice versa */
+	if((md == &mons[PM_ALABASTER_ELF] || md == &mons[PM_ALABASTER_ELF_ELDER] || md == &mons[PM_SENTINEL_OF_MITHARDIR])
+		&& (ma->mlet == S_PUDDING || ma->mlet == S_BLOB || ma->mlet == S_UMBER)
+				&&	!(is_undead_mon(mdef)))
+		return ALLOW_M|ALLOW_TM;
+
 	/* drow vs. other drow */
 	/* Note that factions may be different than the displayed house name, 
 		as faction is set during generation and displayed house name goes by equipment! */
@@ -3347,10 +3369,10 @@ register struct monst *mtmp, *mtmp2;
     place_monster(mtmp2, mtmp2->mx, mtmp2->my);
     if (mtmp2->wormno)	    /* update level.monsters[wseg->wx][wseg->wy] */
 	place_wsegs(mtmp2); /* locations to mtmp2 not mtmp. */
-    if (emits_light(mtmp2->data)) {
+    if (emits_light_mon(mtmp2)) {
 	/* since this is so rare, we don't have any `mon_move_light_source' */
 	new_light_source(mtmp2->mx, mtmp2->my,
-			 emits_light(mtmp2->data),
+			 emits_light_mon(mtmp2),
 			 LS_MONSTER, (genericptr_t)mtmp2);
 	/* here we rely on the fact that `mtmp' hasn't actually been deleted */
 	del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
@@ -3398,7 +3420,7 @@ struct permonst *mptr;	/* reflects mtmp->data _prior_ to mtmp's death */
 	mtmp->mhp = 0; /* simplify some tests: force mhp to 0 */
 	relobj(mtmp, 0, FALSE);
 	remove_monster(mtmp->mx, mtmp->my);
-	if (emits_light(mptr))
+	if (emits_light_mon(mtmp))
 	    del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
 	newsym(mtmp->mx,mtmp->my);
 	unstuck(mtmp);
@@ -3468,7 +3490,7 @@ struct monst *mtmp;
 			newcham(mtmp, &mons[rn2(4) ? PM_ACID_BLOB : PM_BLACK_PUDDING], FALSE, FALSE);
 			return;
 		}
-	} else if(mtmp->mspec_used == 0 && mtmp->data == &mons[PM_UVUUDAUM]){
+	} else if(mtmp->mspec_used == 0 && is_uvuudaum(mtmp->data)){
 		if (cansee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
 			pline("A glowing halo forms over %s!",
@@ -3536,6 +3558,23 @@ struct monst *mtmp;
 		mtmp->m_lev += 4;
 		mtmp->mhpmax = d(mtmp->m_lev, 8);
 		mtmp->mhp = mtmp->mhpmax;
+		return;
+	} else if(mtmp->mfaction == ILLUMINATED && !stoned && !golded && !glassed){
+		if (couldsee(mtmp->mx, mtmp->my)) {
+			pline("But wait...");
+			pline("A glowing halo forms over %s!",
+				mon_nam(mtmp));
+		}
+		mtmp->mcanmove = 1;
+		mtmp->mfrozen = 0;
+		mtmp->mhp = mtmp->mhpmax;
+		if(!rn2(3)){
+			mtmp->mfaction = 0;
+			del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
+			if (emits_light_mon(mtmp))
+				new_light_source(mtmp->mx, mtmp->my, emits_light_mon(mtmp),
+						 LS_MONSTER, (genericptr_t)mtmp);
+		}
 		return;
 	} else if(mtmp->zombify && is_kamerel(mtmp->data)){
 		if (couldsee(mtmp->mx, mtmp->my)) {
@@ -4498,7 +4537,9 @@ register struct monst *mdef;
 #endif
 		/* Archeologists should not break unique statues */
 		if (mdef->data->geno & G_UNIQ)
-			otmp->spe = 1;
+			otmp->spe = STATUE_HISTORIC;
+		if (mdef->mfaction == ILLUMINATED)
+			otmp->spe |= STATUE_FACELESS;
 		otmp->owt = weight(otmp);
 	} else
 		otmp = mksobj_at(ROCK, x, y, TRUE, FALSE);
@@ -4592,7 +4633,9 @@ register struct monst *mdef;
 #endif
 		/* Archeologists should not break unique statues */
 		if (mdef->data->geno & G_UNIQ)
-			otmp->spe = 1;
+			otmp->spe = STATUE_HISTORIC;
+		if (mdef->mfaction == ILLUMINATED)
+			otmp->spe |= STATUE_FACELESS;
 		otmp->owt = weight(otmp);
 	} else {
 		oldminvent = 0;
@@ -4723,7 +4766,9 @@ register struct monst *mdef;
 #endif
 		/* Archeologists should not break unique statues */
 		if (mdef->data->geno & G_UNIQ)
-			otmp->spe = 1;
+			otmp->spe = STATUE_HISTORIC;
+		if (mdef->mfaction == ILLUMINATED)
+			otmp->spe |= STATUE_FACELESS;
 		otmp->owt = weight(otmp);
 	} else {
 		oldminvent = 0;
@@ -5946,13 +5991,13 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	/* take on the new form... */
 	set_mon_data(mtmp, mdat, 0);
 
-	if (emits_light(olddata) != emits_light(mtmp->data)) {
+	if (emits_light(olddata) != emits_light_mon(mtmp)) {
 	    /* used to give light, now doesn't, or vice versa,
 	       or light's range has changed */
-	    if (emits_light(olddata))
+	    if (emits_light(olddata) || mtmp->mfaction == ILLUMINATED)
 		del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
-	    if (emits_light(mtmp->data))
-		new_light_source(mtmp->mx, mtmp->my, emits_light(mtmp->data),
+	    if (emits_light_mon(mtmp))
+		new_light_source(mtmp->mx, mtmp->my, emits_light_mon(mtmp),
 				 LS_MONSTER, (genericptr_t)mtmp);
 	}
 	if (!mtmp->perminvis || pm_invisible(olddata))

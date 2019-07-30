@@ -773,20 +773,39 @@ chaos_montype()
 struct permonst *
 chaos2_montype()
 {
-	if(In_mithardir_desert(&u.uz)){
-		if(rn2(4))
+	if(on_level(&elshava_level,&u.uz)){
+		if(!rn2(3))
+			return !(mvitals[PM_FOG_CLOUD].mvflags & G_GENOD) ? &mons[PM_FOG_CLOUD] : mkclass(S_VORTEX, G_NOHELL);
+		else if(!rn2(2))
+			return !(mvitals[PM_PIRANHA].mvflags & G_GENOD) ? &mons[PM_PIRANHA] : mkclass(S_EEL, G_NOHELL);
+		else if(rn2(3))
+			return mkclass(S_EEL, G_NOHELL);
+		else if(rn2(2))
+			return !(mvitals[PM_COURE_ELADRIN].mvflags & G_GENOD) ? &mons[PM_COURE_ELADRIN] : mkclass(S_CHA_ANGEL, G_NOHELL);
+		else
+			return !(mvitals[PM_NOVIERE_ELADRIN].mvflags & G_GENOD) ? &mons[PM_NOVIERE_ELADRIN] : mkclass(S_CHA_ANGEL, G_NOHELL);
+	} else if(In_mithardir_desert(&u.uz)){
+		if(rn2(3))
+			return !(mvitals[PM_DUST_VORTEX].mvflags & G_GENOD) ? &mons[PM_DUST_VORTEX] : mkclass(S_ZOMBIE, G_NOHELL);
+		else if(rn2(3))
 			return !(mvitals[PM_ALABASTER_ELF].mvflags & G_GENOD) ? &mons[PM_ALABASTER_ELF] : mkclass(S_ZOMBIE, G_NOHELL);
 		else if(rn2(3))
 			return !(mvitals[PM_ALABASTER_ELF_ELDER].mvflags & G_GENOD) ? &mons[PM_ALABASTER_ELF_ELDER] : mkclass(S_ZOMBIE, G_NOHELL);
-		else if(rn2(3))
+		else if(!rn2(3))
 			return !(mvitals[PM_SENTINEL_OF_MITHARDIR].mvflags & G_GENOD) ? &mons[PM_SENTINEL_OF_MITHARDIR] : mkclass(S_GOLEM, G_NOHELL);
+		else if(rn2(2))
+			return !(mvitals[PM_WRAITHWORM].mvflags & G_GENOD) ? &mons[PM_SENTINEL_OF_MITHARDIR] : mkclass(S_SNAKE, G_NOHELL);
 		else 
-			return !(mvitals[PM_LIVING_MIRAGE].mvflags & G_GENOD) ? &mons[PM_LIVING_MIRAGE] : mkclass(S_GOLEM, G_NOHELL);
+			return !(mvitals[PM_LIVING_MIRAGE].mvflags & G_GENOD) ? &mons[PM_LIVING_MIRAGE] : mkclass(S_PUDDING, G_NOHELL);
 	} else if(In_mithardir_catacombs(&u.uz)){
 		if(rn2(2))
 			return mkclass(S_BLOB, G_NOHELL);
 		else if(rn2(3))
 			return mkclass(S_PUDDING, G_NOHELL);
+		else if(!rn2(3))
+			return mkclass(S_WRAITH, G_NOHELL);
+		else if(rn2(2))
+			return !(mvitals[PM_WRAITHWORM].mvflags & G_GENOD) ? &mons[PM_SENTINEL_OF_MITHARDIR] : mkclass(S_SNAKE, G_NOHELL);
 		else if(rn2(3) || !In_mithardir_terminus(&u.uz))
 			return !(mvitals[PM_SENTINEL_OF_MITHARDIR].mvflags & G_GENOD) ? &mons[PM_SENTINEL_OF_MITHARDIR] : mkclass(S_GOLEM, G_NOHELL);
 		else 

@@ -1061,7 +1061,7 @@ int spec;
 		if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS 
 			&& !otmp->blessed && !otmp->cursed
 			&& mon
-			&& (holy_damage(mon) || hates_unholy(ptr))
+			&& (holy_damage(mon) || hates_unholy_mon(mon))
 		){
 			bonus += rnd(10);
 		}
@@ -1119,7 +1119,7 @@ int spec;
 			bonus += rnd(20);
 		}
 	    if (is_unholy(otmp)
-			&& hates_unholy(ptr)
+			&& mon && hates_unholy_mon(mon)
 		){
 			int bdm = 1;
 			if(otmp->obj_material == GOLD)
@@ -1142,7 +1142,7 @@ int spec;
 			else bonus += d(bdm, 9);
 		}
 		
-		if (hates_unholy(ptr) && otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
+		if (mon && hates_unholy_mon(mon) && otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
 			bonus += d(1, 4); // always counts as unholy regardless, but its' pretty weak
 		
 		if(mon && mon->isminion){
@@ -1370,7 +1370,7 @@ int spot;
 			/* never a hated weapon */
 			(mtmp->misc_worn_check & W_ARMG || !hates_silver(mtmp->data) || otmp->obj_material != SILVER) &&
 			(mtmp->misc_worn_check & W_ARMG || !hates_iron(mtmp->data)   || otmp->obj_material != IRON) &&
-			(mtmp->misc_worn_check & W_ARMG || !hates_unholy(mtmp->data) || !is_unholy(otmp))
+			(mtmp->misc_worn_check & W_ARMG || !hates_unholy_mon(mtmp) || !is_unholy(otmp))
 		){
 			if (!obest ||
 				(dmgval(otmp, 0 /*zeromonst*/, 0) > dmgval(obest, 0 /*zeromonst*/,0))
@@ -1480,7 +1480,7 @@ struct obj *otmp;
     if (((strongmonst(mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0) || !bimanual(otmp,mtmp->data)) && 
 		(mtmp->misc_worn_check & W_ARMG || otmp->obj_material != SILVER || !hates_silver(mtmp->data)) &&
 		(mtmp->misc_worn_check & W_ARMG || otmp->obj_material != IRON	|| !hates_iron(mtmp->data)) &&
-		(mtmp->misc_worn_check & W_ARMG || is_unholy(otmp)				|| !hates_unholy(mtmp->data))
+		(mtmp->misc_worn_check & W_ARMG || is_unholy(otmp)				|| !hates_unholy_mon(mtmp))
 	){
         for (i = 0; i < SIZE(pwep); i++)
         {
@@ -1803,7 +1803,7 @@ register struct monst *mtmp;
 			/* never a hated weapon */
 			(mtmp->misc_worn_check & W_ARMG || !hates_silver(mtmp->data) || otmp->obj_material != SILVER) &&
 			(mtmp->misc_worn_check & W_ARMG || !hates_iron(mtmp->data) || otmp->obj_material != IRON) &&
-			(mtmp->misc_worn_check & W_ARMG || !hates_unholy(mtmp->data) || !is_unholy(otmp))
+			(mtmp->misc_worn_check & W_ARMG || !hates_unholy_mon(mtmp) || !is_unholy(otmp))
 			) return otmp;
 	}
 

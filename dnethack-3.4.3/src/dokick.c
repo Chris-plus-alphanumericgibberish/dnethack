@@ -65,7 +65,7 @@ register boolean clumsy;
 			ironmsg = TRUE; ironobj = TRUE;
 	}
 	if (uarmf && is_unholy(uarmf)
-		&& hates_unholy(mdat)) {
+		&& hates_unholy_mon(mon)) {
 			unholymsg = TRUE; unholyobj = TRUE;
 	}
 	
@@ -277,7 +277,7 @@ register xchar x, y;
 				ironobj = TRUE;
 		}
 		if (uarmf && is_unholy(uarmf)
-			&& hates_unholy(mon->data)) {
+			&& hates_unholy_mon(mon)) {
 				unholyobj = TRUE;
 		}
 		

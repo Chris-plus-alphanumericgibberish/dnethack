@@ -193,6 +193,7 @@ struct monst {
 #define	CRYSTALFIED	3	/* crystal dead 'faction' */
 #define	FRACTURED	4	/* witness of the fracture 'faction' */
 #define	VAMPIRIC	5	/* vampirified 'faction' */
+#define	ILLUMINATED	6	/* illuminated 'faction' */
 /*Note: first drow house is 8*/
 	int mvanishes;
 	//hatching situation

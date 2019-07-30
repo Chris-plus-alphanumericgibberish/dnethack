@@ -1521,7 +1521,7 @@ get_weakness_description_of_monster_type(struct monst * mtmp, char * description
 	int many = 0;
 
 	many = append(temp_buf, hates_holy_mon(mtmp)	, "holy"		, many);
-	many = append(temp_buf, hates_unholy(ptr)		, "unholy"		, many);
+	many = append(temp_buf, hates_unholy_mon(mtmp)	, "unholy"		, many);
 	many = append(temp_buf, hates_silver(ptr)		, "silver"		, many);
 	many = append(temp_buf, hates_iron(ptr)			, "iron"		, many);
 
@@ -1822,6 +1822,7 @@ get_description_of_attack_type(uchar id)
 	case AT_LRCH: return "reaching attack";
 	case AT_HODS: return "mirror attack";
 	case AT_LNCK: return "reaching bite";
+	case AT_5SBT: return "long reach bite";
 	case AT_MMGC: return "uses magic spell(s)";
 	case AT_ILUR: return "swallow attack";
 	case AT_HITS: return "automatic hit";
@@ -2067,6 +2068,7 @@ get_description_of_monster_type(struct monst * mtmp, char * description)
 	else if (mtmp->mfaction == SKELIFIED)	Strcat(name, " skeleton");
 	else if (mtmp->mfaction == CRYSTALFIED) Strcat(name, " vitrean");
 	else if (mtmp->mfaction == FRACTURED)	Strcat(name, " witness");
+	else if (mtmp->mfaction == ILLUMINATED)	Strcat(name, " shining one");
 	else if (mtmp->mfaction == VAMPIRIC)	Strcat(name, " vampire");
 
 	temp_buf[0] = '\0';

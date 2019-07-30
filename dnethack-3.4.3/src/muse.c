@@ -2304,7 +2304,7 @@ museamnesia:
 			/* this monster won't want to catch an iron
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;
-		    } else if (where_to == 3 && hates_unholy(mtmp->data) &&
+		    } else if (where_to == 3 && hates_unholy_mon(mtmp) &&
 			    is_unholy(obj)) {
 			/* this monster won't want to catch a cursed
 			   weapon; drop it at hero's feet instead */

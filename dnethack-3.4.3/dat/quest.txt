@@ -8184,6 +8184,12 @@ Demogorgon, Prince of Demons, is near!
 Lamashtu, the Demon Queen, is near!
 %E
 #
+# The Silence warning
+#
+%Cc - 00202
+A terrible silence has fallen!
+%E
+#
 #	Alternate legacy text for Elves
 #
 %Cc - 00211

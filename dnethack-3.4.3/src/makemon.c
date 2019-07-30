@@ -6185,8 +6185,8 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 	if (mon->ispriest) m2->ispriest = FALSE;
 	m2->mxlth = 0;
 	place_monster(m2, m2->mx, m2->my);
-	if (emits_light(m2->data))
-	    new_light_source(m2->mx, m2->my, emits_light(m2->data),
+	if (emits_light_mon(m2))
+	    new_light_source(m2->mx, m2->my, emits_light_mon(m2),
 			     LS_MONSTER, (genericptr_t)m2);
 	if (m2->mnamelth) {
 	    m2->mnamelth = 0; /* or it won't get allocated */
@@ -7078,8 +7078,19 @@ register int	mmflags;
 				mtmp->mhp = mtmp->mhpmax;
 			}
 			else if(mndx == PM_ASPECT_OF_THE_SILENCE){
+				struct obj *otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
 			    mtmp->minvis = TRUE;
 			    mtmp->perminvis = TRUE;
+				otmp = oname(otmp, artiname(ART_THIRD_KEY_OF_CHAOS));
+				if(otmp->oartifact){
+					place_object(otmp, mtmp->mx, mtmp->my);
+					rloco(otmp);
+				} else {
+					obfree(otmp, (struct obj *) 0);
+				}
+				pline("A terrible silence falls!");
+				com_pager(202);
+				nomul(0, NULL);
 			}
 		break;
 		case S_BAT:
@@ -7210,7 +7221,7 @@ register int	mmflags;
 //			pline("%d\n",mtmp->mhpmax);
 		break;
 	}
-	if ((ct = emits_light(mtmp->data)) > 0)
+	if ((ct = emits_light_mon(mtmp)) > 0)
 		new_light_source(mtmp->mx, mtmp->my, ct,
 				 LS_MONSTER, (genericptr_t)mtmp);
 	mitem = 0;	/* extra inventory item for this monster */

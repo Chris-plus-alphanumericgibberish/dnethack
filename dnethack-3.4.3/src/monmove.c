@@ -665,7 +665,7 @@ boolean digest_meal;
 			}
 		}
 	}
-	if(mon->data == &mons[PM_UVUUDAUM]){
+	if(is_uvuudaum(mon->data)){
 		mon->mhp += 25; //Fast healing
 	} else {
 		if(mon->mhp < mon->mhpmax && mon_resistance(mon,REGENERATION)) mon->mhp++;
@@ -1336,6 +1336,7 @@ toofar:
 	      attacktype(mtmp->data, AT_LNCK) ||
 	      attacktype(mtmp->data, AT_LRCH) ||
 	      attacktype(mtmp->data, AT_5SQR) ||
+	      attacktype(mtmp->data, AT_5SBT) ||
 	      (!mtmp->mspec_used && 
 			(attacktype(mtmp->data, AT_SPIT) ||
 			 attacktype(mtmp->data, AT_TNKR) ||

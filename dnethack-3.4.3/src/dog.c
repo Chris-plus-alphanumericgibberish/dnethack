@@ -1028,7 +1028,7 @@ rock:
 	    if (hates_iron(mon->data) &&
 		obj->obj_material == IRON)
 		return(TABU);
-	    if (hates_unholy(mon->data) &&
+	    if (hates_unholy_mon(mon) &&
 		is_unholy(obj))
 		return(TABU);
 	    if (herbi && (obj->otyp == SHEAF_OF_HAY || obj->otyp == SEDGE_HAT))

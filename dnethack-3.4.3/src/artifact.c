@@ -2843,7 +2843,7 @@ int basedmg;
 		}
 	}
 	if(otmp->oproperties&OPROP_UNHYW && otmp->cursed){
-		if(youdefend ? (hates_unholy(youracedata)) : (hates_unholy(mdef->data))){
+		if(youdefend ? (hates_unholy(youracedata)) : (hates_unholy_mon(mdef))){
 			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
 			else bonus += basedmg;
 		}
@@ -5208,7 +5208,7 @@ arti_invoke(obj)
 				pline("Time Stop!");
 				youmonst.movement += NORMAL_SPEED*10;
 				for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
-					if(mtmp->data == &mons[PM_UVUUDAUM] && !DEADMONSTER(mtmp)){
+					if(is_uvuudaum(mtmp->data) && !DEADMONSTER(mtmp)){
 						mtmp->movement += NORMAL_SPEED*10;
 					}
 				}

@@ -730,7 +730,7 @@ struct level_map {
 	{ "chaosvth",	&chaosvth_level },
 	{ "chaose",		&chaose_level },
 	/*Chaos 2 levels*/
-	{ "elshava",&elshava_level },
+	{ "ossa1",&elshava_level },
 	{ "mith3",&lastspire_level },
 	/*Fort Knox*/
 	{ "knox",	&knox_level },
@@ -2611,11 +2611,25 @@ void
 dust_storm()
 {
 	int x, y;
+	struct trap *ttmp;
 	for (x = 0; x < COLNO; x++) {
 		for (y = 0; y < ROWNO; y++) {
 			if(IS_SAND(levl[x][y].typ)){
 				wipe_engr_at(x, y, rnd(3));
-				if(!rn2(6000)){ //1/3rd the bury rate (objects tend to get buried)
+				ttmp = t_at(x, y);
+				if(ttmp && 
+					(ttmp->ttyp == PIT || ttmp->ttyp == SPIKED_PIT)
+					&& !rn2(200)
+				){
+					del_engr_at(x, y);
+					if(u.ux == x && u.uy == y && u.utrap && u.utraptype == TT_PIT){
+						pline("The pit fills in!");
+						nomul(-3, "stuck in the sand");
+					}
+					deltrap(ttmp);
+					bury_objs(x, y);
+					newsym(x,y);
+				} else if(!rn2(6000)){ //1/3rd the bury rate (objects tend to get buried)
 					unearth_objs(x, y);
 					newsym(x,y);
 				} else if(!rn2(2000)){ //Somewhat less than 1 square per turn in a full map of sand.

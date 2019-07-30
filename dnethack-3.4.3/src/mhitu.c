@@ -67,6 +67,7 @@ register struct attack *mattk;
 			break;
 		case AT_LNCK:
 		case AT_BITE:
+		case AT_5SBT:
 			pline("%s bites!", Monnam(mtmp));
 			break;
 		case AT_KICK:
@@ -171,7 +172,7 @@ struct attack *mattk;
 		   (mattk->aatyp == AT_GAZE) ? "gaze" :
 		   (mattk->aatyp == AT_WDGZ) ? "gaze" :
 		   (mattk->aatyp == AT_ENGL) ? "vapor" :
-		   (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK) ? "bite" : 
+		   (mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT) ? "bite" : 
 		   (mattk->aatyp == AT_NONE) ? "attack" :
 		   "sting";
 	}
@@ -238,7 +239,7 @@ wildmiss(mtmp, mattk)		/* monster attacked your displaced image */
 		pline("%s flails around randomly.",Monnam(mtmp));
 	} else {
 	    const char *swings =
-		mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK ? "snaps" :
+		mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT ? "snaps" :
 		mattk->aatyp == AT_KICK ? "kicks" :
 		(mattk->aatyp == AT_STNG ||
 		 mattk->aatyp == AT_BUTT ||
@@ -770,7 +771,7 @@ mattacku(mtmp)
 			tchtmp -= uwep->spe+1;
 		}
 	}
-	if(mtmp->data == &mons[PM_UVUUDAUM] || mtmp->data == &mons[PM_CLAIRVOYANT_CHANGED]){
+	if(is_uvuudaum(mtmp->data) || mtmp->data == &mons[PM_CLAIRVOYANT_CHANGED]){
 		tmp += 20;
 		tchtmp += 20;
 	}
@@ -901,7 +902,7 @@ mattacku(mtmp)
 			oarmor = which_armor(mtmp, W_ARMH);
 			if(oarmor && 
 				(oarmor->otyp == PLASTEEL_HELM || oarmor->otyp == CRYSTAL_HELM || oarmor->otyp == PONTIFF_S_CROWN) && 
-				(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || 
+				(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT || 
 					(mattk->aatyp == AT_ENGL && !u.uswallow) ||
 					(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
 				)
@@ -913,7 +914,7 @@ mattacku(mtmp)
 				(oarmor->otyp == WHITE_FACELESS_ROBE
 					|| oarmor->otyp == BLACK_FACELESS_ROBE
 					|| oarmor->otyp == SMOKY_VIOLET_FACELESS_ROBE) && 
-				(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || 
+				(mattk->aatyp == AT_BITE || mattk->aatyp == AT_LNCK || mattk->aatyp == AT_5SBT || 
 					(mattk->aatyp == AT_ENGL && !u.uswallow) ||
 					(mattk->aatyp == AT_TENT && is_mind_flayer(mtmp->data))
 				)
@@ -1187,6 +1188,32 @@ mattacku(mtmp)
 		case AT_LNCK:
 		case AT_LRCH:{
 			if(dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8 && couldsee(mtmp->mx, mtmp->my)){
+				if(mtmp->mconf || Conflict ||
+					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
+					!touch_petrifies(youracedata)){
+					if (foundyou){
+						if(tmp > (j = rnd(20+i*2))) {
+							sum[i] = hitmu(mtmp, mattk);
+						} else
+							missmu(mtmp, (tmp == j), mattk);
+					} else
+						wildmiss(mtmp, mattk);
+					mon_ranged_gazeonly = 0;
+				}
+				if(mdat == &mons[PM_DEMOGORGON] && sum[i]){
+					mtmp->mvar2 = mtmp->mvar2+1;
+					if(!range2 && mtmp->mvar2>=2){
+						struct attack rend = {AT_REND, AD_SHRD, 3, 12};
+						sum[i] = hitmu(mtmp, &rend);
+						mon_ranged_gazeonly = 0;
+						mtmp->mvar2=0;
+					}
+				}
+			}
+		}break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////
+		case AT_5SBT:{
+			if(distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 5 && couldsee(mtmp->mx, mtmp->my)){
 				if(mtmp->mconf || Conflict ||
 					mattk->adtyp == AD_STAR || mattk->adtyp == AD_BLUD || mattk->adtyp == AD_SHDW || 
 					!touch_petrifies(youracedata)){
@@ -2423,11 +2450,15 @@ hitmu(mtmp, mattk)
 			for(; i>0; i--){
 				obj = some_armor(&youmonst);
 				if(obj){
-					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
-						damage_item(obj);
-					}
-					else if(!obj->oartifact){
-						destroy_arm(obj);
+					if(obj_resists(obj, 0, 80)){
+						break; //End loop
+					} else {
+						if(obj->spe > -1*objects[(obj)->otyp].a_ac){
+							damage_item(obj);
+						}
+						else if(!obj->oartifact){
+							destroy_arm(obj);
+						}
 					}
 				} else {
 					i = 0;
@@ -2865,6 +2896,15 @@ dopois:
 					if(mtmp->mtame){
 						EDOG(mtmp)->hungrytime += 100;  //400/4 = human nut/4
 					}
+				}
+			}
+			if(mtmp->data == &mons[PM_WRAITHWORM]
+				|| mtmp->data == &mons[PM_FIRST_WRAITHWORM]
+			){
+				if(uncancelled && !rn2(8)) {
+					Sprintf(buf, "%s %s",
+						s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
+					poisoned(buf, ptmp, mdat->mname, 30, 0);
 				}
 			}
 		break;
@@ -3556,6 +3596,7 @@ dopois:
 			 switch (mattk->aatyp) {
 				case AT_LNCK:
 				case AT_BITE:
+				case AT_5SBT:
 					pline("%s's teeth catch on your armor!", Monnam(mtmp));
 				break;
 				case AT_STNG:
@@ -3849,6 +3890,18 @@ dopois:
 		} else if(hates_holy(youracedata)){
 			pline("%s's glory sears you!", Monnam(mtmp));
 			dmg += d(4,9);
+		}
+	}
+	if(mtmp->data == &mons[PM_MASKED_QUEEN]){
+		if(hates_holy(youracedata)){
+			pline("%s's glory sears you!", Monnam(mtmp));
+			dmg += d(3,7);
+		}
+	}
+	if(mtmp->mfaction == ILLUMINATED){
+		if(hates_holy(youracedata)){
+			pline("%s's holy glory sears you!", Monnam(mtmp));
+			dmg += d(3,7);
 		}
 	}
 	
@@ -4719,17 +4772,28 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		   }
 		 //else succeeded = 0
 		}
-		else if (!mtmp->mcan && multi >= 0 && !rn2(3) && !is_blind(mtmp) && umetgaze(mtmp)) {
+		else if (!mtmp->mcan && multi >= 0 && !rn2(3) 
+			&& !is_blind(mtmp) && umetgaze(mtmp)
+			&& !mtmp->mspec_used
+		) {
 		    if (Free_action) {
 				You("momentarily stiffen.");
 				succeeded=0;
 		    }
 			else{
+				int plys, max;
+				if((int)mattk->damn == 0 || (int)mattk->damd == 0) 
+					plys = rnd(10), 
+					max = 10;
+				else plys = d((int)mattk->damn, (int)mattk->damd),
+					 max = (int)mattk->damn * (int)mattk->damd;
+
 				You("are mesmerized by %s!", mon_nam(mtmp));
 				nomovemsg = 0;	/* default: "you can move again" */
-				nomul(-rnd(10), "mesmerized by a monster");
+				nomul(-plys, "mesmerized by a monster");
 				exercise(A_DEX, FALSE);
 				succeeded=1;
+				mtmp->mspec_used = mtmp->mspec_used + max;
 		    }
 		}
 		break;
@@ -4902,7 +4966,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		}
 		break;
 	    case AD_CONF:
-		if(mtmp->data == &mons[PM_UVUUDAUM]){
+		if(is_uvuudaum(mtmp->data)){
 			if(!mtmp->mcan && umetgaze(mtmp) && rn2(5)){
 				int conf;
 				if((int)mattk->damn == 0 || (int)mattk->damd == 0) 

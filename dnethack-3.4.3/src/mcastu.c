@@ -734,6 +734,7 @@ unsigned int type;
 		}
 	break;
 	case PM_UVUUDAUM:
+	case PM_MASKED_QUEEN:
 		switch(rn2(8)){
 			case 0: return PSI_BOLT;
 			case 1: return MON_WARP;
@@ -2021,7 +2022,7 @@ int spellnum;
 				timeout_problems(mtmp);
 			}
 		for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
-			if(tmpm->data == &mons[PM_UVUUDAUM] && tmpm != mtmp && !DEADMONSTER(tmpm)){
+			if(is_uvuudaum(tmpm->data) && tmpm != mtmp && !DEADMONSTER(tmpm)){
 				if(canseemon(tmpm))
 					pline("%s blurs with speed!", Monnam(tmpm));
 				for(i= extraturns; i > 0; i--){
@@ -4545,7 +4546,7 @@ uspsibolt:
 					  Monnam(mtmp), rays);
 			dmg = (d(n,20)*3+1)/2;
 			destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
-		} else if(hates_unholy(mtmp->data)){
+		} else if(hates_unholy_mon(mtmp)){
 			if (yours || canseemon(mtmp))
 				pline("%s is seared by %s of unholy light!",
 					  Monnam(mtmp), rays);
@@ -4614,7 +4615,7 @@ uspsibolt:
 				pline("%s is seared by golden light!",
 					  Monnam(mtmp));
 			dmg = d(2,12) + d(1,20);
-		} else if(hates_unholy(mtmp->data)){
+		} else if(hates_unholy_mon(mtmp)){
 			if (yours || canseemon(mtmp))
 				pline("%s is seared by unholy light!",
 					  Monnam(mtmp));

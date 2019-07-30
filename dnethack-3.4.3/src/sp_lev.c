@@ -1091,6 +1091,21 @@ struct mkroom	*croom;
 		tmpo = oname(tmpo, artiname(ART_YORSHKA_S_SPEAR));
 		tmpo->spe = +5;
 	}
+	if(otmp->otyp == STATUE && (otmp->spe&STATUE_FACELESS) && In_mithardir_quest(&u.uz)){
+		static int statuetypes[] = {PM_ELVENKING, PM_ELVENKING, PM_ELVENQUEEN, PM_ELVENQUEEN,
+			PM_ELF_LORD, PM_ELF_LORD, PM_ELF_LADY, PM_ELF_LADY, PM_DOPPELGANGER, PM_DOPPELGANGER,
+			PM_NOBLEMAN, PM_NOBLEMAN, PM_NOBLEWOMAN, PM_NOBLEWOMAN, PM_DARK_YOUNG, PM_COURE_ELADRIN,
+			PM_NOVIERE_ELADRIN, PM_BRALANI_ELADRIN, PM_FIRRE_ELADRIN, PM_SHIERE_ELADRIN, PM_GHAELE_ELADRIN,
+			PM_TULANI_ELADRIN, PM_MASKED_QUEEN, PM_QUEEN_OF_STARS,
+			PM_GOD,  PM_DREAD_SERAPH, PM_TITAN, PM_TITAN, PM_TITAN};
+		otmp->corpsenm = statuetypes[rn2(SIZE(statuetypes))];
+		if(otmp->corpsenm == PM_MASKED_QUEEN)
+			otmp->spe &= ~STATUE_FACELESS; //Wearing mask
+		if(otmp->corpsenm == PM_GOD)
+			otmp = oname(otmp, "the Black Goat of the woods with a thousand young");
+			
+		fix_object(otmp);
+	}
 	
 	/* assume we wouldn't be given an egg corpsenm unless it was
 	   hatchable */

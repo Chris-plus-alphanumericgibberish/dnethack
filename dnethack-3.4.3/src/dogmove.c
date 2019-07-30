@@ -1032,6 +1032,7 @@ register int after;	/* this is extra fast monster movement */
 	      attacktype(mtmp->data, AT_LRCH) ||
 	      attacktype(mtmp->data, AT_LNCK) ||
 	      attacktype(mtmp->data, AT_5SQR) ||
+	      attacktype(mtmp->data, AT_5SBT) ||
 	      attacktype(mtmp->data, AT_TNKR) ||
 	     ( (attacktype(mtmp->data, AT_MAGC) && !mtmp->mcan &&
 			(attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp <= AD_SPC2
