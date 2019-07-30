@@ -1530,13 +1530,25 @@ doandroid()
 				if(!use_whip(uwep)) return 1;
 				u.uen--;
 				if(!uwep) return 1;
-				use_force_sword(uwep);
-				if(u.ustuck && u.uswallow)
-					mon = u.ustuck;
-				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(mon){
-					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-					hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 2);
+				if(uwep->otyp == FORCE_WHIP){
+					use_force_sword(uwep);
+					if(u.ustuck && u.uswallow)
+						mon = u.ustuck;
+					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+					if(mon){
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 2);
+					}
+				} else {
+					if(!use_whip(uwep)) return 1;
+					u.uen--;
+					if(u.ustuck && u.uswallow)
+						mon = u.ustuck;
+					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+					if(mon){
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 1);
+					}
 				}
 			}
 			return 1;
