@@ -4775,7 +4775,7 @@ mkriver()	/* John Harris */
 	else {      /* Vertical river */
 		center = rn2(COLNO-14)+7;
 		width = rn2(4)+5;
-		for (prog = 1; prog<ROWNO; prog++) {
+		for (prog = 0; prog<ROWNO; prog++) {
 			edge = TRUE;
 			for (fill=center-(width/2); fill<=center+(width/2) ; fill++) {
 				liquify(fill, prog, edge);
