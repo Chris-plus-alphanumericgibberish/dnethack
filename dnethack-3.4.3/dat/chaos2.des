@@ -244,55 +244,100 @@ STAIR:(09,09),down
 
 MAZE: "cat1",' '
 FLAGS: shortsighted,hardfloor
-
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-0   |||||||                  -------------
-1 |||.....|||                |...........|
-2 |.........|                |...........|
-3||..PPPPP..||               |...........|
-4|..PPPPPPP..|               |...........|
-5|..PPPPPPP..|---------------|...........|
-6|..PPP.PPP..S###############S.....-.....|
-7|..PPPPPPP..|---------------|...........|
-8|..PPPPPPP..|               |...........|
-9||..PPPPP..||               |...........|
-0 |.........|                |...........|
-1 |||.....|||                |...........|
-2   |||||||                  -------------
+0   |||||||     
+1 |||.....|||   
+2 |.........|   
+3||..PPPPP..||  
+4|..PPPPPPP..|  
+5|..PPPPPPP..|-|
+6|..PPP.PPP..S.|
+7|..PPPPPPP..|-|
+8|..PPPPPPP..|  
+9||..PPPPP..||  
+0 |.........|   
+1 |||.....|||   
+2   |||||||     
 ENDMAP
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
 #0         1         2   	   3	     4	       5		 6	       7
 
 STAIR:(06,06),up
 
-CONTAINER:'`',"statue",(04,01),"titan",9
-CONTAINER:'`',"statue",(05,01),"titan",9
-CONTAINER:'`',"statue",(06,01),"titan",9
-CONTAINER:'`',"statue",(07,01),"titan",9
-CONTAINER:'`',"statue",(08,01),"titan",9
-CONTAINER:'`',"statue",(09,02),"titan",9
-CONTAINER:'`',"statue",(10,02),"titan",9
-CONTAINER:'`',"statue",(10,03),"titan",9
-CONTAINER:'`',"statue",(11,04),"titan",9
-CONTAINER:'`',"statue",(11,05),"titan",9
+MONSTER:'b',"crystal ooze",(05,03)
 
-CONTAINER:'`',"statue",(11,07),"titan",9
-CONTAINER:'`',"statue",(11,08),"titan",9
-CONTAINER:'`',"statue",(10,09),"titan",9
-CONTAINER:'`',"statue",(10,08),"titan",9
-CONTAINER:'`',"statue",(09,08),"titan",9
-CONTAINER:'`',"statue",(08,07),"titan",9
-CONTAINER:'`',"statue",(07,07),"titan",9
-CONTAINER:'`',"statue",(06,07),"titan",9
-CONTAINER:'`',"statue",(05,07),"titan",9
-CONTAINER:'`',"statue",(04,07),"titan",9
+OBJECT:'`',"statue",(01,06), blessed, +9
 
-PORTAL:(34,00,40,12),(00,00,00,00),"cat2"
+OBJECT:'`',"statue",(01,05), blessed, +9
+OBJECT:'`',"statue",(01,04), blessed, +9
+OBJECT:'`',"statue",(02,03), blessed, +9
+OBJECT:'`',"statue",(02,02), blessed, +9
+OBJECT:'`',"statue",(03,02), blessed, +9
+OBJECT:'`',"statue",(04,01), blessed, +9
+OBJECT:'`',"statue",(05,01), blessed, +9
+OBJECT:'`',"statue",(06,01), blessed, +9
+OBJECT:'`',"statue",(07,01), blessed, +9
+OBJECT:'`',"statue",(08,01), blessed, +9
+OBJECT:'`',"statue",(09,02), blessed, +9
+OBJECT:'`',"statue",(10,02), blessed, +9
+OBJECT:'`',"statue",(10,03), blessed, +9
+OBJECT:'`',"statue",(11,04), blessed, +9
+OBJECT:'`',"statue",(11,05), blessed, +9
+
+OBJECT:'`',"statue",(01,07), blessed, +9
+OBJECT:'`',"statue",(01,08), blessed, +9
+OBJECT:'`',"statue",(02,09), blessed, +9
+OBJECT:'`',"statue",(02,10), blessed, +9
+OBJECT:'`',"statue",(03,10), blessed, +9
+OBJECT:'`',"statue",(04,11), blessed, +9
+OBJECT:'`',"statue",(05,11), blessed, +9
+OBJECT:'`',"statue",(06,11), blessed, +9
+OBJECT:'`',"statue",(07,11), blessed, +9
+OBJECT:'`',"statue",(08,11), blessed, +9
+OBJECT:'`',"statue",(09,10), blessed, +9
+OBJECT:'`',"statue",(10,10), blessed, +9
+OBJECT:'`',"statue",(10,09), blessed, +9
+OBJECT:'`',"statue",(11,08), blessed, +9
+OBJECT:'`',"statue",(11,07), blessed, +9
+
+PORTAL:(13,06,13,06),(00,00,00,00),"cat2"
 
 MAZE: "cat2",' '
+FLAGS: shortsighted,hardfloor
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0 -------------
+1 |...........|
+2 |...........|
+3 |...........|
+4 |...........|
+5||...........|
+6|......-.....|
+7||...........|
+8 |...........|
+9 |...........|
+0 |...........|
+1 |...........|
+2 -------------
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+PORTAL:(01,06,01,06),(00,00,00,00),"cat1"
+
+OBJECT: '(',"skeleton key", random, uncursed, 0, "The Second Key of Chaos"
+
+MONSTER:'S',"first wraithworm",(07,06)
+
+PORTAL:(07,00,12,12),(00,00,00,00),"cat3"
+
+MAZE: "cat3",' '
 FLAGS: shortsighted,hardfloor
 
 GEOMETRY:center,center
@@ -316,10 +361,10 @@ ENDMAP
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
 #0         1         2   	   3	     4	       5		 6	       7
 
-#RANDOM_PLACES:(03,04),(05,02),(08,01),(03,08),(05,10),(08,11),(13,04),(11,02),(08,01),(13,08),(11,10)
-RANDOM_PLACES:(03,04),(05,02),(03,08),(05,10),(13,04),(11,02),(08,01),(13,08),(11,10)
+#RANDOM_PLACES:(03,04),(05,02),(03,08),(05,10),(13,04),(11,02),(08,01),(13,08),(11,10)
+RANDOM_PLACES:(03,04),(05,02),(08,01),(03,08),(05,10),(08,11),(13,04),(11,02),(13,08),(11,10)
 
-PORTAL:(01,06,01,06),(00,00,00,00),"cat1"
+PORTAL:(01,06,01,06),(00,00,00,00),"mith3"
 STAIR:(15,06),down
 
 OBJECT:'#',"slab",place[0]
