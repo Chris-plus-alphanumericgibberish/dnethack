@@ -387,7 +387,7 @@ boolean forcecontrol;
 	) newman();
 	else if(!polymon(mntmp)) return;
 
-	if (!uarmg) selftouch("No longer petrify-resistant, you");
+	if (!uarmg) selftouch("No longer petrification-resistant, you");
 
  made_change:
 	new_light = Upolyd ? emits_light(youmonst.data) : 0;
