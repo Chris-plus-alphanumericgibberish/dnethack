@@ -3449,6 +3449,43 @@ register schar delta;
 	}
 }
 
+void
+dosymbiotic()
+{
+	struct monst *mon;
+	int tmp, weptmp, tchtmp;
+	int clockwisex[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
+	int clockwisey[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
+	int i = rnd(8),j, lim=0;
+	struct attack symbiote[] = 
+	{
+		{AT_TENT,AD_PHYS,3,3},
+		{0,0,0,0}
+	};
+	//2 pips on a die is +1 on average
+	if(uarm)
+		symbiote[0].damd = max(1, 3+2*uarm->spe);
+	for(j=8;j>=1;j--){
+		if(u.ustuck && u.uswallow)
+			mon = u.ustuck;
+		else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
+		if(!mon || mon->mpeaceful || !rn2(4))
+			continue;
+		if(touch_petrifies(mon->data)
+		 || mon->data == &mons[PM_MEDUSA]
+		 || mon->data == &mons[PM_PALE_NIGHT]
+		) continue;
+		
+		if(mon && !mon->mtame){
+			find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+			hmonwith(mon, tmp, weptmp, tchtmp, symbiote, 1);
+			morehungry(1);
+			lim++;
+			if(lim > 4) break;
+		}
+	}
+}
+
 #endif /* OVLB */
 
 /*do_wear.c*/

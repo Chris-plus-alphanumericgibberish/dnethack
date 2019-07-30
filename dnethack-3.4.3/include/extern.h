@@ -501,6 +501,7 @@ E int FDECL(teleport_arm, (struct obj *));
 E int FDECL(tent_destroy_arm, (struct obj *));
 E void FDECL(adj_abon, (struct obj *,SCHAR_P));
 E int FDECL(properties_dr, (struct obj *,int,int));
+E void NDECL(dosymbiotic);
 
 /* ### dog.c ### */
 

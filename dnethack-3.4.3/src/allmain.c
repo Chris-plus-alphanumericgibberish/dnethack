@@ -1463,6 +1463,9 @@ karemade:
 			dust_storm();
 			/* Item attacks */
 			mind_blast_items();
+			if(uarm && 
+				(uarm->otyp == LIVING_ARMOR || uarm->otyp == BARNACLE_ARMOR)
+			) dosymbiotic();
 			/* Clouds on Lolth's level deal damage */
 			if(Is_lolth_level(&u.uz) && levl[u.ux][u.uy].typ == CLOUD){
 				if (!(nonliving(youracedata) || Breathless)){

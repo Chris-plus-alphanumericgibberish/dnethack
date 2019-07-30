@@ -3912,6 +3912,8 @@ int wishflags;
 	   strncmpi(bp, "ring mail", 9) &&
 	   strncmpi(bp, "studded leather arm", 19) &&
 	   strncmpi(bp, "leather arm", 11) &&
+	   strncmpi(bp, "living arm", 10) &&
+	   strncmpi(bp, "barnacle arm", 12) &&
 	   strncmpi(bp, "tooled horn", 11) &&
 	   strncmpi(bp, "food ration", 11) &&
 	   strncmpi(bp, "meat ring", 9) && 
