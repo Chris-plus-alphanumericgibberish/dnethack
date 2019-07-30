@@ -4031,7 +4031,17 @@ int spell;
 			return 0;
 		break;
 	}
-	return 1;
+	{
+	static long last_used_move = -1;
+	static short last_used_movement = 0;
+	int res;
+	//Speak one word of power per move free.
+	res = (moves == last_used_move) &&
+	      (youmonst.movement == last_used_movement);
+	last_used_move = moves;
+	last_used_movement = youmonst.movement;
+	return res;
+	}
 }
 int
 spelleffects(spell, atme, spelltyp)
