@@ -2603,6 +2603,9 @@ weight_cap()
 		|| (strongmonst(mdat) && (mdat->cwt > WT_HUMAN)))
 		maxcap = (maxcap * (long)mdat->cwt / WT_HUMAN);
 
+	if(Race_if(PM_ORC) && !Upolyd && !u.usteed){
+		maxcap = 2*maxcap/3 + u.ulevel*maxcap/30;
+	}
 	/* consistent with can_carry() in mon.c */
 	if (mdat->mlet == S_NYMPH)
 		carrcap = maxcap;
@@ -2617,13 +2620,14 @@ weight_cap()
 		carrcap = maxcap;
 	else {
 		if(u.ucarinc < 0) carrcap += u.ucarinc;
+		if(Race_if(PM_ORC)){
+			carrcap = 2*carrcap/3 + u.ulevel*carrcap/30;
+		}
+
 		if(carrcap > maxcap) carrcap = maxcap;
 		/* note that carinc bonues can push you over the normal limit! */
 		if(u.ucarinc > 0) carrcap += u.ucarinc;
 
-		if(Race_if(PM_ORC)){
-			carrcap += (u.ulevel/3)*10;
-		}
 		static int hboots = 0;
 		if (!hboots) hboots = find_hboots();
 		if (uarmf && uarmf->otyp == hboots) carrcap += uarmf->cursed ? 0 : 100; 
