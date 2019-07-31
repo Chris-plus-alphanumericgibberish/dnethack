@@ -93,12 +93,13 @@ struct engr {
 #define ACERERAK					(LAST_WARD+33)
 #define COUNCIL						(LAST_WARD+34)
 #define COSMOS						(LAST_WARD+35)
-#define MISKA						(LAST_WARD+36)
-#define NUDZIRATH					(LAST_WARD+37)
-#define ALIGNMENT_THING				(LAST_WARD+38)
-#define UNKNOWN_GOD					(LAST_WARD+39)
-#define BLACK_WEB					(LAST_WARD+40)
-#define NUMINA						(LAST_WARD+41)
+#define LIVING_CRYSTAL				(LAST_WARD+36)
+#define MISKA						(LAST_WARD+37)
+#define NUDZIRATH					(LAST_WARD+38)
+#define ALIGNMENT_THING				(LAST_WARD+39)
+#define UNKNOWN_GOD					(LAST_WARD+40)
+#define BLACK_WEB					(LAST_WARD+41)
+#define NUMINA						(LAST_WARD+42)
 
 /*Some hallucinatory engravings have special properties. Keep track of them here*/
 /*Functional halucinatory wards, keep in sync with engrave.c!*/

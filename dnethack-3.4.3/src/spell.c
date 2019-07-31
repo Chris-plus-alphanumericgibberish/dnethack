@@ -1137,6 +1137,7 @@ static const long spiritPOwner[NUMBER_POWERS] = {
 	SEAL_SPECIAL|SEAL_ACERERAK,
 	SEAL_SPECIAL|SEAL_COUNCIL,
 	SEAL_SPECIAL|SEAL_COSMOS,
+	SEAL_SPECIAL|SEAL_LIVING_CRYSTAL,
 	SEAL_SPECIAL|SEAL_NUDZIRATH, SEAL_SPECIAL|SEAL_NUDZIRATH,
 	SEAL_SPECIAL|SEAL_ALIGNMENT_THING,
 	SEAL_SPECIAL|SEAL_UNKNOWN_GOD,
@@ -1180,6 +1181,7 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Swallow Soul",
 	"Embassy of Elements",
 	"Crystal Memories",
+	"Pseudonatural Surge",
 	"Mirror Shatter", "Mirror Walk",
 	"Flowing Forms",
 	"Phase step",
@@ -3597,6 +3599,11 @@ spiriteffects(power, atme)
 				mon->mvanishes = 10+u.ulevel/2;
 			} else return 0;
 		}break;
+		case PWR_PSEUDONATURAL_SURGE:
+			pline("The dustlight seethes around you as tentacles erupt from your body!");
+			nomul(-5, "channeling a pseudonatural.");
+			dopseudonatural();
+		break;
 		case PWR_MIRROR_SHATTER:{
 			int dmg;
 			boolean done = FALSE;
@@ -5628,4 +5635,33 @@ reorder_spirit_powers()
 		return 0;
 	}
 }
+
+void
+dopseudonatural()
+{
+	struct monst *mon, *nmon;
+	int tmp, weptmp, tchtmp;
+	struct attack symbiote[] = 
+	{
+		{AT_TENT,AD_PHYS,5,spiritDsize()},
+		{0,0,0,0}
+	};
+	for(mon = fmon;mon;mon = nmon){
+		nmon = mon->nmon;
+		if(!mon || mon->mtame || !rn2(5))
+			continue;
+		if(distmin(u.ux, u.uy, mon->mx, mon->my) > 2 || !couldsee(mon->mx, mon->my))
+			continue;
+		if((!Stone_resistance && (touch_petrifies(mon->data)
+		 || mon->data == &mons[PM_MEDUSA]))
+		 || mon->data == &mons[PM_PALE_NIGHT]
+		) continue;
+		
+		if(mon){
+			find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+			hmonwith(mon, tmp, weptmp, tchtmp, symbiote, 1);
+		}
+	}
+}
+
 /*spell.c*/

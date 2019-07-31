@@ -906,12 +906,13 @@ char * sealNames[] =  {
 	"Acererak", /* 32 */
 	"the Council of Elements", /* 33 */
 	"Cosmos", /* 34 */
-	"Miska", /* 35 */
-	"Nudzirath", /* 36 */
-	"the Alignment Thing", /* 37 */
-	"the Unknown God", /* 38 */
-	"the Eddergud", /* 38 */
-	"Numina" /* 39 */
+	"Mediator", /* 35 */
+	"Miska", /* 36 */
+	"Nudzirath", /* 37 */
+	"the Alignment Thing", /* 38 */
+	"the Unknown God", /* 39 */
+	"the Eddergud", /* 40 */
+	"Numina" /* 41 */
 };
 
 char * sealTitles[] =  {
@@ -950,12 +951,13 @@ char * sealTitles[] =  {
 	", the Demi-Lich", /* 32 */
 	"", /* 33 */
 	", goddess of crystal", /* 34 */
-	" the wolf-spider", /* 35 */
-	", the mirrored destroyer", /* 36 */
-	"", /* 37 */
+	", shard of the Living Gate", /* 35 */
+	" the wolf-spider", /* 36 */
+	", the mirrored destroyer", /* 37 */
 	"", /* 38 */
-	", The Black Web Entity", /* 39 */
-	", The Whispering Multitude" /* 40 */
+	"", /* 39 */
+	", The Black Web Entity", /* 40 */
+	", The Whispering Multitude" /* 41 */
 };
 
 char *
@@ -3705,6 +3707,33 @@ pick_seal()
 			);
 		}
 		any.a_int = COSMOS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_LIVING_CRYSTAL){
+		if((u.specialSealsActive&SEAL_LIVING_CRYSTAL) && u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (active; timeout:%ld)",
+				sealNames[LIVING_CRYSTAL-FIRST_SEAL], 
+				u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] - moves
+			);
+		} else if(u.specialSealsActive&SEAL_LIVING_CRYSTAL) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[LIVING_CRYSTAL-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%ld)",
+				sealNames[LIVING_CRYSTAL-FIRST_SEAL], 
+				u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[LIVING_CRYSTAL-FIRST_SEAL], 
+				sealTitles[LIVING_CRYSTAL-FIRST_SEAL]
+			);
+		}
+		any.a_int = LIVING_CRYSTAL;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);

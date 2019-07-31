@@ -522,6 +522,7 @@ E void FDECL(abuse_dog, (struct monst *));
 E void FDECL(wary_dog, (struct monst *, BOOLEAN_P));
 E void FDECL(enough_dogs, (int));
 E void NDECL(vanish_dogs);
+E void NDECL(average_dogs);
 
 /* ### dogmove.c ### */
 
@@ -2360,6 +2361,7 @@ E void FDECL(initialspell, (struct obj *));
 E void FDECL(initialward, (struct obj *));
 E void FDECL(set_spirit_powers, (long));
 E int NDECL(reorder_spirit_powers);
+E void NDECL(dopseudonatural);
 
 /* ### steal.c ### */
 

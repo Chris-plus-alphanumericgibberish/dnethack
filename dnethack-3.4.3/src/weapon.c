@@ -1255,7 +1255,7 @@ struct monst *mon;
 	int dmg = 0;
 	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 2 : 1;
 	
-	if(u.specialSealsActive&SEAL_COSMOS){
+	if(u.specialSealsActive&SEAL_COSMOS || u.specialSealsActive&SEAL_LIVING_CRYSTAL){
 		if(mon->data->maligntyp == A_CHAOTIC) dmg += d(2*dnum,4);
 		else if(mon->data->maligntyp == A_NEUTRAL) dmg += d(dnum,4);
 	} else if(u.specialSealsActive&SEAL_MISKA){

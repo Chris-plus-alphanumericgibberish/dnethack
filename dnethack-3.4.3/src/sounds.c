@@ -4161,7 +4161,7 @@ int tx,ty;
 				}
 				else if(uwep && uwep->oartifact == ART_PEN_OF_THE_VOID && (!u.spiritTineA || (!u.spiritTineB && quest_status.killed_nemesis && Role_if(PM_EXILE)))){
 					if(!Blind) pline("A beautiful woman walks into the seal.");
-					pline("\"Somtimes, a subtle aproach is better.\"");
+					pline("\"Sometimes, a subtle approach is better.\"");
 					if(!Blind) pline("She dips her fingers into the ink of %s and writes on your weapon.", xname(o));
 					o->spestudied++;
 					uwep->ovar1 |= SEAL_PAIMON;
@@ -4198,8 +4198,8 @@ int tx,ty;
 					pline("It swoops down and lands on your shoulder.");
 					pline("Its radiant rainbow feathers reflect in its eyes,");
 					pline("becoming images of roaring flames and sparkling snow,");
-					pline("harsh radiance on barren clifs");
-					pline("and swolen suns in empty black skies.");
+					pline("harsh radiance on barren cliffs");
+					pline("and swollen suns in empty black skies.");
 					bindspirit(ep->ward_id);
 					u.sealTimeout[SIMURGH-FIRST_SEAL] = moves + bindingPeriod;
 				}
@@ -4236,7 +4236,7 @@ int tx,ty;
 					!(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3))
 			){
 				if(!Blind) pline("Within the seal, darkness takes on its own meaning,");
-				if(!Blind) pline("beyond mere absense of light.");
+				if(!Blind) pline("beyond mere absence of light.");
 				if(u.sealCounts < numSlots){
 					if(!Blind) pline("The darkness inside the seal flows out to pool around you.");
 					pline("\"None shall rest until my vengeance is complete.");
@@ -4380,6 +4380,38 @@ int tx,ty;
 				} else {
 					You("think of shining crystal.");
 					// u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod/10;
+				}
+			}
+		} else pline("You can't feel the spirit.");
+	}break;
+	case LIVING_CRYSTAL:{
+		struct obj *otmp;
+		if(u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] < moves){
+			if(Role_if(PM_EXILE)){
+				for(otmp = level.objects[tx][ty]; otmp; otmp = otmp->nexthere) {
+					if(otmp->oclass == GEM_CLASS && otmp->obj_material == GLASS){
+						break; // break out of loop
+					}
+				}
+				if(otmp){
+					if(!Blind){
+						pline("The motes of dust in the air before you begin to glow.");
+						pline("You see a vast, distant gate of crystal through the curtains of bright dustlight.");
+						pline("The terrain around the foot of the gate shifts and flows like potters clay,");
+						pline("and you hear the murmur of a distant conversation.");
+						pline("Suddenly, a patch of darkness and silence appears in the shifting lands,");
+						pline("and quickly overtakes all else around the gate.");
+						pline("The gate fades, cracks, and shatters.");
+						if(!rn2(20))
+							You("glimpse a pair of tiny green lights in the place from whence the darkness spread.");
+					} else {
+						You_hear("the murmur of a distance conversation, and a spreading silence.");
+					}
+					bindspirit(ep->ward_id);
+					u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] = moves + bindingPeriod;
+				} else {
+					You("think of colored glass.");
+					// u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}
 		} else pline("You can't feel the spirit.");
@@ -4911,6 +4943,10 @@ bindspirit(seal_id)
 				unrestrict_weapon_skill(P_MACE);
 				u.sealsActive |= SEAL_TENEBROUS;
 				u.sealsUsed |= SEAL_TENEBROUS;
+				if(Role_if(PM_EXILE) && u.ufirst_life && u.ufirst_sky && u.ufirst_light && (u.sealsUsed&SEAL_TENEBROUS) && !(u.specialSealsKnown&SEAL_LIVING_CRYSTAL)){
+					pline("As knowledge of the Echo flows into your mind, you also realize how the Words you've learned can be used in the drawing of a seal!");
+					u.specialSealsKnown |= SEAL_LIVING_CRYSTAL;
+				}
 				u.spirit[u.sealCounts] = SEAL_TENEBROUS;
 				set_spirit_powers(SEAL_TENEBROUS);
 				u.spiritT[u.sealCounts] = moves + bindingPeriod;
@@ -4984,6 +5020,27 @@ bindspirit(seal_id)
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_COSMOS;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
 				u.sealTimeout[COSMOS-FIRST_SEAL] = moves + bindingPeriod;
+			} else You("can't feel the spirit.");
+		break;
+		case LIVING_CRYSTAL:
+			if(u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] < moves){
+				if(u.spirit[ALIGN_SPIRIT]){
+					//Eject current alignment quest spirit
+					int i;
+					for(i=0;i<=(NUMINA-QUEST_SPIRITS);i++){
+						if(((u.spirit[ALIGN_SPIRIT]&~SEAL_SPECIAL)>>i)&0x1L){
+							u.sealTimeout[QUEST_SPIRITS+i-FIRST_SEAL] = moves;
+							break;
+						}
+					}
+					unbind(u.spirit[ALIGN_SPIRIT],FALSE);
+				}
+				u.specialSealsActive |= SEAL_SPECIAL|SEAL_LIVING_CRYSTAL;
+				u.specialSealsUsed |= SEAL_LIVING_CRYSTAL;
+				set_spirit_powers(SEAL_SPECIAL|SEAL_LIVING_CRYSTAL);
+				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_LIVING_CRYSTAL;
+				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
+				u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
 		case MISKA:

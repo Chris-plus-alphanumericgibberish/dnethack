@@ -1365,7 +1365,7 @@ touch_artifact(obj, mon, hypothetical)
 			badalign = FALSE;
 			// badclass = FALSE;
 		}
-		else if(oart->alignment == A_LAWFUL && u.specialSealsActive&SEAL_COSMOS){
+		else if(oart->alignment == A_LAWFUL && (u.specialSealsActive&SEAL_COSMOS || u.specialSealsActive&SEAL_LIVING_CRYSTAL)){
 			badalign = FALSE;
 			// badclass = FALSE;
 		}

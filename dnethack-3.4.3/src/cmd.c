@@ -1760,6 +1760,15 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_LIVING_CRYSTAL){
+			Strcat(buf, sealNames[(LIVING_CRYSTAL) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
 			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
 			numFound++;
@@ -1830,7 +1839,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(!u.spirit[QUEST_SPIRIT] && u.specialSealsKnown&(SEAL_DAHLVER_NAR|SEAL_ACERERAK|SEAL_BLACK_WEB)){
 			you_are("able to bind with a quest spirit");
 		}
-		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
+		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|LIVING_CRYSTAL|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
 			you_are("able to bind with an aligned spirit");
 		}
 		if(!u.spirit[OUTER_SPIRIT] && u.ulevel == 30 && Role_if(PM_EXILE)){
@@ -2391,6 +2400,15 @@ int final;
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_LIVING_CRYSTAL){
+			Strcat(buf, sealNames[(LIVING_CRYSTAL) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
 			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
 			numFound++;
@@ -2461,7 +2479,7 @@ int final;
 		if(!u.spirit[QUEST_SPIRIT] && u.specialSealsKnown&(SEAL_DAHLVER_NAR|SEAL_ACERERAK|SEAL_BLACK_WEB)){
 			you_are("able to bind with a quest spirit");
 		}
-		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
+		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(LIVING_CRYSTAL|SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
 			you_are("able to bind with an aligned spirit");
 		}
 		if(!u.spirit[OUTER_SPIRIT] && u.ulevel == 30 && Role_if(PM_EXILE)){
@@ -2925,6 +2943,15 @@ resistances_enlightenment()
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_LIVING_CRYSTAL){
+			Strcat(buf, sealNames[(LIVING_CRYSTAL) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
 			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
 			numFound++;
@@ -3295,6 +3322,10 @@ signs_enlightenment()
 		putstr(en_win, 0, "You feel like something is behind you, but you can't see anything.");
 		message = TRUE;
 	}
+	if(u.specialSealsActive&SEAL_LIVING_CRYSTAL){
+		putstr(en_win, 0, "You feel like something is behind you, but you can't see anything.");
+		message = TRUE;
+	}
 	if(u.specialSealsActive&SEAL_MISKA && u.ulevel >= 10){
 		static char mbuf[BUFSZ] = {'\0'};
 		if(u.ulevel >= 26){
@@ -3325,7 +3356,7 @@ signs_enlightenment()
 		message = TRUE;
 	}
 	if(u.specialSealsActive&SEAL_NUMINA){
-		putstr(en_win, 0, "You are surounded by whispers.");
+		putstr(en_win, 0, "You are surrounded by whispers.");
 		message = TRUE;
 	}
 	
@@ -3608,19 +3639,39 @@ signs_mirror()
 			putstr(en_win, 0, "Your star-like eyes are covered by your blindfold.");
 		message = TRUE;
 	}
-	if(u.specialSealsActive&SEAL_COSMOS && !NoBInvis){
-		putstr(en_win, 0, "A bright, crystaline aureola hangs behind you.");
+	if(u.specialSealsActive&SEAL_COSMOS){
+		putstr(en_win, 0, "A bright, crystalline aureola hangs behind you.");
 		message = TRUE;
 	}
-	if(u.specialSealsActive&SEAL_MISKA && !NoBInvis){
-		putstr(en_win, 0, "You have 4 arms, and a wolf's head grows from either hip.");
+	if(u.specialSealsActive&SEAL_LIVING_CRYSTAL){
+		putstr(en_win, 0, "Broken rings of fragmentary glyphs form and dissolve in the dustlight behind you.");
 		message = TRUE;
 	}
-	if(u.specialSealsActive&SEAL_NUDZIRATH && !NoBInvis){
+	if(u.specialSealsActive&SEAL_MISKA && !Invis && u.ulevel >= 10){
+		static char mbuf[BUFSZ] = {'\0'};
+		if(u.ulevel >= 26){
+			int howManyArms = (youracedata == &mons[PM_VALAVI]) ? 6 : 
+						  (youracedata == &mons[PM_MAN_SERPENT_MAGE]) ? 6 : 
+						  (youracedata == &mons[PM_PHALANX]) ? 6 : 
+						  (youracedata == &mons[PM_MARILITH]) ? 8 : 
+						  (youracedata == &mons[PM_KARY__THE_FIEND_OF_FIRE]) ? 8 : 
+						  (youracedata == &mons[PM_CATHEZAR]) ? 8 : 
+						  (youracedata == &mons[PM_SHAKTARI]) ? 8 : 
+						  4;
+			Sprintf(mbuf, "You have %d arms, and a wolf head grows from each hip.", howManyArms);
+			putstr(en_win, 0, mbuf);
+		} else if(u.ulevel >= 18) {
+			putstr(en_win, 0, "You have a wolf head growing from each hip.");
+		} else {
+			putstr(en_win, 0, "You have a wolf head growing from your lower stomach.");
+		}
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_NUDZIRATH){
 		putstr(en_win, 0, "A nimbus of tiny mirrored shards surrounds your head.");
 		message = TRUE;
 	}
-	if(u.specialSealsActive&SEAL_ALIGNMENT_THING && !NoBInvis){
+	if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
 		putstr(en_win, 0, "You see a small black halo just behind your head. There is an eye in the center, staring at you!");
 		message = TRUE;
 	}

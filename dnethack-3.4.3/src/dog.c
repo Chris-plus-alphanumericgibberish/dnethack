@@ -1099,6 +1099,48 @@ vanish_dogs()
 	} while(weakdog && numdogs > (ACURR(A_CHA)/3));
 }
 
+void
+average_dogs()
+{
+	struct monst *mon;
+	double totalmax = 0, totalcurrent = 0;
+	double percent;
+	for(mon = fmon; mon; mon = mon->nmon){
+		if(mon->mtame && !DEADMONSTER(mon)){
+			totalmax += mon->mhpmax;
+			totalcurrent += mon->mhp;
+		}
+	}
+	if(Upolyd){
+		totalmax += u.mhmax;
+		totalcurrent += u.mh;
+	} else {
+		totalmax += u.uhpmax;
+		totalcurrent += u.uhp;
+	}
+	percent = totalcurrent/totalmax;
+	
+	for(mon = fmon; mon; mon = mon->nmon){
+		if(mon->mtame && !DEADMONSTER(mon)){
+			mon->mhp = (int)(percent * mon->mhpmax);//Chops
+			totalmax -= mon->mhpmax;
+			totalcurrent -= mon->mhp;
+			
+			percent = totalcurrent/totalmax; //Will creep up over time, due to the effects of the chop
+			if(mon->mhp <= 0)
+				mondied(mon);
+		}
+	}
+	if(Upolyd){
+		if(u.mh != totalcurrent){
+			u.mh = max(1, totalcurrent); //Remainder goes to you.  The max(1, limit should never come into play, but we should be nice and never kill the player
+			flags.botl = 1;
+		}
+	} else if(u.uhp != totalcurrent){
+		u.uhp = max(1, totalcurrent);
+		flags.botl = 1;
+	}
+}
 
 struct monst *
 tamedog(mtmp, obj)
