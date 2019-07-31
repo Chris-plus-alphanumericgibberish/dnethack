@@ -1729,6 +1729,25 @@ karemade:
 		
 		if(u.ustdy > 0) u.ustdy -= 1;
 		
+		//Mithardir portals
+		if(In_mithardir_quest(&u.uz)){
+			struct trap *ttmp;
+			for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
+				if(ttmp->ttyp == MAGIC_PORTAL && distmin(u.ux, u.uy, ttmp->tx, ttmp->ty) < 3){
+					if(!ttmp->tseen){
+						ttmp->tseen = 1;
+						newsym(ttmp->tx, ttmp->ty);
+						if(cansee(ttmp->tx, ttmp->ty)){
+							You("spot a swirling portal!");
+						} else {
+							You("sense a nearby portal!");
+						}
+					}
+				}
+			}
+		}
+		
+		//Echolocation
 		if(Echolocation){
 			for(i=1; i<COLNO; i++)
 				for(j=0; j<ROWNO; j++)
