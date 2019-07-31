@@ -483,8 +483,6 @@ STATIC_OVL int
 use_stethoscope(obj)
 	register struct obj *obj;
 {
-	static long last_used_move = -1;
-	static short last_used_movement = 0;
 	struct monst *mtmp;
 	struct rm *lev;
 	int rx, ry, res;
@@ -500,10 +498,10 @@ use_stethoscope(obj)
 	}
 	if (!getdir((char *)0)) return 0;
 
-	res = (moves == last_used_move) &&
-	      (youmonst.movement == last_used_movement);
-	last_used_move = moves;
-	last_used_movement = youmonst.movement;
+	res = (moves == u.last_used_move) &&
+	      (youmonst.movement == u.last_used_movement);
+	u.last_used_move = moves;
+	u.last_used_movement = youmonst.movement;
 
 #ifdef STEED
 	if (u.usteed && u.dz > 0) {

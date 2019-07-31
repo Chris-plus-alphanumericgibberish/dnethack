@@ -550,15 +550,13 @@ int
 read_tile(scroll)
 struct obj *scroll;
 {
-	static long last_used_move = -1;
-	static short last_used_movement = 0;
 	int res;
 	int duration;
 	//Speak one word of power per move free.
-	res = (moves == last_used_move) &&
-	      (youmonst.movement == last_used_movement);
-	last_used_move = moves;
-	last_used_movement = youmonst.movement;
+	res = (moves == u.last_used_move) &&
+	      (youmonst.movement == u.last_used_movement);
+	u.last_used_move = moves;
+	u.last_used_movement = youmonst.movement;
 	
 	if(!scroll->dknown){
 		You("have never seen it!");
