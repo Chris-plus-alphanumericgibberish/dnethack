@@ -787,8 +787,10 @@ chaos2_montype()
 	} else if(In_mithardir_desert(&u.uz)){
 		if(rn2(3))
 			return !(mvitals[PM_DUST_VORTEX].mvflags & G_GENOD) ? &mons[PM_DUST_VORTEX] : mkclass(S_ZOMBIE, G_NOHELL);
-		else if(rn2(3))
+		else if(rn2(2))
 			return !(mvitals[PM_ALABASTER_ELF].mvflags & G_GENOD) ? &mons[PM_ALABASTER_ELF] : mkclass(S_ZOMBIE, G_NOHELL);
+		else if(rn2(2))
+			return !(mvitals[PM_WEREWOLF].mvflags & G_GENOD) ? &mons[PM_WEREWOLF] : mkclass(S_ZOMBIE, G_NOHELL);
 		else if(rn2(3))
 			return !(mvitals[PM_ALABASTER_ELF_ELDER].mvflags & G_GENOD) ? &mons[PM_ALABASTER_ELF_ELDER] : mkclass(S_ZOMBIE, G_NOHELL);
 		else if(!rn2(3))
