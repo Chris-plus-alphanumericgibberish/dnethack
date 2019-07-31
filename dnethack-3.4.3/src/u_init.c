@@ -2919,7 +2919,6 @@ register struct trobj *trop;
 			}
 			if(obj->otyp == BATTLE_AXE && Role_if(PM_ANACHRONONAUT) && Race_if(PM_ANDROID)){
 				set_obj_size(obj, MZ_LARGE);
-				obj->oeroded = 1;
 			}
 			if(obj->otyp == SCALE_MAIL && Role_if(PM_ANACHRONONAUT)){
 				set_material(obj, COPPER);
