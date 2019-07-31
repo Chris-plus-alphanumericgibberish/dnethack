@@ -3871,7 +3871,7 @@ register struct monst *mtmp;
 		}
 		break;
 	    case S_NYMPH:
-			if(ptr == &mons[PM_THRIAE]){
+			if(ptr == &mons[PM_THRIAE] || ptr == &mons[PM_OCEANID] || ptr == &mons[PM_SELKIE]){
 				switch (rn2(6)) {
 				/* MAJOR fall through ... */
 				case 0: (void) mongets(mtmp, WAN_MAGIC_MISSILE);
@@ -3882,6 +3882,11 @@ register struct monst *mtmp;
 				case 4: (void) mongets(mtmp, POT_HEALING);
 				case 5: (void) mongets(mtmp, POT_EXTRA_HEALING);
 				}
+				if(ptr == &mons[PM_OCEANID]){
+					(void)mongets(mtmp, POT_OBJECT_DETECTION);
+					(void)mongets(mtmp, MIRROR);
+				}
+				if(ptr == &mons[PM_THRIAE])
 				(void)mongets(mtmp, (rn2(2) ? FLUTE : HARP));
 			} else if(ptr == &mons[PM_INTONER]){
 				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
@@ -6746,7 +6751,7 @@ register int	mmflags;
 			break;
 		case S_SPIDER:
 		case S_SNAKE:
-			if(in_mklev)
+			if(in_mklev && ptr != &mons[PM_YURIAN] && ptr != &mons[PM_FIRST_WRAITHWORM])
 			    if(x && y)
 				(void) mkobj_at(0, x, y, TRUE);
 			if(hides_under(ptr) && OBJ_AT(x, y))

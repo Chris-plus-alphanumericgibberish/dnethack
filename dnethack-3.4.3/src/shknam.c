@@ -692,6 +692,7 @@ struct mkroom	*sroom;
 {
 	register int sh, sx, sy;
 	struct monst *shk;
+	struct permonst *shkdat;
 
 	/* place the shopkeeper in the given room */
 	sh = sroom->fdoor;
@@ -741,8 +742,19 @@ struct mkroom	*sroom;
 
 	if(MON_AT(sx, sy)) (void) rloc(m_at(sx, sy), FALSE); /* insurance */
 
+	switch(sroom->rtype){
+		default: shkdat = &mons[PM_SHOPKEEPER]; break;
+		case JELLYSHOP: shkdat = &mons[PM_THRIAE]; break;
+		case ACIDSHOP: shkdat = &mons[PM_FORMIAN_TASKMASTER]; break;
+		case PETSHOP: shkdat = &mons[PM_FORMIAN_TASKMASTER]; break;
+		case CERAMICSHOP: shkdat = &mons[PM_VALAVI]; break;
+		case SEAGARDEN: shkdat = &mons[PM_YURIAN]; break;
+		case SANDWALKER: shkdat = &mons[PM_SELKIE]; break;
+		case NAIADSHOP: shkdat = &mons[PM_OCEANID]; break;
+	}
+	
 	/* now initialize the shopkeeper monster structure */
-	if(!(shk = makemon(&mons[PM_SHOPKEEPER], sx, sy, NO_MM_FLAGS)))
+	if(!(shk = makemon(shkdat, sx, sy, NO_MM_FLAGS)))
 		return(-1);
 	shk->isshk = shk->mpeaceful = 1;
 	set_malign(shk);
@@ -776,24 +788,11 @@ struct mkroom	*sroom;
 	    (void) mongets(shk, TOUCHSTONE);
 	nameshk(shk, shp->shknms);
 	
+	//Note: these two don't have a shopkeeper struct
 	if(In_outlands(&u.uz) && !Is_gatetown(&u.uz))
 		newcham(shk, &mons[PM_PLUMACH_RILMANI], FALSE, FALSE);
-	if (ESHK(shk)->shoptype == JELLYSHOP)
-		newcham(shk, &mons[PM_THRIAE], FALSE, FALSE);
-	else if (ESHK(shk)->shoptype == ACIDSHOP)
-		newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
-	else if (ESHK(shk)->shoptype == PETSHOP)
-		newcham(shk, &mons[PM_FORMIAN_TASKMASTER], FALSE, FALSE);
-	else if (ESHK(shk)->shoptype == CERAMICSHOP)
-		newcham(shk, &mons[PM_VALAVI], FALSE, FALSE);
-	else if (ESHK(shk)->shoptype == SEAGARDEN)
-		newcham(shk, &mons[PM_YURIAN], FALSE, FALSE);
 	else if (ESHK(shk)->shoptype == SEAFOOD)
 		newcham(shk, &mons[PM_DEEP_ONE], FALSE, FALSE);
-	else if (ESHK(shk)->shoptype == SANDWALKER)
-		newcham(shk, &mons[PM_SEAL], FALSE, FALSE);
-	else if (ESHK(shk)->shoptype == NAIADSHOP)
-		newcham(shk, &mons[PM_OCEANID], FALSE, FALSE);
 	
 	return(sh);
 }
