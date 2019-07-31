@@ -1106,6 +1106,25 @@ struct mkroom	*croom;
 			
 		fix_object(otmp);
 	}
+	if(otmp->otyp == ROBE && In_mithardir_catacombs(&u.uz)){
+		struct obj *tmpo;
+		
+		tmpo = mksobj_at(ELVEN_BOOTS, x, y, FALSE, FALSE);
+		tmpo = mksobj_at(ELVEN_TOGA, x, y, FALSE, FALSE);
+		tmpo = mksobj_at(GLOVES, x, y, FALSE, FALSE);
+		
+		tmpo = mksobj_at(QUARTERSTAFF, x, y, FALSE, FALSE);
+		tmpo->obj_material = METAL;
+		tmpo->oproperties = OPROP_ANARW;
+		fix_object(tmpo);
+		
+		//Note: the parser can't handle this bit:
+		tmpo = mksobj_at(MASK, x, y, FALSE, FALSE);
+		tmpo->obj_material = MINERAL;
+		tmpo->ovar1 = 1;
+		tmpo->corpsenm = PM_HUMAN;
+		fix_object(tmpo);
+	}
 	
 	/* assume we wouldn't be given an egg corpsenm unless it was
 	   hatchable */

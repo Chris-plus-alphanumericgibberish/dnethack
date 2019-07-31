@@ -388,6 +388,9 @@ RANDOM_PLACES:(03,04),(05,02),(08,01),(03,08),(05,10),(08,11),(13,04),(11,02),(1
 PORTAL:(01,06,01,06),(00,00,00,00),"mith3"
 STAIR:(15,06),down
 
+OBJECT:'[',"robe",(08,05)
+OBJECT:'[',"robe",(08,07)
+
 OBJECT:'#',"slab",place[0]
 
 OBJECT:'-',random,place[1]
