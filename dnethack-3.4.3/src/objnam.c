@@ -680,7 +680,7 @@ struct obj *obj;
 char *buf;
 {
 	boolean iscrys = (obj->otyp == CRYSKNIFE);
-	if (!is_damageable(obj) && !iscrys && !(obj->oclass == POTION_CLASS && obj->odiluted)) return;
+	if (!is_damageable(obj) && obj->otyp != MASK && !iscrys && !(obj->oclass == POTION_CLASS && obj->odiluted)) return;
 
 	/* The only cases where any of these bits do double duty are for
 	* rotted food and diluted potions, which are all not is_damageable().
