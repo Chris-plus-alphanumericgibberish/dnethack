@@ -774,7 +774,7 @@ struct permonst *
 chaos2_montype()
 {
 	if(on_level(&elshava_level,&u.uz)){
-		if(!rn2(3))
+		if(rn2(3))
 			return !(mvitals[PM_FOG_CLOUD].mvflags & G_GENOD) ? &mons[PM_FOG_CLOUD] : mkclass(S_VORTEX, G_NOHELL);
 		else if(!rn2(2))
 			return !(mvitals[PM_PIRANHA].mvflags & G_GENOD) ? &mons[PM_PIRANHA] : mkclass(S_EEL, G_NOHELL);
