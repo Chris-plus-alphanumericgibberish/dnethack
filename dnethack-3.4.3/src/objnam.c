@@ -916,6 +916,8 @@ boolean adjective;
 		/* overly fancy clothing */
 		else if (obj->otyp == GENTLEMAN_S_SUIT || obj->otyp == GENTLEWOMAN_S_DRESS)
 			return "silk";
+		else if (obj->oartifact == ART_SPIDERSILK)
+			return "spidersilk";
 		else
 			return "cloth";
 	case LEATHER:
@@ -3377,6 +3379,12 @@ int wishflags;
 		} else if (!strncmpi(bp, "tattered ", l=9)) {
 			eroded3 = 1 + very;
 			very = 0;
+		} else if (!strncmpi(bp, "cracked ", l=8)) {
+			eroded3 = 1;
+		} else if (!strncmpi(bp, "chipped ", l=8)) {
+			eroded3 = 2;
+		} else if (!strncmpi(bp, "fragmentary ", l=12)) {
+			eroded3 = 3;
 		} else if (!strncmpi(bp, "partly drained ", l=15)) {
 			isdrained = 1;
 			halfdrained = 1;
@@ -3536,6 +3544,7 @@ int wishflags;
 			) {
 			mat = GEMSTONE;
 		} else if ((!strncmpi(bp, "stone ", l=6) || !strncmpi(bp, "ceramic ", l=8))
+			&& strncmpi(bp, "stone to flesh", 14)
 			) {
 			mat = MINERAL;
 		} else if (!strncmpi(bp, "obsidian ", l=9)
@@ -4678,6 +4687,8 @@ typfnd:
 		    otmp->oeroded2 = eroded2;
 	    if (eroded3 && otmp->otyp == DROVEN_CLOAK)
 		    otmp->oeroded3 = eroded3;
+		if (eroded3 && otmp->otyp == MASK)
+			otmp->ovar1 = eroded3;
 
 	    /* set erodeproof */
 	    if (erodeproof && !eroded && !eroded2)

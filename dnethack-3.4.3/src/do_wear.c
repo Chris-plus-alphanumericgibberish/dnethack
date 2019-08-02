@@ -2014,6 +2014,9 @@ struct obj * otmp;
 	case ART_AEGIS:
 		def += 3;//3 total, Same as Cloak of protection
 		break;
+	case ART_SPIDERSILK:
+		def += 2;//offsetting the cloth material
+		break;
 	}
 
 	return def;
@@ -2097,6 +2100,9 @@ struct obj * otmp;
 		break;
 	case ART_AEGIS:
 		def += 1;//3 total, Same as Cloak of protection
+		break;
+	case ART_SPIDERSILK:
+		def += 2;//offsetting the cloth material
 		break;
 	// case ART_CLAWS_OF_THE_REVENANCER:
 		// def += 5;

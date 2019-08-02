@@ -481,13 +481,33 @@ domonability()
 		Have_same_dragon_armor_and_shield &&
 		uarm->age < monstermoves && uarms->age < monstermoves
 	){
-		Sprintf(buf, "Armor's Breath Weapon");
-		any.a_int = MATTK_DSCALE;	/* must be non-zero */
-		incntlet = 'a';
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		atleastone = TRUE;
+		if (!((Race_if(PM_HALF_DRAGON) &&
+			(((flags.HDbreath == AD_COLD) && (
+				(uarm && (uarm->otyp == WHITE_DRAGON_SCALES || uarm->otyp == WHITE_DRAGON_SCALE_MAIL)) ||
+				(uarms && uarms->otyp == WHITE_DRAGON_SCALE_SHIELD))) ||
+			((flags.HDbreath == AD_FIRE) && (
+				(uarm && (uarm->otyp == RED_DRAGON_SCALES || uarm->otyp == RED_DRAGON_SCALE_MAIL)) ||
+				(uarms && uarms->otyp == RED_DRAGON_SCALE_SHIELD))) ||
+			((flags.HDbreath == AD_SLEE) && (
+				(uarm && (uarm->otyp == ORANGE_DRAGON_SCALES || uarm->otyp == ORANGE_DRAGON_SCALE_MAIL)) ||
+				(uarms && uarms->otyp == ORANGE_DRAGON_SCALE_SHIELD))) ||
+			((flags.HDbreath == AD_ELEC) && (
+				(uarm && (uarm->otyp == BLUE_DRAGON_SCALES || uarm->otyp == BLUE_DRAGON_SCALE_MAIL)) ||
+				(uarms && uarms->otyp == BLUE_DRAGON_SCALE_SHIELD))) ||
+			((flags.HDbreath == AD_DRST) && (
+				(uarm && (uarm->otyp == GREEN_DRAGON_SCALES || uarm->otyp == GREEN_DRAGON_SCALE_MAIL)) ||
+				(uarms && uarms->otyp == GREEN_DRAGON_SCALE_SHIELD))) ||
+			((flags.HDbreath == AD_ACID) && (
+				(uarm && (uarm->otyp == YELLOW_DRAGON_SCALES || uarm->otyp == YELLOW_DRAGON_SCALE_MAIL)) ||
+				(uarms && uarms->otyp == YELLOW_DRAGON_SCALE_SHIELD))))))){
+			Sprintf(buf, "Armor's Breath Weapon");
+			any.a_int = MATTK_DSCALE;	/* must be non-zero */
+			incntlet = 'a';
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+			atleastone = TRUE;
+		}
 	}
 	if(is_were(youracedata)){
 		Sprintf(buf, "Summon Aid");

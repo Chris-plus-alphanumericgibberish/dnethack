@@ -883,16 +883,104 @@ dobreathe(mdat)
 	if (!mattk)
 	    impossible("bad breath attack?");	/* mouthwash needed... */
 	else{
-		int type = mattk->adtyp, multiplier = 1;
+		int type = mattk->adtyp;
+		double multiplier = 1.0;
 		if(type == AD_HDRG){
 			type = flags.HDbreath;
-			if(type == AD_SLEE) multiplier = 4;
+			if(type == AD_SLEE) multiplier = 4.0;
+		}
+		if(Race_if(PM_HALF_DRAGON)){
+			// give Half-dragons a +0.5 bonus per armor piece that matches their default breath
+			if (flags.HDbreath == AD_FIRE){
+				if (uarm){
+					if (Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == &mons[PM_RED_DRAGON])
+						multiplier += 0.5;
+					if (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == &mons[PM_RED_DRAGON])
+						multiplier += 0.5;
+				} 
+				if (uarms){
+					if (Is_dragon_shield(uarms) && Dragon_shield_to_pm(uarms) == &mons[PM_RED_DRAGON])
+						multiplier += 0.5;
+				}
+			} else if (flags.HDbreath == AD_COLD){
+				if (uarm){
+					if (Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == &mons[PM_WHITE_DRAGON])
+						multiplier += 0.5;
+					if (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == &mons[PM_WHITE_DRAGON])
+						multiplier += 0.5;
+				} 
+				if (uarms){
+					if (Is_dragon_shield(uarms) && Dragon_shield_to_pm(uarms) == &mons[PM_WHITE_DRAGON])
+						multiplier += 0.5;
+				}
+			} else if (flags.HDbreath == AD_ELEC){
+				if (uarm){
+					if (Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == &mons[PM_BLUE_DRAGON])
+						multiplier += 0.5;
+					if (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == &mons[PM_BLUE_DRAGON])
+						multiplier += 0.5;
+				} 
+				if (uarms){
+					if (Is_dragon_shield(uarms) && Dragon_shield_to_pm(uarms) == &mons[PM_BLUE_DRAGON])
+						multiplier += 0.5;
+				}
+			} else if (flags.HDbreath == AD_DRST){
+				if (uarm){
+					if (Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == &mons[PM_GREEN_DRAGON])
+						multiplier += 0.5;
+					if (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == &mons[PM_GREEN_DRAGON])
+						multiplier += 0.5;
+				} 
+				if (uarms){
+					if (Is_dragon_shield(uarms) && Dragon_shield_to_pm(uarms) == &mons[PM_GREEN_DRAGON])
+						multiplier += 0.5;
+				}
+			} else if (flags.HDbreath == AD_SLEE){
+				if (uarm){
+					if (Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == &mons[PM_ORANGE_DRAGON])
+						multiplier += 2.0;
+					if (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == &mons[PM_ORANGE_DRAGON])
+						multiplier += 2.0;
+				} 
+				if (uarms){
+					if (Is_dragon_shield(uarms) && Dragon_shield_to_pm(uarms) == &mons[PM_ORANGE_DRAGON])
+						multiplier += 2.0;
+				}
+			} else if (flags.HDbreath == AD_ACID){
+				if (uarm){
+					if (Is_dragon_scales(uarm) && Dragon_scales_to_pm(uarm) == &mons[PM_YELLOW_DRAGON])
+						multiplier += 0.5;
+					if (Is_dragon_mail(uarm) && Dragon_mail_to_pm(uarm) == &mons[PM_YELLOW_DRAGON])
+						multiplier += 0.5;
+				} 
+				if (uarms){
+					if (Is_dragon_shield(uarms) && Dragon_shield_to_pm(uarms) == &mons[PM_YELLOW_DRAGON])
+						multiplier += 0.5;
+				}
+			}
+			
+			
+			// Chromatic/Platinum dragon gear is never going to naturally apply
+			// Because it's black/silver, so give it appropriate buffs here 
+						
+			if (((uarm && uarm->oartifact == ART_CHROMATIC_DRAGON_SCALES) ||
+				 (uarms && uarms->oartifact == ART_CHROMATIC_DRAGON_SCALES)) && 
+				(flags.HDbreath == AD_FIRE || flags.HDbreath == AD_COLD || 
+				 flags.HDbreath == AD_ELEC || flags.HDbreath == AD_DRST ||
+				 flags.HDbreath == AD_ACID))
+			
+				multiplier += 0.5;
+			if (uarm && uarm->oartifact == ART_DRAGON_PLATE && 
+				(flags.HDbreath == AD_FIRE || flags.HDbreath == AD_COLD || 
+				 flags.HDbreath == AD_ELEC || flags.HDbreath == AD_SLEE))
+			
+				multiplier += (flags.HDbreath == AD_SLEE)?2.0:0.5;
 		}
 		if(carrying_art(ART_DRAGON_S_HEART_STONE))
 			multiplier *= 2;
 		if(is_true_dragon(mdat) || (Race_if(PM_HALF_DRAGON) && u.ulevel >= 14)) flags.drgn_brth = 1;
 	    buzz(type, FOOD_CLASS, TRUE, (int)mattk->damn + (u.ulevel/2),
-			u.ux, u.uy, u.dx, u.dy,0, mattk->damd ? (d((int)mattk->damn + (u.ulevel/2), (int)mattk->damd)*multiplier) : 0);
+			u.ux, u.uy, u.dx, u.dy,0, mattk->damd ? ((int)(d((int)mattk->damn + (u.ulevel/2), (int)mattk->damd)*multiplier)) : 0);
 		flags.drgn_brth = 0;
 	}
 	return(1);

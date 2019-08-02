@@ -731,6 +731,7 @@ struct weapon_dice {
 													Dragon_shield_to_pm(uarms) == &mons[PM_BLACK_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_BLUE_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_RED_DRAGON] ||\
+													Dragon_shield_to_pm(uarms) == &mons[PM_WHITE_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_GRAY_DRAGON] ||\
 													Dragon_shield_to_pm(uarms) == &mons[PM_ORANGE_DRAGON]\
 												)) ||\
@@ -743,7 +744,6 @@ struct weapon_dice {
 													Dragon_shield_to_pm(uarms) == &mons[PM_GREEN_DRAGON]\
 												))\
 											))
-
 /* Elven gear */
 #define is_elven_weapon(otmp)	((otmp)->otyp == ELVEN_ARROW\
 				|| (otmp)->otyp == ELVEN_SPEAR\

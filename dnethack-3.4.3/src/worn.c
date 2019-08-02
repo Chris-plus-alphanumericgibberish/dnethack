@@ -1616,6 +1616,12 @@ long timeout;
 				objects[uarmc->otyp].a_can - uarmc->ovar1 :
 				objects[uarmc->otyp].a_can;
 		}
+		
+		if (Invis){
+			start_timer(1, TIMER_OBJECT, LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+		
 		if((levl[u.ux][u.uy].lit == 0 && 
 			!(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK1)))
 		  || (levl[u.ux][u.uy].lit && 
@@ -1714,6 +1720,10 @@ long timeout;
 			armpro = armor->otyp == DROVEN_CLOAK ? 
 				objects[armor->otyp].a_can - armor->ovar1 :
 				objects[armor->otyp].a_can;
+		}
+		if (obj->ocarry->perminvis || obj->ocarry->minvis){
+			start_timer(1, TIMER_OBJECT, LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
 		}
 		if((levl[obj->ocarry->mx][obj->ocarry->my].lit == 0 && 
 				!(viz_array[obj->ocarry->my][obj->ocarry->mx]&TEMP_LIT1 && !(viz_array[obj->ocarry->my][obj->ocarry->mx]&TEMP_DRK1)))

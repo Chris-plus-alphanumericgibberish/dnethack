@@ -389,7 +389,17 @@ PORTAL:(01,06,01,06),(00,00,00,00),"mith3"
 STAIR:(15,06),down
 
 OBJECT:'[',"robe",(08,05)
+OBJECT:'[',"elven boots",(08,05)
+OBJECT:'[',"elven toga",(08,05)
+OBJECT:'[',"gloves",(08,05)
+OBJECT:'#',"metal anarchic quarterstaff",(08,05)
+OBJECT:'#',"cracked stone mask of a human",(08,05)
 OBJECT:'[',"robe",(08,07)
+OBJECT:'[',"elven boots",(08,07)
+OBJECT:'[',"elven toga",(08,07)
+OBJECT:'[',"gloves",(08,07)
+OBJECT:'#',"metal anarchic quarterstaff",(08,07)
+OBJECT:'#',"cracked stone mask of a human",(08,07)
 
 OBJECT:'#',"slab",place[0]
 
