@@ -1737,7 +1737,7 @@ karemade:
 			average_dogs();
 		
 		//Mithardir portals
-		if(In_mithardir_quest(&u.uz)){
+		if(In_mithardir_desert(&u.uz)){
 			struct trap *ttmp;
 			for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
 				if(ttmp->ttyp == MAGIC_PORTAL && distmin(u.ux, u.uy, ttmp->tx, ttmp->ty) < 3){
@@ -1747,7 +1747,7 @@ karemade:
 						if(cansee(ttmp->tx, ttmp->ty)){
 							You("spot a swirling portal!");
 						} else {
-							You("sense a nearby portal!");
+							You_hear("swirling dust!");
 						}
 					}
 				}

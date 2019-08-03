@@ -514,7 +514,7 @@ fixup_special()
 	}
 	/* CHAOS QUEST 2: various features */
 	if (In_mithardir_quest(&u.uz)){
-		if (In_mithardir_desert(&u.uz)){
+		if (In_mithardir_desert(&u.uz) || on_level(&u.uz, &elshava_level)){
 			for (x = 0; x<COLNO; x++){
 				for (y = 0; y<ROWNO; y++){
 					levl[x][y].lit = TRUE;

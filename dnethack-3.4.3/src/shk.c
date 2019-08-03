@@ -77,6 +77,7 @@ static void FDECL(shk_appraisal, (char *, struct monst *));
 static void FDECL(shk_weapon_works, (char *, struct monst *));
 static void FDECL(shk_armor_works, (char *, struct monst *));
 static void FDECL(shk_charge, (char *, struct monst *));
+static void FDECL(shk_guide, (char *, struct monst *));
 static boolean FDECL(shk_obj_match, (struct obj *, struct monst *));
 static boolean FDECL(shk_offer_price, (char *, long, struct monst *));
 static void FDECL(shk_smooth_charge, (int *, int, int));
@@ -1903,7 +1904,10 @@ shk_other_services()
 */
   	/* Weapon-works!  Only a weapon store. */
 	if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B|SHK_SPECIAL_C))
-			&& (ESHK(shkp)->shoptype == WEAPONSHOP)
+			 &&(ESHK(shkp)->shoptype == WEAPONSHOP
+			   || ESHK(shkp)->shoptype == SANDWALKER
+			   || ESHK(shkp)->shoptype == ACIDSHOP
+			   )
 	) {
 		any.a_int = 4;
 		if (ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B))
@@ -1916,7 +1920,9 @@ shk_other_services()
   
   	/* Armor-works */
 	if ((ESHK(shkp)->services & (SHK_SPECIAL_A|SHK_SPECIAL_B))
-			 &&(ESHK(shkp)->shoptype == ARMORSHOP)
+			 &&(ESHK(shkp)->shoptype == ARMORSHOP
+			   || ESHK(shkp)->shoptype == CERAMICSHOP
+			   )
 	) {
 		any.a_int = 5;
 		add_menu(tmpwin, NO_GLYPH, &any , 'r', 0, ATR_NONE,
@@ -1936,6 +1942,12 @@ shk_other_services()
 				"Charge", MENU_UNSELECTED);
 	}
 
+	if (In_mithardir_quest(&u.uz)) {
+		any.a_int = 7;
+		add_menu(tmpwin, NO_GLYPH, &any , 'o', 0, ATR_NONE,
+				"Guide to portal", MENU_UNSELECTED);
+	}
+	
 	end_menu(tmpwin, "Services Available:");
 	n = select_menu(tmpwin, PICK_ONE, &selected);
 	destroy_nhwindow(tmpwin);
@@ -1964,6 +1976,9 @@ shk_other_services()
 
 	        case 6:
 	                shk_charge(slang, shkp);
+	                break;
+	        case 7:
+	                shk_guide(slang, shkp);
 	                break;
 	        default:
 	                pline ("Unknown Service");
@@ -5110,6 +5125,14 @@ struct monst *shkp;
 	    any.a_int = 3;
 	    add_menu(tmpwin, NO_GLYPH, &any , 'p', 0, ATR_NONE,
 		    "Poison", MENU_UNSELECTED);
+			
+		if((ESHK(shkp)->shoptype == SANDWALKER)  
+		|| (ESHK(shkp)->shoptype == ACIDSHOP)
+		){
+			any.a_int = 8;
+			add_menu(tmpwin, NO_GLYPH, &any , 'a', 0, ATR_NONE,
+				"Acid-coating", MENU_UNSELECTED);
+		}
 		if(!(ESHK(shkp)->services&SHK_SPECIAL_A) || !(ESHK(shkp)->services&SHK_SPECIAL_B) || 
 		   !(ESHK(shkp)->services&SHK_ID_PREMIUM) || !(ESHK(shkp)->services&SHK_UNCURSE)
 		){
@@ -5156,7 +5179,7 @@ struct monst *shkp;
 
 			/* Another warning if object is naturally rustproof */
 			if (obj->oerodeproof || !is_damageable(obj))
-			pline("%s gives you a suspciously happy smile...",
+			pline("%s gives you a suspiciously happy smile...",
 				mon_nam(shkp));
 
 			/* Artifacts cost more to deal with */
@@ -5267,6 +5290,16 @@ struct monst *shkp;
 			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
 			obj->opoisoned = OPOISON_FILTH;
+		break;
+		case 8:
+			verbalize("Just imagine what acid-coated %s can do!", xname(obj));
+
+			charge = 90;
+			charge+= 10 * obj->quan;
+
+			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+
+			obj->opoisoned = OPOISON_ACID;
 		break;
 
 		default:
@@ -5532,6 +5565,26 @@ shk_charge(slang, shkp)
 
 
 /*
+** FUNCTION shk_guide
+**
+** Guide the customer safely to the portal by revealing all traps
+*/
+static void
+shk_guide(slang, shkp)
+	char *slang;
+	struct monst *shkp;
+{
+	struct obj *obj;                /* The object picked            */
+	int charge = 500;                     /* How much to uncurse          */
+
+	/* Go ahead? */
+	if (shk_offer_price(slang, charge, shkp) == FALSE) return;
+
+	trap_detect((struct obj *)0);
+}
+
+
+/*
 ** FUNCTION shk_obj_match
 **
 ** Does object "obj" match the type of shop?
@@ -5776,7 +5829,8 @@ struct monst *mon;
 		if(u.specialSealsActive&SEAL_COUNCIL && !Blind) count++;
 		if(u.specialSealsActive&SEAL_ALIGNMENT_THING) count++;
 		if(u.sealsActive&SEAL_BLACK_WEB && !Invis && !(levl[u.ux][u.uy].lit == 0 && !(viz_array[u.uy][u.ux]&TEMP_LIT1 && !(viz_array[u.uy][u.ux]&TEMP_DRK3)))) count++;
-	} if(u.specialSealsActive&SEAL_NUMINA) count++;
+	}
+	if(u.specialSealsActive&SEAL_NUMINA) count++;
 //	if(u.specialSealsActive&SEAL_UNKNOWN_GOD) count++;
 	return count;
 }

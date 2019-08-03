@@ -220,7 +220,7 @@ unsigned *ospecial;
 				}
 			} else if(In_cha(&u.uz)){
 				if(In_mithardir_quest(&u.uz)){
-					if(In_mithardir_desert(&u.uz)){
+					if(In_mithardir_desert(&u.uz) || on_level(&u.uz, &elshava_level)){
 						if((offset >= S_vwall && offset <= S_trwall)
 							|| offset == S_litroom
 							|| offset == S_brightrm

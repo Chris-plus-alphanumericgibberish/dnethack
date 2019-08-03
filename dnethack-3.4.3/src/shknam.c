@@ -330,16 +330,16 @@ const struct shclass shtypes[] = {
 		 {1, TILE_CLASS}},
 	shkdeep},
 	{"sand-walker's shop", SANDWALKER, 0, D_SHOP,
-	    {{30, ARMOR_CLASS}, {20, WEAPON_CLASS}, /* note: uses custom list for armor_class and weapon_class */
-		 {5, -TINNING_KIT}, {5, -STETHOSCOPE},
-		 {5, -CRYSTAL_BALL}, {5, -CAN_OF_GREASE},
-		 {25, TILE_CLASS}, {5, -AMULET_OF_MAGICAL_BREATHING}
+	    {{35, ARMOR_CLASS}, {25, WEAPON_CLASS}, /* note: uses custom list for armor_class and weapon_class */
+		 {7, -TINNING_KIT}, {7, -STETHOSCOPE},
+		 {7, -CRYSTAL_BALL}, {7, -CAN_OF_GREASE},
+		 {5, TILE_CLASS}, {7, -AMULET_OF_MAGICAL_BREATHING}
 		},
 	shkselkie},
 	{"spa", NAIADSHOP, 0, D_SHOP,
-	    {{20, -POT_OBJECT_DETECTION}, {20, -MIRROR}, 
+	    {{22, -POT_OBJECT_DETECTION}, {22, -MIRROR}, 
 		 {15, -TOWEL}, {40, ARMOR_CLASS}, /* note: uses custom list for armor_class */
-		 {5, TILE_CLASS}
+		 {1, TILE_CLASS}
 		},
 	shknaiad},
 	{(char *)0, 0, 0, 0, {{0, 0}, {0, 0}, {0, 0}}, 0}
@@ -419,6 +419,7 @@ const int sand_weapons[] = {
 	RAPIER,
 	LONG_SWORD,
 	CRYSTAL_SWORD,
+	HIGH_ELVEN_WARSWORD,
 	ELVEN_BROADSWORD
 };
 
@@ -594,7 +595,8 @@ int sx, sy;
 						newobj->shopOwned = TRUE;
 						if(!newobj->oartifact && newobj->otyp != CRYSTAL_SWORD)
 							set_material(newobj, SILVER);
-						newobj->opoisoned = rn2(3) ? OPOISON_ACID : OPOISON_SILVER;
+						// newobj->opoisoned = rn2(3) ? OPOISON_ACID : OPOISON_SILVER;
+						newobj->opoisoned = OPOISON_ACID; //Silver is not implemented.
 
 						/* replace curobj with newobj */
 						delobj(curobj);
@@ -889,11 +891,16 @@ struct monst *shk;
 
 	if (!rn2(3)) ESHK(shk)->services |= SHK_UNCURSE;
 
-	if (!rn2(3) && (ESHK(shk)->shoptype == WEAPONSHOP || ESHK(shk)->shoptype == GENERALSHOP))
+	if ((rn2(3) && ESHK(shk)->shoptype == WEAPONSHOP)
+		|| (rn2(3) && ESHK(shk)->shoptype == SANDWALKER)
+		|| (!rn2(3) && ESHK(shk)->shoptype == GENERALSHOP)
+	)
 		ESHK(shk)->services |= SHK_APPRAISE;
 
 	if ((ESHK(shk)->shoptype == WEAPONSHOP) ||
+		(ESHK(shk)->shoptype == SANDWALKER) ||
 		(ESHK(shk)->shoptype == ARMORSHOP) ||
+		(ESHK(shk)->shoptype == CERAMICSHOP) ||
 		(ESHK(shk)->shoptype == WANDSHOP) ||
 		(ESHK(shk)->shoptype == TOOLSHOP) ||
 		(ESHK(shk)->shoptype == CANDLESHOP) ||
@@ -902,7 +909,10 @@ struct monst *shk;
 		if (!rn2(4/*5*/)) ESHK(shk)->services |= SHK_SPECIAL_A;
 		if (!rn2(4/*5*/)) ESHK(shk)->services |= SHK_SPECIAL_B;
 	}
-	if (!rn2(4/*5*/) && (ESHK(shk)->shoptype == WEAPONSHOP))
+	if ((!rn2(4/*5*/) && ESHK(shk)->shoptype == WEAPONSHOP)
+		|| (rn2(4/*5*/) && ESHK(shk)->shoptype == ACIDSHOP)
+		|| (rn2(4/*5*/) && ESHK(shk)->shoptype == SANDWALKER)
+	)
 	 ESHK(shk)->services |= SHK_SPECIAL_C;
 
 	return;
