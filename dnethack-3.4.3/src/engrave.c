@@ -1446,7 +1446,10 @@ register xchar x,y,strt_cnt;
 
 	/* Headstones are indelible */
 	if(ep && ep->engr_type != HEADSTONE){
-	    if(ep->engr_txt[0] && (ep->engr_type != BURN || is_ice(x,y))) {
+	    if(ep->engr_txt[0] && (ep->engr_type != BURN 
+			|| is_ice(x,y) 
+			|| levl[x][y].typ == SAND)
+		) {
 			if(ep->engr_type != DUST && ep->engr_type != ENGR_BLOOD) {
 				cnt = rn2(1 + 50/(strt_cnt+1)) ? 0 : 1;
 			}
@@ -1455,7 +1458,10 @@ register xchar x,y,strt_cnt;
 			while(ep->engr_txt[0] == ' ')
 				ep->engr_txt++;
 		}
-	    if(ep->ward_id && (ep->ward_type != BURN || is_ice(x,y))) {
+	    if(ep->ward_id && (ep->ward_type != BURN 
+			|| is_ice(x,y)
+			|| levl[x][y].typ == SAND
+		)) {
 			if(ep->ward_type != DUST && ep->ward_type != ENGR_BLOOD) {
 				cnt = rn2(1 + 50/(strt_cnt+1)) ? 0 : 1;
 			}
@@ -1504,7 +1510,9 @@ register int x,y;
 		if (!Blind || can_reach_floor()) {
 			sensed = 1;
 			pline("Some text has been %s into the %s here.",
-				is_ice(x,y) ? "melted" : "burned",
+				is_ice(x,y) ? "melted" : 
+				levl[x][y].typ == SAND ? "fused" :
+				"burned",
 				surface(x,y));
 		}
 		break;
@@ -1562,6 +1570,8 @@ register int x,y;
 		if(!Blind) {
 			sensed = 1;
 			word = is_ice(x,y) ?	"drawn here in the frost." : 
+						(levl[x][y].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+					"drawn here in the sand." : 
 					"drawn here in the dust.";
 		}
 		break;
@@ -1576,6 +1586,7 @@ register int x,y;
 		if (!Blind || can_reach_floor()) {
 			sensed = 1;
 			word = is_ice(x,y) ?	"melted into the ice here." : 
+					levl[x][y].typ == SAND ? "fused into the sand here." :
 					"burned into the floor here.";
 		
 		}
@@ -2236,7 +2247,11 @@ int mode;
 		) {
 			type = BURN;
 		} else if (is_blade(otmp)) {
-		    if ((int)otmp->spe > -3 || levl[u.ux][u.uy].typ == GRASS)
+		    if ((int)otmp->spe > -3 
+			|| levl[u.ux][u.uy].typ == GRASS 
+			|| levl[u.ux][u.uy].typ == SOIL
+			|| levl[u.ux][u.uy].typ == SAND
+		)
 				type = ENGRAVE;
 		    else
 				Your("%s too dull for engraving.", aobjnam(otmp,"are"));
@@ -2326,14 +2341,20 @@ int mode;
 				    Your("%s %s %s.", xname(otmp),
 					 otense(otmp, "get"),
 					 is_ice(u.ux,u.uy) ?
-					 "frosty" : "dusty");
+					 "frosty" : 
+						(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+						"sandy" :
+						"dusty");
 				dengr = TRUE;
 			    } else
 				Your("%s can't wipe out this engraving.",
 				     xname(otmp));
 			else{
 			    Your("%s %s %s.", xname(otmp), otense(otmp, "get"),
-				  is_ice(u.ux,u.uy) ? "frosty" : "dusty");
+				  is_ice(u.ux,u.uy) ? "frosty" : 
+					(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+					"sandy" :
+					"dusty");
 			}
 			break;
 		    default:
@@ -2356,6 +2377,9 @@ int mode;
 	if(type == DUST && levl[u.ux][u.uy].typ == GRASS){
 		You_cant("make legible marks in grass with just your %s.", writer);
 		return(0);
+	}
+	if(type == ENGRAVE && levl[u.ux][u.uy].typ == SAND){
+		type = DUST;
 	}
 	if(mode == ENGRAVE_MODE){
 		if (IS_GRAVE(levl[u.ux][u.uy].typ)) {
@@ -2418,7 +2442,10 @@ int mode;
 		  The(xname(otmp)), Blind ? "" : "glows violently, then ");
 	    if (!IS_GRAVE(levl[u.ux][u.uy].typ))
 		You("are not going to get anywhere trying to %s in the %s with your dust.",
-		    word, is_ice(u.ux,u.uy) ?	"frost" :	"dust");
+		    word, is_ice(u.ux,u.uy) ?	"frost" :	
+				(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+				"sand" :
+				"dust");
 	    useup(otmp);
 	    ptext = FALSE;
 	}
@@ -2457,7 +2484,11 @@ int mode;
 			    (oep->engr_type == MARK) ) {
 			    if (!Blind) {
 				You("wipe out the message that was %s here.",
-				    ((oep->engr_type == DUST)  ? "written in the dust" :
+				    ((oep->engr_type == DUST)  ? (
+						(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+						"written in the sand" :
+						"written in the dust"
+					) :
 				    ((oep->engr_type == ENGR_BLOOD) ? "scrawled in blood"   :
 								 "written")));
 				del_engr(oep);
@@ -2470,7 +2501,9 @@ int mode;
 				You(
 				 "cannot wipe out the message that is %s the %s here.",
 				 oep->engr_type == BURN ?
-				   (is_ice(u.ux,u.uy) ? "melted into" : "burned into") :
+				   (is_ice(u.ux,u.uy) ? "melted into" : 
+					levl[u.ux][u.uy].typ == SAND ? "fused into" :
+				   "burned into") :
 				   "engraved in", surface(u.ux,u.uy));
 				return(1);
 			    } else
@@ -2507,7 +2540,11 @@ int mode;
 					(oep->ward_type == MARK) ) {
 					if (!Blind) {
 					You("wipe out the ward that was %s here.",
-						((oep->ward_type == DUST)  ?	"drawn in the dust" :
+						((oep->ward_type == DUST)  ?	(
+							(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+							"drawn in the sand" :
+							"drawn in the dust"
+						) :
 						((oep->ward_type == ENGR_BLOOD) ?	"painted in blood"   :
 										"drawn")));
 					del_ward(oep);
@@ -2520,7 +2557,9 @@ int mode;
 					You(
 						"cannot wipe out the ward that is %s the %s here.",
 					 oep->ward_type == BURN ?
-					   (is_ice(u.ux,u.uy) ?	"melted into" :	"burned into") :
+					   (is_ice(u.ux,u.uy) ?	"melted into" :	
+						levl[u.ux][u.uy].typ == SAND ? "fused into" :
+					   "burned into") :
 					  	"engraved in", surface(u.ux,u.uy));
 					return(1);
 					} else
@@ -2569,7 +2608,11 @@ int mode;
 				(oep->ward_type == MARK) ) {
 				if (!Blind) {
 				You("wipe out the drawing that was %s here.",
-					((oep->ward_type == DUST)  ?	"drawn in the dust" :
+					((oep->ward_type == DUST)  ?	(
+						(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+						"drawn in the sand" :
+						"drawn in the dust"
+					) :
 					((oep->ward_type == ENGR_BLOOD) ?	"painted in blood"   :
 									"drawn")));
 				del_ward(oep);
@@ -2582,7 +2625,9 @@ int mode;
 				You(
 					"cannot wipe out the drawing that is %s the %s here.",
 				 oep->ward_type == BURN ?
-				   (is_ice(u.ux,u.uy) ?	"melted into" :	"burned into") :
+				   (is_ice(u.ux,u.uy) ?	"melted into" :	
+					levl[u.ux][u.uy].typ == SAND ? "fused into" :
+				   "burned into") :
 				  	"engraved in", surface(u.ux,u.uy));
 				return(1);
 				} else
@@ -2610,7 +2655,10 @@ int mode;
 					       "write in");
 		else everb = (oep && !eow ?	"add to the drawing in" :
 				      	"draw in");
-		eloc = is_ice(u.ux,u.uy) ?	"frost" :	"dust";
+		eloc = is_ice(u.ux,u.uy) ?	"frost" : 
+			(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+			"sand" :
+			"dust";
 		break;
 	    case HEADSTONE:
 		if(mode == ENGRAVE_MODE)
@@ -2630,12 +2678,18 @@ int mode;
 		if(mode == ENGRAVE_MODE)
 			everb = (oep && !eow ?
 				( is_ice(u.ux,u.uy) ? "add to the text melted into" :
+				  levl[u.ux][u.uy].typ == SAND ? "add to the text fused into" :
 						      "add to the text burned into") :
-				( is_ice(u.ux,u.uy) ? "melt into" : "burn into"));
+				( is_ice(u.ux,u.uy) ? "melt into" : 
+					levl[u.ux][u.uy].typ == SAND ? "fuse into" :
+					"burn into"));
 		else everb = (oep && !eow ?
 			( is_ice(u.ux,u.uy) ?	"add to the drawing melted into" :
+				  levl[u.ux][u.uy].typ == SAND ? "add to the drawing fused into" :
 					     	"add to the drawing burned into") :
-			( is_ice(u.ux,u.uy) ?	"melt into" :	"burn into"));
+			( is_ice(u.ux,u.uy) ?	"melt into" :	
+				levl[u.ux][u.uy].typ == SAND ? "fuse into" :
+				"burn into"));
 		break;
 	    case MARK:
 		if(mode == ENGRAVE_MODE)
@@ -2766,8 +2820,14 @@ int mode;
 			multi = -(len/10);
 			if (multi){
 				if(mode == ENGRAVE_MODE)
-					nomovemsg =	"You finish writing in the dust.";
-				else nomovemsg =	"You finish drawing in the dust.";
+					nomovemsg =	
+						(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+						"You finish writing in the sand." :
+						"You finish writing in the dust.";
+				else nomovemsg = 
+					(levl[u.ux][u.uy].typ == SAND && !In_mithardir_quest(&u.uz)) ?
+					"You finish drawing in the sand." :
+					"You finish drawing in the dust.";
 			}
 		break;
 	    case HEADSTONE:
