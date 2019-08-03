@@ -939,7 +939,11 @@ level_tele()
 				}
 			} else if (In_cha(&u.uz)){
 				newlev = newlev + dungeons[u.uz.dnum].depth_start - 1;
-				if(mvitals[PM_CHAOS].died > 0) rangeRestricted = FALSE;
+				if(In_FF_quest(&u.uz)){
+					if(mvitals[PM_CHAOS].died > 0) rangeRestricted = FALSE;
+				} else if(In_mithardir_quest(&u.uz)){
+					if(u.ufirst_life && u.ufirst_sky && u.ufirst_light) rangeRestricted = FALSE;
+				}
 			}
 #ifdef WIZARD
 			if (wizard) rangeRestricted = FALSE;
