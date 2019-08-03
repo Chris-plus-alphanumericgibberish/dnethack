@@ -184,7 +184,7 @@ LEVEL:		"ossa1" "none" @ (1, 0)
 LEVEL:		"mith1" "A" @ (2, 0)
 LEVEL:		"mith2" "B" @ (3, 0)
 LEVEL:		"mith3" "C" @ (4, 0)
-LEVEL:		"cat1"  "D" @ (5, 0)
+LEVEL:		"cat1" "none" @ (5, 0)
 LEVEL:		"cat2" "none" @ (6, 0)
 LEVEL:		"cat3" "none" @ (7, 0)
 
