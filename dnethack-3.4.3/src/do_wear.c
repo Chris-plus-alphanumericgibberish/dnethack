@@ -3470,7 +3470,7 @@ dosymbiotic()
 	};
 	//2 pips on a die is +1 on average
 	if(uarm)
-		symbiote[0].damd = max(1, 3+2*uarm->spe);
+		symbiote[0].damd = max(1, 3 + uarm->spe);
 	for(j=8;j>=1;j--){
 		if(u.ustuck && u.uswallow)
 			mon = u.ustuck;
