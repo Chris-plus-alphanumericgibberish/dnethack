@@ -672,9 +672,9 @@ boolean digest_meal;
 		if(!nonliving_mon(mon)){
 			if (mon->mhp < mon->mhpmax){
 				//recover 1/30th hp per turn:
-				mon->mhp += (mon->m_lev + mon->mcon)/30;
+				mon->mhp += (mon->m_lev)/30;
 				//Now deal with any remainder
-				if(((moves)*((mon->m_lev + mon->mcon)%30))/30 > ((moves-1)*((mon->m_lev + mon->mcon)%30))/30) mon->mhp += 1;
+				if(((moves)*((mon->m_lev)%30))/30 > ((moves-1)*((mon->m_lev)%30))/30) mon->mhp += 1;
 			}
 		}
 	}
