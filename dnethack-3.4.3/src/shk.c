@@ -5249,6 +5249,10 @@ struct monst *shkp;
 
 			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
+			if(obj->otyp == VIPERWHIP){
+				if(obj->opoisoned == OPOISON_BASIC) obj->opoisonchrgs += 2;
+				else obj->opoisonchrgs = 1;
+			}
 			obj->opoisoned = OPOISON_BASIC;
 		break;
 		case 4:
@@ -5259,6 +5263,10 @@ struct monst *shkp;
 
 			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
+			if(obj->otyp == VIPERWHIP){
+				if(obj->opoisoned == OPOISON_SLEEP) obj->opoisonchrgs += 2;
+				else obj->opoisonchrgs = 1;
+			}
 			obj->opoisoned = OPOISON_SLEEP;
 		break;
 		case 5:
@@ -5269,6 +5277,10 @@ struct monst *shkp;
 
 			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
+			if(obj->otyp == VIPERWHIP){
+				if(obj->opoisoned == OPOISON_BLIND) obj->opoisonchrgs += 2;
+				else obj->opoisonchrgs = 1;
+			}
 			obj->opoisoned = OPOISON_BLIND;
 		break;
 		case 6:
@@ -5279,6 +5291,10 @@ struct monst *shkp;
 
 			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
+			if(obj->otyp == VIPERWHIP){
+				if(obj->opoisoned == OPOISON_PARAL) obj->opoisonchrgs += 2;
+				else obj->opoisonchrgs = 1;
+			}
 			obj->opoisoned = OPOISON_PARAL;
 		break;
 		case 7:
@@ -5289,6 +5305,10 @@ struct monst *shkp;
 
 			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
+			if(obj->otyp == VIPERWHIP){
+				if(obj->opoisoned == OPOISON_FILTH) obj->opoisonchrgs += 2;
+				else obj->opoisonchrgs = 1;
+			}
 			obj->opoisoned = OPOISON_FILTH;
 		break;
 		case 8:
@@ -5299,6 +5319,10 @@ struct monst *shkp;
 
 			if (shk_offer_price(slang, charge, shkp) == FALSE) return;
 
+			if(obj->otyp == VIPERWHIP){
+				if(obj->opoisoned == OPOISON_ACID) obj->opoisonchrgs += 2;
+				else obj->opoisonchrgs = 1;
+			}
 			obj->opoisoned = OPOISON_ACID;
 		break;
 
