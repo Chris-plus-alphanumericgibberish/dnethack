@@ -281,7 +281,7 @@ WEAPON("glaive", "single-edged polearm",
 WEAPON("naginata", "samurai-sword polearm",
 	0, 0, 1,  1, 75, 90,  8, 10, 1, S,   P_POLEARMS, IRON, FALSE, HI_METAL),
 WEAPON("lance", (char *)0,
-	1, 0, 0,  4,180, 10,  6,  8, 0, P,   P_LANCE, IRON, FALSE, HI_METAL),
+	1, 0, 0,  4, 80, 10,  6,  8, 0, P,   P_LANCE, IRON, FALSE, HI_METAL),
 WEAPON("force pike", "long gray spear",/*Needs tile*/
 	0, 0, 0,  0, 30, 1000,  6,  8, 2, P|S,   P_LANCE, PLASTIC, FALSE, CLR_GRAY),
 WEAPON("white vibrospear", "long white spear",/*Needs tile*/
@@ -291,16 +291,16 @@ WEAPON("gold-bladed vibrospear", "long black and gold spear",/*Needs tile*/
 WEAPON("elven lance", "runed lance", /*Needs encyc entry*//*Needs tile*/
 	0, 0, 0,  0, 60, 10,  8,  8, 2, P,   P_LANCE, WOOD, FALSE, HI_WOOD),
 WEAPON("droven lance", "lance", /*Needs encyc entry*//*Needs tile*/
-	0, 0, 1,  0,100, 10, 10, 10, 2, P,   P_LANCE, OBSIDIAN_MT, UNIDED, CLR_BLACK),
+	0, 0, 1,  0, 60, 10, 10, 10, 2, P,   P_LANCE, OBSIDIAN_MT, UNIDED, CLR_BLACK),
 /* axe-type */
 WEAPON("halberd", "angled poleaxe",
-	0, 0, 1,  8,150, 10, 10,  6, 0, P|S, P_POLEARMS, IRON, FALSE, HI_METAL),
+	0, 0, 1,  8, 75, 10, 10,  6, 0, P|S, P_POLEARMS, IRON, FALSE, HI_METAL),
 						/* +1d6 large */
 WEAPON("bardiche", "long poleaxe",
-	0, 0, 1,  4,120,  7,  4,  4, 0, S,   P_POLEARMS, IRON, FALSE, HI_METAL),
+	0, 0, 1,  4, 80,  7,  4,  4, 0, S,   P_POLEARMS, IRON, FALSE, HI_METAL),
 						/* +1d4 small, +2d4 large */
 WEAPON("voulge", "pole cleaver",
-	0, 0, 1,  4,125,  5,  4,  4, 0, S,   P_POLEARMS, IRON, FALSE, HI_METAL),
+	0, 0, 1,  4, 50,  5,  4,  4, 0, S,   P_POLEARMS, IRON, FALSE, HI_METAL),
 						/* +d4 both */
 WEAPON("dwarvish mattock", "broad pick",
 	0, 0, 1, 13,120, 50, 12,  8,-1, P|B,   P_PICK_AXE, IRON, FALSE, HI_METAL),
@@ -312,17 +312,17 @@ WEAPON("guisarme", "pruning hook",
 	0, 0, 1,  5, 80,  5,  4,  8, 0, S,   P_POLEARMS, IRON, FALSE, HI_METAL),
 						/* +1d4 small */
 WEAPON("bill-guisarme", "hooked polearm",
-	0, 0, 1,  3,120,  7,  4, 10, 0, P|S, P_POLEARMS, IRON, FALSE, HI_METAL),
+	0, 0, 1,  3, 80,  7,  4, 10, 0, P|S, P_POLEARMS, IRON, FALSE, HI_METAL),
 						/* +1d4 small */
 /* other */
 WEAPON("lucern hammer", "pronged polearm",
-	0, 0, 1,  4,150,  7,  4,  6, 0, B|P, P_POLEARMS, IRON, FALSE, HI_METAL),
+	0, 0, 1,  4, 85,  7,  4,  6, 0, B|P, P_POLEARMS, IRON, FALSE, HI_METAL),
 						/* +1d4 small */
 WEAPON("bec de corbin", "beaked polearm",
-	0, 0, 1,  3,100,  8,  8,  6, 0, B|P, P_POLEARMS, IRON, FALSE, HI_METAL),
+	0, 0, 1,  3, 75,  8,  8,  6, 0, B|P, P_POLEARMS, IRON, FALSE, HI_METAL),
 
 WEAPON("scythe", (char *)0, /* 2d4 damage. Vs plants: +6 to hit and double damage */
-	1, 0, 1, 5, 100,  6,  4,  4, -2, S,   P_HARVEST, IRON, FALSE, HI_METAL),
+	1, 0, 1, 5,  75,  6,  4,  4, -2, S,   P_HARVEST, IRON, FALSE, HI_METAL),
 
 /* bludgeons */
 WEAPON("mace", (char *)0,
@@ -332,7 +332,7 @@ WEAPON("elven mace", "runed mace", /*Needs encyc entry*/
 	0, 0, 0,  0, 10,  5,  7,  7, 2, B,   P_MACE, WOOD, FALSE, HI_WOOD),
 						/* +1 small */
 WEAPON("morning star", (char *)0,
-	1, 0, 0, 12,120, 10,  4,  6, 0, B|P,   P_MORNING_STAR, IRON, FALSE, HI_METAL),
+	1, 0, 0, 12, 80, 10,  4,  6, 0, B|P,   P_MORNING_STAR, IRON, FALSE, HI_METAL),
 						/* +d4 small, +1 large */
 WEAPON("war hammer", (char *)0,
 	1, 0, 0, 15, 50,  5,  4,  4, 0, B,   P_HAMMER, IRON, FALSE, HI_METAL),
