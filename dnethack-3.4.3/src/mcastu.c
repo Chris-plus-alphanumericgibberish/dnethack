@@ -4194,13 +4194,9 @@ int spellnum;
 	} else {
             register struct obj *otmp = some_armor(mtmp), *otmp2;
 
-#define oresist_disintegration(obj) \
-		(objects[obj->otyp].oc_oprop == DISINT_RES || \
-		 obj_resists(obj, 0, 90) || is_quest_artifact(obj))
-
 	    if (otmp &&
-	        !oresist_disintegration(otmp))
-	    {
+	        !(oresist_disintegration(otmp) || obj_resists(otmp, 0, 90))
+	    ){
 			long unwornmask = otmp->owornmask;
 			if (yours || canseemon(mtmp)) pline("%s %s %s!",
 				s_suffix(Monnam(mtmp)),

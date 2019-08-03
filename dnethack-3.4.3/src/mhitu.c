@@ -2453,7 +2453,9 @@ hitmu(mtmp, mattk)
 					if(obj_resists(obj, 0, 80)){
 						break; //End loop
 					} else {
-						if(obj->spe > -1*objects[(obj)->otyp].a_ac){
+						if(oresist_disintegration(obj))
+							continue;
+						if(obj->spe > -1*objects[obj->otyp].a_ac){
 							damage_item(obj);
 						}
 						else if(!obj->oartifact){

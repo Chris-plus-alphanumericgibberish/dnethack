@@ -110,6 +110,10 @@ int otyp;
 				if (obj->oproperties & OPROP_REFL)
 					got_prop = TRUE;
 				break;
+			case DISINT_RES:
+				if (obj->oproperties & OPROP_DISN)
+					got_prop = TRUE;
+				break;
 			}
 		}
 		// from object type that doesn't fit into objclass

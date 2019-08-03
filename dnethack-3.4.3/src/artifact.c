@@ -9748,4 +9748,16 @@ int spe;
 		}
 	}
 }
+
+int
+oresist_disintegration(obj)
+struct obj *obj;
+{
+	return objects[obj->otyp].oc_oprop == DISINT_RES 
+	 || obj->oartifact == ART_CHROMATIC_DRAGON_SCALES
+	 || obj->oartifact == ART_DRAGON_PLATE
+	 || obj->oproperties&OPROP_DISN
+	 || is_quest_artifact(obj);
+}
+
 /*artifact.c*/

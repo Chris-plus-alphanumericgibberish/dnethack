@@ -129,6 +129,7 @@ E long FDECL(arti_cost, (struct obj *));
 E void FDECL(arti_poly_contents, (struct obj *));
 E struct obj * FDECL(minor_artifact, (struct obj *, char *));
 E void NDECL(mind_blast_items);
+E int FDECL(oresist_disintegration, (struct obj *));
 
 /* ### attrib.c ### */
 

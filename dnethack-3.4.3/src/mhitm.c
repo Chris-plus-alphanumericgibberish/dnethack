@@ -1683,11 +1683,17 @@ physical:{
 			for(; i>0; i--){
 				obj = some_armor(mdef);
 				if(obj){
-					if(obj->spe > -1*objects[(obj)->otyp].a_ac){
-						damage_item(obj);
-					}
-					else if(!obj->oartifact){
-						destroy_marm(mdef, obj);
+					if(obj_resists(obj, 0, 80)){
+						break; //End loop
+					} else {
+						if(oresist_disintegration(obj))
+							continue;
+						if(obj->spe > -1*objects[obj->otyp].a_ac){
+							damage_item(obj);
+						}
+						else if(!obj->oartifact){
+							destroy_marm(mdef, obj);
+						}
 					}
 				} else {
 					i = 0;
