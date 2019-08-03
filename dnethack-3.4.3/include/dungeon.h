@@ -147,6 +147,10 @@ typedef struct branch {
 #define Is_elshava(x)		(on_level(x,&elshava_level))
 #define Is_last_spire(x)		(on_level(x,&lastspire_level))
 
+//Chaos quest 3
+#define Is_ford_level(x)	(on_level(x,&ford_level))
+#define Is_spider_cave(x)	(on_level(x,&spider_level))
+
 //Neutral quest
 #define In_depths(x)		((x)->dnum == rlyeh_dnum)
 #define Is_gatetown(x)		(on_level(x,&gatetown_level))

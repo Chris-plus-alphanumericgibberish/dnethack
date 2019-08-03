@@ -732,6 +732,22 @@ struct level_map {
 	/*Chaos 2 levels*/
 	{ "ossa1",&elshava_level },
 	{ "mith3",&lastspire_level },
+	/*Chaos 3 levels*/
+	{ "frst1",&forest_1_level },
+	{ "frst2",&forest_2_level },
+	{ "frst3",&forest_3_level },
+	{ "ford",&ford_level },
+	{ "frst4",&forest_4_level },
+	{ "mord1",&mordor_1_level },
+	{ "mord2",&mordor_2_level },
+	{ "spi1",&spider_level },
+	{ "mdpth1",&modor_depths_1_level },
+	{ "mdpth2",&modor_depths_2_level },
+	{ "mdpth3",&modor_depths_3_level },
+	{ "bore1",&borehole_1_level },
+	{ "bore2",&borehole_2_level },
+	{ "bore3",&borehole_3_level },
+	{ "bore4",&borehole_4_level },
 	/*Fort Knox*/
 	{ "knox",	&knox_level },
 	{ "",		(d_level *)0 }
@@ -1497,7 +1513,7 @@ boolean
 In_mithardir_desert(lev)	/* are you on the chaotic quest? */
 d_level	*lev;
 {
-	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MITHARDIR && lev->dlevel <= lastspire_level.dlevel));
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MITHARDIR && lev->dlevel <= lastspire_level.dlevel && !on_level(lev, &elshava_level)));
 }
 
 boolean
@@ -1519,6 +1535,73 @@ In_mithardir_quest(lev)	/* are you on the chaotic quest? */
 d_level	*lev;
 {
 	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MITHARDIR));
+}
+
+boolean
+In_FF_quest(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == TEMPLE_OF_CHAOS));
+}
+
+boolean
+In_mordor_quest(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MORDOR));
+}
+
+boolean
+In_mordor_forest(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MORDOR && (
+		on_level(&u.uz, &forest_1_level)
+		|| on_level(&u.uz, &forest_2_level)
+		|| on_level(&u.uz, &forest_3_level)
+	)));
+}
+
+boolean
+In_mordor_fields(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MORDOR && (
+		on_level(&u.uz, &forest_4_level)
+	)));
+}
+
+boolean
+In_mordor_buildings(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MORDOR && (
+		on_level(&u.uz, &mordor_1_level)
+		|| on_level(&u.uz, &mordor_2_level)
+	)));
+}
+
+boolean
+In_mordor_depths(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MORDOR && (
+		on_level(&u.uz, &modor_depths_1_level)
+		|| on_level(&u.uz, &modor_depths_2_level)
+		|| on_level(&u.uz, &modor_depths_3_level)
+	)));
+}
+
+boolean
+In_mordor_borehole(lev)	/* are you on the chaotic quest? */
+d_level	*lev;
+{
+	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MORDOR && (
+		on_level(&u.uz, &borehole_1_level)
+		|| on_level(&u.uz, &borehole_2_level)
+		|| on_level(&u.uz, &borehole_3_level)
+		|| on_level(&u.uz, &borehole_4_level)
+	)));
 }
 
 boolean

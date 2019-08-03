@@ -43,9 +43,9 @@ CHAINBRANCH:	"Law Quest" "lawlev" + (0, 0) portal
 LEVEL:		"neulev" "none" @ (12, 8)
 LEVALIGN:	neutral
 CHAINBRANCH:	"Neutral Quest" "neulev" + (0, 0) portal
-LEVEL:		"chalev" "none" @ (12, 8)
+LEVEL:		"chalv3" "none" @ (12, 8)
 LEVALIGN:	chaotic
-CHAINBRANCH:	"Chaos Quest" "chalev" + (0, 0) portal
+CHAINBRANCH:	"Chaos Quest" "chalv3" + (0, 0) portal
 BRANCH:		"The Elemental Planes" @ (1, 0) no_down up
 
 #
@@ -177,18 +177,24 @@ ENTRY:		2
 
 # Chaos Quest
 
-DUNGEON:		"Chaos Quest" "C" (9, 0)
+DUNGEON:		"Chaos Quest" "F" (15, 0)
 DESCRIPTION:    mazelike
 ALIGNMENT:      chaotic
-LEVEL:		"chaosf" "none" @ (1, 0)
-LEVEL:		"chaoss" "A" @ (2, 0)
-LEVEL:		"chaost" "B" @ (3, 0)
-LEVEL:		"chaosm" "M" @ (4, 0)
-LEVEL:		"chaosfrh" "none" @ (5, 0)
-LEVEL:		"chaosffh" "C" @ (6, 0)
-LEVEL:		"chaossth" "D" @ (7, 0)
-LEVEL:		"chaosvth" "E" @ (8, 0)
-LEVEL:		"chaose" "none" @ (9, 0)
+LEVEL:		"frst1" "A" @ (1, 0)
+LEVEL:		"frst2" "B" @ (2, 0)
+LEVEL:		"frst3" "C" @ (3, 0)
+LEVEL:		"ford"  "none" @ (4, 0)
+LEVEL:		"frst4" "D" @ (5, 0)
+LEVEL:		"mord1" "E" @ (6, 0)
+LEVEL:		"mord2" "F" @ (7, 0)
+LEVEL:		"spi1"  "G" @ (8, 0)
+LEVEL:		"mdpth1" "H" @ (9, 0)
+LEVEL:		"mdpth2" "I" @ (10, 0)
+LEVEL:		"mdpth3" "J" @ (11, 0)
+LEVEL:		"bore1" "K" @ (12, 0)
+LEVEL:		"bore2" "L" @ (13, 0)
+LEVEL:		"bore3" "M" @ (14, 0)
+LEVEL:		"bore4" "none" @ (15, 0)
 
 #
 #	The Questdungeon

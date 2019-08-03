@@ -872,6 +872,14 @@ register struct monst *mtmp;
 			makemon(&mons[PM_GNOLL], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
 		}
 	}
+	if(mdat == &mons[PM_FORD_GUARDIAN]){
+		if(!rn2(20) && mtmp->mux == u.ux && mtmp->muy == u.uy && !(mtmp->mstrategy&STRAT_WAITFORU)){
+			int i = rnd(4);
+			pline("The waters of the ford rise to the aid of the guardian!");
+			for(; i > 0; i--)
+				makemon(&mons[PM_FORD_ELEMENTAL], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+		}
+	}
 	if(mdat == &mons[PM_LEGION]){
 		rn2(7) ? makemon(mkclass(S_ZOMBIE, G_NOHELL|G_HELL), mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT): 
 				 makemon(&mons[PM_LEGIONNAIRE], mtmp->mx, mtmp->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);

@@ -263,10 +263,23 @@ char *buf;
 	else if (In_neu(&u.uz)){
 		if(In_depths(&u.uz)) Sprintf(buf, "Depths %d ", dunlev(&u.uz)+dungeons[neutral_dnum].num_dunlevs-1);
 		else Sprintf(buf, "Outlands %d ", dunlev(&u.uz));
-	} else if (In_cha(&u.uz))
-		if(dungeons[chaos_dnum].entry_lev == u.uz.dlevel) Sprintf(buf, "Ruined Temple ");
-		else Sprintf(buf, "Temple %d ", dunlev(&u.uz));
-	else {
+	} else if (In_cha(&u.uz)){
+		if(In_FF_quest(&u.uz)){
+			if(dungeons[chaos_dnum].entry_lev == u.uz.dlevel) Sprintf(buf, "Ruined Temple ");
+			else Sprintf(buf, "Temple %d ", dunlev(&u.uz));
+		} else if(In_mithardir_quest(&u.uz)){
+			if(dungeons[chaos_dnum].entry_lev == u.uz.dlevel) Sprintf(buf, "Elshava ");
+			else Sprintf(buf, "Mithardir %d ", dunlev(&u.uz));
+		} else if(In_mordor_quest(&u.uz)){
+			if(In_mordor_forest(&u.uz)) Sprintf(buf, "Forest %d ", dunlev(&u.uz));
+			else if(Is_ford_level(&u.uz)) Sprintf(buf, "Ford ");
+			else if(In_mordor_fields(&u.uz)) Sprintf(buf, "Field ", dunlev(&u.uz));
+			else if(In_mordor_buildings(&u.uz)) Sprintf(buf, "Fortress %d", dunlev(&u.uz)-5);
+			else if(Is_spider_cave(&u.uz)) Sprintf(buf, "Spider ", dunlev(&u.uz)-5);
+			else if(In_mordor_depths(&u.uz)) Sprintf(buf, "Cracks %d", dunlev(&u.uz)-8);
+			else if(In_mordor_borehole(&u.uz)) Sprintf(buf, "Bore %d", dunlev(&u.uz)-11);
+		}
+	} else {
 		/* ports with more room may expand this one */
 		Sprintf(buf, "Dlvl:%-2d ", depth(&u.uz) > 0 ? depth(&u.uz) : depth(&u.uz)-1);
 		ret = 0;

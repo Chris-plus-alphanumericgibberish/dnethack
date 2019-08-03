@@ -1,0 +1,700 @@
+#	SCCS Id: @(#)chaos.des	3.4	2012/10/07
+# NetHack may be freely redistributed.  See license for details.
+#
+# Chaos Quest branch
+#
+MAZE: "chalv3",' '
+FLAGS: nommap, shortsighted
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                            ------------------                            
+1                    ---------TTTTTTTTTTTTTTTT---------                    
+2              -------TTTTTTTTeeeeeeeeeeeeeeeeTTTTTTTT-------              
+3         ------eTTTTTeeeeeeeeeeeeee---eeeeeeeeeeeeeeeTTTTTe------         
+4      ----eTTTTTeeeeeeeeeeeeeeeeeee-.-eeeeeeeeeeeeeeeeeeeeTTTTTe----      
+5    ---eTTTeeeeeeeeeeeeeeeeeeeeeeee-+-eeeeeeeeeeeeeeeeeeeeeeeeeTTTe---    
+6  ---eTTeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeTTe---  
+7---eTeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeTe---
+8|TeTeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeTeT|
+9|TeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeT|
+0|TeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeT|
+1---TeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeT---
+2  ---eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee---  
+3    ---eeeeeeeeeeeeeeeeeeeeeeeeee---+---eeeeeeeeeeeeeeeeeeeeeeeeeee---    
+4      ----eeeeeeeeeeeeeeeeeeeeeee-.....-eeeeeeeeeeeeeeeeeeeeeeee----      
+5         ------eeeeeeeeeeeeeeeeee+.---.+eeeeeeeeeeeeeeeeeee------         
+6              -------eeeeeeeeeeee-..-..-eeeeeeeeeeeee-------              
+7                    ---------eeee-.....-eeeee---------                    
+8                            ------------------                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
+# Dungeon Description
+REGION:(00,00,72,18),lit,"ordinary"
+
+BRANCH:(36,04,36,04),(0,0,0,0)
+
+DOOR:closed,(36,05)
+
+STAIR: (37,16), up
+STAIR: (35,16), down
+
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+
+MONSTER: '@', "elf-lord", random
+
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+MONSTER[75%]: 'o', "Mordor orc", random
+
+MONSTER: 'o', "orc-captain", random
+
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+TRAP: "magic", random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+OBJECT:random,random,random
+OBJECT:random,random,random
+OBJECT:random,random,random
+
+MAZE: "frst1",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: 'e' , 'T' , true, true, lit , true
+
+NOMAP
+
+BRANCH:(00,00,30,10),(0,0,0,0)
+PORTAL:(35,10,55,20),(00,00,00,00),"frst2"
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+
+
+MAZE: "frst2",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: 'e' , 'T' , true, true, lit , true
+
+NOMAP
+
+PORTAL:(00,00,30,10),(00,00,00,00),"frst1"
+PORTAL:(35,10,55,20),(00,00,00,00),"frst3"
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+
+MAZE: "frst3",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: 'e' , 'T' , true, true, lit , true
+
+NOMAP
+
+PORTAL:(00,00,30,10),(00,00,00,00),"frst2"
+PORTAL:(35,10,55,20),(00,00,00,00),"ford"
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+
+MAZE: "ford",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: 'e' , 'T' , true, true, lit , true
+
+NOMAP
+
+PORTAL:(00,00,37,10),(00,00,00,00),"frst3"
+PORTAL:(65,00,75,20),(00,00,00,00),"frst4"
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+TT}}e}}|T
+eT}}}}}|T
+ee}}}}}|T
+e}}}}}}|e
+}}}}}}}|e
+e}}}}}}|e
+e}}}}}}|e
+eT}}}}}|e
+e}}}}}}|e
+e}}}}}e|e
+e}}}}}}|e
+e}}}}}}|e
+e}}}}}}|e
+ee}}}}}|e
+ee}}}}}|e
+e}}}}}}|e
+e}}}}}}|e
+e}}}}}}|e
+ee}}}}}|e
+ee}}}}}|T
+eT}}}}}|T
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0Teeeee}}}}}}}-------eee
+1eeeew}}}}}}}}}}}ww+eeee
+2eewwww}}}}}}}}}www+eeee
+3e}}wwwwweeeeeewww}----e
+4}}}}wwweeeeeeeee}}}}}|e
+5}}}}}}eeeeeeeeee}}}}}|e
+6}}}}}}weeeeeeee}}}}}}|e
+7e}}}}wwweeeeee}}}}}}}|e
+8ee}}www}}}}}}}}}}}}--|e
+9eeeeew}}}}}}}}}}}---eee
+0eeeeee}}}}}}}-----eeeee
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+DOOR:locked,(18,01)
+DOOR:locked,(18,02)
+
+MAZE: "frst4",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: ',' , 'T' , true, true, lit , true
+
+NOMAP
+
+PORTAL:(00,00,25,20),(00,00,00,00),"ford"
+PORTAL:(70,00,75,20),(00,00,00,00),"mord1"
+
+
+MAZE: "mord1",' '
+FLAGS: shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0               -------------------------------------------------------------
+1               |.....|..|.|.........................................|...|   
+2               |.....|..|.---------------S----------S----------------...|   
+3   ##          |.....+..+.|......|......|.............|......|......|...|   
+4  ####        -|.....|--|.|......+......+.............+......+......|...|---
+5   ##         .|.....|..|.|......|......|.............|......|......|...|...
+6    #         .-------..|.|----S-|--S---|S----------S-|---S--|------|...|...
+7   ##       ............|...............................................|...
+8.  HH      .............----S------++--S----------S----------S-----------...
+9............................................................................
+0............................................................................
+1............................................................................
+2............................................................................
+3............................................................................
+4............................................................................
+5............................................................................
+6............................................................................
+7............................................................................
+8............................................................................
+9............................................................................
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+PORTAL:(03,04,03,04),(00,00,00,00),"spi1"
+STAIR:(46,01),down
+
+PORTAL:(00,15,75,19),(00,00,00,00),"frst4"
+
+# Doors
+DOOR:locked,(31,06)
+DOOR:locked,(36,06)
+DOOR:locked,(41,06)
+DOOR:locked,(52,06)
+DOOR:locked,(58,06)
+DOOR:locked,(28,08)
+DOOR:locked,(39,08)
+DOOR:locked,(50,08)
+DOOR:locked,(61,08)
+DOOR:closed,(33,04)
+DOOR:closed,(40,04)
+DOOR:closed,(54,04)
+DOOR:closed,(61,04)
+DOOR:locked,(35,08)
+DOOR:locked,(36,08)
+DOOR:locked,(21,03)
+DOOR:locked,(24,03)
+
+MAZE: "mord2",' '
+FLAGS: shortsighted,hardfloor
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0---------------------------------.------------------------------------------
+1|.....|.||..........|....|......|.|.........|.......+............---.......|
+2|.....|..+..........+....---....S.|...-S-----.-----.|............+.+.......|
+3|.....+.||........---......|....|.|...|.....|.|...|.---.....------.--------|
+4|-----|.-------|..|........------.-----.....|.--..|...-------..............|
+5|.....|........------+------..........+.....|..--S---.........------.-----..
+6|.....|.------...............-----.}}.--------.|....-------.---....|.+...--|
+7|..-+--.|....|-----.--------.|...|.....+.....|.|....|.....+.+......|.--....|
+8|..|....|....|....+.|......|.|...-----.|.....|.--...|.....|.|......|..|....|
+9|..|.-----S----...|.+....-----...|...|.----..|..|.---....--.---S-----.|----|
+0|..|.|........|...------.|.S.....|...|....-----.+.|......|..|.......|.|....|
+1|---.-------..|...|....|.|.|.....|...----.|...|.|---.....|.|-.......|.---..|
+2...........|..S...|....---.----S----..|...|...+.|..-------.---+-....|...--+|
+3|---------.---------...|......|....S..|.---...|.|..|...........----.---....|
+4      ...|.........|...+.------....|---.---...|.--+-.----.----....|.+...--+|
+5 ## #  ..|.---+---.|----.--........|......-----......|..|..|.--+-.|.-S-.|..|
+6  #### ..|.|.....|........----------.----.......---.--..|-.|....|.-----.|..|
+7 ##### ..+.|.....----+---............|..|--------.+.|...SS.|....|.......|..|
+8   ###+..---.....|......|.------------............---...||.------+--+----..|
+9  ###  ....S.....|......|.|..........S............|.....||...|.....|....|..|
+0      .....--------------.--------------------------------------------------
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+RANDOM_PLACES: (33,0), (0,12), (25,20), (75,05)
+
+#Whichever level is visited first will have the Key
+OBJECT: '(',"skeleton key", random, uncursed, 0, "The Second Key of Chaos"
+
+STAIR:place[0],up
+PORTAL:(01,17,01,15),(00,00,00,00),"mdpth1"
+
+# Doors (secret)
+#DOOR:locked|closed|open,(xx,yy)
+DOOR: locked, (32, 2)
+DOOR: locked, (63, 9)
+DOOR: locked, (27,10)
+DOOR: locked, (31,12)
+DOOR: locked, (35,13)
+DOOR: locked, (69,15)
+DOOR: locked, (56,17)
+DOOR: locked, (57,17)
+DOOR: locked, (11,19)
+DOOR: locked, (37,19)
+DOOR: locked, (39, 2)
+DOOR: locked, (49, 5)
+DOOR: locked, (10, 9)
+DOOR: locked, (14,12)
+# Doors (regular)
+DOOR: closed, (52, 1)
+DOOR: closed, ( 9, 2)
+DOOR: closed, (20, 2)
+DOOR: closed, (65, 2)
+DOOR: closed, (67, 2)
+DOOR: closed, ( 6, 3)
+DOOR: closed, (21, 5)
+DOOR: closed, (38, 5)
+DOOR: closed, (69, 6)
+DOOR: closed, ( 4, 7)
+DOOR: closed, (39, 7)
+DOOR: closed, (58, 7)
+DOOR: closed, (60, 7)
+DOOR: closed, (18, 8)
+DOOR: closed, (20, 9)
+DOOR: closed, (48,10)
+DOOR: closed, (46,12)
+DOOR: closed, (62,12)
+DOOR: closed, (74,12)
+DOOR: closed, (23,14)
+DOOR: closed, (23,14)
+DOOR: closed, (50,14)
+DOOR: closed, (68,14)
+DOOR: closed, (74,14)
+DOOR: closed, (14,15)
+DOOR: closed, (63,15)
+DOOR: closed, ( 9,17)
+DOOR: closed, (21,17)
+DOOR: closed, (50,17)
+DOOR: closed, ( 6,18)
+DOOR: closed, (65,18)
+DOOR: closed, (68,18)
+
+MAZE: "spi1",' '
+FLAGS: shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0                            -----               -----
+1                         ----...-               |...|------
+2            ------    ----.....--               ---.......|
+3            -....------.....----                 -----..---
+4            ----.........----       |-------------.....--
+5              -...----......----|----..............-----
+6              -.---  ------....--.......-----|------     -------
+7              -.-  --------..................|-------- ---.....-
+8      |------ ---  -........---...----|..............---...-----
+9      |.....-- ---------.---- |...|   |------|...........----- 
+0      |----..---.........-    |...|          -----------.....--------
+1       |.........-------.-    |...|-|                  -------......-
+2       -----------     ---|---|.....|             --------......-----
+3                 ---------|.........---------------.........-----
+4           ------|.............|-|....................-----.....----
+5        ---|..................---|...-----------.....---  -----....-
+6        |....----|.-----------|......|         ----....-----  ------
+7        |----|   |..--      |-|...|--|            ---......-
+8                 -|..| -----|...|--                 ---..---
+9                  ---- |.......|-                     -.--
+0                       |-------|                      ---
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+#Whichever level is visited first will have the Key
+OBJECT: '(',"skeleton key", random, uncursed, 0, "The Second Key of Chaos"
+
+PORTAL:(32,10,32,10),(0,0,0,0),"mord1"
+PORTAL:(00,00,68,20),(26,4,38,16),"mdpth1"
+
+#PORTAL:(01,06,01,06),(00,00,00,00),"mith3"
+
+
+OBJECT: '!',random,random
+OBJECT: '!',"starlight",random
+OBJECT: '/',"make invisible",random
+OBJECT: '"',"amulet versus poison",random
+OBJECT: '[',"speed boots",random
+OBJECT: '=',"conflict",random
+OBJECT: '/',"death",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+OBJECT: '%',"egg",random
+GOLD: random, random
+GOLD: random, random
+GOLD: random, random
+GOLD: random, random
+GOLD: random, random
+#
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', random, random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "giant spider", random, hostile
+MONSTER: 's', "Shelob", random, hostile
+
+#
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+TRAP: "web", random
+
+MAZE: "mdpth1",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '.' , ' ' , true, true, unlit , true
+
+NOMAP
+
+PORTAL:(00,00,25,20),(00,00,00,00),"spi1"
+PORTAL:(50,00,75,20),(00,00,00,00),"mord2"
+STAIR:(30,00,45,20),(00,00,00,00),down
+
+
+MAZE: "mdpth2",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '.' , ' ' , true, true, unlit , true
+
+NOMAP
+
+#Lava pool
+
+STAIR:(00,00,75,20),(30,00,45,20),up
+STAIR:(30,00,45,20),(00,00,00,00),down
+
+
+MAZE: "mdpth3",' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '.' , 'L' , true, true, unlit , true
+
+NOMAP
+
+#Lava sea
+
+STAIR:(00,00,75,09),(00,00,00,00),up
+STAIR:(30,10,45,20),(00,00,00,00),down
+
+
+MAZE: "bore1",' '
+FLAGS: shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0  -----  
+1 -|...|- 
+2-|.....|-
+3|.......|
+4|...-...|
+5|.......|
+6-|.....|-
+7 -|...|- 
+8  -----  
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+STAIR:(04,02),up
+LADDER:(04,07),down
+
+MAZE: "bore2",' '
+FLAGS: shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0  -------  
+1 -|.....|- 
+2-|.......|-
+3|.........|
+4|...---...|
+5|...- -...|
+6|...---...|
+7|.........|
+8-|.......|-
+9 -|.....|- 
+0  -------  
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+LADDER:(05,08),up
+LADDER:(05,01),down
+
+MAZE: "bore3",' '
+FLAGS: shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0   -------   
+1  -|.....|-  
+2 -|.......|- 
+3-|.........|-
+4|....---....|
+5|...-- --...|
+6|...-   -...|
+7|...-- --...|
+8|....---....|
+9-|.........|-
+0 -|.......|- 
+1  -|.....|-  
+2   -------   
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+LADDER:(06,02),up
+LADDER:(06,11),down
+
+
+MAZE: "bore4",' '
+FLAGS: shortsighted,hardfloor
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0    -------    
+1  --|.....|--  
+2 -|.........|- 
+3-|...........|-
+4-|...........|-
+5|.............|
+6|.............|
+7|.............|
+8|.............|
+9|.............|
+0-|...........|-
+1-|...........|-
+2 -|.........|- 
+3  --|.....|--  
+4    -------    
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+LADDER:(07,12),up
+ALTAR:(07,07),noalign,altar
+
+#PORTAL:(00,00,25,20),(00,00,00,00),"frst2"
+#PORTAL:(50,00,75,20),(00,00,00,00),"ford"
+
+

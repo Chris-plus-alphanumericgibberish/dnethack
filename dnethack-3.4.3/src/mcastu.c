@@ -635,6 +635,48 @@ unsigned int type;
 			break;
 		}
 	break;
+	case PM_FORD_GUARDIAN:
+		switch(rn2(5)){
+			case 0:
+				return CURE_SELF;
+			break;
+			case 1:
+				return RECOVER;
+			break;
+			case 2:
+				return OPEN_WOUNDS;
+			break;
+			case 3:
+				switch(rn2(2)){
+					case 0:
+						return MON_PROTECTION;
+					break;
+					case 1:
+						return MASS_CURE_FAR;
+					break;
+				}
+			break;
+			case 4:
+				switch(rn2(5)){
+					case 0:
+						return LIGHTNING;
+					break;
+					case 1:
+						return ACID_RAIN;
+					break;
+					case 2:
+						return FIRE_PILLAR;
+					break;
+					case 3:
+						return GEYSER;
+					break;
+					case 4:
+						return ICE_STORM;
+					break;
+				}
+			break;
+		}
+	break;
 	case PM_MINOTAUR_PRIESTESS:
 		switch (d(1,5)+8) {
 			case 13:

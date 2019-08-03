@@ -155,6 +155,22 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 	/*Chaos Quest 2*/
     d_level	d_elshava_level;
     d_level	d_lastspire_level;
+	/*Chaos Quest 2*/
+    d_level	d_forest_1_level;
+    d_level	d_forest_2_level;
+    d_level	d_forest_3_level;
+    d_level	d_ford_level;
+    d_level	d_forest_4_level;
+    d_level	d_mordor_1_level;
+    d_level	d_mordor_2_level;
+    d_level	d_spider_level;
+    d_level	d_modor_depths_1_level;
+    d_level	d_modor_depths_2_level;
+    d_level	d_modor_depths_3_level;
+    d_level	d_borehole_1_level;
+    d_level	d_borehole_2_level;
+    d_level	d_borehole_3_level;
+    d_level	d_borehole_4_level;
 	/*Law Quest*/
 	xchar	d_law_dnum;
 	d_level d_path1, d_path2, d_path3, d_illregrd, 
@@ -250,6 +266,22 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 	/*Chaos Quest 2*/
 #define elshava_level		(dungeon_topology.d_elshava_level)
 #define lastspire_level		(dungeon_topology.d_lastspire_level)
+	/*Chaos Quest 3*/
+#define forest_1_level		(dungeon_topology.d_forest_1_level)
+#define forest_2_level		(dungeon_topology.d_forest_2_level)
+#define forest_3_level		(dungeon_topology.d_forest_3_level)
+#define ford_level			(dungeon_topology.d_ford_level)
+#define forest_4_level		(dungeon_topology.d_forest_4_level)
+#define mordor_1_level		(dungeon_topology.d_mordor_1_level)
+#define mordor_2_level		(dungeon_topology.d_mordor_2_level)
+#define spider_level		(dungeon_topology.d_spider_level)
+#define modor_depths_1_level		(dungeon_topology.d_modor_depths_1_level)
+#define modor_depths_2_level		(dungeon_topology.d_modor_depths_2_level)
+#define modor_depths_3_level		(dungeon_topology.d_modor_depths_3_level)
+#define borehole_1_level	(dungeon_topology.d_borehole_1_level)
+#define borehole_2_level	(dungeon_topology.d_borehole_2_level)
+#define borehole_3_level	(dungeon_topology.d_borehole_3_level)
+#define borehole_4_level	(dungeon_topology.d_borehole_4_level)
 	/*Law Quest*/
 #define law_dnum		(dungeon_topology.d_law_dnum)
 #define path1_level		(dungeon_topology.d_path1)

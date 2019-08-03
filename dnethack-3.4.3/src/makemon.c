@@ -337,6 +337,17 @@ register struct monst *mtmp;
 		}
 		return;
 	}
+	if(mm==PM_FORD_GUARDIAN){
+		otmp = mksobj(ELVEN_BROADSWORD, TRUE, TRUE);
+		otmp->obj_material = SILVER;
+		otmp->objsize = MZ_LARGE;
+		otmp->oproperties = OPROP_WATRW;
+		otmp->spe = abs(otmp->spe);
+		bless(otmp);
+		fix_object(otmp);
+		(void) mpickobj(mtmp,otmp);
+		return;
+	}
 	if(mm==PM_GLASS_GOLEM){
 		switch(rnd(12)){
 			case 1:
@@ -1446,7 +1457,12 @@ register struct monst *mtmp;
 					if (rnd(100) < mtmp->m_lev)
 						(void)mongets(mtmp, POT_STARLIGHT);
 						
-					switch (rn2(3)) {
+					if(In_quest(&u.uz) && Role_if(PM_KNIGHT)){
+						if (mm == PM_ELF_LORD) {
+							(void)mongets(mtmp, CRYSTAL_SWORD);
+						}
+					} 
+					else switch (rn2(3)) {
 					case 0:
 						if (!rn2(4)) (void)mongets(mtmp, ELVEN_SHIELD);
 						else if (could_twoweap(ptr)) (void)mongets(mtmp, ELVEN_DAGGER);
@@ -1469,12 +1485,7 @@ register struct monst *mtmp;
 					if (mm == PM_ELVENKING) {
 					if (rn2(3) || (in_mklev && Is_earthlevel(&u.uz)))
 						(void)mongets(mtmp, PICK_AXE);
-					if (!rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
-					}
-					if(In_quest(&u.uz) && Role_if(PM_KNIGHT)){
-						if (mm == PM_ELF_LORD) {
-							(void)mongets(mtmp, CRYSTAL_SWORD);
-						}
+						if (In_mordor_quest(&u.uz) || !rn2(50)) (void)mongets(mtmp, CRYSTAL_BALL);
 					}
 				}
 			} else if (ptr->msound == MS_PRIEST ||
@@ -3778,19 +3789,57 @@ register struct monst *mtmp;
 			    (void)mongets(mtmp, DRUM);
 			break;
 		    case PM_ANGBAND_ORC:
-				(void)mongets(mtmp, SCIMITAR);
-				if(rn2(2))
+				if(In_mordor_quest(&u.uz)){
 					(void)mongets(mtmp, SCIMITAR);
-				else
+					(void)mongets(mtmp, KNIFE);
+					(void)mongets(mtmp, ORCISH_BOW);
+					m_initthrow(mtmp, ORCISH_ARROW, 12);
+					(void)mongets(mtmp, WHITE_DRAGON_SCALES);
+					(void)mongets(mtmp, ORCISH_HELM);
+					(void)mongets(mtmp, ORCISH_CLOAK);
 					(void)mongets(mtmp, ORCISH_SHIELD);
-				(void)mongets(mtmp, KNIFE);
-				(void)mongets(mtmp, ORCISH_HELM);
-				(void)mongets(mtmp, ORCISH_CHAIN_MAIL);
-				(void)mongets(mtmp, ORCISH_CLOAK);
-				(void)mongets(mtmp, GLOVES);
-				(void)mongets(mtmp, HIGH_BOOTS);
+					(void)mongets(mtmp, GLOVES);
+					(void)mongets(mtmp, HIGH_BOOTS);
+					if(!rn2(3)) mongets(mtmp, WAN_MAGIC_MISSILE);
+				} else {
+					(void)mongets(mtmp, SCIMITAR);
+					if(rn2(2))
+						(void)mongets(mtmp, SCIMITAR);
+					else
+						(void)mongets(mtmp, ORCISH_SHIELD);
+					(void)mongets(mtmp, KNIFE);
+					(void)mongets(mtmp, ORCISH_HELM);
+					(void)mongets(mtmp, ORCISH_CHAIN_MAIL);
+					(void)mongets(mtmp, ORCISH_CLOAK);
+					(void)mongets(mtmp, GLOVES);
+					(void)mongets(mtmp, HIGH_BOOTS);
+				}
 			break;
+		    case PM_MORDOR_MARSHAL:
 		    case PM_ORC_CAPTAIN:
+				if(In_mordor_quest(&u.uz)){
+					(void)mongets(mtmp, SCIMITAR);
+					(void)mongets(mtmp, GREEN_DRAGON_SCALES);
+					(void)mongets(mtmp, ORCISH_HELM);
+					if(rn2(2)) (void)mongets(mtmp, ORCISH_CLOAK);
+					(void)mongets(mtmp, ORCISH_SHIELD);
+					(void)mongets(mtmp, GLOVES);
+					(void)mongets(mtmp, HIGH_BOOTS);
+					break;
+				}
+				//else fall through
+		    case PM_MORDOR_ORC_ELITE:
+				if(In_mordor_quest(&u.uz)){
+					(void)mongets(mtmp, SCIMITAR);
+					(void)mongets(mtmp, ORCISH_CHAIN_MAIL);
+					(void)mongets(mtmp, ORCISH_HELM);
+					if(rn2(2)) (void)mongets(mtmp, ORCISH_CLOAK);
+					(void)mongets(mtmp, ORCISH_SHIELD);
+					(void)mongets(mtmp, GLOVES);
+					(void)mongets(mtmp, HIGH_BOOTS);
+					break;
+				}
+				//else fall through
 		    case PM_MORDOR_ORC:
 			if(!rn2(3)) (void)mongets(mtmp, SCIMITAR);
 			if(!rn2(3)) (void)mongets(mtmp, ORCISH_SHIELD);
@@ -3830,12 +3879,34 @@ register struct monst *mtmp;
 //endif
 			break;
 		    default:
-			if (mm != PM_ORC_SHAMAN && rn2(2))
+			if (mm != PM_ORC_SHAMAN && mm != PM_MORDOR_SHAMAN && rn2(2))
 			  (void)mongets(mtmp, (mm == PM_GOBLIN || rn2(2) == 0)
 						   ? ORCISH_DAGGER : SCIMITAR);
 		}
 		break;
 	    case S_OGRE:
+			if(In_mordor_quest(&u.uz)){
+				if(mm == PM_OGRE_KING){
+					if(!rn2(4))
+						(void) mongets(mtmp, BATTLE_AXE);
+					else 
+						(void) mongets(mtmp, AXE);
+					(void) mongets(mtmp, ORCISH_CHAIN_MAIL);
+					if(rn2(2))
+						(void) mongets(mtmp, ORCISH_HELM);
+					break;
+				} else if(mm == PM_OGRE){
+					if(!rn2(6))
+						(void) mongets(mtmp, BATTLE_AXE);
+					else 
+						(void) mongets(mtmp, AXE);
+					(void) mongets(mtmp, LEATHER_ARMOR);
+					if(rn2(2))
+						(void) mongets(mtmp, ORCISH_HELM);
+					break;
+				}
+				// Siege Ogres etc. continue
+			}
 		if (!rn2(mm == PM_OGRE_KING ? 3 : mm == PM_OGRE_LORD ? 6 : 12))
 		    (void) mongets(mtmp, BATTLE_AXE);
 		else
@@ -4673,9 +4744,29 @@ register struct monst *mtmp;
 				return; //bypass general weapons
 			break;
 		    case PM_BALROG:
-				(void)mongets(mtmp, BULLWHIP);
-				(void)mongets(mtmp, BROADSWORD);
-				return; //bypass general weapons
+				if(In_mordor_quest(&u.uz)){
+					switch(rn2(3)){
+						case 0:
+						(void)mongets(mtmp, MACE);
+						break;
+						case 1:
+						(void)mongets(mtmp, BROADSWORD);
+						break;
+						case 2:
+						(void)mongets(mtmp, AXE);
+						break;
+					}
+					(void)mongets(mtmp, BULLWHIP);
+					otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
+					otmp->obj_material = PLATINUM;
+					otmp->objsize = MZ_LARGE;
+					fix_object(otmp);
+					mpickobj(mtmp, otmp);
+				} else {
+					(void)mongets(mtmp, BULLWHIP);
+					(void)mongets(mtmp, BROADSWORD);
+					return; //bypass general weapons
+				}
 			break;
 		    case PM_NESSIAN_PIT_FIEND:
 				otmp = mksobj(TRIDENT, FALSE, FALSE);
@@ -7059,6 +7150,12 @@ register int	mmflags;
 			}
 			if (anymon && mndx == PM_ORC_SHAMAN){
 				for(num = rnd(3); num >= 0; num--) makemon(&mons[PM_HILL_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+			}
+			if (anymon && mndx == PM_MORDOR_MARSHAL){
+				for(num = rn1(10,3); num >= 0; num--) makemon(rn2(3) ? &mons[PM_MORDOR_ORC] : &mons[PM_MORDOR_ORC_ELITE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
+			}
+			if (anymon && mndx == PM_MORDOR_SHAMAN){
+				for(num = rnd(3); num >= 0; num--) makemon(&mons[PM_MORDOR_ORC_ELITE], mtmp->mx, mtmp->my, MM_ADJACENTOK);
 			}
 			if (anymon && mndx == PM_ORC_OF_THE_AGES_OF_STARS){
 				for(num = rn1(10,3); num >= 0; num--) makemon(&mons[PM_ANGBAND_ORC], mtmp->mx, mtmp->my, MM_ADJACENTOK);

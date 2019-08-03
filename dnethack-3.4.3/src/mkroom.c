@@ -30,6 +30,7 @@ STATIC_DCL void NDECL(mkkamereltowers);
 STATIC_DCL void NDECL(mkminorspire);
 STATIC_DCL void NDECL(mkfishingvillage);
 STATIC_DCL void NDECL(mkpluhomestead);
+STATIC_DCL void NDECL(mkelfhut);
 STATIC_DCL void FDECL(mkwell, (int));
 STATIC_DCL void FDECL(mkfishinghut, (int));
 STATIC_DCL void NDECL(mkpluvillage);
@@ -56,8 +57,10 @@ STATIC_DCL void FDECL(mkarmory, (struct mkroom *));
 STATIC_DCL void NDECL(mkisland);
 STATIC_DCL void NDECL(mkriver);
 STATIC_DCL void NDECL(mkneuriver);
+STATIC_DCL void NDECL(mkforest12river);
 STATIC_DCL void FDECL(liquify, (int,int,int));
 STATIC_DCL void FDECL(neuliquify, (int, int, int));
+STATIC_DCL void FDECL(chaliquify, (int, int, int));
 STATIC_DCL struct permonst * NDECL(morguemon);
 STATIC_DCL struct permonst * NDECL(antholemon);
 STATIC_DCL struct permonst * FDECL(squadmon, (struct d_level *));
@@ -2184,6 +2187,77 @@ mkpluhomestead()
 	}
 }
 
+STATIC_OVL
+void
+mkelfhut()
+{
+	int x,y,tries=0, roomnumb;
+	int i,j, pathto = 0;
+	boolean good=FALSE, okspot, accessible;
+	while(!good && tries < 500){
+		x = rn2(COLNO-10)+1;
+		y = rn2(ROWNO-3);
+		tries++;
+		okspot = TRUE;
+		accessible = FALSE;
+		for(i=0;i<4;i++)
+			for(j=0;j<4;j++){
+				if(!isok(x+i,y+j) || t_at(x+i, y+j) || !(levl[x+i][y+j].typ == TREE || IS_WALL(levl[x+i][y+j].typ)))
+					okspot = FALSE;
+			}
+		pathto = 0;
+		if(isok(x+1,y-1) && (levl[x+1][y-1].typ == SOIL || levl[x+1][y-1].typ == ROOM)) pathto++;
+		if(isok(x+2,y-1) && (levl[x+2][y-1].typ == SOIL || levl[x+2][y-1].typ == ROOM)) pathto++;
+		if(isok(x+1,y+4) && (levl[x+1][y+4].typ == SOIL || levl[x+1][y+4].typ == ROOM)) pathto++;
+		if(isok(x+2,y+4) && (levl[x+2][y+4].typ == SOIL || levl[x+2][y+4].typ == ROOM)) pathto++;
+		if(isok(x+4,y+1) && (levl[x+4][y+1].typ == SOIL || levl[x+4][y+1].typ == ROOM)) pathto++;
+		if(isok(x+4,y+2) && (levl[x+4][y+2].typ == SOIL || levl[x+4][y+2].typ == ROOM)) pathto++;
+		if(isok(x-1,y+1) && (levl[x-1][y+1].typ == SOIL || levl[x-1][y+1].typ == ROOM)) pathto++;
+		if(isok(x-1,y+2) && (levl[x-1][y+2].typ == SOIL || levl[x-1][y+2].typ == ROOM)) pathto++;
+		if(pathto) accessible = TRUE;
+		if(okspot && accessible){
+			good = TRUE;
+		} else continue;
+		
+		for(i=0;i<4;i++){
+			for(j=0;j<4;j++){
+				levl[x+i][y+j].typ = HWALL;
+				if(m_at(x+i, y+j)) rloc(m_at(x+i, y+j), TRUE);
+			}
+		}
+		for(i=1;i<3;i++){
+			for(j=1;j<3;j++){
+				levl[x+i][y+j].typ = ROOM;
+				// if(!rn2(3)) mkobj_at((rn2(2) ? WEAPON_CLASS : rn2(2) ? TOOL_CLASS : ARMOR_CLASS), x+i, y+j, FALSE);
+			}
+		}
+		i = rnd(3);
+		for(;i>0;i--){
+			makemon(&mons[PM_GREEN_ELF], x+rnd(2), y+rnd(2), MM_ADJACENTOK);
+		}
+		
+		// wallification(x, y, x+3, y+3);//Can be adjacent, do wallification after all huts placed
+		
+		pathto = rn2(pathto);
+		if(isok(x+1,y-1) && (levl[x+1][y-1].typ == SOIL || levl[x+1][y-1].typ == ROOM) && !(pathto--))
+			levl[x+1][y+0].typ = DOOR, levl[x+1][y+0].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x+2,y-1) && (levl[x+2][y-1].typ == SOIL || levl[x+2][y-1].typ == ROOM) && !(pathto--))
+			levl[x+2][y+0].typ = DOOR, levl[x+2][y+0].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x+1,y+4) && (levl[x+1][y+4].typ == SOIL || levl[x+1][y+4].typ == ROOM) && !(pathto--))
+			levl[x+1][y+3].typ = DOOR, levl[x+1][y+3].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x+2,y+4) && (levl[x+2][y+4].typ == SOIL || levl[x+2][y+4].typ == ROOM) && !(pathto--))
+			levl[x+2][y+3].typ = DOOR, levl[x+2][y+3].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x+4,y+1) && (levl[x+4][y+1].typ == SOIL || levl[x+4][y+1].typ == ROOM) && !(pathto--))
+			levl[x+3][y+1].typ = DOOR, levl[x+3][y+1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x+4,y+2) && (levl[x+4][y+2].typ == SOIL || levl[x+4][y+2].typ == ROOM) && !(pathto--))
+			levl[x+3][y+2].typ = DOOR, levl[x+3][y+2].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x-1,y+1) && (levl[x-1][y+1].typ == SOIL || levl[x-1][y+1].typ == ROOM) && !(pathto--))
+			levl[x+0][y+1].typ = DOOR, levl[x+0][y+1].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+		if(isok(x-1,y+2) && (levl[x-1][y+2].typ == SOIL || levl[x-1][y+2].typ == ROOM) && !(pathto--))
+			levl[x+0][y+2].typ = DOOR, levl[x+0][y+2].doormask = rn2(3) ? D_CLOSED : D_LOCKED;
+	}
+}
+
 #define VALAVI_CAMP		0
 #define FORMIAN_CAMP1	1
 #define FORMIAN_CAMP2	2
@@ -3671,6 +3745,16 @@ place_lolth_vaults()
 }
 
 void
+place_chaos_forest_features()
+{
+	int i = 6 + d(2,6);
+	mkforest12river();
+	for(; i > 0; i--)
+		mkelfhut();
+	wallification(1,0,COLNO-1,ROWNO-1);
+}
+
+void
 place_neutral_features()
 {
 	if(!rn2(30)){
@@ -4849,6 +4933,34 @@ mkneuriver()	/* John Harris */
 	}
 }
 
+STATIC_OVL void
+mkforest12river()	/* John Harris */
+{
+	register int center, width, prog, fill, edge;
+	register int x, y;
+	level.flags.has_river = 1;
+	center = rn2(COLNO/4-14)+7+3*COLNO/4;
+	width = rn2(4)+5;
+	for (prog = 0; prog<ROWNO; prog++) {
+		edge = TRUE;
+		for (fill=center-(width/2); fill<=center+(width/2) ; fill++) {
+			chaliquify(fill, prog, edge);
+			edge = (fill == (center+(width/2)-1));
+		}
+		if (!rn2(3)) {
+			if (!rn2(2) && width >5) {width--;}
+			else if (width <8) {width++;}
+		}
+		if (!rn2(3)) {
+			if (!rn2(2) && (center-width/2) >1) {center--;}
+			else if ((center+width/2) < ROWNO-1) {center++;}
+		}
+		/* Sanity checking */
+		if (center < 5) {center = 5;}
+		if (center > (COLNO-6)) {center = COLNO-6;}
+	}
+}
+
 /* This isn't currently used anywhere. It liquifies the whole level. */
 STATIC_OVL void
 mksea()	/* John Harris */
@@ -4925,6 +5037,48 @@ register int edge; /* Allows room walls to intrude slightly into river. */
 	// }
 	/* Sea monsters */
 	if (levl[x][y].typ == POOL){
+		if(!rn2(85-depth(&u.uz))) {
+			if (depth(&u.uz) > 19 && !rn2(3)) {monster = PM_ELECTRIC_EEL;}
+				else if (depth(&u.uz) > 15 && !rn2(3)) {monster = PM_GIANT_EEL;}
+				else if (depth(&u.uz) > 11 && !rn2(2)) {monster = PM_SHARK;}
+				else if (depth(&u.uz) > 7 && rn2(4)) {monster = PM_PIRANHA;}
+			(void) makemon(&mons[monster], x, y, NO_MM_FLAGS);
+		}
+		if(!rn2(140-depth(&u.uz))){
+			mkobj_at(RANDOM_CLASS, x, y, FALSE);
+		}
+		else if(!rn2(100-depth(&u.uz))){
+		  (void) mkgold((long) rn1(10 * level_difficulty(),10), x, y);
+		}
+	}
+	levl[x][y].lit = 1;
+}
+
+STATIC_OVL void
+chaliquify(x, y, edge)
+register int x, y;
+register int edge; /* Allows room walls to intrude slightly into river. */
+{
+	register int typ = levl[x][y].typ;
+	register int monster = PM_JELLYFISH;
+	/* Don't liquify shop walls */
+	if (level.flags.has_shop && *in_rooms(x, y, SHOPBASE)) {return;}
+	
+	/* Don't liquify other level features */
+	if(typ != TREE && typ != GRASS && typ != SOIL && typ != SAND)
+		return;
+	
+	if (typ!=TREE || (!edge && rn2(6))){
+		if(m_at(x, y))
+			rloc(m_at(x, y), FALSE);
+		levl[x][y].typ = MOAT;
+	}
+	// else if ((typ == SCORR || typ == CORR || IS_DOOR(typ)
+					// || typ == SDOOR) && !IS_WALL(typ)) {
+			// levl[x][y].typ = ROOM;
+	// }
+	/* Sea monsters */
+	if (levl[x][y].typ == MOAT){
 		if(!rn2(85-depth(&u.uz))) {
 			if (depth(&u.uz) > 19 && !rn2(3)) {monster = PM_ELECTRIC_EEL;}
 				else if (depth(&u.uz) > 15 && !rn2(3)) {monster = PM_GIANT_EEL;}

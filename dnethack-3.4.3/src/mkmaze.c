@@ -522,6 +522,20 @@ fixup_special()
 			}
 		}
 	}
+	/* CHAOS QUEST 3: various features */
+	if (In_mordor_quest(&u.uz)){
+		if(In_mordor_forest(&u.uz))
+			place_chaos_forest_features();
+		if(In_mordor_fields(&u.uz)){
+			for (x = COLNO/2; x<COLNO; x++){
+				for (y = 0; y<ROWNO; y++){
+					if (levl[x][y].typ == TREE &&
+						(x > COLNO/2 || rn2(2))
+					) levl[x][y].typ = GRASS;
+				}
+			}
+		}
+	}
 	/* NEUTRAL QUEST: various features */
 	if (In_outlands(&u.uz)){
 		if (!(u.uz.dlevel == spire_level.dlevel || Is_gatetown(&u.uz) || Is_sumall(&u.uz)))
