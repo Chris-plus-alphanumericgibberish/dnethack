@@ -583,6 +583,25 @@ find_iring()
     return -1;	/* not 0, or caller would try again each move */
 }
 
+/* find the object index for a non-hunger iron ring */
+int
+find_good_iring()
+{
+    register const char *s;
+    register int i = find_iring();
+	
+	if(i != RIN_HUNGER)
+		return i;
+	
+    for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
+		if ((s = OBJ_DESCR(objects[i])) != 0 && (
+			!strcmp(s, "twisted")
+		)) return i;
+
+    impossible("twisted ring not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
 /* find the object index for visored helmet */
 int
 find_vhelm()

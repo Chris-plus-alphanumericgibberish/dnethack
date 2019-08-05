@@ -1680,6 +1680,7 @@ E int NDECL(find_riwant);
 E int NDECL(find_gcirclet);
 E int NDECL(find_sring);
 E int NDECL(find_iring);
+E int NDECL(find_good_iring);
 E int NDECL(find_vhelm);
 E int NDECL(find_skates);
 E int NDECL(find_cboots);
@@ -2052,6 +2053,8 @@ E void FDECL(qt_pager, (int));
 E struct permonst *NDECL(qt_montype);
 E struct permonst *NDECL(chaos_montype);
 E struct permonst *NDECL(chaos2_montype);
+E struct permonst *NDECL(chaos3_montype);
+E struct permonst *FDECL(ford_montype, (int));
 E struct permonst *NDECL(neutral_montype);
 E struct permonst *NDECL(law_montype);
 

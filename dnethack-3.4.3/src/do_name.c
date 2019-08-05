@@ -553,6 +553,10 @@ const char *name;
 			name = "The Mantle of Heaven";
 		}
 	}
+	else if(!strcmp((&artilist[ART_SHARD_FROM_MORGOTH_S_CROWN])->name,name) &&
+	   obj && obj->otyp != find_good_iring()){
+		obj = poly_obj(obj,find_good_iring());
+	}
 	else if(!strcmp((&artilist[ART_SILVER_KEY])->name,name) &&
 	   obj && obj->otyp == UNIVERSAL_KEY && Role_if(PM_EXILE)){
 		obj = poly_obj(obj,MIRROR);

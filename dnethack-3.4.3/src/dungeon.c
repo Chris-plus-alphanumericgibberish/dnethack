@@ -12,9 +12,9 @@
 //define DUNGEON_FILE	"dungeon"
 
 const char *DUNGEON_FILES[] = {
-	"dngnch1", //Temple of Chaos (FF1)
-	"dngnch2", //Aquallor->Mithardir (D&D)
-	"dngnch3"  //Mordor
+	"dngnch1", //Temple of Chaos (FF1) TEMPLE_OF_CHAOS
+	"dngnch2", //Aquallor->Mithardir (D&D) MITHARDIR
+	"dngnch3"  //sorta-Mordor (LotR) MORDOR
 };
 
 #define X_START		"x-strt"

@@ -816,6 +816,222 @@ chaos2_montype()
 }
 
 struct permonst *
+chaos3_montype()
+{
+	if(In_mordor_forest(&u.uz)){
+		switch(rn2(20)){
+			case 0:
+			case 1:
+			case 2:
+			case 3: return &mons[PM_WOODLAND_ELF];
+			case 4:
+			case 5:
+			case 6: return &mons[PM_GREEN_ELF];
+			case 7:
+			case 8:
+			case 9: return &mons[PM_GREY_ELF];
+			case 10: return &mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY];
+			case 11: return &mons[PM_COURE_ELADRIN];
+			case 12: return &mons[PM_NOVIERE_ELADRIN];
+			case 13: return &mons[PM_QUICKLING];
+			case 14: return &mons[PM_DRYAD];
+			case 15: return &mons[PM_LEOCROTTA];
+			case 16: return &mons[PM_BLACK_UNICORN];
+			case 17: return &mons[rn2(2) ? PM_GRAY_UNICORN : PM_WHITE_UNICORN];
+			case 18: return &mons[PM_BLACK_UNICORN];
+			case 19: return &mons[PM_DREAM_QUASIELEMENTAL];
+		}
+	} else if(Is_ford_level(&u.uz)){
+		return ford_montype(0);
+	} else if(In_mordor_fields(&u.uz)){
+		switch(rn2(8)){
+			case 0: return &mons[PM_ROTHE];
+			case 1: return &mons[PM_MUMAK_CALF];
+			case 2: return &mons[PM_MUMAK];
+			case 3: return &mons[PM_PONY];
+			case 4: return &mons[PM_HORSE];
+			case 5: return &mons[PM_WARHORSE];
+			case 6: return &mons[PM_FOG_CLOUD];
+			case 7: return &mons[PM_BARROW_WIGHT];
+		}
+	} else if(In_mordor_buildings(&u.uz)){
+		switch(rn2(20)){
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5: return &mons[PM_MORDOR_ORC];
+			case 6:
+			case 7:
+			case 8: return &mons[PM_ORC_SHAMAN];
+			case 9:
+			case 10: return &mons[PM_ORC_CAPTAIN];
+			case 11: return &mons[PM_QUASIT];
+			case 12:
+			case 13: return &mons[PM_OGRE];
+			case 14: return &mons[PM_OGRE_LORD];
+			case 15: return &mons[PM_MUMAK_CALF];
+			case 16: return &mons[PM_MUMAK];
+			case 17:
+			case 18: return &mons[PM_MORDOR_ORC_ELITE];
+			case 19: return &mons[rn2(2) ? PM_SHADE : PM_NAZGUL];
+		}
+	} else if(Is_spider_cave(&u.uz)){
+		switch(rn2(9)){
+			case 0: 
+			case 1: 
+			case 2: 
+			case 3: return &mons[PM_CAVE_SPIDER];
+			case 4: 
+			case 5: 
+			case 6: return &mons[PM_GIANT_SPIDER];
+			case 7: return &mons[PM_MIRKWOOD_SPIDER];
+			case 8: return mkclass(S_SPIDER, G_NOHELL|G_HELL);
+		}
+	} else if(
+		on_level(&u.uz, &modor_depths_1_level)
+		|| on_level(&u.uz, &modor_depths_2_level)
+	){
+		switch(rn2(on_level(&u.uz, &modor_depths_2_level) ? 30 : 20)){
+			case 1:
+			case 2:
+			case 3:
+			case 4:
+			case 5: return &mons[PM_MORDOR_ORC];
+			case 6:
+			case 7:
+			case 8: return &mons[PM_ORC_SHAMAN];
+			case 9:
+			case 10: return &mons[PM_ORC_CAPTAIN];
+			case 11: return &mons[PM_QUASIT];
+			case 12:
+			case 13: return &mons[PM_OGRE];
+			case 14: return &mons[PM_OGRE_LORD];
+			case 15: return &mons[PM_MUMAK_CALF];
+			case 16: return &mons[PM_MUMAK];
+			case 17:
+			case 18:
+			case 19: return &mons[PM_MORDOR_ORC_ELITE];
+			case 20:
+			case 21:
+			case 22:
+			case 23: return &mons[PM_FLAMING_SPHERE];
+			case 24:
+			case 25: return &mons[PM_FIRE_VORTEX];
+			case 26:
+			case 27: return &mons[PM_FIRE_ELEMENTAL];
+			case 28:
+			case 29: return &mons[PM_MORDOR_SHAMAN];
+		}
+	} else if(on_level(&u.uz, &modor_depths_3_level)){
+		switch(rn2(20)){
+			case 0:
+			case 1:
+			case 2: return &mons[PM_MORDOR_ORC];
+			case 3: return &mons[PM_ORC_SHAMAN];
+			case 4:
+			case 5: return &mons[PM_ORC_CAPTAIN];
+			case 6: return &mons[PM_QUASIT];
+			case 7:
+			case 8:
+			case 9:
+			case 10: return &mons[PM_MORDOR_ORC_ELITE];
+			case 11:
+			case 12:
+			case 13: return &mons[PM_FLAMING_SPHERE];
+			case 14:
+			case 15: return &mons[PM_FIRE_VORTEX];
+			case 16:
+			case 17: return &mons[PM_FIRE_ELEMENTAL];
+			case 18:
+			case 19: return &mons[PM_MORDOR_SHAMAN];
+		}
+	} else if(on_level(&u.uz, &borehole_1_level)){
+		switch(rn2(4)){
+			case 0:
+			case 1:
+			case 2: return &mons[PM_MORDOR_ORC];
+			case 3: return &mons[PM_MORDOR_ORC_ELITE];
+		}
+	} else if(on_level(&u.uz, &borehole_2_level)){
+		switch(rn2(6)){
+			case 0:
+			case 1:
+			case 2: return &mons[PM_MORDOR_ORC];
+			case 3:
+			case 4: return &mons[PM_MORDOR_ORC_ELITE];
+			case 5: return &mons[PM_ANGBAND_ORC];
+		}
+	} else if(on_level(&u.uz, &borehole_3_level)){
+		switch(rn2(10)){
+			case 0:
+			case 1:
+			case 2:
+			case 3: return &mons[PM_MORDOR_ORC];
+			case 4:
+			case 5:
+			case 6: return &mons[PM_MORDOR_ORC_ELITE];
+			case 7:
+			case 8: return &mons[PM_ANGBAND_ORC];
+			case 9: return &mons[PM_INVIDIAK];
+		}
+	}
+	return (struct permonst *)0;
+}
+
+
+struct permonst *
+ford_montype(leftright)
+int leftright;
+{
+	if(!leftright)
+		leftright = rn2(2) ? 1 : -1;
+	
+	if(leftright < 0){
+		switch(rn2(20)){
+			case 0:
+			case 1:
+			case 2:
+			case 3: return &mons[PM_WOODLAND_ELF];
+			case 4:
+			case 5:
+			case 6: return &mons[PM_GREEN_ELF];
+			case 7:
+			case 8:
+			case 9: return &mons[PM_GREY_ELF];
+			case 10: return &mons[rn2(2) ? PM_ELF_LORD : PM_ELF_LADY];
+			case 11: return &mons[PM_COURE_ELADRIN];
+			case 12: return &mons[PM_NOVIERE_ELADRIN];
+			case 13: return &mons[PM_QUICKLING];
+			case 14: return &mons[PM_DRYAD];
+			case 15: return &mons[PM_LEOCROTTA];
+			case 16: return &mons[PM_BLACK_UNICORN];
+			case 17: return &mons[rn2(2) ? PM_GRAY_UNICORN : PM_WHITE_UNICORN];
+			case 18: return &mons[PM_BLACK_UNICORN];
+			case 19: return &mons[PM_DREAM_QUASIELEMENTAL];
+		}
+	} else {
+		switch(rn2(15)){
+			case 0:
+			case 1:
+			case 2: return &mons[PM_HILL_ORC];
+			case 3:
+			case 4:
+			case 5: return &mons[PM_MORDOR_ORC];
+			case 6:
+			case 7:
+			case 8: return &mons[PM_URUK_HAI];
+			case 9:
+			case 10:
+			case 11: return &mons[PM_ORC_SHAMAN];
+			case 12: return &mons[PM_ORC_CAPTAIN];
+			case 13: return &mons[PM_URUK_CAPTAIN];
+			case 14: return &mons[PM_QUASIT];
+		}
+	}
+}
+
+struct permonst *
 neutral_montype()
 {
 	if(u.uz.dnum == neutral_dnum && u.uz.dlevel < sum_of_all_level.dlevel){

@@ -1674,6 +1674,7 @@ LADDER:(07,12),up
 ALTAR:(07,07),noalign,altar
 
 MONSTER: '&', "Lungorthin", (07,07)
+OBJECT: '=',"adornment",(07,07),cursed, 4,"The Shard from Morgoth's Crown"
 
 #PORTAL:(00,00,25,20),(00,00,00,00),"frst2"
 #PORTAL:(50,00,75,20),(00,00,00,00),"ford"

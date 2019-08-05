@@ -815,6 +815,13 @@ A("The Mantle of Wrath",	ORCISH_CLOAK, 				0,			0,
 	0,	A_CHAOTIC,	 NON_PM, PM_ORC, 2500L,
 	0,0,WSFX_PLUSSEV),
 
+A("The Shard from Morgoth's Crown",	RIN_ADORNMENT, 				0,			0,/*Actually an iron ring (or twisted, if iron is hunger)*/ /*Needs encyc entry*/
+	(SPFX_NOGEN|SPFX_RESTR), 0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	NO_ATTK,	DFNS(AD_ELEC),	CARY(AD_MAGM),
+	0, A_CHAOTIC, NON_PM, NON_PM, 4000L,
+	0,0,0),
+
 /*/Artifact Keys.  Must be grouped together.  Some code in lock.c, artifact.h, and invent.c depends on the order./*/
 
 A("The First Key of Law", SKELETON_KEY, 	0,			0,/*must be first*/

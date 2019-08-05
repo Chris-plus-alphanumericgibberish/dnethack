@@ -390,7 +390,7 @@ register int x, y, typ;
 	if (ttmp->ttyp == HOLE) ttmp->tseen = 1;  /* You can't hide a hole */
 	else if (ttmp->ttyp == MAGIC_PORTAL && (
 		In_neu(&u.uz) 
-		|| In_mordor_quest(&u.uz)
+		|| In_mordor_forest(&u.uz)
 		|| Is_ford_level(&u.uz)
 		|| In_mordor_fields(&u.uz)
 		|| In_mordor_buildings(&u.uz)
