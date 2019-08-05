@@ -498,10 +498,7 @@ use_stethoscope(obj)
 	}
 	if (!getdir((char *)0)) return 0;
 
-	res = (moves == u.last_used_move) &&
-	      (youmonst.movement == u.last_used_movement);
-	u.last_used_move = moves;
-	u.last_used_movement = youmonst.movement;
+	res = partial_action();
 
 #ifdef STEED
 	if (u.usteed && u.dz > 0) {
@@ -6138,6 +6135,17 @@ unfixable_trouble_count(is_horn)
 	    if (HStun) unfixable_trbl++;
 	}
 	return unfixable_trbl;
+}
+
+//Returns 0 if this is the first time its called this round, 1 otherwise.
+int
+partial_action()
+{
+	int res = (moves == u.last_used_move) &&
+	      (youmonst.movement == u.last_used_movement);
+	u.last_used_move = moves;
+	u.last_used_movement = youmonst.movement;
+	return res;
 }
 
 #endif /* OVLB */

@@ -550,13 +550,7 @@ int
 read_tile(scroll)
 struct obj *scroll;
 {
-	int res;
 	int duration;
-	//Speak one word of power per move free.
-	res = (moves == u.last_used_move) &&
-	      (youmonst.movement == u.last_used_movement);
-	u.last_used_move = moves;
-	u.last_used_movement = youmonst.movement;
 	
 	if(!scroll->dknown){
 		You("have never seen it!");
@@ -656,7 +650,9 @@ struct obj *scroll;
 		if(!scroll->cursed) u.uvaul++;
 	}
 	useup(scroll);
-	return res;
+	
+	//Speak one word of power per move free.
+	return partial_action();
 }
 
 static int delay = 0;

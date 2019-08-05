@@ -4041,11 +4041,7 @@ int spell;
 	{
 	int res;
 	//Speak one word of power per move free.
-	res = (moves == u.last_used_move) &&
-	      (youmonst.movement == u.last_used_movement);
-	u.last_used_move = moves;
-	u.last_used_movement = youmonst.movement;
-	return res;
+	return partial_action();
 	}
 }
 int

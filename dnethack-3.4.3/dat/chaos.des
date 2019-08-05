@@ -294,6 +294,19 @@ BRANCH:(35,19,35,19),(0,0,0,0)
 ALTAR:(35,09),noalign,altar
 MONSTER:'@',"Sir Garland", (35, 11)
 
+OBJECT:'`',"statue",(36, 11),cursed,"Sir Garland",0
+OBJECT:'`',"statue",(37, 12),cursed,"Kary, the Fiend of Fire",0
+OBJECT:'(',"crystal ball",(37, 12),uncursed,0,"The Fire Crystal"
+OBJECT:'`',"statue",(34, 11),cursed,"Sir Garland",0
+OBJECT:'`',"statue",(33, 12),cursed,"Lich, the Fiend of Earth",0
+OBJECT:'(',"crystal ball",(33, 12),uncursed,0,"The Earth Crystal"
+OBJECT:'`',"statue",(34,  9),cursed,"Sir Garland",0
+OBJECT:'`',"statue",(33,  8),cursed,"Kraken, the Fiend of Water",0
+OBJECT:'(',"crystal ball",(33,  8),uncursed,0,"The Water Crystal"
+OBJECT:'`',"statue",(36,  9),cursed,"Sir Garland",0
+OBJECT:'`',"statue",(37,  8),cursed,"Tiamat, the Fiend of Wind",0
+OBJECT:'(',"crystal ball",(37,  8),uncursed,0,"The Air Crystal"
+
 REGION:(30,08,40,12),  lit,"ordinary"
 
 REGION:(00,00,16,20),  lit,"ordinary",unfilled
@@ -1067,17 +1080,13 @@ OBJECT:'(',"crystal ball",(35,09),cursed,0,"The Black Crystal"
 MONSTER:'@',"Garland", (35, 11)
 
 OBJECT:'`',"statue",(36, 11),cursed,"Sir Garland",0
-CONTAINER:'`',"statue",(37, 12),cursed,"Kary, the Fiend of Fire",0
-OBJECT:'(',"crystal ball",contained,uncursed,0,"The Fire Crystal"
+OBJECT:'`',"statue",(37, 12),cursed,"Kary, the Fiend of Fire",0
 OBJECT:'`',"statue",(34, 11),cursed,"Sir Garland",0
-CONTAINER:'`',"statue",(33, 12),cursed,"Lich, the Fiend of Earth",0
-OBJECT:'(',"crystal ball",contained,uncursed,0,"The Earth Crystal"
+OBJECT:'`',"statue",(33, 12),cursed,"Lich, the Fiend of Earth",0
 OBJECT:'`',"statue",(34,  9),cursed,"Sir Garland",0
-CONTAINER:'`',"statue",(33,  8),cursed,"Kraken, the Fiend of Water",0
-OBJECT:'(',"crystal ball",contained,uncursed,0,"The Water Crystal"
+OBJECT:'`',"statue",(33,  8),cursed,"Kraken, the Fiend of Water",0
 OBJECT:'`',"statue",(36,  9),cursed,"Sir Garland",0
-CONTAINER:'`',"statue",(37,  8),cursed,"Tiamat, the Fiend of Wind",0
-OBJECT:'(',"crystal ball",contained,uncursed,0,"The Air Crystal"
+OBJECT:'`',"statue",(37,  8),cursed,"Tiamat, the Fiend of Wind",0
 
 NON_DIGGABLE:(00,00,75,20)
 

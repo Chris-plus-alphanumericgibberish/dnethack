@@ -4869,17 +4869,17 @@ arti_invoke(obj)
 	    /* the artifact is tired :-) */
 		if(obj->oartifact == ART_FIELD_MARSHAL_S_BATON){
 			You_hear("the sounds of hurried preparation.");
-			return 1;
+			return partial_action();
 		}
 		if(oart->inv_prop == VOID_CHIME) {
 	    pline("%s makes no sound.", The(xname(obj)));
-			return 1;
+			return partial_action();
 		}
 	    You_feel("that %s %s ignoring you.",
 		     the(xname(obj)), otense(obj, "are"));
 	    /* and just got more so; patience is essential... */
 		obj->age += Role_if(PM_PRIEST) ? (long) d(1,20) : (long) d(3,10);
-	    return 1;
+	    return partial_action();
 	}
 	if( /* some properties can be used as often as desired, or track cooldowns in a different way */
 		oart->inv_prop != FIRE_SHIKAI &&
@@ -7510,7 +7510,7 @@ arti_invoke(obj)
 		     the(xname(obj)), otense(obj, "are"));
 	    /* can't just keep repeatedly trying */
 	    obj->age += (long) d(3,10);
-	    return 1;
+	    return partial_action();
 	} else if(!on) {
 	    /* when turning off property, determine downtime */
 	    /* arbitrary for now until we can tune this -dlc */

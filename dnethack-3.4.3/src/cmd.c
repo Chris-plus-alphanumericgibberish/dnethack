@@ -156,7 +156,6 @@ STATIC_PTR int NDECL(doconduct); /**/
 STATIC_PTR boolean NDECL(minimal_enlightenment);
 STATIC_PTR void NDECL(resistances_enlightenment);
 STATIC_PTR void NDECL(signs_enlightenment);
-STATIC_PTR void NDECL(udr_enlightenment);
 
 #ifdef OVLB
 STATIC_DCL void FDECL(enlght_line, (const char *,const char *,const char *));
