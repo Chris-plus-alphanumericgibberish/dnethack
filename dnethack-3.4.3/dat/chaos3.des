@@ -105,6 +105,9 @@ NOMAP
 BRANCH:(00,00,30,10),(0,0,0,0)
 PORTAL:(35,10,55,20),(00,00,00,00),"frst2"
 
+OBJECT: '=', random, random
+OBJECT[80%]: '=', random, random
+
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
@@ -117,6 +120,18 @@ MONSTER[75%]: '@', "Grey-elf", random
 MONSTER[75%]: '@', "Grey-elf", random
 MONSTER[75%]: '@', "Grey-elf", random
 
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+
+MONSTER[5%]: 'W', "Nazgul", random
+MONSTER: 'W', "wraith", random
+
+CONTAINER: '(', "chest"  , (31,08)
+OBJECT:'!',"healing", contained
+OBJECT:'[',"elven helm", contained
+OBJECT[20%]:'(',"skeleton key", contained
+OBJECT:'?',random, contained
 
 MAZE: "frst2",' '
 FLAGS: shortsighted,hardfloor
@@ -127,17 +142,33 @@ NOMAP
 PORTAL:(00,00,30,10),(00,00,00,00),"frst1"
 PORTAL:(35,10,55,20),(00,00,00,00),"frst3"
 
-MONSTER[75%]: '@', "Green-elf", random
-MONSTER[75%]: '@', "Green-elf", random
-MONSTER[75%]: '@', "Green-elf", random
+OBJECT: '=', random, random
+OBJECT[80%]: '=', random, random
 
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
 
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
 MONSTER[75%]: '@', "Grey-elf", random
 MONSTER[75%]: '@', "Grey-elf", random
 MONSTER[75%]: '@', "Grey-elf", random
+
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+
+MONSTER[5%]: 'W', "Nazgul", random
+MONSTER: 'W', "wraith", random
+
+CONTAINER: '(', "chest", random
+OBJECT:'!',random, contained
+OBJECT:'[',random, contained
+OBJECT[20%]:'(',"skeleton key", contained
+OBJECT:'?',random, contained
 
 MAZE: "frst3",' '
 FLAGS: shortsighted,hardfloor
@@ -148,26 +179,51 @@ NOMAP
 PORTAL:(00,00,30,10),(00,00,00,00),"frst2"
 PORTAL:(35,10,55,20),(00,00,00,00),"ford"
 
-MONSTER[75%]: '@', "Green-elf", random
-MONSTER[75%]: '@', "Green-elf", random
-MONSTER[75%]: '@', "Green-elf", random
+OBJECT: '=', random, random
+OBJECT[80%]: '=', random, random
 
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
 
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
 MONSTER[75%]: '@', "Grey-elf", random
 MONSTER[75%]: '@', "Grey-elf", random
 MONSTER[75%]: '@', "Grey-elf", random
+
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+
+MONSTER[5%]: 'W', "Nazgul", random
+MONSTER: 'W', "wraith", random
+
+CONTAINER: '(', "chest", random
+OBJECT:'!',random, contained
+OBJECT:'[',random, contained
+OBJECT:'+',random, contained
+OBJECT:'?',random, contained
 
 MAZE: "ford",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 INIT_MAP: 'e' , 'T' , true, true, lit , true
 
 NOMAP
 
-PORTAL:(00,00,37,10),(00,00,00,00),"frst3"
+PORTAL:(00,00,27,20),(00,00,00,00),"frst3"
 PORTAL:(65,00,75,20),(00,00,00,00),"frst4"
+
+OBJECT: '=', random, random
+OBJECT[80%]: '=', random, random
+
+CONTAINER: '(', "chest", random
+OBJECT:'!',"extra healing", contained
+OBJECT:'[',random, contained
+OBJECT:'/',random, contained
+OBJECT:'?',"taming", contained
 
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
@@ -205,11 +261,11 @@ MAP
 0Teeeee}}}}}}}-------eee
 1eeeew}}}}}}}}}}}ww+eeee
 2eewwww}}}}}}}}}www+eeee
-3e}}wwwwweeeeeewww}----e
-4}}}}wwweeeeeeeee}}}}}|e
-5}}}}}}eeeeeeeeee}}}}}|e
-6}}}}}}weeeeeeee}}}}}}|e
-7e}}}}wwweeeeee}}}}}}}|e
+3e}}wwwwwe eeeewww}----e
+4}}}}www eeeeeeee}}}}}|e
+5}}}}}} eeeeeeee }}}}}|e
+6}}}}}}w eeeeee }}}}}}|e
+7e}}}}wwwe eeee}}}}}}}|e
 8ee}}www}}}}}}}}}}}}--|e
 9eeeeew}}}}}}}}}}}---eee
 0eeeeee}}}}}}}-----eeeee
@@ -217,34 +273,231 @@ ENDMAP
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
 #0         1         2   	   3	     4	       5		 6	       7
 
+ALTAR:(10,05),law,altar
+MONSTER: '\'', "ford guardian", (10,05), hostile
+
+MONSTER[75%]: '@', "Green-elf", (02,10)
+MONSTER[75%]: '@', "Green-elf", (02,10)
+MONSTER[75%]: '@', "Green-elf", (02,10)
+
+MONSTER[75%]: '@', "Grey-elf", (02,10)
+MONSTER[75%]: '@', "Grey-elf", (02,10)
+MONSTER[75%]: '@', "Grey-elf", (02,10)
+
+MONSTER[25%]: 'A', "Ghaele Eladrin", (02,10)
+MONSTER[75%]: '@', "elf-lord", (02,10)
+MONSTER[75%]: '@', "elf-lady", (02,10)
+
+MONSTER: '@', "Grey-elf", (22,00)
+MONSTER: 'o', "Mordor orc", (22,00)
+MONSTER: 'o', "Mordor orc", (22,00)
+MONSTER: 'o', "Mordor orc", (22,00)
+MONSTER: 'o', "Mordor orc", (22,00)
+
+MONSTER: 'o', "orc-captain", (22,00)
+MONSTER: 'o', "orc shaman", (22,00)
+
 DOOR:locked,(18,01)
 DOOR:locked,(18,02)
 
 MAZE: "frst4",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 INIT_MAP: ',' , 'T' , true, true, lit , true
 
 NOMAP
 
+OBJECT:'=',"protection", random, blessed, +3
+OBJECT:'=',"invisibility", random
+OBJECT:'=',"aggravate monster", random, cursed, +0
+OBJECT[20%]: '=', random, random
+OBJECT[20%]: '=', random, random
+OBJECT[20%]: '=', random, random
+
+
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+
+OBJECT:')',"elven spear", random
+OBJECT:')',"elven spear", random
+OBJECT:')',"elven spear", random
+
+OBJECT:')',"elven dagger", random
+OBJECT:')',"elven short sword", random
+OBJECT:')',"elven broadsword", random
+
+OBJECT:'[',"elven helm", random
+OBJECT:'[',"elven helm", random
+OBJECT:'[',"elven helm", random
+
+OBJECT:')',"orcish arrow", random
+OBJECT:')',"orcish arrow", random
+OBJECT:')',"orcish arrow", random
+OBJECT:')',"orcish arrow", random
+OBJECT:')',"orcish arrow", random
+OBJECT:')',"orcish arrow", random
+
+OBJECT:')',"scimitar", random
+OBJECT:')',"scimitar", random
+OBJECT:')',"scimitar", random
+
+OBJECT:'[',"orcish chain mail", random
+OBJECT:'[',"orcish chain mail", random
+OBJECT:'[',"orcish chain mail", random
+
+OBJECT:'[',"orcish ring mail", random
+OBJECT:'[',"orcish ring mail", random
+OBJECT:'[',"orcish ring mail", random
+
 PORTAL:(00,00,25,20),(00,00,00,00),"ford"
 PORTAL:(70,00,75,20),(00,00,00,00),"mord1"
 
+GEOMETRY:right,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+T,,,,,,,T
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+
+MONSTER: '@', "Elvenqueen", (01,10)
+MONSTER: '@', "elf-lord", (01,10)
+MONSTER: '@', "elf-lady", (01,10)
+
+MONSTER: 'A', "Firre Eladrin", (01,08)
+MONSTER: 'A', "Firre Eladrin", (01,12)
+
+MONSTER: '@', "Grey-elf", (01,08)
+MONSTER: '@', "Grey-elf", (01,10)
+MONSTER: '@', "Grey-elf", (01,12)
+
+MONSTER: '@', "Grey-elf", (01,13)
+MONSTER: '@', "Grey-elf", (01,13)
+MONSTER: '@', "Grey-elf", (01,13)
+
+MONSTER: '@', "Grey-elf", (01,07)
+MONSTER: '@', "Grey-elf", (01,07)
+MONSTER: '@', "Grey-elf", (01,07)
+
+MONSTER: '@', "Grey-elf", (01,15)
+MONSTER: '@', "Grey-elf", (01,15)
+MONSTER: '@', "Grey-elf", (01,15)
+
+MONSTER: '@', "Grey-elf", (01,05)
+MONSTER: '@', "Grey-elf", (01,05)
+MONSTER: '@', "Grey-elf", (01,05)
+
+MONSTER: '@', "Grey-elf", (01,17)
+MONSTER: '@', "Grey-elf", (01,17)
+MONSTER: '@', "Grey-elf", (01,17)
+
+MONSTER: '@', "Grey-elf", (01,03)
+MONSTER: '@', "Grey-elf", (01,03)
+MONSTER: '@', "Grey-elf", (01,03)
+
+MONSTER: 'W', "Nazgul", random
+MONSTER: 'W', "wraith", random
+MONSTER: 'W', "wraith", random
+MONSTER: 'W', "wraith", random
+
+MONSTER[75%]: 'O', "ogre lord", random
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+
+MONSTER[75%]: 'O', "ogre lord", random
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+
+MONSTER[75%]: 'o', "orc-captain", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+
+MONSTER[75%]: 'o', "orc-captain", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+
+MONSTER[75%]: 'o', "orc-captain", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+
+MONSTER[75%]: 'o', "orc-captain", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+
+MONSTER[75%]: 'o', "orc-captain", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+
 
 MAZE: "mord1",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
 0               -------------------------------------------------------------
-1               |.....|..|.|.........................................|...|   
-2               |.....|..|.---------------S----------S----------------...|   
-3   ##          |.....+..+.|......|......|.............|......|......|...|   
-4  ####        -|.....|--|.|......+......+.............+......+......|...|---
-5   ##         .|.....|..|.|......|......|.............|......|......|...|...
-6    #         .-------..|.|----S-|--S---|S----------S-|---S--|------|...|...
-7   ##       ............|...............................................|...
-8.  HH      .............----S------++--S----------S----------S-----------...
+1               |     |  | |                                         |   |   
+2               |     |  | ---------------S----------S----------------   |   
+3               |     S  S |      |      |             |      |      |   |   
+4              -|     |--| |      S      S             S      S      |   |---
+5               |     |  | |      |      |             |      |      |   |   
+6               -------  | |----S-|------|-------------|---S--|------|   |   
+7                        |                                               |   
+8   HH                   ----------------------SS-------------------------   
 9............................................................................
 0............................................................................
 1............................................................................
@@ -260,50 +513,352 @@ ENDMAP
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
 #0         1         2   	   3	     4	       5		 6	       7
 
+
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+OBJECT:')',"elven arrow", random
+
+OBJECT:')',"elven spear", random
+OBJECT:')',"elven spear", random
+OBJECT:')',"elven spear", random
+
+OBJECT:')',"elven dagger", random
+OBJECT:')',"elven short sword", random
+OBJECT:')',"elven broadsword", random
+
+OBJECT:'[',"elven helm", random
+OBJECT:'[',"elven helm", random
+OBJECT:'[',"elven helm", random
+
+OBJECT:'[',"elven cloak", random
+OBJECT:'[',"elven cloak", random
+OBJECT:'[',"elven cloak", random
+
+OBJECT:'[',"elven boots", random
+OBJECT:'[',"elven boots", random
+OBJECT:'[',"elven boots", random
+
+OBJECT[50%]:'[',"elven mithril-coat", random
+OBJECT[50%]:'[',"high-elven helm", random
+OBJECT[50%]:'[',"high-elven gauntlets", random
+OBJECT[50%]:'[',"high-elven plate", random
+
+MONSTER: 'o', "orc shaman", random
+
+MONSTER: 'o', "hill orc", random
+MONSTER: 'o', "hill orc", random
+MONSTER: 'o', "hill orc", random
+MONSTER: 'o', "hill orc", random
+MONSTER: 'o', "hill orc", random
+MONSTER: 'o', "hill orc", random
+MONSTER: 'o', "hill orc", random
+
+MONSTER: 's', "giant spider", random
+MONSTER: 's', "giant spider", random
+MONSTER: 's', "giant spider", random
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0               -------------------------------------------------------------
+1               |.....|..|.|.........................................|...|   
+2               |.....|..|.---------------S----------S----------------...|   
+3               |.....+..+.|......|......|.............|......|......|...|   
+4              -|.....|--|.|......+......+.............+......+......|...|---
+5               |.....|  |.|......|......|.............|......|......|...|   
+6               -------  |.|----S-|------|-------------|---S--|------|...|   
+7                        |...............................................|   
+8   HH                   ----------------------++-------------------------   
+9                                                                            
+0                                                                            
+1                                                                            
+2                                                                            
+3                                                                            
+4                                                                            
+5                                                                            
+6                                                                            
+7                                                                            
+8                                                                            
+9                                                                            
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+MONSTER: 'W', "Nazgul", (47,04)
+MONSTER: 'W', "wraith", (47,04)
+MONSTER: 'o', "Mordor marshal", (47,04)
+MONSTER: 'o', "Mordor orc elite", (47,04)
+MONSTER: 'o', "Mordor orc elite", (47,04)
+MONSTER: 'o', "Mordor orc elite", (47,04)
+MONSTER: 'o', "Mordor shaman", (47,04)
+
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+
+MONSTER: 'W', "Nazgul", random
+MONSTER: 'o', "orc-captain", random
+MONSTER: 'o', "orc-captain", random
+MONSTER: 'o', "orc-captain", random
+MONSTER: 'o', "orc shaman", random
+MONSTER: 'o', "orc shaman", random
+MONSTER: 'o', "orc shaman", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0               -------------------------------------------------------------
+1               |.....|..|.|.........................................|...|   
+2               |.....|..|.---------------S----------S----------------...|   
+3   ##          |.....+..+.|......|......|.............|......|......|...|   
+4  ####        -|.....|--|.|......+......+.............+......+......|...|---
+5   ##         .|.....|..|.|......|......|.............|......|......|...|...
+6    #         .-------..|.|----S-|------|-------------|---S--|------|...|...
+7   ##       ............|...............................................|...
+8.  HH      .............----------------------++-------------------------...
+9............................................................................
+0............................................................................
+1............................................................................
+2............................................................................
+3............................................................................
+4............................................................................
+5............................................................................
+6............................................................................
+7............................................................................
+8............................................................................
+9............................................................................
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+NON_DIGGABLE:(00,00,75,19)
+
 PORTAL:(03,04,03,04),(00,00,00,00),"spi1"
 STAIR:(46,01),down
 
 PORTAL:(00,15,75,19),(00,00,00,00),"frst4"
 
 # Doors
+DOOR:locked,(21,03)
+DOOR:locked,(24,03)
+
 DOOR:locked,(31,06)
-DOOR:locked,(36,06)
-DOOR:locked,(41,06)
-DOOR:locked,(52,06)
 DOOR:locked,(58,06)
-DOOR:locked,(28,08)
-DOOR:locked,(39,08)
-DOOR:locked,(50,08)
-DOOR:locked,(61,08)
+
 DOOR:closed,(33,04)
 DOOR:closed,(40,04)
 DOOR:closed,(54,04)
 DOOR:closed,(61,04)
-DOOR:locked,(35,08)
-DOOR:locked,(36,08)
-DOOR:locked,(21,03)
-DOOR:locked,(24,03)
+
+DOOR:locked,(46,08)
+DOOR:locked,(47,08)
+
 
 MAZE: "mord2",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-0---------------------------------.------------------------------------------
+0----------------------------------------------------------------------------
+1|. . .| ||          |    |.     | |.       .|       S            ---. . . .|
+2|.    |  S          S    ---    S |.  -S----- ----- |            S S      .|
+3|. .  S ||        ---      |.   | |...|     | |...| ---     ------ --------|
+4|-----| -------|  |        ------ -----     | --  |   -------              |
+5|. . .|        ------S------          S     |  --S---         ------ ----- |
+6|     | ------               -----    -------- |    -----------    | S  .--|
+7|. -S-- |    |----- -------- |   |     S     | |    |.      S      | --   .|
+8|. |    |    |    S |      | |   ----- |     | --   |.     .|      |  |....|
+9|  | -----S----   | S    -----   |...| ----  |  | ---       |      -- |----|
+0|..| |        |   ------ | S     |   |    ----- S |.       .|       | |.  .|
+1|--- -------  |   |    | | |     |   ---- |.  | |---. . . .|-       | ---. |
+2|          |  S   |    --- ----S----  |   |.  S |  -----------S-    |   --S|
+3|--------- ---------   |      |    S  | ---.  | |  |           ---- ---    |
+4         |         |   S ------    |--- ---.  | --S- ---- ----    | S   --S|
+5         | ---S--- |---- --        |      -----      |  |  | --S- | -S- |. |
+6         | |     |        ---------- ----       --- --  |- |    | ----- |  |
+7         S |     ----S---            |  |-------- S |   SS |    |       |. |
+8      S  ---     |      | ------------            ---   || ------S--S----  |
+9           S     |......| |.         S            |     ||   |.   .|   .|..|
+0           -----------------------------------------------------------------
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+
+MONSTER: '@', "Green-elf", random
+MONSTER: '@', "Green-elf", random
+MONSTER: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+MONSTER[75%]: '@', "Green-elf", random
+
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+MONSTER[75%]: '@', "Grey-elf", random
+
+MONSTER[75%]: '@', "elf-lord", random
+MONSTER[75%]: '@', "elf-lady", random
+MONSTER[25%]: '@', "Elvenking", random
+MONSTER[25%]: '@', "Elvenqueen", random
+
+MONSTER: 'A', "lillend", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Coure Eladrin", random
+MONSTER[75%]: 'A', "Noviere Eladrin", random
+MONSTER[25%]: 'A', "Shiere Eladrin", random
+MONSTER[25%]: 'A', "Ghaele Eladrin", random
+
+MONSTER[25%]: '7', "Justice Archon", random
+MONSTER[25%]: '9', "Monadic Deva", random
+MONSTER[25%]: '&', "erinys", random
+
+MONSTER[75%]: 'h', "dwarf", random
+MONSTER[75%]: 'h', "dwarf", random
+MONSTER[75%]: 'h', "dwarf", random
+
+MONSTER[75%]: 'h', "hobbit", random
+MONSTER[75%]: 'h', "hobbit", random
+MONSTER[75%]: 'h', "hobbit", random
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
+1|     | ||          |    |  ....| |         |       S............---       |
+2|     |  S          S    ---....S |   -S----- ----- |............S S       |
+3|     S ||         -|      | ...| |   |.....| |...| ---.....------ --------|
+4|-----| ------------|      ------ -----.....| --..|   -------              |
+5|     |             --------      ....S.....|  --S---         ------ -----.|
+6|     | -----------          -----....-------- |....-----------    | S...--|
+7|  -S-- |....|....|.--------.|...|.... S.....| |....|       S      | --....|
+8|  |    |....|....S.|......|.|...----- |.....| --...|       |      |  |....|
+9|  | -----S----...|.S....-----...|   | ----..|  |.---       |      -- |----|
+0|  | |........|...------.| S.....|   |    ----- S.|         |       | |....|
+1|--- -------..|...|....|.| |.....|   ---- |...| |---       |-       | ---..|
+2|          |..S...|....--- ----S----..|   |...S |..-----------S-    |   --S|
+3|--------- ---------...|      |....S..| ---...| |..|           ---- ---    |
+4         |         |...S ------....|--- ---...| --S- ----.----    | S   --S|
+5         | ---S--- |---- --........|      -----      |..|..|.--S- | -S- |  |
+6         | |.....|        ---------- ----       --- --..|-.|....| ----- |  |
+7         S |.....----S---            |..|--------.S |...SS.|....|       |  |
+8      S  ---.....|      | ------------............---...||.------S--S----  |
+9           S.....|      | |          S............|.....||...|     |    |  |
+0           -----------------------------------------------------------------
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+MONSTER:'o',"orc-captain",random
+MONSTER:'o',"orc-captain",random
+MONSTER:'o',"orc shaman",random
+MONSTER:'o',"orc shaman",random
+
+MONSTER:'o',"Mordor orc",random
+MONSTER:'o',"Mordor orc",random
+MONSTER:'o',"Mordor orc",random
+MONSTER:'o',"Mordor orc",random
+
+MONSTER:'o',"Mordor orc",random
+MONSTER:'o',"Mordor orc",random
+MONSTER:'o',"Mordor orc",random
+MONSTER:'o',"Mordor orc",random
+
+TRAP:"arrow",random
+TRAP:"arrow",random
+TRAP:"bear",random
+TRAP:"spiked pit",random
+
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+OBJECT:'%',"tripe ration",random
+
+OBJECT:')',"scimitar", random
+OBJECT:')',"scimitar", random
+OBJECT:')',"scimitar", random
+OBJECT:')',"scimitar", random
+
+OBJECT:')',"orcish dagger", random
+OBJECT:')',"orcish dagger", random
+OBJECT:')',"orcish dagger", random
+OBJECT:')',"orcish dagger", random
+
+OBJECT:'[',"orcish chain mail", random
+OBJECT:'[',"orcish chain mail", random
+OBJECT:'[',"orcish chain mail", random
+OBJECT:'[',"orcish chain mail", random
+
+OBJECT:'[',"orcish ring mail", random
+OBJECT:'[',"orcish ring mail", random
+OBJECT:'[',"orcish ring mail", random
+OBJECT:'[',"orcish ring mail", random
+
+OBJECT:'[',"orcish helm", random
+OBJECT:'[',"orcish helm", random
+OBJECT:'[',"orcish helm", random
+OBJECT:'[',"orcish helm", random
+
+OBJECT:'[',"orcish helm", random
+OBJECT:'[',"orcish helm", random
+OBJECT:'[',"orcish helm", random
+OBJECT:'[',"orcish helm", random
+
+OBJECT:'!',"sickness", random
+OBJECT:'!',"sickness", random
+OBJECT:'!',"sickness", random
+OBJECT:'!',"sickness", random
+
+OBJECT:'!',"booze", random
+OBJECT:'!',"booze", random
+OBJECT:'!',"booze", random
+OBJECT:'!',"booze", random
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
 1|.....|.||..........|....|......|.|.........|.......+............---.......|
-2|.....|..+..........+....---....S.|...-S-----.-----.|............+.+.......|
-3|.....+.||........---......|....|.|...|.....|.|...|.---.....------.--------|
-4|-----|.-------|..|........------.-----.....|.--..|...-------..............|
-5|.....|........------+------..........+.....|..--S---.........------.-----..
-6|.....|.------...............-----.}}.--------.|....-------.---....|.+...--|
-7|..-+--.|....|-----.--------.|...|.....+.....|.|....|.....+.+......|.--....|
-8|..|....|....|....+.|......|.|...-----.|.....|.--...|.....|.|......|..|....|
-9|..|.-----S----...|.+....-----...|...|.----..|..|.---....--.---S-----.|----|
-0|..|.|........|...------.|.S.....|...|....-----.+.|......|..|.......|.|....|
-1|---.-------..|...|....|.|.|.....|...----.|...|.|---.....|.|-.......|.---..|
-2...........|..S...|....---.----S----..|...|...+.|..-------.---+-....|...--+|
+2|.....|..+.........\S....---....S.|...-S-----.-----.|............+.+.......|
+3|.....+.||.........-|......|....|.|...|.....|.|...|.---.....------.--------|
+4|-----|.------------|......------.-----.....|.--..|...-------..............|
+5|.....|.............--------..........+.....|..--S---.........------.-----.|
+6|.....|.-----------..........-----....--------.|....-----------....|.+...--|
+7|..-+--.|....|....|.--------.|...|.....+.....|.|....|.......+...\..|.--....|
+8|..|....|....|....+.|......|.|...-----.|.....|.--...|.......|......|..|....|
+9|..|.-----S----...|.+....-----...|...|.----..|..|.---.......|......--.|----|
+0|..|.|........|...------.|.S.....|...|....-----.+.|.........|.......|.|....|
+1|---.-------..|...|....|.|.|.....|...----.|...|.|---.......|-.......|.---..|
+2|..........|..S...|....---.----S----..|...|...+.|..-----------+-....|...--+|
 3|---------.---------...|......|....S..|.---...|.|..|...........----.---....|
 4      ...|.........|...+.------....|---.---...|.--+-.----.----....|.+...--+|
 5 ## #  ..|.---+---.|----.--........|......-----......|..|..|.--+-.|.-S-.|..|
@@ -311,22 +866,280 @@ MAP
 7 ##### ..+.|.....----+---............|..|--------.+.|...SS.|....|.......|..|
 8   ###+..---.....|......|.------------............---...||.------+--+----..|
 9  ###  ....S.....|......|.|..........S............|.....||...|.....|....|..|
-0      .....--------------.--------------------------------------------------
+0      .....-----------------------------------------------------------------
 ENDMAP
 #01234567890123456789012345678901234567890123456789012345678901234567890123456
 #0         1         2   	   3	     4	       5		 6	       7
-RANDOM_PLACES: (33,0), (0,12), (25,20), (75,05)
+
+MONSTER:'o',"Mordor marshal",(19,02),asleep
+MONSTER:'&',"succubus",(19,01),asleep
+
+MONSTER:'o',"Mordor orc elite",(10,01),asleep
+MONSTER:'o',"Mordor orc elite",(10,02),asleep
+MONSTER:'o',"Mordor orc elite",(10,03),asleep
+
+MONSTER:'i',"manes",(11,01),asleep
+MONSTER:'o',"hobgoblin",(11,02),asleep
+MONSTER:'o',"hobgoblin",(11,03),asleep
+
+MONSTER:'o',"Mordor orc elite",(12,01),asleep
+MONSTER:'o',"Mordor orc",(12,02),asleep
+MONSTER:'o',"hill orc",(12,03),asleep
+
+MONSTER:'o',"goblin",(13,01),asleep
+MONSTER:'i',"manes",(13,02),asleep
+MONSTER:'o',"Mordor orc",(13,03),asleep
+
+MONSTER:'o',"hobgoblin",(14,01),asleep
+MONSTER:'o',"hobgoblin",(14,02),asleep
+MONSTER:'i',"quasit",(14,03),asleep
+
+MONSTER:'o',"goblin",(15,01),asleep
+MONSTER:'o',"Mordor shaman",(15,02),asleep
+MONSTER:'o',"hill orc",(15,03),asleep
+
+MONSTER:'o',"Mordor orc elite",(16,01),asleep
+MONSTER:'&',"vrock",(16,02),asleep
+MONSTER:'o',"Mordor orc elite",(16,03),asleep
+
+MONSTER:'o',"Mordor orc elite",(17,01),asleep
+MONSTER:'o',"Mordor orc elite",(17,02),asleep
+MONSTER:'o',"goblin",(17,03),asleep
+
+MONSTER:'o',"Mordor orc elite",(18,01),asleep
+MONSTER:'o',"Mordor orc elite",(18,02),asleep
+MONSTER:'o',"Mordor shaman",(18,03),asleep
+
+MONSTER:'O',"ogre mage",(64,06),asleep
+MONSTER:'O',"ogre mage",(63,07),asleep
+MONSTER:'O',"ogre emperor",(64,07),asleep
+MONSTER:'&',"marilith",(65,07),asleep
+
+MONSTER:'O',"ogre lord",(61,08),asleep
+MONSTER:'O',"ogre lord",(62,08),asleep
+MONSTER:'O',"ogre king",(63,08),asleep
+MONSTER:'O',"ogre king",(64,08),asleep
+MONSTER:'O',"ogre king",(65,08),asleep
+MONSTER:'O',"ogre lord",(66,08),asleep
+
+MONSTER:'O',"ogre lord",(61,09),asleep
+MONSTER:'O',"ogre lord",(62,09),asleep
+MONSTER:'O',"ogre lord",(63,09),asleep
+MONSTER:'O',"ogre lord",(64,09),asleep
+MONSTER:'O',"ogre lord",(65,09),asleep
+MONSTER:'O',"ogre lord",(66,09),asleep
+
+MONSTER:'O',"ogre",(61,10),asleep
+MONSTER:'O',"ogre",(62,10),asleep
+MONSTER:'O',"ogre lord",(63,10),asleep
+MONSTER:'O',"ogre lord",(64,10),asleep
+MONSTER:'O',"ogre lord",(65,10),asleep
+MONSTER:'O',"ogre",(66,10),asleep
+MONSTER:'O',"ogre",(67,10),asleep
+
+MONSTER:'o',"Mordor orc",(61,11),asleep
+MONSTER:'o',"Mordor orc",(62,11),asleep
+MONSTER:'O',"ogre",(63,11),asleep
+MONSTER:'O',"ogre",(64,11),asleep
+MONSTER:'O',"ogre",(65,11),asleep
+MONSTER:'o',"Mordor orc",(66,11),asleep
+MONSTER:'o',"Mordor orc",(67,11),asleep
+
+MONSTER:'O',"ogre mage",(64,12),asleep
+MONSTER:'O',"ogre",(65,12),asleep
+MONSTER:'o',"Mordor orc",(66,12),asleep
+MONSTER:'i',"tengu",(67,12),asleep
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
+1|     | ||          |....|      | |         |       S            ---       |
+2|     |  S          S....---    S |   -S----- ----- |            S S       |
+3|     S ||         -|......|    | |   |     | |   | ---     ------ --------|
+4|-----| ------------|......------ -----     | --  |   -------              |
+5|     |             --------          S     |  --S---         ------ ----- |
+6|     | -----------          -----    -------- |    -----------    | S   --|
+7|  -S-- |    |    | -------- |   |     S     | |    | ......S      | --    |
+8|  |    |    |    S |      | |   ----- |     | --   | ..... |      |  |    |
+9|  | -----S----   | S    -----   |   | ----  |  | ---.......|      -- |----|
+0|  | |        |   ------ | S     |   |    ----- S | ....... |       | |    |
+1|--- -------  |   |    | | |     |   ---- |   | |--- . . . |-       | ---  |
+2|          |  S   |    --- ----S----  |   |   S |  -----------S-    |   --S|
+3|--------- ---------   |      |    S  | ---   | |  |           ---- ---    |
+4         |         |   S ------    |--- ---   | --S- ---- ----    | S   --S|
+5         | ---S--- |---- --        |      -----      |  |  | --S- | -S- |  |
+6         | |     |        ---------- ----       --- --  |- |    | ----- |  |
+7         S |     ----S---            |  |-------- S |   SS |    |       |  |
+8      S  ---     |      | ------------            ---   || ------S--S----  |
+9           S     |      | |          S            |     ||   |     |    |  |
+0           -----------------------------------------------------------------
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+OBJECT:'#',"10 cursed +4 morgul metal ancient arrow", random
+OBJECT:'#',"10 cursed +4 morgul metal ancient arrow", random
+
+OBJECT:'#',"cursed +4 morgul metal stiletto", random
+OBJECT:'#',"cursed +4 morgul metal stiletto", random
+
+OBJECT:')',"elven spear", random
+OBJECT:')',"elven spear", random
+OBJECT:')',"elven spear", random
+
+OBJECT:')',"elven dagger", random
+OBJECT:')',"elven short sword", random
+OBJECT:')',"elven broadsword", random
+
+OBJECT:')',"rapier", random
+OBJECT:')',"rapier", random
+
+OBJECT:'[',"elven helm", random
+OBJECT:'[',"elven helm", random
+OBJECT:'[',"elven helm", random
+
+OBJECT:'[',"elven cloak", random
+OBJECT:'[',"elven cloak", random
+OBJECT:'[',"elven cloak", random
+
+OBJECT:'[',"elven boots", random
+OBJECT:'[',"elven boots", random
+OBJECT:'[',"elven boots", random
+
+OBJECT[50%]:'[',"elven mithril-coat", random
+OBJECT[50%]:'[',"elven mithril-coat", random
+OBJECT[50%]:'[',"elven mithril-coat", random
+
+OBJECT[50%]:'[',"dwarvish mithril-coat", random
+OBJECT:'[',"chain mail", random
+
+OBJECT:'[',"dwarvish cloak", random
+OBJECT:'[',"dwarvish cloak", random
+
+OBJECT:'[',"dwarvish helm", random
+OBJECT:'[',"dwarvish helm", random
+
+OBJECT:'[',"dwarvish roundshield", random
+
+OBJECT:')',"dwarvish mattock", random
+OBJECT:')',"dwarvish short sword", random
+
+CONTAINER: '(', "chest", (22,03)
+OBJECT:'?',"charging", contained, cursed, 0
+OBJECT:'!',"full healing", contained, cursed, 0
+
+OBJECT:'[',"orcish cloak", (53,10), cursed, 2,"The Mantle of Wrath"
+
+CONTAINER: '(', "chest", (23,03)
+OBJECT:'#',"cursed +1 iron helmet", contained
+OBJECT:'#',"blessed fixed helmet", contained
+OBJECT:'[',"archaic helm", contained
+OBJECT:'#',"gemstone band", contained
+OBJECT:'[',"high-elven helm", contained
+OBJECT:'#',"blessed +3 cloth elven helm", contained
+
+CONTAINER: '(', "chest"  , (24,04)
+OBJECT:'#',"cursed +1 iron plate mail", contained
+OBJECT:'#',"blessed fixed gentlewoman's dress", contained
+OBJECT:'[',"archaic plate mail", contained
+OBJECT:'[',"crystal plate mail", contained
+OBJECT:'[',"high-elven plate", contained
+OBJECT:'[',"elven toga", contained, blessed, +3
+
+CONTAINER: '(', "chest"  , (25,04)
+OBJECT:'#',"cursed +1 iron gauntlets", contained
+OBJECT:'#',"blessed fixed iron gauntlets", contained
+OBJECT:'[',"crystal gauntlets", contained
+OBJECT:'[',"high-elven gauntlets", contained
+OBJECT:'#',"blessed +3 cloth gloves", contained
+
+CONTAINER: '(', "chest"  , (57,08)
+OBJECT:'#',"lesser unholy flaming +1 iron long sword", contained
+OBJECT:'#',"blessed fixed silver long sword", contained
+OBJECT:'#',"blessed fixed flaming +4 two-handed sword", contained
+OBJECT:'#',"bronze long sword", contained
+OBJECT:')',"crystal sword", contained
+OBJECT:'#',"large high-elven warsword", contained
+OBJECT:'#',"mithril elven broadsword", contained
+OBJECT:'#',"blessed +3 mithril rapier", contained
+OBJECT:'#',"blessed wand of nothing", contained
+OBJECT:'#',"blessed fixed +3 elven bow", contained
+OBJECT:'#',"blessed fixed +3 silver long sword", contained
+
+CONTAINER: '(', "chest"  , (56,08)
+OBJECT:'#',"cursed +1 iron kite shield", contained
+OBJECT:'#',"blessed fixed iron kite shield", contained
+OBJECT:'[',"roundshield", contained
+OBJECT:'[',"crystal shield", contained
+OBJECT:'[',"crystal shield", contained
+OBJECT:'#',"mithril elven shield", contained
+
+CONTAINER: '(', "chest"  , (55,08)
+OBJECT:'#',"cursed +1 iron armored boots", contained
+OBJECT:'#',"blessed fixed iron armored boots", contained
+OBJECT:'[',"archaic boots", contained
+OBJECT:'#',"mithril armored boots", contained
+OBJECT:'#',"blessed +3 cloth shoes", contained
+
+CONTAINER: '(', "chest"  , (55,09)
+OBJECT:'_',"iron bands", contained
+OBJECT:'#',"elven cloak", contained
+OBJECT:'#',"blessed +3 cloth elven cloak", contained
+OBJECT:'(',"crystal ball", contained, blessed, +3
+OBJECT:'!',"starlight", contained, blessed, 0
+OBJECT:'(',"harp", contained
+OBJECT:'#',"30 blessed fixed silver elven arrow", contained
+
+CONTAINER: '(', "chest"  , (56,09)
+OBJECT:'#',"marilith mask", contained
+OBJECT:'#',"cockatrice mask", contained
+OBJECT:'#',"black dragon mask", contained
+OBJECT:'#',"Faerinaal mask", contained
+OBJECT:'#',"Gwynharwyf mask", contained
+OBJECT:'#',"Queen of Stars mask", contained
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0----------------------------------------------------------------------------
+1|.....|.||..........|....|......|.|.........|.......+............---.......|
+2|.....|..+.........\S....---....S.|...-S-----.-----.|............+.+.......|
+3|.....+.||.........-|......|....|.|...|.....|.|...|.---.....------.--------|
+4|-----|.------------|......------.-----.....|.--..|...-------..............|
+5|.....|.............--------..........+.....|..--S---.........------.-----.|
+6|.....|.-----------..........-----....--------.|....-----------....|.+...--|
+7|..-+--.|....|....|.--------.|...|.....+.....|.|....|.......+...\..|.--....|
+8|..|....|....|....+.|......|.|...-----.|.....|.--...|.......|......|..|....|
+9|..|.-----S----...|.+....-----...|...|.----..|..|.---.......|......--.|----|
+0|..|.|........|...------.|.S.....|...|....-----.+.|.........|.......|.|....|
+1|---.-------..|...|....|.|.|.....|...----.|...|.|---.......|-.......|.---..|
+2|..........|..S...|....---.----S----..|...|...+.|..-----------+-....|...--+|
+3|---------.---------...|......|....S..|.---...|.|..|...........----.---....|
+4      ...|.........|...+.------....|---.---...|.--+-.----.----....|.+...--+|
+5 ## #  ..|.---+---.|----.--........|......-----......|..|..|.--+-.|.-S-.|..|
+6  #### ..|.|.....|........----------.----.......---.--..|-.|....|.-----.|..|
+7 ##### ..+.|.....----+---............|..|--------.+.|...SS.|....|.......|..|
+8   ###+..---.....|......|.------------............---...||.------+--+----..|
+9  ###  ....S.....|......|.|..........S............|.....||...|.....|....|..|
+0      .....-----------------------------------------------------------------
+ENDMAP
+#01234567890123456789012345678901234567890123456789012345678901234567890123456
+#0         1         2   	   3	     4	       5		 6	       7
+
+NON_DIGGABLE:(00,00,75,20)
 
 #Whichever level is visited first will have the Key
 OBJECT: '(',"skeleton key", random, uncursed, 0, "The Second Key of Chaos"
 
-STAIR:place[0],up
+STAIR:(39,19),up
 PORTAL:(01,17,01,15),(00,00,00,00),"mdpth1"
 
 # Doors (secret)
 #DOOR:locked|closed|open,(xx,yy)
 DOOR: locked, (32, 2)
-DOOR: locked, (63, 9)
 DOOR: locked, (27,10)
 DOOR: locked, (31,12)
 DOOR: locked, (35,13)
@@ -341,28 +1154,26 @@ DOOR: locked, (10, 9)
 DOOR: locked, (14,12)
 # Doors (regular)
 DOOR: closed, (52, 1)
-DOOR: closed, ( 9, 2)
+DOOR: locked, ( 9, 2)
 DOOR: closed, (20, 2)
 DOOR: closed, (65, 2)
 DOOR: closed, (67, 2)
 DOOR: closed, ( 6, 3)
-DOOR: closed, (21, 5)
 DOOR: closed, (38, 5)
 DOOR: closed, (69, 6)
 DOOR: closed, ( 4, 7)
 DOOR: closed, (39, 7)
-DOOR: closed, (58, 7)
 DOOR: closed, (60, 7)
 DOOR: closed, (18, 8)
 DOOR: closed, (20, 9)
 DOOR: closed, (48,10)
 DOOR: closed, (46,12)
-DOOR: closed, (62,12)
+DOOR: locked, (62,12)
 DOOR: closed, (74,12)
 DOOR: closed, (23,14)
 DOOR: closed, (23,14)
 DOOR: closed, (50,14)
-DOOR: closed, (68,14)
+DOOR: locked, (68,14)
 DOOR: closed, (74,14)
 DOOR: closed, (14,15)
 DOOR: closed, (63,15)
@@ -408,10 +1219,7 @@ ENDMAP
 OBJECT: '(',"skeleton key", random, uncursed, 0, "The Second Key of Chaos"
 
 PORTAL:(32,10,32,10),(0,0,0,0),"mord1"
-PORTAL:(00,00,68,20),(26,4,38,16),"mdpth1"
-
-#PORTAL:(01,06,01,06),(00,00,00,00),"mith3"
-
+STAIR:(00,00,68,20),(26,4,38,16),down
 
 OBJECT: '!',random,random
 OBJECT: '!',"starlight",random
@@ -559,18 +1367,63 @@ TRAP: "web", random
 TRAP: "web", random
 
 MAZE: "mdpth1",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 INIT_MAP: '.' , ' ' , true, true, unlit , true
 
 NOMAP
 
-PORTAL:(00,00,25,20),(00,00,00,00),"spi1"
+STAIR:(00,00,25,20),(00,00,00,00),up
 PORTAL:(50,00,75,20),(00,00,00,00),"mord2"
 STAIR:(30,00,45,20),(00,00,00,00),down
 
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+MONSTER[80%]: 'O', "ogre", random
+MONSTER[80%]: 'O', "ogre", random
+MONSTER[80%]: 'O', "ogre", random
+
+MONSTER: 'T', random, random
+
+MONSTER: 'h', "bugbear", random
+MONSTER: 'h', "bugbear", random
+MONSTER: 'h', "bugbear", random
+MONSTER: 'h', "bugbear", random
+MONSTER[80%]: 'h', "bugbear", random
+MONSTER[80%]: 'h', "bugbear", random
+MONSTER[80%]: 'h', "bugbear", random
+MONSTER[80%]: 'h', "bugbear", random
+
+MONSTER: 'o', "goblin", random
+MONSTER: 'o', "goblin", random
+MONSTER: 'o', "goblin", random
+MONSTER[80%]: 'o', "goblin", random
+MONSTER[80%]: 'o', "goblin", random
+MONSTER[80%]: 'o', "goblin", random
+
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+
+MONSTER: 'd', "warg", random
+MONSTER: 'd', "warg", random
+MONSTER[80%]: 'd', "warg", random
+MONSTER[80%]: 'd', "warg", random
+MONSTER[80%]: 'd', "warg", random
+
+MONSTER: 'v', "fire vortex", random
+
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
 
 MAZE: "mdpth2",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 INIT_MAP: '.' , ' ' , true, true, unlit , true
 
 NOMAP
@@ -578,23 +1431,121 @@ NOMAP
 #Lava pool
 
 STAIR:(00,00,75,20),(30,00,45,20),up
-STAIR:(30,00,45,20),(00,00,00,00),down
+STAIR:(30,00,45,20),(30,03,45,18),down
 
+MONSTER: 'E', "fire elemental", random
+MONSTER: 'E', "fire elemental", random
+
+MONSTER: 'v', "fire vortex", random
+MONSTER: 'v', "fire vortex", random
+MONSTER[80%]: 'v', "fire vortex", random
+MONSTER[80%]: 'v', "fire vortex", random
+MONSTER[80%]: 'v', "fire vortex", random
+
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+MONSTER[80%]: 'o', "Mordor orc", random
+
+MONSTER: 'o', "Mordor shaman", random
+MONSTER: 'o', "Mordor shaman", random
+
+MONSTER: 'O', "ogre", random
+MONSTER: 'O', "ogre", random
+MONSTER[80%]: 'O', "ogre", random
+MONSTER[80%]: 'O', "ogre", random
+MONSTER[80%]: 'O', "ogre", random
+
+MONSTER: 'T', random, random
 
 MAZE: "mdpth3",' '
 FLAGS: shortsighted,hardfloor
-INIT_MAP: '.' , 'L' , true, true, unlit , true
+GEOMETRY:center,center
+#0         1         2   	   3	     4		   5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0.....                                                       ................
+1.....                                                       ................
+2.....                                                       ................
+3.....                                                       ................
+4.....                                                       ................
+5.....                                                       ................
+6.....                                                       ................
+7.....                                                       ................
+8.....                                                       ................
+9.....                                                       ................
+0.....                                                       ................
+1.....                                                       ................
+2.....                                                       ................
+3.....                                                       ................
+4.....                                                       ................
+5.....                                                       ................
+6.....                                                       ................
+7.....                                                       ................
+8.....                                                       ................
+9.....                                                       ................
+0.....                                                       ................
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4		   5		 6	       7
 
-NOMAP
+MONSTER: '&', "balrog", random
+MONSTER: 'v', "fire vortex", random
+MONSTER[80%]: 'v', "fire vortex", random
+MONSTER[80%]: 'v', "fire vortex", random
+MONSTER: 'E', "fire elemental", random
+MONSTER[80%]: 'E', "fire elemental", random
+MONSTER[80%]: 'E', "fire elemental", random
+
+
+GEOMETRY:center,center
+#0         1         2   	   3	     4		   5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+1LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+2LLLLLLLLLLLLLL......................................LLLLLLLLLLLLLLLLLLLLLLLL
+3LLLLLLLLLLLL..........................................LLLLLLLLLLLLLLLLLLLLLL
+4LLLLLLLLLLL............................................LLLLLLLLLLLLLLLLLLLLL
+5LLLLLLLLL................................................LLLLLLLLLLLLLLLLLLL
+6LLLLLLLL.........                                 .......LLLLLLLLLLLLLLLLLLL
+7LLLLLLL........                                    .......LLLLLLLLLLLLLLLLLL
+8LLLLLLL......                                        .....LLLLLLLLLLLLLLLLLL
+9LLLLLL.....                                            ....LLLLLLLLLLLLLLLLL
+0LLLLLL.....                                            ....LLLLLLLLLLLLLLLLL
+1LLLLLL.....                                            ....LLLLLLLLLLLLLLLLL
+2LLLLLLL......                                      .......LLLLLLLLLLLLLLLLLL
+3LLLLLLL........                                    .......LLLLLLLLLLLLLLLLLL
+4LLLLLLLL.........                                 .......LLLLLLLLLLLLLLLLLLL
+5LLLLLLLLL................................................LLLLLLLLLLLLLLLLLLL
+6LLLLLLLLLLL.............................................LLLLLLLLLLLLLLLLLLLL
+7LLLLLLLLLLLL...........................................LLLLLLLLLLLLLLLLLLLLL
+8LLLLLLLLLLLLLL.......................................LLLLLLLLLLLLLLLLLLLLLLL
+9LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+0LLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLLL
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4		   5		 6	       7
 
 #Lava sea
 
-STAIR:(00,00,75,09),(00,00,00,00),up
-STAIR:(30,10,45,20),(00,00,00,00),down
+#REGION:(00,00,75,20),lit,"ordinary"
 
+# The shrine to Moloch.
+REGION:(00,00,75,20),lit,"temple"
+ALTAR:(33,16),noalign,shrine
+
+STAIR:(00,00,75,05),(00,00,00,00),up
+STAIR:(17,15,49,20),(00,00,00,00),down
+
+MONSTER: 'o', "orc shaman", (22,00)
+MONSTER[80%]: 'o', "orc shaman", (22,00)
+MONSTER[80%]: 'o', "orc shaman", (22,00)
 
 MAZE: "bore1",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -615,8 +1566,13 @@ ENDMAP
 STAIR:(04,02),up
 LADDER:(04,07),down
 
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+
 MAZE: "bore2",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -639,8 +1595,17 @@ ENDMAP
 LADDER:(05,08),up
 LADDER:(05,01),down
 
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+
+MONSTER: 'o', "Angband orc", random
+MONSTER: 'o', "Angband orc", random
+MONSTER: 'o', "Angband orc", random
+
 MAZE: "bore3",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -666,8 +1631,22 @@ LADDER:(06,02),up
 LADDER:(06,11),down
 
 
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+MONSTER: 'o', "Mordor orc elite", random
+
+MONSTER: 'o', "Angband orc", random
+MONSTER: 'o', "Angband orc", random
+MONSTER: 'o', "Angband orc", random
+
+MONSTER: '&', "balrog", random
+MONSTER: '&', "balrog", random
+
+#And a partridge in a pear tree
+
 MAZE: "bore4",' '
-FLAGS: shortsighted,hardfloor
+FLAGS: hardfloor
 GEOMETRY:center,center
 #0         1         2   	   3	     4	       5		 6	       7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
@@ -693,6 +1672,8 @@ ENDMAP
 
 LADDER:(07,12),up
 ALTAR:(07,07),noalign,altar
+
+MONSTER: '&', "Lungorthin", (07,07)
 
 #PORTAL:(00,00,25,20),(00,00,00,00),"frst2"
 #PORTAL:(50,00,75,20),(00,00,00,00),"ford"

@@ -501,6 +501,7 @@ struct weapon_dice {
 #define bimanual(otmp,ptr)	(otmp && (otmp->oclass == WEAPON_CLASS || \
 			 otmp->oclass == TOOL_CLASS) && \
 			 ptr != &mons[PM_THRONE_ARCHON] && \
+			 ptr != &mons[PM_LUNGORTHIN] && \
 			 ptr != &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY] && \
 			 (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit ?\
 			  (objects[otmp->otyp].oc_bimanual ? \

@@ -671,11 +671,23 @@ boolean chatting;
 	char verbuf[BUFSZ];
 	char class_list[MAXOCLASSES+2];
 
-	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
-		if(chatting && canspotmon(mtmp))
-			pline("%s is sleeping peacefully; presumably the doing of the delicate equipment that displays %s vivisected form.", 
-				Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : "their")
-			);
+	if(mtmp && noactions(mtmp)){
+		if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+			if(chatting && canspotmon(mtmp))
+				pline("%s is sleeping peacefully; presumably the doing of the delicate equipment that displays %s vivisected form.", 
+					Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : hisherits(mtmp))
+				);
+		}
+		else if(mtmp->entangled == SHACKLES){
+			if(chatting && canspotmon(mtmp))
+				pline("%s is unconscious.",  Monnam(mtmp));
+		}
+		else {
+			if(chatting && canspotmon(mtmp))
+				pline("%s struggles against %s bindings.", 
+					Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : hisherits(mtmp))
+				);
+		}
 		return 0;
 	}
 	
@@ -1188,7 +1200,7 @@ asGuardian:
 		struct trap *ttmp;
 		int ix, iy, i;
 		boolean inrange = FALSE;
-		if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) break;
+		if(noactions(mtmp)) break;
 		if((ptr == &mons[PM_INTONER] && !rn2(5)) || ptr == &mons[PM_BLACK_FLOWER]){
 			if (!canspotmon(mtmp))
 				map_invisible(mtmp->mx, mtmp->my);
@@ -2429,11 +2441,23 @@ int dz;
 		mtmp = m_at(tx, ty);
 	}
 	
-	if(mtmp && mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+	if(mtmp && noactions(mtmp)){
+		if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
 		if(canspotmon(mtmp))
 			pline("%s is sleeping peacefully; presumably the doing of the delicate equipment that displays %s vivisected form.", 
 				Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : hisherits(mtmp))
 			);
+		}
+		else if(mtmp->entangled == SHACKLES){
+			if(canspotmon(mtmp))
+				pline("%s is unconscious.",  Monnam(mtmp));
+		}
+		else {
+			if(canspotmon(mtmp))
+				pline("%s struggles against %s bindings.", 
+					Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : hisherits(mtmp))
+				);
+		}
 		return 0;
 	}
 	

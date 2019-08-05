@@ -819,6 +819,10 @@ boolean ranged;
 {
 	if(mtmp2->moccupation) return FALSE;
 	
+	if(mtmp2->entangled == SHACKLES) return FALSE;
+	if(mtmp2->mtrapped && t_at(mtmp2->mx, mtmp2->my) && t_at(mtmp2->mx, mtmp2->my)->ttyp == VIVI_TRAP)
+		return FALSE;
+	
 	if(mtmp->mtame && mtmp2->mpeaceful && !u.uevent.uaxus_foe && mtmp2->data == &mons[PM_AXUS])
 		return FALSE;
 	

@@ -984,7 +984,7 @@ register struct monst *mtmp;
 
 	/* some monsters teleport */
 	if (mon_resistance(mtmp,TELEPORT) && (mtmp->mflee || !rn2(5)) && !rn2(40) && !mtmp->iswiz &&
-	    !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP)) &&
+	    !(noactions(mtmp)) &&
 	    !level.flags.noteleport) {
 		(void) rloc(mtmp, FALSE);
 		return(0);
@@ -1082,7 +1082,7 @@ register struct monst *mtmp;
 	if(is_covetous(mdat) && (mdat!=&mons[PM_DEMOGORGON] || !rn2(3)) 
 		&& mdat!=&mons[PM_ELDER_PRIEST] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
 		&& mdat!=&mons[PM_LEGION] /*&& mdat!=&mons[PM_SHAMI_AMOURAE]*/
-		&& !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
+		&& !(noactions(mtmp))
 		&& !(mtmp->mpeaceful && !mtmp->mtame) /*Don't telespam the player if peaceful*/
 	) (void) tactics(mtmp);
 	
@@ -1106,7 +1106,7 @@ register struct monst *mtmp;
 		&& (!mtmp->mpeaceful || Darksight)
 		&& (levl[mtmp->mx][mtmp->my].lit == 1 || viz_array[mtmp->my][mtmp->mx]&TEMP_LIT1)
 		&& !mtmp->mcan && mtmp->mspec_used < 4
-		&& !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
+		&& !(noactions(mtmp))
 		&& !(mindless_mon(mtmp))
 	){
 		if(cansee(mtmp->mx,mtmp->my)) pline("%s invokes the darkness.",Monnam(mtmp));
@@ -1649,7 +1649,7 @@ register int after;
 
 	/* teleport if that lies in our nature */
 	if(mteleport(ptr) && !rn2(5) && !mtmp->mcan &&
-	   !tele_restrict(mtmp) && !((mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
+	   !tele_restrict(mtmp) && !(noactions(mtmp))
 	) {
 	    if(mtmp->mhp < 7 || mtmp->mpeaceful || rn2(2))
 		(void) rloc(mtmp, FALSE);
@@ -2118,7 +2118,7 @@ not_special:
 		}
 	} else {
 	    if(is_unicorn(ptr) && rn2(2) && !tele_restrict(mtmp) && 
-			!(mtmp->data->maligntyp < 0 && !(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP))
+			!(mtmp->data->maligntyp < 0 && !(noactions(mtmp)))
 		) {
 			(void) rloc(mtmp, FALSE);
 			return(1);

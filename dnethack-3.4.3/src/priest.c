@@ -222,10 +222,16 @@ int sanctum;   /* is it the seat of the high priest? */
 		EPRI(priest)->shrpos.y = sy;
 		assign_level(&(EPRI(priest)->shrlevel), lvl);
 		priest->mtrapseen = ~0;	/* traps are known */
-		priest->mpeaceful = 1;
-		priest->ispriest = 1;
-		priest->msleeping = 0;
-		set_malign(priest); /* mpeaceful may have changed */
+		if(In_mordor_depths(&u.uz)){
+			priest->ispriest = 1;
+			priest->msleeping = 0;
+		    (void) mpickobj(priest, mksobj(SPE_FIREBALL, FALSE, FALSE));
+		} else {
+			priest->mpeaceful = 1;
+			priest->ispriest = 1;
+			priest->msleeping = 0;
+			set_malign(priest); /* mpeaceful may have changed */
+		}
 
 		/* now his/her goodies... */
 		if(sanctum && EPRI(priest)->shralign == A_NONE &&
@@ -323,7 +329,7 @@ char *pname;		/* caller-supplied output buffer */
 
 	Strcpy(pname, "the ");
 	if (mon->minvis) Strcat(pname, "invisible ");
-	if (mon->ispriest || mon->data == &mons[PM_ALIGNED_PRIEST] ||
+	if ((mon->ispriest && !&mons[PM_HIGH_SHAMAN]) || mon->data == &mons[PM_ALIGNED_PRIEST] ||
 					mon->data == &mons[PM_ANGEL]) {
 		/* use epri */
 		if (mon->mtame && mon->data == &mons[PM_ANGEL])

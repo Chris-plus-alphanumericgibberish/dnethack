@@ -808,6 +808,13 @@ A("Nighthorn",	UNICORN_HORN, 				0,			0,/*from SLASH'EM, although modified from 
 	SPFX2_FIRE2,SPFX3_FEAR|SPFX3_NOCNT,0), /*Fire explosion and acts as a scroll of scare monster against non-chaotic monsters.*/
 
 
+A("The Mantle of Wrath",	ORCISH_CLOAK, 				0,			0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_HSPDAM),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
+	NO_ATTK,	ACID(0,0),	FIRE(0,0),
+	0,	A_CHAOTIC,	 NON_PM, PM_ORC, 2500L,
+	0,0,WSFX_PLUSSEV),
+
 /*/Artifact Keys.  Must be grouped together.  Some code in lock.c, artifact.h, and invent.c depends on the order./*/
 
 A("The First Key of Law", SKELETON_KEY, 	0,			0,/*must be first*/

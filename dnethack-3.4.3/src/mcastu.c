@@ -330,6 +330,7 @@ choose_magic_special(mtmp, type)
 struct monst *mtmp;
 unsigned int type;
 {
+	//50% favored spells
     if (rn2(2)) {
        switch(monsndx(mtmp->data)) {
        case PM_WIZARD_OF_YENDOR:
@@ -548,6 +549,18 @@ unsigned int type;
 
        case PM_GNOMISH_WIZARD:
            if (rn2(2)) return SUMMON_SPHERE;
+       case PM_HIGH_SHAMAN:
+			switch (rnd(3)) {
+				case 3:
+				return AGGRAVATION;
+				break;
+				case 2:
+				return MON_FIRA;
+				break;
+				case 1:
+				return SUMMON_DEVIL;
+				break;
+			}
        }
     }//50% favored spells
 	
@@ -1157,7 +1170,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 
 	if(mon_resistance(mtmp, NULLMAGIC)) return 0;
 
-	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
+	if(noactions(mtmp)) return 0;
 	
 	if(is_derived_undead_mon(mtmp) && mtmp->mfaction != FRACTURED) return 0;
 	/* Three cases:
@@ -3251,7 +3264,7 @@ castmm(mtmp, mdef, mattk)
 	int dmd, dmn;
 	struct obj *mirror;
 
-	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my)&& t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
+	if(noactions(mtmp)) return 0;
 	
 	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
 	    int cnt = 40;

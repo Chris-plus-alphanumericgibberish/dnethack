@@ -533,6 +533,7 @@ long nmv;		/* number of moves */
 {
 	int imv = 0;	/* avoid zillions of casts and lint warnings */
 	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return;
+	if(mtmp->entangled == SHACKLES) return;
 
 #if defined(DEBUG) || defined(BETA)
 	if (nmv < 0L) {			/* crash likely... */
@@ -548,6 +549,14 @@ long nmv;		/* number of moves */
 	else
 	    imv = (int)nmv;
 
+	if(noactions(mtmp)){
+		int i;
+		for(i = imv; i > 0 && mtmp->entangled; i--){
+			mbreak_entanglement(mtmp);
+			mescape_entanglement(mtmp);
+		}
+	}
+	
 	/* might stop being afraid, blind or frozen */
 	/* set to 1 and allow final decrement in movemon() */
 	if (mtmp->mblinded) {

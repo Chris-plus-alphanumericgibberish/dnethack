@@ -1038,11 +1038,25 @@ moveloop()
 						continue;
 					}
 				}
-				/* Monsters in a essence trap can't move */
-				if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
-					mtmp->mhp = 1;
-					mtmp->movement = 0;
-					continue;
+				if(noactions(mtmp)){
+					/* Monsters in a essence trap can't move */
+					if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
+						mtmp->mhp = 1;
+						mtmp->movement = 0;
+						continue;
+					}
+					if(mtmp->entangled){
+						if(mtmp->entangled == SHACKLES){
+							mtmp->mhp = min(mtmp->mhp, mtmp->mhpmax/2+1);
+							mtmp->movement = 0;
+							continue;
+						}
+						else if(!mbreak_entanglement(mtmp)){
+							mtmp->movement = 0;
+							mescape_entanglement(mtmp);
+							continue;
+						}
+					}
 				}
 				/* Possibly wake up */
 				if(mtmp->mtame && mtmp->mstrategy&STRAT_WAITMASK){

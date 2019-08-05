@@ -275,6 +275,14 @@ unsigned *ospecial;
 							color = CLR_BLACK;
 						}
 					}
+				} else if(In_mordor_quest(&u.uz)){
+					if(In_mordor_forest(&u.uz) 
+						|| Is_ford_level(&u.uz)
+					){
+						if(offset >= S_vwall && offset <= S_trwall){
+							color = CLR_BROWN;
+						}
+					}
 				} else {
 					if(offset >= S_vwall && offset <= S_trwall){
 						color = CLR_BLACK;

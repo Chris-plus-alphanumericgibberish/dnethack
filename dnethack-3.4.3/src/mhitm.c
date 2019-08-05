@@ -220,7 +220,7 @@ mattackm(magr, mdef)
 	struct obj *oarmor;
 	boolean derundspec = 0;
 	
-	if(magr->mtrapped && t_at(magr->mx, magr->my) && t_at(magr->mx, magr->my)->ttyp == VIVI_TRAP) return 0;
+	if(noactions(magr)) return 0;
 	
     if (!magr || !mdef) return(MM_MISS);		/* mike@genat */
     if (!magr->mcanmove || magr->msleeping) return(MM_MISS);
@@ -819,7 +819,7 @@ struct monst *mdef;
     int multishot, mhp;
 	const char *onm;
 
-	if(magr->mtrapped && t_at(magr->mx, magr->my) && t_at(magr->mx, magr->my)->ttyp == VIVI_TRAP) return 0;
+	if(noactions(magr)) return 0;
 	
 	/* Rearranged beginning so monsters can use polearms not in a line */
 	if (magr->weapon_check == NEED_WEAPON || !MON_WEP(magr)) {
@@ -1078,7 +1078,7 @@ gazemm(magr, mdef, mattk)
 {
 	char buf[BUFSZ];
 
-	if(magr->mtrapped && t_at(magr->mx, magr->my) && t_at(magr->mx, magr->my)->ttyp == VIVI_TRAP) return 0;
+	if(noactions(magr)) return 0;
 	
 	if (magr->mcan) return MM_MISS;
 

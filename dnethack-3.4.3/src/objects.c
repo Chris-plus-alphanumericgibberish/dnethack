@@ -1509,6 +1509,8 @@ OBJECT(OBJ("iron bands", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,WHACK,P_NONE,IRON,
 		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  0, 200, HI_METAL),
 OBJECT(OBJ("razor wire", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,SLASH,P_NONE,IRON,0), 0,
 		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  0, 200, HI_METAL),
+OBJECT(OBJ("shackles", (char *)0), BITS(1,0,0,0,0,0,0,0,0,0,SLASH,P_NONE,IRON,0), 0,
+		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  0, 200, HI_METAL),
 
 OBJECT(OBJ("blinding venom", "splash of venom"),
 		BITS(0,1,0,0,0,0,0,1,0,0,0,P_NONE,LIQUID,0), 0,

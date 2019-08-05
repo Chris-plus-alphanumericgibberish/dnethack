@@ -341,7 +341,7 @@ register struct monst *mtmp;
 		otmp = mksobj(ELVEN_BROADSWORD, TRUE, TRUE);
 		otmp->obj_material = SILVER;
 		otmp->objsize = MZ_LARGE;
-		otmp->oproperties = OPROP_WATRW;
+		// otmp->oproperties = OPROP_WATRW;
 		otmp->spe = abs(otmp->spe);
 		bless(otmp);
 		fix_object(otmp);
@@ -1443,6 +1443,15 @@ register struct monst *mtmp;
 					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					(void)mongets(mtmp, ELVEN_BOOTS);
+				} else if(In_mordor_quest(&u.uz) 
+					&& !In_mordor_forest(&u.uz)
+					&& !Is_ford_level(&u.uz)
+					&& !In_mordor_fields(&u.uz)
+					&& in_mklev
+				){
+					(void)mongets(mtmp, SHACKLES);
+					mtmp->entangled = SHACKLES;
+					return;
 				} else {
 					if (rn2(2))
 					(void) mongets(mtmp,
@@ -2501,6 +2510,16 @@ register struct monst *mtmp;
 	    case S_CHA_ANGEL:
 		{
 		int spe2;
+			if(In_mordor_quest(&u.uz) 
+				&& !In_mordor_forest(&u.uz)
+				&& !Is_ford_level(&u.uz)
+				&& !In_mordor_fields(&u.uz)
+				&& in_mklev
+			){
+				(void)mongets(mtmp, SHACKLES);
+				mtmp->entangled = SHACKLES;
+				return;
+			}
 /*			if(ptr == &mons[PM_DESTROYER]){
 				struct obj *otmp = mksobj(BROADSWORD, TRUE, FALSE);
 				otmp->blessed = FALSE;
@@ -3291,6 +3310,16 @@ register struct monst *mtmp;
 
 		case S_HUMANOID:
 		if (mm == PM_HOBBIT) {
+			if(In_mordor_quest(&u.uz) 
+				&& !In_mordor_forest(&u.uz)
+				&& !Is_ford_level(&u.uz)
+				&& !In_mordor_fields(&u.uz)
+				&& in_mklev
+			){
+				(void)mongets(mtmp, SHACKLES);
+				mtmp->entangled = SHACKLES;
+				return;
+			}
 		    switch (rn2(3)) {
 			case 0:
 			    (void)mongets(mtmp, DAGGER);
@@ -3728,6 +3757,16 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, ARCHAIC_BOOTS);
 			}
 		} else if (is_dwarf(ptr)) { //slightly rearanged code so more dwarves get helms -D_E
+			if(In_mordor_quest(&u.uz) 
+				&& !In_mordor_forest(&u.uz)
+				&& !Is_ford_level(&u.uz)
+				&& !In_mordor_fields(&u.uz)
+				&& in_mklev
+			){
+				(void)mongets(mtmp, SHACKLES);
+				mtmp->entangled = SHACKLES;
+				return;
+			}
 		    if (rn2(7)) (void)mongets(mtmp, DWARVISH_CLOAK);
 		    if (rn2(7)) (void)mongets(mtmp, SHOES);
 			if (!rn2(4)) {
@@ -3790,10 +3829,15 @@ register struct monst *mtmp;
 			break;
 		    case PM_ANGBAND_ORC:
 				if(In_mordor_quest(&u.uz)){
-					(void)mongets(mtmp, SCIMITAR);
+					otmp = mksobj(STILETTO, TRUE, FALSE);
+					otmp->oproperties = OPROP_MORGW;
+					otmp->opoisoned = OPOISON_BASIC;
+					otmp->obj_material = METAL;
+					fix_object(otmp);
+					curse(otmp);
+					(void) mpickobj(mtmp, otmp);
+					
 					(void)mongets(mtmp, KNIFE);
-					(void)mongets(mtmp, ORCISH_BOW);
-					m_initthrow(mtmp, ORCISH_ARROW, 12);
 					(void)mongets(mtmp, WHITE_DRAGON_SCALES);
 					(void)mongets(mtmp, ORCISH_HELM);
 					(void)mongets(mtmp, ORCISH_CLOAK);
@@ -3907,7 +3951,13 @@ register struct monst *mtmp;
 				}
 				// Siege Ogres etc. continue
 			}
-		if (!rn2(mm == PM_OGRE_KING ? 3 : mm == PM_OGRE_LORD ? 6 : 12))
+		if (mm == PM_OGRE_EMPEROR){
+		    (void) mongets(mtmp, TSURUGI);
+			(void)mongets(mtmp, GAUNTLETS);
+			(void)mongets(mtmp, BANDED_MAIL);
+			(void)mongets(mtmp, WAR_HAT);
+			(void)mongets(mtmp, HIGH_BOOTS);
+		} else if (!rn2(mm == PM_OGRE_KING ? 3 : mm == PM_OGRE_LORD ? 6 : 12))
 		    (void) mongets(mtmp, BATTLE_AXE);
 		else
 		    (void) mongets(mtmp, CLUB);
@@ -4557,7 +4607,7 @@ register struct monst *mtmp;
 		break;
 	    case S_DEMON:
 
-		if(mm>PM_SHAYATEEN) return; //Lords handled above, no random cursed stuff!
+		if(mm>=PM_FIERNA) return; //Lords handled above, no random cursed stuff!
 		switch (mm) {
 			case PM_DAMNED_PIRATE:
 				otmp = mksobj(SCIMITAR, FALSE, FALSE);
@@ -4584,6 +4634,16 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, rn2(4) ? TRIDENT : BULLWHIP);
 			break;
 		    case PM_ERINYS:{
+				if(In_mordor_quest(&u.uz) 
+					&& !In_mordor_forest(&u.uz)
+					&& !Is_ford_level(&u.uz)
+					&& !In_mordor_fields(&u.uz)
+					&& in_mklev
+				){
+					(void)mongets(mtmp, SHACKLES);
+					mtmp->entangled = SHACKLES;
+					return;
+				}
 				chance = rnd(10);
 				if(chance >= 9){
 					mongets(mtmp, HELMET);
@@ -4594,14 +4654,14 @@ register struct monst *mtmp;
 					otmp->obj_material = IRON;
 					(void) mpickobj(mtmp, otmp);
 					mongets(mtmp, LONG_SWORD);
-					// mongets(mtmp, IRON_BANDS);
+					mongets(mtmp, IRON_BANDS);
 				} else if(chance >= 6){
 					mongets(mtmp, HELMET);
 					mongets(mtmp, CHAIN_MAIL);
 					mongets(mtmp, GLOVES);
 					mongets(mtmp, HIGH_BOOTS);
 					mongets(mtmp, TWO_HANDED_SWORD);
-					// mongets(mtmp, ROPE_OF_ENTANGLING);
+					mongets(mtmp, ROPE_OF_ENTANGLING);
 				} else if(chance >= 3){
 					mongets(mtmp, LEATHER_HELM);
 					mongets(mtmp, LEATHER_ARMOR);
@@ -4611,7 +4671,7 @@ register struct monst *mtmp;
 					mongets(mtmp, STILETTO);
 					mongets(mtmp, BOW);
 					m_initthrow(mtmp, ARROW, 20);
-					// mongets(mtmp, ROPE_OF_ENTANGLING);
+					mongets(mtmp, ROPE_OF_ENTANGLING);
 				} else {
 					mongets(mtmp, find_gcirclet());
 					mongets(mtmp, GENTLEWOMAN_S_DRESS);
@@ -6101,6 +6161,22 @@ register struct	monst	*mtmp;
 				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 ////////////////////////////////////////
+		    case PM_LUNGORTHIN:
+				otmp = mksobj(BULLWHIP, FALSE, FALSE);
+				otmp->obj_material = METAL;
+				otmp->oproperties = OPROP_FIREW;
+				otmp->objsize = MZ_GIGANTIC;
+				otmp->spe = 4;
+				fix_object(otmp);
+				mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(SHIELD_OF_REFLECTION, FALSE, FALSE);
+				otmp->obj_material = PLATINUM;
+				otmp->objsize = MZ_LARGE;
+				fix_object(otmp);
+				mpickobj(mtmp, otmp);
+			break;
+////////////////////////////////////////
 		    case PM_DURIN_S_BANE:
 				(void)mongets(mtmp, BULLWHIP);
 				otmp = mksobj(BULLWHIP, FALSE, FALSE);
@@ -7292,6 +7368,10 @@ register int	mmflags;
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
+			else if(mndx == PM_LUNGORTHIN){
+				mtmp->mhpmax = 3*mtmp->mhpmax;
+				mtmp->mhp = mtmp->mhpmax;
+			}
 			else if(mndx == PM_PALE_NIGHT){
 				mtmp->mvar1 = 0;
 			}
@@ -7307,6 +7387,14 @@ register int	mmflags;
 					if(rn2(2)){
 						mtmp->mfaction = SUCCUBUS_FACTION;
 					}
+				}
+				else if(In_mordor_quest(&u.uz) 
+					&& !In_mordor_forest(&u.uz)
+					&& !Is_ford_level(&u.uz)
+					&& !In_mordor_fields(&u.uz)
+					&& in_mklev
+				){
+					mtmp->mfaction = SUCCUBUS_FACTION;
 				}
 			}
 			if(mndx == PM_ANCIENT_OF_DEATH){
@@ -8390,6 +8478,7 @@ struct monst *mtmp, *victim;
 			ptr == &mons[PM_WATCHER_IN_THE_WATER] ||
 			ptr == &mons[PM_KETO] ||
 			ptr == &mons[PM_DURIN_S_BANE] ||
+			ptr == &mons[PM_LUNGORTHIN] ||
 			ptr == &mons[PM_CHROMATIC_DRAGON] ||
 			ptr == &mons[PM_BOLG] ||
 			ptr == &mons[PM_PRIEST_OF_GHAUNADAUR] ||
@@ -8624,6 +8713,7 @@ int type;
 		case PM_SEMBLANCE: return 80;
 		case PM_ARSENAL: return 88;
 		case PM_RETRIEVER: return 120;
+		case PM_FORD_GUARDIAN: return 135;//Max HP
 //		case PM_HEAD_OF_THE_UNKNOWN_GOD: return 65;
 //		case PM_BODY_OF_THE_UNKNOWN_GOD: return 65;
 //		case PM_LEGS_OF_THE_UNKNOWN_GOD: return 65;

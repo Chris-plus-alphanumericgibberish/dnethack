@@ -524,16 +524,36 @@ fixup_special()
 	}
 	/* CHAOS QUEST 3: various features */
 	if (In_mordor_quest(&u.uz)){
-		if(In_mordor_forest(&u.uz))
+		if(In_mordor_forest(&u.uz) || Is_ford_level(&u.uz))
 			place_chaos_forest_features();
+		if(Is_ford_level(&u.uz) || In_mordor_fields(&u.uz)){
+			for (x = 1; x<COLNO; x++){
+				for (y = 0; y<ROWNO; y++){
+					levl[x][y].lit = TRUE;
+				}
+			}
+		}
 		if(In_mordor_fields(&u.uz)){
-			for (x = COLNO/2; x<COLNO; x++){
+			for (x = 2*COLNO/3; x<COLNO; x++){
 				for (y = 0; y<ROWNO; y++){
 					if (levl[x][y].typ == TREE &&
-						(x > COLNO/2 || rn2(2))
+						(x > 2*COLNO/3 || rn2(2))
 					) levl[x][y].typ = GRASS;
 				}
 			}
+			//Note: Post forest-conversion
+			place_chaos_forest_features();
+		}
+		if(on_level(&u.uz, &modor_depths_2_level)){
+			place_chaos_forest_features();
+			for (x = 1; x < COLNO - 1; x++)
+			for (y = 0; y < ROWNO - 1; y++){
+				if (levl[x][y].typ == STONE) levl[x][y].typ = HWALL;
+			}
+			wallification(1, 0, COLNO - 1, ROWNO - 1);
+		}
+		if(on_level(&u.uz, &modor_depths_3_level)){
+			place_chaos_forest_features();
 		}
 	}
 	/* NEUTRAL QUEST: various features */

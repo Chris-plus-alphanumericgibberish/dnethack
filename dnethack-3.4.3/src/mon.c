@@ -3018,6 +3018,9 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(mdef->mtrapped && t_at(mdef->mx, mdef->my) && t_at(mdef->mx, mdef->my)->ttyp == VIVI_TRAP){
 			return 0L;
 	}
+	if(mdef->entangled == SHACKLES){
+		return 0L;
+	}
 	
 	if(!mon_can_see_mon(magr, mdef)) return 0L;
 	
@@ -3111,13 +3114,17 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 		if(mdef->mpeaceful==TRUE && magr->mtame==TRUE) return FALSE;
 	}
 
-	/* elves vs. orcs */
-	if(is_elf(ma) && (is_orc(md) || is_ogre(md) || is_undead_mon(mdef))
-				&&	!(is_orc(ma) || is_ogre(ma) || is_undead_mon(magr)))
+	/* elves (and Eladrin) vs. (orcs and undead and wargs) */
+	if((is_elf(ma) || is_eladrin(ma) || ma == &mons[PM_GROVE_GUARDIAN] || ma == &mons[PM_FORD_GUARDIAN] || ma == &mons[PM_FORD_ELEMENTAL])
+		&& (is_orc(md) || md == &mons[PM_WARG] || is_ogre(md) || is_undead_mon(mdef))
+		&& !(is_orc(ma) || is_ogre(ma) || is_undead_mon(magr))
+	)
 		return ALLOW_M|ALLOW_TM;
 	/* and vice versa */
-	if(is_elf(md) && (is_orc(ma) || is_ogre(ma) || is_undead_mon(magr))
-				&&	!(is_orc(md) || is_ogre(md) || is_undead_mon(mdef)))
+	if((is_elf(md) || is_eladrin(md) || md == &mons[PM_GROVE_GUARDIAN] || md == &mons[PM_FORD_GUARDIAN] || md == &mons[PM_FORD_ELEMENTAL]) 
+		&& (is_orc(ma) || ma == &mons[PM_WARG] || is_ogre(ma) || is_undead_mon(magr))
+		&& !(is_orc(md) || is_ogre(md) || is_undead_mon(mdef))
+	)
 		return ALLOW_M|ALLOW_TM;
 
 	/* dwarves vs. orcs */

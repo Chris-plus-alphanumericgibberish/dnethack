@@ -1270,6 +1270,10 @@ god_priest(gptr, sx, sy, sanctum)
 	if(on_level(&sanctum_level, &u.uz)) //make moloch's high priest, assume gptr == Moloch is potentially misleading and not necessary
 		priest = makemon(&mons[PM_ELDER_PRIEST], sx + 1, sy, NO_MM_FLAGS);
 	else if(Role_if(PM_EXILE) && sanctum) priest = (struct monst *) 0;
+	else if(In_mordor_depths(&u.uz)){
+		priest = makemon(&mons[PM_HIGH_SHAMAN], sx + 1, sy, NO_MM_FLAGS);
+		return priest;
+	}
 	else {
 		int role = -1, galign, i;
 		
@@ -1288,6 +1292,8 @@ god_priest(gptr, sx, sy, sanctum)
 		
 		priest = makemon(&mons[sanctum ? PM_HIGH_PRIEST : PM_ALIGNED_PRIEST],
 			sx + 1, sy, NO_MM_FLAGS);
+		
+		
 		if(role != -1){
 			return priest;
 		}

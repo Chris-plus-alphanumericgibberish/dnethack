@@ -388,7 +388,13 @@ register int x, y, typ;
 		break;
 	}
 	if (ttmp->ttyp == HOLE) ttmp->tseen = 1;  /* You can't hide a hole */
-	else if (ttmp->ttyp == MAGIC_PORTAL && In_neu(&u.uz)) ttmp->tseen = 1;  /* Just make portals known */
+	else if (ttmp->ttyp == MAGIC_PORTAL && (
+		In_neu(&u.uz) 
+		|| In_mordor_quest(&u.uz)
+		|| Is_ford_level(&u.uz)
+		|| In_mordor_fields(&u.uz)
+		|| In_mordor_buildings(&u.uz)
+	)) ttmp->tseen = 1;  /* Just make portals known */
 	else ttmp->tseen = 0;
 	ttmp->once = 0;
 	ttmp->madeby_u = 0;
@@ -4435,6 +4441,36 @@ boolean force;
 		    }
 		}
 	} /* end if */
+	else if((mtmp = m_at(x,y)) && mtmp->entangled){
+		if(mtmp->entangled == SHACKLES){
+			mtmp->entangled = 0;
+			You("unlock the shackles imprisoning %s.", mon_nam(mtmp));
+			if(rnd(20) < ACURR(A_CHA) && !(is_animal(mtmp->data) || mindless_mon(mtmp))){
+				struct monst *newmon;
+				pline("%s is very grateful!", Monnam(mtmp));
+				newmon = tamedog(mtmp, (struct obj *)0);
+				if(newmon) mtmp = newmon;
+				if(!mtmp->mtame)
+					pline("But, apparently not grateful enough to join you.");
+			}
+			else if(mtmp->mpeaceful){
+				pline("%s is grateful for the assistance, but makes no move to help you in return.", Monnam(mtmp));
+			}
+			else if(!mtmp->mpeaceful && rnd(10) < ACURR(A_CHA) && !(is_animal(mtmp->data) || mindless_mon(mtmp))){
+				mtmp->mpeaceful = 1;
+				pline("%s is thankful enough for the rescue to not attack you, at least.", Monnam(mtmp));
+			}
+			else {
+				mtmp->movement += 12;
+				pline("That might have been a mistake.");
+			}
+		}
+		else {
+			You("disentangle %s.", mon_nam(mtmp));
+			mtmp->entangled = 0;
+		}
+		return 1;
+	}
 
 	if(!u.dx && !u.dy) {
 	    for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)

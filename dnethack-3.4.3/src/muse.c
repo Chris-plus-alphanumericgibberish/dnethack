@@ -1027,7 +1027,7 @@ struct monst *mtmp;
 	
 	if(tbx == 0 && tby == 0) return FALSE; //Target is not lined up.
 	
-	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP) return 0;
+	if(noactions(mtmp)) return 0;
 	
 	if (target)
 	{
@@ -2867,4 +2867,77 @@ boolean stoning;
     mon->mlstmv = monstermoves; /* it takes a turn */
 }
 
+int
+mbreak_entanglement(mon)
+struct monst *mon;
+{
+	struct obj *obj;
+	int count;
+	if(mon->entangled == SHACKLES) return FALSE;
+	else if(mon->entangled == ROPE_OF_ENTANGLING){
+		if((mon->data->msize + !!strongmonst(mon->data))*2 <= rn2(20))
+			return FALSE;
+	} else if(mon->entangled == IRON_BANDS){
+		if(!strongmonst(mon->data) && mon->data->msize != MZ_GIGANTIC) return FALSE;
+		if((mon->data->msize - 3) <= rn2(40)) return FALSE;
+	} else if(mon->entangled == RAZOR_WIRE){
+		if((mon->data->msize + !!strongmonst(mon->data)) <= rn2(40))
+			return FALSE;
+	} else {
+		mon->entangled = 0;
+		return TRUE;
+	}
+	for(obj = mon->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == mon->entangled){
+			m_useup(mon, obj);
+			break;
+		}
+	}
+	for(obj = mon->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == mon->entangled){
+			return FALSE;
+		}
+	}
+	// else
+	mon->entangled = 0;
+	return TRUE;
+}
+
+int
+mescape_entanglement(mon)
+struct monst *mon;
+{
+	struct obj *obj;
+	int count;
+	if(mon->entangled == SHACKLES) return FALSE;
+	else if(mon->entangled == ROPE_OF_ENTANGLING){
+		if((7-mon->data->msize) <= rn2(40))
+			return FALSE;
+	} else if(mon->entangled == IRON_BANDS){
+		if((7-mon->data->msize)*2 <= rn2(20))
+			return FALSE;
+	} else if(mon->entangled == RAZOR_WIRE){
+		if((7-mon->data->msize) <= rn2(40))
+			return FALSE;
+	} else {
+		mon->entangled = 0;
+		return TRUE;
+	}
+	for(obj = mon->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == mon->entangled){
+			obj_extract_self(obj);
+			place_object(obj, mon->mx, mon->my);
+			stackobj(obj);
+			break;
+		}
+	}
+	for(obj = mon->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == mon->entangled){
+			return FALSE;
+		}
+	}
+	// else
+	mon->entangled = 0;
+	return TRUE;
+}
 /*muse.c*/

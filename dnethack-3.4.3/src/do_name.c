@@ -876,6 +876,9 @@ boolean called;
 			else if(mtmp->mhp > 0) (has_blood_mon(mtmp)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
 			name_at_start = FALSE;
 		}
+		if(mtmp->entangled == SHACKLES){
+			Strcat(buf, "shackled ");
+		}
 		if(is_drow(mdat)){
 			struct obj *otmp;
 			for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
@@ -946,6 +949,9 @@ boolean called;
 				else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood_mon(mtmp)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 				else if(mtmp->mhp > 0) (has_blood_mon(mtmp)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
 				name_at_start = FALSE;
+			}
+			if(mtmp->entangled == SHACKLES){
+				Strcat(buf, "shackled ");
 			}
 			if(is_drow(mdat)){
 				struct obj *otmp;
@@ -1025,6 +1031,9 @@ boolean called;
 			else if(mtmp->mhp >= .1*mtmp->mhpmax) (has_blood_mon(mtmp)) ? Strcat(buf, "badly bloodied ") : Strcat(buf, "badly damaged ");
 			else if(mtmp->mhp > 0) (has_blood_mon(mtmp)) ? Strcat(buf, "mortally injured ") : Strcat(buf, "critically damaged ");
 			name_at_start = FALSE;
+		}
+		if(mtmp->entangled == SHACKLES){
+			Strcat(buf, "shackled ");
 		}
 		if(is_drow(mdat)){
 			struct obj *otmp;
