@@ -1394,7 +1394,7 @@ A("The Mitre of Holiness",	HELM_OF_BRILLIANCE,			0,			0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_UNDEAD /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	CARY(AD_FIRE),
 	ENERGY_BOOST,	A_LAWFUL, PM_PRIEST, NON_PM, 2000L, 
-	0,0,0),
+	0,0,WSFX_PLUSSEV),
 
 A("The Treasury of Proteus",	CHEST,					0,			0,
 	(SPFX_NOGEN|SPFX_RESTR|SPFX_INTEL|SPFX_LUCK),0,
