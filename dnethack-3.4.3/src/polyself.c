@@ -607,6 +607,8 @@ int	mntmp;
 	if (flags.verbose) {
 	    static const char use_thec[] = "Use the command #%s to %s.";
 	    static const char monsterc[] = "monster";
+	    if (u.ufirst_light || u.ufirst_sky || u.ufirst_life)
+		pline(use_thec,monsterc,"speak a word of power");
 #ifdef YOUMONST_SPELL
 	    if (attacktype(youmonst.data, AT_MAGC))
 		pline(use_thec,monsterc,"cast monster spells");
@@ -1736,6 +1738,48 @@ doandroid()
 		}
 	}
 	return 0;
+}
+
+int
+dowords()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Words of Power");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(u.ufirst_light && u.ufirst_light_timeout <= moves){
+		Sprintf(buf, "speak the First Word");
+		any.a_int = FIRST_LIGHT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			 'q', 0, ATR_NONE, buf, MENU_UNSELECTED);
+	}
+	if(u.ufirst_sky && u.ufirst_sky_timeout <= moves){
+		Sprintf(buf, "speak the Dividing Word");
+		any.a_int = PART_WATER+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			 'w', 0, ATR_NONE, buf, MENU_UNSELECTED);
+	}
+	if(u.ufirst_life && u.ufirst_life_timeout <= moves){
+		Sprintf(buf, "speak the Nurturing Word");
+		any.a_int = OVERGROW+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			 'e', 0, ATR_NONE, buf, MENU_UNSELECTED);
+	}
+	end_menu(tmpwin, "Select Word");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? wordeffects(selected[0].item.a_int-1) : 0;
 }
 
 STATIC_OVL void

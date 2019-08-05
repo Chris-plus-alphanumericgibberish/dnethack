@@ -475,6 +475,15 @@ domonability()
 	
 	Sprintf(buf, "Attacks");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	if(u.ufirst_light || u.ufirst_sky || u.ufirst_life){
+		Sprintf(buf, "Speak a Word of Power");
+		any.a_int = MATTK_WORD;	/* must be non-zero */
+		incntlet = 'p';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;
+	}
 	if(uarm && uarms && 
 		Is_dragon_armor(uarm) && Is_dragon_shield(uarms) && 
 		Have_same_dragon_armor_and_shield &&
@@ -694,6 +703,7 @@ domonability()
 	if(n <= 0) return 0;
 	
 	switch (selected[0].item.a_int) {
+	case MATTK_WORD: return dowords();
 	case MATTK_BREATH: return dobreathe(youmonst.data);
 	case MATTK_DSCALE:{
 		int res = dobreathe(Dragon_shield_to_pm(uarms));

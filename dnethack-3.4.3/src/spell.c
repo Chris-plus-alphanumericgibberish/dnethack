@@ -1029,9 +1029,6 @@ int menutype;
 	if (spellid(0) == NO_SPELL && !((uarmh && uarmh->oartifact == ART_STORMHELM)  
 		|| (uwep && uwep->oartifact == ART_DEATH_SPEAR_OF_VHAERUN) 
 		|| (uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM)
-		|| u.ufirst_light
-		|| u.ufirst_sky
-		|| u.ufirst_life
 	)){
 	    You("don't know any spells right now.");
 	    return FALSE;
@@ -4557,31 +4554,6 @@ int *spell_no;
 	 * To do it right would require that we implement columns
 	 * in the window-ports (say via a tab character).
 	 */
-	//Special Spells
-	if((splaction == SPELLMENU_CAST || splaction == SPELLMENU_DESCRIBE)
-	&& (u.ufirst_light || u.ufirst_sky || u.ufirst_life)
-	){
-		Sprintf(buf, "Words of Power");
-		add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
-		if(u.ufirst_light && u.ufirst_light_timeout <= moves){
-			Sprintf(buf, "speak the First Word");
-			any.a_int = FIRST_LIGHT+1;	/* must be non-zero */
-			add_menu(tmpwin, NO_GLYPH, &any,
-				 'z', 0, ATR_NONE, buf, MENU_UNSELECTED);
-		}
-		if(u.ufirst_sky && u.ufirst_sky_timeout <= moves){
-			Sprintf(buf, "speak the Dividing Word");
-			any.a_int = PART_WATER+1;	/* must be non-zero */
-			add_menu(tmpwin, NO_GLYPH, &any,
-				 'y', 0, ATR_NONE, buf, MENU_UNSELECTED);
-		}
-		if(u.ufirst_life && u.ufirst_life_timeout <= moves){
-			Sprintf(buf, "speak the Nurturing Word");
-			any.a_int = OVERGROW+1;	/* must be non-zero */
-			add_menu(tmpwin, NO_GLYPH, &any,
-				 'x', 0, ATR_NONE, buf, MENU_UNSELECTED);
-		}
-	}
 	any.a_void = 0;		/* zero out all bits */
 	//Standard Spells
 	if (!iflags.menu_tab_sep)
