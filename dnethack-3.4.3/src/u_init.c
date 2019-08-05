@@ -906,6 +906,7 @@ static const struct def_skill Skill_B[] = {
 
 #ifdef BARD
 static struct def_skill Skill_Bard[] = {
+	{ P_SABER, P_SKILLED },
     { P_DAGGER, P_SKILLED },		{ P_KNIFE,  P_BASIC },
     { P_SHORT_SWORD, P_BASIC },		{ P_SCIMITAR, P_BASIC },
     { P_CLUB, P_SKILLED },		{ P_FLAIL, P_BASIC },
