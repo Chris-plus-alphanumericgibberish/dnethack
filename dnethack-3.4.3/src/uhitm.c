@@ -5091,6 +5091,10 @@ uchar aatyp, adtyp;
 	    if (bite_monster(mon))
 		return 2;			/* lifesaved */
 	}
+	if(!(mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED) && ptr == &mons[PM_LILLEND] && rn2(2)){
+		ptr = find_mask(mon);
+		if(!Blind && ptr != &mons[PM_LILLEND]) pline("%s uses a %s mask!",Monnam(mon), ptr->mname);
+	}
 	for(i = 0; ; i++) {
 	    if(i >= NATTK) return(malive | mhit);	/* no passive attacks */
 	    if(ptr->mattk[i].aatyp == AT_NONE) break;	/* try this one */

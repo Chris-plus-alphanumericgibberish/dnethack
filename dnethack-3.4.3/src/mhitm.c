@@ -27,7 +27,7 @@ STATIC_DCL int FDECL(mdamagem, (struct monst *,struct monst *,struct attack *));
 STATIC_DCL void FDECL(mswingsm, (struct monst *, struct monst *, struct obj *));
 STATIC_DCL void FDECL(noises,(struct monst *,struct attack *));
 STATIC_DCL void FDECL(missmm,(struct monst *,struct monst *,struct attack *));
-STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, BOOLEAN_P, int, struct attack *));
+STATIC_DCL int FDECL(passivemm, (struct monst *, struct monst *, struct permonst *, BOOLEAN_P, int, struct attack *));
 STATIC_DCL int NDECL(beastmastery);
 STATIC_DCL int NDECL(mountedCombat);
 
@@ -760,8 +760,14 @@ meleeattack:
 		break;
 	}
 	if (attk && !(res[i] & MM_AGR_DIED) &&
-	    dist2(magr->mx, magr->my, mdef->mx, mdef->my) < 3)
-	    res[i] = passivemm(magr, mdef, strike, res[i] & MM_DEF_DIED, mattk);
+	    dist2(magr->mx, magr->my, mdef->mx, mdef->my) < 3
+	){
+		if(!(mdef->mfaction == ZOMBIFIED || mdef->mfaction == SKELIFIED) && pd == &mons[PM_LILLEND] && rn2(2)){
+			pd = find_mask(mdef);
+			if(!Blind && pd != &mons[PM_LILLEND]) pline("%s uses a %s mask!",Monnam(mdef), pd->mname);
+		}
+	    res[i] = passivemm(magr, mdef, pd, strike, res[i] & MM_DEF_DIED, mattk);
+	}
 	
 	if(res[i] && magr->mtame && canseemon(magr)) u.petattacked = TRUE;
 	if (res[i] & MM_DEF_DIED) return res[i];
@@ -2815,7 +2821,9 @@ physical:{
 	}
 	
 	if(attacktype_fordmg(mdef->data, AT_NONE, AD_STAR)){
-		if(otmp && otmp == MON_WEP(magr) && !otmp->oartifact && otmp->spe <= 0) tmp = 0;
+		if(otmp && otmp == MON_WEP(magr) && !otmp->oartifact && otmp->spe <= 0){
+			tmp = 0;
+		}
 		else if(!otmp || otmp != MON_WEP(magr)) tmp /= 2;
 	}
 	
@@ -2979,13 +2987,13 @@ register struct obj *otemp;
  * handled above.  Returns same values as mattackm.
  */
 STATIC_OVL int
-passivemm(magr,mdef,mhit,mdead,mattk)
+passivemm(magr,mdef, mddat,mhit,mdead,mattk)
 register struct monst *magr, *mdef;
+struct permonst *mddat;
 boolean mhit;
 int mdead;
 struct attack *mattk;
 {
-	register struct permonst *mddat = mdef->data;
 	register struct permonst *madat = magr->data;
 	char buf[BUFSZ];
 	int i, tmp;
@@ -2999,19 +3007,46 @@ struct attack *mattk;
 				    (int)mddat->mattk[i].damd);
 	else if(mddat->mattk[i].damd)
 	    tmp = d((int)mddat->mlevel+1, (int)mddat->mattk[i].damd);
+	else if(mddat->mattk[i].adtyp == AD_PHYS)
+		return (mdead | mhit); //NO_ATTK
 	else
 	    tmp = 0;
 
-	if (mdef->data == &mons[PM_GRUE] && !((!levl[mdef->mx][mdef->my].lit && !(viz_array[mdef->my][mdef->mx] & TEMP_LIT1 && !(viz_array[mdef->my][mdef->mx] & TEMP_DRK1)))
+	if (mddat == &mons[PM_GRUE] && !((!levl[mdef->mx][mdef->my].lit && !(viz_array[mdef->my][mdef->mx] & TEMP_LIT1 && !(viz_array[mdef->my][mdef->mx] & TEMP_DRK1)))
 		|| (levl[mdef->mx][mdef->my].lit && (viz_array[mdef->my][mdef->mx] & TEMP_DRK1 && !(viz_array[mdef->my][mdef->mx] & TEMP_LIT1)))))
 		return (mdead | mhit);
 	
 	/* These affect the enemy even if defender killed */
 	switch(mddat->mattk[i].adtyp) {
+	    case AD_STON:{ /* cockatrice */
+		long protector = attk_protection((int)mattk->aatyp),
+		     wornitems = magr->misc_worn_check;
+
+		if(mattk->adtyp == AD_STAR || mattk->adtyp == AD_SHDW || mattk->adtyp == AD_BLUD) break;
+
+		/* wielded weapon gives same protection as gloves here */
+		if (MON_WEP(magr) != 0) wornitems |= W_ARMG;
+		
+		if (!resists_ston(magr) && 
+			(protector == 0L || (protector != ~0L &&
+			    (wornitems & protector) != protector))
+		) {
+			pline("%s turns to stone!", Monnam(magr));
+		    if (poly_when_stoned(magr->data)) {
+				mon_to_stone(magr);
+				return (mdead | mhit);
+		    }
+			monstone(magr);
+			if (magr->mhp > 0) return (mdead | mhit);
+			else if (magr->mtame && !vis)
+			    You(brief_feeling, "peculiarly sad");
+			return (mdead | mhit | MM_AGR_DIED);
+		}
+	    }break;
 		case AD_BARB:
 			Strcpy(buf, Monnam(magr));
 			if(canseemon(magr)){
-				if(mdef->data == &mons[PM_RAZORVINE]) 
+				if(mddat == &mons[PM_RAZORVINE]) 
 					pline("%s is hit by the springing vines!", buf);
 				else pline("%s is hit by %s barbs!",
 					  buf, s_suffix(mon_nam(mdef)));
@@ -3065,6 +3100,7 @@ struct attack *mattk;
 			    tmp = mdef->mhp;
 			}
 		    }
+			goto assess_dmg;
 		}
 		break;
 	    case AD_WEBS:{	/* KMH -- remove enchantment (disenchanter) */
@@ -3099,9 +3135,10 @@ struct attack *mattk;
 				Strcpy(buf, s_suffix(Monnam(mdef)));
 				pline("%s falls upon %s.", buf, mon_nam(magr));
 		    }
+			goto assess_dmg;
 		break;
 	    case AD_STAR:
-			if((otmp && otmp == MON_WEP(magr)) || !hates_silver(magr->data)) {
+			if((otmp && (otmp == MON_WEP(magr) || otmp == MON_SWEP(magr))) || !hates_silver(magr->data)) {
             	tmp = 0;
             } else if (vis) pline("The dress of silver stars sears %s!", mon_nam(magr));
 			if(otmp){
@@ -3116,12 +3153,13 @@ struct attack *mattk;
 					}
 				}
 			}
+			goto assess_dmg;
 		break;
 	    case AD_HLBD:
 //		pline("hp: %d x: %d y: %d", (mon->mhp*100)/mon->mhpmax, mon->mx, mon->my);
 	    if(!mhit) break; //didn't draw blood, forget it.
 		
-		if(mdef->data == &mons[PM_LEGION]){
+		if(mddat == &mons[PM_LEGION]){
 			int n = rnd(4);
 			for(; n>0; n--) rn2(7) ? makemon(mkclass(S_ZOMBIE, G_NOHELL|G_HELL), mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT): 
 									  makemon(&mons[PM_LEGIONNAIRE], mdef->mx, mdef->my, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
