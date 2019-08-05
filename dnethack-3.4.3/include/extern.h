@@ -237,6 +237,7 @@ E void NDECL(sanity_check);
 #endif
 E char FDECL(yn_function, (const char *, const char *, CHAR_P));
 E int NDECL(dotravel);
+E void NDECL(udr_enlightenment);
 
 /* ### dbridge.c ### */
 
