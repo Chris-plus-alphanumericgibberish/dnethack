@@ -4673,11 +4673,13 @@ u_material_next_to_skin(material)
 int material;
 {
 	int count = 0;
+	if(uarmu && uarmu->obj_material == material)
+		count++;
+	if(uarmu && uarmu->otyp == BODYGLOVE)
+		return count;
 	if(uwep && uwep->obj_material == material && !uarmg)
 		count++;
 	if(uarm && uarm->obj_material == material && !uarmu)
-		count++;
-	if(uarmu && uarmu->obj_material == material)
 		count++;
 	if(uarmc && uarmc->obj_material == material && !uarmu && !uarm)
 		count++;
@@ -4710,11 +4712,13 @@ int bcu;
 {
 	#define bcu(otmp) (is_unholy(otmp) ? -1 : otmp->blessed ? 1 : 0)
 	int count = 0;
+	if(uarmu && bcu(uarmu) == bcu)
+		count++;
+	if(uarmu && uarmu->otyp == BODYGLOVE)
+		return count;
 	if(uwep && bcu(uwep) == bcu && !uarmg)
 		count++;
 	if(uarm && bcu(uarm) == bcu && !uarmu)
-		count++;
-	if(uarmu && bcu(uarmu) == bcu)
 		count++;
 	if(uarmc && bcu(uarmc) == bcu && !uarmu && !uarm)
 		count++;
