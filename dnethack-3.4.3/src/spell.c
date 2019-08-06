@@ -1135,6 +1135,7 @@ static const long spiritPOwner[NUMBER_POWERS] = {
 	SEAL_SPECIAL|SEAL_COUNCIL,
 	SEAL_SPECIAL|SEAL_COSMOS,
 	SEAL_SPECIAL|SEAL_LIVING_CRYSTAL,
+	SEAL_SPECIAL|SEAL_TWO_TREES,SEAL_SPECIAL|SEAL_TWO_TREES,
 	SEAL_SPECIAL|SEAL_NUDZIRATH, SEAL_SPECIAL|SEAL_NUDZIRATH,
 	SEAL_SPECIAL|SEAL_ALIGNMENT_THING,
 	SEAL_SPECIAL|SEAL_UNKNOWN_GOD,
@@ -1179,6 +1180,7 @@ static const char *spiritPName[NUMBER_POWERS] = {
 	"Embassy of Elements",
 	"Crystal Memories",
 	"Pseudonatural Surge",
+	"Silver dew of Telperion","Golden dew of Laurelin",
 	"Mirror Shatter", "Mirror Walk",
 	"Flowing Forms",
 	"Phase step",
@@ -3601,6 +3603,81 @@ spiriteffects(power, atme)
 			nomul(-5, "channeling a pseudonatural.");
 			dopseudonatural();
 		break;
+		case PWR_SILVER_DEW:{
+			int dmg;
+			struct monst *mon;
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				dmg = d(5,dsize);
+				if(mon->mpeaceful){
+					if(canseemon(mon))
+						pline("%s looks rested and healthy!", Monnam(mon));
+					mon->msleeping = 0;
+					mon->mhp += dmg;
+					mon->mhp = min(mon->mhp, mon->mhpmax);
+				} else {
+					if(hates_silver(mon->data)){
+						pline("The silver dew sears %s!", mon_nam(mon));
+						dmg += d(5,20); //Ouch (Melee-ranged attack that takes your whole turn)
+					}
+					else {
+						pline("%s is laden with dew!", Monnam(mon));
+						if (amphibious_mon(mon) &&
+							!flaming(mon->data)
+						){
+							dmg = 0;
+							pline("%s seems unharmed.", Monnam(mon));
+						}
+					}
+					mon->mhp -= dmg;
+					if (mon->mhp <= 0){
+						mon->mhp = 0;
+						xkilled(mon, 1);
+						break;
+					}
+				}
+			} else break;
+		}break;
+		case PWR_GOLDEN_DEW:{
+			int dmg;
+			struct monst *mon;
+			if (!getdir((char *)0)  || !(u.dx || u.dy)) return(0);
+			if(isok(u.ux+u.dx, u.uy+u.dy)) {
+				mon = m_at(u.ux+u.dx, u.uy+u.dy);
+				if(!mon) break;
+				dmg = d(5,dsize);
+				if(mon->mpeaceful){
+					if(canseemon(mon))
+						pline("%s looks full of righteous wrath!", Monnam(mon));
+					if(mon->encouraged < BASE_DOG_ENCOURAGED_MAX || mon->encouraged < dmg){
+						mon->encouraged += dmg;
+						mon->encouraged = min(mon->encouraged, max(dmg, BASE_DOG_ENCOURAGED_MAX));
+					}
+				} else {
+					if(hates_holy_mon(mon)){
+						pline("The golden dew sears %s!", mon_nam(mon));
+						dmg += d(5,20); //Ouch (Melee-ranged attack that takes your whole turn)
+					}
+					else {
+						pline("%s is laden with dew!", Monnam(mon));
+						if (amphibious_mon(mon) &&
+							!flaming(mon->data)
+						){
+							dmg = 0;
+							pline("%s seems unharmed.", Monnam(mon));
+						}
+					}
+					mon->mhp -= dmg;
+					if (mon->mhp <= 0){
+						mon->mhp = 0;
+						xkilled(mon, 1);
+						break;
+					}
+				}
+			} else break;
+		}break;
 		case PWR_MIRROR_SHATTER:{
 			int dmg;
 			boolean done = FALSE;

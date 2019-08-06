@@ -907,6 +907,7 @@ char * sealNames[] =  {
 	"the Council of Elements", /* 33 */
 	"Cosmos", /* 34 */
 	"Mediator", /* 35 */
+	"Telperion and Laurelin", /* 36 */
 	"Miska", /* 36 */
 	"Nudzirath", /* 37 */
 	"the Alignment Thing", /* 38 */
@@ -952,6 +953,7 @@ char * sealTitles[] =  {
 	"", /* 33 */
 	", goddess of crystal", /* 34 */
 	", shard of the Living Gate", /* 35 */
+	", the Two Trees", /* 36 */
 	" the wolf-spider", /* 36 */
 	", the mirrored destroyer", /* 37 */
 	"", /* 38 */
@@ -3794,6 +3796,33 @@ pick_seal()
 			);
 		}
 		any.a_int = LIVING_CRYSTAL;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet = (incntlet != 'z') ? (incntlet+1) : 'A';
+	}
+	if(Role_if(PM_EXILE) && u.specialSealsKnown&SEAL_TWO_TREES){
+		if((u.specialSealsActive&SEAL_TWO_TREES) && u.sealTimeout[TWO_TREES-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (active; timeout:%ld)",
+				sealNames[TWO_TREES-FIRST_SEAL], 
+				u.sealTimeout[TWO_TREES-FIRST_SEAL] - moves
+			);
+		} else if(u.specialSealsActive&SEAL_TWO_TREES) {
+			Sprintf(buf,	"%s (active)", 
+				sealNames[TWO_TREES-FIRST_SEAL] 
+			);
+		} else if(u.sealTimeout[TWO_TREES-FIRST_SEAL] > moves){
+			Sprintf(buf,	"%s (timeout:%ld)",
+				sealNames[TWO_TREES-FIRST_SEAL], 
+				u.sealTimeout[TWO_TREES-FIRST_SEAL] - moves
+			);
+		} else {
+			Sprintf(buf,	"%s%s", 
+				sealNames[TWO_TREES-FIRST_SEAL], 
+				sealTitles[TWO_TREES-FIRST_SEAL]
+			);
+		}
+		any.a_int = TWO_TREES;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);

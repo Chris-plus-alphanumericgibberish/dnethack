@@ -1277,6 +1277,11 @@ touch_artifact(obj, mon, hypothetical)
 				pline("You learn a new seal!");
 				u.specialSealsKnown |= SEAL_COSMOS;
 			}
+			else if(obj->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN && !(u.specialSealsKnown&SEAL_TWO_TREES)){
+				pline("There is a seal in the space enclosed by the ring, shining in the darkness.");
+				pline("You learn a new seal!");
+				u.specialSealsKnown |= SEAL_TWO_TREES;
+			}
 			else if(obj->oartifact == ART_HAND_MIRROR_OF_CTHYLLA && !(u.specialSealsKnown&SEAL_NUDZIRATH)){
 				pline("The cracks on the mirror's surface form part of a seal.");
 				pline("In fact, you realize that all cracked and broken mirrors everywhere together are working towards writing this seal.");
@@ -1383,7 +1388,7 @@ touch_artifact(obj, mon, hypothetical)
 			badalign = FALSE;
 			// badclass = FALSE;
 		}
-		else if(oart->alignment == A_LAWFUL && (u.specialSealsActive&SEAL_COSMOS || u.specialSealsActive&SEAL_LIVING_CRYSTAL)){
+		else if(oart->alignment == A_LAWFUL && (u.specialSealsActive&SEAL_COSMOS || u.specialSealsActive&SEAL_LIVING_CRYSTAL || u.specialSealsActive&SEAL_TWO_TREES)){
 			badalign = FALSE;
 			// badclass = FALSE;
 		}

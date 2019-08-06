@@ -1324,11 +1324,11 @@ asGuardian:
 									if (canseemon(tmpm)) {
 										if (Hallucination) {
 											if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-												  tmpm->encouraged == BASE_DOG_ENCOURAGED_MAX ? "way cool" :
+												  tmpm->encouraged >= BASE_DOG_ENCOURAGED_MAX ? "way cool" :
 												  tmpm->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
 										} else {
 											if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-												  tmpm->encouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" :
+												  tmpm->encouraged >= BASE_DOG_ENCOURAGED_MAX ? "berserk" :
 												  tmpm->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
 										}
 									}
@@ -1337,8 +1337,9 @@ asGuardian:
 						}
 					}
 					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && !u.uinvulnerable){
+						if(u.uencouraged < BASE_DOG_ENCOURAGED_MAX) 
 						u.uencouraged = min_ints(BASE_DOG_ENCOURAGED_MAX, u.uencouraged + rnd(mtmp->m_lev/3+1));
-						You_feel("%s!", u.uencouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" : "wild");
+						You_feel("%s!", u.uencouraged >= BASE_DOG_ENCOURAGED_MAX ? "berserk" : "wild");
 					}
 					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && uwep && uwep->oartifact == ART_SINGING_SWORD){
 						uwep->ovar1 |= OHEARD_COURAGE;
@@ -1576,12 +1577,12 @@ asGuardian:
 									if (canseemon(tmpm)) {
 										if (Hallucination) {
 											if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-												  tmpm->encouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "peaced out" :
+												  tmpm->encouraged <= -1*BASE_DOG_ENCOURAGED_MAX ? "peaced out" :
 												  tmpm->encouraged < (-1*BASE_DOG_ENCOURAGED_MAX/2) ? "mellower" : "mellow");
 										} else {
 											if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-												  tmpm->encouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" :
-												  tmpm->encouraged > -1*(BASE_DOG_ENCOURAGED_MAX/2) ? "depressed" : "a bit sad");
+												  tmpm->encouraged <= -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" :
+												  tmpm->encouraged < -1*(BASE_DOG_ENCOURAGED_MAX/2) ? "depressed" : "a bit sad");
 										}
 									}
 								}
@@ -1589,8 +1590,9 @@ asGuardian:
 						}
 					}
 					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
+						if(u.uencouraged > -1*BASE_DOG_ENCOURAGED_MAX) 
 						u.uencouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, u.uencouraged - rnd(mtmp->m_lev/3+1));
-						You_feel("%s!", u.uencouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" : "depressed");
+						You_feel("%s!", u.uencouraged <= -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" : "depressed");
 					}
 					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
 						uwep->ovar1 |= OHEARD_DIRGE;
@@ -3580,8 +3582,8 @@ int tx,ty;
 	case EVE:{
 		if(u.sealTimeout[EVE-FIRST_SEAL] < moves){
 			//Spirit requires that her seal be drawn beside a tree.
-			if(isok(tx+(tx-u.ux), ty+(ty-u.uy)) && 
-				IS_TREE(levl[tx+(tx-u.ux)][ty+(ty-u.uy)].typ) 
+			if(isok(tx+u.dx, ty+u.dy) && 
+				IS_TREE(levl[tx+u.dx][ty+u.dy].typ) 
 			){
 				You("%s a woman within the seal.", Blind ? "sense" : "see");
 				pline("She is both young and old at once.");
@@ -4430,13 +4432,37 @@ int tx,ty;
 						if(!rn2(20))
 							You("glimpse a pair of tiny green lights in the place from whence the darkness spread.");
 					} else {
-						You_hear("the murmur of a distance conversation, and a spreading silence.");
+						You_hear("the murmur of a distance conversation, and a terrible spreading silence.");
 					}
 					bindspirit(ep->ward_id);
 					u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] = moves + bindingPeriod;
 				} else {
 					You("think of colored glass.");
 					// u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] = moves + bindingPeriod/10;
+				}
+			}
+		} else pline("You can't feel the spirit.");
+	}break;
+	case TWO_TREES:{
+		struct obj *otmp;
+		if(u.sealTimeout[TWO_TREES-FIRST_SEAL] < moves){
+			//Spirit requires that her seal be drawn beside a tree or plant.
+			if(Role_if(PM_EXILE)){
+				if(isok(tx+u.dx, ty+u.dy) && (
+					IS_TREE(levl[tx+u.dx][ty+u.dy].typ) 
+					|| (m_at(tx+u.dx, ty+u.dy) && m_at(tx+u.dx, ty+u.dy)->data->mlet == S_PLANT)
+				)){
+					if(!Blind){
+						You("see two enormous trees in the distance, growing together atop a quiet hill.");
+						You("have an overpowering feeling that you have seen something that no longer exists in this world.");
+					} else {
+						You("feel like you're trespassing....");
+					}
+					bindspirit(ep->ward_id);
+					u.sealTimeout[TWO_TREES-FIRST_SEAL] = moves + bindingPeriod;
+				} else {
+					You("think of plants.");
+					// u.sealTimeout[TWO_TREES-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
 			}
 		} else pline("You can't feel the spirit.");
@@ -5066,6 +5092,27 @@ bindspirit(seal_id)
 				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_LIVING_CRYSTAL;
 				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
 				u.sealTimeout[LIVING_CRYSTAL-FIRST_SEAL] = moves + bindingPeriod;
+			} else You("can't feel the spirit.");
+		break;
+		case TWO_TREES:
+			if(u.sealTimeout[TWO_TREES-FIRST_SEAL] < moves){
+				if(u.spirit[ALIGN_SPIRIT]){
+					//Eject current alignment quest spirit
+					int i;
+					for(i=0;i<=(NUMINA-QUEST_SPIRITS);i++){
+						if(((u.spirit[ALIGN_SPIRIT]&~SEAL_SPECIAL)>>i)&0x1L){
+							u.sealTimeout[QUEST_SPIRITS+i-FIRST_SEAL] = moves;
+							break;
+						}
+					}
+					unbind(u.spirit[ALIGN_SPIRIT],FALSE);
+				}
+				u.specialSealsActive |= SEAL_SPECIAL|SEAL_TWO_TREES;
+				u.specialSealsUsed |= SEAL_TWO_TREES;
+				set_spirit_powers(SEAL_SPECIAL|SEAL_TWO_TREES);
+				u.spirit[ALIGN_SPIRIT] = SEAL_SPECIAL|SEAL_TWO_TREES;
+				u.spiritT[ALIGN_SPIRIT] = moves + bindingPeriod;
+				u.sealTimeout[TWO_TREES-FIRST_SEAL] = moves + bindingPeriod;
 			} else You("can't feel the spirit.");
 		break;
 		case MISKA:

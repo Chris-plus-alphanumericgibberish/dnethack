@@ -1022,11 +1022,11 @@ aglaopesong(mtmp)
 								if (canseemon(tmpm)) {
 									if (Hallucination) {
 										if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-											  tmpm->encouraged == BASE_DOG_ENCOURAGED_MAX ? "way cool" :
+											  tmpm->encouraged >= BASE_DOG_ENCOURAGED_MAX ? "way cool" :
 											  tmpm->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
 									} else {
 										if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-											  tmpm->encouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" :
+											  tmpm->encouraged >= BASE_DOG_ENCOURAGED_MAX ? "berserk" :
 											  tmpm->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
 									}
 								}
@@ -1095,12 +1095,12 @@ aglaopesong(mtmp)
 								if (canseemon(tmpm)) {
 									if (Hallucination) {
 										if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-											  tmpm->encouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "peaced out" :
+											  tmpm->encouraged <= -1*BASE_DOG_ENCOURAGED_MAX ? "peaced out" :
 											  tmpm->encouraged < (-1*BASE_DOG_ENCOURAGED_MAX/2) ? "mellower" : "mellow");
 									} else {
 										if(canspotmon(tmpm)) pline("%s looks %s!", Monnam(tmpm),
-											  tmpm->encouraged == -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" :
-											  tmpm->encouraged > -1*(BASE_DOG_ENCOURAGED_MAX/2) ? "depressed" : "a bit sad");
+											  tmpm->encouraged <= -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" :
+											  tmpm->encouraged < -1*(BASE_DOG_ENCOURAGED_MAX/2) ? "depressed" : "a bit sad");
 									}
 								}
 							}

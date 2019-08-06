@@ -622,11 +622,12 @@ struct you {
 #define SEAL_COUNCIL				0x00000004L
 #define SEAL_COSMOS					0x00000008L
 #define SEAL_LIVING_CRYSTAL			0x00000010L
-#define SEAL_MISKA					0x00000020L
-#define SEAL_NUDZIRATH				0x00000040L
-#define SEAL_ALIGNMENT_THING		0x00000080L
-#define SEAL_UNKNOWN_GOD			0x00000100L
-#define SEAL_BLACK_WEB				0x00000200L
+#define SEAL_TWO_TREES				0x00000020L
+#define SEAL_MISKA					0x00000040L
+#define SEAL_NUDZIRATH				0x00000080L
+#define SEAL_ALIGNMENT_THING		0x00000100L
+#define SEAL_UNKNOWN_GOD			0x00000200L
+#define SEAL_BLACK_WEB				0x00000400L
 #define SEAL_NUMINA					0x40000000L
 //	long	numina;	//numina does not expire, and can be immediatly re-bound once 30th level is achived if the pact is broken.
 	
@@ -718,17 +719,19 @@ struct you {
 #define	PWR_EMBASSY_OF_ELEMENTS		58
 #define	PWR_SUMMON_MONSTER			59
 #define	PWR_PSEUDONATURAL_SURGE		60
-#define	PWR_MIRROR_SHATTER			61
-#define	PWR_MIRROR_WALK				62
-#define	PWR_FLOWING_FORMS			63
-#define	PWR_PHASE_STEP				64
-#define	PWR_BLACK_BOLT				65
-#define	PWR_WEAVE_BLACK_WEB			66
-#define	PWR_IDENTIFY_INVENTORY		67
-#define	PWR_CLAIRVOYANCE			68
-#define	PWR_FIND_PATH				69
-#define	PWR_GNOSIS_PREMONITION		70
-#define	NUMBER_POWERS				71
+#define	PWR_SILVER_DEW				61
+#define	PWR_GOLDEN_DEW				62
+#define	PWR_MIRROR_SHATTER			63
+#define	PWR_MIRROR_WALK				64
+#define	PWR_FLOWING_FORMS			65
+#define	PWR_PHASE_STEP				66
+#define	PWR_BLACK_BOLT				67
+#define	PWR_WEAVE_BLACK_WEB			68
+#define	PWR_IDENTIFY_INVENTORY		69
+#define	PWR_CLAIRVOYANCE			70
+#define	PWR_FIND_PATH				71
+#define	PWR_GNOSIS_PREMONITION		72
+#define	NUMBER_POWERS				73
 
 	int spiritPOrder[52]; //# of letters in alphabet, capital and lowercase
 //	char spiritPLetters[NUMBER_POWERS];

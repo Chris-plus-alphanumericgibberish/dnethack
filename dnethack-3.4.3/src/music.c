@@ -979,11 +979,11 @@ int distance;
 			if (canseemon(mtmp)) {
 				if (Hallucination) {
 					pline("%s looks %s!", Monnam(mtmp),
-					      mtmp->encouraged == BASE_DOG_ENCOURAGED_MAX ? "way cool" :
+					      mtmp->encouraged >= BASE_DOG_ENCOURAGED_MAX ? "way cool" :
 					      mtmp->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "cooler" : "cool");
 				} else {
 					pline("%s looks %s!", Monnam(mtmp),
-					      mtmp->encouraged == BASE_DOG_ENCOURAGED_MAX ? "berserk" :
+					      mtmp->encouraged >= BASE_DOG_ENCOURAGED_MAX ? "berserk" :
 					      mtmp->encouraged > (BASE_DOG_ENCOURAGED_MAX/2) ? "wilder" : "wild");
 				}
 			}

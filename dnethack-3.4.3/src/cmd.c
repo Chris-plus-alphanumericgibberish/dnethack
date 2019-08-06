@@ -1798,6 +1798,15 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_TWO_TREES){
+			Strcat(buf, sealNames[(TWO_TREES) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
 			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
 			numFound++;
@@ -1868,7 +1877,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 		if(!u.spirit[QUEST_SPIRIT] && u.specialSealsKnown&(SEAL_DAHLVER_NAR|SEAL_ACERERAK|SEAL_BLACK_WEB)){
 			you_are("able to bind with a quest spirit");
 		}
-		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|LIVING_CRYSTAL|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
+		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_COSMOS|SEAL_LIVING_CRYSTAL|SEAL_TWO_TREES|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
 			you_are("able to bind with an aligned spirit");
 		}
 		if(!u.spirit[OUTER_SPIRIT] && u.ulevel == 30 && Role_if(PM_EXILE)){
@@ -2438,6 +2447,15 @@ int final;
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_TWO_TREES){
+			Strcat(buf, sealNames[(TWO_TREES) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
 			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
 			numFound++;
@@ -2508,7 +2526,7 @@ int final;
 		if(!u.spirit[QUEST_SPIRIT] && u.specialSealsKnown&(SEAL_DAHLVER_NAR|SEAL_ACERERAK|SEAL_BLACK_WEB)){
 			you_are("able to bind with a quest spirit");
 		}
-		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(LIVING_CRYSTAL|SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
+		if(!u.spirit[ALIGN_SPIRIT] && u.specialSealsKnown&(SEAL_LIVING_CRYSTAL|SEAL_TWO_TREES|SEAL_COSMOS|SEAL_MISKA|SEAL_NUDZIRATH|SEAL_ALIGNMENT_THING|SEAL_UNKNOWN_GOD)){
 			you_are("able to bind with an aligned spirit");
 		}
 		if(!u.spirit[OUTER_SPIRIT] && u.ulevel == 30 && Role_if(PM_EXILE)){
@@ -2981,6 +2999,15 @@ resistances_enlightenment()
 				if(numFound==numBound-1) Strcat(buf,", and ");
 			}
 		}
+		if(numFound < numBound && u.specialSealsActive&SEAL_TWO_TREES){
+			Strcat(buf, sealNames[(TWO_TREES) - (FIRST_SEAL)]);
+			numFound++;
+			if(numBound==2 && numFound==1) Strcat(buf," and ");
+			else if(numBound>=3){
+				if(numFound<numBound-1) Strcat(buf,", ");
+				if(numFound==numBound-1) Strcat(buf,", and ");
+			}
+		}
 		if(numFound < numBound && u.specialSealsActive&SEAL_MISKA){
 			Strcat(buf, sealNames[(MISKA) - (FIRST_SEAL)]);
 			numFound++;
@@ -3355,6 +3382,10 @@ signs_enlightenment()
 		putstr(en_win, 0, "You feel like something is behind you, but you can't see anything.");
 		message = TRUE;
 	}
+	if(u.specialSealsActive&SEAL_TWO_TREES){
+		putstr(en_win, 0, "Glorious dappled light dances on your body.");
+		message = TRUE;
+	}
 	if(u.specialSealsActive&SEAL_MISKA && u.ulevel >= 10){
 		static char mbuf[BUFSZ] = {'\0'};
 		if(u.ulevel >= 26){
@@ -3674,6 +3705,10 @@ signs_mirror()
 	}
 	if(u.specialSealsActive&SEAL_LIVING_CRYSTAL){
 		putstr(en_win, 0, "Broken rings of fragmentary glyphs form and dissolve in the dustlight behind you.");
+		message = TRUE;
+	}
+	if(u.specialSealsActive&SEAL_TWO_TREES){
+		putstr(en_win, 0, "Glorious dappled light dances on your body.");
 		message = TRUE;
 	}
 	if(u.specialSealsActive&SEAL_MISKA && !Invis && u.ulevel >= 10){
