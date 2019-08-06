@@ -691,7 +691,7 @@ const char *DnDHumLgod = "Saint Cuthbert",
 		   *DnDHumCgod = "_Mask"; /* DnD human pantheon */
 
 //defined in pray.c
-extern const char *Moloch, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *DreadFracture, *AllInOne; /*defined in pray*/
+extern const char *Moloch, *Morgoth, *MolochLieutenant, *Silence, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *DreadFracture, *AllInOne; /*defined in pray*/
 /* The player's role, created at runtime from initial
  * choices.  This may be munged in role_init().
  */
@@ -1185,7 +1185,7 @@ god_minions(gptr)
 		break;
 	}
 	
-	if(gptr == Moloch) return rn2(2) ? Ldevils:Cdemons;
+	if(gptr == Moloch || gptr == MolochLieutenant) return rn2(2) ? Ldevils:Cdemons;
 	
 	if(gptr == ElfRangerLgod) return LOrome;
 	if(gptr == ElfRangerNgod) return NYavanna;

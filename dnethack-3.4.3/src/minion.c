@@ -10,7 +10,7 @@
 extern const int monstr[];
 
 //defined in pray.c
-extern const char *Moloch, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *DreadFracture, *AllInOne; /*defined in pray*/
+extern const char *Moloch, *Morgoth, *MolochLieutenant, *Silence, *Chaos, *DeepChaos, *tVoid, *Demiurge, *Sophia, *Other, *BlackMother, *DreadFracture, *AllInOne; /*defined in pray*/
 
 void
 msummon(mon)		/* mon summons a monster */

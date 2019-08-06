@@ -49,6 +49,9 @@ static void FDECL(god_gives_benefit,(ALIGNTYP_P));
  */
 //definition of externs in you.h
 const char	*Moloch = "Moloch";
+const char	*Morgoth = "Melkor";
+const char	*MolochLieutenant = "Moloch, lieutenant of Melkor";
+const char	*Silence = "The Silence";
 const char	*Chaos = "Chaos";
 const char	*DeepChaos = "Chaos, with Cosmos in chains";
 const char	*tVoid = "the void";
@@ -3161,8 +3164,15 @@ aligntyp alignment;
 	}
     switch (alignment) {
      case A_NONE:
-		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
-		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
+		if(In_FF_quest(&u.uz)){
+			if(on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
+			else gnam = Chaos;
+		} else if(In_mithardir_quest(&u.uz)){
+			gnam = Silence;
+		} else if(In_mordor_quest(&u.uz)){
+			if(on_level(&u.uz, &borehole_4_level)) gnam = MolochLieutenant;
+			else gnam = Moloch;
+		}
 		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
 		else if(In_lost_cities(&u.uz)){
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
@@ -3213,8 +3223,15 @@ aligntyp alignment;
 
     switch (alignment) {
      case A_NONE:
-		if(u.uz.dnum == chaos_dnum && !on_level(&chaose_level,&u.uz)) gnam = Chaos;
-		else if(u.uz.dnum == chaos_dnum && on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
+		if(In_FF_quest(&u.uz)){
+			if(on_level(&chaose_level,&u.uz)) gnam = DeepChaos;
+			else gnam = Chaos;
+		} else if(In_mithardir_quest(&u.uz)){
+			gnam = Silence;
+		} else if(In_mordor_quest(&u.uz)){
+			if(on_level(&u.uz, &borehole_4_level)) gnam = MolochLieutenant;
+			else gnam = Moloch;
+		}
 		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
 		else if(In_outlands(&u.uz)) gnam = DreadFracture;
 		else if(In_lost_cities(&u.uz)){
