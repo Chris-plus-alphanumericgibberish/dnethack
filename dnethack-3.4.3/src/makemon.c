@@ -2979,6 +2979,73 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, CRYSTAL_BOOTS);
 				(void)mongets(mtmp, CRYSTAL_GAUNTLETS);
 				(void)mongets(mtmp, CRYSTAL_HELM);
+			} else if(ptr == &mons[PM_GAE_ELADRIN]){
+				switch(rnd(5)){
+					case 1:
+					otmp = mksobj(CRYSTAL_PLATE_MAIL, TRUE, FALSE);
+					otmp->obj_material = GEMSTONE;
+					otmp->ovar1 = EMERALD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(ELVEN_CLOAK, TRUE, FALSE);
+					otmp->oproperties = OPROP_MAGC;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(CRYSTAL_GAUNTLETS, TRUE, FALSE);
+					otmp->obj_material = GEMSTONE;
+					otmp->ovar1 = EMERALD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(ARCHAIC_HELM, TRUE, FALSE);
+					otmp->obj_material = GEMSTONE;
+					otmp->ovar1 = rn2(2) ? EMERALD : GOLD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(CRYSTAL_SWORD, TRUE, FALSE);
+					otmp->obj_material = GEMSTONE;
+					otmp->ovar1 = EMERALD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(SICKLE, TRUE, FALSE);
+					otmp->obj_material = GEMSTONE;
+					otmp->ovar1 = EMERALD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					break;
+					case 2:
+					otmp = mksobj(CLOAK_OF_MAGIC_RESISTANCE, TRUE, FALSE);
+					otmp->obj_material = CLOTH;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					(void)mongets(mtmp, QUARTERSTAFF);
+					break;
+					case 3:
+					otmp = mksobj(GAUNTLETS, TRUE, FALSE);
+					otmp->oproperties = OPROP_MAGC;
+					otmp->obj_material = GOLD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					break;
+					case 4:
+					otmp = mksobj(AMULET_OF_LIFE_SAVING, TRUE, FALSE);
+					otmp->oproperties = OPROP_MAGC|OPROP_REFL;
+					otmp->obj_material = GEMSTONE;
+					otmp->ovar1 = EMERALD;
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+					break;
+					case 5:
+					break;
+				}
 			} else if(ptr == &mons[PM_GWYNHARWYF]){
 				(void)mongets(mtmp, CLOAK);
 				(void)mongets(mtmp, HIGH_BOOTS);
@@ -7004,7 +7071,7 @@ register int	mmflags;
 					tmpm = makemon(&mons[PM_ARCADIAN_AVENGER], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 					if(tmpm) m_initsgrp(tmpm, mtmp->mx, mtmp->my);
 				}
-			} else if(mndx == PM_KETO){ 
+			} else if(mndx == PM_KETO || mndx == PM_DRACAE_ELADRIN){ 
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}
@@ -7166,7 +7233,7 @@ register int	mmflags;
 //			}
 //		break;
 		case S_BLOB:
-			if (mndx == PM_SHOGGOTH || mndx == PM_PRIEST_OF_GHAUNADAUR){
+			if (mndx == PM_SHOGGOTH || mndx == PM_PRIEST_OF_GHAUNADAUR || mndx == PM_MOTHERING_MASS){
 				mtmp->mhpmax = 3*mtmp->mhpmax;
 				mtmp->mhp = mtmp->mhpmax;
 			}

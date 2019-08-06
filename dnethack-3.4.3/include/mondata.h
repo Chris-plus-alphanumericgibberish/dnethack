@@ -246,6 +246,8 @@
 							 (ptr) == &mons[PM_SHIERE_ELADRIN] || \
 							 (ptr) == &mons[PM_GHAELE_ELADRIN] || \
 							 (ptr) == &mons[PM_TULANI_ELADRIN] || \
+							 (ptr) == &mons[PM_GAE_ELADRIN] || \
+							 (ptr) == &mons[PM_DRACAE_ELADRIN] || \
 							 (ptr) == &mons[PM_ALRUNES] ||\
 							 (ptr) == &mons[PM_GWYNHARWYF] ||\
 							 (ptr) == &mons[PM_ASCODEL] ||\
@@ -262,6 +264,8 @@
 							 (ptr) == &mons[PM_BALL_OF_LIGHT] || \
 							 (ptr) == &mons[PM_LUMINOUS_CLOUD] || \
 							 (ptr) == &mons[PM_BALL_OF_RADIANCE] || \
+							 (ptr) == &mons[PM_WARDEN_TREE] || \
+							 (ptr) == &mons[PM_MOTHERING_MASS] || \
 							 (ptr) == &mons[PM_HATEFUL_WHISPERS] ||\
 							 (ptr) == &mons[PM_FURIOUS_WHIRLWIND] ||\
 							 (ptr) == &mons[PM_BLOODY_SUNSET] ||\
