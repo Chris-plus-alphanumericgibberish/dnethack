@@ -1280,9 +1280,9 @@ mdamagem(magr, mdef, mattk)
 		tmp += magr->encouraged;
 		if(uwep && uwep->oartifact == ART_SINGING_SWORD && !mindless_mon(magr) && !is_deaf(magr)){
 			if(uwep->osinging == OSING_COURAGE && magr->mtame){
-				tmp += uwep->spe;
+				tmp += uwep->spe+1;
 			} else if(uwep->osinging == OSING_DIRGE && !magr->mtame){
-				tmp -= uwep->spe;
+				tmp -= uwep->spe+1;
 			}
 		}
 		if(tmp < 0) tmp = 0;
