@@ -107,6 +107,8 @@ PORTAL:(35,10,55,20),(00,00,00,00),"frst2"
 
 OBJECT: '=', random, random
 OBJECT[80%]: '=', random, random
+OBJECT[80%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful silver sword", random
 
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
@@ -144,6 +146,8 @@ PORTAL:(35,10,55,20),(00,00,00,00),"frst3"
 
 OBJECT: '=', random, random
 OBJECT[80%]: '=', random, random
+OBJECT[80%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful silver sword", random
 
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
@@ -181,6 +185,8 @@ PORTAL:(35,10,55,20),(00,00,00,00),"ford"
 
 OBJECT: '=', random, random
 OBJECT[80%]: '=', random, random
+OBJECT[80%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful silver sword", random
 
 MONSTER[75%]: '@', "Green-elf", random
 MONSTER[75%]: '@', "Green-elf", random
@@ -218,6 +224,8 @@ PORTAL:(65,00,75,20),(00,00,00,00),"frst4"
 
 OBJECT: '=', random, random
 OBJECT[80%]: '=', random, random
+OBJECT[80%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful silver sword", random
 
 CONTAINER: '(', "chest", random
 OBJECT:'!',"extra healing", contained
@@ -313,6 +321,13 @@ OBJECT[20%]: '=', random, random
 OBJECT[20%]: '=', random, random
 OBJECT[20%]: '=', random, random
 
+OBJECT[80%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful silver sword", random
+OBJECT[20%]: '#', "wrathful mithril sword", random
+OBJECT[20%]: '#', "wrathful silver sword", random
+
+OBJECT[50%]: '#', "cursed morgul orcish short sword", random
+OBJECT[50%]: '#', "cursed morgul orcish dagger", random
 
 OBJECT:')',"elven arrow", random
 OBJECT:')',"elven arrow", random
@@ -984,6 +999,15 @@ OBJECT:'#',"10 cursed +4 morgul metal ancient arrow", random
 
 OBJECT:'#',"cursed +4 morgul metal stiletto", random
 OBJECT:'#',"cursed +4 morgul metal stiletto", random
+
+OBJECT: '#', "wrathful silver high-elven warsword", random
+OBJECT: '#', "wrathful mithril elven lance", random
+OBJECT[60%]: '#', "wrathful mithril elven lance", random
+OBJECT[60%]: '#', "wrathful mithril elven lance", random
+OBJECT[60%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful mithril sword", random
+OBJECT[60%]: '#', "wrathful mithril sword", random
 
 OBJECT:')',"elven spear", random
 OBJECT:')',"elven spear", random

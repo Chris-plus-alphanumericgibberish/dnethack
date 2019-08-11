@@ -131,6 +131,7 @@ E void FDECL(arti_poly_contents, (struct obj *));
 E struct obj * FDECL(minor_artifact, (struct obj *, char *));
 E void NDECL(mind_blast_items);
 E int FDECL(oresist_disintegration, (struct obj *));
+E int FDECL(wrath_target, (struct obj *, struct monst *));
 
 /* ### attrib.c ### */
 

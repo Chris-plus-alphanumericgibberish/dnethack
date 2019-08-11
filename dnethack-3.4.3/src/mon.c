@@ -4913,6 +4913,41 @@ xkilled(mtmp, dest)
 	u.uconduct.killer++;
 	if(mtmp->data == &mons[PM_CROW] && u.sealsActive&SEAL_MALPHAS) unbind(SEAL_MALPHAS,TRUE);
 
+	if(uwep && uwep->oproperties&OPROP_WRTHW){
+		struct obj *otmp = uwep;
+		if(wrath_target(otmp, mtmp)){
+			if((otmp->wrathdata&0x3L) < 3) otmp->wrathdata++;
+		}
+		else {
+			if(mtmp->mfaction == ZOMBIFIED){
+				otmp->wrathdata = PM_ZOMBIE<<2;
+			} else if(mtmp->mfaction == SKELIFIED){
+				otmp->wrathdata = PM_SKELETON<<2;
+			} else if(mtmp->mfaction == VAMPIRIC){
+				otmp->wrathdata = PM_VAMPIRE<<2;
+			} else {
+				otmp->wrathdata = monsndx(mtmp->data)<<2;
+			}
+		}
+	}
+	if(uswapwep && u.twoweap && uswapwep->oproperties&OPROP_WRTHW){
+		struct obj *otmp = uswapwep;
+		if(wrath_target(otmp, mtmp)){
+			if((otmp->wrathdata&0xFF) < 3) otmp->wrathdata++;
+		}
+		else {
+			if(mtmp->mfaction == ZOMBIFIED){
+				otmp->wrathdata = PM_ZOMBIE<<2;
+			} else if(mtmp->mfaction == SKELIFIED){
+				otmp->wrathdata = PM_SKELETON<<2;
+			} else if(mtmp->mfaction == VAMPIRIC){
+				otmp->wrathdata = PM_VAMPIRE<<2;
+			} else {
+				otmp->wrathdata = monsndx(mtmp->data)<<2;
+			}
+		}
+	}
+	
 	if (dest & 1) {
 	    const char *verb = nonliving_mon(mtmp) ? "destroy" : "kill";
 

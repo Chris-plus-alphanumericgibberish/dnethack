@@ -147,6 +147,7 @@ struct obj {
 	/* 19 free bits in this field, I think -CM */
 	
 	long bodytypeflag;	/* MB tag(s) this item goes with. */
+#define wrathdata	bodytypeflag	/* MA flags this item is currently wrathful against. */
 	int	corpsenm;	/* type of corpse is mons[corpsenm] */
 					/* Class of mask */
 #define leashmon	corpsenm	/* gets m_id of attached pet */
@@ -223,6 +224,7 @@ struct obj {
 #define OPROP_PSIOW		0x0000800000000000
 #define OPROP_VORPW		0x0001000000000000
 #define OPROP_MORGW		0x0002000000000000
+#define OPROP_WRTHW		0x0004000000000000
 #define OPROP_W_MASK	~OPROP_DEF_MASK
 
 	unsigned oeaten;	/* nutrition left in food, if partly eaten */

@@ -187,8 +187,6 @@ WEAPON("moon axe", "two-handed axe", /*Needs encyc entry*//*Needs tile*/
 /* swords */
 WEAPON("short sword", (char *)0,
 	1, 0, 0,  8, 30, 10,  6,  8, 0, P,   P_SHORT_SWORD, IRON, FALSE, HI_METAL),
-WEAPON("vibroblade", "gray short sword", /*Needs encyc entry*//*Needs tile*/
-	1, 0, 0,  0,  5,1000, 6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, FALSE, CLR_GRAY),
 WEAPON("elven short sword", "runed short sword",
 	0, 0, 0,  2, 10, 10,  7,  7, 2, P,   P_SHORT_SWORD, WOOD, FALSE, HI_WOOD),
 WEAPON("droven short sword", "short sword", /*Needs encyc entry*/
@@ -233,7 +231,9 @@ WEAPON("droven greatsword", "two-handed sword", /*Needs encyc entry*//*Needs til
 	0, 0, 1,  0,120, 50,  18, 30, 2, S,   P_TWO_HANDED_SWORD, OBSIDIAN_MT, UNIDED, CLR_BLACK),
 WEAPON("katana", "samurai sword",
 	0, 0, 0,  4, 40, 80, 10, 12, 1, S,   P_LONG_SWORD, IRON, FALSE, HI_METAL),
-/* special swords set up for artifacts */
+/* special swords set up for artifacts and future weapons*/
+WEAPON("vibroblade", "gray short sword", /*Needs encyc entry*//*Needs tile*/
+	1, 0, 0,  0,  5,1000, 6,  8, 0, P,   P_SHORT_SWORD, PLASTIC, FALSE, CLR_GRAY),
 WEAPON("tsurugi", "long samurai sword",
 	0, 0, 1,  0, 60,500, 16,  8, 2, S,   P_TWO_HANDED_SWORD, METAL, FALSE, HI_METAL),
 						/* +2d6 large */

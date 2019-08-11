@@ -341,7 +341,8 @@ register struct monst *mtmp;
 		otmp = mksobj(ELVEN_BROADSWORD, TRUE, TRUE);
 		otmp->obj_material = SILVER;
 		otmp->objsize = MZ_LARGE;
-		// otmp->oproperties = OPROP_WATRW;
+		otmp->oproperties = OPROP_WRTHW;
+		otmp->wrathdata = (PM_ORC<<2)+1; //"Plus 2/4 vs orcs"
 		otmp->spe = abs(otmp->spe);
 		bless(otmp);
 		fix_object(otmp);
@@ -8523,7 +8524,45 @@ struct monst *mtmp, *victim;
 	if (mtmp->mhp <= 0)
 	    return ((struct permonst *)0);
 
-	if(mtmp->m_lev > 50 || ptr == &mons[PM_CHAOS]) return ((struct permonst *)0);
+	/*Update wrathful weapons here*/
+	if(victim && mtmp != victim){ //Currently used to give some monsters the final HP during special growing-up code.
+		if(MON_WEP(mtmp) && MON_WEP(mtmp)->oproperties&OPROP_WRTHW){
+			struct obj *otmp = MON_WEP(mtmp);
+			if(wrath_target(otmp, victim)){
+				if((otmp->wrathdata&0x3L) < 3) otmp->wrathdata++;
+			}
+			else {
+				if(victim->mfaction == ZOMBIFIED){
+					otmp->wrathdata = PM_ZOMBIE<<2;
+				} else if(victim->mfaction == SKELIFIED){
+					otmp->wrathdata = PM_SKELETON<<2;
+				} else if(victim->mfaction == VAMPIRIC){
+					otmp->wrathdata = PM_VAMPIRE<<2;
+				} else {
+					otmp->wrathdata = monsndx(victim->data)<<2;
+				}
+			}
+		}
+		if(MON_SWEP(mtmp) && MON_SWEP(mtmp)->oproperties&OPROP_WRTHW){
+			struct obj *otmp = MON_SWEP(mtmp);
+			if(wrath_target(otmp, victim)){
+				if((otmp->wrathdata&0xFF) < 3) otmp->wrathdata++;
+			}
+			else {
+				if(victim->mfaction == ZOMBIFIED){
+					otmp->wrathdata = PM_ZOMBIE<<2;
+				} else if(victim->mfaction == SKELIFIED){
+					otmp->wrathdata = PM_SKELETON<<2;
+				} else if(victim->mfaction == VAMPIRIC){
+					otmp->wrathdata = PM_VAMPIRE<<2;
+				} else {
+					otmp->wrathdata = monsndx(victim->data)<<2;
+				}
+			}
+		}
+	}
+	
+	if(mtmp->m_lev > 50 || ptr == &mons[PM_CHAOS]) return ptr;
 	/* note:  none of the monsters with special hit point calculations
 	   have both little and big forms */
 	oldtype = monsndx(ptr);

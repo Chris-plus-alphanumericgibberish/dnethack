@@ -1296,6 +1296,9 @@ boolean artif;
 		break;
 	}
 
+	if(otmp->oproperties&OPROP_WRTHW)
+		otmp->wrathdata = PM_ORC<<2;//wrathful + 1/4 vs orcs
+
 	/* unique objects may have an associated artifact entry */
 	if (objects[otyp].oc_unique && !otmp->oartifact)
 	    otmp = mk_artifact(otmp, (aligntyp)A_NONE);

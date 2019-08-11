@@ -808,6 +808,8 @@ boolean dofull;
 				Strcat(buf, "vorpal ");
 			if (obj->oproperties&OPROP_MORGW && obj->known && obj->cursed)
 				Strcat(buf, "morgul ");
+			if (obj->oproperties&OPROP_WRTHW && obj->known)
+				Strcat(buf, "wrathful ");
 			if (obj->oproperties&OPROP_FLAYW && obj->known)
 				Strcat(buf, "flaying ");
 			/* note: "holy" and "unholy" properties are shown in the BUC part of the name, as they replace "blessed" and "cursed". */
@@ -3623,6 +3625,9 @@ int wishflags;
 		} else if (!strncmpi(bp, "morgul ", l=7)
 			) {
 			oproperties |= OPROP_MORGW;
+		} else if (!strncmpi(bp, "wrathful ", l=9)
+			) {
+			oproperties |= OPROP_WRTHW;
 		} else if (!strncmpi(bp, "flaying ", l=8)
 			) {
 			oproperties |= OPROP_FLAYW;
@@ -4756,7 +4761,7 @@ typfnd:
 			case WEAPON_CLASS:
 				oproperties &= (OPROP_FIREW | OPROP_COLDW | OPROP_PSIOW | OPROP_DEEPW | OPROP_WATRW | OPROP_ELECW | OPROP_ACIDW | OPROP_MAGCW 
 								| OPROP_ANARW | OPROP_CONCW | OPROP_AXIOW | OPROP_HOLYW | OPROP_UNHYW | OPROP_VORPW | OPROP_MORGW | OPROP_FLAYW
-								| OPROP_PHSEW | OPROP_LESSW);
+								| OPROP_WRTHW | OPROP_PHSEW | OPROP_LESSW);
 				break;
 			case ARMOR_CLASS:
 				oproperties &= (OPROP_FIRE | OPROP_COLD | OPROP_ELEC | OPROP_ACID | OPROP_MAGC | OPROP_ANAR | OPROP_CONC | OPROP_AXIO | OPROP_REFL);
@@ -4766,6 +4771,8 @@ typfnd:
 			}
 			otmp->oproperties = oproperties;
 		}
+		if(otmp->oproperties&OPROP_WRTHW)
+			otmp->wrathdata = PM_ORC<<2;//wrathful + 1/4 vs orcs
 	}
 		
 

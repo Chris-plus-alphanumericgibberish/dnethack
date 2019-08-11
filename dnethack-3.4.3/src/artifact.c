@@ -2841,6 +2841,15 @@ int basedmg;
 			bonus += d(1,15-(otmp->spe)*2);
 		}
 	}
+	if(mdef && (otmp->oproperties&OPROP_WRTHW) && (otmp->wrathdata >> 2) >= 0 && (otmp->wrathdata >> 2) < NUMMONS){
+		int bmod = 0;
+		if(wrath_target(otmp, mdef)){
+			bmod = (otmp->wrathdata&0x3L)+1;
+			if(otmp->oproperties&OPROP_LESSW)
+				bonus += bmod*rnd(8)/4;
+			else bonus += bmod*basedmg/4;
+		}
+	}
 	if(otmp->oproperties&OPROP_ANARW){
 		if(youdefend ? (u.ualign.type != A_CHAOTIC) : (sgn(mdef->data->maligntyp) >= 0)){
 			if (otmp->oproperties&OPROP_LESSW) bonus += d(1, 8);
@@ -9764,6 +9773,44 @@ struct obj *obj;
 	 || obj->oartifact == ART_DRAGON_PLATE
 	 || obj->oproperties&OPROP_DISN
 	 || is_quest_artifact(obj);
+}
+
+int
+wrath_target(otmp, mon)
+struct obj *otmp;
+struct monst *mon;
+{
+	boolean youdefend = mon == &youmonst;
+	if(youdefend){
+		if(&mons[(otmp->wrathdata >> 2)] == youracedata)
+			return 1;
+		
+		if(mons[(otmp->wrathdata >> 2)].mflagsa && 
+		 (mons[(otmp->wrathdata >> 2)].mflagsa&(youracedata->mflagsa) != 0)
+		)
+			return 1;
+	} else {
+		if(mon->mfaction == ZOMBIFIED){
+			if((otmp->wrathdata >> 2) == PM_ZOMBIE)
+				return 1;
+		} else if(mon->mfaction == SKELIFIED){
+			if((otmp->wrathdata >> 2) == PM_SKELETON)
+				return 1;
+		} else if(mon->mfaction == VAMPIRIC){
+			if((otmp->wrathdata >> 2) == PM_VAMPIRE)
+				return 1;
+		} else {
+			if(&mons[(otmp->wrathdata >> 2)] == mon->data)
+				return 1;
+			
+			if(mons[(otmp->wrathdata >> 2)].mflagsa && 
+			 ((mons[(otmp->wrathdata >> 2)].mflagsa&(mon->data->mflagsa)) != 0)
+			){
+				return 1;
+			}
+		}
+	}
+	return 0;
 }
 
 /*artifact.c*/
