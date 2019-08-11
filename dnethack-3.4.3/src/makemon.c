@@ -3000,9 +3000,13 @@ register struct monst *mtmp;
 					fix_object(otmp);
 					bless(otmp);
 					(void) mpickobj(mtmp, otmp);
-					otmp = mksobj(ARCHAIC_HELM, TRUE, FALSE);
+					otmp = mksobj(rn2(4) ? ARCHAIC_HELM : find_gcirclet(), TRUE, FALSE);
+					if(rn2(2)){
 					otmp->obj_material = GEMSTONE;
-					otmp->ovar1 = rn2(2) ? EMERALD : GOLD;
+						otmp->ovar1 = EMERALD;
+					} else {
+						otmp->obj_material = GOLD;
+					}
 					fix_object(otmp);
 					bless(otmp);
 					(void) mpickobj(mtmp, otmp);
@@ -3028,7 +3032,7 @@ register struct monst *mtmp;
 					(void)mongets(mtmp, QUARTERSTAFF);
 					break;
 					case 3:
-					otmp = mksobj(GAUNTLETS, TRUE, FALSE);
+					otmp = mksobj(ARCHAIC_GAUNTLETS, TRUE, FALSE);
 					otmp->oproperties = OPROP_MAGC;
 					otmp->obj_material = GOLD;
 					fix_object(otmp);
