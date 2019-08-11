@@ -114,7 +114,7 @@ NON_DIGGABLE:(00,00,75,20)
 
 MAZE: "Bin-loca",' '
 FLAGS: shortsighted,hardfloor
-INIT_MAP: '.' , 'T' , false , true , lit , false
+INIT_MAP: 'G' , 'T' , false , true , lit , false
 GEOMETRY:center,center
 #0         1         2         3         4         
 #01234567890123456789012345678901234567890123456789
