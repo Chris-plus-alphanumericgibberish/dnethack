@@ -126,7 +126,7 @@ NEARDATA const struct songspell songs[] = {
 	{ SPE_CANCELLATION,	"Disruption", 		2, 5,	BUGLE,			TOOLED_HORN },
 	{ SPE_SLOW_MONSTER,	"Lethargy",			2, 5,	FLUTE,	HARP },
 	{ SPE_CHARM_MONSTER,"Friendship",		3, 6,	FLUTE,	HARP },
-	{ SPE_CAUSE_FEAR,	"Inspire Courage",	3, 6,	DRUM,	BUGLE }
+	{ SPE_CAUSE_FEAR,	"Inspire Courage",	3, 3,	DRUM,	BUGLE }
 /*	random ideas that weren't implemented -- based in spells from other schools
 	{ SPE_CURE_BLINDNESS,	"Cause Blindness"
 	{ SPE_CURE_SICKNESS,	"Cause Sickness"
