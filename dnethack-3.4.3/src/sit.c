@@ -453,31 +453,34 @@ dosit()
 	return(1);
 }
 
-void
+/* returns TRUE if the caller should print a message */
+boolean
 rndcurse()			/* curse a few inventory items at random! */
 {
 	int	nobj = 0;
 	int	cnt, onum;
 	struct	obj	*otmp;
 	static const char mal_aura[] = "feel a malignant aura surround %s.";
+	boolean did_curse = FALSE;
 
 	if (uamul && (uamul->otyp == AMULET_VERSUS_CURSES)) {
 	    You(mal_aura, "your amulet");
-	    return;
+		return FALSE;
 	} else if (uwep && (uwep->oartifact == ART_MAGICBANE) && rn2(20)) {
 	    You(mal_aura, "the magic-absorbing blade");
-	    return;
+		return FALSE;
 	} else if (uwep && (uwep->oartifact == ART_TECPATL_OF_HUHETOTL) && rn2(20)) {
 	    You(mal_aura, "the bloodstained dagger");
-	    return;
+		return FALSE;
 	} else if(uwep && (uwep->oartifact == ART_TENTACLE_ROD) && rn2(20)){
 	    You(mal_aura, "the languid tentacles");
-	    return;
+		return FALSE;
 	}
 	for(otmp = invent; otmp; otmp=otmp->nobj){
 		if(otmp->oartifact == ART_HELPING_HAND && rn2(20)){
+			You_feel("as if you need some help.");
 			You_feel("something lend you some help!");
-			return;
+			return FALSE;
 		}
 	}
 	if(u.ukinghill && rn2(20)){
@@ -492,7 +495,7 @@ rndcurse()			/* curse a few inventory items at random! */
 		else
 			curse(otmp);
 	    update_inventory();		
-		return;
+		return FALSE;
 	}
 
 	if(Antimagic) {
@@ -533,6 +536,7 @@ rndcurse()			/* curse a few inventory items at random! */
 		else
 			curse(otmp);
 	    }
+		did_curse = TRUE;
 	    update_inventory();
 	}
 
@@ -552,11 +556,14 @@ rndcurse()			/* curse a few inventory items at random! */
 		      hcolor(otmp->cursed ? NH_BLACK : (const char *)"brown"));
 		otmp->bknown = TRUE;
 	    }
+		did_curse = TRUE;
 	}
 #endif	/*STEED*/
+	return did_curse;
 }
 
-void
+/* returns TRUE if the caller should print a message */
+boolean
 mrndcurse(mtmp)			/* curse a few inventory items at random! */
 register struct monst *mtmp;
 {
@@ -564,47 +571,58 @@ register struct monst *mtmp;
 	int	cnt, onum;
 	struct	obj	*otmp;
 	static const char mal_aura[] = "feel a malignant aura surround %s.";
+	static const char mons_item_mal_aura[] = "feel a malignant aura surround %s %s.";
 
 	boolean resists = resist(mtmp, 0, 0, FALSE);
+	boolean visible = canseemon(mtmp);
 
 	if(mtmp->mfaction == ILLUMINATED){
-	    You("feel a malignant aura burn away in the Light.");
-	    return;
+	    if(visible) You("feel a malignant aura burn away in the Light.");
+	    return FALSE;
 	}
 	
+	if (which_armor(mtmp, W_AMUL) && (which_armor(mtmp, W_AMUL)->otyp == AMULET_VERSUS_CURSES)) {
+		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "amulet");
+		return FALSE;
+	}
 	if (MON_WEP(mtmp) &&
 	    (MON_WEP(mtmp)->oartifact == ART_MAGICBANE) && rn2(20)) {
-	    You(mal_aura, "the magic-absorbing blade");
-	    return;
+		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "magic-absorbing blade");
+		return FALSE;
+	}
+	if (MON_WEP(mtmp) &&
+		(MON_WEP(mtmp)->oartifact == ART_TECPATL_OF_HUHETOTL) && rn2(20)) {
+		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "bloodstained dagger");
+		return FALSE;
 	}
 	if (MON_WEP(mtmp) &&
 	    (MON_WEP(mtmp)->oartifact == ART_TENTACLE_ROD) && rn2(20)) {
-	    You(mal_aura, "languid tentacles");
-	    return;
+		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "languid tentacles");
+		return FALSE;
 	}
 	for(otmp = mtmp->minvent; otmp; otmp=otmp->nobj)
 		if(otmp->oartifact == ART_TREASURY_OF_PROTEUS)
 			break;
 	if(otmp && rn2(20)){
-	    You(mal_aura, "the cursed treasure chest");
+		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "cursed treasure chest");
 		if(otmp->blessed)
 			unbless(otmp);
 		else
 			curse(otmp);
-		return;
+		return FALSE;
 	}
 	for(otmp = mtmp->minvent; otmp; otmp=otmp->nobj)
 		if(otmp->oartifact == ART_HELPING_HAND)
 			break;
 	if(otmp && rn2(20)){
-	    You(mal_aura, "the helpful hand");
-		return;
+		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "helpful hand");
+		return FALSE;
 	}
 
 
 	if(resists) {
 	    shieldeff(mtmp->mx, mtmp->my);
-	    You(mal_aura, mon_nam(mtmp));
+		if (visible) You(mal_aura, mon_nam(mtmp));
 	}
 
 	for (otmp = mtmp->minvent; otmp; otmp = otmp->nobj) {
@@ -631,7 +649,7 @@ register struct monst *mtmp;
 
 		if(otmp->oartifact && spec_ability(otmp, SPFX_INTEL) &&
 		   rn2(10) < 8) {
-		    pline("%s!", Tobjnam(otmp, "resist"));
+			if (visible) pline("%s!", Tobjnam(otmp, "resist"));
 		    continue;
 		}
 
@@ -641,7 +659,9 @@ register struct monst *mtmp;
 			curse(otmp);
 	    }
 	    update_inventory();
+		return TRUE;
 	}
+	return FALSE;
 }
 
 void

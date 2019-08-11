@@ -11,7 +11,6 @@ STATIC_DCL void FDECL(handle_material_specials, (struct obj *, int, int));
 STATIC_DCL void FDECL(init_obj_material, (struct obj *));
 #ifdef OVL1
 STATIC_DCL void FDECL(container_weight, (struct obj *));
-STATIC_DCL struct obj *FDECL(save_mtraits, (struct obj *, struct monst *));
 #ifdef WIZARD
 STATIC_DCL const char *FDECL(where_name, (int));
 STATIC_DCL void FDECL(check_contained, (struct obj *,const char *));
@@ -2443,7 +2442,7 @@ unsigned mid;
     return otmp;
 }
 
-static struct obj *
+struct obj *
 save_mtraits(obj, mtmp)
 struct obj *obj;
 struct monst *mtmp;

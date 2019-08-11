@@ -1794,7 +1794,8 @@ boolean with_price;
 			if (obj->owornmask & W_RINGR) Strcat(buf, " (on right ");
 			if (obj->owornmask & W_RINGL) Strcat(buf, " (on left ");
 			if (obj->owornmask & W_RING) {
-				Strcat(buf, body_part(HAND));
+				const char *hand_s = obj->where == OBJ_MINVENT ? mbodypart(obj->ocarry, HAND) : body_part(HAND);
+				Strcat(buf, hand_s);
 				if (isSignetRing(obj->otyp)){
 					if (obj->opoisoned & OPOISON_BASIC) Strcat(buf, ", poison injecting");
 					if (obj->opoisoned & OPOISON_FILTH) Strcat(buf, ", filth injecting");
@@ -1839,7 +1840,7 @@ boolean with_price;
 				Strcat(buf, " (wielded)");
 			}
 			else {
-				const char *hand_s = body_part(HAND);
+				const char *hand_s = obj->where == OBJ_MINVENT ? mbodypart(obj->ocarry, HAND) : body_part(HAND);
 
 				if ((bimanual(obj, youracedata)
 					&& !(u.twoweap && (obj->oartifact == ART_PROFANED_GREATSCYTHE || obj->oartifact == ART_LIFEHUNT_SCYTHE)))
@@ -1849,9 +1850,10 @@ boolean with_price;
 			}
 		}
 		if (obj->owornmask & W_SWAPWEP) {
+			const char *hand_s = obj->where == OBJ_MINVENT ? mbodypart(obj->ocarry, HAND) : body_part(HAND);
 			if (mcarried(obj) || (u.twoweap && !(uwep && uwep->otyp == STILETTOS)))	// Monsters twoweaponing stilettos would give a bad message, but they can't even wield stilettos right now...
 				Sprintf(eos(buf), " (wielded in other %s)",
-				body_part(HAND));
+				hand_s);
 			else
 				Strcat(buf, " (alternate weapon; not wielded)");
 		}
@@ -2847,6 +2849,7 @@ const char *oldstr;
 			if (!BSTRCMP(bp, p-6, "gloves") ||
 			    !BSTRCMP(bp, p-6, "lenses") ||
 			    !BSTRCMP(bp, p-5, "shoes") ||
+				!BSTRCMPI(bp, p-9, "vs curses") ||
 				!BSTRCMPI(bp, p-13, "versus curses") ||
 			    !BSTRCMP(bp, p-6, "scales") ||
 				!BSTRCMP(bp, p-6, "wishes") ||	/* ring */
@@ -3008,6 +3011,9 @@ struct alt_spellings {
 	{ "iron ball", HEAVY_IRON_BALL },
 	{ "mattock", DWARVISH_MATTOCK },
 	{ "amulet of poison resistance", AMULET_VERSUS_POISON },
+	{ "amulet of curse resistance", AMULET_VERSUS_CURSES },
+	{ "amulet vs poison", AMULET_VERSUS_POISON },
+	{ "amulet vs curses", AMULET_VERSUS_CURSES },
 	{ "stone", ROCK },
 	{ "crystal", ROCK },
 #ifdef TOURIST
@@ -3135,7 +3141,7 @@ int wishflags;
 	boolean allow_artifact = !!(wishflags & WISH_ARTALLOW);
 	
 	int halfeaten, halfdrained, mntmp, contents;
-	int islit, unlabeled, ishistoric, isdiluted;
+	int islit, unlabeled, ishistoric, ispetrified, isdiluted;
 	struct fruit *f;
 	int ftype = current_fruit;
 	char fruitbuf[BUFSZ];
@@ -3395,6 +3401,8 @@ int wishflags;
 			halfeaten = 1;
 		} else if (!strncmpi(bp, "historic ", l=9)) {
 			ishistoric = 1;
+		} else if (!strncmpi(bp, "petrified ", l=10)) {
+			ispetrified = 1;
 		} else if (!strncmpi(bp, "diluted ", l=8)) {
 			isdiluted = 1;
 		} else if(!strncmpi(bp, "empty ", l=6)) {
@@ -4792,6 +4800,24 @@ typfnd:
 	/* set moon phase */
 	if(moonphase != -1 && otmp->otyp == MOON_AXE){
 		otmp->ovar1 = moonphase;
+	}
+
+	/* attach creature of the item's permonst type */
+	if(ispetrified && wizwish && otmp->corpsenm != NON_PM){
+		struct monst * mon;
+		struct obj * otmp2;
+		mon = makemon(&mons[otmp->corpsenm], 0, 0, NO_MINVENT);
+		otmp2 = save_mtraits(otmp, mon);
+		mongone(mon);
+		if (otmp2){
+			otmp = otmp2;
+		}
+		else {
+			//something went wrong
+			impossible("bad petrified statue?");
+			*wishreturn = WISH_FAILURE;
+			return &zeroobj;
+		}
 	}
 	
 	/* more wishing abuse: don't allow wishing for certain artifacts */

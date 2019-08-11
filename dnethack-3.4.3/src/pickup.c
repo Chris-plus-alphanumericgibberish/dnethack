@@ -2573,6 +2573,7 @@ struct monst *mon;
 				 otmp->otyp == AMULET_OF_NULLIFY_MAGIC ||
 				 otmp->otyp == AMULET_OF_MAGICAL_BREATHING ||
 				 otmp->otyp == AMULET_OF_DRAIN_RESISTANCE ||
+				 otmp->otyp == AMULET_VERSUS_CURSES ||
 				 otmp->otyp == AMULET_OF_ESP ||
 				 otmp->otyp == AMULET_VERSUS_POISON)
 			){

@@ -2313,8 +2313,8 @@ summon_alien:
        zap = AD_COLD;
        goto ray;
     case CURSE_ITEMS:
-       You_feel("as if you need some help.");
-       rndcurse();
+	   if (rndcurse())
+	       You_feel("as if you need some help.");
        dmg = 0;
 	   stop_occupation();
        break;
@@ -4189,9 +4189,8 @@ int spellnum;
 	    impossible("curse spell with no mtmp");
 	    return;
 	}
-	if (yours || canseemon(mtmp))
+	if (mrndcurse(mtmp) && (yours || canseemon(mtmp)))
 	    You_feel("as though %s needs some help.", mon_nam(mtmp));
-	mrndcurse(mtmp);
 	dmg = 0;
 	break;
     case DESTRY_ARMR:
