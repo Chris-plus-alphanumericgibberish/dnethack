@@ -2279,10 +2279,10 @@ int right;
 	boolean good=FALSE, okspot, accessible;
 	while(!good && tries < 500){
 		if(right){
-			x = COLNO/2 + rn2(COLNO/2);
+			x = COLNO/2 + rn2(COLNO/2)-2;
 			y = rn2(ROWNO-3);
 		} else {
-			x = rn2(COLNO-3)+1;
+			x = rn2(COLNO-3);
 			y = rn2(ROWNO-3);
 		}
 		tries++;
@@ -2329,8 +2329,8 @@ int right;
 			}
 		if(!rn2(4)){
 			rn2(4) ? 
-			makemon(mkclass(S_WRAITH, Inhell ? G_HELL : G_NOHELL), x+rnd(2), y+rnd(2), MM_ADJACENTOK) :
-			makemon(&mons[PM_SHADE], x+rnd(2), y+rnd(2), MM_ADJACENTOK);
+			makemon(mkclass(S_WRAITH, Inhell ? G_HELL : G_NOHELL), x+rn2(2), y+rn2(2), MM_ADJACENTOK) :
+			makemon(&mons[PM_SHADE], x+rn2(2), y+rn2(2), MM_ADJACENTOK);
 		}
 	}
 }
