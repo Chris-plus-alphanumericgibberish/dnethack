@@ -549,6 +549,7 @@ unsigned int type;
 
        case PM_GNOMISH_WIZARD:
            if (rn2(2)) return SUMMON_SPHERE;
+		break;
        case PM_HIGH_SHAMAN:
 			switch (rnd(3)) {
 				case 3:
