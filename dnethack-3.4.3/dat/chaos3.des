@@ -129,7 +129,7 @@ MONSTER[75%]: 'A', "Coure Eladrin", random
 MONSTER[5%]: 'W', "Nazgul", random
 MONSTER: 'W', "wraith", random
 
-CONTAINER: '(', "chest"  , (31,08)
+CONTAINER: '(', "chest", random
 OBJECT:'!',"healing", contained
 OBJECT:'[',"elven helm", contained
 OBJECT[20%]:'(',"skeleton key", contained
