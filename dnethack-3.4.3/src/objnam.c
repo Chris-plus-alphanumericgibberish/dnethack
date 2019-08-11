@@ -3194,7 +3194,7 @@ int wishflags;
 		isinvisible =
 #endif
 		ispoisoned = isgreased = eroded = eroded2 = eroded3 = erodeproof =
-		halfeaten = islit = unlabeled = ishistoric = isdiluted = 0;
+		halfeaten = islit = unlabeled = ishistoric = ispetrified = isdiluted = 0;
 	mntmp = NON_PM;
 #define UNDEFINED 0
 #define EMPTY 1
