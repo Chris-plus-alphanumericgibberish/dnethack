@@ -5811,9 +5811,9 @@ is a red right hand
 #endif
     MON("Shaktari", S_DEMON,// /*Needs encyc entry*//*Needs tile*/
 	LVL(63, 12, -4, 49, -18), (G_HELL|G_NOCORPSE|G_NOGEN|G_UNIQ), /* -44 if armed, MR adds to 99, 8 better than regular marilith (91) */
-	A(ATTK(AT_WEAP, AD_PHYS, 4, 10), ATTK(AT_XWEP, AD_PHYS, 4, 10),
-	  ATTK(AT_MARI, AD_PHYS, 4, 10), ATTK(AT_MARI, AD_PHYS, 4, 10),
-	  ATTK(AT_MARI, AD_PHYS, 4, 10), ATTK(AT_MARI, AD_PHYS, 4, 10)), 
+	A(ATTK(AT_WEAP, AD_PHYS, 4, 10), ATTK(AT_WEAP, AD_PHYS, 4, 10),
+	  ATTK(AT_WEAP, AD_PHYS, 4, 10), ATTK(AT_WEAP, AD_PHYS, 4, 10),
+	  ATTK(AT_WEAP, AD_PHYS, 4, 10), ATTK(AT_WEAP, AD_PHYS, 4, 10)), 
 	  /*ATTK(AT_HUGS, AD_WRAP, 8, 6)*/
 	SIZ(WT_LARGE, 400, 0, MS_CUSS, MZ_LARGE), MR_ACID|MR_FIRE|MR_POISON, 0,
 	0 /*MM*/, MT_STALK|MT_HOSTILE|MT_COLLECT|MT_TRAITOR /*MT*/,
