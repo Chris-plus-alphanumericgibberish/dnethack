@@ -21,34 +21,37 @@ register struct monst *mon;
 	if(mon->data == &mons[PM_NOVIERE_ELADRIN] && !is_pool(mon->mx, mon->my, FALSE)) return;
 	
 	if (humanoid_torso(mon->data)) {
-		if ((mon->data == &mons[PM_INCUBUS] || mon->data == &mons[PM_SUCCUBUS])
+		if (mon->data == &mons[PM_INCUBUS] || mon->data == &mons[PM_SUCCUBUS]){
+			if(!Protection_from_shape_changers 
+			&& !canseemon(mon) 
 			&& mon->mfaction != INCUBUS_FACTION
 			&& mon->mfaction != SUCCUBUS_FACTION
-			&& !canseemon(mon)
-			&& !Protection_from_shape_changers
 			&& !rn2(300)
-		){
-			mon->female = !mon->female;
-			new_were(mon);
-	    } else if (!Protection_from_shape_changers && is_heladrin(mon->data)){
-			new_were(mon);
-	    } else if (!Protection_from_shape_changers &&
-		!rn2(night() ? (flags.moonphase == FULL_MOON ?  3 : 30)
+			){
+				mon->female = !mon->female;
+				new_were(mon);
+			}
+	    } else if (is_heladrin(mon->data)){
+			if(!Protection_from_shape_changers) new_were(mon);
+	    } else if (
+			!rn2(night() ? (flags.moonphase == FULL_MOON ?  3 : 30)
 					 : (flags.moonphase == FULL_MOON ? 10 : 50))
 		){
-		new_were(mon);		/* change into animal form */
-		if (flags.soundok && !canseemon(mon)) {
-		    const char *howler;
+			if(!Protection_from_shape_changers){
+				new_were(mon);		/* change into animal form */
+				if (flags.soundok && !canseemon(mon)) {
+					const char *howler;
 
-		    switch (monsndx(mon->data)) {
-		    case PM_WEREWOLF:	howler = "wolf";    break;
-		    case PM_WEREJACKAL: howler = "jackal";  break;
-		    case PM_ANUBAN_JACKAL: howler = "jackal";  break;
-		    default:		howler = (char *)0; break;
-		    }
-		    if (howler)
-			You_hear("a %s howling at the moon.", howler);
-		}
+					switch (monsndx(mon->data)) {
+					case PM_WEREWOLF:	howler = "wolf";    break;
+					case PM_WEREJACKAL: howler = "jackal";  break;
+					case PM_ANUBAN_JACKAL: howler = "jackal";  break;
+					default:		howler = (char *)0; break;
+					}
+					if (howler)
+					You_hear("a %s howling at the moon.", howler);
+				}
+			}
 	    }
 	} else if (!rn2(30) || (is_were(mon->data) && Protection_from_shape_changers) 
 		|| (is_yochlol(mon->data) && !Protection_from_shape_changers)
