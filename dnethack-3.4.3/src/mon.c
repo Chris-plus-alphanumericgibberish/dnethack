@@ -4337,6 +4337,17 @@ boolean was_swallowed;			/* digestion */
 		   || mdat == &mons[PM_WARRIOR_CHANGED]
 		   || mdat == &mons[PM_TWITCHING_FOUR_ARMED_CHANGED]
 		   || mdat == &mons[PM_CLAIRVOYANT_CHANGED]
+		   || mdat == &mons[PM_ANDROID]
+		   || mdat == &mons[PM_GYNOID]
+		   || mdat == &mons[PM_MUMMIFIED_ANDROID]
+		   || mdat == &mons[PM_MUMMIFIED_GYNOID]
+		   || mdat == &mons[PM_FLAYED_ANDROID]
+		   || mdat == &mons[PM_FLAYED_GYNOID]
+		   || mdat == &mons[PM_PARASITIZED_EMBRACED_ALIDER]
+		   || mdat == &mons[PM_PARASITIZED_ANDROID]
+		   || mdat == &mons[PM_PARASITIZED_GYNOID]
+		   || mdat == &mons[PM_CRUCIFIED_ANDROID]
+		   || mdat == &mons[PM_CRUCIFIED_GYNOID]
 //		   || mdat == &mons[PM_PINK_UNICORN]
 		   )
 		return TRUE;
