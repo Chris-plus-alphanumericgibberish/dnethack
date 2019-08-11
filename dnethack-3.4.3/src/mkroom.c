@@ -2556,7 +2556,7 @@ mkpluvillage()
 				}
 			for(i=sizebig1;i<(sizetot-sizebig2);i++) 
 				for(j=1;j<10;j++){
-					levl[x+i][y+j].typ = ROOM;
+					levl[x+i][y+j].typ = GRASS;
 					levl[x+i][y+j].lit = 1;
 				}
 			
