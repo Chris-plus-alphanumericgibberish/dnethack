@@ -13,19 +13,19 @@ MAP
 1                    ---------TTTTTTTTTTTTTTTT---------                    
 2              -------TTTTTTTTeeeeeeeeeeeeeeeeTTTTTTTT-------              
 3         ------eTTTTTeeeeeeeeeeeeee---eeeeeeeeeeeeeeeTTTTTe------         
-4      ----eTTTTTeeeeeeeeeeeeeeeeeee-.-eeeeeeeeeeeeeeeeeeeeTTTTTe----      
-5    ---eTTTeeeeeeeeeeeeeeeeeeeeeeee-+-eeeeeeeeeeeeeeeeeeeeeeeeeTTTe---    
-6  ---eTTeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeTTe---  
-7---eTeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeTe---
-8|TeTeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeTeT|
-9|TeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeT|
-0|TeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeT|
-1---TeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeT---
-2  ---eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee---  
-3    ---eeeeeeeeeeeeeeeeeeeeeeeeee---+---eeeeeeeeeeeeeeeeeeeeeeeeeee---    
-4      ----eeeeeeeeeeeeeeeeeeeeeee-.....-eeeeeeeeeeeeeeeeeeeeeeee----      
-5         ------eeeeeeeeeeeeeeeeee+.---.+eeeeeeeeeeeeeeeeeee------         
-6              -------eeeeeeeeeeee-..-..-eeeeeeeeeeeee-------              
+4      ----eTTTTTeeeeeeeeeTTeeeeeeee-.-eeeeweeeeeeeeeeeeeeeTTTTTe----      
+5    ---eTTTeeeeeeeeeeeeeeeeeeeeeeee-+-eeeeeeeeeeTweeeeeeeeeeeeeTTTe---    
+6  ---eTTeeeeeeeeeeeTweeeeTeTTeeeeeeeeeeeeeeeeeeeeTewweeweeeeeeeeeeTTe---  
+7---eTeeeeeeeeeeeTweeeeeeeeeeeweeeeeeeeeeeewweeeeeeeeeeeeeeeeeeeeeeeeeTe---
+8|TeTeeeeeeewTeeeewTeeeeeeeeeeweeeeeeeeeeeewweeeTTTeeeweeeTeeeeeeeeeeeeTeT|
+9|TeeeeTTeeeTTTeeeeeeeeeeeeeTeeeeeeeeeeTeeeeeeeeeeTeeeweeewTeeeeeTTeeeeeeT|
+0|TeeeeeeTeeeTTeeeeeeeeeeeTTeeeeeeeeTweTeeeeeeeeeeeeeeTTTeeeeeeeewTeeeeeeT|
+1---TeeeeeeeeeeeeewweeeeeeeeeeeeeeeeeewweeeeewTeeeeeeeeTeeeeeeeeTweeTeeT---
+2  ---eeeeeeTeeeeeTwweeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeTeeeeeeweeee---  
+3    ---eeeeeeeeeewTeeeeeeeeeTTeee---+---eeeTeeeeeeeeeeeTeeeeeeeeewe---    
+4      ----eeeeeeeeeeeeeeeeeeeeeee-.....-eeeeTeeeeeeeeeeeeeeeeeee----      
+5         ------eeeeeeeeeeeeTeeeee+.---.+eeeeeeeeeeeeeeeeeee------         
+6              -------eeeeeeeeTeee-..-..-eeeeeeeeeeeee-------              
 7                    ---------eeee-.....-eeeee---------                    
 8                            ------------------                            
 ENDMAP
