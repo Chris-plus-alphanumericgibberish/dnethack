@@ -5706,7 +5706,7 @@ arti_invoke(obj)
 		}
     break;
 	case FIRAGA:
-				if( (obj->spe > 0) && throweffect()){
+		if(throweffect()){
 			int dmg;
 			dmg = u.ulevel + 10;
 			if(u.ukrau_duration) dmg *= 1.5;
@@ -5727,10 +5727,10 @@ arti_invoke(obj)
 								u.dy = cc.y;
 						}
 					}
-				}
+		} else obj->age = 0;
 	break;
 	case BLIZAGA:
-				if( (obj->spe > 0) && throweffect()){
+		if(throweffect()){
 			int dmg;
 			dmg = u.ulevel + 10;
 			if(u.ukrau_duration) dmg *= 1.5;
@@ -5751,10 +5751,10 @@ arti_invoke(obj)
 								u.dy = cc.y;
 						}
 					}
-				}
+		} else obj->age = 0;
 	break;
 	case THUNDAGA:
-				if( (obj->spe > 0) && throweffect()){
+		if(throweffect()){
 			int dmg;
 			dmg = u.ulevel + 10;
 			if(u.ukrau_duration) dmg *= 1.5;
@@ -5775,7 +5775,7 @@ arti_invoke(obj)
 								u.dy = cc.y;
 						}
 					}
-				}
+		} else obj->age = 0;
 	break;
 	case QUAKE:{
 				register struct monst *mtmp, *mtmp2;
