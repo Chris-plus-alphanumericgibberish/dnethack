@@ -9786,7 +9786,7 @@ struct monst *mon;
 			return 1;
 		
 		if(mons[(otmp->wrathdata >> 2)].mflagsa && 
-		 (mons[(otmp->wrathdata >> 2)].mflagsa&(youracedata->mflagsa) != 0)
+		 ((mons[(otmp->wrathdata >> 2)].mflagsa&(youracedata->mflagsa)) != 0)
 		)
 			return 1;
 	} else {
