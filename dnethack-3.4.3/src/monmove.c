@@ -611,6 +611,25 @@ boolean digest_meal;
 		mon->mhp += 10;
 	}
 	
+	if(!DEADMONSTER(mon) &&  mon->entangled == RAZOR_WIRE){
+		mon->mhp -= rnd(6);
+		if(hates_silver(mon->data) && entangle_material(mon, SILVER))
+			mon->mhp -= rnd(20);
+		if(hates_iron(mon->data) && entangle_material(mon, IRON))
+			mon->mhp -= rnd(mon->m_lev);
+		if(hates_unholy_mon(mon) && entangle_beatitude(mon, -1))
+			mon->mhp -= rnd(9);
+		if(hates_holy_mon(mon) && entangle_beatitude(mon, 1))
+			mon->mhp -= rnd(4);
+		if(mon->mhp <= 0){
+			mon->mhp = 0;
+			if(canspotmon(mon))
+				pline("%s is sliced to ribbons in %s struggles!", Monnam(mon), hisherits(mon));
+			mondied(mon);
+			return;
+		}
+	}
+	
 	if(!DEADMONSTER(mon) && mon->mhp < mon->mhpmax/2 && (mon->data == &mons[PM_CHANGED] || mon->data == &mons[PM_WARRIOR_CHANGED])){
 		mon->mhp -= 1;
 		flags.cth_attk=TRUE;//state machine stuff.

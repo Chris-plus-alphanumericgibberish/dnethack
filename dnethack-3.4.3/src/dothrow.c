@@ -2376,6 +2376,18 @@ int thrown;
 	    (void) hmon(mon, obj, 1);
 	    return 1;	/* hmon used it up */
 
+	} else if ((otyp == IRON_BANDS || otyp == RAZOR_WIRE || otyp == ROPE_OF_ENTANGLING) &&
+		!guaranteed_hit && /*Assumes that guaranteed hit is due to being swallowed*/
+		(ACURR(A_DEX) > rnd(25))
+	) {
+	    (void) hmon(mon, obj, 1);
+	    wakeup(mon, TRUE);
+		if(!DEADMONSTER(mon) && (!mon->entangled || mon->entangled == otyp)){
+			mon->entangled = otyp;
+			mon->movement = 0;
+			mpickobj(mon,obj);
+			return 1;
+		} else return 0;
 	} else if (obj->oclass == POTION_CLASS &&
 		(guaranteed_hit || ACURR(A_DEX) > rnd(25))) {
 	    potionhit(mon, obj, TRUE);

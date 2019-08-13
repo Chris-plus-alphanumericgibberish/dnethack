@@ -2878,13 +2878,13 @@ struct monst *mon;
 	int count;
 	if(mon->entangled == SHACKLES) return FALSE;
 	else if(mon->entangled == ROPE_OF_ENTANGLING){
-		if((mon->data->msize + !!strongmonst(mon->data))*2 <= rn2(20))
+		if((mon->data->msize + !!strongmonst(mon->data))*2 <= rn2(100))
 			return FALSE;
 	} else if(mon->entangled == IRON_BANDS){
 		if(!strongmonst(mon->data) && mon->data->msize != MZ_GIGANTIC) return FALSE;
-		if((mon->data->msize - 3) <= rn2(40)) return FALSE;
+		if((mon->data->msize - 3) <= rn2(200)) return FALSE;
 	} else if(mon->entangled == RAZOR_WIRE){
-		if((mon->data->msize + !!strongmonst(mon->data)) <= rn2(40))
+		if((mon->data->msize + !!strongmonst(mon->data)) <= rn2(200))
 			return FALSE;
 	} else {
 		mon->entangled = 0;
@@ -2892,6 +2892,10 @@ struct monst *mon;
 	}
 	for(obj = mon->minvent; obj; obj = obj->nobj){
 		if(obj->otyp == mon->entangled){
+			if(canseemon(mon))
+				pline("%s breaks the restraining %s!", Monnam(mon), xname(obj));
+			else if(canspotmon(mon))
+				pline("%s breaks a restraint!", Monnam(mon));
 			m_useup(mon, obj);
 			break;
 		}
@@ -2914,13 +2918,13 @@ struct monst *mon;
 	int count;
 	if(mon->entangled == SHACKLES) return FALSE;
 	else if(mon->entangled == ROPE_OF_ENTANGLING){
-		if((7-mon->data->msize) <= rn2(40))
+		if((7-mon->data->msize) <= rn2(200))
 			return FALSE;
 	} else if(mon->entangled == IRON_BANDS){
-		if((7-mon->data->msize)*2 <= rn2(20))
+		if((7-mon->data->msize)*2 <= rn2(100))
 			return FALSE;
 	} else if(mon->entangled == RAZOR_WIRE){
-		if((7-mon->data->msize) <= rn2(40))
+		if((7-mon->data->msize) <= rn2(200))
 			return FALSE;
 	} else {
 		mon->entangled = 0;
@@ -2928,6 +2932,10 @@ struct monst *mon;
 	}
 	for(obj = mon->minvent; obj; obj = obj->nobj){
 		if(obj->otyp == mon->entangled){
+			if(canseemon(mon))
+				pline("%s slips loose from the restraining %s!", Monnam(mon), xname(obj));
+			else if(canspotmon(mon))
+				pline("%s slips loose from a restraint!", Monnam(mon));
 			obj_extract_self(obj);
 			place_object(obj, mon->mx, mon->my);
 			stackobj(obj);
@@ -2942,5 +2950,44 @@ struct monst *mon;
 	// else
 	mon->entangled = 0;
 	return TRUE;
+}
+
+int
+entangle_material(mon, mat)
+struct monst *mon;
+int mat;
+{
+	struct obj *obj;
+	int num = 0;
+	for(obj = mon->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == mon->entangled){
+			if(obj->obj_material == mat)
+				num++;
+		}
+	}
+	return num;
+}
+
+int
+entangle_beatitude(mon, bet)
+struct monst *mon;
+int bet;
+{
+	struct obj *obj;
+	int num = 0;
+	for(obj = mon->minvent; obj; obj = obj->nobj){
+		if(obj->otyp == mon->entangled){
+			if(obj->cursed){
+				if(bet < 0) num++;
+			}
+			else if(obj->blessed){
+				if(bet > 0) num++;
+			}
+			else {
+				if(bet == 0) num++;
+			}
+		}
+	}
+	return num;
 }
 /*muse.c*/
