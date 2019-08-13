@@ -466,6 +466,9 @@ aggravate()
 {
 	register struct monst *mtmp;
 
+	if(uarmc && uarmc->oartifact == ART_MANTLE_OF_WRATH)
+		return;
+	
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
 	    if (!DEADMONSTER(mtmp)) {
 			mtmp->msleeping = 0;

@@ -2379,6 +2379,9 @@ struct monst *mtmp;
 {
 	register struct monst *tmpm;
 
+	if(mtmp && which_armor(mtmp, W_ARMC) && which_armor(mtmp, W_ARMC)->oartifact == ART_MANTLE_OF_WRATH)
+		return;
+
 	for(tmpm = fmon; tmpm; tmpm = tmpm->nmon)
 	    if (!DEADMONSTER(tmpm) && mtmp != tmpm && mtmp->mpeaceful != tmpm->mpeaceful) {
 			tmpm->msleeping = 0;
