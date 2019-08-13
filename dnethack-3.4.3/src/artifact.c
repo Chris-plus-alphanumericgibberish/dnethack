@@ -2898,7 +2898,12 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	boolean messaged=FALSE;
 	static const char you[] = "you";
 	char hittee[BUFSZ];
-	int basedmg = *dmgptr;
+	int basedmg;
+	
+	if(*dmgptr <= 0)
+		*dmgptr = 1; //Round up to 1 now to avoid confusion with artifact-induced misses (would typically round up later)
+	
+	basedmg = *dmgptr;
 	
 	Strcpy(hittee, youdefend ? you : mon_nam(mdef));
 	
@@ -3117,7 +3122,12 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	boolean messaged=FALSE;
 	static const char you[] = "you";
 	char hittee[BUFSZ];
-	int basedmg = *dmgptr;
+	int basedmg;
+	
+	if(*dmgptr <= 0)
+		*dmgptr = 1; //Round up to 1 now to avoid confusion with artifact-induced misses (would typically round up later)
+	
+	basedmg = *dmgptr;
 	
 	Strcpy(hittee, youdefend ? you : mon_nam(mdef));
 	
@@ -3371,6 +3381,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	 * the exception being for level draining, which is specially
 	 * handled.  Messages are done in this function, however.
 	 */
+	
+	if(*dmgptr <= 0)
+		*dmgptr = 1; //Round up to 1 now to avoid confusion with artifact-induced misses (would typically round up later)
+	
 	basedmg = *dmgptr;
 	*dmgptr += spec_dbon(otmp, mdef, *dmgptr);
 	
