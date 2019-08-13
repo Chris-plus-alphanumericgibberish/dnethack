@@ -1728,7 +1728,7 @@ struct obj	*sobj;
 		} else return !chwepon(sobj,
 				       sobj->cursed ? -1 :
 				       !uwep ? 1 :
-				       uwep->spe >= 9 ? (rn2(uwep->spe) == 0) :
+				       uwep->spe >= 10 ? (rn2(uwep->spe) == 0) :
 				       sobj->blessed ? rnd(3-uwep->spe/3) : 1);
 		break;
 	case SCR_TAMING:
