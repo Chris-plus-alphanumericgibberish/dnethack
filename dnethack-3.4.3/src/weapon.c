@@ -1783,6 +1783,11 @@ register struct monst *mtmp;
 	boolean strong = strongmonst(mtmp->data);
 	boolean wearing_shield = (mtmp->misc_worn_check & W_ARMS) != 0;
 
+	/* needs to be capable of wielding a weapon in the mainhand */
+	if (!attacktype(mtmp->data, AT_WEAP) &&
+		!attacktype(mtmp->data, AT_DEVA))
+		return (struct obj *)0;
+
 	/* prefer artifacts to everything else */
 	for(otmp=mtmp->minvent; otmp; otmp = otmp->nobj) {
 		if (/* valid weapon */
@@ -1828,6 +1833,10 @@ register struct monst *mtmp;
 	register int i;
 	boolean strong = strongmonst(mtmp->data);
 	boolean wearing_shield = (mtmp->misc_worn_check & W_ARMS) != 0;
+
+	/* needs to be capable of wielding a weapon in the offhand */
+	if (!attacktype(mtmp->data, AT_XWEP))
+		return (struct obj *)0;
 
 	if(is_giant(mtmp->data))	/* giants just love to use clubs */
 		Oselect(CLUB, W_SWAPWEP);
@@ -1905,8 +1914,13 @@ boolean polyspot;
 		mon->weapon_check = NEED_WEAPON;
 	}
 
-	/* monster can no longer wield any weapons */
-	if (!attacktype(mon->data, AT_WEAP)) {
+	/* we don't want weapons if we can't wield any at all */
+	if (!is_armed(mon->data))
+		mon->weapon_check = NO_WEAPON_WANTED;
+
+	/* monster can no longer wield any mainhand weapons */
+	if (!attacktype(mon->data, AT_WEAP) &&
+		!attacktype(mon->data, AT_DEVA)) {
 		if (mw_tmp) {
 			setmnotwielded(mon, mw_tmp);
 			MON_NOWEP(mon);
@@ -1924,8 +1938,6 @@ boolean polyspot;
 				stackobj(obj);
 			}
 		}
-		/* can't wield any weapons -> none wanted */
-		mon->weapon_check = NO_WEAPON_WANTED;
 	}
 	/* monster can no longer twoweapon */
 	if (!could_twoweap(mon->data))
@@ -1947,8 +1959,6 @@ boolean polyspot;
 				stackobj(sobj);
 			}
 		}
-		/* Do not set weapon_check */
-		/* We may still want a mainhand weapon. Or not. */
 	}
 	/* The remaining case where there is a change is where a monster
 	 * is polymorphed into a stronger/weaker monster with a different
@@ -2205,7 +2215,9 @@ register struct monst *mon;
 	struct obj *msw_tmp = MON_SWEP(mon);
 	int toreturn = 0;
 	
-	if(!attacktype(mon->data, AT_WEAP)) return;
+	if (!attacktype(mon->data, AT_WEAP) &&
+		!attacktype(mon->data, AT_DEVA) &&
+		!attacktype(mon->data, AT_XWEP)) return;
 
 	if(needspick(mon->data)){
 		obj = m_carrying(mon, DWARVISH_MATTOCK);

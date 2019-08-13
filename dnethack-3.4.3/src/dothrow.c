@@ -2216,7 +2216,10 @@ int thrown;
 			pline("%s catches %s.", Monnam(mon), the(xname(obj)));
 			obj_extract_self(obj);
 			(void) mpickobj(mon,obj);
-			if (attacktype(mon->data, AT_WEAP) &&
+			if((attacktype(mon->data, AT_WEAP) ||
+				attacktype(mon->data, AT_DEVA) ||
+				attacktype(mon->data, AT_XWEP)
+				) &&
 				mon->weapon_check == NEED_WEAPON) {
 				mon->weapon_check = NEED_HTH_WEAPON;
 				(void) mon_wield_item(mon);

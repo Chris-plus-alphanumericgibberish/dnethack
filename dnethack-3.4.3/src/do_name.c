@@ -790,17 +790,24 @@ int suppress;
 /* SUPPRESS_IT, SUPPRESS_INVISIBLE, SUPPRESS_HALLUCINATION, SUPPRESS_SADDLE.
  * EXACT_NAME: combination of all the above
  */
+#define XMONNAM_BUFFERS 3
 boolean called;
 {
 #ifdef LINT	/* static char buf[BUFSZ]; */
-	char buf[BUFSZ];
+	char buffers[XMONNAM_BUFFERS][BUFSZ];
 #else
-	static char buf[BUFSZ];
+	static char buffers[XMONNAM_BUFFERS][BUFSZ];
 #endif
 	struct permonst *mdat = mtmp->data;
 	boolean do_hallu, do_invis, do_it, do_saddle;
 	boolean name_at_start, has_adjectives;
 	char *bp;
+	static int current_buffer = 0;
+	
+	/* rotate buffer every time x_monnam() is called */
+	current_buffer = ((current_buffer + 1) % XMONNAM_BUFFERS);
+
+	char *buf = buffers[current_buffer];
 
 	if (program_state.gameover)
 	    suppress |= SUPPRESS_HALLUCINATION;
