@@ -610,21 +610,31 @@ peffects(otmp)
 	break;
 	case POT_BOOZE:
 		unkn++;
-		pline("Ooph!  This tastes like %s%s!",
-		      otmp->odiluted ? "watered down " : "",
-		      Hallucination ? "dandelion wine" : "liquid fire");
-		if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax){
-			pline("The fruits of civilization give you strength!");
-			u.uhp += u.ulevel*10;
-			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+		if(uclockwork){ /* Note: Does not include Androids */
+			pline("It would seem you just drank a bottle of industrial solvent.");
+			if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax){
+				pline("The fruits of civilization give you strength!");
+				u.uhp += u.ulevel*10;
+				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+				if(u.udrunken < u.ulevel*3) u.udrunken++; //Enki allows clockworks to benefit from booze quaffing
+			}
+		} else { /* Note: Androids can get drunk */
+			pline("Ooph!  This tastes like %s%s!",
+			      otmp->odiluted ? "watered down " : "",
+			      Hallucination ? "dandelion wine" : "liquid fire");
+			if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax){
+				pline("The fruits of civilization give you strength!");
+				u.uhp += u.ulevel*10;
+				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+			}
+			if(u.udrunken < u.ulevel*3) u.udrunken++;
+			if (!otmp->blessed)
+			    make_confused(itimeout_incr(HConfusion, d(3,8)), FALSE);
+			/* the whiskey makes us feel better */
+			if (!otmp->odiluted) healup(u.ulevel, 0, FALSE, FALSE);
+			if(!Race_if(PM_INCANTIFIER) && !umechanoid) u.uhunger += 130 + 10 * (2 + bcsign(otmp));
+			newuhs(FALSE);
 		}
-		if(u.udrunken < u.ulevel*3) u.udrunken++;
-		if (!otmp->blessed)
-		    make_confused(itimeout_incr(HConfusion, d(3,8)), FALSE);
-		/* the whiskey makes us feel better */
-		if (!otmp->odiluted) healup(u.ulevel, 0, FALSE, FALSE);
-		if(!Race_if(PM_INCANTIFIER) && !umechanoid) u.uhunger += 130 + 10 * (2 + bcsign(otmp));
-		newuhs(FALSE);
 		if (!umechanoid){
 			if(u.uhunger > u.uhungermax){
 				u.uhunger = u.uhungermax - d(2,20);
