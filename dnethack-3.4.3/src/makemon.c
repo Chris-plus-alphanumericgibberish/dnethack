@@ -4763,7 +4763,8 @@ register struct monst *mtmp;
 					mtmp->entangled = SHACKLES;
 					return;
 				}
-				chance = rnd(10);
+				if(!Inhell) chance = 3; //Leather armor
+				else chance = rnd(10);
 				if(chance >= 9){
 					mongets(mtmp, HELMET);
 					mongets(mtmp, PLATE_MAIL);
