@@ -836,7 +836,7 @@ chaos3_montype()
 			case 13: return &mons[PM_QUICKLING];
 			case 14: return &mons[PM_DRYAD];
 			case 15: return &mons[PM_LEOCROTTA];
-			case 16: return &mons[PM_BLACK_UNICORN];
+			case 16: return &mons[PM_HORSE];
 			case 17: return &mons[rn2(2) ? PM_GRAY_UNICORN : PM_WHITE_UNICORN];
 			case 18: return &mons[PM_BLACK_UNICORN];
 			case 19: return &mons[PM_DREAM_QUASIELEMENTAL];
@@ -1005,7 +1005,7 @@ int leftright;
 			case 13: return &mons[PM_QUICKLING];
 			case 14: return &mons[PM_DRYAD];
 			case 15: return &mons[PM_LEOCROTTA];
-			case 16: return &mons[PM_BLACK_UNICORN];
+			case 16: return &mons[PM_HORSE];
 			case 17: return &mons[rn2(2) ? PM_GRAY_UNICORN : PM_WHITE_UNICORN];
 			case 18: return &mons[PM_BLACK_UNICORN];
 			case 19: return &mons[PM_DREAM_QUASIELEMENTAL];
