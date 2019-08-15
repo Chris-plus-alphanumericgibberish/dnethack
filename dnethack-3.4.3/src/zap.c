@@ -5190,9 +5190,6 @@ allow_artwish()
 	n += (u.uevent.utook_castle & ARTWISH_EARNED);	// sitting on the castle throne
 	n += (u.uevent.uunknowngod & ARTWISH_EARNED);	// sacrificing five artifacts to the priests of the unknown god
 
-	if (Race_if(PM_INHERITOR))	// you started with an artifact, you don't get an artifact wish for free!
-		n--;
-
 	n -= u.uconduct.wisharti;	// how many artifacts the player has wished for
 
 	return ((n > 0) ? WISH_ARTALLOW : 0);
