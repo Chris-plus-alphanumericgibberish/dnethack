@@ -225,6 +225,8 @@ static struct trobj Binder_Hedrow[] = {
 	{ DROVEN_CLOAK, 0, ARMOR_CLASS, 1, 0 },
 	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
 	{ SLIME_MOLD, UNDEF_SPE, FOOD_CLASS, 4, 0 },
+	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
+	{ FLINT, 0, GEM_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Binder_Drow[] = {
@@ -233,6 +235,8 @@ static struct trobj Binder_Drow[] = {
 	{ DROVEN_CLOAK, 0, ARMOR_CLASS, 1, 0 },
 	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
 	{ SLIME_MOLD, UNDEF_SPE, FOOD_CLASS, 4, 0 },
+	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
+	{ FLINT, 0, GEM_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Binder_Dwarf[] = {
@@ -245,6 +249,8 @@ static struct trobj Binder_Dwarf[] = {
 	{ CRAM_RATION, 0, FOOD_CLASS, 1, 0 },
 	{ APPLE, 0, FOOD_CLASS, 2, 0 },
 	{ TRIPE_RATION, 0, FOOD_CLASS, 2, 0 },
+	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
+	{ FLINT, 0, GEM_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Binder_Elf[] = {
@@ -255,6 +261,8 @@ static struct trobj Binder_Elf[] = {
 	{ LEMBAS_WAFER, 0, FOOD_CLASS, 1, 0 },
 	{ APPLE, 0, FOOD_CLASS, 2, 0 },
 	{ TRIPE_RATION, 0, FOOD_CLASS, 2, 0 },
+	{ ROCK, 0, GEM_CLASS, 5, 0 }, 
+	{ FLINT, 0, GEM_CLASS, 1, 0 },
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Binder_Vam[] = {
