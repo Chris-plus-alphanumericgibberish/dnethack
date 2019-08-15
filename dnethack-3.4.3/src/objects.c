@@ -503,7 +503,7 @@ HELM("elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 HELM_MATSPEC("high-elven helm", "runed helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,	0, 1, 15,   5, 9, 2, 0, MITHRIL,UNIDED, HI_MITHRIL),
 HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	0, 1, 25,   5, 8, 2, 0, SHADOWSTEEL, CLR_BLACK),
+		0, 0,  0,	0, 1, 20,   5, 8, 2, 0, SHADOWSTEEL, CLR_BLACK),
 HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
 		0, 1,  INFRAVISION,   0, 2, 25,  50, 8, 2, 2, PLASTIC, CLR_WHITE),
 HELM_MATSPEC("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
@@ -566,11 +566,11 @@ ARMOR("plate mail", (char *)0, /*Needs encyc entry*/
 ARMOR("high-elven plate", "runed plate mail", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 5, 110, 	1200,  4, 6, 3, ARM_SUIT, MITHRIL, HI_MITHRIL),
 ARMOR("droven plate mail", "crested black plate", /*Needs encyc entry*/
-	0, 0, 1, 0,	0, 5, 110, 	2000,  4, 6, 1, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
+	0, 0, 1, 0,	0, 5, 85, 	2000,  4, 6, 1, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
 ARMOR("elven toga", (char *)0, /*Needs encyc entry*//*Needs tile*/
 	1, 0, 0, 0,	 0, 5,	 5,  100,10, 1, 2, ARM_SUIT, CLOTH, CLR_GREEN),
 ARMOR("noble's dress", "armored black dress", /*Needs encyc entry*/
-	0, 0, 1, 0,	0, 5, 80, 2000,  6, 4, 3, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
+	0, 0, 1, 0,	0, 5, 40, 2000,  6, 4, 3, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
 ARMOR("black dress", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	0, 5,  5,  500, 10, 0, 2, ARM_SHIRT, CLOTH, CLR_BLACK),
 ARMOR("consort's suit", "loud foppish suit", /*Needs encyc entry*//*Needs tile*/
@@ -609,7 +609,7 @@ ARMOR("elven mithril-coat", (char *)0,
 ARMOR("chain mail", (char *)0,
 	1, 0, 0, 0,	72, 5, 150,  75,  8, 3, 1, ARM_SUIT, IRON, HI_METAL),
 ARMOR("droven chain mail", "crested black mail", /*Needs encyc entry*/
-	0, 0, 0, 0,	0, 5,   75,  1000,  8, 4, 2, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
+	0, 0, 0, 0,	0, 5,   50,  1000,  8, 4, 2, ARM_SUIT, SHADOWSTEEL, CLR_BLACK),
 ARMOR("orcish chain mail", "crude chain mail",
 	0, 0, 0, 0,	20, 5, 150,  75,  8, 2, 1, ARM_SUIT, IRON, CLR_BLACK),
 ARMOR("scale mail", (char *)0,
