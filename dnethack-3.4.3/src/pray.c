@@ -2149,7 +2149,7 @@ dosacrifice()
 			if (is_demon(youracedata)) {
 				You("find the idea very satisfying.");
 				exercise(A_WIS, TRUE);
-			} else if (u.ualign.type != A_CHAOTIC || u.ualign.type != A_CHAOTIC) {
+			} else if (u.ualign.type != A_CHAOTIC || altaralign != A_CHAOTIC) {
 				if(u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS))){
 					char buf[BUFSZ];
 					Sprintf(buf, "You feel a deep sense of kinship to %s!  Sacrifice %s anyway?",
