@@ -971,7 +971,7 @@ int curse_bless;
 //#ifdef FIREARMS
 	    case HAND_BLASTER:
 	    case ARM_BLASTER:
-			if(obj->recharged > 4){
+			if(obj->recharged >= 4){
 				obj->recharged = 4;
 			} else {
 				if(is_blessed) obj->ovar1 = 100L;
