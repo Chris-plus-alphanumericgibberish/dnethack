@@ -1477,11 +1477,14 @@ poly_obj(obj, id)
 	if (obj->otyp == BOULDER && In_sokoban(&u.uz))
 	    change_luck(-1);	/* Sokoban guilt, boulders only */
 	if (id == STRANGE_OBJECT) { /* preserve symbol */
-		if(obj->otyp == SPE_BLANK_PAPER || obj->otyp == SCR_BLANK_PAPER){
+		if(obj->otyp == SPE_BLANK_PAPER || obj->otyp == SCR_BLANK_PAPER || obj->otyp == SCR_AMNESIA){
 			otmp = mksobj(rn2(2) ? SPE_BLANK_PAPER : SCR_BLANK_PAPER, FALSE, FALSE);
 		} else if(obj->otyp == POT_BLOOD){
 			otmp = mksobj(POT_BLOOD, FALSE, FALSE);
-		} else if(obj->otyp == POT_WATER){
+		} else if(obj->otyp == POT_WATER || obj->otyp == POT_AMNESIA){
+			if(obj->otyp == POT_AMNESIA){
+				obj->otyp = POT_WATER;
+			}
 			if(!rn2(3)){
 				obj->blessed = 0;
 				obj->cursed = 1;
