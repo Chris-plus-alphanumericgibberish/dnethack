@@ -760,19 +760,12 @@ boolean dofull;
 	}
 
 	if (obj->oproperties && (obj->oartifact == 0 || dofull)){
-		if(obj->oproperties&OPROP_LESSW 
+		if(!(obj->oproperties&OPROP_LESSW 
 			&& obj->oproperties&OPROP_AXIOW 
 			&& obj->oproperties&(OPROP_FIREW|OPROP_COLDW|OPROP_ELECW)
 			&& obj->known
-		){
-			if (obj->oproperties&OPROP_FIREW)
-				Strcat(buf, "forge-hot ");
-			if (obj->oproperties&OPROP_COLDW)
-				Strcat(buf, "crystalline ");
-			if (obj->oproperties&OPROP_ELECW)
-				Strcat(buf, "arcing ");
-		}
-		else {
+		)){
+			//Note: Oona's properties were already added as part of the materials check
 			if(obj->oproperties&OPROP_LESSW && obj->known)
 				Strcat(buf, "lesser ");
 			if (obj->oproperties&OPROP_ANARW && obj->known)
@@ -793,7 +786,7 @@ boolean dofull;
 			if (obj->oproperties&OPROP_WATRW)
 				Strcat(buf, "misty ");
 			if (obj->oproperties&OPROP_FIREW){
-				if (obj->oproperties&OPROP_LESSW) Strcat(buf, "red-hot ");
+				if (obj->oproperties&OPROP_LESSW && !obj->known) Strcat(buf, "red-hot ");
 				else Strcat(buf, "flaming ");
 			}
 			if (obj->oproperties&OPROP_COLDW)
