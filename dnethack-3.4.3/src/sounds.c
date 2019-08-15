@@ -265,13 +265,13 @@ dosounds()
 	return;
     }
     if (level.flags.has_armory && !rn2(200)) {
-	static const char *library_msg[4] = {
+	static const char *armory_msg[4] = {
 		"water dripping onto metal.",
 		"a ceiling tile fall.",
 		"iron oxidize.",
 		"a military contractor making out like a bandit.",
 	};
-	You_hear("%s", library_msg[rn2(2) + 2 * hallu]);
+	You_hear("%s", armory_msg[rn2(2) + 2 * hallu]);
 	return;
     }
     if (level.flags.has_swamp && !rn2(200)) {
