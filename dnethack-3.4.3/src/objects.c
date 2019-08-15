@@ -507,7 +507,7 @@ HELM("droven helm", "spider-shaped helm", /*Needs encyc entry*//*Needs tile*/
 HELM("plasteel helm", "white skull helm", /*Needs encyc entry*//*Needs tile*/
 		0, 1,  INFRAVISION,   0, 2, 25,  50, 8, 2, 2, PLASTIC, CLR_WHITE),
 HELM_MATSPEC("crystal helm", "fish bowl", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,   0, 2,150, 300, 9, 2, 0, GLASS,UNIDED, HI_GLASS),
+		0, 0,  0,   0, 2,150, 300, 9, 1, 0, GLASS,UNIDED, HI_GLASS),
 HELM("pontiff's crown", "filigreed faceless helm", /*Needs encyc entry*//*Needs tile*/
 		0, 0,  0,   0, 2, 90, 300, 8, 3, 0, METAL, HI_GOLD),
 /* With shuffled appearances... */
@@ -580,7 +580,7 @@ ARMOR("gentleman's suit", "expensive clothes", /*Needs encyc entry*/
 ARMOR("gentlewoman's dress", "expensive dress", /*Needs encyc entry*/
 	0, 0, 1, 0,	0, 6,100, 1000,  10, 1, 3, ARM_SUIT, BONE, CLR_RED), /*Specifically, whale bone*/
 ARMOR("crystal plate mail", (char *)0, /*Needs encyc entry*/
-	1, 0, 1, 0,	10, 5, 170, 2000,  5, 5, 0, ARM_SUIT, GLASS, HI_GLASS), /*Best armor, AC wise*/
+	1, 0, 1, 0,	10, 5, 170, 2000,  7, 3, 0, ARM_SUIT, GLASS, HI_GLASS), /*Best armor, AC wise*/
 #ifdef TOURIST
 ARMOR("archaic plate mail", (char *)0, /*Needs encyc entry*/
 	1, 0, 1, 0,	20, 5, 200, 400,  6, 4, 3, ARM_SUIT, COPPER, HI_COPPER),
@@ -712,7 +712,7 @@ SHIELD_MATSPEC("roundshield", "round shield",
 SHIELD("dwarvish roundshield", "round shield",
 		0, 0, 0, 0,	     4, 0, 80, 10,  7, 0, 1, IRON, HI_METAL),
 SHIELD_MATSPEC("crystal shield", "shield", /*Needs encyc entry*//*Needs tile*/
-		0, 0, 0, 0,	     0, 0, 80,150,  8, 0, 0, GLASS,UNIDED, HI_GLASS),
+		0, 0, 0, 0,	     0, 0, 80,150,  9, 0, 0, GLASS,UNIDED, HI_GLASS),
 SHIELD("shield of reflection", "polished shield",
 		0, 1, 0, REFLECTING, 3, 0, 60, 50,  8, 0, 0, SILVER, HI_SILVER),
 /*#define SHIELD(name,desc,kn,mgc,blk,power,prob,delay,wt,cost,ac,can,metal,c) \
@@ -739,7 +739,7 @@ DRGN_SHIELD("yellow dragon scale shield", 1, ACID_RES,   900, 7, 0, CLR_YELLOW),
 //define GLOVES(name,desc,kn,mgc,power,prob,delay,wt,cost,ac,dr,can,metal,c) \
 	ARMOR(name,desc,kn,mgc,0,power,prob,delay,wt,cost,ac,dr,can,ARM_GLOVES,metal,c)
 GLOVES_MATSPEC("crystal gauntlets", "gauntlets", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 2, 20, 400,  8, 2, 0, GLASS,UNIDED, HI_GLASS),
+		0, 0,  0,	   0, 2, 20, 400, 9, 0, 0, GLASS,UNIDED, HI_GLASS),
 GLOVES_MATSPEC("gauntlets", (char *)0, /*Needs encyc entry*//*Needs tile*/
 		1, 0,  0,	   4, 2, 25, 10, 8, 2, 0, IRON,IDED|UNIDED, HI_METAL),
 GLOVES("archaic gauntlets", (char *)0, /*Needs encyc entry*//*Needs tile*/
@@ -785,7 +785,7 @@ BOOTS("high boots", "jackboots",
 BOOTS("heeled boots", "tall boots",
 		1, 0,  0,	   0, 2, 20, 12, 10, 2, 0, LEATHER, CLR_BLACK),
 BOOTS_MATSPEC("crystal boots", "boots", /*Needs encyc entry*//*Needs tile*/
-		0, 0,  0,	   0, 2, 60,300,  8, 2, 0, GLASS,UNIDED, HI_GLASS),
+		0, 0,  0,	   0, 2, 60,300,  9, 0, 0, GLASS,UNIDED, HI_GLASS),
 /* With shuffled appearances... */
 BOOTS("speed boots", "combat boots",
 		0, 1,  FAST,	  12, 2, 20, 50,  9, 0, 0, LEATHER, HI_LEATHER),

@@ -1974,19 +1974,19 @@ struct obj * otmp;
 	// add enchantment
 	if (otmp->spe)
 	{
-		int spemult = 6; // out of 12
+		int spemult = 1; // out of 2
 		// shields get full enchantment to AC
 		if (is_shield(otmp))
-			spemult += 6;
+			spemult += 1;
 		// crystal armor bonus enchantment
 		if (otmp->otyp == CRYSTAL_PLATE_MAIL ||
 			otmp->otyp == CRYSTAL_HELM ||
 			otmp->otyp == CRYSTAL_BOOTS ||
 			otmp->otyp == CRYSTAL_SHIELD ||
 			otmp->otyp == CRYSTAL_GAUNTLETS)
-			spemult += 3;
+			spemult *= 2;
 
-		def += (otmp->spe * spemult + 0) / 12;
+		def += (otmp->spe * spemult + 0) / 2;
 	}
 
 	// artifact bonus def
@@ -2065,7 +2065,7 @@ struct obj * otmp;
 	// add enchantment
 	if (otmp->spe)
 	{
-		int spemult = 6; // out of 12
+		int spemult = 1; // out of 2
 		// shields get no enchantment to DR
 		if (is_shield(otmp))
 			spemult = 0;
@@ -2074,9 +2074,9 @@ struct obj * otmp;
 			otmp->otyp == CRYSTAL_HELM ||
 			otmp->otyp == CRYSTAL_BOOTS ||
 			otmp->otyp == CRYSTAL_GAUNTLETS)
-			spemult += 4;
+			spemult *= 2;
 
-		def += (otmp->spe * spemult + 6) / 12;
+		def += ((otmp->spe + 1) * spemult) / 2;
 	}
 
 	// artifact bonus def
