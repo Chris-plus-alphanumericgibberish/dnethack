@@ -4449,11 +4449,21 @@ register struct monst *mon;
 register int tmp, weptmp, tchtmp;
 {
 	struct attack *mattk, alt_attk;
-	struct permonst *mas = youmonst.data;
+	struct permonst *mas;
 	int	i, sum[NATTK], hittmp = 0;
 	int	nsum = 0;
 	int	dhit = 0;
 	boolean Old_Upolyd = Upolyd, wepused;
+	
+	if (Upolyd 
+		|| Race_if(PM_VAMPIRE) 
+		|| Race_if(PM_CHIROPTERAN) 
+		|| (!uwep && Race_if(PM_YUKI_ONNA))
+	){
+		mas = youracedata;
+	} else {
+		mas = youmonst.data;
+	}
 	
 	if(mon_resistance(mon,DISPLACED) && rn2(2)){
 		if(has_passthrough_displacement(mon->data)){
