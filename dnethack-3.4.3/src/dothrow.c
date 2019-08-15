@@ -1441,7 +1441,7 @@ int thrown;
 //		obj->opoisoned = 1;
 
     obj->was_thrown = 1;
-	if ((obj->cursed || obj->greased || (ammo_and_launcher(obj, launcher) && launcher->otyp == FLINTLOCK)) && (u.dx || u.dy) && !rn2(7)) {
+	if (((obj->cursed && !is_weldproof(youracedata)) || obj->greased || (ammo_and_launcher(obj, launcher) && launcher->otyp == FLINTLOCK)) && (u.dx || u.dy) && !rn2(7)) {
 	    boolean slipok = TRUE;
 	    if (ammo_and_launcher(obj, launcher)){
 			if(is_firearm(launcher)) pline("%s!", Tobjnam(launcher, "misfire"));

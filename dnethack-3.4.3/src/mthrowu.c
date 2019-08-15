@@ -543,7 +543,12 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 
 	singleobj->owornmask = 0; /* threw one of multiple weapons in hand? */
 
-	if ((singleobj->cursed || (mon != &youmonst && is_ammo(singleobj) && MON_WEP(mon) && MON_WEP(mon)->otyp == FLINTLOCK)) && (dx || dy) && !rn2(7)) {
+	if (((singleobj->cursed && !(
+		(mon == &youmonst && is_weldproof(youracedata)) 
+		|| (mon != &youmonst && is_weldproof_mon(mon))
+	  )) || (mon != &youmonst && is_ammo(singleobj) && MON_WEP(mon) && MON_WEP(mon)->otyp == FLINTLOCK)
+	 ) && (dx || dy) && !rn2(7)
+	) {
 		if(mon == &youmonst){
 			if(is_ammo(singleobj))
 				Your("weapon misfires!");
