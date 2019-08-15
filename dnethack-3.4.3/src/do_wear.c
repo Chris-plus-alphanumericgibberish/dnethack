@@ -2076,7 +2076,7 @@ struct obj * otmp;
 			otmp->otyp == CRYSTAL_GAUNTLETS)
 			spemult *= 2;
 
-		def += ((otmp->spe + 1) * spemult) / 2;
+		def += (otmp->spe * spemult + 1) / 2;
 	}
 
 	// artifact bonus def
