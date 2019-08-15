@@ -1278,8 +1278,12 @@ boolean with_price;
 				Sprintf(eos(buf), "set of %s", actualn);
 				break;
 			}
-			if ((typ == VICTORIAN_UNDERWEAR && nn) || (typ == JUMPSUIT && !nn) || (typ == BODYGLOVE && !nn)) {
+			if (typ == VICTORIAN_UNDERWEAR && nn) {
 				Sprintf(eos(buf), "set of %s", actualn);
+				break;
+			}
+			if ((typ == JUMPSUIT && !nn) || (typ == BODYGLOVE && !nn)) {
+				Sprintf(eos(buf), "set of %s", dn);
 				break;
 			}
 			if (is_boots(obj) || is_gloves(obj)) Strcat(buf, "pair of ");
@@ -1346,7 +1350,11 @@ boolean with_price;
 			break;
 		case COIN_CLASS:
 		case CHAIN_CLASS:
-			Strcat(buf, actualn);
+			if (typ == IRON_BANDS) {
+				Sprintf(eos(buf), "set of %s", actualn);
+			} else {
+				Strcat(buf, actualn);
+			}
 			if (obj->owornmask & W_ARM)
 				Strcat(eos(buf), " (wrapped around chest)");
 			else if (obj->owornmask & W_ARMC)
@@ -1432,16 +1440,17 @@ boolean with_price;
 				;
 			}
 		} else {
-			if (!obj->dknown)
-				Strcat(buf, dn ? dn : actualn);
-			else if (nn)
-				Strcat(buf, actualn);
-			else if (un) {
-				Strcat(buf, dn ? dn : actualn);
-				Strcat(buf, " called ");
-				Strcat(buf, un);
+			if (obj->dknown && !nn)
+			{
+				Strcat(buf, dn);
+				Strcat(buf, " ");
+				Strcat(buf, "scroll");
+				if(un){
+					Strcat(buf, " called ");
+					Strcat(buf, un);
+				}
 			}
-			else Strcat(buf, dn ? dn : actualn);
+			else Strcat(buf, actualn);
 		}
 	break;
 	case TILE_CLASS:
