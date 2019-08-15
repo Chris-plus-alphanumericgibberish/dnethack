@@ -965,6 +965,7 @@ register const char *let,*word;
 	boolean allowall = FALSE;
 	boolean allownone = FALSE;
 	boolean useboulder = FALSE;
+	boolean usethrowing = FALSE;
 	xchar foox = 0;
 	long cnt;
 	boolean prezero = FALSE;
@@ -1005,6 +1006,9 @@ register const char *let,*word;
 	   !strcmp(word, "throw") && (throws_rocks(youracedata) || (u.sealsActive&SEAL_YMIR)))
 	    useboulder = TRUE;
 
+	if(*let == WEAPON_CLASS && !strcmp(word, "throw"))
+	    usethrowing = TRUE;
+
 	if(allownone) *bp++ = '-';
 #ifndef GOLDOBJ
 	if(allowgold) *bp++ = def_oc_syms[COIN_CLASS];
@@ -1024,6 +1028,7 @@ register const char *let,*word;
 		|| (usegold && otmp->invlet == GOLD_SYM)
 #endif
 		|| (useboulder && is_boulder(otmp))
+		|| (usethrowing && (otmp->otyp == ROPE_OF_ENTANGLING || otmp->otyp == IRON_BANDS || otmp->otyp == RAZOR_WIRE))
 		) {
 		register int otyp = otmp->otyp;
 		bp[foo++] = otmp->invlet;
@@ -4746,6 +4751,21 @@ int bcu;
 	return count;
 }
 
+struct obj *
+outermost_armor(mon)
+struct monst *mon;
+{
+	if(mon == &youmonst){
+		if(uarmc) return uarmc;
+		if(uarm) return uarm;
+		if(uarmu) return uarmu;
+	} else {
+		if(which_armor(mon, W_ARMC)) return which_armor(mon, W_ARMC);
+		if(which_armor(mon, W_ARM)) return which_armor(mon, W_ARM);
+		if(which_armor(mon, W_ARMU)) return which_armor(mon, W_ARMU);
+	}
+	return (struct obj *) 0;
+}
 
 #endif /* OVL1 */
 

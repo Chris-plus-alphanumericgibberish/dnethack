@@ -1483,6 +1483,26 @@ karemade:
 		    youmonst.movement += moveamt;
 			//floor how far into movement-debt you can fall.
 		    if (youmonst.movement < -2*NORMAL_SPEED) youmonst.movement = -2*NORMAL_SPEED;
+			
+			if(u.uentangled){ //Note: the normal speed calculations include important hunger modifiers, so just calculate speed then 0 it out if needed.
+				if(!ubreak_entanglement()){
+					youmonst.movement = 0;
+					if(u.uentangled == RAZOR_WIRE){
+						int dmg = d(1,6);
+						if(hates_silver(youracedata) && entangle_material(&youmonst, SILVER))
+							dmg += rnd(20);
+						if(hates_iron(youracedata) && entangle_material(&youmonst, SILVER))
+							dmg += rnd(u.ulevel);
+						if(hates_unholy(youracedata) && entangle_beatitude(&youmonst, -1))
+							dmg += rnd(9);
+						if(hates_holy(youracedata) && entangle_beatitude(&youmonst, 1))
+							dmg += rnd(4);
+						losehp(dmg, "being sliced to ribbons by razor wire", KILLED_BY);
+					}
+					uescape_entanglement();
+				}
+			}
+			
 		    settrack();
 
 		    monstermoves++;

@@ -1684,6 +1684,9 @@ struct obj* obj;
 	 * Return NULL so that init_obj_material and valid_obj_material both
 	 * work properly. */
 	case BULLWHIP:
+	case TORCH:
+	case SHADOWLANDER_S_TORCH:
+	case SUNROD:
 	case WORM_TOOTH:
 	case CRYSKNIFE:
 	case LEATHER_HELM:

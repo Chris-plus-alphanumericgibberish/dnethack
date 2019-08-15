@@ -1405,7 +1405,11 @@ struct monst *mtmp;
 }
 
 static NEARDATA const int rwep[] =
-{	LOADSTONE/*1d30*/, 
+{	
+	RAZOR_WIRE/*damage plus lost turns*/, 
+	IRON_BANDS/*lost turns*/, 
+	ROPE_OF_ENTANGLING/*lost turns*/, 
+	LOADSTONE/*1d30 plus weight*/, 
 // #ifdef FIREARMS
 	FRAG_GRENADE, GAS_GRENADE, ROCKET, SILVER_BULLET, BULLET, SHOTGUN_SHELL,
 // #endif

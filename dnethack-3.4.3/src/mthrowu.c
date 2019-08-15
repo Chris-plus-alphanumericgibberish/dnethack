@@ -227,6 +227,23 @@ int x,y;
 				if(mtmp == &youmonst && obj->otyp == LOADSTONE && (!rn2(3) || autopickup) ){
 					pickup_object(obj,1,FALSE);
 				}
+				else if(ohit && !(mtmp == &youmonst && Free_action)
+					&& !(mtmp != &youmonst && mon_resistance(mtmp,FREE_ACTION))
+					&& (obj->otyp == ROPE_OF_ENTANGLING || obj->otyp == IRON_BANDS || obj->otyp == RAZOR_WIRE)
+				){
+					if(mtmp == &youmonst){
+						obj->spe = 1;
+						u.uentangled = obj->otyp;
+						youmonst.movement = 0;
+						pickup_object(obj,1,FALSE);
+					}
+					else {
+						obj->spe = 1;
+						mtmp->entangled = obj->otyp;
+						mtmp->movement = 0;
+						mpickobj(mtmp,obj);
+					}
+				}
 				else stackobj(obj);
 			    retvalu = 0;
 			}

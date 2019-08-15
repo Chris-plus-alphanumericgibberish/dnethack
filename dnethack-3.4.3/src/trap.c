@@ -4466,7 +4466,17 @@ boolean force;
 			}
 		}
 		else {
+			struct obj *obj, *nobj;
 			You("disentangle %s.", mon_nam(mtmp));
+			for(obj = mtmp->minvent; obj; obj = nobj){
+				nobj = obj->nobj;
+				if(obj->otyp == mtmp->entangled && obj->spe == 1){
+					obj->spe = 0;
+					obj_extract_self(obj);
+					place_object(obj, mtmp->mx, mtmp->my);
+					stackobj(obj);
+				}
+			}
 			mtmp->entangled = 0;
 		}
 		return 1;
@@ -5022,6 +5032,102 @@ burn_stuff:
 		destroy_item(POTION_CLASS, AD_FIRE);
 	}
     return(FALSE);
+}
+
+#define ATTRSCALE 4
+int
+ubreak_entanglement()
+{
+	struct obj *obj;
+	int breakcheck = (youracedata->msize*ATTRSCALE + ACURRSTR);
+	if(u.uentangled == ROPE_OF_ENTANGLING){
+		if(breakcheck*2 <= rn2(100*ATTRSCALE))
+			return FALSE;
+	} else if(u.uentangled == IRON_BANDS){
+		if(ATTRSCALE < 15 && youracedata->msize != MZ_GIGANTIC) return FALSE;
+		if(breakcheck <= rn2(200*ATTRSCALE))
+			return FALSE;
+	} else if(u.uentangled == RAZOR_WIRE){
+		if(breakcheck <= rn2(200*ATTRSCALE))
+			return FALSE;
+	} else {
+		u.uentangled = 0;
+		return TRUE;
+	}
+	for(obj = invent; obj; obj = obj->nobj){
+		if(obj->otyp == u.uentangled && obj->spe == 1){
+			You("break the restraining %s!", xname(obj));
+			useup(obj);
+			break;
+		}
+	}
+	for(obj = invent; obj; obj = obj->nobj){
+		if(obj->otyp == u.uentangled && obj->spe == 1){
+			return FALSE;
+		}
+	}
+	// else
+	u.uentangled = 0;
+	return TRUE;
+}
+
+int
+uescape_entanglement()
+{
+	struct obj *obj;
+	int escapecheck = ((7-youracedata->msize)*ATTRSCALE + ACURR(A_DEX));
+	if(Free_action){ /*Somehow gained free action while entangled, dump all entangling items.*/
+		struct obj *nobj;
+		for(obj = invent; obj; obj = nobj){
+			nobj = obj->nobj;
+			if(obj->otyp == u.uentangled && obj->spe == 1){
+				You("slip loose from the entangling %s!", xname(obj));
+				obj->spe = 0;
+				obj_extract_self(obj);
+				dropy(obj);
+			}
+		}
+		u.uentangled = 0;
+		return TRUE;
+	}
+	if(outermost_armor(&youmonst) && outermost_armor(&youmonst)->greased);//Slip free
+	else if(u.uentangled == ROPE_OF_ENTANGLING){
+		if(escapecheck <= rn2(200*ATTRSCALE))
+			return FALSE;
+	} else if(u.uentangled == IRON_BANDS){
+		if(escapecheck <= rn2(100*ATTRSCALE))
+			return FALSE;
+	} else if(u.uentangled == RAZOR_WIRE){
+		if(escapecheck <= rn2(200*ATTRSCALE))
+			return FALSE;
+	} else {
+		u.uentangled = 0;
+		return TRUE;
+	}
+	for(obj = invent; obj; obj = obj->nobj){
+		if(obj->otyp == u.uentangled && obj->spe == 1){
+			You("slip loose from the entangling %s!", xname(obj));
+			obj->spe = 0;
+			obj_extract_self(obj);
+			dropy(obj);
+			obj = outermost_armor(&youmonst);
+			if(obj && obj->greased){
+				if (!rn2(obj->blessed ? 4 : 2)){
+					obj->greased = 0;
+					pline("The layer of grease on your %s wears off.", xname(obj));
+				}
+			}
+			break;
+		}
+	}
+	for(obj = invent; obj; obj = obj->nobj){
+		if(obj->otyp == u.uentangled && obj->spe == 1){
+			return FALSE;
+		}
+	}
+	// else
+	u.uentangled = 0;
+	return TRUE;
 }
 
 #endif /* OVLB */

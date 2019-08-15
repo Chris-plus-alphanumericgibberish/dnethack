@@ -2376,13 +2376,16 @@ int thrown;
 	    (void) hmon(mon, obj, 1);
 	    return 1;	/* hmon used it up */
 
-	} else if ((otyp == IRON_BANDS || otyp == RAZOR_WIRE || otyp == ROPE_OF_ENTANGLING) &&
+	} else if (
+		(otyp == IRON_BANDS || otyp == RAZOR_WIRE || otyp == ROPE_OF_ENTANGLING) &&
+		!mon_resistance(mon,FREE_ACTION) &&
 		!guaranteed_hit && /*Assumes that guaranteed hit is due to being swallowed*/
 		(ACURR(A_DEX) > rnd(25))
 	) {
 	    (void) hmon(mon, obj, 1);
 	    wakeup(mon, TRUE);
 		if(!DEADMONSTER(mon) && (!mon->entangled || mon->entangled == otyp)){
+			obj->spe = 1;
 			mon->entangled = otyp;
 			mon->movement = 0;
 			mpickobj(mon,obj);

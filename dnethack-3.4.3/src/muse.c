@@ -2535,6 +2535,13 @@ struct obj *obj;
 	    if (typ == EGG)
 		return (boolean)(touch_petrifies(&mons[obj->corpsenm]));
 	    break;
+	case CHAIN_CLASS:
+	    if (typ == IRON_BANDS
+		    || typ == RAZOR_WIRE
+		    || typ == ROPE_OF_ENTANGLING
+		)
+		return TRUE;
+	    break;
 	default:
 	    break;
 	}
@@ -2891,9 +2898,9 @@ struct monst *mon;
 		return TRUE;
 	}
 	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled){
+		if(obj->otyp == mon->entangled && obj->spe == 1){
 			if(canseemon(mon))
-				pline("%s breaks the restraining %s!", Monnam(mon), xname(obj));
+				pline("%s breaks the entangling %s!", Monnam(mon), xname(obj));
 			else if(canspotmon(mon))
 				pline("%s breaks a restraint!", Monnam(mon));
 			m_useup(mon, obj);
@@ -2901,7 +2908,7 @@ struct monst *mon;
 		}
 	}
 	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled){
+		if(obj->otyp == mon->entangled && obj->spe == 1){
 			return FALSE;
 		}
 	}
@@ -2916,12 +2923,31 @@ struct monst *mon;
 {
 	struct obj *obj;
 	int count;
+	if(mon_resistance(mon,FREE_ACTION)){ /*Somehow gained free action while entangled, dump all entangling items.*/
+		struct obj *nobj;
+		for(obj = mon->minvent; obj; obj = nobj){
+			nobj = obj->nobj;
+			if(obj->otyp == u.uentangled && obj->spe == 1){
+				if(canseemon(mon))
+					pline("%s slips loose from the entangling %s!", Monnam(mon), xname(obj));
+				else if(canspotmon(mon))
+					pline("%s slips loose from a restraint!", Monnam(mon));
+				obj->spe = 0;
+				obj_extract_self(obj);
+				place_object(obj, mon->mx, mon->my);
+				stackobj(obj);
+			}
+		}
+		u.uentangled = 0;
+		return TRUE;
+	}
 	if(mon->entangled == SHACKLES) return FALSE;
+	else if(outermost_armor(mon) && outermost_armor(mon)->greased);//Slip free
 	else if(mon->entangled == ROPE_OF_ENTANGLING){
 		if((7-mon->data->msize) <= rn2(200))
 			return FALSE;
 	} else if(mon->entangled == IRON_BANDS){
-		if((7-mon->data->msize)*2 <= rn2(100))
+		if((7-mon->data->msize) <= rn2(100))
 			return FALSE;
 	} else if(mon->entangled == RAZOR_WIRE){
 		if((7-mon->data->msize) <= rn2(200))
@@ -2931,19 +2957,27 @@ struct monst *mon;
 		return TRUE;
 	}
 	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled){
+		if(obj->otyp == mon->entangled && obj->spe == 1){
 			if(canseemon(mon))
-				pline("%s slips loose from the restraining %s!", Monnam(mon), xname(obj));
+				pline("%s slips loose from the entangling %s!", Monnam(mon), xname(obj));
 			else if(canspotmon(mon))
 				pline("%s slips loose from a restraint!", Monnam(mon));
+			obj->spe = 0;
 			obj_extract_self(obj);
 			place_object(obj, mon->mx, mon->my);
 			stackobj(obj);
+			obj = outermost_armor(mon);
+			if(obj && obj->greased){
+				if (!rn2(obj->blessed ? 4 : 2)){
+					obj->greased = 0;
+					if(canseemon(mon)) pline("The layer of grease on %s's %s wears off.", mon_nam(mon), xname(obj));
+				}
+			}
 			break;
 		}
 	}
 	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled){
+		if(obj->otyp == mon->entangled && obj->spe == 1){
 			return FALSE;
 		}
 	}
@@ -2960,7 +2994,7 @@ int mat;
 	struct obj *obj;
 	int num = 0;
 	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled){
+		if(obj->otyp == mon->entangled && obj->spe == 1){
 			if(obj->obj_material == mat)
 				num++;
 		}
@@ -2976,7 +3010,7 @@ int bet;
 	struct obj *obj;
 	int num = 0;
 	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled){
+		if(obj->otyp == mon->entangled && obj->spe == 1){
 			if(obj->cursed){
 				if(bet < 0) num++;
 			}

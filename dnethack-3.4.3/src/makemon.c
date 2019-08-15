@@ -515,7 +515,7 @@ register struct monst *mtmp;
 				mongets(mtmp, GENTLEWOMAN_S_DRESS);
 				mongets(mtmp, CRYSTAL_BOOTS);
 				mongets(mtmp, CRYSTAL_GAUNTLETS);
-				// mongets(mtmp, RAZOR_WIRE);
+				mongets(mtmp, RAZOR_WIRE);
 			break;
 			}
 		    if (w1) (void)mongets(mtmp, w1);
@@ -4754,7 +4754,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 					mongets(mtmp, CRYSTAL_GAUNTLETS);
 					mongets(mtmp, STILETTO);
-					// mongets(mtmp, RAZOR_WIRE);
+					mongets(mtmp, RAZOR_WIRE);
 				}
 			}break;
 		    case PM_BONE_DEVIL:

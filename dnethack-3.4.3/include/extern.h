@@ -1026,6 +1026,7 @@ E struct obj *NDECL(getnextgetobj);
 E int FDECL(sortloot_cmp, (struct obj *, struct obj *));
 #endif
 E int NDECL(u_healing_penalty);
+E struct obj * FDECL(outermost_armor, (struct monst *));
 
 /* ### ioctl.c ### */
 
@@ -2544,6 +2545,8 @@ E void FDECL(blow_up_landmine, (struct trap *));
 E int FDECL(launch_obj,(SHORT_P,int,int,int,int,int));
 E void FDECL(dowebgush, (int,int,int));
 E void FDECL(webgush, (int,int,genericptr_t));
+E int NDECL(ubreak_entanglement);
+E int NDECL(uescape_entanglement);
 
 /* ### u_init.c ### */
 

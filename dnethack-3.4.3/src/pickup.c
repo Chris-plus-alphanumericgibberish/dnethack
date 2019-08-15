@@ -1212,8 +1212,11 @@ boolean telekinesis;
 			body_part(HAND), xname(obj));
 	return -1;
     }
-    if (obj->otyp == LOADSTONE ||
-	    (is_boulder(obj) && (throws_rocks(youracedata) || (u.sealsActive&SEAL_YMIR))))
+    if (obj->otyp == LOADSTONE
+		 || (obj->otyp == ROPE_OF_ENTANGLING && obj->spe == 1)
+		 || (obj->otyp == IRON_BANDS && obj->spe == 1)
+		 || (obj->otyp == RAZOR_WIRE && obj->spe == 1)
+	     || (is_boulder(obj) && (throws_rocks(youracedata) || (u.sealsActive&SEAL_YMIR))))
 	return 1;		/* lift regardless of current situation */
 
     *cnt_p = carry_count(obj, container, *cnt_p, telekinesis, &old_wt, &new_wt);
