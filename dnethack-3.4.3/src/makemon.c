@@ -3261,75 +3261,75 @@ register struct monst *mtmp;
 			} else if(mm == PM_PARASITIZED_GYNOID){
 				switch(rn2(8)){
 					case 0:
-					(void) mongets(mtmp, VIBROBLADE);
 					(void) mongets(mtmp, FORCE_PIKE);
+					(void) mongets(mtmp, VIBROBLADE);
 					break;
 					case 1:
-					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+					otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
 					otmp->objsize = MZ_LARGE;
 					otmp->obj_material = SILVER;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
-					otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
 					otmp->objsize = MZ_LARGE;
 					otmp->obj_material = SILVER;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					break;
 					case 2:
-					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
+					otmp = mksobj(SPEAR, TRUE, FALSE);
 					otmp->objsize = MZ_LARGE;
 					otmp->obj_material = SILVER;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
-					otmp = mksobj(SPEAR, TRUE, FALSE);
+					otmp = mksobj(SHORT_SWORD, TRUE, FALSE);
 					otmp->objsize = MZ_LARGE;
 					otmp->obj_material = SILVER;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 					break;
 					case 3:
-					otmp = mksobj(RAPIER, TRUE, FALSE);
-					otmp->oproperties = OPROP_FLAYW|OPROP_LESSW;
-					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(BATTLE_AXE, TRUE, FALSE);
 					otmp->objsize = MZ_LARGE;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(RAPIER, TRUE, FALSE);
+					otmp->oproperties = OPROP_FLAYW|OPROP_LESSW;
+					(void) mpickobj(mtmp, otmp);
 					break;
 					case 4:
-					otmp = mksobj(SABER, TRUE, FALSE);
-					otmp->obj_material = METAL;
-					fix_object(otmp);
-					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(SPEAR, TRUE, FALSE);
 					otmp->obj_material = METAL;
 					otmp->oproperties = OPROP_ELECW|OPROP_LESSW;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
-					break;
-					case 5:
 					otmp = mksobj(SABER, TRUE, FALSE);
 					otmp->obj_material = METAL;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
+					break;
+					case 5:
 					otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
 					otmp->obj_material = METAL;
 					otmp->oproperties = OPROP_ELECW|OPROP_LESSW;
 					otmp->objsize = MZ_LARGE;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(SABER, TRUE, FALSE);
+					otmp->obj_material = METAL;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
 					break;
 					case 6:
-					(void) mongets(mtmp, VIBROBLADE);
 					(void) mongets(mtmp, DOUBLE_FORCE_BLADE);
+					(void) mongets(mtmp, VIBROBLADE);
 					break;
 					case 7:
-					(void) mongets(mtmp, rn2(2) ? FORCE_WHIP : FORCE_SWORD);
 					(void) mongets(mtmp, FORCE_PIKE);
+					(void) mongets(mtmp, rn2(2) ? FORCE_WHIP : FORCE_SWORD);
 					break;
 				}
-				switch(rn2(6)){
+				switch(rn2(8)){
 					case 0:
 					(void) mongets(mtmp, BLACK_DRESS);
 					(void) mongets(mtmp, LONG_GLOVES);
@@ -3342,7 +3342,7 @@ register struct monst *mtmp;
 					break;
 					case 2:
 					(void) mongets(mtmp, GENTLEWOMAN_S_DRESS);
-					(void) mongets(mtmp, NOBLE_S_DRESS);
+					(void) mongets(mtmp, VICTORIAN_UNDERWEAR);
 					(void) mongets(mtmp, LONG_GLOVES);
 					rn2(2) ? mongets(mtmp, HEELED_BOOTS) : mongets(mtmp, STILETTOS);
 					break;
@@ -3354,10 +3354,21 @@ register struct monst *mtmp;
 					rn2(2) ? mongets(mtmp, LOW_BOOTS) : rn2(2) ? mongets(mtmp, HIGH_BOOTS) : mongets(mtmp, HEELED_BOOTS);
 					break;
 					case 5:
-					(void) mongets(mtmp, PLASTEEL_HELM);
+					// (void) mongets(mtmp, PLASTEEL_HELM); //Broken
 					(void) mongets(mtmp, PLASTEEL_ARMOR);
 					(void) mongets(mtmp, PLASTEEL_BOOTS);
 					(void) mongets(mtmp, PLASTEEL_GAUNTLETS);
+					break;
+					case 6:
+					(void) mongets(mtmp, BLACK_DRESS);
+					(void) mongets(mtmp, ALCHEMY_SMOCK);
+					(void) mongets(mtmp, LONG_GLOVES);
+					rn2(2) ? mongets(mtmp, HEELED_BOOTS) : mongets(mtmp, STILETTOS);
+					break;
+					case 7:
+					(void) mongets(mtmp, HEALER_UNIFORM);
+					(void) mongets(mtmp, LONG_GLOVES);
+					rn2(2) ? mongets(mtmp, LOW_BOOTS) : rn2(2) ? mongets(mtmp, HIGH_BOOTS) : mongets(mtmp, HEELED_BOOTS);
 					break;
 				}
 				(void) mongets(mtmp, ANDROID_VISOR);
