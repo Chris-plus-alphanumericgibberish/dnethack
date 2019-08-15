@@ -148,7 +148,7 @@ const struct innate {
 		     {	 1, &(HCold_resistance), "", "" },
 		     {   5, &(HStealth), ">Initiating short-range camouflage<", ">Short-range camouflage damaged<" },
 		     {  10, &(HShock_resistance), ">Initiating ion-channel re-direction<", ">Ion-channel re-direction non-operational<" },
-		     {  15, &(HFire_resistance), ">Activating non-conservative heat sink<", ">Non-conservative heat sink destroyed<" },
+		     {  15, &(HFire_resistance), ">Activating asymmetrical heat sink<", ">Asymmetrical heat sink destroyed<" },
 		     {	 0, 0, 0, 0 } },
 
 	vam_abil[] = { {	1, &(HPoison_resistance), "", "" },
