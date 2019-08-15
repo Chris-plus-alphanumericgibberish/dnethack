@@ -792,8 +792,6 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_CLOCKWORK_AUTOMATON,	POT_BOOZE,			POT_OIL    	  },
     // Yuki-onna substitutions
     { PM_YUKI_ONNA,           RING_MAIL,   STUDDED_LEATHER_ARMOR  },
-    { PM_YUKI_ONNA,           SPLINT_MAIL, STUDDED_LEATHER_ARMOR  },
-    { PM_YUKI_ONNA,           HELMET,                  SEDGE_HAT  },
     { NON_PM,	STRANGE_OBJECT,		STRANGE_OBJECT	      }
 };
 
@@ -3113,7 +3111,11 @@ register struct trobj *trop;
 				if(Role_if(PM_PIRATE) && obj->obj_material == IRON) obj->oerodeproof = 1;
 				if(Role_if(PM_SAMURAI) && obj->oclass == ARMOR_CLASS && obj->obj_material == IRON) obj->oerodeproof = 1;
 				if(Role_if(PM_SAMURAI) && obj->otyp == MASK){
-					set_material(obj, IRON);
+					if(hates_iron(youracedata)){
+						set_material(obj, Race_if(PM_DROW) ? OBSIDIAN_MT : MITHRIL);
+					} else {
+						set_material(obj, IRON);
+					}
 //					obj->oerodeproof = 1;
 					obj->corpsenm = PM_HUMAN;
 				}
