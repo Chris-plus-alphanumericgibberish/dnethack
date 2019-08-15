@@ -227,10 +227,10 @@ int x,y;
 				if(mtmp == &youmonst && obj->otyp == LOADSTONE && (!rn2(3) || autopickup) ){
 					pickup_object(obj,1,FALSE);
 				}
-				else if(ohit && !(mtmp == &youmonst && Free_action)
+				else if(mtmp && (ohit && !(mtmp == &youmonst && Free_action)
 					&& !(mtmp != &youmonst && mon_resistance(mtmp,FREE_ACTION))
 					&& (obj->otyp == ROPE_OF_ENTANGLING || obj->otyp == IRON_BANDS || obj->otyp == RAZOR_WIRE)
-				){
+				)){
 					if(mtmp == &youmonst){
 						obj->spe = 1;
 						u.uentangled = obj->otyp;
@@ -241,6 +241,7 @@ int x,y;
 						obj->spe = 1;
 						mtmp->entangled = obj->otyp;
 						mtmp->movement = 0;
+						obj_extract_self(obj);
 						mpickobj(mtmp,obj);
 					}
 				}
@@ -472,7 +473,8 @@ boolean verbose;  /* give message(s) even when you can't see what happened */
 
 	    if (can_blnd((struct monst*)0, mtmp,
 		    (uchar)(otmp->otyp == BLINDING_VENOM ? AT_SPIT : AT_WEAP),
-		    otmp)) {
+		    otmp)
+		) {
 		if (vis && mtmp->mcansee)
 		    pline("%s is blinded by %s.", Monnam(mtmp), the(xname(otmp)));
 		mtmp->mcansee = 0;

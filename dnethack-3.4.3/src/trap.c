@@ -5092,13 +5092,13 @@ uescape_entanglement()
 	}
 	if(outermost_armor(&youmonst) && outermost_armor(&youmonst)->greased);//Slip free
 	else if(u.uentangled == ROPE_OF_ENTANGLING){
-		if(escapecheck <= rn2(200*ATTRSCALE))
+		if(escapecheck <= rn2(20*ATTRSCALE)+rn2(20*ATTRSCALE))
 			return FALSE;
 	} else if(u.uentangled == IRON_BANDS){
-		if(escapecheck <= rn2(100*ATTRSCALE))
+		if(escapecheck <= rn2(20*ATTRSCALE))
 			return FALSE;
 	} else if(u.uentangled == RAZOR_WIRE){
-		if(escapecheck <= rn2(200*ATTRSCALE))
+		if(escapecheck <= rn2(20*ATTRSCALE)+rn2(20*ATTRSCALE))
 			return FALSE;
 	} else {
 		u.uentangled = 0;

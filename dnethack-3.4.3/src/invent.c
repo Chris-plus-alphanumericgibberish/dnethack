@@ -4703,6 +4703,8 @@ int material;
 		count++;
 	if(uamul && uamul->obj_material == material && !uarmu && !uarm)
 		count++;
+	if(u.uentangled && !uarmu && !uarm && !uarmc && entangle_material(&youmonst, material))
+		count++;
 	if(ublindf && ublindf->obj_material == material)
 		count++;
 	if(uchain && uchain->obj_material == material)
@@ -4741,6 +4743,8 @@ int bcu;
 	if(uright && bcu(uright) == bcu)
 		count++;
 	if(uamul && bcu(uamul) == bcu && !uarmu && !uarm)
+		count++;
+	if(u.uentangled && !uarmu && !uarm && !uarmc && entangle_beatitude(&youmonst, bcu))
 		count++;
 	if(ublindf && bcu(ublindf) == bcu)
 		count++;

@@ -1489,14 +1489,17 @@ karemade:
 					youmonst.movement = 0;
 					if(u.uentangled == RAZOR_WIRE){
 						int dmg = d(1,6);
+						int beat;
 						if(hates_silver(youracedata) && entangle_material(&youmonst, SILVER))
 							dmg += rnd(20);
 						if(hates_iron(youracedata) && entangle_material(&youmonst, SILVER))
 							dmg += rnd(u.ulevel);
-						if(hates_unholy(youracedata) && entangle_beatitude(&youmonst, -1))
-							dmg += rnd(9);
-						if(hates_holy(youracedata) && entangle_beatitude(&youmonst, 1))
-							dmg += rnd(4);
+						beat = entangle_beatitude(&youmonst, -1);
+						if(hates_unholy(youracedata) && beat)
+							dmg += beat == 2 ? d(2,9) : rnd(9);
+						beat = entangle_beatitude(&youmonst, 1);
+						if(hates_holy(youracedata) && beat)
+							dmg += beat == 2 ? rnd(20) : rnd(4);
 						losehp(dmg, "being sliced to ribbons by razor wire", KILLED_BY);
 					}
 					uescape_entanglement();

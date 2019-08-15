@@ -2861,6 +2861,8 @@ const char *oldstr;
 		} else if (!BSTRCMPI(bp, p-5, "boots") ||
 			   !BSTRCMPI(bp, p-7, "sandals") ||
 			   !BSTRCMPI(bp, p-9, "gauntlets") ||
+			   !BSTRCMPI(bp, p-5, "bands") ||
+			   !BSTRCMPI(bp, p-8, "shackles") ||
 			   !BSTRCMPI(bp, p-6, "tricks") ||
 			   !BSTRCMPI(bp, p-9, "paralysis") ||
 			   !BSTRCMPI(bp, p-5, "glass") ||

@@ -612,15 +612,18 @@ boolean digest_meal;
 	}
 	
 	if(!DEADMONSTER(mon) &&  mon->entangled == RAZOR_WIRE){
+		int beat;
 		mon->mhp -= rnd(6);
 		if(hates_silver(mon->data) && entangle_material(mon, SILVER))
 			mon->mhp -= rnd(20);
 		if(hates_iron(mon->data) && entangle_material(mon, IRON))
 			mon->mhp -= rnd(mon->m_lev);
-		if(hates_unholy_mon(mon) && entangle_beatitude(mon, -1))
-			mon->mhp -= rnd(9);
-		if(hates_holy_mon(mon) && entangle_beatitude(mon, 1))
-			mon->mhp -= rnd(4);
+		beat = entangle_beatitude(mon, -1);
+		if(hates_unholy_mon(mon) && beat)
+			mon->mhp -= beat == 2 ? d(2,9) : rnd(9);
+		beat = entangle_beatitude(mon, 1);
+		if(hates_holy_mon(mon) && beat)
+			mon->mhp -= beat == 2 ? rnd(20) : rnd(4);
 		if(mon->mhp <= 0){
 			mon->mhp = 0;
 			if(canspotmon(mon))

@@ -2927,7 +2927,7 @@ struct monst *mon;
 		struct obj *nobj;
 		for(obj = mon->minvent; obj; obj = nobj){
 			nobj = obj->nobj;
-			if(obj->otyp == u.uentangled && obj->spe == 1){
+			if(obj->otyp == mon->entangled && obj->spe == 1){
 				if(canseemon(mon))
 					pline("%s slips loose from the entangling %s!", Monnam(mon), xname(obj));
 				else if(canspotmon(mon))
@@ -2938,19 +2938,19 @@ struct monst *mon;
 				stackobj(obj);
 			}
 		}
-		u.uentangled = 0;
+		mon->entangled = 0;
 		return TRUE;
 	}
 	if(mon->entangled == SHACKLES) return FALSE;
 	else if(outermost_armor(mon) && outermost_armor(mon)->greased);//Slip free
 	else if(mon->entangled == ROPE_OF_ENTANGLING){
-		if((7-mon->data->msize) <= rn2(200))
+		if((7-mon->data->msize) <= rn2(20)+rn2(20))
 			return FALSE;
 	} else if(mon->entangled == IRON_BANDS){
-		if((7-mon->data->msize) <= rn2(100))
+		if((7-mon->data->msize) <= rn2(20))
 			return FALSE;
 	} else if(mon->entangled == RAZOR_WIRE){
-		if((7-mon->data->msize) <= rn2(200))
+		if((7-mon->data->msize) <= rn2(20)+rn2(20))
 			return FALSE;
 	} else {
 		mon->entangled = 0;
@@ -2992,14 +2992,22 @@ struct monst *mon;
 int mat;
 {
 	struct obj *obj;
-	int num = 0;
-	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled && obj->spe == 1){
-			if(obj->obj_material == mat)
-				num++;
+	if(mon == &youmonst){
+		for(obj = invent; obj; obj = obj->nobj){
+			if(obj->otyp == u.uentangled && obj->spe == 1){
+				if(obj->obj_material == mat)
+					return TRUE;
+			}
+		}
+	} else {
+		for(obj = mon->minvent; obj; obj = obj->nobj){
+			if(obj->otyp == mon->entangled && obj->spe == 1){
+				if(obj->obj_material == mat)
+					return TRUE;
+			}
 		}
 	}
-	return num;
+	return FALSE;
 }
 
 int
@@ -3008,20 +3016,38 @@ struct monst *mon;
 int bet;
 {
 	struct obj *obj;
-	int num = 0;
-	for(obj = mon->minvent; obj; obj = obj->nobj){
-		if(obj->otyp == mon->entangled && obj->spe == 1){
-			if(obj->cursed){
-				if(bet < 0) num++;
+	int strength = 0;
+	if(mon == &youmonst){
+		for(obj = invent; obj; obj = obj->nobj){
+			if(obj->otyp == u.uentangled && obj->spe == 1){
+				if(obj->cursed){
+					if(bet < 0 && strength < 2) strength = obj->obj_material == GOLD ? 2 : 1;
+				}
+				else if(obj->blessed){
+					if(bet > 0 && strength < 2) strength = obj->obj_material == GOLD ? 2 : 1;
+				}
+				else {
+					if(bet == 0 && strength < 2) strength = obj->obj_material == GOLD ? 2 : 1;
+				}
 			}
-			else if(obj->blessed){
-				if(bet > 0) num++;
+			if(strength == 2) return strength;
+		}
+	} else {
+		for(obj = mon->minvent; obj; obj = obj->nobj){
+			if(obj->otyp == mon->entangled && obj->spe == 1){
+				if(obj->cursed){
+					if(bet < 0 && strength < 2) strength = obj->obj_material == GOLD ? 2 : 1;
+				}
+				else if(obj->blessed){
+					if(bet > 0 && strength < 2) strength = obj->obj_material == GOLD ? 2 : 1;
+				}
+				else {
+					if(bet == 0 && strength < 2) strength = obj->obj_material == GOLD ? 2 : 1;
+				}
 			}
-			else {
-				if(bet == 0) num++;
-			}
+			if(strength == 2) return strength;
 		}
 	}
-	return num;
+	return strength;
 }
 /*muse.c*/
