@@ -1138,6 +1138,46 @@ register struct monst *mtmp;
 		else mtmp->mspec_used += max(10 - mtmp->m_lev,2);
 	}
 
+	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID])
+		&& MON_WEP(mtmp)
+		&& (is_vibroweapon(MON_WEP(mtmp)) || is_blaster(MON_WEP(mtmp)))
+		&& MON_WEP(mtmp)->ovar1 <= 0
+		&& (!(MON_WEP(mtmp)->otyp == HAND_BLASTER || MON_WEP(mtmp)->otyp == ARM_BLASTER) || MON_WEP(mtmp)->recharged < 4)
+		&& !mtmp->mcan && !mtmp->mspec_used
+		&& !(noactions(mtmp))
+		&& !(mindless_mon(mtmp))
+		&& !rn2(20)
+	){
+		if(canspotmon(mtmp)) pline("%s uses %s on-board recharger.",Monnam(mtmp), hisherits(mtmp));
+		if(MON_WEP(mtmp)->otyp == MASS_SHADOW_PISTOL){
+			MON_WEP(mtmp)->ovar1 = 800L + rn2(200);
+		} else if(MON_WEP(mtmp)->otyp == RAYGUN){
+			if(Role_if(PM_ANACHRONONAUT) || Role_if(PM_TOURIST))
+				MON_WEP(mtmp)->ovar1 = (8 + rn2(8))*10L;
+			else MON_WEP(mtmp)->ovar1 = 2+rnd(5)*2;
+		} else {
+			MON_WEP(mtmp)->ovar1 =80L + rn2(20);
+		}
+		if(MON_WEP(mtmp)->recharged < 7) MON_WEP(mtmp)->recharged++;
+		mtmp->mspec_used = 10;
+	}
+
+	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID])
+		&& MON_WEP(mtmp)
+		&& (is_lightsaber(MON_WEP(mtmp)) && MON_WEP(mtmp)->oartifact != ART_INFINITY_S_MIRRORED_ARC && MON_WEP(mtmp)->otyp != KAMEREL_VAJRA)
+		&& MON_WEP(mtmp)->age <= 0
+		&& (!(MON_WEP(mtmp)->otyp == HAND_BLASTER || MON_WEP(mtmp)->otyp == ARM_BLASTER) || MON_WEP(mtmp)->recharged < 4)
+		&& !mtmp->mcan && !mtmp->mspec_used
+		&& !(noactions(mtmp))
+		&& !(mindless_mon(mtmp))
+		&& !rn2(20)
+	){
+		if(canspotmon(mtmp)) pline("%s uses %s on-board recharger.",Monnam(mtmp), hisherits(mtmp));
+		MON_WEP(mtmp)->age = 75000;
+		if(MON_WEP(mtmp)->recharged < 7) MON_WEP(mtmp)->recharged++;
+		mtmp->mspec_used = 10;
+	}
+
 	/* Demonic Blackmail! */
 	if(nearby && mdat->msound == MS_BRIBE &&
 #ifdef CONVICT
