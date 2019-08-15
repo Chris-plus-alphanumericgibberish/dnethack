@@ -6621,7 +6621,11 @@ register int	mmflags;
 			}
 			fakemon.data = ptr;
 			gpflags = (mmflags & MM_IGNOREWATER) ? MM_IGNOREWATER : 0;
-		} while((!goodpos(x, y, &fakemon, gpflags) || (!in_mklev && cansee(x, y))) && tryct++ < 200);
+		} while((!goodpos(x, y, &fakemon, gpflags) 
+				|| (tryct < 50 && !in_mklev && couldsee(x, y)) 
+				|| ((tryct < 100 && !in_mklev && cansee(x, y))) 
+				|| (!in_mklev && distmin(x,y,u.ux,u.uy) < BOLT_LIM)
+			) && tryct++ < 200);
 		if(tryct >= 200){
 			//That failed, return to the default way of handling things
 			ptr = (struct permonst *)0;
