@@ -542,7 +542,7 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7     
 #The altar of the unknown god
-MONSTER:'&',"priest of an unknown god",(35,10)
+MONSTER:'&',"priest of an unknown god",(36,10)
 ALTAR:(35,10),noalign,altar
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
@@ -699,7 +699,7 @@ MAP
                                                                             
 ENDMAP
 #The altar of the unknown god
-MONSTER:'&',"priest of an unknown god",(35,10)
+MONSTER:'&',"priest of an unknown god",(36,10)
 ALTAR:(35,10),noalign,altar
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
