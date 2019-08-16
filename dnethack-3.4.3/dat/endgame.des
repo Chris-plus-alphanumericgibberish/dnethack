@@ -576,15 +576,15 @@ ALTAR:(07,09),align[0],sanctum
 ALTAR:(37,05),align[1],sanctum
 ALTAR:(67,09),align[2],sanctum
 # Doors
-DOOR:closed,(11,09)
-DOOR:closed,(17,09)
+DOOR:locked,(11,09)
+DOOR:locked,(17,09)
 DOOR:locked,(23,12)
 DOOR:locked,(37,08)
-DOOR:closed,(37,11)
-DOOR:closed,(37,17)
+DOOR:locked,(37,11)
+DOOR:locked,(37,17)
 DOOR:locked,(51,12)
 DOOR:locked,(57,09)
-DOOR:closed,(63,09)
+DOOR:locked,(63,09)
 # Non diggable and phazeable everywhere
 NON_DIGGABLE:(00,00,74,19)
 NON_PASSWALL:(00,00,74,19)
