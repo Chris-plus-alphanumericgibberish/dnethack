@@ -3093,12 +3093,12 @@ register struct obj *obj;
 
 	switch (chance) {
 	case 0 : verbalize("I am in your debt.  I will grant one wish!");
-		if (u.uevent.utook_castle & ARTWISH_EARNED)
+		if ((u.uevent.utook_castle & ARTWISH_EARNED) && !(u.uevent.utook_castle & ARTWISH_SPENT))
 			mtmp2 = makemon(&mons[PM_PSYCHOPOMP], u.ux, u.uy, NO_MM_FLAGS);
-		if (u.uevent.uunknowngod & ARTWISH_EARNED)
+		if ((u.uevent.uunknowngod & ARTWISH_EARNED) && !(u.uevent.uunknowngod & ARTWISH_SPENT))
 			mtmp3 = makemon(&mons[PM_PRIEST_OF_AN_UNKNOWN_GOD], u.ux, u.uy, NO_MM_FLAGS);
 		if ((mtmp2 && canseemon(mtmp2)) || (mtmp3 && canseemon(mtmp3))) {
-			You("See %s%s%s appear at the djinni's words.",
+			You("see %s%s%s appear at the djinni's words.",
 				(mtmp2 && canseemon(mtmp2)) ? a_monnam(mtmp2) : "",
 				((mtmp2 && canseemon(mtmp2)) && (mtmp3 && canseemon(mtmp3))) ? " and " : "",
 				(mtmp3 && canseemon(mtmp3)) ? a_monnam(mtmp3) : "");
