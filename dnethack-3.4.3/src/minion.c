@@ -182,29 +182,30 @@ boolean talk;
 		/* don't call set_malign(); player was naughty */
 		mon->msleeping = 0;
 		mon->mcanmove = 1;
-    }
-	
-	/* fix house setting */
-	if(is_drow(mon->data)){
-		int faction = god_faction(gptr);
-		struct obj *otmp;
-
-		mon->mfaction = faction;
 		
-		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
-			if(otmp->otyp == find_signet_ring() || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == NOBLE_S_DRESS){
-				otmp->oward = faction;
+		/* fix house setting */
+		if(is_drow(mon->data)){
+			int faction = god_faction(gptr);
+			struct obj *otmp;
+
+			mon->mfaction = faction;
+			
+			for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
+				if(otmp->otyp == find_signet_ring() || otmp->otyp == DROVEN_CHAIN_MAIL || otmp->otyp == DROVEN_PLATE_MAIL || otmp->otyp == NOBLE_S_DRESS){
+					otmp->oward = faction;
+				}
 			}
 		}
-	}
+		
+		if(gptr == DreadFracture && mon->mfaction != FRACTURED){
+			mon->mfaction = FRACTURED;
+			mon->m_lev += 4;
+			mon->mhpmax = d(mon->m_lev, 8);
+			mon->mhp = mon->mhpmax;
+			newsym(mon->mx,mon->my);
+		}
+    }
 	
-	if(gptr == DreadFracture && mon->mfaction != FRACTURED){
-		mon->mfaction = FRACTURED;
-		mon->m_lev += 4;
-		mon->mhpmax = d(mon->m_lev, 8);
-		mon->mhp = mon->mhpmax;
-		newsym(mon->mx,mon->my);
-	}
 	return mon;
 }
 
