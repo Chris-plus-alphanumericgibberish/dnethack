@@ -59,6 +59,7 @@ const char	*Demiurge = "Yaldabaoth";
 const char	*Sophia = "Pistis Sophia";
 const char	*Other = "an alien god";
 const char	*BlackMother = "the Black Mother";
+const char	*Nodens = "Nodens";
 const char	*DreadFracture = "the Dread Fracture";
 const char	*AllInOne = "Yog-Sothoth";
 
@@ -3176,7 +3177,11 @@ aligntyp alignment;
 		else if(Role_if(PM_EXILE) && In_quest(&u.uz)) gnam = Demiurge;
 		else if(In_lost_cities(&u.uz)){
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
-			else gnam = BlackMother;
+			else if(on_level(&lethe_headwaters,&u.uz))
+				gnam = Nodens;
+			else if(on_level(&lethe_temples,&u.uz))
+				gnam = BlackMother;
+			else gnam = Nodens;
 		}
 		else if(In_outlands(&u.uz)){
 			gnam = DreadFracture;
@@ -3236,7 +3241,11 @@ aligntyp alignment;
 		else if(In_outlands(&u.uz)) gnam = DreadFracture;
 		else if(In_lost_cities(&u.uz)){
 			if(on_level(&rlyeh_level,&u.uz)) gnam = AllInOne;
-			else gnam = BlackMother;
+			else if(on_level(&lethe_headwaters,&u.uz))
+				gnam = Nodens;
+			else if(on_level(&lethe_temples,&u.uz))
+				gnam = BlackMother;
+			else gnam = Nodens;
 		}
 		else gnam = Moloch;
 	 break;
