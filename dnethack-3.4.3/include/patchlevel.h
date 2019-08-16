@@ -15,7 +15,7 @@
    Incremented to 3.11 with the introduction Anachrononauts.
    Incremented to 3.12 with the introduction Magic chests, scrolls of antimagic, resistance, and consecration, YARevison to chaos quest, beter resistance-from-diet, and lightsaber forms.
 */
-#define VERSION_MINOR	17
+#define VERSION_MINOR	18
 /*
  * PATCHLEVEL is updated for each release.
  *
@@ -40,8 +40,9 @@
  * 3.16.0: Reworked neutral quest, minor bug fixes.  Added shallow water, rilmani.  Layed groundwork for Half Dragon Noble quests and more neutral quest additions, but these should not be accessable in this version
  * 3.17.0: AC/DR split, wishing revamp (Nero), maze improvements (Nero), Law quest inclusions, Weapon properties, Convict Quest changes, Uvuudaum spiffyfication, more groundwork for Half Dragon Noble quests, 
  * 3.17.1: Bard first gift, singing quest guardians, and monster music affects the player 
+ * 3.18.0: Alternate Chaos quests, Android Anachrononauts
  */
-#define PATCHLEVEL	1
+#define PATCHLEVEL	0
 /*
  * Incrementing EDITLEVEL can be used to force invalidation of old bones
  * and save files.
