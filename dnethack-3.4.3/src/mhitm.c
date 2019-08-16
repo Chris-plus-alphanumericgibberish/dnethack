@@ -2059,6 +2059,8 @@ physical:{
 		tmp = (mattk->adtyp == AD_STON ? 0 : 1);
 		break;
 	    case AD_ABDC:
+			if(Is_valley(&u.uz))
+				break;
 	    case AD_TLPT:
 		if (!cancelled && tmp < mdef->mhp && !tele_restrict(mdef)) {
 		    char mdef_Monnam[BUFSZ];

@@ -3252,6 +3252,9 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_ABDC:
 		hitmsg(mtmp, mattk);
+		if(Is_valley(&u.uz))
+			break;
+
 		if ( armuncancel || (mtmp->data==&mons[PM_PALE_NIGHT] && !rn2(3)) ) {
 			(void) safe_teleds(FALSE);
 		}
