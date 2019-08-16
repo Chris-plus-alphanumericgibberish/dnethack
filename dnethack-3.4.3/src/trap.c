@@ -5044,7 +5044,7 @@ ubreak_entanglement()
 		if(breakcheck*2 <= rn2(100*ATTRSCALE))
 			return FALSE;
 	} else if(u.uentangled == IRON_BANDS){
-		if(ATTRSCALE < 15 && youracedata->msize != MZ_GIGANTIC) return FALSE;
+		if(ACURRSTR < 15 && youracedata->msize != MZ_GIGANTIC) return FALSE;
 		if(breakcheck <= rn2(200*ATTRSCALE))
 			return FALSE;
 	} else if(u.uentangled == RAZOR_WIRE){
