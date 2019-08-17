@@ -2308,6 +2308,8 @@ newgame()
 		fully_identify_obj(otmp);
 	    otmp = hold_another_object(otmp, "Oops!  %s to the floor!",
 				       The(aobjnam(otmp, "slip")), (const char *)0);
+		if(otmp->oclass == WEAPON_CLASS)
+			expert_weapon_skill(objects[otmp->otyp].oc_skill);
 	    // otmp->oartifact = inherited;
 	}
 	return;
