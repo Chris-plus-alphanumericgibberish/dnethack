@@ -164,8 +164,8 @@ ENDMAP
 
 RANDOM_PLACES:(40,11),(67,01),(61,17),(56,01),(73,10),(59,08)
 
-#OBJECT[10%]:')',"club",place[0],uncursed,0,"The Limb of the Black Tree"
-#OBJECT[10%]:')',"boomerang",place[1],uncursed,0,"Windrider"
+OBJECT[10%]:')',"macuahuitl",place[0],uncursed,0,"The Macuahuitl of Quetzalcoatl"
+OBJECT[10%]:'(',"mask",place[1],uncursed,0,"The Mask of Tlaloc"
 #OBJECT[10%]:'[',"orcish shield",place[2],uncursed,0,"The Shield of the All-Seeing"
 #OBJECT[10%]:'[',"elven shield",place[3],uncursed,0,"The Shield of Yggdrasil"
 #OBJECT[10%]:')',"sickle",place[4],uncursed,0,"Gaia's Fate"
