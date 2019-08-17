@@ -9623,16 +9623,21 @@ mind_blast_items()
 	struct monst *mtmp, *nmon = (struct monst *)0;
 	struct obj *obj;
 	struct blast_element *blast_list = 0, *nblast = 0;
+	int whisper = 0;
 	if(u.uinvulnerable)
 		return;
 	
 	//collect all the blasting items into a list so that they can blast away without worrying about changing the state of the dungeon.
-	for(obj = invent; obj; obj = obj->nobj) 
-	 if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
-		nblast = (struct blast_element *)malloc(sizeof(struct blast_element));
-		nblast->nblast = blast_list;
-		nblast->spe = obj->spe;
-		blast_list = nblast;
+	for(obj = invent; obj; obj = obj->nobj){
+		if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
+			nblast = (struct blast_element *)malloc(sizeof(struct blast_element));
+			nblast->nblast = blast_list;
+			nblast->spe = obj->spe;
+			blast_list = nblast;
+		}
+		if(obj->otyp == STATUE && (obj->spe&STATUE_FACELESS)){
+			whisper++;
+		}
 	}
 	for (obj = fobj; obj; obj = obj->nobj) {
 		if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
@@ -9641,6 +9646,9 @@ mind_blast_items()
 			nblast->spe = obj->spe;
 			blast_list = nblast;
 		}
+		if(obj->otyp == STATUE && (obj->spe&STATUE_FACELESS)){
+			whisper++;
+		}
 	}
 	for (obj = level.buriedobjlist; obj; obj = obj->nobj) {
 		if(obj->oproperties&OPROP_DEEPW && obj->spe < 8){
@@ -9648,6 +9656,9 @@ mind_blast_items()
 			nblast->nblast = blast_list;
 			nblast->spe = obj->spe;
 			blast_list = nblast;
+		}
+		if(obj->otyp == STATUE && (obj->spe&STATUE_FACELESS)){
+			whisper++;
 		}
 	}
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
@@ -9659,11 +9670,77 @@ mind_blast_items()
 				nblast->spe = obj->spe;
 				blast_list = nblast;
 			}
+			if(obj->otyp == STATUE && (obj->spe&STATUE_FACELESS)){
+				whisper++;
+			}
 		}
 	}
 	
 	for(nblast = blast_list; nblast; nblast = nblast->nblast){
 		do_item_blast(nblast->spe);
+	}
+	if(whisper && !rn2(20)){
+		if(whisper >= 10){
+			switch(rn2(4)){
+				case 0:
+				You_hear("murmuring babble surrounding you.");
+				break;
+				case 1:
+				You_hear("whispering babble all around you.");
+				break;
+				case 2:
+				You_hear("faint singing.");
+				break;
+				case 3:
+				You_hear("soft sobbing all around you.");
+				break;
+			}
+		} else if(whisper >= 5){
+			switch(rn2(4)){
+				case 0:
+				You_hear("faint murmuring.");
+				break;
+				case 1:
+				You_hear("whispering babble.");
+				break;
+				case 2:
+				You_hear("distant music.");
+				break;
+				case 3:
+				You_hear("soft sobbing.");
+				break;
+			}
+		} else if(whisper >= 2){
+			switch(rn2(4)){
+				case 0:
+				You_hear("isolated murmurs.");
+				break;
+				case 1:
+				You_hear("scattered whispers.");
+				break;
+				case 2:
+				You_hear("faint snatches of songs.");
+				break;
+				case 3:
+				You_hear("soft sobbing.");
+				break;
+			}
+		} else {
+			switch(rn2(4)){
+				case 0:
+				You_hear("someone murmuring.");
+				break;
+				case 1:
+				You_hear("someone whispering.");
+				break;
+				case 2:
+				You_hear("someone humming.");
+				break;
+				case 3:
+				You_hear("someone crying.");
+				break;
+			}
+		}
 	}
 	
 	//free the list
