@@ -1312,6 +1312,21 @@ find_fgloves()
     return -1;	/* not 0, or caller would try again each move */
 }
 
+/* find the object index for piece of cloth robe */
+int
+find_pcloth()
+{
+    register int i;
+    register const char *s;
+
+    for (i = CLOAK_OF_PROTECTION; i <= CLOAK_OF_DISPLACEMENT; i++)
+	if ((s = OBJ_DESCR(objects[i])) != 0 && !strcmp(s, "piece of cloth"))
+	    return i;
+
+    impossible("piece of cloth not found?");
+    return -1;	/* not 0, or caller would try again each move */
+}
+
 void
 oinit()			/* level dependent initialization */
 {

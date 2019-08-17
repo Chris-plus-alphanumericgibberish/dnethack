@@ -1675,6 +1675,8 @@ struct obj* obj;
     unsigned short otyp = obj->otyp;
     int default_material = objects[otyp].oc_material;
 
+	if(otyp == find_pcloth())
+		return NULL;
     /* Cases for specific object types. */
 	switch (otyp) {
 	/* Special exceptions to the whole randomized materials system - where
@@ -1687,6 +1689,14 @@ struct obj* obj;
 	case SHADOWLANDER_S_TORCH:
 	case SUNROD:
 	case WORM_TOOTH:
+	case MUMMY_WRAPPING:
+	case ELVEN_CLOAK:
+	case DROVEN_CLOAK:
+	case OILSKIN_CLOAK:
+	case ROBE:
+	case WHITE_FACELESS_ROBE:
+	case BLACK_FACELESS_ROBE:
+	case SMOKY_VIOLET_FACELESS_ROBE:
 	case CRYSKNIFE:
 	case LEATHER_HELM:
 	case LEATHER_ARMOR:
