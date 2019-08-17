@@ -481,7 +481,7 @@ char *buf;
 	{
 		Sprintf(tmpbuf, "%ld ", obj->quan);
 		Strcat(buf, tmpbuf);
-		if (obj->otyp == CORPSE && (mons[obj->corpsenm].geno & G_UNIQ))
+		if (obj->otyp == CORPSE && (mons[obj->corpsenm].geno & G_UNIQ) && obj->corpsenm != PM_GOD)
 		{
 			Strcat(buf, "of ");
 			if (!type_is_pname(&mons[obj->corpsenm])) Strcat(buf, "the ");
@@ -489,7 +489,7 @@ char *buf;
 			Strcat(buf, tmpbuf);
 		}
 	}
-	else if (obj->otyp == CORPSE && (mons[obj->corpsenm].geno & G_UNIQ)) {
+	else if (obj->otyp == CORPSE && (mons[obj->corpsenm].geno & G_UNIQ) && obj->corpsenm != PM_GOD) {
 		if (!type_is_pname(&mons[obj->corpsenm])) Strcat(buf, "the ");
 		Sprintf(tmpbuf, "%s ", s_suffix(mons[obj->corpsenm].mname));
 		Strcat(buf, tmpbuf);
@@ -1366,7 +1366,7 @@ boolean with_price;
 				((obj->spe & STATUE_FACELESS)) ? "faceless " : "",
 				actualn,
 				type_is_pname(&mons[obj->corpsenm]) ? "" :
-				(mons[obj->corpsenm].geno & G_UNIQ) ? "the " :
+				((mons[obj->corpsenm].geno & G_UNIQ) && obj->corpsenm != PM_GOD) ? "the " :
 				(index(vowels, *(mons[obj->corpsenm].mname)) ?
 				"an " : "a "),
 				mons[obj->corpsenm].mname);

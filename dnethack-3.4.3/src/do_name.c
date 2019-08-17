@@ -1083,7 +1083,7 @@ boolean called;
 		article = ARTICLE_THE;
 	    else
 		article = ARTICLE_NONE;
-	} else if ((mdat->geno & G_UNIQ) && article == ARTICLE_A) {
+	} else if ((mdat->geno & G_UNIQ) && article == ARTICLE_A && mdat != &mons[PM_GOD]) {
 	    article = ARTICLE_THE;
 	}
 
@@ -1155,7 +1155,7 @@ boolean called;
 		article = ARTICLE_THE;
 	    else
 		article = ARTICLE_NONE;
-	} else if ((mdat->geno & G_UNIQ) && article == ARTICLE_A) {
+	} else if ((mdat->geno & G_UNIQ) && article == ARTICLE_A && mdat != &mons[PM_GOD]) {
 	    article = ARTICLE_THE;
 	}
 
