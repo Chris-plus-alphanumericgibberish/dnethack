@@ -1699,12 +1699,13 @@ register struct attack *mattk;
 		switch (mattk->adtyp) {
 		    case AD_SHDW:
 				if(onscary(mtmp->mux,mtmp->muy,mtmp)) return 0; //Warded
-				ammo_type = DROVEN_BOLT;
+				ammo_type = SPIKE;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;
 			    qvr->cursed = 0;
 			    qvr->quan = 1;
 			    qvr->spe = 8;
+			    qvr->obj_material = SHADOWSTEEL;
 				qvr->opoisoned = (OPOISON_BASIC|OPOISON_BLIND);
 				bypassDR = 1;
 			break;
@@ -1855,12 +1856,13 @@ register struct attack *mattk;
 		switch (mattk->adtyp) {
 		    case AD_SHDW:
 				if(onscary(mdef->mx,mdef->my,mtmp)) return 0; //Warded
-				ammo_type = DROVEN_BOLT;
+				ammo_type = SPIKE;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;
 			    qvr->cursed = 0;
 			    qvr->quan = 1;
 			    qvr->spe = 8;
+			    qvr->obj_material = SHADOWSTEEL;
 				qvr->opoisoned = (OPOISON_BASIC|OPOISON_BLIND);
 				bypassDR = 1;
 			break;

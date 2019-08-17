@@ -3833,11 +3833,12 @@ spiriteffects(power, atme)
 				} else break;
 			}
 			if(!mon) return 0;
-			qvr = mksobj(DROVEN_BOLT, TRUE, FALSE);
+			qvr = mksobj(SPIKE, TRUE, FALSE);
 			qvr->blessed = 0;
 			qvr->cursed = 0;
 			qvr->quan = 1;
 			qvr->spe = d(5,dsize) + 8;
+			qvr->obj_material = SHADOWSTEEL;
 			qvr->opoisoned = (OPOISON_BASIC|OPOISON_BLIND);
 			set_bypassDR(1);  //state variable referenced in drop_throw
 			set_destroy_thrown(1); //state variable referenced in drop_throw
