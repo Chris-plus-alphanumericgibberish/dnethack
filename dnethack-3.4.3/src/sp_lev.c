@@ -1101,11 +1101,19 @@ struct mkroom	*croom;
 			PM_TULANI_ELADRIN, PM_MASKED_QUEEN, PM_QUEEN_OF_STARS,
 			PM_GOD,  PM_DREAD_SERAPH, PM_TITAN, PM_TITAN, PM_TITAN};
 		otmp->corpsenm = statuetypes[rn2(SIZE(statuetypes))];
-		if(otmp->corpsenm == PM_MASKED_QUEEN)
-			otmp->spe &= ~STATUE_FACELESS; //Wearing mask
-		if(otmp->corpsenm == PM_GOD)
-			otmp = oname(otmp, "the Black Goat of the woods with a thousand young");
-			
+		if(otmp->corpsenm == PM_MASKED_QUEEN || otmp->corpsenm == PM_GOD)
+			otmp->spe &= ~STATUE_FACELESS;
+		if(otmp->corpsenm == PM_GOD) switch(rn2(3)){
+			case 0:
+			otmp = oname(otmp, "the goat with a thousand young");
+			break;
+			case 1:
+			otmp = oname(otmp, "the misty mother");
+			break;
+			case 2:
+			otmp = oname(otmp, "the wandering dancer");
+			break;
+		}
 		fix_object(otmp);
 	}
 	
