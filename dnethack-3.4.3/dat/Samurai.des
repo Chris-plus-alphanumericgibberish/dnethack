@@ -352,7 +352,7 @@ MONSTER:'E',"stalker",random
 #
 
 MAZE: "Sam-fila", ' '
-INIT_MAP: '.' , 'P', true, true, random, true
+INIT_MAP: 'G' , 'P', true, true, random, true
 NOMAP
 #
 STAIR: random, up

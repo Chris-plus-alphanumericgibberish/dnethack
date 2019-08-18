@@ -13,24 +13,24 @@ FLAGS: noteleport,hardfloor
 GEOMETRY:center,center
 MAP
 PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-PPPP........PPPP.....PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP.P..PPPPP......PPPPPPPP
-PPP..........PPPP...PPPPP.........................PPPP..PPPPP........PPPPPPP
-PP............PPPPPPPP..............................PPP...PPPP......PPPPPPPP
-P.....PPPPPPPPPPPPPPP................................PPPPPPPPPPPPPPPPPPPPPPP
-PPPP....PPPPPPPPPPPP...................................PPPPP.PPPPPPPPPPPPPPP
-PPPP........PPPPP.........-----------------------........PP...PPPPPPP.....PP
-PPP............PPPPP....--|.|......S..........S.|--.....PPPP.PPPPPPP.......P
-PPPP..........PPPPP.....|.S.|......-----------|S|.|......PPPPPP.PPP.......PP
-PPPPPP......PPPPPP......|.|.|......|...|......|.|.|.....PPPPPP...PP.......PP
-PPPPPPPPPPPPPPPPPPP.....+.|.|......S.\.S......|.|.+......PPPPPP.PPPP.......P
-PPP...PPPPP...PPPP......|.|.|......|...|......|.|.|.......PPPPPPPPPPP.....PP
-PP.....PPP.....PPP......|.|S|-----------......|.S.|......PPPPPPPPPPPPPPPPPPP
-PPP..PPPPP...PPPP.......--|.S..........S......|.|--.....PPPPPPPPP....PPPPPPP
-PPPPPPPPPPPPPPPP..........-----------------------..........PPPPP..........PP
-PPPPPPPPPPPPPPPPP........................................PPPPPP............P
-PPP.............PPPP...................................PPP..PPPP..........PP
-PP...............PPPPP................................PPPP...PPPP........PPP
-PPP.............PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP....PPPPPP
+PPPPeeeeeeeePPPPeeeeePPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPePeePPPPPeeeeeePPPPPPPP
+PPPeeeeeeeeeePPPPeeePPPPPeeeeeeeeeeeeeeeeeeeeeeeeePPPPeePPPPPeeeeeeeePPPPPPP
+PPeeeeeeeeeeeePPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeeePPPPeeeeeePPPPPPPP
+PeeeeePPPPPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPPPPPPPPPPPPPPPPPPP
+PPPPeeeePPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPePPPPPPPPPPPPPPP
+PPPPeeeeeeeePPPPPeeeeeeeee-----------------------eeeeeeeePPeeePPPPPPPeeeeePP
+PPPeeeeeeeeeeeePPPPPeeee--|.|......S..........S.|--eeeeePPPPePPPPPPPeeeeeeeP
+PPPPeeeeeeeeeePPPPPeeeee|.S.|......-----------|S|.|eeeeeePPPPPPePPPeeeeeeePP
+PPPPPPeeeeeePPPPPPeeeeee|.|.|......|...|......|.|.|eeeeePPPPPPeeePPeeeeeeePP
+PPPPPPPPPPPPPPPPPPPeeeee+.|.|......S.\.S......|.|.+eeeeeePPPPPPePPPPeeeeeeeP
+PPPeeePPPPPeeePPPPeeeeee|.|.|......|...|......|.|.|eeeeeeePPPPPPPPPPPeeeeePP
+PPeeeeePPPeeeeePPPeeeeee|.|S|-----------......|.S.|eeeeeePPPPPPPPPPPPPPPPPPP
+PPPeePPPPPeeePPPPeeeeeee--|.S..........S......|.|--eeeeePPPPPPPPPeeeePPPPPPP
+PPPPPPPPPPPPPPPPeeeeeeeeee-----------------------eeeeeeeeeePPPPPeeeeeeeeeePP
+PPPPPPPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPPeeeeeeeeeeeeP
+PPPeeeeeeeeeeeeePPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeePPPPeeeeeeeeeePP
+PPeeeeeeeeeeeeeeePPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPeeePPPPeeeeeeeePPP
+PPPeeeeeeeeeeeeePPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPeeeePPPPPP
 PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
 ENDMAP
 # Dungeon Description
@@ -113,19 +113,19 @@ MONSTER: 'S',random,random,hostile
 MAZE: "Hea-loca",' '
 FLAGS: hardfloor
 #
-INIT_MAP: '.' , 'P', true , true , lit , false
+INIT_MAP: 'e' , 'P', true , true , lit , false
 GEOMETRY:center,center
 MAP
-PPPPPPPPPPPPP.......PPPPPPPPPPP
-PPPPPPPP...............PPPPPPPP
-PPPP.....-------------...PPPPPP
-PPPPP....|.S.........|....PPPPP
-PPP......+.|.........|...PPPPPP
-PPP......+.|.........|..PPPPPPP
-PPPP.....|.S.........|..PPPPPPP
-PPPPP....-------------....PPPPP
-PPPPPPPP...............PPPPPPPP
-PPPPPPPPPPP........PPPPPPPPPPPP
+PPPPPPPPPPPPPeeeeeeePPPPPPPPPPP
+PPPPPPPPeeeeeeeeeeeeeeePPPPPPPP
+PPPPeeeee-------------eeePPPPPP
+PPPPPeeee|.S.........|eeeePPPPP
+PPPeeeeee+.|.........|eeePPPPPP
+PPPeeeeee+.|.........|eePPPPPPP
+PPPPeeeee|.S.........|eePPPPPPP
+PPPPPeeee-------------eeeePPPPP
+PPPPPPPPeeeeeeeeeeeeeeePPPPPPPP
+PPPPPPPPPPPeeeeeeeePPPPPPPPPPPP
 ENDMAP
 # Dungeon Description
 REGION:(00,00,30,09),lit,"ordinary"
@@ -214,21 +214,21 @@ MONSTER: 'S',random,random,hostile
 
 MAZE: "Hea-goal", 'P'
 #
-INIT_MAP: '.' , 'P' , false , true , lit , false
+INIT_MAP: 'e' , 'P' , false , true , lit , false
 GEOMETRY:center,center
 MAP
-.P....................................PP.
-PP.......PPPPPPP....PPPPPPP....PPPP...PP.
-...PPPPPPP....PPPPPPP.....PPPPPP..PPP...P
-...PP..............................PPP...
-..PP..............................PP.....
-..PP..............................PPP....
-..PPP..............................PP....
-.PPP..............................PPPP...
-...PP............................PPP...PP
-..PPPP...PPPPP..PPPP...PPPPP.....PP...PP.
-P....PPPPP...PPPP..PPPPP...PPPPPPP...PP..
-PPP..................................PPP.
+ePeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPe
+PPeeeeeeePPPPPPPeeeePPPPPPPeeeePPPPeeePPe
+eeePPPPPPPeeeePPPPPPPeeeeePPPPPPeePPPeeeP
+eeePPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeee
+eePPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPeeeee
+eePPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeeee
+eePPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPeeee
+ePPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPeee
+eeePPeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeeePP
+eePPPPeeePPPPPeePPPPeeePPPPPeeeeePPeeePPe
+PeeeePPPPPeeePPPPeePPPPPeeePPPPPPPeeePPee
+PPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPe
 ENDMAP
 # Dungeon Description
 REGION:(00,00,40,11),lit,"ordinary"
@@ -304,7 +304,7 @@ MONSTER: 'S',random,random,hostile
 #
 
 MAZE: "Hea-fila" , 'P'
-INIT_MAP: '.' , 'P' , false , true , lit , false
+INIT_MAP: 'e' , 'P' , false , true , lit , false
 NOMAP
 #
 STAIR: random, up
@@ -339,7 +339,7 @@ TRAP: random, random
 TRAP: random, random
 
 MAZE: "Hea-filb" , 'P'
-INIT_MAP: '.' , 'P' , false , true , lit , false
+INIT_MAP: 'e' , 'P' , false , true , lit , false
 NOMAP
 #
 STAIR: random, up

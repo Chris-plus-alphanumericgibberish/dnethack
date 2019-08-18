@@ -10,27 +10,27 @@
 #
 MAZE: "Nob-strt",'.'
 FLAGS: noteleport,hardfloor
-INIT_MAP: '.' , 'P' , false , true , lit , false
+INIT_MAP: 'e' , 'P' , false , true , lit , false
 GEOMETRY:center,center
 #0         1         2         3
 #0123456789012345678901234567890
 MAP
-0PP...........PPPPPPPPPPPPPPPPPP
-1P..PPP............P-----P.PPPPP
-2P..PPPPPPPPPPPPPPPP|...|PPP..PP
-3....P-----.......|--...--|P..PP
-4....P|...|.|-----|.......|P...P
-5....P--|+--|.....+...\...|P...P
-6....PPP|...+.....|.......|P....
-7......P|.-----+--|--...--|P....
-8......P|.|.........|...|PPP....
-9......P|.|.........--S--PP.....
-0P.....P|.|..........|.|PPP.....
-1P.....P|.|----++----|-|PPP.....
-2P...PPP|.|............|PPP.....
-3PP..P--|+-----++-----+|--P....P
-4PP..P|...|PPPP..PPPP|...|P....P
-5PPPPP-----PPPPPPPPPP-----P...PP
+0PPeeeeeeeeeeePPPPPPPPPPPPPPPPPP
+1PeePPPeeeeeeeeeeeeP-----P.PPPPP
+2PeePPPPPPPPPPPPPPPP|...|PPPeePP
+3eeeeP-----.......|--...--|PeePP
+4eeeeP|...|.|-----|.......|PeeeP
+5eeeeP--|+--|.....+...\...|PeeeP
+6eeeePPP|...+.....|.......|Peeee
+7eeeeeeP|.-----+--|--...--|Peeee
+8eeeeeeP|.|.........|...|PPPeeee
+9eeeeeeP|.|.........--S--PPeeeee
+0PeeeeeP|.|..........|.|PPPeeeee
+1PeeeeeP|.|----++----|-|PPPeeeee
+2PeeePPP|.|............|PPPeeeee
+3PPeeP--|+-----++-----+|--PeeeeP
+4PPeeP|...|PPPP..PPPP|...|PeeeeP
+5PPPPP-----PPPPPPPPPP-----PeeePP
 6PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
 ENDMAP
 #0123456789012345678901234567890
@@ -102,7 +102,7 @@ MONSTER: '@',"peasant",(29,11),peaceful
 #
 
 MAZE: "Nob-loca",' '
-INIT_MAP: '.' , 'T', true, true, lit, true
+INIT_MAP: 'G' , 'T', true, true, lit, true
 NOMAP
 #
 STAIR: random, up
@@ -147,7 +147,7 @@ MONSTER: random, random, random, hostile
 
 MAZE: "Nob-goal", ' '
 FLAGS: shortsighted,hardfloor
-INIT_MAP: '.' , 'T' , false , true , lit , false
+INIT_MAP: 'G' , 'T' , false , true , lit , false
 GEOMETRY:center,center
 #0         1         2         3         4         
 #01234567890123456789012345678901234567890123456789
