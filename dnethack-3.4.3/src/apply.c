@@ -1451,7 +1451,7 @@ struct obj *obj;
 		}
 	} else {
 		if(!uswapwep || uswapwep->otyp != RAKUYO_DAGGER){
-			You("need the matching dagger.");
+			You("need the matching dagger in your swap-weapon sheath or offhand.");
 			return 0;
 		}
 		if(!mergable_traits(obj, uswapwep)){
@@ -1504,7 +1504,7 @@ struct obj *obj;
 		}
 	} else {
 		if(!uswapwep || uswapwep->otyp != FORCE_BLADE){
-			You("need the matching blade.");
+			You("need the matching blade in your swap-weapon sheath or offhand.");
 			return 0;
 		}
 		if(!mergable_traits(obj, uswapwep)){
