@@ -772,7 +772,7 @@ const struct Race races[] = {
 	{"hedrow", "drow"},
 	PM_DROW, NON_PM, PM_DROW_MUMMY, PM_ZOMBIE,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
-	MA_ELF, 0, MA_ELF|MA_ORC,
+	MA_ELF, 0, MA_FEY|MA_ELF|MA_ORC,
 	/*  Str    Int Wis Dex Con Cha */
 	{    3,     3,  3,  3,  3,  3 },
 	{   18,    20, 18, 20, 16, 20 },
@@ -852,7 +852,7 @@ const struct Race races[] = {
 	{0, 0},
 	PM_ORC, NON_PM, PM_ORC_MUMMY, PM_ZOMBIE,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
-	MA_ORC, 0, MA_HUMAN|MA_ELF|MA_DWARF,
+	MA_ORC, 0, MA_FEY|MA_HUMAN|MA_ELF|MA_DWARF,
 	/*  Str    Int Wis Dex Con Cha */
 	{   3,      3,  3,  3,  3,  3 },
 	{   18 ,   16, 16, 18, 18, 16 },
@@ -865,7 +865,7 @@ const struct Race races[] = {
 	{"vampire", "vampiress"},
 	PM_VAMPIRE, NON_PM, PM_HUMAN_MUMMY, PM_ZOMBIE,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC|ROLE_NEUTRAL,
-	MA_VAMPIRE, 0, MA_ELF|MA_GNOME|MA_DWARF|MA_ORC,
+	MA_VAMPIRE, 0, MA_FEY|MA_ELF|MA_GNOME|MA_DWARF|MA_ORC,
 	/*    Str     Int Wis Dex Con Cha */
 	{      3,      3,  3,  3,  3,  3 },
 	{ STR19(19), 18, 18, 20, 20, 20 },
@@ -928,7 +928,7 @@ struct Race android =
 	{"android", "gynoid"},
 	PM_ANDROID, PM_GYNOID, PM_MUMMIFIED_ANDROID, PM_FLAYED_ANDROID,
 	ROLE_MALE|ROLE_FEMALE | ROLE_NEUTRAL,
-	MA_CLOCK, 0, MA_ELF|MA_ORC|MA_DROW,
+	MA_CLOCK, 0, MA_ORC,
 	/*  Str    Int Wis Dex Con Cha */
 	{    3,     3,  3,  3,  3,  3 },
 	{   20,    18, 16, 22, 22, 18 },
