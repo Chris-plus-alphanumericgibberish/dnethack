@@ -367,8 +367,8 @@ register int x, y, typ;
 				&& !flags.mon_moving) ? 200L : 0L);
 		lev->doormask = 0;	/* subsumes altarmask, icedpool... */
 		if (IS_ROOM(lev->typ) 
-			&& !lev->typ == SAND
-			&& !lev->typ == SOIL
+			&& lev->typ != SAND
+			&& lev->typ != SOIL
 		){ /* && !IS_AIR(lev->typ) */
 			if(lev->typ == GRASS) lev->typ = SOIL;
 		    else lev->typ = ROOM;
