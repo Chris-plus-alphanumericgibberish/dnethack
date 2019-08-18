@@ -5048,7 +5048,7 @@ ubreak_entanglement()
 		if(breakcheck <= rn2(200*ATTRSCALE))
 			return FALSE;
 	} else if(u.uentangled == RAZOR_WIRE){
-		if(breakcheck <= rn2(200*ATTRSCALE))
+		if(breakcheck <= rn2(100*ATTRSCALE))
 			return FALSE;
 	} else {
 		u.uentangled = 0;
