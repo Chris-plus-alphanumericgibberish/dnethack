@@ -2724,6 +2724,61 @@ winid *datawin;
 //			}
 		}
 
+		if(obj){
+			if(obj->otyp == TORCH){
+				Sprintf(buf2, "Deals 1d6 bonus fire damage when lit.");
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == SHADOWLANDER_S_TORCH){
+				Sprintf(buf2, "Deals 1d6 bonus cold damage when lit.");
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == SUNROD){
+				Sprintf(buf2, "Deals 1d6 + enchantment bonus lightning and acid damage when lit.");
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == KAMEREL_VAJRA){
+				Sprintf(buf2, "Deals 2d6 bonus lightning damage, or 6d6 if wielded by an Ara Kamerel.");
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == VIPERWHIP && obj->ovar1 > 1){
+				Sprintf(buf2, "May strike with up to %d heads at once, multiplying the damage accordingly.", obj->ovar1);
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == MIRRORBLADE){
+				Sprintf(buf2, "May use a weapon-wielding opponent's own weapon against them.");
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == CRYSTAL_SWORD && obj->spe >= 3){
+				Sprintf(buf2, "Deals an extra %d enchantment damage.", obj->spe/3);
+				OBJPUTSTR(buf2);
+			}
+			if(force_weapon(obj)){
+				Sprintf(buf2, "Deals 1.5 base-damage-dice bonus energy damage.");
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == DOUBLE_FORCE_BLADE){
+				Sprintf(buf2, "Deals double damage if wielded without an off-hand weapon, at the cost of an extra 1/4 move.");
+				OBJPUTSTR(buf2);
+			}
+			if(obj->otyp == RAKUYO){
+				Sprintf(buf2, "Deals an extra 1d4 vs. small or 1d3 vs large and double enchantment damage if wielded without an off-hand weapon, at the cost of an extra 1/4 move.");
+				OBJPUTSTR(buf2);
+			}
+			if(fast_weapon(obj) && obj->spe >= 2){
+				Sprintf(buf2, "Is 1/6th faster to swing than other weapons.");
+				OBJPUTSTR(buf2);
+			}
+			if(pure_weapon(obj) && obj->spe >= 6){
+				Sprintf(buf2, "Deals an 20% damage to all targets when the wielder is at full health.");
+				OBJPUTSTR(buf2);
+			}
+			if(dark_weapon(obj) && obj->spe >= 6){
+				Sprintf(buf2, "Deals an 20% damage to all targets when the wielder is at 30% health or lower.");
+				OBJPUTSTR(buf2);
+			}
+		}
+
 
 		/* to-hit */
 		int hitbon = oc.oc_hitbon - (obj ? (4 * max(0,(obj->objsize - youracedata->msize))) : 0);
