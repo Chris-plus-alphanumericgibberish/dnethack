@@ -3262,6 +3262,11 @@ scatter_weapons(){
 		initedog(mtmp);
 		EDOG(mtmp)->loyal = TRUE;
 		nlev = rnd(stronghold_level.dlevel-10)+10;
+		if(nlev >= 8){
+			//Landed in poly-trap-land, and found a random CoMR on the ground nearby
+			// Every time! What A Coincidence!
+			mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
+		}
 		// pline("going to %d",nlev);
 		get_level(&flev, nlev);
 		migrate_to_level(mtmp, ledger_no(&flev), MIGR_RANDOM,
@@ -3279,6 +3284,11 @@ scatter_weapons(){
 		EDOG(mtmp)->loyal = TRUE;
 		nlev = rnd(stronghold_level.dlevel-10)+10;
 		// pline("going to %d",nlev);
+		if(nlev >= 8){
+			//Landed in poly-trap-land, and found a random CoMR on the ground nearby
+			// Every time! What A Coincidence!
+			mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
+		}
 		get_level(&flev, nlev);
 		migrate_to_level(mtmp, ledger_no(&flev), MIGR_RANDOM,
 			(coord *)0);
