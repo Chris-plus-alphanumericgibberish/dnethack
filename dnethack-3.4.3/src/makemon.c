@@ -6295,6 +6295,13 @@ register struct	monst	*mtmp;
 				otmp->objsize = MZ_LARGE;
 				fix_object(otmp);
 				mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
+				otmp = oname(otmp, artiname(ART_THIRD_KEY_OF_CHAOS));
+				otmp->blessed = FALSE;
+				otmp->cursed = FALSE;
+				(void) mpickobj(mtmp,otmp);
+
 			break;
 ////////////////////////////////////////
 		    case PM_DURIN_S_BANE:
