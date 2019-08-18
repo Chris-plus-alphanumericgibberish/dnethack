@@ -5090,7 +5090,8 @@ uescape_entanglement()
 		u.uentangled = 0;
 		return TRUE;
 	}
-	if(outermost_armor(&youmonst) && outermost_armor(&youmonst)->greased);//Slip free
+	obj = outermost_armor(&youmonst);
+	if(obj && (obj->greased || obj->otyp == OILSKIN_CLOAK));//Slip free
 	else if(u.uentangled == ROPE_OF_ENTANGLING){
 		if(escapecheck <= rn2(20*ATTRSCALE)+rn2(20*ATTRSCALE))
 			return FALSE;
