@@ -5428,8 +5428,9 @@ mkpoolroom()
 			return;
 		}
 
-		if(sroom->rtype != OROOM || !isspacious(sroom))
+		if(sroom->rtype != OROOM || !isspacious(sroom) || has_dnstairs(sroom) || has_upstairs(sroom))
 				continue;
+
 		else break;
 	}
 	
