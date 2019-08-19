@@ -1483,7 +1483,7 @@ int thrown;
 		bhitpos.y = mon->my;
 	} else if(u.dz) {
 	    if (u.dz < 0 &&  ( 
-				Race_if(PM_ANDROID) || 
+				(Race_if(PM_ANDROID) && !(launcher && ammo_and_launcher(obj, launcher))) || 
 				(obj->oartifact == ART_MJOLLNIR &&
 				 Role_if(PM_VALKYRIE)) || 
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
@@ -1677,7 +1677,7 @@ int thrown;
 	} else {
 		/* the code following might become part of dropy() */
 		if ( ( 
-				Race_if(PM_ANDROID) ||
+				(Race_if(PM_ANDROID) && !(launcher && ammo_and_launcher(obj, launcher))) || 
 				(obj->oartifact == ART_MJOLLNIR &&
 				 Role_if(PM_VALKYRIE)) || 
 				(obj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS && 
