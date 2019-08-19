@@ -1564,6 +1564,7 @@ boolean with_price;
 				Strcat(buf, " (being worn)");
 			break;
 		case WEAPON_CLASS:
+weapon:
 			if (obj->known && obj->oartifact &&
 				(oart->inv_prop == LORDLY || oart->inv_prop == ANNUL)
 				){
@@ -1779,6 +1780,8 @@ boolean with_price;
 			}
 			if (objects[obj->otyp].oc_charged && !is_weptool(obj))
 				goto charges;
+		if(is_weptool(obj))
+			goto weapon;
 			break;
 		case WAND_CLASS:
 		charges:
