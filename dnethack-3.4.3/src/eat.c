@@ -2806,12 +2806,12 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	
 	boolean dont_start = FALSE;
 	
-	if(uandroid){
+	if(uandroid && !Race_if(PM_INCANTIFIER)){
 		pline("Though you may look human, you run on magical energy, not food.");
 		pline("Use #monster to rest and recover.");
 		return 0;
 	}
-	if(uclockwork){
+	if(uclockwork && !Race_if(PM_INCANTIFIER)){
 		long uUpgrades = (u.clockworkUpgrades&(WOOD_STOVE|MAGIC_FURNACE|HELLFIRE_FURNACE|SCRAP_MAW));
 		if(!uUpgrades){
 			pline("You are metal and springs, not flesh and blood. You cannot eat.");
