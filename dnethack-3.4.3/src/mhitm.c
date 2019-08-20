@@ -3221,7 +3221,7 @@ struct attack *mattk;
 		    pline("%s is suddenly very cold!", Monnam(magr));
 		mdef->mhp += tmp / 2;
 		if (mdef->mhpmax < mdef->mhp) mdef->mhpmax = mdef->mhp;
-		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8) && (mdef->data == &mons[PM_BROWN_MOLD] || mdef->data == &mons[PM_BLUE_JELLY]))
+		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8) && (mdef->data == &mons[PM_BROWN_MOLD] || mdef->data == &mons[PM_BLUE_JELLY] || mdef->data == &mons[PM_ASPECT_OF_THE_SILENCE]))
 		    (void)split_mon(mdef, magr);
 		else mdef->mhpmax = ((int) (mdef->m_lev+1) * 8);
 		break;
