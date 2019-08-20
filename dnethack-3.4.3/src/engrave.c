@@ -1661,7 +1661,7 @@ register int x,y;
 							word);
 						if(!Role_if(PM_EXILE) && ep->ward_id < QUEST_SPIRITS){
 							long wardhere = 1L << (((int)ep->ward_id)-((int)FIRST_SEAL));
-							if( !(u.wardsknown & wardhere) ){
+							if( !(u.sealsKnown & wardhere) ){
 								You("have learned a new seal!");
 								u.sealsKnown |= wardhere;
 							}
