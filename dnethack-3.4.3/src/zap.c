@@ -4158,8 +4158,7 @@ int dx, dy, range, flat;
     while(range-- > 0) {
 		lsx = sx; sx += dx;
 		lsy = sy; sy += dy;
-		lev = &levl[sx][sy];
-		if(isok(sx,sy) && lev->typ) {
+		if(isok(sx,sy) && (lev = &levl[sx][sy]) && lev->typ) {
 			mon = m_at(sx, sy);
 			if(cansee(sx,sy)) {
 				/* reveal/unreveal invisible monsters before tmp_at() */
@@ -4169,7 +4168,7 @@ int dx, dy, range, flat;
 					unmap_object(sx, sy);
 					newsym(sx, sy);
 				}
-				if(ZAP_POS(lev->typ) || cansee(lsx,lsy))
+				if(ZAP_POS(lev->typ) || (isok(lsx,lsy) && cansee(lsx,lsy)))
 					tmp_at(sx,sy);
 				delay_output(); /* wait a little */
 			}
