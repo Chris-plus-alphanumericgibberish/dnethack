@@ -3223,6 +3223,7 @@ struct attack *mattk;
 		if (mdef->mhpmax < mdef->mhp) mdef->mhpmax = mdef->mhp;
 		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8) && (mdef->data == &mons[PM_BROWN_MOLD] || mdef->data == &mons[PM_BLUE_JELLY]))
 		    (void)split_mon(mdef, magr);
+		else mdef->mhpmax = ((int) (mdef->m_lev+1) * 8);
 		break;
 	    case AD_STUN:
 		if (!magr->mstun) {
