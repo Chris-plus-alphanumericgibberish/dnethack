@@ -8557,9 +8557,11 @@ register struct attack *mattk;
 		pline("%s is suddenly very cold!", Monnam(mtmp));
 		u.mh += tmp / 2;
 		if (u.mhmax < u.mh) u.mhmax = u.mh;
-		if (u.mhmax > ((youracedata->mlevel+1) * 8) && (youracedata == &mons[PM_BROWN_MOLD] || youracedata == &mons[PM_BLUE_JELLY] || youracedata == &mons[PM_ASPECT_OF_THE_SILENCE]))
-		    (void)split_mon(&youmonst, mtmp);
-		else u.mhmax = ((youracedata->mlevel+1) * 8);
+		if (u.mhmax > ((youracedata->mlevel+1) * 8)){
+			if(youracedata == &mons[PM_BROWN_MOLD] || youracedata == &mons[PM_BLUE_JELLY] || youracedata == &mons[PM_ASPECT_OF_THE_SILENCE])
+				(void)split_mon(&youmonst, mtmp);
+			else u.mhmax = ((youracedata->mlevel+1) * 8);
+		}
 		break;
 		case AD_ECLD:
 		if (resists_cold(mtmp)) {

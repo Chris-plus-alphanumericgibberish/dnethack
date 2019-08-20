@@ -5528,9 +5528,11 @@ dobpois:
 			    mon->mhp += tmp / 2;
 			    if (mon->mhpmax < mon->mhp) mon->mhpmax = mon->mhp;
 			/* at a certain point, the monster will reproduce! */
-			    if(mon->mhpmax > ((int) (mon->m_lev+1) * 8) && (mon->data == &mons[PM_BROWN_MOLD] || mon->data == &mons[PM_BLUE_JELLY] || mon->data == &mons[PM_ASPECT_OF_THE_SILENCE]))
-					(void)split_mon(mon, &youmonst);
-				else mon->mhpmax = ((int) (mon->m_lev+1) * 8);
+			    if(mon->mhpmax > ((int) (mon->m_lev+1) * 8)){
+					if(mon->data == &mons[PM_BROWN_MOLD] || mon->data == &mons[PM_BLUE_JELLY] || mon->data == &mons[PM_ASPECT_OF_THE_SILENCE])
+						(void)split_mon(mon, &youmonst);
+					else mon->mhpmax = ((int) (mon->m_lev+1) * 8);
+				}
 			}
 		break;
         case AD_STUN:		/* specifically yellow mold */
