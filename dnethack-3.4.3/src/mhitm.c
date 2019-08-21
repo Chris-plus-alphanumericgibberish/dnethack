@@ -566,7 +566,7 @@ meleeattack:
 		    }
 			if(mattk->aatyp == AT_DEVA && !DEADMONSTER(mdef)){
 				int deva = 1;
-				while(!DEADMONSTER(mdef) && tmp > (dieroll = rnd(20+i+(deva++)*2))) res[i] = hitmm(magr, mdef, mattk);
+				while(!DEADMONSTER(mdef) && tmp > (dieroll = rnd(20+i*2+(deva++)*2))) res[i] = hitmm(magr, mdef, mattk);
 				mon_ranged_gazeonly = 0;
 			}
 		} else

@@ -377,7 +377,7 @@ struct attack *alt_attk_buf;
 			)
 			|| (!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
 			|| (!derundspec && indx == NATTK - 1 && (mtmp->mfaction == CRYSTALFIED || mtmp->mfaction == SKELIFIED))
-			){
+		){
 			// yes, replace the current attack
 			if (indx == 0){
 				attk->aatyp = AT_CLAW;
@@ -1306,7 +1306,7 @@ mattacku(mtmp)
 							mon_ranged_gazeonly = 0;
 							if(mattk->aatyp == AT_DEVA && sum[i]){
 								deva = 1;
-								while(tchtmp > (j = dieroll = rnd(20+i+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
+								while(tchtmp > (j = dieroll = rnd(20+i*2+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
 							}
 						} else missmu(mtmp, (tchtmp == j), mattk);
 					} else {
@@ -1315,7 +1315,7 @@ mattacku(mtmp)
 							mon_ranged_gazeonly = 0;
 							if(mattk->aatyp == AT_DEVA && sum[i]){
 								deva = 1;
-								while(tmp > (j = dieroll = rnd(20+i+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
+								while(tmp > (j = dieroll = rnd(20+i*2+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
 							}
 						} else missmu(mtmp, (tmp == j), mattk);
 					}
@@ -1430,7 +1430,7 @@ mattacku(mtmp)
 							mon_ranged_gazeonly = 0;
 							if(mattk->aatyp == AT_DEVA && sum[i]){
 								deva = 1;
-								while(tchtmp > (j = dieroll = rnd(20+i+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
+								while(tchtmp > (j = dieroll = rnd(20+i*2+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
 							}
 						} else missmu(mtmp, (tchtmp == j), mattk);
 					} else {
@@ -1439,7 +1439,7 @@ mattacku(mtmp)
 							mon_ranged_gazeonly = 0;
 							if(mattk->aatyp == AT_DEVA && sum[i]){
 								deva = 1;
-								while(tmp > (j = dieroll = rnd(20+i+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
+								while(tmp > (j = dieroll = rnd(20+i*2+(deva++)*2))) sum[i] = hitmu(mtmp, mattk);
 							}
 						} else missmu(mtmp, (tmp == j), mattk);
 					}
