@@ -3186,7 +3186,7 @@ int wishflags;
 		veioistafur = FALSE,
 		thjofastafur = FALSE,
 		sizewished = FALSE;
-	int objsize = youracedata->msize;
+	int objsize = (from_user ? youracedata->msize : MZ_MEDIUM);
 	long bodytype = 0L;
 	long long int oproperties = 0L;
 	char oclass;
@@ -4620,9 +4620,14 @@ typfnd:
 	
 	if(otmp->oclass == ARMOR_CLASS && !Is_dragon_scales(otmp)){
 		if(bodytype == 0L){
-			if(is_suit(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
-			else if(is_helmet(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
-			else if(is_shirt(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
+			if (from_user) {
+				if(is_suit(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_BODYTYPEMASK);
+				else if(is_helmet(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HEADMODIMASK);
+				else if(is_shirt(otmp)) otmp->bodytypeflag = (youracedata->mflagsb&MB_HUMANOID) ? MB_HUMANOID : (youracedata->mflagsb&MB_BODYTYPEMASK);
+			}
+			else {
+				otmp->bodytypeflag = MB_HUMANOID;
+			}
 		} else {
 			if(is_suit(otmp)){
 				if((bodytype&MB_BODYTYPEMASK) != 0L) otmp->bodytypeflag = (bodytype&MB_BODYTYPEMASK);

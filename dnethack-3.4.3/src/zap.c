@@ -605,6 +605,7 @@ coord *cc;
 		mtmp2->mux  = mtmp->mux;
 		mtmp2->muy  = mtmp->muy;
 		mtmp2->mw   = mtmp->mw;
+		mtmp2->msw	= mtmp->msw;
 		mtmp2->wormno = mtmp->wormno;
 		mtmp2->misc_worn_check = mtmp->misc_worn_check;
 		mtmp2->weapon_check = mtmp->weapon_check;
