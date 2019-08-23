@@ -2927,6 +2927,55 @@ winid *datawin;
 		/* nothing special */
 		OBJPUTSTR("Scroll.");
 	}
+	if (olet == TILE_CLASS) {
+		switch (otyp) {
+		case SYLLABLE_OF_STRENGTH__AESH:
+			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
+			OBJPUTSTR("Temporarily increases physical attack damage by 10 points.");
+			OBJPUTSTR("Permanently increases physical attack damage by 1/3rd point.");
+		break;
+		case SYLLABLE_OF_POWER__KRAU:
+			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
+			OBJPUTSTR("Temporarily empower damaging magic to 150% of normal strength.");
+			OBJPUTSTR("Permanently spell damage bonus by 1/3rd point.");
+		break;
+		case SYLLABLE_OF_LIFE__HOON:
+			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
+			OBJPUTSTR("Temporarily regenerate an additional 10 HP per turn.");
+			OBJPUTSTR("Permanently increase natural regeneration by 1 point per 30 turns.");
+		break;
+		case SYLLABLE_OF_GRACE__UUR:
+			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
+			OBJPUTSTR("Temporarily gain +10 AC, +10 to-hit, and +6 movement per turn.");
+			OBJPUTSTR("Permanently increase AC by 1/2 point.");
+		break;
+		case SYLLABLE_OF_THOUGHT__NAEN:
+			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
+			OBJPUTSTR("Temporarily regenerate an additional 10 power per turn and 0% spell failure.");
+			OBJPUTSTR("Permanently increase natural power regeneration by 1 point per 30 turns.");
+		break;
+		case SYLLABLE_OF_SPIRIT__VAUL:
+			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
+			OBJPUTSTR("Temporarily gain displacement and take half damage from attacks.");
+			OBJPUTSTR("Permanently increase DR by 1/5th point.");
+		break;
+		case FIRST_WORD:
+			OBJPUTSTR("Read to permanently learn the First Word of Creation.");
+			OBJPUTSTR("Adds a new ability to the #monster powers menu.");
+			OBJPUTSTR("Permanently grants intrinisc flying.");
+		break;
+		case DIVIDING_WORD:
+			OBJPUTSTR("Read to permanently learn the Dividing Word of Creation.");
+			OBJPUTSTR("Adds a new ability to the #monster powers menu.");
+			OBJPUTSTR("Permanently grants intrinisc water resistance.");
+		break;
+		case NURTURING_WORD:
+			OBJPUTSTR("Read to permanently learn the Nurturing Word of Creation.");
+			OBJPUTSTR("Adds a new ability to the #monster powers menu.");
+			OBJPUTSTR("Permanently grants regeneration to all pets.");
+		break;
+		}
+	}
 	if (olet == SPBOOK_CLASS) {
 		if (!(obj && oartifact))
 		{
