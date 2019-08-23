@@ -1521,7 +1521,7 @@ toofar:
 			/* Maybe it stepped on a trap and fell asleep... */
 			if (mtmp->msleeping || !(mtmp->mcanmove && mtmp->mnotlaugh)) return(0);
 			/* Long worms thrash around */
-			if(mtmp->wormno) wormhitu(mtmp);
+			if(mtmp->wormno && (!mtmp->mpeaceful || Conflict)) wormhitu(mtmp);
 			if(!nearby &&
 			  (ranged_attk(mdat) || find_offensive(mtmp))){
 				if(mdat == &mons[PM_GREAT_CTHULHU] || mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO] || mdat == &mons[PM_ARCADIAN_AVENGER]){
