@@ -2363,12 +2363,12 @@ struct obj *otmp;
 			(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
 		) && !uarms && !u.twoweap
 		) bonus *= 2;
+		else if(otmp->otyp == FORCE_SWORD && !uarms && !u.twoweap)
+			bonus *= 2;
 		else if(otmp->otyp == KATANA && !uarms && !u.twoweap)
 			bonus *= 1.5;
 		else if(is_vibrosword(otmp) && !uarms && !u.twoweap)
 			bonus *= 1.5;
-		else if(otmp->otyp == FORCE_SWORD && !uarms && !u.twoweap)
-			bonus *= 2;
 		
 		if(otmp==uwep 
 		&& (is_rapier(otmp)
