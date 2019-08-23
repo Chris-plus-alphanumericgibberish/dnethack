@@ -4236,7 +4236,7 @@ static const char *epitaphs[] = {
 	
 	"Omnes una manet nox", /*One night awaits us all*/
 	
-	"I wake. I work. I sleep. I die." /*Alpha Centauri*/
+	"I wake. I work. I sleep. I die.", /*Alpha Centauri*/
 	
 	"I suddenly have a LOT of regrets.", /*Water Phoenix King is very quotable...*/
 	
