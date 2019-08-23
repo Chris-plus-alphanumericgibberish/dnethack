@@ -2283,11 +2283,11 @@ defaultvalue:
 	    struct obj *wep;
 
 	    wep = (obj && ammo_and_launcher(obj, uwep)) ? uwep : obj;
-	    if((thrown && objects[wep->otyp].oc_skill != P_LANCE && objects[wep->otyp].oc_skill != P_POLEARMS)
+	    if((thrown && ammo_and_launcher(obj, uwep))
 			|| (wep && wep->oartifact == ART_TENTACLE_ROD)
 		){
-			if((objects[wep->otyp].oc_skill == P_CROSSBOW ||
-				wep->otyp == SNIPER_RIFLE || wep->otyp == ATLATL
+			if((objects[wep->otyp].oc_skill == P_CROSSBOW
+				|| wep->otyp == SNIPER_RIFLE
 			  ) && !(noncorporeal(mdat) || amorphous(mdat) || ((stationary(mdat) || sessile(mdat)) && (mdat->mlet == S_FUNGUS || mdat->mlet == S_PLANT)))
 			){
 				int dambonus = weapon_dam_bonus(wep);
@@ -2301,6 +2301,10 @@ defaultvalue:
 					if(obj && ((is_lightsaber(obj) && litsaber(obj)) || arti_shining(obj))) phasearmor = TRUE;
 					if(wep->oartifact == ART_LIECLEAVER) tmp += rnd(10);
 				}
+			} else if(wep->otyp == ATLATL){
+				tmp += dbon(wep);
+				tmp += dbon(obj);
+				tmp += weapon_dam_bonus(obj);
 			}
 			//else tmp += 0;
 		} else tmp += weapon_dam_bonus(wep);
