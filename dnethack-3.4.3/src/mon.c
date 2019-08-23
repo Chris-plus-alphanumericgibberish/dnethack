@@ -1644,7 +1644,7 @@ mcalcdistress()
 				|| (NCold_resistance)
 			) damage /= 2;
 			int temparise = u.ugrave_arise;
-			mtmp->mhp += maybe_polyd(u.mh, u.uhp);
+			mtmp->mhp += min(damage, maybe_polyd(u.mh, u.uhp));
 			u.ugrave_arise = PM_BAALPHEGOR;
 			mdamageu(mtmp, damage);
 			/*If the player surived the attack, restore the value of arise*/
