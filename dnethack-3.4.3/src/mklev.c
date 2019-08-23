@@ -1040,10 +1040,12 @@ makelevel()
 		makerogueghost();
 	} else
 #endif
+	{
 	/* probably use the 'claustrophobic' room generation, since we aren't doing a special level */
 	if (In_mithardir_catacombs(&u.uz) || rn2(7))
 		flags.makelev_closerooms = TRUE;
 	makerooms();
+	}
 	sort_rooms();
 
 	/* construct stairs (up and down in different rooms if possible) */
