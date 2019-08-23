@@ -703,7 +703,7 @@ domonability()
 	if(n <= 0) return 0;
 	
 	switch (selected[0].item.a_int) {
-	case MATTK_WORD: return dowords();
+	case MATTK_WORD: return dowords(SPELLMENU_CAST);
 	case MATTK_BREATH: return dobreathe(youmonst.data);
 	case MATTK_DSCALE:{
 		int res = dobreathe(Dragon_shield_to_pm(uarms));

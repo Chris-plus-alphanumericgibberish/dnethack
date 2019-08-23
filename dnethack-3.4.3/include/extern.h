@@ -1956,7 +1956,7 @@ E int NDECL(domindblast);
 E int NDECL(dodarken);
 E int NDECL(doandroid);
 E int NDECL(doclockspeed);
-E int NDECL(dowords);
+E int FDECL(dowords, (int));
 E void FDECL(skinback, (BOOLEAN_P));
 E const char *FDECL(mbodypart, (struct monst *,int));
 E const char *FDECL(body_part, (int));

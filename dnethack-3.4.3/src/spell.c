@@ -8,12 +8,6 @@ static NEARDATA schar delay;		/* moves left for this spell */
 static NEARDATA struct obj *book;	/* last/current book being xscribed */
 static NEARDATA int RoSbook;		/* Read spell or Study Wards?" */
 
-/* spellmenu arguments; 0 thru n-1 used as spl_book[] index when swapping */
-#define SPELLMENU_MAINTAIN (-4)
-#define SPELLMENU_DESCRIBE (-3)
-#define SPELLMENU_CAST (-2)
-#define SPELLMENU_VIEW (-1)
-
 #define KEEN 20000
 #define READ_SPELL 1
 #define STUDY_WARD 2
@@ -4786,28 +4780,6 @@ int spellID;
 	char desc3[80] = " ";
 	char desc4[80] = " ";
 
-	if(spellID > MAXSPELL){
-		switch (spellID){
-		case FIRST_LIGHT:
-			strcat(desc1, "Creates a lit field over your entire line-of-sight.");
-			strcat(desc2, "Damages all hostile monsters in your line of sight.");
-			strcat(desc3, "Deals heavy damage to undead, demons, and wraiths .");
-			strcat(desc4, "");
-			break;
-		case PART_WATER:
-			strcat(desc1, "Creates a directed plane of partitioning force.");
-			strcat(desc2, "Parts water and knocks hostile monsters aside.");
-			strcat(desc3, "Deals light damage, but may bisect targets.");
-			strcat(desc4, "");
-			break;
-		case OVERGROW:
-			strcat(desc1, "Creates a field of rapid plant growth in your line-of-sight.");
-			strcat(desc2, "Heavily damages hostile elementals, undead, and some golems.");
-			strcat(desc3, "Destroyed enemies may leave trees behind.");
-			strcat(desc4, "");
-			break;
-		}
-	} else {
 		pseudo = mksobj(spellid(spellID), FALSE, FALSE);
 		pseudo->blessed = pseudo->cursed = 0;
 		sprintf(name,  " %s", spellname(spellID));
@@ -5106,7 +5078,6 @@ int spellID;
 			break;
 		default:
 			impossible("Spell %d?", pseudo->otyp);
-		}
 	}
 	datawin = create_nhwindow(NHW_TEXT);
 	if(spellID < MAXSPELL){

@@ -21,6 +21,7 @@ STATIC_DCL int FDECL(armor_to_dragon,(int));
 STATIC_DCL void NDECL(newman);
 STATIC_DCL short NDECL(doclockmenu);
 STATIC_DCL short NDECL(dodroidmenu);
+STATIC_DCL void FDECL(worddescriptions, (int));
 
 /* Assumes u.umonster is set up already */
 /* Use u.umonster since we might be restoring and you may be polymorphed */
@@ -1741,45 +1742,128 @@ doandroid()
 }
 
 int
-dowords()
+dowords(splaction)
+int splaction;
 {
 	winid tmpwin;
 	int n, how;
 	char buf[BUFSZ];
-	char incntlet = 'a';
 	menu_item *selected;
 	anything any;
 
+	
+	do {
 	tmpwin = create_nhwindow(NHW_MENU);
 	start_menu(tmpwin);
 	any.a_void = 0;		/* zero out all bits */
 
 	Sprintf(buf, "Words of Power");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
-	if(u.ufirst_light && u.ufirst_light_timeout <= moves){
+	if(splaction == SPELLMENU_DESCRIBE || (u.ufirst_light && u.ufirst_light_timeout <= moves)){
 		Sprintf(buf, "speak the First Word");
 		any.a_int = FIRST_LIGHT+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			 'q', 0, ATR_NONE, buf, MENU_UNSELECTED);
 	}
-	if(u.ufirst_sky && u.ufirst_sky_timeout <= moves){
+	if(splaction == SPELLMENU_DESCRIBE || (u.ufirst_sky && u.ufirst_sky_timeout <= moves)){
 		Sprintf(buf, "speak the Dividing Word");
 		any.a_int = PART_WATER+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			 'w', 0, ATR_NONE, buf, MENU_UNSELECTED);
 	}
-	if(u.ufirst_life && u.ufirst_life_timeout <= moves){
+	if(splaction == SPELLMENU_DESCRIBE || (u.ufirst_life && u.ufirst_life_timeout <= moves)){
 		Sprintf(buf, "speak the Nurturing Word");
 		any.a_int = OVERGROW+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			 'e', 0, ATR_NONE, buf, MENU_UNSELECTED);
+	}
+	if (splaction != SPELLMENU_DESCRIBE && splaction < 0){
+		Sprintf(buf, "Describe a word instead");
+		any.a_int = SPELLMENU_DESCRIBE;
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'?', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	if (splaction != SPELLMENU_CAST && splaction < 0) {
+		Sprintf(buf, "Cast a spell instead");
+		any.a_int = SPELLMENU_CAST;
+		add_menu(tmpwin, NO_GLYPH, &any,
+			'!', 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
 	}
 	end_menu(tmpwin, "Select Word");
 
 	how = PICK_ONE;
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
-	return (n > 0) ? wordeffects(selected[0].item.a_int-1) : 0;
+	
+	if(splaction == SPELLMENU_DESCRIBE && n > 0 && selected[0].item.a_int != SPELLMENU_CAST) 
+		worddescriptions(selected[0].item.a_int-1);
+	
+	} while(splaction == SPELLMENU_DESCRIBE && n > 0 && selected[0].item.a_int != SPELLMENU_CAST);
+	
+	if(n > 0 && selected[0].item.a_int == SPELLMENU_CAST) return dowords(SPELLMENU_CAST);
+	if(n > 0 && selected[0].item.a_int == SPELLMENU_DESCRIBE) return dowords(SPELLMENU_DESCRIBE);
+	if(splaction == SPELLMENU_CAST) return (n > 0) ? wordeffects(selected[0].item.a_int-1) : 0;
+	
+	return 0;
+}
+
+STATIC_OVL void
+worddescriptions(spellID)
+int spellID;
+{
+	struct obj *pseudo;
+
+	winid datawin;
+	char name[20];
+	char stats[30];
+	char fail[20];
+	char known[20];
+	
+	char desc1[80] = " ";
+	char desc2[80] = " ";
+	char desc3[80] = " ";
+	char desc4[80] = " ";
+
+	switch (spellID){
+	case FIRST_LIGHT:
+		strcat(desc1, "Creates a lit field over your entire line-of-sight.");
+		strcat(desc2, "Damages all hostile monsters in your line of sight.");
+		strcat(desc3, "Deals heavy damage to undead, demons, and wraiths.");
+		strcat(desc4, "Takes less than 1 turn to cast.");
+		break;
+	case PART_WATER:
+		strcat(desc1, "Creates a directed plane of partitioning force.");
+		strcat(desc2, "Parts water and knocks hostile monsters aside.");
+		strcat(desc3, "Deals light damage, but may bisect targets.");
+		strcat(desc4, "Takes less than 1 turn to cast");
+		break;
+	case OVERGROW:
+		strcat(desc1, "Creates a field of rapid plant growth in your line-of-sight.");
+		strcat(desc2, "Heavily damages hostile elementals, undead, and some golems.");
+		strcat(desc3, "Destroyed enemies may leave trees behind.");
+		strcat(desc4, "Takes less than 1 turn to cast");
+		break;
+	}
+	datawin = create_nhwindow(NHW_TEXT);
+	if(spellID < MAXSPELL){
+		putstr(datawin, 0, "");
+		putstr(datawin, 0, name);
+		putstr(datawin, 0, "");
+		putstr(datawin, 0, stats);
+		putstr(datawin, 0, "");
+		putstr(datawin, 0, fail);
+		putstr(datawin, 0, known);
+		putstr(datawin, 0, "");
+	}
+	if (desc1[3] != 0) putstr(datawin, 0, desc1);
+	if (desc2[3] != 0) putstr(datawin, 0, desc2);
+	if (desc3[3] != 0) putstr(datawin, 0, desc3);
+	if (desc4[3] != 0) putstr(datawin, 0, desc4);
+	display_nhwindow(datawin, FALSE);
+	destroy_nhwindow(datawin);
+	return;
 }
 
 STATIC_OVL void

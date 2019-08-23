@@ -5,6 +5,12 @@
 #ifndef SPELL_H
 #define SPELL_H
 
+/* spellmenu arguments; 0 thru n-1 used as spl_book[] index when swapping */
+#define SPELLMENU_MAINTAIN (-4)
+#define SPELLMENU_DESCRIBE (-3)
+#define SPELLMENU_CAST (-2)
+#define SPELLMENU_VIEW (-1)
+
 struct spell {
     short	sp_id;			/* spell id (== object.otyp) */
     xchar	sp_lev;			/* power level */
