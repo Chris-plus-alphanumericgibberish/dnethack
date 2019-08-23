@@ -1045,6 +1045,8 @@ register struct monst *mtmp;
 	
 	if(!mtmp->mblinded) for (gazemon = fmon; gazemon; gazemon = nxtmon){
 		nxtmon = gazemon->nmon;
+		if(DEADMONSTER(gazemon))
+			continue;
 		if (gazemon != mtmp
 			&& mon_can_see_mon(mtmp, gazemon)
 			&& clear_path(mtmp->mx, mtmp->my, gazemon->mx, gazemon->my)
