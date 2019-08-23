@@ -1290,6 +1290,7 @@ mcalcdistress()
 				&& tmpm->mtame != mtmp->mtame
 				&& !resists_fire(tmpm)
 				&& !DEADMONSTER(tmpm)
+				&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 			) targets++;
 		}
 		if(distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
@@ -1304,6 +1305,7 @@ mcalcdistress()
 				&& tmpm->mtame != mtmp->mtame
 				&& !resists_fire(tmpm)
 				&& !DEADMONSTER(tmpm)
+				&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 			) targets--;
 			if(!targets) break;
 		}
@@ -1385,6 +1387,7 @@ mcalcdistress()
 						&& !resists_cold(tmpm)
 						&& mlined_up(mtmp, tmpm, TRUE)
 						&& !DEADMONSTER(tmpm)
+						&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 					){
 						flags.drgn_brth = 1;
 						breamm(mtmp, tmpm, &mattk);
@@ -1405,6 +1408,7 @@ mcalcdistress()
 				&& tmpm->mtame != mtmp->mtame
 				&& !nonliving_mon(tmpm)
 				&& !DEADMONSTER(tmpm)
+				&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 			) targets++;
 		}
 		if(distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
@@ -1419,6 +1423,7 @@ mcalcdistress()
 				&& tmpm->mtame != mtmp->mtame
 				&& !nonliving_mon(tmpm)
 				&& !DEADMONSTER(tmpm)
+				&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 			) targets--;
 			if(!targets) break;
 		}
@@ -1510,6 +1515,7 @@ mcalcdistress()
 						&& !(ward_at(tmpm->mx,tmpm->my) == CIRCLE_OF_ACHERON)
 						&& !(resists_death(tmpm))
 						&& !DEADMONSTER(tmpm)
+						&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 					){
 						if(!targ || (distmin(tmpm->mx, tmpm->my, mtmp->mx, mtmp->my) < distmin(targ->mx, targ->my, mtmp->mx, mtmp->my))){
 							targ = tmpm;
@@ -1566,6 +1572,7 @@ mcalcdistress()
 				&& tmpm->mfaction != CRYSTALFIED
 				&& !is_demon(tmpm->data)
 				&& !DEADMONSTER(tmpm)
+				&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 			) targets++;
 		}
 		if(distmin(u.ux,u.uy,mtmp->mx,mtmp->my) <= 4
@@ -1581,6 +1588,7 @@ mcalcdistress()
 				&& tmpm->mfaction != CRYSTALFIED
 				&& !is_demon(tmpm->data)
 				&& !DEADMONSTER(tmpm)
+				&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 			) targets--;
 			if(!targets) break;
 		}
@@ -1728,6 +1736,7 @@ mcalcdistress()
 						&& !(MON_WEP(tmpm) && (MON_WEP(tmpm)->oartifact == ART_MAGICBANE) && rn2(20))
 						&& !(MON_WEP(tmpm) && (MON_WEP(tmpm)->oartifact == ART_TENTACLE_ROD) && rn2(20))
 						&& !DEADMONSTER(tmpm)
+						&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 					){
 						for(otmp = tmpm->minvent; otmp; otmp=otmp->nobj)
 							if(otmp->oartifact == ART_TREASURY_OF_PROTEUS)
@@ -4121,6 +4130,8 @@ boolean was_swallowed;			/* digestion */
 			int mndx = 0;
 //			int quincount = 0;
 			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+				if(DEADMONSTER(mtmp))
+					continue;
 				mdat1 = mtmp->data;
 //				if(mdat1==&mons[PM_QUINON]) quincount++;
 				if(mdat1==&mons[PM_QUATON] && quin){
@@ -4235,6 +4246,8 @@ boolean was_swallowed;			/* digestion */
 				child[0]=0;
 				growto[0]=0;
 				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+					if(DEADMONSTER(mtmp))
+						continue;
 					mdat1 = mtmp->data;
 					if(mdat1==&mons[PM_AXUS]){
 						mtmp = makemon(&mons[PM_MONOTON], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY|MM_NOCOUNTBIRTH);
@@ -4259,6 +4272,8 @@ boolean was_swallowed;			/* digestion */
 						found=TRUE;
 						if(child[i] == &mons[PM_MONOTON]){
 							for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+								if(DEADMONSTER(mtmp))
+									continue;
 								mdat1 = mtmp->data;
 								if(mdat1==&mons[PM_AXUS]){
 									mtmp = makemon(child[i], mtmp->mx, mtmp->my,MM_ADJACENTOK|MM_ANGRY);
@@ -4272,6 +4287,8 @@ boolean was_swallowed;			/* digestion */
 				}
 				if(!found && tontype){
 					for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
+						if(DEADMONSTER(mtmp))
+							continue;
 						mdat1 = mtmp->data;
 						if(mdat1==&mons[PM_AXUS]){
 							chain = FALSE;
@@ -5715,6 +5732,7 @@ register int x, y, distance;
 						&& !nonliving_mon(tmpm)
 						&& !resists_drain(tmpm)
 						&& !DEADMONSTER(tmpm)
+						&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 					) targets++;
 				}
 				if(dist2(u.ux,u.uy,mtmp->mx,mtmp->my) <= distance
@@ -5730,6 +5748,7 @@ register int x, y, distance;
 						&& !nonliving_mon(tmpm)
 						&& !resists_drain(tmpm)
 						&& !DEADMONSTER(tmpm)
+						&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 					) targets--;
 					if(!targets) break;
 				}
