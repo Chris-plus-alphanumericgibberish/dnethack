@@ -45,9 +45,7 @@ can_saddle(mtmp)
 				(ptr == &mons[PM_BYAKHEE])
 			) && 
 			(ptr->msize >= MZ_MEDIUM) &&
-			(!humanoid(ptr) || ptr->mlet == S_CENTAUR
-				|| ptr == &mons[PM_SALAMANDER] 
-				|| ptr == &mons[PM_MARILITH]) &&
+			!humanoid(ptr) &&
 			!amorphous(ptr) && !noncorporeal(ptr) &&
 			!is_whirly(ptr) && !unsolid(ptr));
 }
