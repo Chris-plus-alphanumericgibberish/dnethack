@@ -425,7 +425,7 @@
 		((ptr->mflagsb&MB_BODYTYPEMASK) == (obj->bodytypeflag&MB_BODYTYPEMASK))))
 #define can_wear_gloves(ptr)	(!nohands(ptr))
 #define can_wear_amulet(ptr)	(has_head(ptr))
-#define can_wear_boots(ptr)	(humanoid(ptr))
+#define can_wear_boots(ptr)	(humanoid(ptr) && !nofeet(ptr) && !nolimbs(ptr))
 #define shirt_match(ptr,obj)	(((ptr->mflagsb&MB_HUMANOID) && (obj->bodytypeflag&MB_HUMANOID)) || \
 		(((ptr->mflagsb&MB_BODYTYPEMASK) != 0) && ((ptr->mflagsb&MB_BODYTYPEMASK) == (obj->bodytypeflag&MB_BODYTYPEMASK))))
 #define helm_match(ptr,obj)	(((ptr->mflagsb&MB_HEADMODIMASK) == (obj->bodytypeflag&MB_HEADMODIMASK)))
