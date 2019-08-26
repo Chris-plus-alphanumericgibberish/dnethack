@@ -145,6 +145,8 @@ struct monst *mtmp;
 	int wardAt = ward_at(x,y);
 	struct monst *mat = m_at(x,y);
 	
+	if(no_upos(mtmp))
+		return FALSE;
 	
 	return (boolean)(
 				((
@@ -818,7 +820,7 @@ int *inrange, *nearby, *scared;
 {
 	int seescaryx, seescaryy;
 
-	*inrange = (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <=
+	*inrange = !no_upos(mtmp) && (dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <=
 							(BOLT_LIM * BOLT_LIM));
 	*nearby = *inrange && monnear(mtmp, mtmp->mux, mtmp->muy);
 
@@ -1185,6 +1187,7 @@ register struct monst *mtmp;
 #ifdef CONVICT
        (monsndx(mdat) != PM_PRISON_GUARD) &&
 #endif /* CONVICT */
+       !no_upos(mtmp) &&
 	   mtmp->mpeaceful && !mtmp->mtame && !u.uswallow) {
 		if (mtmp->mux != u.ux || mtmp->muy != u.uy) {
 			pline("%s whispers at thin air.",
@@ -1382,6 +1385,7 @@ toofar:
 	 */
 	if((!mtmp->mpeaceful || mdat == &mons[PM_NURSE] || Conflict) && inrange &&
 	   dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8
+	   && !no_upos(mtmp)
 	   && attacktype(mdat, AT_WEAP)) {
 	    struct obj *mw_tmp;
 
@@ -1770,6 +1774,7 @@ not_special:
 #endif
 	) {
 	    boolean in_line = lined_up(mtmp) &&
+		!no_upos(mtmp) &&
 		(distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <=
 		    (throws_rocks(youracedata) ? 20 : ACURRSTR/2+1)
 		);
@@ -1804,6 +1809,7 @@ not_special:
 	
 	/* cut down the search radius if it thinks character is closer. */
 	if(distmin(mtmp->mux, mtmp->muy, omx, omy) < SQSRCHRADIUS &&
+		!no_upos(mtmp) &&
 	    (!mtmp->mpeaceful || mtmp->data == &mons[PM_NURSE])) minr--;
 	/* guards shouldn't get too distracted */
 	if(!mtmp->mpeaceful && is_mercenary(ptr)) minr = 1;
@@ -1887,7 +1893,7 @@ not_special:
 	}
 
 	if(minr < SQSRCHRADIUS && appr == -1) {
-	    if(distmin(omx,omy,mtmp->mux,mtmp->muy) <= 3) {
+	    if(!no_upos(mtmp) && distmin(omx,omy,mtmp->mux,mtmp->muy) <= 3) {
 		gx = mtmp->mux;
 		gy = mtmp->muy;
 	    } else
@@ -1897,7 +1903,7 @@ not_special:
 
 	/* don't tunnel if hostile and close enough to prefer a weapon */
 	if (can_tunnel && needspick(ptr) &&
-	    ((!mtmp->mpeaceful || Conflict) &&
+	    ((!mtmp->mpeaceful || Conflict) && !no_upos(mtmp) && 
 	     dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8))
 	    can_tunnel = FALSE;
 

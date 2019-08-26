@@ -1202,7 +1202,7 @@ struct monst *mon;
 		mmove *= 2;
 	}
 	
-	if(mon->data == &mons[PM_PYTHON] && 
+	if(mon->data == &mons[PM_PYTHON] && !no_upos(mon) && 
 		dist2(mon->mx, mon->my, mon->mux, mon->muy) <= 8)
 		mmove *= 4;
 	
@@ -2882,6 +2882,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		if((mdat == &mons[PM_GRUE]) && isdark(mon->mx, mon->my) && !isdark(nx, ny))
 				continue;
 		if((mdat == &mons[PM_WATCHER_IN_THE_WATER] || mdat == &mons[PM_KETO]) && 
+			!no_upos(mon) && 
 			distmin(nx, ny, mon->mux, mon->muy) <= 3 && 
 			dist2(nx, ny, mon->mux, mon->muy) <= dist2(mon->mx, mon->my, mon->mux, mon->muy)) continue;
 		if((mdat == &mons[PM_WATCHER_IN_THE_WATER]) && 
@@ -2908,7 +2909,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		/* Displacement also displaces the Elbereth/scare monster,
 		 * as long as you are visible.
 		 */
-		if(Displaced && monseeu && (mon->mux==nx) && (mon->muy==ny)) {
+		if(Displaced && !no_upos(mon) && monseeu && (mon->mux==nx) && (mon->muy==ny)) {
 		    dispx = u.ux;
 		    dispy = u.uy;
 		} else {
@@ -2922,7 +2923,7 @@ nexttry:	/* eels prefer the water, but if there is no water nearby,
 		    info[cnt] |= ALLOW_SSM;
 		}
 		if((nx == u.ux && ny == u.uy) ||
-		   (nx == mon->mux && ny == mon->muy)) {
+		   (nx == mon->mux && ny == mon->muy && !no_upos(mon))) {
 			if (nx == u.ux && ny == u.uy) {
 				/* If it's right next to you, it found you,
 				 * displaced or no.  We must set mux and muy
@@ -3007,7 +3008,7 @@ impossible("A monster looked at a very strange trap of type %d.", ttmp->ttyp);
 				    (mdat->msize > MZ_SMALL &&
 				     !amorphous(mdat) && !mon_resistance(mon,FLYING)))
 				&& (ttmp->ttyp != FIRE_TRAP ||
-				    !resists_fire(mon) || distmin(mon->mx, mon->my, mon->mux, mon->muy) > 2) /*Cuts down on plane of fire message spam*/
+				    !resists_fire(mon) || (!no_upos(mon) && distmin(mon->mx, mon->my, mon->mux, mon->muy) > 2)) /*Cuts down on plane of fire message spam*/
 				&& (ttmp->ttyp != SQKY_BOARD || !mon_resistance(mon,FLYING))
 				&& (ttmp->ttyp != WEB || (!amorphous(mdat) &&
 				    !(webmaker(mdat) || (Is_lolth_level(&u.uz) && !mon->mpeaceful)) && !(
@@ -5696,7 +5697,7 @@ register int x, y, distance;
 				 dist2(mtmp->mx, mtmp->my, x, y) < distance)
 		){
 			mtmp->msleeping = 0;
-			if(mtmp->mux == 0 && mtmp->muy == 0){
+			if(no_upos(mtmp)){
 				mtmp->mux = x;
 				mtmp->muy = y;
 			}

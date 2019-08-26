@@ -54,6 +54,7 @@ struct monst {
 	xchar mx, my;
 	xchar mux, muy;		/* where the monster thinks you are */
 #define MTSZ	4
+#define no_upos(mon)	((mon)->mux == 0 && (mon)->muy == 0)
 	coord mtrack[MTSZ];	/* monster track */
 	int mhp, mhpmax;
 	unsigned mappearance;	/* for undetected mimics and the wiz */
