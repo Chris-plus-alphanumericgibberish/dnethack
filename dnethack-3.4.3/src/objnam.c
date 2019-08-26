@@ -4615,7 +4615,10 @@ typfnd:
 		otmp->sknown = 1;
 	}
 	
-	if(otmp->oclass == WEAPON_CLASS || (otmp->oclass == ARMOR_CLASS && !Is_dragon_scales(otmp))){
+	if(otmp->oclass == WEAPON_CLASS 
+	 || (otmp->oclass == TOOL_CLASS && is_weptool(otmp))
+	 || (otmp->oclass == ARMOR_CLASS && !Is_dragon_scales(otmp))
+	){
 		otmp->objsize = objsize;
 	}
 	
