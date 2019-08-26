@@ -757,7 +757,7 @@ dofire()
 		result = fire_blaster(uwep, shotlimit);
 		
 		return result;
-	} else if(uwep && uwep->oartifact == ART_HOLY_MOONLIGHT_SWORD && uwep->lamplit && u.uen > 25){
+	} else if(uwep && uwep->oartifact == ART_HOLY_MOONLIGHT_SWORD && uwep->lamplit && u.uen >= 25){
 		int dmg;
 		int range = (Double_spell_size) ? 6 : 3;
 		xchar lsx, lsy, sx, sy;
