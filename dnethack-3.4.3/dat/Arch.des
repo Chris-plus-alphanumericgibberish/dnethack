@@ -114,6 +114,11 @@ CONTAINER:'(',"chest",(41,9)
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
+CONTAINER:'#',"trapped gold box",(40,7)
+OBJECT:'#',"+3 cursed gold flail",contained
+OBJECT:'#',"small +3 cursed gold shepherd's crook",contained
+OBJECT:'#',"gold amulet",contained
+OBJECT:'#',"gold pharaoh mask",contained
 # 3 random spellbooks in some of the empty rooms
 OBJECT:'+',random,place[0]
 OBJECT:'+',random,place[1]
