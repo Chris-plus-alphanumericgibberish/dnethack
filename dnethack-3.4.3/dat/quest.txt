@@ -1548,7 +1548,7 @@ are drawn together by the breeze. You can here them clearly now.
 It is Acererak's name they repeat.
 %E
 %Cc Bin 00081
-Dahlver-Nar is still dead
+Dahlver-Nar is still dead.
 %E
 %Cc Bin 00082
 You pick %o back up.
