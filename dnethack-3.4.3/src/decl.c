@@ -291,7 +291,7 @@ const struct material materials[] = {
 	{LEATHER,		HI_LEATHER,		 15,/*old:   9*/		  5, 		3	},
 	{WOOD,			HI_WOOD,		 30,/*old:   5*/		  8, 		4	},
 	{BONE,			CLR_WHITE,		 25,/*old:  17*/		 20,		4	},
-	{SHELL,			CLR_WHITE,		 25,/*old:  25*/		 30,		5	},
+	{SHELL,			CLR_WHITE,		 25,/*old:  27*/		 30,		5	},
 	{DRAGON_HIDE,	CLR_WHITE,		 35,/*old:  34*/		200,		8	},	/*note: color variable */
 	{IRON,			HI_METAL,		 80,/*old:  79*/		 10,		5	},
 	{METAL,			HI_METAL,		 70,/*old:  77*/		 10,		5	},
@@ -303,7 +303,7 @@ const struct material materials[] = {
 	{PLASTIC,		CLR_WHITE,		 20,/*old:  13*/		 10,		3	},
 	{GLASS,			HI_GLASS,		 60,/*old:  24*/		 20,		5	},
 	{GEMSTONE,		CLR_RED,		 55,/*old:  36*/		100,		7	},	/*note: color and cost variable */
-	{MINERAL,		CLR_GRAY,		 70,/*old:  27*/		 15,		6	},
+	{MINERAL,		CLR_GRAY,		 50,/*old:  27*/		 15,		6	},
 	{OBSIDIAN_MT,	CLR_BLACK,		 60,/*old:  26*/		 20,		4	},
 	{SHADOWSTEEL,	CLR_BLACK,		 30,/*old:  27*/		 50,		6	}
 };
