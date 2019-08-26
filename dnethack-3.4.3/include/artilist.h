@@ -484,7 +484,7 @@ A("The Lifehunt Scythe",			SCYTHE,					DRAGON_HIDE,	MZ_LARGE,/*Needs encyc entry
 	INVIS, A_CHAOTIC, NON_PM, NON_PM, 4000L, //Note: Has Str and Dex scaling for +16 max
 	SPFX2_STLTH,0,0),
 
-A("The Holy Moonlight Sword",		LONG_SWORD, 			METAL,			0,/*Needs encyc entry*/
+A("The Holy Moonlight Sword",		LONG_SWORD, 			METAL,			0,
 	(SPFX_RESTR|SPFX_INHER),0, //Becomes two sizes larger when lit, likely requiring two hands
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(12,0),	NO_DFNS,	NO_CARY, //Actually only applies vs non-magic resistance and while lit
@@ -813,7 +813,7 @@ A("The Mantle of Wrath",	ORCISH_CLOAK, 				0,			0, /*also blocks Aggravate monst
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/, /*Needs encyc entry*/
 	NO_ATTK,	ACID(0,0),	FIRE(0,0),
 	0,	A_CHAOTIC,	 NON_PM, PM_ORC, 2500L,
-	0,0,WSFX_PLUSSEV),
+	0,SPFX3_NOCNT,WSFX_PLUSSEV),
 
 A("The Shard from Morgoth's Crown",	RIN_ADORNMENT, 				0,			0,/*Actually an iron ring (or twisted, if iron is hunger)*/ /*Needs encyc entry*/
 	(SPFX_NOGEN|SPFX_RESTR), 0,
