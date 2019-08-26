@@ -2451,14 +2451,23 @@ dooverview()
 	mapseen *mptr;
 	boolean first;
 	boolean printdun;
+	boolean intrest;
 	int lastdun;
 
 	first = TRUE;
+	intrest = FALSE;
 
 	/* lazy intialization */
 	(void) recalc_mapseen();
 
 	if(mapseenchn){
+		for (mptr = mapseenchn; mptr; mptr = mptr->next)
+			if (interest_mapseen(mptr)) {
+				intrest = TRUE;
+				break;
+			}
+	}
+	if(intrest){
 		win = create_nhwindow(NHW_MENU);
 		for (mptr = mapseenchn; mptr; mptr = mptr->next) {
 			/* only print out info for a level or a dungeon if interest */
