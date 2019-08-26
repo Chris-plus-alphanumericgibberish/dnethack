@@ -240,7 +240,7 @@ static struct trobj Binder_Drow[] = {
 	{ 0, 0, 0, 0, 0 }
 };
 static struct trobj Binder_Dwarf[] = {
-	{ BATTLE_AXE, 0, WEAPON_CLASS, 1, 0 },
+	{ AXE, 0, WEAPON_CLASS, 1, 0 },
 	{ KNIFE, 0, WEAPON_CLASS, 1, 0 },
 	{ CHAIN_MAIL, 0, ARMOR_CLASS, 1, 0 },
 	{ GLOVES, 0, ARMOR_CLASS, 1, 0 },
