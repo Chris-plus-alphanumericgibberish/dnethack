@@ -6347,9 +6347,11 @@ arti_invoke(obj)
 				u.uevent.uread_necronomicon = 1;
 				livelog_write_string("read the necronomicon for the first time");
 			}
-			discover_artifact(ART_NECRONOMICON);
-			identify(obj);
-			update_inventory();
+			if(!obj->known){
+				discover_artifact(ART_NECRONOMICON);
+				identify(obj);
+				update_inventory();
+			}
 			if(obj->ovar1 && yn("Read a known incantation?") == 'y'){
 				int booktype = 0;
 				u.uconduct.literate++;
