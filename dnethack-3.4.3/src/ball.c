@@ -35,8 +35,14 @@ ballfall()
 			body_part(HEAD));
 		if (uarmh) {
 		    if(is_hard(uarmh)) {
-			pline("Fortunately, you are wearing a hard helmet.");
-			dmg = 3;
+				pline("Fortunately, you are wearing a hard helmet.");
+				dmg = 3;
+			} else if (umechanoid) {
+				pline("Fortunately, you have a very hard head!");
+				dmg = 3;
+			} else if (thick_skinned(youracedata)) {
+				pline("Fortunately, you have a thick head!");
+				dmg = 7;
 		    } else if (flags.verbose)
 			Your("%s does not protect you.", xname(uarmh));
 		}
