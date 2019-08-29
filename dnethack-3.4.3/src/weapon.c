@@ -333,7 +333,7 @@ int otyp;
 			dmod += 2;
 
 		/* material-based dmod modifiers */
-		if (obj->obj_material != objects[obj->otyp].oc_material)
+		if (obj->obj_material != objects[obj->otyp].oc_material && !(is_lightsaber(obj) && litsaber(obj)))
 		{
 			/* if something is made of an especially effective material 
 			 * and it normally isn't, it gets a dmod bonus 
@@ -1034,7 +1034,7 @@ int spec;
 			tmp = 0;
 	}
 
-	if (otmp->obj_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)))
+	if (otmp->obj_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)) && !(is_lightsaber(otmp) && litsaber(otmp)))
 		/* thick skinned/scaled creatures don't feel it */
 		tmp = 0;
 
@@ -1067,7 +1067,7 @@ int spec;
 		}
 	    if (otmp->blessed && mon && (holy_damage(mon))){
 			int dsize = 4;
-			if(otmp->obj_material == GOLD)
+			if(otmp->obj_material == GOLD && !(is_lightsaber(otmp) && litsaber(otmp)))
 				dsize = 20;
 			
 			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
@@ -1122,7 +1122,7 @@ int spec;
 			&& mon && hates_unholy_mon(mon)
 		){
 			int bdm = 1;
-			if(otmp->obj_material == GOLD)
+			if(otmp->obj_material == GOLD && !(is_lightsaber(otmp) && litsaber(otmp)))
 				bdm = 2;
 			
 			if(otmp->oartifact == ART_STORMBRINGER)
