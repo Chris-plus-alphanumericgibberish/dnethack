@@ -50,10 +50,6 @@ int etype;			/* Clockwork's eat type */
 
 #endif /* OVLB */
 
-/* also used to see if you're allowed to eat cats and dogs */
-#define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || \
-		Race_if(PM_VAMPIRE))
-
 #ifndef OVLB
 
 STATIC_DCL NEARDATA const char comestibles[];
@@ -2880,7 +2876,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    You_cant("eat %s you're wearing.", something);
 	    return 0;
 	}
-	if((otmp->otyp == CORPSE || (otmp->otyp == TIN && otmp->spe != 1)) && your_race(&mons[otmp->corpsenm])
+	if((otmp->otyp == CORPSE || (otmp->otyp == TIN && otmp->spe != 1)) && your_race(&mons[otmp->corpsenm]) && !is_animal(&mons[otmp->corpsenm]) && !mindless(&mons[otmp->corpsenm])
 		&& !CANNIBAL_ALLOWED() && (u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS)))
 	){
 		char buf[BUFSZ];

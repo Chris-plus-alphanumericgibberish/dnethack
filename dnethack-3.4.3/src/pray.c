@@ -2146,7 +2146,7 @@ dosacrifice()
 			value = eaten_stat(value, otmp);
 		}
 
-		if (your_race(ptr) && u.ualign.type != A_VOID) {
+		if (your_race(ptr) && !is_animal(ptr) && !mindless(ptr) && u.ualign.type != A_VOID) {
 			if (is_demon(youracedata)) {
 				You("find the idea very satisfying.");
 				exercise(A_WIS, TRUE);

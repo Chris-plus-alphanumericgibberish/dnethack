@@ -1065,7 +1065,7 @@ as_extra_healing:
 		break;
 	case POT_BLOOD:
 		unkn++;
-		if(your_race(&mons[otmp->corpsenm]) && !(Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || Race_if(PM_VAMPIRE)) 
+		if(your_race(&mons[otmp->corpsenm]) && !is_animal(&mons[otmp->corpsenm]) && !mindless(&mons[otmp->corpsenm]) && !CANNIBAL_ALLOWED() 
 			&& (u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS)))
 		){
 			char buf[BUFSZ];

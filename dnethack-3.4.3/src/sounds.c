@@ -3807,7 +3807,11 @@ int tx,ty;
 				  /*////////////////////////////////*/
 				 /* Do a light sacrificing routine */
 				/*////////////////////////////////*/
-				if (your_race(&mons[otmp->corpsenm]) && u.ualign.type != A_VOID) {
+				if (your_race(&mons[otmp->corpsenm]) 
+					&& !is_animal(&mons[otmp->corpsenm]) 
+					&& !mindless(&mons[otmp->corpsenm]) 
+					&& u.ualign.type != A_VOID
+				) {
 					/* Human sacrifice on a chaotic or unaligned altar */
 					/* is equivalent to demon summoning */
 					pline_The("%s blood covers the %s!", urace.adj, surface(tx,ty));

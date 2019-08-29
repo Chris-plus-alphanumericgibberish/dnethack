@@ -157,6 +157,10 @@ extern struct Role urole;
 #define Role_if(X)	(urole.malenum == (X))
 #define Pantheon_if(X)	(flags.racial_pantheon != 0 ? flags.racial_pantheon == (X) : roles[flags.pantheon].malenum == (X))
 #define Role_switch	(urole.malenum)
+/* also used to see if you're allowed to eat cats and dogs */
+#define CANNIBAL_ALLOWED() (Role_if(PM_CAVEMAN) || Race_if(PM_ORC) || \
+		Race_if(PM_VAMPIRE))
+
 
 /* used during initialization for race, gender, and alignment
    as well as for character class */
