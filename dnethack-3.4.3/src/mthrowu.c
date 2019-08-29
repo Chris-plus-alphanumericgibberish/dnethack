@@ -1762,7 +1762,6 @@ ironball:
 				rngmod = 8;
 			break;
 			case AD_LOAD:
-				if(near_capacity()>UNENCUMBERED) goto ironball;
 				ammo_type = LOADSTONE;
 				qvr = mksobj(ammo_type, TRUE, FALSE);
 			    qvr->blessed = 0;

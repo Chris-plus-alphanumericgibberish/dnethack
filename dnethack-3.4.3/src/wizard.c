@@ -662,6 +662,43 @@ illur_resurrect()
 
 }
 
+void
+coa_arrive()
+{
+	struct monst *mtmp, **mmtmp;
+	long elapsed;
+
+	/* look for a migrating CoAll */
+	mmtmp = &migrating_mons;
+	while ((mtmp = *mmtmp) != 0) {
+		if (mtmp->data==&mons[PM_CENTER_OF_ALL]) {
+			if((elapsed = monstermoves - mtmp->mlstmv) > 0L){
+				mon_catchup_elapsed_time(mtmp, elapsed);
+				if (elapsed >= LARGEST_INT) elapsed = LARGEST_INT - 1;
+				elapsed /= 50L;
+			} else elapsed = 1;
+			mtmp->msleeping = 0;
+			if (mtmp->mfrozen == 1) /* would unfreeze on next move */
+				mtmp->mfrozen = 0,  mtmp->mcanmove = 1;
+			if (mtmp->mcanmove) {
+				*mmtmp = mtmp->nmon;
+				mtmp->mtrack[0].x = MIGR_RANDOM;
+				mon_arrive(mtmp, FALSE);
+				break;
+			}
+		}
+		mmtmp = &mtmp->nmon;
+	}
+	
+	if(!mtmp && mvitals[PM_CENTER_OF_ALL].born == 0) mtmp = makemon(&mons[PM_CENTER_OF_ALL], 0, 0, MM_NOWAIT);
+	
+	if (mtmp) {
+		mtmp->msleeping = mtmp->mtame = mtmp->mpeaceful = 0;
+		set_malign(mtmp);
+	}
+
+}
+
 STATIC_PTR void
 dowizdarken()
 {

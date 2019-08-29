@@ -797,6 +797,7 @@ boolean pets_only;	/* true for ascension or final escape */
 			// mondied(mtmp);
 	    } else if (mtmp->iswiz || 
 			mtmp->data == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] || 
+			mtmp->data == &mons[PM_CENTER_OF_ALL] || 
 			mtmp->data == &mons[PM_HUNGRY_DEAD] ||
 			mtmp->mtame
 		) {

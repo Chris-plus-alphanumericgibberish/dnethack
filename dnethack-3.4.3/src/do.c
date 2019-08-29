@@ -1547,6 +1547,9 @@ final_level()
 	/* create some player-monsters */
 	create_mplayers(rn1(4, 3), TRUE);
 
+	/* Center of All arrives to stop the player from throwing off the Balance. */
+	coa_arrive();
+	
 	if(u.uevent.ukilled_apollyon){
 		livelog_write_string("confronted the Fallen");
 		int host;

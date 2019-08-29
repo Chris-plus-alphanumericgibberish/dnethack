@@ -921,7 +921,12 @@ register struct monst *mtmp;
 	/* update quest status flags */
 	quest_stat_check(mtmp);
 	
-	if(mdat == &mons[PM_CENTER_OF_ALL] && !mtmp->mtame && (near_capacity()>UNENCUMBERED || u.ulevel < 14) && !rn2(4)){
+	if(mdat == &mons[PM_CENTER_OF_ALL] 
+		&& !mtmp->mtame 
+		&& !Is_astralevel(&u.uz)
+		&& (near_capacity()>SLT_ENCUMBER || u.ulevel < 14 || mtmp->mpeaceful) 
+		&& (near_capacity()>MOD_ENCUMBER || !rn2(4))
+	){
 		int nlev;
 		d_level flev;
 

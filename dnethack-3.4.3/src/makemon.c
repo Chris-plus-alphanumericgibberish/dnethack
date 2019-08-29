@@ -2328,6 +2328,7 @@ register struct monst *mtmp;
 			}
 			if(ptr == &mons[PM_AURUMACH_RILMANI]){
 				otmp = mksobj(HALBERD, TRUE, FALSE);
+				otmp->objsize = MZ_LARGE;
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
 				if(otmp->spe < 4) otmp->spe = 4;
@@ -2336,6 +2337,7 @@ register struct monst *mtmp;
 				fix_object(otmp);
 			    (void) mpickobj(mtmp, otmp);
 				otmp = mksobj(TWO_HANDED_SWORD, TRUE, FALSE);
+				otmp->objsize = MZ_LARGE;
 			    otmp->cursed = 0;
 			    otmp->blessed = 0;
 				if(otmp->spe < 4) otmp->spe = 4;
@@ -2345,6 +2347,7 @@ register struct monst *mtmp;
 			    (void) mpickobj(mtmp, otmp);
 				if(!rn2(3)){
 					otmp = mksobj(PLATE_MAIL, TRUE, FALSE);
+					otmp->objsize = MZ_LARGE;
 					otmp->cursed = 0;
 					otmp->blessed = 0;
 					otmp->oproperties = OPROP_CONC;
@@ -2356,9 +2359,13 @@ register struct monst *mtmp;
 			}
 			if(ptr == &mons[PM_CENTER_OF_ALL]){
 				struct obj *otmp = mksobj(BARDICHE, TRUE, FALSE);
-				otmp->blessed = TRUE;
+				otmp->objsize = MZ_LARGE;
+				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
-				otmp->spe = 8;
+				otmp->spe = 4;
+				otmp->oproperties = OPROP_CONCW;
+				otmp->obj_material = GOLD;
+				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 
 				otmp = mksobj(SKELETON_KEY, TRUE, FALSE);
@@ -2366,7 +2373,35 @@ register struct monst *mtmp;
 				otmp->blessed = FALSE;
 				otmp->cursed = FALSE;
 				(void) mpickobj(mtmp,otmp);
-				return;
+				
+				otmp = mksobj(WAR_HAT, FALSE, FALSE);
+				otmp->objsize = MZ_LARGE;
+				otmp->oproperties = OPROP_CONC;
+				otmp->obj_material = GOLD;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(LEATHER_ARMOR, FALSE, FALSE);
+				otmp->objsize = MZ_LARGE;
+				otmp->oproperties = OPROP_CONC;
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(ROBE, FALSE, FALSE);
+				otmp->objsize = MZ_LARGE;
+				otmp->oproperties = OPROP_CONC;
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
+				otmp->objsize = MZ_LARGE;
+				otmp->oproperties = OPROP_CONC;
+				otmp->obj_material = LEATHER;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				
+				otmp = mksobj(LOW_BOOTS, FALSE, FALSE);
+				otmp->objsize = MZ_LARGE;
+				otmp->oproperties = OPROP_CONC;
+				(void) mpickobj(mtmp, otmp);
 			}
 			if(ptr == &mons[PM_AMM_KAMEREL]){
 				if(rn2(10)){//Physical fighter, no magic
@@ -7912,9 +7947,8 @@ rndmonst()
 		}
 	}
 
-	if((u.uevent.sum_entered || !rn2(100)) && !(mvitals[PM_CENTER_OF_ALL].mvflags & G_EXTINCT) && !rn2(100)){
-	    return &mons[PM_CENTER_OF_ALL]; /*center of all may be created at any time, but is much more likely after
-												entering sum of all */
+	if(!(mvitals[PM_CENTER_OF_ALL].mvflags & G_EXTINCT) && !rn2(5000)){
+	    return &mons[PM_CENTER_OF_ALL]; /*center of all may be created at any time */
 	}
 
 	if (u.uz.dnum == quest_dnum && !undeadfaction && (ptr = qt_montype()) != 0){

@@ -2834,6 +2834,7 @@ E int NDECL(pick_nasty);
 E int FDECL(nasty, (struct monst*));
 E void NDECL(resurrect);
 E void NDECL(illur_resurrect);
+E void NDECL(coa_arrive);
 E void NDECL(intervene);
 E void NDECL(illur_intervene);
 E void NDECL(wizdead);
