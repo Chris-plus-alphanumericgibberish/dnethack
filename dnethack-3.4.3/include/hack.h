@@ -313,6 +313,9 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define CREAK 25
 #define CRACK 26
 
+#define BALL_IN_MON	(u.uswallow && uball && uball->where == OBJ_FREE)
+#define CHAIN_IN_MON	(u.uswallow && uchain && uchain->where == OBJ_FREE)
+
 /* Flags to control menus */
 #define MENUTYPELEN sizeof("traditional ")
 #define MENU_TRADITIONAL 0

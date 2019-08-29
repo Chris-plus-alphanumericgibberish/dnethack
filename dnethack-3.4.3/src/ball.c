@@ -23,9 +23,11 @@ ballfall()
 		if (uswapwep == uball)
 			setuswapwep((struct obj *)0);
 		if (uquiver == uball)
-			setuqwep((struct obj *)0);;
-		if (uwep != uball)
-			freeinv(uball);
+			setuqwep((struct obj *)0);
+        /* [this used to test 'if (uwep != uball)' but that always passes
+           after the setuwep() above] */
+        freeinv(uball); /* remove from inventory but don't place on floor */
+        encumber_msg();
 	}
 	if(gets_hit){
 		int dmg = rn1(7,25);
@@ -803,6 +805,68 @@ drag_down()
 			litter();
 		}
 	}
+}
+
+void
+bc_sanity_check()
+{
+    int otyp;
+    unsigned save_nameknown;
+    const char *onam;
+
+    if (Punished && (!uball || !uchain)) {
+        impossible("Punished without %s%s%s?",
+                   !uball ? "iron ball" : "",
+                   (!uball && !uchain) ? " and " : "",
+                   !uchain ? "attached chain" : "");
+    } else if (!Punished && (uball || uchain)) {
+        impossible("Attached %s%s%s without being Punished?",
+                   uchain ? "chain" : "",
+                   (uchain && uball) ? " and " : "",
+                   uball ? "iron ball" : "");
+    }
+    /* ball is free when swallowed, changing levels, other times? */
+    if (uball && (uball->otyp != HEAVY_IRON_BALL
+                  || (uball->where != OBJ_FLOOR
+                      && uball->where != OBJ_INVENT
+                      && uball->where != OBJ_FREE)
+                  || (uball->owornmask & W_BALL) == 0L
+                  || (uball->owornmask & ~(W_BALL)) != 0L
+	)) {
+        otyp = uball->otyp;
+        if (otyp < STRANGE_OBJECT || otyp >= NUM_OBJECTS
+            || !OBJ_NAME(objects[otyp])) {
+            onam = "glorkum";
+        } else {
+            save_nameknown = objects[otyp].oc_name_known;
+            objects[otyp].oc_name_known = 1;
+            onam = simple_typename(otyp);
+            objects[otyp].oc_name_known = save_nameknown;
+        }
+        impossible("uball: type %d (%s), where %d, wornmask=0x%08lx",
+                   otyp, onam, uball->where, uball->owornmask);
+    }
+    /* similar check to ball except can't be in inventory */
+    if (uchain && (uchain->otyp != CHAIN
+                   || (uchain->where != OBJ_FLOOR
+                       && uchain->where != OBJ_FREE)
+                   /* [could simplify this to owornmask != W_CHAIN] */
+                   || (uchain->owornmask & W_CHAIN) == 0L
+                   || (uchain->owornmask & ~W_CHAIN) != 0L)) {
+        otyp = uchain->otyp;
+        if (otyp < STRANGE_OBJECT || otyp >= NUM_OBJECTS
+            || !OBJ_NAME(objects[otyp])) {
+            onam = "glorkum";
+        } else {
+            save_nameknown = objects[otyp].oc_name_known;
+            objects[otyp].oc_name_known = 1;
+            onam = simple_typename(otyp);
+            objects[otyp].oc_name_known = save_nameknown;
+        }
+        impossible("uchain: type %d (%s), where %d, wornmask=0x%08lx",
+                   otyp, onam, uchain->where, uchain->owornmask);
+    }
+    /* [check bc_order too?] */
 }
 
 /*ball.c*/
