@@ -581,69 +581,43 @@ MONSTER:'s',"scorpion",random
 MONSTER:'B',"parrot",random
 MONSTER:'B',"parrot",random
 
-MAZE: "Arc-filb",' '
-FLAGS: shortsighted,hardfloor
+LEVEL: "Arc-filb"
+#
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+OBJECT: random,random,random
+MONSTER: 'M', random, random
 
-GEOMETRY: center, center
-#0          1         2   	  3	      4	    5		  6	      7
-#0123456789012345678901234567890123456789012345678901234567890123456789012345
-MAP
-0                                                                            
-1----------------------------------------------------------------------------
-2                                                                            
-3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-8T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-9 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-0T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-1 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-2T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-3 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-4T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-5 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-6T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.T.
-7 T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T T
-8                                                                            
-9----------------------------------------------------------------------------
-0----------------------------------------------------------------------------
-ENDMAP
-#0123456789012345678901234567890123456789012345678901234567890123456789012345
-#0          1         2   	  3	      4	    5		  6	      7
-REGION:(00,00,75,19),unlit,"ordinary"
-# Stairs
-STAIR:(00,00,20,18),(0,0,0,0), up
-STAIR:(54,00,74,18),(0,0,0,0), down
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random,random,random
+TRAP:"mummy trap",random
+TRAP:"mummy trap",random
 
-MAZEWALK:(04,10),east
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+TRAP:"mummy trap",random
+TRAP:"mummy trap",random
+OBJECT: random,random,random
+MONSTER: 'S', random, random
 
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER:'M',"human mummy",random
-MONSTER: 'M', "human mummy", random
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+OBJECT: random, random, random
+TRAP: random, random
+TRAP:"mummy trap",random
+MONSTER: 'S', random, random
 
-MONSTER:'S',"snake",random
-MONSTER:'S',"snake",random
-MONSTER:'S',"snake",random
-MONSTER:'S',"pit viper",random
-MONSTER:'S',"pit viper",random
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: 'S', random, random
 
-MONSTER[50%]:'f',"jaguar",random
-MONSTER[50%]:'f',"tiger",random
-MONSTER[50%]:'f',"panther",random
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+TRAP: random, random
+MONSTER: 'S', random, random
 
-MONSTER:'s',"cave spider",random
-MONSTER:'s',"cave spider",random
-MONSTER:'s',"giant spider",random
-MONSTER:'s',"giant spider",random
-MONSTER:'s',"scorpion",random
-
-MONSTER:'B',"bat",random
-MONSTER:'B',"giant bat",random
-MONSTER:'B',"battle-bat",random
-MONSTER:'B',"warbat",random
-MONSTER:'B',"warbat",random
-MONSTER:'B',"vampire bat",random
+RANDOM_CORRIDORS
