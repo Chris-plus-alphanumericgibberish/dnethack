@@ -22,6 +22,7 @@ static NEARDATA int RoSbook;		/* Read spell or Study Wards?" */
 	((char)((spell < 26) ? ('a' + spell) : ('A' + spell - 26)))
 
 STATIC_PTR int NDECL(purifying_blast);
+STATIC_PTR int NDECL(stargate);
 STATIC_PTR struct permonst * NDECL(choose_crystal_summon);
 STATIC_DCL int FDECL(spell_let_to_idx, (CHAR_P));
 STATIC_DCL boolean FDECL(check_spirit_let, (char));
@@ -1827,6 +1828,70 @@ purifying_blast()
 	return 0;
 }
 
+STATIC_PTR int
+stargate()
+{
+	int i, num_ok_dungeons, last_ok_dungeon = 0;
+	d_level newlev;
+	extern int n_dgns; /* from dungeon.c */
+	winid tmpwin = create_nhwindow(NHW_MENU);
+	anything any;
+
+	any.a_void = 0;	/* set all bits to zero */
+	start_menu(tmpwin);
+	/* use index+1 (cant use 0) as identifier */
+	for (i = num_ok_dungeons = 0; i < n_dgns; i++) {
+	if (!dungeons[i].dunlev_ureached) continue;
+	any.a_int = i+1;
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
+		 dungeons[i].dname, MENU_UNSELECTED);
+	num_ok_dungeons++;
+	last_ok_dungeon = i;
+	}
+	end_menu(tmpwin, "Open a portal to which dungeon?");
+	if (num_ok_dungeons > 1) {
+	/* more than one entry; display menu for choices */
+	menu_item *selected;
+	int n;
+
+	n = select_menu(tmpwin, PICK_ONE, &selected);
+	if (n <= 0) {
+		destroy_nhwindow(tmpwin);
+		return 0;
+	}
+	i = selected[0].item.a_int - 1;
+	free((genericptr_t)selected);
+	} else
+	i = last_ok_dungeon;	/* also first & only OK dungeon */
+	destroy_nhwindow(tmpwin);
+
+	/*
+	 * i is now index into dungeon structure for the new dungeon.
+	 * Find the closest level in the given dungeon, open
+	 * a use-once portal to that dungeon and go there.
+	 * The closest level is either the entry or dunlev_ureached.
+	 */
+	newlev.dnum = i;
+	if(dungeons[i].depth_start >= depth(&u.uz))
+	newlev.dlevel = dungeons[i].entry_lev;
+	else
+	newlev.dlevel = dungeons[i].dunlev_ureached;
+	if(u.uhave.amulet || In_endgame(&u.uz) || In_endgame(&newlev) ||
+	   newlev.dnum == u.uz.dnum) {
+	You_feel("very disoriented for a moment.");
+	} else {
+	if(u.usteed && mon_has_amulet(u.usteed)){
+		dismount_steed(DISMOUNT_VANISHED);
+	}
+	if(!Blind) You("are surrounded by a shimmering sphere!");
+	else You_feel("weightless for a moment.");
+	u.uen -= 125;
+	if(u.uen < 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
+	goto_level(&newlev, FALSE, FALSE, FALSE);
+	}
+	return 0;
+}
+
 int
 spiriteffects(power, atme)
 	int power;
@@ -2446,66 +2511,12 @@ spiriteffects(power, atme)
 				setmangry(mon);
 			} else break;
 		}break;
-		case PWR_STARGATE:{
-			int i, num_ok_dungeons, last_ok_dungeon = 0;
-			d_level newlev;
-			extern int n_dgns; /* from dungeon.c */
-			winid tmpwin = create_nhwindow(NHW_MENU);
-			anything any;
-
-			any.a_void = 0;	/* set all bits to zero */
-			start_menu(tmpwin);
-			/* use index+1 (cant use 0) as identifier */
-			for (i = num_ok_dungeons = 0; i < n_dgns; i++) {
-			if (!dungeons[i].dunlev_ureached) continue;
-			any.a_int = i+1;
-			add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_NONE,
-				 dungeons[i].dname, MENU_UNSELECTED);
-			num_ok_dungeons++;
-			last_ok_dungeon = i;
-			}
-			end_menu(tmpwin, "Open a portal to which dungeon?");
-			if (num_ok_dungeons > 1) {
-			/* more than one entry; display menu for choices */
-			menu_item *selected;
-			int n;
-
-			n = select_menu(tmpwin, PICK_ONE, &selected);
-			if (n <= 0) {
-				destroy_nhwindow(tmpwin);
-				return 0;
-			}
-			i = selected[0].item.a_int - 1;
-			free((genericptr_t)selected);
-			} else
-			i = last_ok_dungeon;	/* also first & only OK dungeon */
-			destroy_nhwindow(tmpwin);
-
-			/*
-			 * i is now index into dungeon structure for the new dungeon.
-			 * Find the closest level in the given dungeon, open
-			 * a use-once portal to that dungeon and go there.
-			 * The closest level is either the entry or dunlev_ureached.
-			 */
-			newlev.dnum = i;
-			if(dungeons[i].depth_start >= depth(&u.uz))
-			newlev.dlevel = dungeons[i].entry_lev;
-			else
-			newlev.dlevel = dungeons[i].dunlev_ureached;
-			if(u.uhave.amulet || In_endgame(&u.uz) || In_endgame(&newlev) ||
-			   newlev.dnum == u.uz.dnum) {
-			You_feel("very disoriented for a moment.");
-			} else {
-			if(u.usteed && mon_has_amulet(u.usteed)){
-				dismount_steed(DISMOUNT_VANISHED);
-			}
-			if(!Blind) You("are surrounded by a shimmering sphere!");
-			else You_feel("weightless for a moment.");
-			u.uen -= 125;
-			if(u.uen < 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
-			goto_level(&newlev, FALSE, FALSE, FALSE);
-			}
-		}break;
+		case PWR_STARGATE:
+			u.edenshield = moves+5;
+			nomul(-5, "charging up a stargate");
+			nomovemsg = "You finish charging.";
+			afternmv = stargate;
+		break;
 		case PWR_WALKER_OF_THRESHOLDS:{
 			coord cc;
 			int cancelled;
