@@ -777,6 +777,7 @@ unsigned int type;
 			case 3: return MAKE_VISIBLE;
 		}
 	break;
+	case PM_CENTER_OF_ALL:
 	case PM_AURUMACH_RILMANI:
 		if(rn2(4)) return GOLDEN_WAVE;
 		switch(rn2(7)){
