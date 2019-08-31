@@ -7619,7 +7619,7 @@ is a red right hand
  *	creation's heart.
  */
     MON("Center of All", S_NEU_OUTSIDER,//22
-	LVL(18, 10, -8, 100, 0), (G_NOCORPSE|G_UNIQ|G_NOGEN),
+	LVL(18, 15, -8, 100, 0), (G_NOCORPSE|G_UNIQ|G_NOGEN),
 	A(ATTK(AT_WEAP, AD_PHYS, 2, 8),
 	  ATTK(AT_WEAP, AD_PHYS, 2, 8),
 	  ATTK(AT_WEAP, AD_PHYS, 2, 8),
