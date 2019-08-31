@@ -3118,7 +3118,9 @@ dopois:
 				return 1;
 			}
 			if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
-			if (((MON_WEP(mtmp)) && mdat == &mons[PM_ALRUNES]) && !rn2(20)) return 1;
+			if(mdat == &mons[PM_ALRUNES]){
+				if (MON_WEP(mtmp) && rn2(20)) return 1;
+			}
 			if (dmgtype(youracedata, AD_SEDU)
 #ifdef SEDUCE
 				|| dmgtype(youracedata, AD_SSEX) || dmgtype(youracedata, AD_LSEX)
@@ -4676,7 +4678,9 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 					return 1;
 				}
 				if ( (mdat == &mons[PM_FIERNA] || mdat == &mons[PM_PALE_NIGHT]) && rnd(20)<15) return 1;
-				if (((MON_WEP(mtmp)) && mdat == &mons[PM_ALRUNES]) && !rn2(20)) return 1;
+				if(mdat == &mons[PM_ALRUNES]){
+					if (MON_WEP(mtmp) && rn2(20)) return 1;
+				}
 				if (is_animal(mtmp->data)) {
 					hitmsg(mtmp, mattk);
 						if (mtmp->mcan) break;
