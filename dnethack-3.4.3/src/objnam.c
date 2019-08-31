@@ -1050,7 +1050,7 @@ boolean adjective;
 		else if (obj->otyp == WORM_TOOTH || obj->otyp == CRYSKNIFE)
 			return "enamel";
 		/* ceramic wand is handled already */
-		else if (obj->oclass == ARMOR_CLASS || obj->oclass == TILE_CLASS)
+		else if (obj->oclass == ARMOR_CLASS || obj->oclass == TILE_CLASS || obj->otyp == MASK)
 			return "ceramic";
 		else
 			return "stone";
