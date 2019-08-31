@@ -579,7 +579,7 @@ fixup_special()
 			for (y = 2; y <= y_maze_max; y++){
 				if (levl[x][y].typ == STONE) levl[x][y].typ = HWALL;
 				if (levl[x][y].typ == ROOM) levl[x][y].lit = TRUE;
-				if (m_at(x, y)) rloc(m_at(x, y), FALSE);
+				if (!ZAP_POS(levl[x][y].typ) && m_at(x, y)) rloc(m_at(x, y), FALSE);
 			}
 			wallification(1, 1, COLNO - 1, ROWNO - 1);
 		}
