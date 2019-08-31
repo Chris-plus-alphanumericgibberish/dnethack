@@ -3074,6 +3074,12 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(magr->mtame && mdef->mpeaceful && !u.uevent.uaxus_foe && md == &mons[PM_AXUS])
 		return 0L;
 	
+	if(magr->mhp < 100 && attacktype_fordmg(md, AT_BOOM, AD_MAND))
+		return 0L;
+	
+	if((Upolyd ? u.mh < 100 : u.uhp < 100) && magr->mtame && attacktype_fordmg(md, AT_BOOM, AD_MAND))
+		return 0L;
+	
 	if(ma == &mons[PM_DREADBLOSSOM_SWARM]){
 		if(!(is_fey(md) || is_plant(md))) return ALLOW_M|ALLOW_TM;
 	}

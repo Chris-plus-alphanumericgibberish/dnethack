@@ -826,6 +826,15 @@ boolean ranged;
 	if(mtmp->mtame && mtmp2->mpeaceful && !u.uevent.uaxus_foe && mtmp2->data == &mons[PM_AXUS])
 		return FALSE;
 	
+	if(mtmp->mhp < 100 && attacktype_fordmg(mtmp2->data, AT_BOOM, AD_MAND))
+		return FALSE;
+	
+	if((Upolyd ? u.mh < 100 : u.uhp < 100) && mtmp->mtame && attacktype_fordmg(mtmp2->data, AT_BOOM, AD_MAND))
+		return FALSE;
+	
+	if(mtmp2->data == &mons[PM_MANDRAKE])
+		return FALSE;
+	
     return !((!ranged &&
 #ifdef BARD
                 (int)mtmp2->m_lev >= (int)mtmp->m_lev+2 + (mtmp->encouraged)*2 &&
@@ -839,7 +848,6 @@ boolean ranged;
 		 && (mon_resistance(mtmp,SEE_INVIS) || !mtmp2->minvis)) ||
 		(!ranged &&
 		 mtmp2->data==&mons[PM_GELATINOUS_CUBE] && rn2(10)) ||
-		(mtmp2->data == &mons[PM_MANDRAKE]) ||
 		(!ranged &&
 		 max_passive_dmg(mtmp2, mtmp) >= mtmp->mhp) ||
 		((   mtmp2->data == &mons[urole.guardnum]
