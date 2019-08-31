@@ -892,7 +892,7 @@ int spell;
 	switch (spell)
 	{
 	case SPE_DETECT_MONSTERS:
-		if (P_SKILL(spell_skilltype(SPE_DETECT_MONSTERS)) < P_SKILLED)
+		if (P_SKILL(spell_skilltype(SPE_DETECT_MONSTERS)) + (Spellboost ? 1 : 0) < P_SKILLED)
 			break;
 	case SPE_HASTE_SELF:
 	case SPE_LEVITATION:
