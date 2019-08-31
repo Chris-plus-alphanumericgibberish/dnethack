@@ -568,6 +568,15 @@ const char *name;
 			buf[PL_PSIZ - 1] = '\0';
 		}
 	}
+	else if (obj && *name) {
+		register const struct artifact *a;
+		for (a = artilist + 1; a->otyp; a++)
+		if (artitypematch(a, obj) && !strcmp(a->name, name)) {
+			if (obj->otyp != a->otyp) {
+				obj = poly_obj(obj, a->otyp);
+			}
+		}
+	}
 	
 	if (lth == obj->onamelth) {
 		/* no need to replace entire object */

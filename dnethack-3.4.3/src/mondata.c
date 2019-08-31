@@ -76,9 +76,10 @@ int flag;
 			}
 		}
 	}
-#define set_mintrinsic(ptr_condition, intrinsic) if((ptr_condition))\
-	{if(flag==1) mon->mintrinsics[((intrinsic)-1)/32] |= (1<<((intrinsic)-1)%32);\
-	else mon->mintrinsics[((intrinsic)-1)/32] = (1<<((intrinsic)-1)%32);}
+#define set_mintrinsic(ptr_condition, intrinsic) \
+	if ((ptr_condition)) { mon->mintrinsics[((intrinsic)-1)/32] |=  (1L<<((intrinsic)-1)%32); } \
+	else if (flag != 1)  { mon->mintrinsics[((intrinsic)-1)/32] &= ~(1L<<((intrinsic)-1)%32); }
+
 	/* other intrinsics */
 	set_mintrinsic(species_flies(mon->data), FLYING);
 	set_mintrinsic(species_floats(mon->data), LEVITATION);

@@ -912,25 +912,40 @@ struct obj *obj;
 						  "Yow!  The mirror stares back!" :
 						  "Yikes!  You've frozen yourself!");
 					nomul(-rnd((MAXULEV+6) - u.ulevel), "frozen by your own reflection");
-				} else You("stiffen momentarily under your gaze.");
-		    } else if (youracedata->mlet == S_VAMPIRE)
+					vis = FALSE;
+				}
+				else {
+					You("stiffen momentarily under your gaze.");
+					vis = TRUE;
+				}
+			} else if (youracedata->mlet == S_VAMPIRE) {
 				You("don't have a reflection.");
-		    else if (u.umonnum == PM_UMBER_HULK && ward_at(u.ux, u.uy) != HAMSA) {
+				vis = FALSE;
+			} else if (u.umonnum == PM_UMBER_HULK && ward_at(u.ux, u.uy) != HAMSA) {
 				pline("Huh?  That doesn't look like you!");
 				make_confused(HConfusion + d(3,4),FALSE);
+				vis = FALSE;
 		    } else if (u.sealsActive&SEAL_IRIS){
 				pline("What?  Who is that in the mirror!?");
 				unbind(SEAL_IRIS,TRUE);
-		    } else if (Hallucination)
+				vis = FALSE;
+		    } else if (Hallucination) {
 				You(look_str, hcolor((char *)0));
-		    else if (Sick)
+				vis = TRUE;
+		    } else if (Sick) {
 				You(look_str, "peaked");
-		    else if (u.uhs >= WEAK)
+				vis = TRUE;
+		    } else if (u.uhs >= WEAK) {
 				You(look_str, "undernourished");
-		    else You("look as %s as ever.",
+				vis = TRUE;
+			} else {
+				You("look as %s as ever.",
 				ACURR(A_CHA) > 14 ?
 				(poly_gender()==1 ? "beautiful" : "handsome") :
 				"ugly");
+				vis = TRUE;
+			}
+			if (vis)
 			signs_mirror();
 		} else {
 			You_cant("see your %s %s.",

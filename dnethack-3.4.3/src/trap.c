@@ -1517,7 +1517,7 @@ struct obj *otmp;
 			if(In_outlands(&u.uz)){
 				if (in_sight && hates_silver(mtmp->data) && tt == SPIKED_PIT) {
 					pline("The silver mirror-shards sear %s!",
-						Monnam(mtmp));
+						mon_nam(mtmp));
 				}
 				if (mtmp->mhp <= 0 ||
 					thitm(0, mtmp, (struct obj *)0,
@@ -1527,7 +1527,7 @@ struct obj *otmp;
 			} else {
 				if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
 					pline("The cold-iron sears %s!", 	//half cold-iron damage
-						Monnam(mtmp));
+						mon_nam(mtmp));
 				}
 				if (mtmp->mhp <= 0 ||
 					thitm(0, mtmp, (struct obj *)0,
@@ -2289,7 +2289,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			if(In_outlands(&u.uz)){
 				if (in_sight && hates_silver(mtmp->data) && tt == SPIKED_PIT) {
 					pline("The silver mirror-shards sear %s!",
-						Monnam(mtmp));
+						mon_nam(mtmp));
 				}
 				mselftouch(mtmp, "Falling, ", FALSE);
 				if (mtmp->mhp <= 0 ||
@@ -2299,7 +2299,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			} else {
 				if (in_sight && hates_iron(mtmp->data) && tt == SPIKED_PIT) {
 					pline("The cold-iron sears %s!",
-						Monnam(mtmp));
+						mon_nam(mtmp));
 				}
 				mselftouch(mtmp, "Falling, ", FALSE);
 				if (mtmp->mhp <= 0 ||

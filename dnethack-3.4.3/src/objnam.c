@@ -682,9 +682,10 @@ char *buf;
 	boolean iscrys = (obj->otyp == CRYSKNIFE);
 	if (!is_damageable(obj) && obj->otyp != MASK && !iscrys && !(obj->oclass == POTION_CLASS && obj->odiluted)) return;
 
-	/* The only cases where any of these bits do double duty are for
-	* rotted food and diluted potions, which are all not is_damageable().
-	*/
+	/* food uses oeroded to determine if it is rotten -- do not show this */
+	if (obj->oclass == FOOD_CLASS)
+		return;
+	
 	if (obj->oeroded && !iscrys) {
 		switch (obj->oeroded) {
 		case 2:	Strcat(buf, "very "); break;

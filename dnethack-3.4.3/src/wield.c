@@ -515,6 +515,7 @@ test_twoweapon()
 	if (!could_twoweap(youmonst.data) && 
 		!(!Upolyd && Role_if(PM_ANACHRONONAUT)) && 
 		!(u.specialSealsActive&SEAL_MISKA) && 
+		!(u.specialSealsActive&SEAL_BLACK_WEB && !uswapwep) && 
 		!(!Upolyd && uwep && uswapwep && 
 			((artilist[uwep->oartifact].inv_prop == DANCE_DAGGER && artilist[uswapwep->oartifact].inv_prop == SING_SPEAR) ||
 			 (artilist[uswapwep->oartifact].inv_prop == DANCE_DAGGER && artilist[uwep->oartifact].inv_prop == SING_SPEAR))
