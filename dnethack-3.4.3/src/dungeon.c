@@ -2321,6 +2321,12 @@ mapseen *mptr;
 {
 	return ((on_level(&u.uz, &mptr->lev) || (!mptr->feat.forgot)) && (
 		INTEREST(mptr->feat) ||
+		(Is_hell1(&mptr->lev)) || 
+		(Is_hell2(&mptr->lev)) || 
+		(Is_hell3(&mptr->lev)) || 
+		(Is_abyss1(&mptr->lev)) || 
+		(Is_abyss2(&mptr->lev)) || 
+		(Is_abyss3(&mptr->lev)) || 
 		(mptr->custom) || 
 		(mptr->br)
 	));
@@ -2628,7 +2634,73 @@ boolean printdun;
 		if (slev)
 			Sprintf(eos(buf), " [%s]", slev->proto);
 	}
+	else
 #endif
+	{ //Block associated with the else in the ifdef
+		if(Is_hell1(&mptr->lev)){
+			if(Is_bael_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Avernus]");
+			} else if(Is_dis_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Dis]");
+			} else if(Is_mammon_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Minauros]");
+			} else if(Is_belial_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Phlegethos]");
+			} else {
+				Sprintf(eos(buf), " [Upper Hell]");
+			}
+		} else if(Is_hell2(&mptr->lev)){
+			if(Is_leviathan_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Stygia]");
+			} else if(Is_lilith_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Malbolge]");
+			} else if(Is_baalzebub_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Maladomini]");
+			} else if(Is_mephisto_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Cania]");
+			} else {
+				Sprintf(eos(buf), " [Lower Hell]");
+			}
+		} else if(Is_hell3(&mptr->lev)){
+			Sprintf(eos(buf), " [Nessus]");
+		} else if(Is_abyss1(&mptr->lev)){
+			if(Is_juiblex_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Slime Pits]");
+			} else if(Is_zuggtmoy_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Shedaklah]");
+			} else if(Is_yeenoghu_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Dun Savana]");
+			} else if(Is_baphomet_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Lyktion]");
+			} else if(Is_night_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Bone Plateau]");
+			} else {
+				Sprintf(eos(buf), " [First Abyss]");
+			}
+		} else if(Is_abyss2(&mptr->lev)){
+			if(Is_malcanthet_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Shendilavri]");
+			} else if(Is_grazzt_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Azzagrat]");
+			} else if(Is_orcus_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Thanatos]");
+			} else if(Is_lolth_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Demonweb]");
+			} else {
+				Sprintf(eos(buf), " [Second Abyss]");
+			}
+		} else if(Is_abyss3(&mptr->lev)){
+			if(Is_demogorgon_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Brine Flats]");
+			} else if(Is_dagon_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Shadowsea]");
+			} else if(Is_lamashtu_level(&mptr->lev)){
+				Sprintf(eos(buf), " [Salt Flats]");
+			} else {
+				Sprintf(eos(buf), " [Third Abyss]");
+			}
+		}
+	}
 
 	if (mptr->custom)
 		Sprintf(eos(buf), " (%s)", mptr->custom);
