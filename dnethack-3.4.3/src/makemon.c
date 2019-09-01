@@ -943,6 +943,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 					/*Helm*/
 					otmp = mksobj(DROVEN_HELM, TRUE, FALSE);
+					set_material(otmp, SILVER);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
@@ -950,6 +951,7 @@ register struct monst *mtmp;
 					(void) mpickobj(mtmp, otmp);
 					/*boots*/
 					otmp = mksobj(SHOES, TRUE, FALSE);
+					set_material(otmp, SILVER);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
