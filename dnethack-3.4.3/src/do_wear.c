@@ -2352,49 +2352,11 @@ int base_udr()
 void
 find_dr()
 {
-	int udr = 0, ubasedr, armdr=0;
+	int udr = 0, i;
 	
-	ubasedr = base_udr();
-	//Note: Actual use is that only one armorslot applies at a time.  Average them for display purposes only
-	if (uarmc)	udr += arm_dr_bonus(uarmc)*4/5;//Doesn't cover arms
-	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-		udr += max( 1 + (uwep->spe+1)/2,0);
-	}
-	
-	if (uarm){
-		if(uarm->otyp == JUMPSUIT) udr += arm_dr_bonus(uarm);
-		else armdr += arm_dr_bonus(uarm)*2;//Note: extends to two slots
-	} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-		udr += max( 1 + uwep->spe,0);
-	}
-	if (uarmh)	armdr += arm_dr_bonus(uarmh);
-	if (uarmf)	armdr += arm_dr_bonus(uarmf);
-	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-		udr += max( 1 + (uwep->spe+1)/2,0);
-	}
-	if (uarmg)	armdr += arm_dr_bonus(uarmg);
-	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
-		udr += max( 1 + (uwep->spe+1)/2,0);
-	}
-	if (uarmu){
-		if(uarmu->otyp == BODYGLOVE)
-			udr += arm_dr_bonus(uarmu);
-		else armdr += arm_dr_bonus(uarmu);
-	}
-	
-	if(uandroid) armdr += (6*2+3*3); /*armor bonus for androids*/
-	armdr /= 5;
-	
-	udr += armdr;
-	
-	// if(u.ustdy && udr>0){
-		// udr -= u.ustdy;
-		// if(udr<0)
-			// udr = 0;
-	// }
-	
-	udr += ubasedr;
-	
+	for(i = 0; i < 5; i++)
+		udr += slot_udr(i,0);
+	udr /= 5;
 	if (udr > 127) udr = 127;	/* u.uac is an schar */
 	if(udr != u.udr){
 		u.udr = udr;
