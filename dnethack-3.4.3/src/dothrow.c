@@ -2153,7 +2153,7 @@ int thrown;
 						yn("Do you wish to take Spidersilk, instead of this?") == 'y'
 					){
 						obfree(obj, (struct obj *)0);
-						obj = mksobj(ELVEN_MITHRIL_COAT, TRUE, FALSE);
+						obj = mksobj(DROVEN_CHAIN_MAIL, TRUE, FALSE);
 						obj = oname(obj, artiname(ART_SPIDERSILK));
 						obj->oerodeproof = TRUE;
 						obj->blessed = TRUE;
