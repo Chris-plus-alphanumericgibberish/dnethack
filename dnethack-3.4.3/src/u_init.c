@@ -1008,11 +1008,13 @@ static const struct def_skill Skill_Drow_Unarmed[] = {
 static const struct def_skill Skill_DP[] = {
     { P_ATTACK_SPELL, P_EXPERT },
     { P_BEAST_MASTERY, P_BASIC },
+    { P_FLAIL, P_EXPERT },
     { P_NONE, 0 }
 };
 
 static const struct def_skill Skill_DW[] = {
     { P_CLERIC_SPELL, P_EXPERT },
+    { P_FLAIL, P_EXPERT },
     { P_NONE, 0 }
 };
 
