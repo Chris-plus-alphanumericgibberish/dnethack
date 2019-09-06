@@ -813,6 +813,7 @@ moveloop()
 					for(j=0; j<ROWNO; j++)
 						if(viz_array[j][i]&COULD_SEE)
 							echo_location(i, j);
+				see_monsters();
 			}
 			/*If anything a monster did caused us to get moved out of water, surface*/
 			if(u.usubwater && !is_pool(u.ux, u.uy, FALSE)){
@@ -1821,6 +1822,7 @@ karemade:
 				for(j=0; j<ROWNO; j++)
 					if(viz_array[j][i]&COULD_SEE)
 						echo_location(i, j);
+			see_monsters();
 		}
 		if(u.utrap && u.utraptype == TT_LAVA) {
 			if(!is_lava(u.ux,u.uy))
