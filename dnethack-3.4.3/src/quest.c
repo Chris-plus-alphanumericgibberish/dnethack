@@ -32,7 +32,8 @@ on_start()
   if(!Qstat(first_start)) {
     qt_pager(QT_FIRSTTIME + (flags.stag ? QT_TURNEDSTAG : 0));
     Qstat(first_start) = TRUE;
-	livelog_write_string("has already received their quest via sticky-note");
+	if(Race_if(PM_ANDROID) && Role_if(PM_ANACHRONONAUT))
+		livelog_write_string("has already received their quest via sticky-note");
   } else if((u.uz0.dnum != u.uz.dnum) || (u.uz0.dlevel < u.uz.dlevel)) {
     if(Qstat(not_ready) <= 2) qt_pager(QT_NEXTTIME + (flags.stag ? QT_TURNEDSTAG : 0));
     else	qt_pager(QT_OTHERTIME + (flags.stag ? QT_TURNEDSTAG : 0));
