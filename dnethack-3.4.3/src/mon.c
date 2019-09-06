@@ -3866,7 +3866,7 @@ register struct monst *mtmp;
 	}
 	
 	//Quest flavor
-	if(Role_if(PM_ANACHRONONAUT) && mtmp->mpeaceful && In_quest(&u.uz) && Is_qstart(&u.uz)){
+	if(Role_if(PM_ANACHRONONAUT) && mtmp->mpeaceful && In_quest(&u.uz) && Is_qstart(&u.uz) && !(quest_status.leader_is_dead)){
 		if(mtmp->data == &mons[PM_TROOPER]){
 			verbalize("**ALERT: trooper %d vital signs terminated**", (int)(mtmp->m_id));
 		} else if(mtmp->data == &mons[PM_MYRKALFAR_WARRIOR]){
