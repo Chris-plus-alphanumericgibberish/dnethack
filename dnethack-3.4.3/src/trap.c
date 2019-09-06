@@ -3788,7 +3788,8 @@ int cnt;
 struct trap *ttmp;
 {
 	struct obj *otmp = mksobj(otyp, TRUE, FALSE);
-	set_obj_quan(otmp, cnt);
+	if(cnt != otmp->quan)
+		set_obj_quan(otmp, cnt);
 	if (ttmp->ttyp == DART_TRAP || ttmp->ttyp == ARROW_TRAP){
 		set_material(otmp, ttmp->launch_mat);
 		otmp->opoisoned = ttmp->launch_pois;
