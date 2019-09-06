@@ -2093,10 +2093,15 @@ int spellnum;
 	case TIME_DUPLICATE:{
 		struct monst *tmpm;
 		if(!mtmp) goto psibolt;
-		tmpm = makemon(mtmp->data, mtmp->mux, mtmp->muy, MM_ADJACENTOK|MM_NOCOUNTBIRTH|NO_MINVENT);
-		tmpm->mvanishes = d(1,4)+1;
-		tmpm->mclone = 1;
-		dmg = 0;
+		if(clear_path(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy))
+			tmpm = makemon(mtmp->data, mtmp->mux, mtmp->muy, MM_ADJACENTOK|MM_NOCOUNTBIRTH|NO_MINVENT);
+		else
+			tmpm = makemon(mtmp->data, mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH|NO_MINVENT);
+		if(tmpm){
+			tmpm->mvanishes = d(1,4)+1;
+			tmpm->mclone = 1;
+			dmg = 0;
+		} else goto psibolt;
 	}break;
 	case NAIL_TO_THE_SKY:{
 		HLevitation &= ~I_SPECIAL;
@@ -2128,8 +2133,12 @@ int spellnum;
        struct monst *mtmp2;
 	   if(!mtmp) goto psibolt;
 	   if(is_alienist(mtmp->data)) goto summon_alien;
-	   mtmp2 = mk_roamer(&mons[PM_ANGEL],
-               sgn(mtmp->data->maligntyp), mtmp->mux, mtmp->muy, FALSE);
+	   if(clear_path(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy))
+		   mtmp2 = mk_roamer(&mons[PM_ANGEL],
+	               sgn(mtmp->data->maligntyp), mtmp->mux, mtmp->muy, FALSE);
+		else
+		   mtmp2 = mk_roamer(&mons[PM_ANGEL],
+				   sgn(mtmp->data->maligntyp), mtmp->mx, mtmp->my, FALSE);
        if (mtmp2) {
            if (canspotmon(mtmp2))
                pline("%s %s!",
@@ -2139,7 +2148,7 @@ int spellnum;
            else
                You("sense the arrival of %s.",
                        an(Hallucination ? rndmonnam() : "hostile angel"));
-       }
+       } else goto psibolt;
        dmg = 0;
 	   stop_occupation();
        break;
@@ -2161,7 +2170,10 @@ summon_alien:
 									&mons[PM_UVUUDAUM]};
 	   if(!mtmp) goto psibolt;
 	   do {
+		if(clear_path(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy))
 	       mtmp2 = makemon(aliens[rn2(SIZE(aliens))], mtmp->mux, mtmp->muy, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+		else
+	       mtmp2 = makemon(aliens[rn2(SIZE(aliens))], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 	   } while (!mtmp2 && tries++ < 10);
        if (mtmp2) {
            if (canspotmon(mtmp2))
@@ -2170,7 +2182,7 @@ summon_alien:
            else
                You("sense the arrival of %s.",
                        an(Hallucination ? rndmonnam() : "alien"));
-       }
+       } else goto psibolt;
        dmg = 0;
 	   stop_occupation();
        break;
