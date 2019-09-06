@@ -2254,7 +2254,7 @@ summon_alien:
 	if(is_drow(mdat)){
 		j = 0;
 		do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
-		while(!is_spider(pm) && j++ < 30);
+		while(pm && !is_spider(pm) && j++ < 30);
 		let = (pm ? S_SPIDER : S_SNAKE);
 	} else{
 		pm = mkclass(S_ANT,G_NOHELL|G_HELL);
@@ -2267,12 +2267,10 @@ summon_alien:
 	    if (!enexto(&bypos, mtmp->mux, mtmp->muy, mtmp->data)) break;
 		if(is_drow(mdat)){
 			j = 0;
-			do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
-			while(!is_spider(pm) && j++ < 30);
-			let = (pm ? S_SPIDER : S_SNAKE);
+			do pm = mkclass(let, G_NOHELL|G_HELL);
+			while(pm && !is_spider(pm) && pm->mlet != S_SNAKE && j++ < 30);
 		} else{
-			pm = mkclass(S_ANT,G_NOHELL|G_HELL);
-			let = (pm ? S_ANT : S_SNAKE);
+			pm = mkclass(let,G_NOHELL|G_HELL);
 		}
 	    if (pm != 0 && (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
 			success = TRUE;
@@ -4898,7 +4896,7 @@ uspsibolt:
 	){ /*summoning is determined by your actual race*/\
 		j = 0;
 		do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
-		while(!is_spider(pm) && j++ < 30);
+		while(pm && !is_spider(pm) && j++ < 30);
 		let = (pm ? S_SPIDER : S_SNAKE);
 	} else {
 		pm = mkclass(S_ANT,G_NOHELL|G_HELL);
@@ -4916,12 +4914,10 @@ uspsibolt:
 			(!yours && is_drow((mattk->data)) )
 		){ /*summoning is determined by your actual race*/\
 			j = 0;
-			do pm = mkclass(S_SPIDER, G_NOHELL|G_HELL);
-			while(!is_spider(pm) && j++ < 30);
-			let = (pm ? S_SPIDER : S_SNAKE);
+			do pm = mkclass(let, G_NOHELL|G_HELL);
+			while(pm && !is_spider(pm) && pm->mlet != S_SNAKE && j++ < 30);
 		} else {
-			pm = mkclass(S_ANT,G_NOHELL|G_HELL);
-			let = (pm ? S_ANT : S_SNAKE);
+			pm = mkclass(let,G_NOHELL|G_HELL);
 		}
 	    if (pm && (mtmp2 = makemon(pm, bypos.x, bypos.y, NO_MM_FLAGS)) != 0) {
 		success = TRUE;
