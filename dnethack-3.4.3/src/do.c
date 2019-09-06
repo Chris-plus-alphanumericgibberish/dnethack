@@ -1850,6 +1850,13 @@ static const int shades[] =
 	PM_SHADE,
 	PM_SHADE,
 	PM_SHADE,
+	PM_SHADE,
+	PM_SHADE,
+	
+	PM_SHADE,
+	PM_SHADE,
+	PM_SHADE,
+	PM_SHADE,
 	PM_PHANTASM
 };
 /* Revive the corpse as a mold via a timeout. */
