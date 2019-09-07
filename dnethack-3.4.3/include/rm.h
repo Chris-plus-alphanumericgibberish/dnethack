@@ -516,7 +516,7 @@ struct levelflags {
 	Bitfield(has_armory, 1);
 	Bitfield(has_barracks, 1);
 	Bitfield(has_temple, 1);
-
+	/*11*/
 	Bitfield(has_swamp, 1);
 	Bitfield(has_island, 1);
 	Bitfield(has_river, 1);
@@ -527,22 +527,24 @@ struct levelflags {
 	Bitfield(shortsighted,1);	/* monsters are shortsighted */
 	Bitfield(graveyard,1);		/* has_morgue, but remains set */
 	Bitfield(is_maze_lev,1);
-
+	/*21*/
 	Bitfield(is_cavernous_lev,1);
 	Bitfield(arboreal, 1);		/* Trees replace rock */
 	Bitfield(lethe, 1);			/* All water on level causes amnesia */
-	
+	/*24*/
 	/* Not currently used */
 	Bitfield(slime, 1);			/* corpses on level become slimes */
 	Bitfield(fungi, 1);			/* corpses on level become fungi */
 	Bitfield(dun, 1);			/* level is the dun savana */
 	Bitfield(necro, 1);			/* corpses on level rise as undead */
 	/* End not currently used */
+	/*28*/
 	
 	Bitfield(cave, 1);			/* level is a cave */
 	Bitfield(outside, 1);			/* level is outside */
 	Bitfield(has_minor_spire, 1);	/* has minor spire (spawns only normal kamerel) */
 	Bitfield(has_kamerel_towers, 1);		/* has kamerel tows (spawns normal kamerel) */
+	/*32*/
 };
 
 typedef struct

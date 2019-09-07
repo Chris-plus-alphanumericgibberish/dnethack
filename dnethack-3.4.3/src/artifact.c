@@ -1613,6 +1613,7 @@ struct monst *mtmp;
 	    return FALSE;
 	
 	if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit) return !((mtmp == &youmonst) ? Antimagic : resists_magm(mtmp));
+	//HMS's to-hit bonus always applies in one-hander mode
 	
 	yours = (mtmp == &youmonst);
 	if(yours) ptr = youracedata;
