@@ -4140,11 +4140,6 @@ boolean atme;
 	int dam = 0;
 	int rad = 0;
 	
-	if(spell > MAXSPELL || (!spell && spelltyp > MAXSPELL)){
-		if(spell) return wordeffects(spell);
-		else if(spelltyp) return wordeffects(spell);
-	}
-
 	if(!spelltyp){
 		/*
 		 * Spell casting no longer affects knowledge of the spell. A
