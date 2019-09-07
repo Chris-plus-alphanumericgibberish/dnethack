@@ -950,8 +950,8 @@ struct monst *mtmp;
 		case 8: case 10:
 			if (!rn2(3)) return WAN_CREATE_MONSTER;
 			/* else FALLTHRU */
-		case 2: return SCR_CREATE_MONSTER;
-		case 3: return POT_HEALING;
+		case 2: return POT_HEALING;
+		case 3: 
 		case 4: return POT_EXTRA_HEALING;
 		case 5: return (mtmp->data != &mons[PM_PESTILENCE]) ?
 				POT_FULL_HEALING : POT_SICKNESS;
