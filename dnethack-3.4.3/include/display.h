@@ -214,7 +214,7 @@
  * given.
  */
 #define what_obj(obj)	(Hallucination ? random_object()  : obj)
-#define what_mon(mon)	(Hallucination ? random_monster() : mon)
+#define what_mon(mon, mtmp)	((Hallucination || ((mtmp) && u.usanity < (mtmp)->m_san_level)) ? random_monster() : mon)
 #define what_trap(trp)	(Hallucination ? random_trap()	  : trp)
 
 /*
@@ -341,12 +341,12 @@
 #define GLYPH_INVISIBLE GLYPH_INVIS_OFF
 
 #define warning_to_glyph(mwarnlev) ((mwarnlev)+GLYPH_WARNING_OFF)
-#define mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_MON_OFF)
-#define detected_mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_DETECT_OFF)
-#define ridden_mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_RIDDEN_OFF)
-#define pet_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_PET_OFF)
-#define peace_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_PEACE_OFF)
-#define zombie_to_glyph(mon) ((int) what_mon(monsndx((mon)->data))+GLYPH_ZOMBIE_OFF)
+#define mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data), mon)+GLYPH_MON_OFF)
+#define detected_mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data), mon)+GLYPH_DETECT_OFF)
+#define ridden_mon_to_glyph(mon) ((int) what_mon(monsndx((mon)->data), mon)+GLYPH_RIDDEN_OFF)
+#define pet_to_glyph(mon) ((int) what_mon(monsndx((mon)->data), mon)+GLYPH_PET_OFF)
+#define peace_to_glyph(mon) ((int) what_mon(monsndx((mon)->data), mon)+GLYPH_PEACE_OFF)
+#define zombie_to_glyph(mon) ((int) what_mon(monsndx((mon)->data), mon)+GLYPH_ZOMBIE_OFF)
 
 /* This has the unfortunate side effect of needing a global variable	*/
 /* to store a result. 'otg_temp' is defined and declared in decl.{ch}.	*/

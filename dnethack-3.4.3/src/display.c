@@ -428,7 +428,7 @@ display_monster(x, y, mon, sightflags, worm_tail)
 	    }
 
 	    case M_AP_MONSTER:
-		show_glyph(x,y, monnum_to_glyph(what_mon((int)mon->mappearance)));
+		show_glyph(x,y, monnum_to_glyph(what_mon((int)mon->mappearance, mon)));
 		break;
 	}
 	
@@ -461,14 +461,14 @@ display_monster(x, y, mon, sightflags, worm_tail)
 	 */
 	} else if (sightflags == DETECTED) {
 	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
-			detected_monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL)):
-			detected_monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
+			detected_monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL, mon)):
+			detected_monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL, mon));
 	    else
 		num = detected_mon_to_glyph(mon);
 	} else {
 	    if (worm_tail) num = mon->data == &mons[PM_HUNTING_HORROR] ?
-			monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL)):
-			monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL));
+			monnum_to_glyph(what_mon(PM_HUNTING_HORROR_TAIL, mon)):
+			monnum_to_glyph(what_mon(PM_LONG_WORM_TAIL, mon));
 	    else
 		num = mon_to_glyph(mon);
 	}
@@ -1683,7 +1683,7 @@ swallow_to_glyph(mnum, loc)
 	impossible("swallow_to_glyph: bad swallow location");
 	loc = S_sw_br;
     }
-    return ((int) (what_mon(mnum)<<3) | (loc - S_sw_tl)) + GLYPH_SWALLOW_OFF;
+    return ((int) (what_mon(mnum, u.ustuck)<<3) | (loc - S_sw_tl)) + GLYPH_SWALLOW_OFF;
 }
 
 

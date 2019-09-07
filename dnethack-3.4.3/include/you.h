@@ -526,6 +526,8 @@ struct you {
 	int 	ustdy;		/* to record extra damage to be dealt due to having been studied */
 	int 	uencouraged;/* to record the buff from tame encouragement songs */
 	int		uentangled; /* to record the otyp of an item entangling you */
+	int 	usanity;	/* to record level of sanity */
+	int 	uinsight;	/* to record level of insight */
 	uchar 	wimage;		/* to record if you have the image of a Weeping Angel in your mind */
 	int 	umorgul;	/* to record the number of morgul wounds */
 	int uinvault;

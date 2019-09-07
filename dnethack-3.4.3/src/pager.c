@@ -121,6 +121,8 @@ lookat(x, y, buf, monbuf, shapebuff)
     struct permonst *pm = (struct permonst *) 0;
     int glyph;
 
+	int do_halu = Hallucination;
+	
     buf[0] = monbuf[0] = shapebuff[0] = 0;
     glyph = glyph_at(x,y);
     if (u.ux == x && u.uy == y && senseself()) {
@@ -182,9 +184,10 @@ lookat(x, y, buf, monbuf, shapebuff)
 	bhitpos.x = x;
 	bhitpos.y = y;
 	mtmp = m_at(x,y);
+	do_halu = Hallucination || (mtmp && u.usanity < mtmp->m_san_level);
 	if (mtmp != (struct monst *) 0) {
 	    char *name, monnambuf[BUFSZ];
-	    boolean accurate = !Hallucination;
+	    boolean accurate = !do_halu;
 
 	    if (mtmp->data == &mons[PM_COYOTE] && accurate)
 		name = coyotename(mtmp, monnambuf);
@@ -322,7 +325,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 		    }
 		    if (MATCH_WARN_OF_MON(mtmp)) {
 		    	char wbuf[BUFSZ];
-			if (Hallucination){
+			if (do_halu){
 				Strcat(monbuf, "paranoid delusion");
 				if (ways_seen-- > 1) Strcat(monbuf, ", ");
 			} else {
@@ -377,7 +380,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 			}
 		}
 	    }
-		if(!Hallucination){
+		if(!do_halu){
 			if(mtmp->data->msize == MZ_TINY) Sprintf(shapebuff, "a tiny");
 			else if(mtmp->data->msize == MZ_SMALL) Sprintf(shapebuff, "a small");
 			else if(mtmp->data->msize == MZ_HUMAN) Sprintf(shapebuff, "a human-sized");
@@ -464,7 +467,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 	break;
     }
 
-    return ((mtmp && !Hallucination) ? mtmp : (struct monst *) 0);
+    return ((mtmp && !do_halu) ? mtmp : (struct monst *) 0);
 }
 
 /*
@@ -1434,6 +1437,12 @@ generate_list_of_resistances(struct monst * mtmp, char * temp_buf, int resists)
 			mr_flags |= MR_SLEEP | MR_POISON | MR_DRAIN;
 			if(mtmp->m_lev > 10) mr_flags |= MR_COLD;
 		}
+		if(mtmp->mfaction == PSEUDONATURAL){
+			mr_flags |= MR_POISON;
+		}
+		if(mtmp->mfaction == TOMB_HERD){
+			mr_flags |= MR_FIRE|MR_COLD|MR_SLEEP|MR_STONE|MR_DRAIN|MR_POISON|MR_SICK|MR_MAGIC;
+		}
 	}
 	if (resists == 0)
 		mr_flags = mtmp->data->mconveys;
@@ -2071,6 +2080,8 @@ get_description_of_monster_type(struct monst * mtmp, char * description)
 	else if (mtmp->mfaction == FRACTURED)	Strcat(name, " witness");
 	else if (mtmp->mfaction == ILLUMINATED)	Strcat(name, " shining one");
 	else if (mtmp->mfaction == VAMPIRIC)	Strcat(name, " vampire");
+	else if (mtmp->mfaction == PSEUDONATURAL)	Strcat(name, " pseudonatural");
+	else if (mtmp->mfaction == TOMB_HERD)	Strcat(name, " tomb herd");
 
 	temp_buf[0] = '\0';
 	if (iflags.pokedex) {

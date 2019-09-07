@@ -6931,6 +6931,8 @@ register int	mmflags;
 	mtmp->mxlth = xlth;
 	mtmp->mnum = mndx;
 	mtmp->m_lev = adj_lev(ptr);
+	float sanlev = ((float)rand()/(float)(RAND_MAX)) * ((float)rand()/(float)(RAND_MAX));
+	mtmp->m_san_level = max(1, (int)(sanlev*100));
 	if(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH])
 		mtmp->m_lev += u.chokhmah;
 	if (is_golem(ptr)) {
@@ -7096,6 +7098,9 @@ register int	mmflags;
 			undeadfaction = FRACTURED;
 			unsethouse = TRUE;
 		}
+	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp) && u.uinsight > rn2(400)){
+		undeadfaction = PSEUDONATURAL;
+		unsethouse = TRUE;
 	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp)){
 		if(In_mines(&u.uz)){
 			if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && rn2(10) <= 5){
@@ -8706,6 +8711,8 @@ struct monst *mtmp, *victim;
 					otmp->wrathdata = PM_SKELETON<<2;
 				} else if(victim->mfaction == VAMPIRIC){
 					otmp->wrathdata = PM_VAMPIRE<<2;
+				} else if(victim->mfaction == PSEUDONATURAL){
+					otmp->wrathdata = PM_MIND_FLAYER<<2;
 				} else {
 					otmp->wrathdata = monsndx(victim->data)<<2;
 				}
@@ -8723,6 +8730,8 @@ struct monst *mtmp, *victim;
 					otmp->wrathdata = PM_SKELETON<<2;
 				} else if(victim->mfaction == VAMPIRIC){
 					otmp->wrathdata = PM_VAMPIRE<<2;
+				} else if(victim->mfaction == PSEUDONATURAL){
+					otmp->wrathdata = PM_MIND_FLAYER<<2;
 				} else {
 					otmp->wrathdata = monsndx(victim->data)<<2;
 				}

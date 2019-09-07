@@ -1896,6 +1896,8 @@ u_init()
 	    u.uenmax += rnd(urace.enadv.inrnd);
 	u.uen = u.uenmax;
 	u.uspellprot = 0;
+	u.usanity = 100;
+	u.uinsight = 0;
 	u.sowdisc = 0;
 	u.voidChime = 0;
 	adjabil(0,1);

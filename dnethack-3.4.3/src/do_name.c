@@ -823,7 +823,7 @@ boolean called;
 	if (article == ARTICLE_YOUR && !mtmp->mtame)
 	    article = ARTICLE_THE;
 
-	do_hallu = Hallucination && !(suppress & SUPPRESS_HALLUCINATION);
+	do_hallu = (Hallucination || (mtmp && u.usanity < mtmp->m_san_level)) && !(suppress & SUPPRESS_HALLUCINATION);
 	do_invis = mtmp->minvis && !(suppress & SUPPRESS_INVISIBLE);
 	do_it = !canspotmon(mtmp) && 
 	    article != ARTICLE_YOUR &&
@@ -920,6 +920,8 @@ boolean called;
 		else if(mtmp->mfaction == FRACTURED) Strcat(buf, ", Witness of the Fracture");
 		else if(mtmp->mfaction == ILLUMINATED) Strcat(buf, "the Illuminated");
 		else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, ", vampire");
+		else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, "the Pseudonatural");
+		else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, "of the Herd");
 	    return buf;
 	}
 
@@ -996,6 +998,8 @@ boolean called;
 				else if(mtmp->mfaction == FRACTURED) Strcat(buf, ", Witness of the Fracture");
 				else if(mtmp->mfaction == ILLUMINATED) Strcat(buf, "the Illuminated");
 				else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, ", vampire");
+				else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, "the Pseudonatural");
+				else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, "of the Herd");
 			} else {
 				if(mtmp->mfaction == ZOMBIFIED) Strcat(buf, " zombie");
 				else if(mtmp->mfaction == SKELIFIED) Strcat(buf, " skeleton");
@@ -1003,6 +1007,8 @@ boolean called;
 				else if(mtmp->mfaction == FRACTURED) Strcat(buf, " witness");
 				else if(mtmp->mfaction == ILLUMINATED) Strcat(buf, " shining one");
 				else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, " vampire");
+				else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, " pseudonatural");
+				else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, " herd");
 			}
 			Sprintf(eos(buf), " called %s", name);
 			
@@ -1035,6 +1041,8 @@ boolean called;
 		else if(mtmp->mfaction == FRACTURED) Strcat(buf, " witness");
 		else if(mtmp->mfaction == ILLUMINATED) Strcat(buf, " shining one");
 		else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, " vampire");
+		else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, " pseudonatural");
+		else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, " herd");
 	    name_at_start = FALSE;
 	} else {
 	    name_at_start = (boolean)type_is_pname(mdat);
@@ -1077,6 +1085,8 @@ boolean called;
 			else if(mtmp->mfaction == FRACTURED) Strcat(buf, ", Witness of the Fracture");
 			else if(mtmp->mfaction == ILLUMINATED) Strcat(buf, "the Illuminated");
 			else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, ", vampire");
+			else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, "the Pseudonatural");
+			else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, "of the Herd");
 		} else {
 			if(mtmp->mfaction == ZOMBIFIED) Strcat(buf, " zombie");
 			else if(mtmp->mfaction == SKELIFIED) Strcat(buf, " skeleton");
@@ -1084,6 +1094,8 @@ boolean called;
 			else if(mtmp->mfaction == FRACTURED) Strcat(buf, " witness");
 			else if(mtmp->mfaction == ILLUMINATED) Strcat(buf, " shining one");
 			else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, " vampire");
+			else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, " pseudonatural");
+			else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, " herd");
 		}
 	}
 
@@ -1381,7 +1393,7 @@ char *outbuf;
     /* high priest(ess)'s identity is concealed on the Astral Plane,
        unless you're adjacent (overridden for hallucination which does
        its own obfuscation) */
-    if ( (mon->data == &mons[PM_HIGH_PRIEST] || mon->data == &mons[PM_ELDER_PRIEST]) && !Hallucination &&
+    if ( (mon->data == &mons[PM_HIGH_PRIEST] || mon->data == &mons[PM_ELDER_PRIEST]) && !(Hallucination || (mon && mon->m_san_level < u.usanity)) &&
 	    Is_astralevel(&u.uz) && distu(mon->mx, mon->my) > 2) {
 	Strcpy(outbuf, article == ARTICLE_THE ? "the " : "");
 	Strcat(outbuf, mon->female ? "high priestess" : "high priest");

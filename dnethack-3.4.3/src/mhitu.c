@@ -359,6 +359,32 @@ struct attack *alt_attk_buf;
 			attk->damd = max(4, max(mtmp->data->msize * 2, attk->damd));
 		}
 	}
+	else if (mtmp->mfaction == PSEUDONATURAL){
+		//Note Pseudo types: tentacles, shadow/spiders, others?
+		if (attk->aatyp == AT_BITE
+			|| (!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+			|| (!derundspec && indx == NATTK - 1)
+		){
+			derundspec = TRUE;
+			attk->aatyp = AT_TENT;
+			attk->adtyp = AD_DRIN;
+			attk->damd = 4;
+			attk->damn = 1;
+		}
+		if(attk->aatyp == AT_CLAW && (mtmp->m_id+indx)%4 == 0){
+			attk->aatyp = AT_TENT;
+			if(attk->damn < 3)
+				attk->damd += 2;
+			else attk->damn++;
+		}
+	}
+	else if (mtmp->mfaction == TOMB_HERD){
+		if(attk->aatyp || attk->adtyp || attk->damn || attk->damd){
+			if(attk->damn < 3)
+				attk->damd += 2;
+			else attk->damn++;
+		}
+	}
 	else if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
 		if (attk->aatyp == AT_SPIT
 			|| attk->aatyp == AT_BREA
@@ -408,7 +434,7 @@ struct attack *alt_attk_buf;
 			}
 		}
 	}
-	if (mtmp->mfaction == FRACTURED){
+	else if (mtmp->mfaction == FRACTURED){
 		// no gazes allowed
 		if (attk->aatyp == AT_GAZE)
 		{
@@ -8149,12 +8175,12 @@ int dmg;
 				} //else
 				You_feel("the tentacles drill through your unprotected %s and into your soul!",body_part(BODY_FLESH));
 				if (!Drain_resistance) {
-					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
-					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
-					losexp("soul-shreding tentacles",FALSE,FALSE,FALSE);
+					losexp("soul-shredding tentacles",FALSE,FALSE,FALSE);
+					losexp("soul-shredding tentacles",FALSE,FALSE,FALSE);
+					losexp("soul-shredding tentacles",FALSE,FALSE,FALSE);
 					i = d(1,4);
 					while(i-- > 0){
-						losexp("soul-shreding tentacles",FALSE,FALSE,TRUE);
+						losexp("soul-shredding tentacles",FALSE,FALSE,TRUE);
 						exercise(A_WIS, FALSE);
 						exercise(A_WIS, FALSE);
 						exercise(A_WIS, FALSE);

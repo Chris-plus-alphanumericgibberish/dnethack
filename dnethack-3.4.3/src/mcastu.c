@@ -28,6 +28,8 @@ cursetxt(mtmp, undirected)
 struct monst *mtmp;
 boolean undirected;
 {
+	if(mtmp->data == &mons[PM_HOUND_OF_TINDALOS])
+		return;
 	if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my)) {
 	    const char *point_msg;  /* spellcasting monsters are impolite */
 
@@ -567,6 +569,9 @@ unsigned int type;
 	
 	//100% favored spells
 	switch(monsndx(mtmp->data)) {
+	case PM_HOUND_OF_TINDALOS:
+		return OPEN_WOUNDS;
+	break;
 	case PM_DWARF_CLERIC:
 	case PM_DWARF_QUEEN:
 		switch (rnd(4)) {
@@ -1233,6 +1238,8 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	if (!foundyou && thinks_it_foundyou &&
 		!is_undirected_spell(spellnum) &&
 		!is_aoe_spell(spellnum)) {
+		if(mtmp->data == &mons[PM_HOUND_OF_TINDALOS])
+			return 0;
 	    pline("%s casts a spell at %s!",
 		canseemon(mtmp) ? Monnam(mtmp) : "Something",
 		levl[mtmp->mux][mtmp->muy].typ == WATER
@@ -1267,16 +1274,18 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			return(0);
 		}
 	}
-	if (canspotmon(mtmp) || !is_undirected_spell(spellnum)) {
-	    pline("%s casts a spell%s!",
-		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
-		  is_undirected_spell(spellnum) ? "" :
-		  (Invisible && !mon_resistance(mtmp,SEE_INVIS) && 
-		   (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
-		  " at a spot near you" :
-		  (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
-		  " at your displaced image" :
-		  " at you");
+	if(mtmp->data != &mons[PM_HOUND_OF_TINDALOS]){
+		if (canspotmon(mtmp) || !is_undirected_spell(spellnum)) {
+		    pline("%s casts a spell%s!",
+			  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
+			  is_undirected_spell(spellnum) ? "" :
+			  (Invisible && !mon_resistance(mtmp,SEE_INVIS) && 
+			   (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
+			  " at a spot near you" :
+			  (Displaced && (mtmp->mux != u.ux || mtmp->muy != u.uy)) ?
+			  " at your displaced image" :
+			  " at you");
+		}
 	}
 
 /*
@@ -3292,6 +3301,8 @@ castmm(mtmp, mdef, mattk)
 
 	/* monster unable to cast spells? */
 	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns_mon(mtmp)) || !ml) {
+		if(mtmp->data == &mons[PM_HOUND_OF_TINDALOS])
+			return 0;
 	    if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my))
 	    {
                 char buf[BUFSZ];
@@ -3339,16 +3350,18 @@ castmm(mtmp, mdef, mattk)
 			return(0);
 		}
 	}
-	if (cansee(mtmp->mx, mtmp->my) ||
-	    canseemon(mtmp) ||
-	    (!is_undirected_spell(spellnum) &&
-	     (cansee(mdef->mx, mdef->my) || canseemon(mdef)))) {
-            char buf[BUFSZ];
-	    Sprintf(buf, " at ");
-	    Strcat(buf, mon_nam(mdef));
-	    pline("%s casts a spell%s!",
-		  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
-		  is_undirected_spell(spellnum) ? "" : buf);
+	if(mtmp->data != &mons[PM_HOUND_OF_TINDALOS]){ //skip messages
+		if (cansee(mtmp->mx, mtmp->my) ||
+		    canseemon(mtmp) ||
+		    (!is_undirected_spell(spellnum) &&
+		     (cansee(mdef->mx, mdef->my) || canseemon(mdef)))) {
+	            char buf[BUFSZ];
+		    Sprintf(buf, " at ");
+		    Strcat(buf, mon_nam(mdef));
+		    pline("%s casts a spell%s!",
+			  canspotmon(mtmp) ? Monnam(mtmp) : "Something",
+			  is_undirected_spell(spellnum) ? "" : buf);
+		}
 	}
 
 	{

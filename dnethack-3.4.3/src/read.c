@@ -3120,6 +3120,10 @@ int gen_restrict;
 					undeadtype = ILLUMINATED;
 				else if (!strcmpi(p, "vampiric"))
 					undeadtype = VAMPIRIC;
+				else if (!strcmpi(p, "pseudonatural"))
+					undeadtype = PSEUDONATURAL;
+				else if (!strcmpi(p, "tomb herd"))
+					undeadtype = TOMB_HERD;
 				else
 				{
 					// no undead suffix was used, undo the split
@@ -3133,6 +3137,8 @@ int gen_restrict;
 		case CRYSTALFIED:
 		case FRACTURED:
 		case ILLUMINATED:
+		case PSEUDONATURAL:
+		case TOMB_HERD:
 			undeadtype = specify_derivation;
 			break;
 		}
@@ -3229,6 +3235,8 @@ createmon:
 				undeadtype == VAMPIRIC ? can_undead_mon(mtmp) :
 				undeadtype == CRYSTALFIED ? TRUE :
 				undeadtype == ILLUMINATED ? TRUE :
+				undeadtype == PSEUDONATURAL ? TRUE :
+				undeadtype == TOMB_HERD ? TRUE :
 				undeadtype == FRACTURED ? is_kamerel(mtmp->data) : 0
 				))
 			{

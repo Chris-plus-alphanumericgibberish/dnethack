@@ -652,6 +652,7 @@ moveloop()
 	int healing_penalty = 0;
 	static int oldCon, oldWisBon;
     int hpDiff;
+	static int oldsanity = 100;
 
     flags.moonphase = phase_of_the_moon();
     if(flags.moonphase == FULL_MOON) {
@@ -1281,6 +1282,17 @@ karemade:
 						if(tries >= 0)
 							makemon(ford_montype(-1), x, y, MM_ADJACENTOK);
 					}
+				} else if((mvitals[PM_HOUND_OF_TINDALOS].mvflags & G_GONE) &&u.uinsight > rn2(40*300)){
+					int x, y;
+					for(x = 1; x < COLNO; x++)
+						for(y = 0; y < ROWNO; y++){
+							if(IS_CORNER(levl[x][y].typ) && couldsee(x, y) && rn2(45) < u.ulevel){
+								flags.cth_attk=TRUE;//state machine stuff.
+								create_gas_cloud(x, y, 4, 30);
+								flags.cth_attk=FALSE;
+								makemon(&mons[PM_HOUND_OF_TINDALOS], x, y, 0);
+							}
+						}
 				} else {
 					if (u.uevent.invoked && xupstair && rn2(10)) {
 						(void) makemon((struct permonst *)0, xupstair, yupstair, MM_ADJACENTOK);
@@ -1926,10 +1938,11 @@ karemade:
 			see_objects();
 			see_traps();
 			if (u.uswallow) swallowed(0);
-		} else if (Unblind_telepat || goodsmeller(youracedata)) {
-			see_monsters();
-	    } else if (Warning || Warn_of_mon)
+		} else if (Unblind_telepat || goodsmeller(youracedata) || Warning || Warn_of_mon || u.usanity < 100 || oldsanity < 100) {
 	     	see_monsters();
+	    }
+		
+		oldsanity = u.usanity;
 
 		switch (((u_healing_penalty() - healing_penalty) > 0) - ((u_healing_penalty() - healing_penalty) < 0))
 		{
@@ -1973,10 +1986,11 @@ karemade:
 			see_objects();
 			see_traps();
 			if (u.uswallow) swallowed(0);
-		} else if (Unblind_telepat || goodsmeller(youracedata)) {
-			see_monsters();
-	    } else if (Warning || Warn_of_mon)
+		} else if (Unblind_telepat || goodsmeller(youracedata) || Warning || Warn_of_mon || u.usanity < 100 || oldsanity < 100) {
 	     	see_monsters();
+	    }
+		
+		oldsanity = u.usanity;
 
 		if (!oldLightBlind ^ !LightBlind) {  /* one or the other but not both */
 			see_monsters();

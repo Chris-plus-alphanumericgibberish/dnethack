@@ -72,6 +72,7 @@ struct monst {
 	int mspec_used;		/* monster's special ability attack timeout */
 	int mstdy;		/* to record extra damage to be delt due to having been studied */
 	int ustdym;		/* to record extra damage to be delt by you due to having been studied by you*/
+	int m_san_level;/* to record sanity level at which this monster will be obscured */
 	
 	short mstr, mdex, mcon, mint, mwis, mcha; /* Monster ability scores */
 
@@ -191,19 +192,21 @@ struct monst {
 	short mxlth;		/* length of following data */
 	int meating;		/* monster is eating timeout */
 	int mfaction;		/* faction to which monster belongs */
-#define	ZOMBIFIED	1	/* zombie 'faction' */
-#define	SKELIFIED	2	/* skeleton 'faction' */
-#define	CRYSTALFIED	3	/* crystal dead 'faction' */
-#define	FRACTURED	4	/* witness of the fracture 'faction' */
-#define	VAMPIRIC	5	/* vampirified 'faction' */
-#define	ILLUMINATED	6	/* illuminated 'faction' */
 /*Note: first drow house is 8*/
 #define	FACTION_PADDING	1000
+#define	ZOMBIFIED	FACTION_PADDING+1	/* zombie 'faction' */
+#define	SKELIFIED	FACTION_PADDING+2	/* skeleton 'faction' */
+#define	CRYSTALFIED	FACTION_PADDING+3	/* crystal dead 'faction' */
+#define	FRACTURED	FACTION_PADDING+4	/* witness of the fracture 'faction' */
+#define	VAMPIRIC	FACTION_PADDING+5	/* vampirified 'faction' */
+#define	ILLUMINATED	FACTION_PADDING+6	/* illuminated 'faction' */
+#define	INCUBUS_FACTION	FACTION_PADDING+7	/* male foocubus */
+#define	SUCCUBUS_FACTION	FACTION_PADDING+8	/* female foocubus */
+#define	PSEUDONATURAL	FACTION_PADDING+9	/* tentacled */
+#define	TOMB_HERD	FACTION_PADDING+10	/* possessed statue */
 //define	HALF_DEMON	FACTION_PADDING+1	/* half-demon */
 //define	HALF_DEVIL	FACTION_PADDING+2	/* half-devil */
 //define	HALF_DRAGON	FACTION_PADDING+3	/* half-dragon */
-#define	INCUBUS_FACTION	FACTION_PADDING+4	/* male foocubus */
-#define	SUCCUBUS_FACTION	FACTION_PADDING+5	/* female foocubus */
 //define	LAMASHTU_FACTION	FACTION_PADDING+6	/* Lamashtu's faction */
 	int mvanishes;
 	//hatching situation

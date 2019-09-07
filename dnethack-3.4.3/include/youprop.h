@@ -126,6 +126,7 @@
 /*** Troubles ***/
 /* Pseudo-property */
 #define Punished		(uball)
+#define	Insanity	(100 - u.usanity)
 
 /* Those implemented solely as timeouts (we use just intrinsic) */
 #define HStun			u.uprops[STUNNED].intrinsic

@@ -202,6 +202,8 @@ STATIC_VAR int cham_to_pm[] = {
 			 is_reviver((mon)->data) ||			\
 			 ((mon)->mfaction == ZOMBIFIED) ||			\
 			 ((mon)->mfaction == VAMPIRIC) ||			\
+			 ((mon)->mfaction == PSEUDONATURAL) ||			\
+			 ((mon)->mfaction == TOMB_HERD) ||			\
 			 ((mon)->zombify) ||			\
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
@@ -256,6 +258,9 @@ register struct monst *mtmp;
 		obj = mkcorpstat(STATUE, (struct monst *)0,
 			mdat, x, y, FALSE);
 		set_material(obj, GLASS);
+	} else if(mtmp->mfaction == TOMB_HERD) {
+		obj = mkcorpstat(STATUE, (struct monst *)0,
+			mdat, x, y, FALSE);
 	} else switch(mndx) {
 	    case PM_LICH__THE_FIEND_OF_EARTH:
 			// if(mvitals[PM_GARLAND].died){
@@ -4376,6 +4381,9 @@ boolean was_swallowed;			/* digestion */
 	if (mon->mfaction == CRYSTALFIED)
 		return TRUE;
 
+	if (mon->mfaction == TOMB_HERD)
+		return TRUE;
+
 	if (is_golem(mdat)
 		   || is_mplayer(mdat)
 		   || is_rider(mdat)
@@ -4994,6 +5002,8 @@ xkilled(mtmp, dest)
 				otmp->wrathdata = PM_SKELETON<<2;
 			} else if(mtmp->mfaction == VAMPIRIC){
 				otmp->wrathdata = PM_VAMPIRE<<2;
+			} else if(mtmp->mfaction == PSEUDONATURAL){
+				otmp->wrathdata = PM_MIND_FLAYER<<2;
 			} else {
 				otmp->wrathdata = monsndx(mtmp->data)<<2;
 			}
@@ -5011,6 +5021,8 @@ xkilled(mtmp, dest)
 				otmp->wrathdata = PM_SKELETON<<2;
 			} else if(mtmp->mfaction == VAMPIRIC){
 				otmp->wrathdata = PM_VAMPIRE<<2;
+			} else if(mtmp->mfaction == PSEUDONATURAL){
+				otmp->wrathdata = PM_MIND_FLAYER<<2;
 			} else {
 				otmp->wrathdata = monsndx(mtmp->data)<<2;
 			}

@@ -332,6 +332,8 @@ struct monst *mtmp;
 			mtmp->data->mlet == S_PUDDING ||
 			mtmp->data->mlet == S_UMBER ||
 			mtmp->data->mlet == S_EEL ||
+			mtmp->mfaction == PSEUDONATURAL ||
+			mtmp->mfaction == TOMB_HERD ||
 			mtmp->data == &mons[PM_TRAPPER] ||
 			mtmp->data == &mons[PM_LURKER_ABOVE] ||
 			mtmp->data == &mons[PM_NIGHTGAUNT] ||

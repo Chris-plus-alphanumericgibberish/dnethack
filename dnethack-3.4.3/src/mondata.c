@@ -176,7 +176,7 @@ resists_fire(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_fire(mon) || mon_resistance(mon, FIRE_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance));
+	return (mon->mfaction == TOMB_HERD || species_resists_fire(mon) || mon_resistance(mon, FIRE_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Fire_resistance));
 }
 
 boolean
@@ -187,7 +187,7 @@ resists_cold(mon)
 	
 	return (species_resists_cold(mon) || mon_resistance(mon, COLD_RES) || 
 		(mon->mfaction == VAMPIRIC && mon->m_lev > 10) || 
-		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		mon->mfaction == TOMB_HERD || mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
 		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Cold_resistance));
 }
 
@@ -198,7 +198,7 @@ resists_sleep(mon)
 	if(!mon) return FALSE;
 	
 	return (species_resists_sleep(mon) || mon_resistance(mon, SLEEP_RES) || 
-		mon->mfaction == VAMPIRIC || mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		mon->mfaction == TOMB_HERD || mon->mfaction == VAMPIRIC || mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
 		((mon) == u.usteed && u.sealsActive&SEAL_BERITH && Sleep_resistance) || (mon)->cham == CHAM_DREAM);
 }
 
@@ -227,7 +227,9 @@ resists_poison(mon)
 	if(!mon) return FALSE;
 	
 	return (species_resists_poison(mon) || mon_resistance(mon, POISON_RES) || 
-		mon->mfaction == VAMPIRIC || mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED || 
+		mon->mfaction == PSEUDONATURAL || mon->mfaction == TOMB_HERD || mon->mfaction == VAMPIRIC || 
+		mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || 
+		mon->mfaction == CRYSTALFIED || 
 		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Poison_resistance));
 }
 
@@ -246,7 +248,7 @@ resists_ston(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_ston(mon) || mon_resistance(mon, STONE_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Stone_resistance));
+	return (mon->mfaction == TOMB_HERD || species_resists_ston(mon) || mon_resistance(mon, STONE_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Stone_resistance));
 }
 
 boolean
@@ -255,7 +257,7 @@ resists_drain(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_drain(mon) || mon_resistance(mon, DRAIN_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
+	return (mon->mfaction == TOMB_HERD || species_resists_drain(mon) || mon_resistance(mon, DRAIN_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
 }
 
 boolean
@@ -264,7 +266,7 @@ resists_sickness(mon)
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_sickness(mon) || mon_resistance(mon, SICK_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sick_resistance));
+	return (mon->mfaction == TOMB_HERD || species_resists_sickness(mon) || mon_resistance(mon, SICK_RES) || (mon == u.usteed && u.sealsActive&SEAL_BERITH && Sick_resistance));
 }
 
 boolean
@@ -277,7 +279,7 @@ struct monst *mon;
 	ptr = mon->data;
 
 	return (boolean)(is_undead_mon(mon) || is_demon(ptr) || is_were(ptr) ||
-			 species_resists_drain(mon) || 
+			 mon->mfaction == TOMB_HERD || species_resists_drain(mon) || 
 			 ptr == &mons[PM_DEATH] ||
 			 mon_resistance(mon, DRAIN_RES) ||
 			 (mon == u.usteed && u.sealsActive&SEAL_BERITH && Drain_resistance));
@@ -289,7 +291,7 @@ struct monst *mon;
 {
 	if(!mon) return FALSE;
 	
-	return (species_resists_magic(mon) || mon_resistance(mon, ANTIMAGIC) ||  mon_resistance(mon, NULLMAGIC) ||
+	return (mon->mfaction == TOMB_HERD || species_resists_magic(mon) || mon_resistance(mon, ANTIMAGIC) ||  mon_resistance(mon, NULLMAGIC) ||
 		(mon == u.usteed && u.sealsActive&SEAL_BERITH && Antimagic));
 }
 

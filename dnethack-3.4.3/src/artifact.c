@@ -9620,7 +9620,7 @@ void
 mind_blast_items()
 {
 	struct monst *mtmp, *nmon = (struct monst *)0;
-	struct obj *obj;
+	struct obj *obj, *nobj;
 	struct blast_element *blast_list = 0, *nblast = 0;
 	int whisper = 0;
 	if(u.uinvulnerable)
@@ -9749,6 +9749,23 @@ mind_blast_items()
 		free(nblast);
 	}
 
+	for (obj = fobj; obj; obj = nobj) {
+		nobj = obj->nobj;
+		if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe) && u.uinsight > rn2(40*300)){
+		// if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe)){
+			mtmp = animate_statue(obj, obj->ox, obj->oy, ANIMATE_NORMAL, (int *) 0);
+			if(mtmp){
+				mtmp->mfaction = TOMB_HERD;
+				mtmp->m_lev += 4;
+				mtmp->mhp = max_ints(mtmp->mhp, d(mtmp->m_lev, 8));
+				// mtmp->m_ap_type = M_AP_OBJECT;
+				// mtmp->mappearance = STATUE;
+				// mtmp->m_ap_type = M_AP_MONSTER;
+				// mtmp->mappearance = PM_STONE_GOLEM;
+				newsym(mtmp->mx, mtmp->my);
+			}
+		}
+	}
 }
 
 STATIC_OVL void
@@ -9888,6 +9905,9 @@ struct monst *mon;
 				return 1;
 		} else if(mon->mfaction == VAMPIRIC){
 			if((otmp->wrathdata >> 2) == PM_VAMPIRE)
+				return 1;
+		} else if(mon->mfaction == PSEUDONATURAL){
+			if((otmp->wrathdata >> 2) == PM_MIND_FLAYER)
 				return 1;
 		} else {
 			if(&mons[(otmp->wrathdata >> 2)] == mon->data)
