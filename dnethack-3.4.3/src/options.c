@@ -319,6 +319,8 @@ static struct Comp_Opt
 						MAXOCLASSES, SET_IN_GAME },
 	{ "player_selection", "choose character via dialog or prompts",
 						12, DISP_IN_GAME },
+	{ "pokedex", "default details shown in the pokedex",
+						32, SET_IN_GAME },
 	{ "race",     "your starting race (e.g., Human, Elf)",
 						PL_CSIZ, DISP_IN_GAME },
 #ifdef CONVICT
@@ -2377,6 +2379,11 @@ static NEARDATA const char *burdentype[] = {
 	"strained", "overtaxed", "overloaded"
 };
 
+static NEARDATA const char *pokedexsections[] = {
+	"stats", "generation", "weight", "resists", "conveys",
+	"movement", "thinking", "biology", "mechanics", "race", "vision", "attacks"/*, "summary"*/
+};
+
 static NEARDATA const char *runmodes[] = {
 	"teleport", "run", "walk", "crawl"
 };
@@ -2809,7 +2816,7 @@ boolean setinitial,setfromfile;
 			}
 			end_menu(tmpwin, "Toggle pokedex sections on/off:");
 			if (select_menu(tmpwin, PICK_ONE, &mode_pick) > 0) {
-				iflags.pokedex ^= (1 << mode_pick->item.a_int - 1);
+				iflags.pokedex ^= (1 << (mode_pick->item.a_int - 1));
 			}
 			else
 				done = TRUE;
