@@ -3270,6 +3270,7 @@ scatter_weapons(){
 			//Landed in poly-trap-land, and found a random CoMR on the ground nearby
 			// Every time! What A Coincidence!
 			mongets(mtmp, CLOAK_OF_MAGIC_RESISTANCE);
+			m_dowear(mtmp, TRUE);
 		}
 		// pline("going to %d",nlev);
 		get_level(&flev, nlev);
