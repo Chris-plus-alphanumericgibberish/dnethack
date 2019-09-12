@@ -365,7 +365,7 @@ struct monst *mtmp;
 			mtmp->data == &mons[PM_DARK_YOUNG] ||
 			mtmp->data == &mons[PM_WEEPING_ANGEL] ||
 			mtmp->data == &mons[PM_ANCIENT_OF_ICE] ||
-			mtmp->data == &mons[PM_ANCIENT_OF_DEATH && complete == 6] ||
+			(mtmp->data == &mons[PM_ANCIENT_OF_DEATH] && complete == 6) ||
 			(mtmp->data == &mons[PM_JUIBLEX] && complete == 6) ||
 			(mtmp->data == &mons[PM_MASKED_QUEEN] && complete == 6) ||
 			(mtmp->data == &mons[PM_PALE_NIGHT] && complete == 6) ||
