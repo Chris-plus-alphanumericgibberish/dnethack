@@ -712,7 +712,7 @@ dofire()
 		return throw_obj(uwep, shotlimit, THROW_UWEP);
 	}
 	
-	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && Race_if(PM_ANDROID)){
+	if(uwep && !is_blaster(uwep) && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && Race_if(PM_ANDROID)){
 		/*See below for shotlimit*/
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
