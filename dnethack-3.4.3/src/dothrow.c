@@ -1502,10 +1502,12 @@ int thrown;
 			(void) encumber_msg();
 			if(!obj->owornmask){
 				if((obj->oartifact == ART_WINDRIDER || obj->oartifact == ART_SICKLE_MOON || obj->oartifact == ART_AMHIMITL || is_ammo(obj)) && !uquiver){
-				setuqwep(obj);
+					setuqwep(obj);
 				} else if(!uwep){
 					setuwep(obj);
 					u.twoweap = twoweap;
+				} else if(!uquiver){
+					setuqwep(obj);
 				}
 			}
 			return;
