@@ -683,6 +683,7 @@ struct monst *mon;
 	if(mon->mfaction == ZOMBIFIED) base += 2;
 	if(mon->mfaction == SKELIFIED) base -= 2;
 	if(mon->mfaction == CRYSTALFIED) base -= 6;
+	if(mon->mfaction == CRANIUM_RAT) base -= 4;
 	
 	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_GRACE__UUR)
 		base -= 10;
@@ -736,6 +737,7 @@ struct monst *mon;
 	
 	if(mon->mfaction == ZOMBIFIED) base -= 4;
 	if(mon->mfaction == CRYSTALFIED) base -= 10;
+	if(mon->mfaction == TOMB_HERD) base -= 6;
 	
 	if(mon->mtame){
 		if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();

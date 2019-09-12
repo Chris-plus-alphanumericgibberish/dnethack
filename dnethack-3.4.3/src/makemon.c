@@ -4164,22 +4164,118 @@ register struct monst *mtmp;
 				if(ptr == &mons[PM_THRIAE])
 				(void)mongets(mtmp, (rn2(2) ? FLUTE : HARP));
 			} else if(ptr == &mons[PM_INTONER]){
-				otmp = mksobj(LONG_SWORD, FALSE, FALSE);
-				otmp->spe = 4;
-				otmp->obj_material = DRAGON_HIDE;
-				otmp->oproperties = OPROP_AXIOW;
-				fix_object(otmp);
-				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(GRAY_DRAGON_SCALE_MAIL, FALSE, FALSE);
-				otmp->spe = 4;
-				otmp->obj_material = GLASS;
-				otmp->oproperties = OPROP_AXIO;
-				fix_object(otmp);
-				(void) mpickobj(mtmp, otmp);
-				otmp = mksobj(LONG_GLOVES, FALSE, FALSE);
-				otmp->spe = 4;
-				otmp->oproperties = OPROP_AXIO;
-				(void) mpickobj(mtmp, otmp);
+				switch(rn2(6)){
+					case 0:
+						otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = DRAGON_HIDE;
+						otmp->oproperties = OPROP_AXIOW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(GRAY_DRAGON_SCALE_MAIL, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = GLASS;
+						otmp->oproperties = OPROP_AXIO;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LONG_GLOVES, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->oproperties = OPROP_AXIO;
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 1:
+						otmp = mksobj(CHAKRAM, FALSE, FALSE);
+						otmp->objsize = MZ_HUGE;
+						otmp->spe = 4;
+						otmp->obj_material = METAL;
+						otmp->oproperties = OPROP_AXIOW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(WHITE_DRAGON_SCALE_MAIL, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = GLASS;
+						otmp->oproperties = OPROP_AXIO;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LONG_GLOVES, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->oproperties = OPROP_AXIO;
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 2:
+						otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = METAL;
+						otmp->oproperties = OPROP_AXIOW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(BLUE_DRAGON_SCALE_MAIL, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = GLASS;
+						otmp->oproperties = OPROP_AXIO;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LONG_GLOVES, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->oproperties = OPROP_AXIO;
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 3:
+						otmp = mksobj(SCIMITAR, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = METAL;
+						otmp->oproperties = OPROP_AXIOW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(SCIMITAR, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = METAL;
+						otmp->oproperties = OPROP_AXIOW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(BLACK_DRAGON_SCALE_MAIL, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = GLASS;
+						otmp->oproperties = OPROP_AXIO;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LONG_GLOVES, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->oproperties = OPROP_AXIO;
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 4:
+						otmp = mksobj(GREEN_DRAGON_SCALE_MAIL, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = GLASS;
+						otmp->oproperties = OPROP_AXIO;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(GAUNTLETS, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->oproperties = OPROP_AXIO|OPROP_AXIOW;
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 5:
+						otmp = mksobj(TWO_HANDED_SWORD, FALSE, FALSE);
+						otmp->objsize = MZ_LARGE;
+						otmp->spe = 4;
+						otmp->obj_material = METAL;
+						otmp->oproperties = OPROP_AXIOW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(YELLOW_DRAGON_SCALE_MAIL, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->obj_material = GLASS;
+						otmp->oproperties = OPROP_AXIO;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						otmp = mksobj(LONG_GLOVES, FALSE, FALSE);
+						otmp->spe = 4;
+						otmp->oproperties = OPROP_AXIO;
+						(void) mpickobj(mtmp, otmp);
+					break;
+				}
 				otmp = mksobj(HEELED_BOOTS, FALSE, FALSE);
 				otmp->spe = 4;
 				otmp->oproperties = OPROP_AXIO;
@@ -7096,8 +7192,11 @@ register int	mmflags;
 			undeadfaction = FRACTURED;
 			unsethouse = TRUE;
 		}
-	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp) && u.uinsight > rn2(400)){
+	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp) && u.uinsight > rn2(INSIGHT_RATE)){
 		undeadfaction = PSEUDONATURAL;
+		unsethouse = TRUE;
+	} else if(randmonst && !undeadfaction && is_rat(mtmp->data) && u.uinsight > rn2(INSIGHT_RATE)){
+		undeadfaction = CRANIUM_RAT;
 		unsethouse = TRUE;
 	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp)){
 		if(In_mines(&u.uz)){
@@ -7120,7 +7219,7 @@ register int	mmflags;
 		mtmp->mfaction = undeadfaction;
 		if(undeadfaction == FRACTURED){
 			mtmp->m_lev += 4;
-			mtmp->mhpmax = d(mtmp->m_lev, 8);
+			mtmp->mhpmax += d(4, 8);
 			mtmp->mhp = mtmp->mhpmax;
 		}
 		newsym(mtmp->mx,mtmp->my);
@@ -7664,6 +7763,15 @@ register int	mmflags;
 			}
 //			pline("%d\n",mtmp->mhpmax);
 		break;
+	}
+	if(!mtmp->mfaction && is_rat(mtmp->data) && u.uinsight > rn2(INSIGHT_RATE)){
+		mtmp->mfaction = CRANIUM_RAT;
+	}
+	if(!mtmp->mfaction && u.uinsight > rn2(INSIGHT_RATE)){
+		mtmp->mfaction = YITH;
+		mtmp->m_lev += 2;
+		mtmp->mhpmax += d(2,8);
+		mtmp->mhp = mtmp->mhpmax;
 	}
 	if ((ct = emits_light_mon(mtmp)) > 0)
 		new_light_source(mtmp->mx, mtmp->my, ct,

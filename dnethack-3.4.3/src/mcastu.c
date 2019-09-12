@@ -12,6 +12,7 @@ extern void you_aggravate(struct monst *);
 STATIC_DCL void FDECL(cursetxt,(struct monst *,BOOLEAN_P));
 STATIC_DCL int FDECL(choose_magic_spell, (int,int,boolean));
 STATIC_DCL int FDECL(choose_clerical_spell, (int,int,boolean));
+STATIC_DCL int FDECL(choose_psionic_spell, (int,int,boolean));
 STATIC_DCL boolean FDECL(is_undirected_spell,(int));
 STATIC_DCL boolean FDECL(is_aoe_spell,(int));
 STATIC_DCL boolean FDECL(spell_would_be_useless,(struct monst *,int));
@@ -324,6 +325,43 @@ boolean hostile;
 		//case "0", "5", "10", "15", "18+"
 		return (mid % 2) ? CURE_SELF : OPEN_WOUNDS;
 	}
+}
+
+/* default spell selection for psychic-flavored casters */
+STATIC_OVL int
+choose_psionic_spell(spellnum,mid,hostile)
+int spellnum;
+int mid;
+boolean hostile;
+{
+	if(!hostile)
+		return PSI_BOLT;
+     switch (spellnum % 18) {
+     case 17:
+       return MON_WARP;
+     case 16:
+     case 14:
+	return PSI_BOLT;
+    case 13:
+    case 12:
+	return VULNERABILITY;
+    case 11:
+    case 9:
+	return NIGHTMARE;
+    case 8:
+    case 7:
+	return PARALYZE;
+    case 6:
+    case 4:
+	return STUN_YOU;
+    case 3:
+    case 2:
+	return CONFUSE_YOU;
+    case 1:
+    case 0:
+    default:/*5,10,15,18+*/
+	return PSI_BOLT;
+    }
 }
 
 /* ...but first, check for monster-specific spells */
@@ -735,6 +773,28 @@ unsigned int type;
 			case 0:
 			default:
 				return OPEN_WOUNDS;
+			break;
+		}
+	break;
+	case PM_KUKER:
+		switch (rnd(6)) {
+			case 6:
+			return PUNISH;
+			break;
+			case 5:
+			return MON_PROTECTION;
+			break;
+			case 4:
+			return CURSE_ITEMS;
+			break;
+			case 3:
+			return EVIL_EYE;
+			break;
+			case 2:
+			return MAKE_VISIBLE;
+			break;
+			case 1:
+			return CONFUSE_YOU;
 			break;
 		}
 	break;
@@ -1155,6 +1215,8 @@ unsigned int type;
 	}
     if (type == AD_CLRC)
         return choose_clerical_spell(mtmp->m_id == 0 ? (rn2(u.ulevel) * 18 / 30) : rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
+    else if (type == AD_PSON)
+        return choose_psionic_spell(mtmp->m_id == 0 ? (rn2(u.ulevel) * 18 / 30) : rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
     return choose_magic_spell(mtmp->m_id == 0 ? (rn2(u.ulevel) * 24 / 30) : rn2(mtmp->m_lev),mtmp->m_id,!(mtmp->mpeaceful));
 }
 
@@ -1192,7 +1254,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	 * attacking casts spells only a small portion of the time that an
 	 * attacking monster does.
 	 */
-	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC || mattk->adtyp == AD_PSON) && ml) {
 	    int cnt = 40;
 		
 		// if(Race_if(PM_DROW) && mtmp->data == &mons[PM_AVATAR_OF_LOLTH] && !Role_if(PM_EXILE) && !mtmp->mpeaceful){
@@ -3287,7 +3349,7 @@ castmm(mtmp, mdef, mattk)
 
 	if(noactions(mtmp)) return 0;
 	
-	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC || mattk->adtyp == AD_PSON) && ml) {
 	    int cnt = 40;
 
 	    do {
@@ -3746,7 +3808,7 @@ castum(mtmp, mattk)
 	 * attacking casts spells only a small portion of the time that an
 	 * attacking monster does.
 	 */
-	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) && ml) {
+	if ((mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC || mattk->adtyp == AD_PSON) && ml) {
 	    int cnt = 40;
 		
 	    if (!spellnum) do {

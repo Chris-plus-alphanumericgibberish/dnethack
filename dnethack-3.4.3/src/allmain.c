@@ -1282,7 +1282,7 @@ karemade:
 						if(tries >= 0)
 							makemon(ford_montype(-1), x, y, MM_ADJACENTOK);
 					}
-				} else if((mvitals[PM_HOUND_OF_TINDALOS].mvflags & G_GONE) &&u.uinsight > rn2(40*300)){
+				} else if(!(mvitals[PM_HOUND_OF_TINDALOS].mvflags&G_GONE && !In_quest(&u.uz)) && (level_difficulty()+u.ulevel)/2+5 > monstr[PM_HOUND_OF_TINDALOS] && u.uinsight > rn2(INSIGHT_RATE)){
 					int x, y;
 					for(x = 1; x < COLNO; x++)
 						for(y = 0; y < ROWNO; y++){
@@ -1863,6 +1863,17 @@ karemade:
 							if(Role_if(PM_TOURIST)){
 								more_experienced(experience(mtmp,0),0);
 								newexplevel();
+							}
+							if(u.usanity > 0 && taxes_sanity(mtmp->data)){
+								u.usanity -= u_sanity_loss(mtmp);
+								if(u.usanity < 0) u.usanity = 0;
+							}
+							if(yields_insight(mtmp->data)){
+								u.uinsight += u_insight_gain(mtmp);
+								if(u.usanity < 100){
+									u.usanity += u_sanity_gain(mtmp);
+									if(u.usanity > 100) u.usanity = 100;
+								}
 							}
 						}
 					}

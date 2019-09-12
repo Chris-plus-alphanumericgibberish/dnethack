@@ -415,6 +415,8 @@
 #define extra_nasty(ptr)	(((ptr)->mflagsg & MG_NASTY) != 0L)
 #define strongmonst(ptr)	(((ptr)->mflagsb & MB_STRONG) != 0L)
 #define can_breathe(ptr)	attacktype(ptr, AT_BREA)
+#define taxes_sanity(ptr)	(((ptr)->mflagsg & MG_SANLOSS) != 0L)
+#define yields_insight(ptr)	(((ptr)->mflagsg & MG_INSIGHT) != 0L)
 
 #define cantwield(ptr)		(nohands(ptr))
 #define could_twoweap(ptr)	attacktype(ptr, AT_XWEP)

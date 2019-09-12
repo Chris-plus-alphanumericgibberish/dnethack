@@ -453,6 +453,15 @@ peffects(otmp)
 			else
 				You_feel("the chill of death fade away.");
 		}
+		if(!otmp->cursed){
+			//Restore sanity if blessed or uncursed
+			if(otmp->blessed){
+				if(u.usanity < 90)
+					u.usanity += 10;
+				else u.usanity=100;
+			} else if(u.usanity < 100)
+				u.usanity++;
+		}
 	case SPE_RESTORE_ABILITY:
 		unkn++;
 		if(otmp->cursed) {
@@ -482,6 +491,15 @@ peffects(otmp)
 		(void) make_hallucinated(itimeout_incr(HHallucination,
 					   rn1(200, 600 - 300 * bcsign(otmp))),
 				  TRUE, 0L);
+		//Bad drugs: inflict brain damage
+		if(otmp->cursed){
+			if(u.usanity > 0)
+				u.usanity--;
+			if(u.uinsight > 0)
+				u.uinsight++;
+			exercise(A_WIS, FALSE);
+			exercise(A_INT, FALSE);
+		}
 		break;
 	case POT_AMNESIA:
 		pline(Hallucination? "This tastes like champagne!" :
@@ -665,6 +683,8 @@ peffects(otmp)
 			unkn++;
 			You("have an uneasy feeling...");
 			exercise(A_WIS, FALSE);
+			//Malign enlightenment
+			u.uinsight++;
 		} else {
 			if (otmp->blessed) {
 				(void) adjattrib(A_INT, 1, FALSE);
@@ -725,6 +745,10 @@ peffects(otmp)
 			 * will help them identify the potion...
 			 */
 			make_blinded(0L,TRUE);
+		} else {
+			//Cursed may raise insight if it's low
+			if(!rn2(u.uinsight))
+				u.uinsight++;
 		}
 		if (otmp->blessed)
 			HSee_invisible |= FROMOUTSIDE;

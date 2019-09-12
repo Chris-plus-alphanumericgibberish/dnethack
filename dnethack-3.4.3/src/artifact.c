@@ -8879,12 +8879,19 @@ read_necro(VOID_ARGS)
 				chance = d(1,6);
 			}
 		}
+		if(chance > 0){
+			u.uinsight++;
+			if(u.usanity < 100 && rnd(30) < ACURR(A_WIS))
+				u.usanity++;
+		}
 		switch(chance){
 			case 0:
 				You("fail.");
 				exercise(A_WIS, FALSE);
 				exercise(A_WIS, FALSE);
 				exercise(A_INT, FALSE);
+				if(rn2(100) < u.usanity)
+					u.usanity--;
 			break;
 			case 1:
 				if(!(artiptr->ovar1 & S_OOZE)){
@@ -9301,12 +9308,18 @@ read_lost(VOID_ARGS)
 
 		i = rn2(31);
 		putativeSeal = 1L << i;
-		if(artiptr->ovar1 & putativeSeal) losexp("getting lost in a book",TRUE,TRUE,TRUE);
-		else{
+		if(artiptr->ovar1 & putativeSeal){
+			losexp("getting lost in a book",TRUE,TRUE,TRUE);
+			if(rn2(100) < u.usanity)
+				u.usanity--;
+		} else {
 			u.sealsKnown |= putativeSeal;
 			artiptr->ovar1 |= putativeSeal;
 			You("learn the name \"%s\" while studying the book.",sealNames[i]);
 			artiptr->spestudied++;
+			u.uinsight++;
+			if(u.usanity < 100 && rnd(30) < ACURR(A_WIS))
+				u.usanity++;
 		}
 	}
 	else{
@@ -9760,13 +9773,14 @@ mind_blast_items()
 
 	for (obj = fobj; obj; obj = nobj) {
 		nobj = obj->nobj;
-		if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe) && u.uinsight > rn2(40*300)){
+		if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe) && u.uinsight > rn2(INSIGHT_RATE)){
 		// if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe)){
 			mtmp = animate_statue(obj, obj->ox, obj->oy, ANIMATE_NORMAL, (int *) 0);
 			if(mtmp){
 				mtmp->mfaction = TOMB_HERD;
 				mtmp->m_lev += 4;
-				mtmp->mhp = max_ints(mtmp->mhp, d(mtmp->m_lev, 8));
+				mtmp->mhpmax += d(4, 8);
+				mtmp->mhp = mtmp->mhpmax;
 				// mtmp->m_ap_type = M_AP_OBJECT;
 				// mtmp->mappearance = STATUE;
 				// mtmp->m_ap_type = M_AP_MONSTER;

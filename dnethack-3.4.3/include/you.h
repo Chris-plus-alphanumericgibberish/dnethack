@@ -527,6 +527,8 @@ struct you {
 	int 	uencouraged;/* to record the buff from tame encouragement songs */
 	int		uentangled; /* to record the otyp of an item entangling you */
 	int 	usanity;	/* to record level of sanity */
+	/*Insight rate calculation: 40: "high insight" 300: "Approximate per-turn WoYendor intervention rate" 5: "total number of harmful effects" */
+#define INSIGHT_RATE (40*300*5)
 	int 	uinsight;	/* to record level of insight */
 	uchar 	wimage;		/* to record if you have the image of a Weeping Angel in your mind */
 	int 	umorgul;	/* to record the number of morgul wounds */

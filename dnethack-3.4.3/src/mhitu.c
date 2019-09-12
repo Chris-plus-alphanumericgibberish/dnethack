@@ -384,6 +384,37 @@ struct attack *alt_attk_buf;
 				attk->damd += 2;
 			else attk->damn++;
 		}
+		if ((!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+			|| (!derundspec && indx == NATTK - 1)
+		){
+			derundspec = TRUE;
+			attk->aatyp = AT_TUCH;
+			attk->adtyp = AD_ABDC;
+			attk->damd = 1;
+			attk->damn = 1;
+		}
+	}
+	else if (mtmp->mfaction == YITH){
+		if ((!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+			|| (!derundspec && indx == NATTK - 1)
+		){
+			derundspec = TRUE;
+			attk->aatyp = AT_MAGC;
+			attk->adtyp = AD_SPEL;
+			attk->damd = 2;
+			attk->damn = 6;
+		}
+	}
+	else if (mtmp->mfaction == CRANIUM_RAT){
+		if ((!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+			|| (!derundspec && indx == NATTK - 1)
+		){
+			derundspec = TRUE;
+			attk->aatyp = AT_MAGC;
+			attk->adtyp = AD_PSON;
+			attk->damd = 0;
+			attk->damn = 15;
+		}
 	}
 	else if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
 		if (attk->aatyp == AT_SPIT

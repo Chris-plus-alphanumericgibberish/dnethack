@@ -17,6 +17,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+extern int monstr[];
 
 STATIC_DCL boolean FDECL(restrap,(struct monst *));
 STATIC_DCL int FDECL(scent_callback,(genericptr_t, int, int));
@@ -204,6 +205,8 @@ STATIC_VAR int cham_to_pm[] = {
 			 ((mon)->mfaction == VAMPIRIC) ||			\
 			 ((mon)->mfaction == PSEUDONATURAL) ||			\
 			 ((mon)->mfaction == TOMB_HERD) ||			\
+			 ((mon)->mfaction == YITH) ||			\
+			 ((mon)->mfaction == CRANIUM_RAT) ||			\
 			 ((mon)->zombify) ||			\
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
@@ -5171,8 +5174,22 @@ cleanup:
 		HTelepat &= ~INTRINSIC;
 		change_luck(-2);
 		You("murderer!");
-		if(u.ualign.type == A_LAWFUL){u.hod += 10; u.ualign.sins += 5;}
-		else{u.hod += 5; u.ualign.sins += 2;}
+		if(u.ualign.type == A_LAWFUL){
+			u.hod += 10;
+			u.ualign.sins += 5;
+			if(u.usanity > 0){
+				u.usanity -= rnd(4);
+				if(u.usanity < 0)
+					u.usanity = 0;
+			}
+		}
+		else{
+			u.hod += 5; 
+			u.ualign.sins += 2;
+			if(u.usanity > 0){
+				u.usanity--;
+			}
+		}
 		if (Blind && !Blind_telepat)
 		    see_monsters(); /* Can't sense monsters any more. */
 	}
@@ -6459,6 +6476,47 @@ short otyp;
 		break;
 	}
 }
+
+int
+u_sanity_loss(mtmp)
+struct monst *mtmp;
+{
+	int mndx = monsndx(mtmp->data);
+	
+	
+	if(rnd(30) > ACURR(A_WIS)){
+		if(mndx == PM_GREAT_CTHULHU)
+			return rnd(100);
+		else return rnd(monstr[mndx]);
+	} else {
+		if(mndx == PM_GREAT_CTHULHU)
+			return rnd(10);
+		else return rnd(max(1, monstr[mndx]-u.ulevel));
+	}
+}
+
+int
+u_sanity_gain(mtmp)
+struct monst *mtmp;
+{
+	int mndx = monsndx(mtmp->data);
+	
+	
+	if(rnd(30) < ACURR(A_WIS)){
+		return max(1, monstr[mndx]/10);
+	}
+	else return 0;
+}
+
+int
+u_insight_gain(mtmp)
+struct monst *mtmp;
+{
+	int mndx = monsndx(mtmp->data);
+	
+	return max(1, monstr[mndx]/10);
+}
+
 #endif /* OVLB */
 
 /*mon.c*/

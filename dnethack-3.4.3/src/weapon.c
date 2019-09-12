@@ -1694,6 +1694,7 @@ static const NEARDATA short hwep[] = {
 	  VIPERWHIP/*2d4/2d3/poison*/,
 	  DROVEN_SHORT_SWORD/*1d9/1d9*/, 
 	  DWARVISH_SPEAR/*1d9/1d9*/, 
+	  CHAKRAM/*1d9/1d9*/, 
 	  SCYTHE/*2d4*/, 
 	  BROADSWORD/*2d4/1d6+1*/, 
 	  MORNING_STAR/*2d4/1d6+1*/, 

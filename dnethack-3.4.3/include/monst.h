@@ -204,6 +204,8 @@ struct monst {
 #define	SUCCUBUS_FACTION	FACTION_PADDING+8	/* female foocubus */
 #define	PSEUDONATURAL	FACTION_PADDING+9	/* tentacled */
 #define	TOMB_HERD	FACTION_PADDING+10	/* possessed statue */
+#define	YITH		FACTION_PADDING+11	/* possessed by the great race of yith */
+#define	CRANIUM_RAT	FACTION_PADDING+12	/* cranium rat */
 //define	HALF_DEMON	FACTION_PADDING+1	/* half-demon */
 //define	HALF_DEVIL	FACTION_PADDING+2	/* half-devil */
 //define	HALF_DRAGON	FACTION_PADDING+3	/* half-dragon */

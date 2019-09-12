@@ -1437,6 +1437,9 @@ E void FDECL(golemeffects, (struct monst *,int,int));
 E boolean FDECL(angry_guards, (BOOLEAN_P));
 E void NDECL(pacify_guards);
 E void FDECL(removeMonster,(int,int));
+E int FDECL(u_sanity_loss,(struct monst *));
+E int FDECL(u_sanity_gain,(struct monst *));
+E int FDECL(u_insight_gain,(struct monst *));
 
 /* ### mondata.c ### */
 

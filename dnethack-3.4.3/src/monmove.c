@@ -334,6 +334,8 @@ struct monst *mtmp;
 			mtmp->data->mlet == S_EEL ||
 			mtmp->mfaction == PSEUDONATURAL ||
 			mtmp->mfaction == TOMB_HERD ||
+			mtmp->mfaction == YITH ||
+			mtmp->mfaction == CRANIUM_RAT ||
 			mtmp->mfaction == FRACTURED ||
 			mtmp->data == &mons[PM_GUG] ||
 			mtmp->data == &mons[PM_MIGO_WORKER] ||
@@ -1733,7 +1735,7 @@ register int after;
 #endif
 
 	/* teleport if that lies in our nature */
-	if(mteleport(ptr) && !rn2(5) && !mtmp->mcan &&
+	if((mteleport(ptr) || mtmp->mfaction == TOMB_HERD) && !rn2(5) && !mtmp->mcan &&
 	   !tele_restrict(mtmp) && !(noactions(mtmp))
 	) {
 	    if(mtmp->mhp < 7 || mtmp->mpeaceful || rn2(2))

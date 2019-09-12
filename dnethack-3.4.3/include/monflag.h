@@ -218,6 +218,8 @@
 #define MG_NOWISH	0x00800000L	/* Monster can't be wished for in figurine/statue form */
 #define MG_BACKSTAB	0x01000000L	/* Monster does extra damage vs. incapacitated foes (as rogue) */
 #define MG_COMMANDER	0x02000000L /* Monster commands its underlings to fight better */
+#define MG_SANLOSS		0x04000000L /* Seeing the monster damages sanity */
+#define MG_INSIGHT		0x08000000L /* Seeing the monster grants insight */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */
