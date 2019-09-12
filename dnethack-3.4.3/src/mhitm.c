@@ -3224,7 +3224,7 @@ struct attack *mattk;
 		if (mdef->mhpmax > ((int) (mdef->m_lev+1) * 8)){
 			if(mdef->data == &mons[PM_BROWN_MOLD] || mdef->data == &mons[PM_BLUE_JELLY] || mdef->data == &mons[PM_ASPECT_OF_THE_SILENCE])
 				(void)split_mon(mdef, magr);
-			else mdef->mhpmax = ((int) (mdef->m_lev+1) * 8);
+			else mdef->mhpmax = mdef->mhp = ((int) (mdef->m_lev+1) * 8);
 		}
 		break;
 	    case AD_STUN:

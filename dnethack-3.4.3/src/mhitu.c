@@ -8590,7 +8590,7 @@ register struct attack *mattk;
 		if (u.mhmax > ((youracedata->mlevel+1) * 8)){
 			if(youracedata == &mons[PM_BROWN_MOLD] || youracedata == &mons[PM_BLUE_JELLY] || youracedata == &mons[PM_ASPECT_OF_THE_SILENCE])
 				(void)split_mon(&youmonst, mtmp);
-			else u.mhmax = ((youracedata->mlevel+1) * 8);
+			else u.mhmax = u.mh = ((youracedata->mlevel+1) * 8);
 		}
 		break;
 		case AD_ECLD:
