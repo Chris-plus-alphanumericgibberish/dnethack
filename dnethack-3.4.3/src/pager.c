@@ -1947,7 +1947,7 @@ get_description_of_damage_type(uchar id)
 	case AD_FNEX: return "fern spore explosion";
 	case AD_SSUN: return "reflected sunlight";
 	case AD_MAND: return "mandrake shriek";
-	case AD_BARB: return "retalitory physical";
+	case AD_BARB: return "retaliatory physical";
 	case AD_LUCK: return "drains luck";
 	case AD_VAMP: return "drains blood";
 	case AD_WEBS: return "spreads webbing";
@@ -1974,6 +1974,8 @@ get_description_of_damage_type(uchar id)
 	case AD_GLSS: return "silver mirror shards";
 	case AD_MERC: return "mercury blade";
 	case AD_GOLD: return "turns victim to gold";
+	case AD_ACFR: return "holy fire";
+	case AD_DESC: return "dessication";
 	case AD_DUNSTAN: return "stones throw themselves at target";
 	case AD_IRIS: return "iridescent tentacles";
 	case AD_NABERIUS: return "tarnished bloody fangs";
