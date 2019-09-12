@@ -3861,9 +3861,9 @@ doattributes()
 {
 	if (!minimal_enlightenment())
 		return 0;
+	resistances_enlightenment();
 	if (wizard || discover)
 		enlightenment(0);
-	else resistances_enlightenment();
 	udr_enlightenment();
 	if(u.sealsActive || u.specialSealsActive) signs_enlightenment();
 	return 0;
