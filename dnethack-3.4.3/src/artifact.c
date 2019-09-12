@@ -8265,6 +8265,14 @@ struct obj *obj;
 				'R', 0, ATR_NONE, buf,
 				MENU_UNSELECTED);
 		}
+	} else if(Is_astralevel(&u.uz) && IS_ALTAR(levl[u.ux][u.uy].typ) && a_align(u.ux, u.uy) == A_LAWFUL){
+		if(obj->otyp == CHAKRAM){
+			Sprintf(buf, "Annul");
+			any.a_int = COMMAND_ANNUL;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				'A', 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
 	}
 	end_menu(tmpwin, prompt);
 
