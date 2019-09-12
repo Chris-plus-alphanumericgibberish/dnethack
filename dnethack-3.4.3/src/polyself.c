@@ -1496,7 +1496,7 @@ doandroid()
 			return 0;
 	    }
 	    if(!recharge(otmp, 0))
-			You("recharged %s", the(xname(otmp)));
+			You("recharged %s.", the(xname(otmp)));
 		u.uen -= 10;
 	    update_inventory();
 		return 1;
