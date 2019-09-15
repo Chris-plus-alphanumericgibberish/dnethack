@@ -2,6 +2,9 @@
 /*	Copyright (c) M. Stephenson 1988			  */
 /* NetHack may be freely redistributed.  See license for details. */
 
+ //Note: math.h must be included before hack.h bc it contains a yn() macro that is incompatible with the one in hack
+#include <math.h>
+
 #include "hack.h"
 
 static NEARDATA schar delay;		/* moves left for this spell */
