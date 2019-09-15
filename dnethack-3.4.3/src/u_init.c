@@ -2671,11 +2671,16 @@ u_init()
 				attkptr->adtyp = AD_PHYS;
 			break;
 			}
-			switch (attkptr->adtyp){
-			case AD_VBLD:
-				attkptr->damn = d(1, 3);
-				attkptr->damd = rn2(3) + 1;
-				break;
+			if(attkptr->aatyp == AT_ARRW){
+				if(attkptr->adtyp == AD_VBLD){
+					attkptr->damn = d(1, 3);
+					attkptr->damd = rn2(3) + 1;
+				} else {
+					attkptr->damn = 1;
+					attkptr->damd = rnd(3) + rn2(3) + 1;
+				}
+			}
+			else switch (attkptr->adtyp){
 			case AD_LUCK:
 				attkptr->damn = 1;
 				attkptr->damd = 1;
