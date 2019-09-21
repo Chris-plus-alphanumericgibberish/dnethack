@@ -1528,21 +1528,27 @@ doandroid()
 				} else return 1;
 			}
 			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_EXPERT && u.uen > 0){
-				if(jump(1) || dokick()){
+				int j = jump(1);
+				int k = dokick();
+				if(j || k){
 					u.uen--;
 				} else return 1;
 			}
 			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_MASTER && u.uen > 0){
-				if(!jump(1) && !getdir((char *)0)) return 0;
-				if(u.ustuck && u.uswallow)
-					mon = u.ustuck;
-				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon) You("swing wildly!");
-				else {
-					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-					hmonwith(mon, tmp, weptmp, tchtmp, unarmedcombo, 4);
-				}
+				int j = jump(1);
+				int d = getdir((char *)0);
+				if(!j && !d) return 1;
 				u.uen--;
+				if(d){
+					if(u.ustuck && u.uswallow)
+						mon = u.ustuck;
+					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+					if(!mon) You("swing wildly!");
+					else {
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, unarmedcombo, 4);
+					}
+				}
 			}
 			return 1;
 		} else if(objects[uwep->otyp].oc_skill == P_SPEAR || objects[uwep->otyp].oc_skill == P_LANCE){ //!uwep handled above
