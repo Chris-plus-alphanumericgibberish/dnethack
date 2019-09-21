@@ -4329,7 +4329,7 @@ boolean incr;
 	if(newhs == FAINTING) {
 		if(is_fainted()) newhs = FAINTED;
 		if(u.uhs <= WEAK || rn2(20-YouHunger/10) >= 19) {
-			if(!is_fainted() && multi >= 0 /* %% */) {
+			if(!is_fainted() && multi >= 0 && occupation != windclock) {
 				/* stop what you're doing, then faint */
 				stop_occupation();
 	            if (clockwork){
