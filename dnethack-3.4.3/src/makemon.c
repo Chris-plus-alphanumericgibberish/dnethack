@@ -7198,7 +7198,7 @@ register int	mmflags;
 	} else if(randmonst && !undeadfaction && is_rat(mtmp->data) && u.uinsight > rn2(INSIGHT_RATE)){
 		undeadfaction = CRANIUM_RAT;
 		unsethouse = TRUE;
-	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp)){
+	} else if(randmonst && !undeadfaction && can_undead_mon(mtmp) && !Is_rogue_level(&u.uz)){
 		if(In_mines(&u.uz)){
 			if(Race_if(PM_GNOME) && Role_if(PM_RANGER) && rn2(10) <= 5){
 				undeadfaction = ZOMBIFIED;
