@@ -8654,10 +8654,11 @@ read_necro(VOID_ARGS)
 					u.uen -= 20;
 					for(i=max(1, d(1,20) - 16); i > 0; i--){
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+						mtmp->mvanishes = 100;
 						if(mtmp){
 							initedog(mtmp);
 							mtmp->m_lev += d(1,15) - 5;
-							if(u.ulevel < mtmp->m_lev){
+							if(u.ulevel < mtmp->m_lev && !rn2(10)){
 								mtmp->mtame = 0;
 								mtmp->mpeaceful = 0;
 								mtmp->mtraitor = 1;
@@ -8700,7 +8701,7 @@ read_necro(VOID_ARGS)
 							initedog(mtmp);
 							mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
 							mtmp->mhpmax = mtmp->mhp = mtmp->m_lev*8 - rnd(7);
-							if(u.ulevel < mtmp->m_lev){
+							if(u.ulevel < mtmp->m_lev && !rn2(10)){
 								mtmp->mtame = 0;
 								mtmp->mpeaceful = 0;
 								mtmp->mtraitor = 1;
@@ -8720,7 +8721,7 @@ read_necro(VOID_ARGS)
 						mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
 						if(!rn2(9)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
 						mtmp->mhpmax = mtmp->mhp = mtmp->m_lev*8 - rnd(7);
-						if(u.ulevel < mtmp->m_lev && rn2(2)){
+						if(u.ulevel < mtmp->m_lev && !rn2(20)){
 							mtmp->mtame = 0;
 							mtmp->mpeaceful = 0;
 							mtmp->mtraitor = 1;
@@ -8736,7 +8737,7 @@ read_necro(VOID_ARGS)
 						initedog(mtmp);
 						if(!rn2(6)) mtmp->m_lev += d(1,(3 * mtmp->m_lev)/2);
 						mtmp->mhpmax = mtmp->mhp = mtmp->m_lev*8 - rnd(7);
-						if(u.ulevel < mtmp->m_lev || rn2(2)){
+						if((u.ulevel < mtmp->m_lev || rn2(2)) && !rn2(10)){
 							mtmp->mtame = 0;
 							mtmp->mpeaceful = 0;
 							mtmp->mtraitor = 1;
