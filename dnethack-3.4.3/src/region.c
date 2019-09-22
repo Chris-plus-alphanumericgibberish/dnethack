@@ -1190,15 +1190,18 @@ genericptr_t p2;
 				"white spores", TRUE, SICK_NONVOMITABLE);
 			You("are covered with dust and can barely breath!");
 			losehp(rnd(dam), "dust storm", KILLED_BY_AN);
+			nomul(0, NULL);
 		} else if(!rn2(10) && !is_anhydrous(youracedata)){
 			//Salt
 			You("are covered with dust and can barely breath!");
 			pline("Salt dust burns your %s!", makeplural(body_part(LUNG)));
 			You("cough and spit blood!");
 			losehp(rnd(dam)+5, "dust storm", KILLED_BY_AN);
+			nomul(0, NULL);
 		} else {
 			You("are covered with dust and can barely breath!");
 			losehp(rnd(dam), "dust storm", KILLED_BY_AN);
+			nomul(0, NULL);
 		}
 		return FALSE;
     } else {			/* A monster is inside the cloud */
