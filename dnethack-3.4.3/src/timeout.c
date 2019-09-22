@@ -1389,7 +1389,7 @@ long timeout;
 	if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD){	
 	        if ((obj->where == OBJ_FLOOR) || 
 		    (obj->where == OBJ_MINVENT && 
-				!((!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)
+				((!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)
 				|| (!MON_SWEP(obj->ocarry) || MON_SWEP(obj->ocarry) != obj))) ||
 		    (obj->where == OBJ_INVENT &&
 		    	((!uwep || uwep != obj) &&
@@ -1842,7 +1842,7 @@ long timeout;
 	        if ((obj->cursed && !rn2(250)) ||
 	            (obj->where == OBJ_FLOOR) || 
 		    (obj->where == OBJ_MINVENT && 
-				!((!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)
+				((!MON_WEP(obj->ocarry) || MON_WEP(obj->ocarry) != obj)
 				|| (!MON_SWEP(obj->ocarry) || MON_SWEP(obj->ocarry) != obj))) ||
 		    (obj->where == OBJ_INVENT &&
 		    	((!uwep || uwep != obj) &&
@@ -2153,8 +2153,10 @@ end_burn(obj, timer_attached)
 	    obj->lamplit = 0;
 	    if (obj->where == OBJ_INVENT)
 		update_inventory();
-	} else if (!stop_timer(BURN_OBJECT, (genericptr_t) obj))
+	} else if (!stop_timer(BURN_OBJECT, (genericptr_t) obj)){
+		obj->lamplit = 0;
 	    impossible("end_burn: obj %s not timed!", xname(obj));
+	}
 	// if(darksight(youracedata) || catsight(youracedata)) doredraw();
 	// So many different vision systems, just do a redraw
 	doredraw();
