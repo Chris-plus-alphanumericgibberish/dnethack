@@ -1,0 +1,661 @@
+#	SCCS Id: @(#)Knight.des	3.4	1995/04/16
+#	Copyright (c) 1989 by Jean-Christophe Collet
+#	Copyright (c) 1991,92 by M. Stephenson
+# NetHack may be freely redistributed.  See license for details.
+#
+#	The "start" level for the quest.
+#
+#	Here you meet your (besieged) class leader, the Old Gypsy woman
+#	and receive your quest assignment.
+#
+MAZE: "Hdf-strt" , 'T'
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '.' , 'T', true, true, lit, true
+NOMAP
+#
+#STAIR: random, up
+#Arrive via levelport
+STAIR: random, down
+#
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+#
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "warg", random, hostile
+
+MONSTER: 'd', "warg", random, hostile
+MONSTER: 'd', "warg", random, hostile
+MONSTER: 'd', "warg", random, hostile
+
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+
+MAZE: "Hdf-home",'T'
+FLAGS: hardfloor
+#INIT_MAP: 'T' , 'T' , false , true , lit , false
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+1T TT    TTFFFFFFFF-------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT TTTTTTTTTTTTTTTTTT
+2     TTTTTF       -.....-TT----------TTTTTTTTTTTTTTT TTTT TT TTTTTTTTTTTTTTT
+3T  TTTTTTTF       +.....----.....-..-TTT T       TT          TT         TTTT
+4T  TTT  T F       -.....S..-.....-..----T       T            T    T       TT
+5T TT  T   FFF+FFFF-.....-..-.....--+-..-                         TT      TTT
+6T T --+---        -.....----.....-  +..-                          T       TT
+7T   -.. .-  T     -.....-  -.....-  ------                         T        
+8T T -....-        --...--  ---+---   T-..-                                  
+9T T -....+         --+--      .       +..-                                  
+0TT  +....-                    .     -------                        T        
+1TTT -. ..-                  --+--   +..-..-                                 
+2TTT -+-S-- -----           --...--  -..-..-                       T         
+3TTTT  -.+  -...+   --+---+--.....-  ----+--                                T
+4TTTT  ++- T-...--+--...-...-.....-            T                  T     T T T
+5TTTTT  TT T-...-...-...-...-.....- T  -+--T  TTT                        TTTT
+6TTTTTTT TTT-----...-...-...--...--TTT -..-TTTT              T   T       TTTT
+7TTTTTTTTTTTTTTT-...--------------TTTTT-..-TTTTTTTTTTTTTTT  TTTTTTTTTTTTTTTTT
+8TTTTTTTTTTTTTTT-----TTTTTTTTTTTTTTTTTT----TTTTTTTTTTTTTT TTTTTTTTTTTTTTTTTTT
+9TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT TTTTTTTTTTTTTTTTT
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT TTTTTTTTTTTTTTTTT
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7        
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+#
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+1T TT    TTFFFFFFFF-------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT TTTTTTTTTTTTTTTTTT
+2     TTTTTF       -.....-TT----------TTTTTTTTTTTTTTT TTTT TT TTTTTTTTTTTTTTT
+3T  TTTTTTTF        .....----.....-..-TTT T       TT          TT         TTTT
+4T  TTT  T F       -.....S..-.....-..----T       T            T    T       TT
+5T TT  T   FFF FFFF-.....-..-.....--+-..-                         TT      TTT
+6T T -- --- .......-.....----.....-..+..-                          T       TT
+7T   -    -..T.....-.....-..-.....-..------                         T        
+8T T -    -........--...--..---+---...T-..-                                  
+9T T -     .........--+--..............+..-                                  
+0TT       -..........................-------                        T        
+1TTT -    -..................--+--...+..-..-                                 
+2TTT - - --.-----...........--...--..-..-..-                       T         
+3TTTT  -    -...+...--+---+--.....-..----+--                                T
+4TTTT    - T-...--+--...-...-.....-.......     T                  T     T T T
+5TTTTT  TT T-...-...-...-...-.....-.T..-+--T  TTT                        TTTT
+6TTTTTTT.TTT-----...-...-...--...--TTT.-..-TTTT              T   T       TTTT
+7TTTTTTTTTTTTTTT-...--------------TTTTT-..-TTTTTTTTTTTTTTT  TTTTTTTTTTTTTTTTT
+8TTTTTTTTTTTTTTT-----TTTTTTTTTTTTTTTTTT----TTTTTTTTTTTTTT TTTTTTTTTTTTTTTTTTT
+9TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT TTTTTTTTTTTTTTTTT
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT TTTTTTTTTTTTTTTTT
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7        
+
+# corvian settlers
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+MONSTER:'@',"corvian",random
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+1T TT    TTFFFFFFFF-------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTTT
+2     TTTTTF       -     -TT----------TTTTTTTTTTTTTTT.TTTT.TT.TTTTTTTTTTTTTTT
+3T  TTTTTTTF             ----     -  -TTT T.......TT......... TT......   TTTT
+4T  TTT  T F       -     S  -     -  ----T ......T............T. ..T.      TT
+5T TT  T   FFF FFFF-     -  -     -- -  -  .......................TT...   TTT
+6T T -- ---        -     ----     -     -  ........................T  .    TT
+7T   -    -  T     -     -  -     -  ------ ........................T....    
+8T T -    -        --   --  --- ---   T-  -  .........................  .    
+9T T -              -- --                 -   ........................ ..    
+0TT       -                          -------  ......................T....    
+1TTT -    -                  -- --      -  -  .........................      
+2TTT - -S-- -----           --   --  -  -  -  .....................T..       
+3TTTT  -    -       -- --- --     -  ---- --   ........................     T
+4TTTT    - T-   -- --   -   -     -            T..................T.    T T T
+5TTTTT  TT T-   -   -   -   -     - T  - --T  TTT...................     TTTT
+6TTTTTTT TTT-----   -   -   --   --TTT -  -TTTT..............T...T....   TTTT
+7TTTTTTTTTTTTTTT-   --------------TTTTT-  -TTTTTTTTTTTTTTT..TTTTTTTTTTTTTTTTT
+8TTTTTTTTTTTTTTT-----TTTTTTTTTTTTTTTTTT----TTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTTTT
+9TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT.TTTTTTTTTTTTTTTTT
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345678
+#0         1         2         3         4         5         6         7        
+
+# Monsters on siege duty.
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+1T.TT....TTFFFFFFFF-------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTITTTTTTTTTTTTTTTTTT
+2.....TTTTTF.......-#####-TT----------TTTTTTTTTTTTTTTITTTTITTITTTTTTTTTTTTTTT
+3T..TTTTTTTF.......+#####----#####-##-TTT.T..II...TTIII.IIIII TT...... ..TTTT
+4T..TTT..T.F.......-#####S##-#####-##----T...III.T..I.IIIIIIIIT. ..T.  ....TT
+5T.TT..T...FFF+FFFF-#####-##-#####--+-##-..I..II...IIIIIIIIIIIII..TT....  TTT
+6T.T.--+---........-#####----#####-..+##-..II.....IIIIIIIIIIIIIII..T. ..  .TT
+7T...-##.#-..T.....-#####-..-#####-..------.I....IIIIIIIIIIIIIIII...T.....   
+8T.T.-####-........--###--..---+---...T-##-..I...IIIIIIIIIIIIIIIII....  ...  
+9T.T.-####+.........--+--......#.......+##-......II...IIIIIIIIIIII.... ......
+0TT..+####-....................#.....-------.....II..IIIIIIIIIIIIII.T........
+1TTT.-#.##-..................--+--...+##-##-..I..III.IIIIIIIIIIIIII.... ..  .
+2TTT.-+-S--.-----...........--###--..-##-##-..I..III.IIIIIIIIIIIIIIT..  ...  
+3TTTT..-#+..-###+...--+---+--#####-..----+--...I..IIIIIIIIIIIIIIII......... T
+4TTTT..++-.T-###--+--###-###-#####-............T..IIIIIIIIIIIIIIIIT.  ..T.T.T
+5TTTTT..TT.T-###-###-###-###-#####-.T..-+--T..TTTIIIII..IIIIIIIIII..  ...TTTT
+6TTTTTTT.TTT-----###-###-###--###--TTT.-##-TTTTIIIIII.....IIITIIIT.......TTTT
+7TTTTTTTTTTTTTTT-###--------------TTTTT-##-TTTTTTTTTTTTTTTIITTTTTTTTTTTTTTTTT
+8TTTTTTTTTTTTTTT-----TTTTTTTTTTTTTTTTTT----TTTTTTTTTTTTTTITTTTTTTTTTTTTTTTTTT
+9TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTITTTTTTTTTTTTTTTTT
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7        
+# Dungeon Description
+REGION:(00,00,75,20),lit,"ordinary"
+# Stairs
+STAIR:(00,02),up
+STAIR:(75,10),down
+
+# Church
+REGION:(18,01,24,08),lit,"temple"
+ALTAR:(21,02),chaos,shrine
+REGION:(10,01,18,05),lit,"morgue"
+
+# Doors
+# Building Doors (others are damaged walls)
+DOOR:locked,(09,09)
+# Inside Doors
+DOOR:closed,(13,05)
+DOOR:closed,(18,03)
+DOOR:closed,(21,09)
+DOOR:closed,(30,08)
+DOOR:closed,(35,05)
+DOOR:closed,(36,06)
+DOOR:closed,(38,09)
+DOOR:closed,(36,11)
+DOOR:closed,(40,13)
+DOOR:closed,(39,15)
+
+DOOR:closed,(30,11)
+DOOR:closed,(25,13)
+DOOR:closed,(21,13)
+DOOR:closed,(17,14)
+DOOR:closed,(15,13)
+
+# Magic Chest
+OBJECT:'(',"magic chest",(06,09)
+
+
+#
+#	The "locate" level for the quest.
+#
+#	Here you have to find your way to the Isle of Glass to go
+#	further towards your assigned quest.
+#
+
+MAZE: "Hdf-loca",'T'
+FLAGS: hardfloor
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTT-----TTTTTTTTTTTTTTTTTT                         
+1TT..TTTTTTTTT..TTTTT.TTTTTT--   --TTTTTTTTTTTTTTTTT                         
+2T....TTTTTTT.........TTT----     -TTTTTTTTTTTTTTTTT                         
+3T.T..TTTTTTTT...TTT..TT          S..TTTTT.TTTTTTTT --- --     ----------    
+4T.T........TT...TTTTTTTT----     -..T.TT...TTTTTTT -                   -    
+5T.TTTTTTTT.TTT..TTTTTTTTTTT--   --T.......TTTTTTTT -    -     -        -    
+6T.TTTTTTTT...T...TTTTTTTTTTT----TTTT......TTTTTTTT -                   -    
+7T.TTTTTTTTTT.......TTTTTTTTTTTTTTTTT......TTTTTTTT -    -     - ----- --    
+8T..TTTTTTT........TTTTTTTT..TTTTTTTTT..TTTTTTTTTTT -    -                   
+9T..TTTTTTT........TTTTTT.....TTTTTTTT..TTTTTTTTTTT ------ -- --             
+0TTTTTTTTTTT.TT....TT..TT.......TTTTT...TTTTTT..TTT        -   -             
+1TTTTTTTTTTTTTTTT......TTT.T......TT....TTTT... .TT            -             
+2TTTTTTTTTTTTTTTTT...TTTTTTTT............TTT.. ..TT        -----             
+3TTTTTTTTTTTTTTTTTTT.TTTTTTTT....................TT                    ------
+4TTTTTTTTTTTTTTTTTTT...T.......................TTTT    ------- - - --  -     
+5TTTTTTTTTTTTTTTTTTTTT....TTTT..TTT..........TTTTTT          - -    -  -     
+6TTTTTTTTTTTTTTTTTTT.............................TT    -     - -    -  -     
+7TTTTTTTTTTTTTTTTTTT.....TTTTTTTT........TT..TTT.T.    -     - -    -        
+8TTTTTTTTTTTTTTTTTTTT.....TTTTTT ........TTTTTTT...    ------- -       ------
+9TTTTTTTTTTTTTTTTTTTTTT..TTTTTTTT.TT.T.TTTTTTTTTT..T           ------        
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT                         
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7        
+
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "warg", random, hostile
+
+MONSTER: 'd', "warg", random, hostile
+MONSTER: 'd', "warg", random, hostile
+MONSTER: 'd', "warg", random, hostile
+
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+MONSTER: '{', "viper tree", random, hostile
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTT-----TTTTTTTTTTTTTTTTTT                         
+1TT  TTTTTTTTT  TTTTT TTTTTT--   --TTTTTTTTTTTTTTTTT                         
+2T    TTTTTTT         TTT----     -TTTTTTTTTTTTTTTTT   #                     
+3T T  TTTTTTTT   TTT  TT          S  TTTTT TTTTTTTT ---S--     ----------    
+4T T        TT   TTTTTTTT----     -  T TT   TTTTTTT -....+#####+........-    
+5T TTTTTTTT TTT  TTTTTTTTTTT--   --T       TTTTTTTT -....-     -........-    
+6T TTTTTTTT   T   TTTTTTTTTTT----TTTT      TTTTTTTT -....+#  ##+........-    
+7T TTTTTTTTTT       TTTTTTTTTTTTTTTTT      TTTTTTTT -....-#  # -S-----+--    
+8T  TTTTTTT        TTTTTTTT  TTTTTTTTT  TTTTTTTTTTT -....-#  #  #     #      
+9T  TTTTTTT        TTTTTT     TTTTTTTT  TTTTTTTTTTT ------#--+--      #      
+0TTTTTTTTTTT TT    TT  TT       TTTTT   TTTTTT  TTT       #-...-    ###      
+1TTTTTTTTTTTTTTTT      TTT T      TT    TTTT     TT       #+...-    #        
+2TTTTTTTTTTTTTTTTT   TTTTTTTT            TTT     TT        -----  ###        
+3TTTTTTTTTTTTTTTTTTT TTTTTTTT                    TT   ########### #    ------
+4TTTTTTTTTTTTTTTTTTT   T                       TTTT   #------- -+-+--  -....-
+5TTTTTTTTTTTTTTTTTTTTT    TTTT  TTT          TTTTTT ###+.....- -....-  -....-
+6TTTTTTTTTTTTTTTTTTT                             TT #  -.....- -....-  -....-
+7TTTTTTTTTTTTTTTTTTT     TTTTTTTT        TT  TTT T +#  -.....- -....- #+....-
+8TTTTTTTTTTTTTTTTTTTT     TTTTTT         TTTTTTT       ------- -....+##------
+9TTTTTTTTTTTTTTTTTTTTTT  TTTTTTTT TT T TTTTTTTTTT  T           ------        
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT                         
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTT-----TTTTTTTTTTTTTTTTTT                         
+1TT..TTTTTTTTT..TTTTT.TTTTTT--...--TTTTTTTTTTTTTTTTT                         
+2T....TTTTTTT.........TTT----.....-TTTTTTTTTTTTTTTTT   #                     
+3T.T..TTTTTTTT...TTT..TTA.........S..TTTTT.TTTTTTTT ---S--     ----------    
+4T.T........TT...TTTTTTTT----.....-..T.TT...TTTTTTT -....+#####+........-    
+5T.TTTTTTTT.TTT..TTTTTTTTTTT--...--T.......TTTTTTTT -....-     -........-    
+6T.TTTTTTTT...T...TTTTTTTTTTT-----TTT......TTTTTTTT -....+#  ##+........-    
+7T.TTTTTTTTTT.......TTTTTTTTTTTTTTTTT......TTTTTTTT -....-#  # -S-----+--    
+8T..TTTTTTT........TTTTTTTT..TTTTTTTTT..TTTTTTTTTTT -....-#  #  #     #      
+9T..TTTTTTT........TTTTTT.....TTTTTTTT..TTTTTTTTTTT ------#--+--      #      
+0TTTTTTTTTTT.TT....TT..TT.......TTTTT...TTTTTT..TTT       #-...-    ###      
+1TTTTTTTTTTTTTTTT......TTT.T......TT....TTTT.....TT       #+...-    #        
+2TTTTTTTTTTTTTTTTT...TTTTTTTT............TTT.....TT        -----  ###        
+3TTTTTTTTTTTTTTTTTTT.TTTTTTTT....................TT   ########### #    ------
+4TTTTTTTTTTTTTTTTTTT...T.......................TTTT   #------- -+-+--  -....-
+5TTTTTTTTTTTTTTTTTTTTT....TTTT..TTT..........TTTTTT ###+.....- -....-  -....-
+6TTTTTTTTTTTTTTTTTTT.............................TT #  -.....- -....-  -....-
+7TTTTTTTTTTTTTTTTTTT.....TTTTTTTT........TT..TTT.T.+#  -.....- -....- #+....-
+8TTTTTTTTTTTTTTTTTTTT.....TTTTTT.........TTTTTTT...    ------- -....+##------
+9TTTTTTTTTTTTTTTTTTTTTT..TTTTTTTT.TT.T.TTTTTTTTTT..T           ------        
+0TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT                         
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
+#
+RANDOM_PLACES:(53,07),(57,16),(60,11),(67,05),(64,17),(63,08)
+STAIR: (01,09), up
+STAIR: place[0], down
+# Portal departure point
+BRANCH:(23,03,23,03),(0,0,0,0)
+#
+
+#
+OBJECT:'#',"+5 large victorian underwear",(40,15)
+OBJECT:'#',"+5 large gentlewoman's dress",(40,15)
+OBJECT:'#',"+5 large silver gauntlets",(40,15)
+OBJECT:'#',"+5 large silver band",(40,15)
+OBJECT:'#',"+5 yorshka's spear",(40,15)
+OBJECT:'%',"corpse",(40,15),"crow-winged half-dragon",0
+
+MONSTER: '@', "corvian knight", (45, 12)
+MONSTER: '@', "corvian knight", (46, 11)
+MONSTER: '@', "corvian knight", (31, 18)
+
+#
+
+#
+#	The "goal" level for the quest.
+#
+#	Here you meet your nemesis, the Reble Ringleader.  
+#	You have to defeat her party in combat to regain 
+#	the artifact you have come to retrieve.
+#
+
+MAZE: "Hdf-goal", ' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '.' , 'T' , false , true , lit , false
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTT-------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+1TTTTTTTTTTTT--     --T----------      ....TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+2------------|       |--........|   .  .....|.|...TTTTTTTTTTTTTTTTTTTTTTTTTTT
+3|...........|       |.|......|.|  .........|.|.........TTTTTTTTTTTTTTTTTTTTT
+4------.-----|       |.|......|.|..........|..|............TTTTTTTTTTTTTTTTTT
+5|......|....|       |.|......|.|..........|...|..............TTTTTTTTTTTTTTT
+6|.---|.|....|       |.|......|.|..............|...............---------TTTTT
+7|....|.|....--     --.|......|.|........  ....|...........|...|       |TTTTT
+8|.-..|.|....---- ---.-------.|.|........  ....|........|..|..T| ----- |TTTTT
+9|....|.------........|.....|.|.|........|.........  ...|..|...| |   | |TTTTT
+0|.-..|......|..   ...|...|.|.|.|........|.....|...  ...|..|...  |     |TTTTT
+1|....------.|.     ..|...|.|.|.|.........|....|...........|...| |   | |TTTTT
+2|.-.......|.|.     ..- ---.|.|.|.........|................|..T| ----- |TTTTT
+3|.........|.|.     ..|...|.|.|.|.........|.......  ........TTT|       |TTTTT
+4|.-.......|.|..   ...--.------.--........  ......  ......TTTTT---------TTTTT
+5|.........|.|........|..........|........  .............TTTTTTTTTTTTTTTTTTTT
+6----------|.|........------------........|.............TTTTTTTTTTTTTTTTTTTTT
+7TTTTTTTTTT|.---..........................|...........TTTTTTTTTTTTTTTTTTTTTTT
+8TTTTTTTTT--...------------------.........|--.......TTTTTTTTTTTTTTTTTTTTTTTTT
+9TTTTTTTTT|.......................     ......|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+0TTTTTTTTT-------------------------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7        
+
+# Random monsters.
+
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+
+GEOMETRY:center,center
+#0         1         2         3         4         5         6         7        
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+MAP
+0TTTTTTTTTTTTT-------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+1TTTTTTTTTTTT--.....--T----------      ....TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+2------------|.......|--........|   .  .....|.|...TTTTTTTTTTTTTTTTTTTTTTTTTTT
+3|...........|.......|.|......|.|  .........|.|.........TTTTTTTTTTTTTTTTTTTTT
+4------.-----|.......|.|......|.|..........|..|............TTTTTTTTTTTTTTTTTT
+5|......|....|.......|.|......|.|..........|...|..............TTTTTTTTTTTTTTT
+6|.---|.|....|.......|.|......|.|..............|...............---------TTTTT
+7|....|.|....--.....--.|......|.|........  ....|...........|...|.......|TTTTT
+8|.-..|.|....----+---.-------.|.|........  ....|........|..|..T|.-----.|TTTTT
+9|....|.------........|.....|.|.|........|.........  ...|..|...|.|...|.|TTTTT
+0|.-..|......|........|...|.|.|.|........|.....|...  ...|..|...+.|...+.|TTTTT
+1|....------.|........|...|.|.|.|.........|....|...........|...|.|...|.|TTTTT
+2|.-.......|.|... ....-+---.|.|.|.........|................|..T|.-----.|TTTTT
+3|.........|.|........|...|.|.|.|.........|.......  ........TTT|.......|TTTTT
+4|.-.......|.|........--.------.--........  ......  ......TTTTT---------TTTTT
+5|.........|.|........|..........|........  .............TTTTTTTTTTTTTTTTTTTT
+6----------|.|........------------........|.............TTTTTTTTTTTTTTTTTTTTT
+7TTTTTTTTTT|.---..........................|...........TTTTTTTTTTTTTTTTTTTTTTT
+8TTTTTTTTT--...------------------.........|--.......TTTTTTTTTTTTTTTTTTTTTTTTT
+9TTTTTTTTT|.......................     ......|TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+0TTTTTTTTT-------------------------TTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTTT
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7        
+# Dungeon Description
+REGION:(00,00,75,20),lit,"ordinary"
+# Stairs
+STAIR:(66,10),up
+# Doors
+# Outside Doors
+DOOR:closed,(68,10)
+DOOR:locked,(62,10)
+DOOR:locked,(16,08)
+DOOR:closed,(22,12)
+
+# Church
+MONSTER:'@',"Bastard of the Boreal Valley",(16,04)
+MONSTER:'d',"Watchdog of the Boreal Valley",(17,05)
+MONSTER:'@', "corvian knight", (18,06)
+MONSTER:'@', "corvian knight", (14,06)
+MONSTER:'@', "corvian knight", (18,07)
+MONSTER:'@', "corvian knight", (14,07)
+MONSTER:'@', "corvian knight", (18,01)
+MONSTER:'@', "corvian knight", (14,01)
+
+MONSTER:'Z', "phalanx", (15,11)
+MONSTER:'Z', "phalanx", (16,11)
+MONSTER:'Z', "phalanx", (17,11)
+MONSTER:'Z', "phalanx", (15,12)
+MONSTER:'Z', "phalanx", (17,12)
+MONSTER:'Z', "phalanx", (15,13)
+MONSTER:'Z', "phalanx", (16,13)
+MONSTER:'Z', "phalanx", (17,13)
+
+MONSTER:'Z', "phalanx", (15,10)
+MONSTER:'Z', "phalanx", (16,10)
+MONSTER:'Z', "phalanx", (17,10)
+
+MONSTER:'Z', "phalanx", (14,11)
+MONSTER:'Z', "phalanx", (14,12)
+MONSTER:'Z', "phalanx", (14,13)
+
+MONSTER:'Z', "phalanx", (18,11)
+MONSTER:'Z', "phalanx", (18,12)
+MONSTER:'Z', "phalanx", (18,13)
+
+MONSTER:'Z', "phalanx", (15,14)
+MONSTER:'Z', "phalanx", (16,14)
+MONSTER:'Z', "phalanx", (17,14)
+# Objects
+
+#
+#	The "fill" levels for the quest.
+#
+#	These levels are used to fill out any levels not occupied by specific
+#	levels as defined above. "fila" is the upper filler, between the
+#	start and locate levels, and "filb" the lower between the locate
+#	and goal levels.
+#
+
+MAZE: "Hdf-fila" , ' '
+FLAGS: shortsighted,hardfloor
+INIT_MAP: '.' , 'T', true, true, lit, true
+NOMAP
+#
+STAIR: random, up
+STAIR: random, down
+#
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+#
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "wolf", random, hostile
+MONSTER: 'd', "warg", random, hostile
+
+MONSTER: 'd', "warg", random, hostile
+MONSTER: 'd', "warg", random, hostile
+MONSTER: 'd', "warg", random, hostile
+
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+MONSTER: 'Z', random, random, hostile
+
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+MONSTER: random, random, random, hostile
+
+LEVEL: "Hdf-filb"
+#
+FLAGS: hardfloor
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, up
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random,random,random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+STAIR: random, down
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random
+MONSTER: random, random, random
+MONSTER: '@', "corvian knight", random
+
+ROOM: "ordinary" , random, random, random, random
+OBJECT: random, random, random
+MONSTER: random, random, random
+
+RANDOM_CORRIDORS
+

@@ -1016,13 +1016,19 @@ makelevel()
 		    char	fillname[9];
 		    s_level	*loc_lev;
 
-		    Sprintf(fillname, "%s-loca", urole.filecode);
-		    loc_lev = find_level(fillname);
-
-		    Sprintf(fillname, "%s-fil", urole.filecode);
-		    Strcat(fillname,
-			   (u.uz.dlevel < loc_lev->dlevel.dlevel) ? "a" : "b");
-		    makemaz(fillname);
+			if(Role_if(PM_NOBLEMAN) && Race_if(PM_HALF_DRAGON) && flags.initgend && qstart_level.dnum == u.uz.dnum && qstart_level.dlevel == (u.uz.dlevel-1)){
+				Sprintf(fillname, "%s-home", urole.filecode);
+				pline("%s",fillname);
+				makemaz(fillname);
+			} else {
+			    Sprintf(fillname, "%s-loca", urole.filecode);
+			    loc_lev = find_level(fillname);
+	
+			    Sprintf(fillname, "%s-fil", urole.filecode);
+			    Strcat(fillname,
+				   (u.uz.dlevel < loc_lev->dlevel.dlevel) ? "a" : "b");
+			    makemaz(fillname);
+			}
 		    return;
 	    } else if(In_hell(&u.uz) || 
 		  (rn2(5) && u.uz.dnum == challenge_level.dnum
@@ -1647,6 +1653,9 @@ xchar x, y;	/* location */
 	 * as a favored spot for a branch.
 	 */
 	if (!br || made_branch) return;
+	
+	if(Role_if(PM_NOBLEMAN) && Race_if(PM_HALF_DRAGON) && flags.initgend && Is_qstart(&u.uz))
+		return;
 
 	if (!x) {	/* find random coordinates for branch */
 	    br_room = find_branch_room(&m);

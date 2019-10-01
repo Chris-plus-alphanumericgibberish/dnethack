@@ -545,6 +545,7 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	 $(DAT)/anachrononaut.des \
 	 $(DAT)/android.des \
 	 $(DAT)/gnomeranger.des \
+	 $(DAT)/HalfDragonFemaleNoble.des \
 	 $(DAT)/elf.des
 	$(subst /,\,$(U)lev_comp $(DAT)/bigroom.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/castle.des)
@@ -596,6 +597,7 @@ $(O)sp_lev.tag: $(O)utility.tag $(DAT)/bigroom.des  $(DAT)/castle.des \
 	$(subst /,\,$(U)lev_comp $(DAT)/hedrownoble.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/gnomeranger.des)
 	$(subst /,\,$(U)lev_comp $(DAT)/elf.des)
+	$(subst /,\,$(U)lev_comp $(DAT)/HalfDragonFemaleNoble.des)
 	$(subst /,\,copy *.lev $(DAT))
 	$(subst /,\,del *.lev)
 	$(subst /,\,echo sp_levs done > $(O)sp_lev.tag)

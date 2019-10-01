@@ -1229,7 +1229,9 @@ remake:
 	vision_full_recalc = 0;	/* don't let that reenable vision yet */
 	flush_screen(-1);	/* ensure all map flushes are postponed */
 
-	if (portal && !In_endgame(&u.uz)) {
+	if (portal && !In_endgame(&u.uz)
+		&& !(Role_if(PM_NOBLEMAN) && Race_if(PM_HALF_DRAGON) && flags.initgend && Is_qstart(&u.uz))
+	) {
 	    /* find the portal on the new level */
 	    register struct trap *ttrap;
 		int found=0;
