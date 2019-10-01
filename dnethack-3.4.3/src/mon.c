@@ -974,34 +974,36 @@ register struct monst *mtmp;
 		}
 		break;
 	}
-	if(obj && obj->otyp == CORPSE && is_undead_mon(mtmp)){
-		obj->age -= 100;		/* this is an *OLD* corpse */
-	}
-	/* All special cases should precede the G_NOCORPSE check */
-	
-	/* if polymorph or undead turning has killed this monster,
-	   prevent the same attack beam from hitting its corpse */
-	if (flags.bypasses) bypass_obj(obj);
+	if(obj && obj->otyp == CORPSE){
+		if(is_undead_mon(mtmp)){
+			obj->age -= 100;		/* this is an *OLD* corpse */
+		}
+		/* All special cases should precede the G_NOCORPSE check */
+		
+		/* if polymorph or undead turning has killed this monster,
+		   prevent the same attack beam from hitting its corpse */
+		if (flags.bypasses) bypass_obj(obj);
 
-	if (mtmp->mnamelth)
-	    obj = oname(obj, NAME(mtmp));
+		if (mtmp->mnamelth)
+			obj = oname(obj, NAME(mtmp));
 
-	/* Avoid "It was hidden under a green mold corpse!" 
-	 *  during Blind combat. An unseen monster referred to as "it"
-	 *  could be killed and leave a corpse.  If a hider then hid
-	 *  underneath it, you could be told the corpse type of a
-	 *  monster that you never knew was there without this.
-	 *  The code in hitmu() substitutes the word "something"
-	 *  if the corpses obj->dknown is 0.
-	 */
-	if (Blind && !sensemon(mtmp)) obj->dknown = 0;
+		/* Avoid "It was hidden under a green mold corpse!" 
+		 *  during Blind combat. An unseen monster referred to as "it"
+		 *  could be killed and leave a corpse.  If a hider then hid
+		 *  underneath it, you could be told the corpse type of a
+		 *  monster that you never knew was there without this.
+		 *  The code in hitmu() substitutes the word "something"
+		 *  if the corpses obj->dknown is 0.
+		 */
+		if (Blind && !sensemon(mtmp)) obj->dknown = 0;
 
 #ifdef INVISIBLE_OBJECTS
-	/* Invisible monster ==> invisible corpse */
-	obj->oinvis = mtmp->minvis;
+		/* Invisible monster ==> invisible corpse */
+		obj->oinvis = mtmp->minvis;
 #endif
 
-	stackobj(obj);
+		stackobj(obj);
+	}
 	newsym(x, y);
 	return obj;
 }

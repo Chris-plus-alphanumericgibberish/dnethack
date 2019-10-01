@@ -4150,7 +4150,7 @@ struct engr *ep;
 	    if (--tryct < 0) return;
 	    tx = rn1(COLNO-3,2);
 	    ty = rn2(ROWNO);
-	} while (engr_at(tx, ty) ||
+	} while (engr_at(tx, ty) || (ep->engr_type == DUST && levl[tx][ty].typ == GRASS) ||
 		!goodpos(tx, ty, (struct monst *)0, 0));
 
 	ep->engr_x = tx;
