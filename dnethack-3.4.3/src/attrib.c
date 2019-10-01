@@ -911,22 +911,62 @@ newhp()
 	    if (u.ulevel < urole.xlev) {
 	    	hp = urole.hpadv.lofix + urace.hpadv.lofix;
 	    	if (urole.hpadv.lornd > 1) hp += rnd(urole.hpadv.lornd);
-	    	else if (urole.hpadv.lornd > 0) hp += rn2(urole.hpadv.lornd);
+	    	else if (urole.hpadv.lornd > 0) hp += rn2(2); //0-1
 	    	if (urace.hpadv.lornd > 1) hp += rnd(urace.hpadv.lornd);
-	    	else if (urace.hpadv.lornd > 0) hp += rn2(urace.hpadv.lornd);
+	    	else if (urace.hpadv.lornd > 0) hp += rn2(2); //0-1
 	    } else {
 	    	hp = urole.hpadv.hifix + urace.hpadv.hifix;
 	    	if (urole.hpadv.hirnd > 1) hp += rnd(urole.hpadv.hirnd);
-	    	else if (urole.hpadv.hirnd > 0) hp += rn2(urole.hpadv.hirnd);
+	    	else if (urole.hpadv.hirnd > 0) hp += rn2(2); //0-1
 	    	if (urace.hpadv.hirnd > 1) hp += rnd(urace.hpadv.hirnd);
-	    	else if (urace.hpadv.hirnd > 0) hp += rn2(urace.hpadv.hirnd);
+	    	else if (urace.hpadv.hirnd > 0) hp += rn2(2); //0-1
 	    }
 	}
 	
-	if(conplus(ACURR(A_CON)) > 0) hp += conplus(ACURR(A_CON));
-	else hp += conplus(ACURR(A_CON));
+	hp += conplus(ACURR(A_CON));
 	
 	return((hp <= 0) ? 1 : hp);
+}
+
+int
+maxhp()
+{
+	int	hp;
+	int perlevel;
+
+
+	/* Initialize hit points */
+	hp = urole.hpadv.infix + urace.hpadv.infix;
+	
+	if (urole.hpadv.inrnd > 1) hp += rnd(urole.hpadv.inrnd);
+	else if(urole.hpadv.inrnd > 0) hp += rn2(urole.hpadv.inrnd);
+	
+	if (urace.hpadv.inrnd > 1) hp += rnd(urace.hpadv.inrnd);
+	else if(urace.hpadv.inrnd > 0) hp += rn2(urace.hpadv.inrnd);
+
+	if (u.ulevel <= urole.xlev) {
+		perlevel = urole.hpadv.lofix + urace.hpadv.lofix;
+		perlevel += urole.hpadv.lornd;
+		perlevel += urace.hpadv.lornd;
+		
+		hp += (u.ulevel-1)*perlevel;
+	} else {
+		perlevel = urole.hpadv.lofix + urace.hpadv.lofix;
+		perlevel += urole.hpadv.lornd;
+		perlevel += urace.hpadv.lornd;
+		
+		hp += (urole.xlev-1)*perlevel; //Full bonus from below cutoff
+		
+		perlevel = urole.hpadv.hifix + urace.hpadv.hifix;
+		perlevel += urole.hpadv.hirnd;
+		perlevel += urace.hpadv.hirnd;
+		
+		hp += (u.ulevel-urole.xlev)*perlevel;
+	}
+	
+	hp += u.ulevel*conplus(ACURR(A_CON));
+	
+	return((hp <= u.ulevel) ? u.ulevel : hp);
 }
 
 int

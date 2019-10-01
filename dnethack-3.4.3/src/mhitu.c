@@ -159,6 +159,9 @@ struct attack *mattk;
 	else if(mattk->adtyp == AD_STAR){
 		return "starlight rapier";
 	} 
+	else if(mattk->adtyp == AD_MERC){
+		return "blade of metallic mercury";
+	} 
 	else if(mattk->adtyp == AD_BLUD){
 		return "blade of rotted blood";
 	} 
@@ -2438,6 +2441,35 @@ hitmu(mtmp, mattk)
 		}
 		burn_away_slime();
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_MERC:{
+		int mult = 1;
+		hitmsg(mtmp, mattk);
+		if(!Cold_resistance || !InvCold_resistance){
+			pline("The metallic blade is covered in frost!");
+		    if (Cold_resistance) {
+				You("aren't cold!");
+				dmg = 0;
+		    } 
+			else mult++;
+			if(!InvCold_resistance){
+				if((int) mtmp->m_lev > rn2(20))
+				destroy_item(POTION_CLASS, AD_COLD);
+			}
+		}
+		exercise(A_INT, FALSE);
+		exercise(A_WIS, FALSE);
+		exercise(A_CHA, FALSE);
+		if(!Poison_resistance){
+			exercise(A_INT, FALSE);
+			exercise(A_WIS, FALSE);
+			exercise(A_CHA, FALSE);
+		    Sprintf(buf, "%s %s",
+			    s_suffix(Monnam(mtmp)), mpoisons_subj(mtmp, mattk));
+		    poisoned(buf, A_DEX, mdat->mname, 30, 0);
+		}
+		dmg *= mult;
+		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_ACFR:{
 		int mult = 1;
@@ -5354,7 +5386,9 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		break;
 	    case AD_LUCK:
 		if(!mtmp->mcan && umetgaze(mtmp) && 
-			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)) {
+			!is_blind(mtmp) && !mtmp->mspec_used && rn2(5)
+		) {
+			int tmp = d((int)mattk->damn, (int)mattk->damd);
 		    pline("%s glares ominously at you!", Monnam(mtmp));
 		    mtmp->mspec_used = mtmp->mspec_used + d(2,6);
 
@@ -5369,7 +5403,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 			pline("Luckily, you are not affected.");
 		    } else {
 			You_feel("your luck running out.");
-			change_luck(-1);
+			change_luck(-1*tmp);
 		    }
 		    stop_occupation();
 		}

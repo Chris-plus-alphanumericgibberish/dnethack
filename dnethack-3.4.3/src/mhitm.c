@@ -1763,6 +1763,30 @@ physical:{
 		/* only potions damage resistant players in destroy_item */
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		break;
+	    case AD_MERC:{
+		int mult = 1;
+		if(!resists_cold(mdef)){
+			mult++;
+			if (vis)
+				pline("%s is %s!", Monnam(mdef),
+				  on_fire(mdef->data, mattk));
+		}
+		tmp *= mult;
+		if(!resists_cold(mdef)){
+			tmp += destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+		}
+		if (vis && !resists_poison(mdef)){
+			pline("%s %s was poisoned!", s_suffix(Monnam(magr)),
+				  mpoisons_subj(magr, mattk));
+			if (rn2(10)) tmp += rn1(10,6);
+			else {
+				if (vis) pline_The("poison was deadly...");
+				tmp = 500;
+				mdef->mhp = 1;
+			}
+		}
+		}break;
+/////////////////////////////////////////////////
 	    case AD_ACFR:{
 		int mult = 1;
 		if(!resists_fire(mdef)){
@@ -1791,15 +1815,17 @@ physical:{
 					return (MM_DEF_DIED | (grow_up(magr,mdef) ?
 								0 : MM_AGR_DIED));
 			}
-			(void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
-			(void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
-			(void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
 		}
 		if(hates_holy_mon(mdef)){
 			if (vis) pline("%s is seared by the holy flames!", Monnam(mdef));
 			mult++;
 		}
 		tmp *= mult;
+		if(!resists_fire(mdef)){
+			tmp += destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+			tmp += destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+			tmp += destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+		}
 		}break;
 /////////////////////////////////////////////////
 		case AD_DESC:

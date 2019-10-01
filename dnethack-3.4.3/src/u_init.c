@@ -2683,7 +2683,7 @@ u_init()
 			else switch (attkptr->adtyp){
 			case AD_LUCK:
 				attkptr->damn = 1;
-				attkptr->damd = 1;
+				attkptr->damd = rnd(13);
 				break;
 			case AD_MIST:
 			case AD_DEAD:

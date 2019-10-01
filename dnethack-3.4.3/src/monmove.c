@@ -954,10 +954,12 @@ register struct monst *mtmp;
 					 "", 0L, DUST);
 					oep = engr_at(mtmp->mx,mtmp->my);
 				}
-				oep->ward_id = FOOTPRINT;
-				oep->halu_ward = 1;
-				oep->ward_type = BURN;
-				oep->complete_wards = 1;
+				if(oep){
+					oep->ward_id = FOOTPRINT;
+					oep->halu_ward = 1;
+					oep->ward_type = BURN;
+					oep->complete_wards = 1;
+				}
 				get_level(&flev, nlev);
 				migrate_to_level(mtmp, ledger_no(&flev), MIGR_RANDOM,
 					(coord *)0);

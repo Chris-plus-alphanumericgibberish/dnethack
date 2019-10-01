@@ -2572,7 +2572,7 @@ summon_alien:
 	} break;
     case EVIL_EYE:
 		if(mtmp){
-			struct attack evilEye = {AT_GAZE, AD_LUCK, 1, 1};
+			struct attack evilEye = {AT_GAZE, AD_LUCK, 1, 4};
 			gazemu(mtmp, &evilEye);
 		}
 		else{

@@ -62,7 +62,7 @@ NEARDATA struct colorTextClr LightsaberColor[] = {
 	{"ruby",CLR_RED},					/*RUBY*/
 	{"sunset",CLR_ORANGE},				/*JACINTH*/
 	{"sapphire",CLR_BLUE},				/*SAPPHIRE*/
-	{"smoke",CLR_BLACK},				/*BLACK_OPAL*/
+	{"smoke",CLR_BROWN},				/*BLACK_OPAL*/
 	{"emerald",CLR_GREEN},				/*EMERALD*/
 	{"turquoise",CLR_GREEN},			/*TURQUOISE*/
 	{"pink",CLR_ORANGE},				/*MORGANITE*/
@@ -70,7 +70,7 @@ NEARDATA struct colorTextClr LightsaberColor[] = {
 	{"aquamarine",CLR_GREEN},			/*AQUAMARINE*/
 	{"amber",CLR_BROWN},				/*AMBER*/
 	{"brown",CLR_BROWN},				/*TOPAZ*/
-	{"mirrored",CLR_BLACK},				/*JET*/
+	{"mirrored",HI_SILVER},				/*JET*/
 	{"rainbow",CLR_WHITE},				/*OPAL*/
 	{"yellow",CLR_YELLOW},				/*CHRYSOBERYL*/
 	{"deep red",CLR_RED},					/*GARNET*/

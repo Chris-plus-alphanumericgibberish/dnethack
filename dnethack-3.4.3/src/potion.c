@@ -1171,11 +1171,11 @@ healup(nhp, nxtra, curesick, cureblind)
 		if (Upolyd) {
 			hp = &u.mh;
 			hpmax = &u.mhmax;
-			hpcap = 40 + mons[u.umonnum].mlevel*(8 + conplus(ACURR(A_CON)) + urole.hpadv.hirnd);
+			hpcap = 24 + 2*mons[u.umonnum].mlevel*8;
 		} else {
 			hp = &u.uhp;
 			hpmax = &u.uhpmax;
-			hpcap = 40 + u.ulevel*(8 + conplus(ACURR(A_CON)) + urole.hpadv.hirnd + urace.hpadv.hirnd);
+			hpcap = 24 + 2*maxhp();
 		}
 		*hp += nhp;
 		if (*hp > *hpmax){

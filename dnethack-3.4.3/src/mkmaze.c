@@ -515,11 +515,40 @@ fixup_special()
 	/* CHAOS QUEST 2: various features */
 	if (In_mithardir_quest(&u.uz)){
 		if (In_mithardir_desert(&u.uz) || on_level(&u.uz, &elshava_level)){
+			int i, j, walls;
 			for (x = 0; x<COLNO; x++){
 				for (y = 0; y<ROWNO; y++){
 					levl[x][y].lit = TRUE;
+					if (m_at(x, y) && !ACCESSIBLE(levl[x][y].typ))
+						rloc(m_at(x, y), FALSE);
+					if(OBJ_AT(x, y) && !ACCESSIBLE(levl[x][y].typ))
+						rlocos_at(x, y);
+					if(In_mithardir_desert(&u.uz) && IS_WALL(levl[x][y].typ)){
+						walls = 0;
+						i = -1; j = 0;
+						if(isok(x+i,y+j) && IS_WALL(levl[x+i][y+j].typ))
+							walls++;
+						i = 0; j = -1;
+						if(isok(x+i,y+j) && IS_WALL(levl[x+i][y+j].typ))
+							walls++;
+						i = 1; j = 0;
+						if(isok(x+i,y+j) && IS_WALL(levl[x+i][y+j].typ))
+							walls++;
+						i = 0; j = 1;
+						if(isok(x+i,y+j) && IS_WALL(levl[x+i][y+j].typ))
+							walls++;
+						if(walls < 2){
+							levl[x][y].typ = STONE;
+							if(walls == 1){
+								//Go back to previous line
+								x = max(0, x-1);
+								y = max(0, y-1);
+							}
+						}
+					}
 				}
 			}
+			wallification(1, 0, COLNO - 1, ROWNO - 1);
 		}
 	}
 	/* CHAOS QUEST 3: various features */

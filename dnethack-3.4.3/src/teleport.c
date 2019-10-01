@@ -1462,6 +1462,17 @@ int in_sight;
 
 
 void
+rlocos_at(x, y)
+int x, y;
+{
+	int try_limit = 4000;
+	struct obj *lobj = 0;
+	
+	while(level.objects[x][y] && (lobj != level.objects[x][y] || try_limit-- > 0))
+		rloco(level.objects[x][y]);
+}
+
+void
 rloco(obj)
 register struct obj *obj;
 {
