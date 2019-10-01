@@ -1033,6 +1033,99 @@ register struct monst *mtmp;
 		return(0);
 	}
 	
+	if(mtmp->data == &mons[PM_DRACAE_ELADRIN]){
+		if(!mtmp->mvar1){
+			struct permonst *ptr = mkclass(S_CHA_ANGEL, G_PLANES);
+			if(ptr)
+				mtmp->mvar1 = monsndx(ptr);
+		}
+		else if(mtmp->mvar2 < 6){
+			mtmp->mvar2 += rnd(3);
+		} else {
+			int ox = mtmp->mx, oy = mtmp->my;
+			rloc(mtmp, FALSE);
+			if(mtmp->mx != ox || mtmp->my != oy){
+				int type = mtmp->mvar1;
+				mtmp->mvar1 = 0;
+				mtmp->mvar2 = 0;
+				mtmp = makemon(&mons[type], ox, oy, NO_MINVENT);
+				if(mtmp){
+					struct obj *otmp;
+					otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+					otmp->obj_material = DRAGON_HIDE;
+					otmp->objsize = mtmp->data->msize;
+					otmp->oproperties = OPROP_ACIDW;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(PLATE_MAIL, TRUE, FALSE);
+					otmp->obj_material = SHELL;
+					otmp->objsize = mtmp->data->msize;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(GAUNTLETS, TRUE, FALSE);
+					otmp->obj_material = SHELL;
+					otmp->objsize = mtmp->data->msize;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(ARMORED_BOOTS, TRUE, FALSE);
+					otmp->obj_material = SHELL;
+					otmp->objsize = mtmp->data->msize;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					m_dowear(mtmp, TRUE);
+				}
+			}
+			return 0;
+		}
+	}
+	if(mtmp->data == &mons[PM_MOTHERING_MASS]){
+		if(!mtmp->mvar1){
+			struct permonst *ptr = mkclass(S_CHA_ANGEL, G_PLANES);
+			if(ptr)
+				mtmp->mvar1 = monsndx(ptr);
+		}
+		else if(mtmp->mvar2 < 6){
+			mtmp->mvar2 += rnd(3);
+		} else {
+			int i;
+			int ox = mtmp->mx, oy = mtmp->my;
+			int type = mtmp->mvar1;
+			int etyp = counter_were(type);
+			mtmp->mvar1 = 0;
+			mtmp->mvar2 = 0;
+			for(i = rnd(4); i; i--){
+				if(etyp)
+					mtmp = makemon(&mons[etyp], ox, oy, NO_MINVENT|MM_ADJACENTOK|MM_ADJACENTSTRICT);
+				else return 0;
+				if(mtmp){
+					struct obj *otmp;
+					otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+					otmp->obj_material = DRAGON_HIDE;
+					otmp->objsize = mons[type].msize;
+					otmp->oproperties = OPROP_ACIDW;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(PLATE_MAIL, TRUE, FALSE);
+					otmp->obj_material = SHELL;
+					otmp->objsize = mons[type].msize;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(GAUNTLETS, TRUE, FALSE);
+					otmp->obj_material = SHELL;
+					otmp->objsize = mons[type].msize;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					otmp = mksobj(ARMORED_BOOTS, TRUE, FALSE);
+					otmp->obj_material = SHELL;
+					otmp->objsize = mons[type].msize;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
+			}
+			return 0;
+		}
+	}
+	
 	if(mdat == &mons[PM_OONA] && !mtmp->mspec_used){
 		nearby = FALSE;
 		struct monst *tmpm;
