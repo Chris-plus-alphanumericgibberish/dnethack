@@ -230,13 +230,13 @@ void FormatStatusString(char* text, int format)
 	if(hp < 0) hp = 0;
 	(void) describe_level(nb=eos(nb));
 	Sprintf(nb = eos(nb),
-		"%c:%-2ld HP:%d(%d) Pw:%d(%d) AC:%-2d", oc_syms[COIN_CLASS],
+		"%c:%-2ld HP:%d(%d) Pw:%d(%d) AC:%-2d DR:%-2d", oc_syms[COIN_CLASS],
 #ifndef GOLDOBJ
 		u.ugold,
 #else
 		money_cnt(invent),
 #endif
-		hp, hpmax, u.uen, u.uenmax, u.uac);
+		hp, hpmax, u.uen, u.uenmax, (u.uac+u.ustdy), (u.udr-u.ustdy));
 
 	if (Upolyd)
 		Sprintf(nb = eos(nb), " HD:%d", mons[u.umonnum].mlevel);

@@ -704,8 +704,8 @@ moveloop()
 		flags.initalign = 2;
 		impossible("Bad alignment initializer detected and fixed. Save and reload.");
 	}
-//	printMons();
-//	printDPR();
+	printMons();
+	printDPR();
     for(;;) {/////////////////////////MAIN LOOP/////////////////////////////////
     hpDiff = u.uhp;
 	get_nh_event();

@@ -2285,7 +2285,7 @@ recover_savefile()
 {
 	int gfd, lfd, sfd;
 	int lev, savelev, hpid;
-	xchar levc;
+	int levc;
 	struct version_info version_data;
 	int processed[256];
 	char savename[SAVESIZE], errbuf[BUFSZ];
@@ -2376,15 +2376,12 @@ recover_savefile()
 	(void)close(gfd);
 	processed[0] = 1;
 
-	for (lev = 1; lev < 256; lev++) {
-		/* level numbers are kept in xchars in save.c, so the
-		 * maximum level number (for the endlevel) must be < 256
-		 */
+	for (lev = 1; lev < 1024; lev++) {//Arbitrary
 		if (lev != savelev) {
 			lfd = open_levelfile(lev, (char *)0);
 			if (lfd >= 0) {
 				/* any or all of these may not exist */
-				levc = (xchar) lev;
+				levc = lev;
 				write(sfd, (genericptr_t) &levc, sizeof(levc));
 				if (!copy_bytes(lfd, sfd)) {
 					(void) close(lfd);

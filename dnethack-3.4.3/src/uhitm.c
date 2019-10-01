@@ -118,6 +118,11 @@ attack_checks(mtmp, wep)
 struct monst *mtmp;
 struct obj *wep;	/* uwep for attack(), null for kick_monster() */
 {
+	char qbuf[QBUFSZ];
+#ifdef PARANOID
+	char buf[BUFSZ];
+#endif
+
 	/* if you're close enough to attack, alert any waiting monster */
 	mtmp->mstrategy &= ~STRAT_WAITMASK;
 

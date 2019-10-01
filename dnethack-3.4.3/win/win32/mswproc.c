@@ -266,7 +266,7 @@ void mswin_player_selection(void)
 							flags.initalign, PICK_RANDOM);
 			if (flags.initrole < 0) {
 				raw_print("Incompatible role!");
-				flags.initrole = randrole();
+				flags.initrole = randrole(0);
 			}
 		}
 
@@ -311,7 +311,7 @@ void mswin_player_selection(void)
 
 void prompt_for_player_selection(void)
 {
-	int i, k, n;
+	int i, k, n, initinitrole, initinitrace, initinitgend, initinitalign;
 	char pick4u = 'n', thisch, lastch = 0;
 	char pbuf[QBUFSZ], plbuf[QBUFSZ];
 	winid win;
@@ -324,12 +324,20 @@ void prompt_for_player_selection(void)
 	/* prevent an unnecessary prompt */
 	rigid_role_checks();
 
+	initinitrole = flags.initrole
+	initinitrace = flags.initrace
+	initinitgend = flags.initgend
+	initinitalign = flags.initalign
+	
 	/* Should we randomly pick for the player? */
 	if (!flags.randomall &&
 	    (flags.initrole == ROLE_NONE || flags.initrace == ROLE_NONE ||
-	     flags.initgend == ROLE_NONE || flags.initalign == ROLE_NONE)) {
+	     flags.initgend == ROLE_NONE || flags.initalign == ROLE_NONE)
+	) {
 	    /* int echoline; */
-	    char *prompt = build_plselection_prompt(pbuf, QBUFSZ, flags.initrole,
+	    char *prompt;
+		
+		prompt = build_plselection_prompt(pbuf, QBUFSZ, flags.initrole,
 				flags.initrace, flags.initgend, flags.initalign);
 
 	    /* tty_putstr(BASE_WINDOW, 0, ""); */
@@ -378,7 +386,7 @@ give_up:	/* Quit */
 						flags.initalign, PICK_RANDOM);
 		if (flags.initrole < 0) {
 		    /* tty_putstr(BASE_WINDOW, 0, "Incompatible role!"); */
-		    flags.initrole = randrole();
+		    flags.initrole = randrole(0);
 		}
  	    } else {
 	    	/* tty_clear_nhwindow(BASE_WINDOW); */
@@ -414,7 +422,7 @@ give_up:	/* Quit */
 		any.a_int = pick_role(flags.initrace, flags.initgend,
 				    flags.initalign, PICK_RANDOM)+1;
 		if (any.a_int == 0)	/* must be non-zero */
-		    any.a_int = randrole()+1;
+		    any.a_int = randrole(0)+1;
 		add_menu(win, NO_GLYPH, &any , '*', 0, ATR_NONE,
 				"Random", MENU_UNSELECTED);
 		any.a_int = i+1;	/* must be non-zero */
@@ -648,6 +656,18 @@ give_up:	/* Quit */
 	    }
 	}
 	/* Success! */
+	
+	root_plselection_prompt(plbuf, QBUFSZ - 1,
+			flags.initrole, flags.initrace, flags.initgend, flags.initalign);
+	Sprintf(pbuf, "Pick a role for your %s", plbuf);
+	box_result = NHMessageBox(NULL, prompt, 
+			MB_ICONQUESTION | MB_YESNOCANCEL | MB_DEFBUTTON1);
+	if(box_result == IDNO){
+		flags.initrole = initinitrole
+		flags.initrace = initinitrace
+		flags.initgend = initinitgend
+		flags.initalign = initinitalign
+	}
 	/* tty_display_nhwindow(BASE_WINDOW, FALSE); */
 }
 

@@ -106,17 +106,13 @@ static struct Bool_Opt
 	{"hilite_peaceful",    &iflags.wc_hilite_peaceful, FALSE, SET_IN_GAME},	/*WC*/
 	{"hilite_zombie",    &iflags.wc_hilite_zombies, FALSE, SET_IN_GAME},	/*WC*/
 	{"zombies_as_Z",    &iflags.wc_zombie_z, TRUE, SET_IN_GAME},	/*WC*/
-	{"hilite_detected",    &iflags.wc_hilite_detected, FALSE, SET_IN_GAME},	/*WC*/
 	{"use_inverse",   &iflags.wc_inverse, TRUE, SET_IN_GAME},		/*WC*/
 #else
 	{"hilite_peaceful",    &iflags.wc_hilite_peaceful, TRUE, SET_IN_GAME},	/*WC*/
 	{"hilite_zombie",    &iflags.wc_hilite_zombies, TRUE, SET_IN_GAME},	/*WC*/
 	{"zombies_as_Z",    &iflags.wc_zombie_z, FALSE, SET_IN_GAME},	/*WC*/
-	{"hilite_detected",    &iflags.wc_hilite_detected, TRUE, SET_IN_GAME},	/*WC*/
 	{"use_inverse",   &iflags.wc_inverse, FALSE, SET_IN_GAME},		/*WC*/
 #endif
-	{"hilite_hidden_stairs",    &iflags.hilite_hidden_stairs, TRUE, SET_IN_GAME},	/*WC*/
-	{"hilite_obj_piles",    &iflags.hilite_obj_piles, FALSE, SET_IN_GAME},	/*WC*/
 	{"dnethack_start_text",    &iflags.dnethack_start_text, TRUE, DISP_IN_GAME},
 	{"role_obj_names",    &iflags.role_obj_names, TRUE, SET_IN_GAME},
 	{"obscure_role_obj_names",    &iflags.obscure_role_obj_names, FALSE, SET_IN_GAME},
@@ -543,7 +539,6 @@ initoptions()
 	iflags.prevmsg_window = 's';
 #endif
 	iflags.menu_headings = ATR_INVERSE;
-	iflags.attack_mode = ATTACK_MODE_CHAT;
 
 	/* Use negative indices to indicate not yet selected */
 	flags.initrole = -1;
@@ -569,10 +564,6 @@ initoptions()
 	flags.warntypea = 0L;
 	flags.warntypev = 0L;
 	flags.montype = (long long int)0;
-
-#ifdef SORTLOOT
-	iflags.sortloot = 'n';
-#endif
 
      /* assert( sizeof flags.inv_order == sizeof def_inv_order ); */
 	(void)memcpy((genericptr_t)flags.inv_order,
@@ -1075,74 +1066,6 @@ boolean tinitial, tfrom_file;
 #endif /* MICRO */
 
 	/* compound options */
-
-	fullname = "attack_mode";
-	/* attack_mode:pacifist, chat, ask, or fight */
-	if (match_optname(opts, fullname, 11, TRUE)) {
-		if (negated) {
-			bad_negation(fullname, FALSE);
-		} else if ((op = string_for_opt(opts, FALSE))) {
-			int tmp = tolower(*op);
-			switch (tmp) {
-				case ATTACK_MODE_PACIFIST:
-				case ATTACK_MODE_CHAT:
-				case ATTACK_MODE_ASK:
-				case ATTACK_MODE_FIGHT_ALL:
-					iflags.attack_mode = tmp;
-				break;
-				default:
-					badoption(opts);
-					return;
-			}
-		}
-		return;
-	}
-
-	fullname = "pokedex";
-	if (match_optname(opts, fullname, 3, TRUE)) {
-		boolean negative = FALSE;
-		if (negated) {
-			iflags.pokedex = POKEDEX_SHOW_DEFAULT;
-		}
-		else if ((op = string_for_opt(opts, FALSE)) != 0) {
-			if (op[0] == '!') {
-				negative = TRUE;
-				op++;
-			}
-#define ADD_REMOVE_SECTION(section)	if (!negative) iflags.pokedex |= (section); else iflags.pokedex &= ~(section)
-			if (!strncmpi(op, "stats", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_STATS);
-			else if (!strncmpi(op, "generation", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_GENERATION);
-			else if (!strncmpi(op, "weight", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_WEIGHT);
-			else if (!strncmpi(op, "resists", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_RESISTS);
-			else if (!strncmpi(op, "conveys", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_CONVEYS);
-			else if (!strncmpi(op, "movement", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_MM);
-			else if (!strncmpi(op, "thinking", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_MT);
-			else if (!strncmpi(op, "biology", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_MB);
-			else if (!strncmpi(op, "mechanics", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_MG);
-			else if (!strncmpi(op, "race", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_MA);
-			else if (!strncmpi(op, "vision", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_MV);
-			else if (!strncmpi(op, "attacks", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_ATTACKS);
-			else if (!strncmpi(op, "summary", strlen(op)))
-				ADD_REMOVE_SECTION(POKEDEX_SHOW_CRITICAL);
-			else
-				badoption(opts);
-#undef ADD_REMOVE_SECTION
-		}
-		return;
-	}
-		
 
 	fullname = "pettype";
 	if (match_optname(opts, fullname, 3, TRUE)) {
@@ -2670,31 +2593,7 @@ boolean setinitial,setfromfile;
      * Also takes care of interactive autopickup_exception_handling changes.
 #endif
      */
-	if(!strcmp("attack_mode", optname)){
-		menu_item *pick = (menu_item *) 0;
-		tmpwin = create_nhwindow(NHW_MENU);
-		start_menu(tmpwin);
-		any = zeroany;
-		any.a_char = ATTACK_MODE_PACIFIST;
-		add_menu(tmpwin, NO_GLYPH, &any, ATTACK_MODE_PACIFIST, 0, 0,
-			"pacifist: don't fight anything", MENU_UNSELECTED);
-		any.a_char = ATTACK_MODE_CHAT;
-		add_menu(tmpwin, NO_GLYPH, &any, ATTACK_MODE_CHAT, 0, 0,
-			"chat: chat with peacefuls, fight hostiles",
-			MENU_UNSELECTED);
-		any.a_char = ATTACK_MODE_ASK;
-		add_menu(tmpwin, NO_GLYPH, &any, ATTACK_MODE_ASK, 0, 0,
-			"ask: ask to fight peacefuls", MENU_UNSELECTED);
-		any.a_char = ATTACK_MODE_FIGHT_ALL;
-		add_menu(tmpwin, NO_GLYPH, &any, ATTACK_MODE_FIGHT_ALL, 0, 0,
-			"fightall: fight peacefuls and hostiles", MENU_UNSELECTED);
-		end_menu(tmpwin, "Select attack_mode:");
-		if (select_menu(tmpwin, PICK_ONE, &pick) > 0) {
-			iflags.attack_mode = pick->item.a_char;
-			free((genericptr_t) pick);
-		}
-		destroy_nhwindow(tmpwin);
-    } else if (!strcmp("menustyle", optname)){
+    if (!strcmp("menustyle", optname)) {
 	const char *style_name;
 	menu_item *style_pick = (menu_item *)0;
         tmpwin = create_nhwindow(NHW_MENU);
@@ -2935,26 +2834,6 @@ boolean setinitial,setfromfile;
         }
 	destroy_nhwindow(tmpwin);
         retval = TRUE;
-#ifdef SORTLOOT
-    } else if (!strcmp("sortloot", optname)) {
-		const char *sortl_name;
-		menu_item *sortl_pick = (menu_item *)0;
-		tmpwin = create_nhwindow(NHW_MENU);
-		start_menu(tmpwin);
-		for (i = 0; i < SIZE(sortltype); i++) {
-			sortl_name = sortltype[i];
-			any.a_char = *sortl_name;
-			add_menu(tmpwin, NO_GLYPH, &any, *sortl_name, 0,
-				 ATR_NONE, sortl_name, MENU_UNSELECTED);
-		}
-		end_menu(tmpwin, "Select loot sorting type:");
-		if (select_menu(tmpwin, PICK_ONE, &sortl_pick) > 0) {
-			iflags.sortloot = sortl_pick->item.a_char;
-			free((genericptr_t)sortl_pick);
-		}
-		destroy_nhwindow(tmpwin);
-		retval = TRUE;
-#endif /* SORTLOOT */
     } else if (!strcmp("menu_headings", optname)) {
 	static const char *mhchoices[3] = {"bold", "inverse", "underline"};
 	const char *npletters = "biu";
@@ -3109,17 +2988,6 @@ char *buf;
 		Sprintf(buf, "%s", iflags.altkeyhandler[0] ?
 			iflags.altkeyhandler : "default");
 #endif
-	else if (!strcmp(optname, "attack_mode"))
-	Sprintf(buf, "%s",
-		iflags.attack_mode == ATTACK_MODE_PACIFIST
-			? "pacifist"
-			: iflags.attack_mode == ATTACK_MODE_CHAT
-				? "chat"
-				: iflags.attack_mode == ATTACK_MODE_ASK
-					? "ask"
-					: iflags.attack_mode == ATTACK_MODE_FIGHT_ALL
-						? "fight"
-						: none);
 	else if (!strcmp(optname, "boulder"))
 		Sprintf(buf, "%c", iflags.bouldersym ?
 			iflags.bouldersym : oc_syms[(int)objects[BOULDER].oc_class]);
@@ -3283,17 +3151,6 @@ char *buf;
 		if (iflags.wc_scroll_margin) Sprintf(buf, "%d",iflags.wc_scroll_margin);
 		else Strcpy(buf, defopt);
 	}
-#ifdef SORTLOOT
-	else if (!strcmp(optname, "sortloot")) {
-		char *sortname = (char *)NULL;
-		for (i=0; i < SIZE(sortltype) && sortname==(char *)NULL; i++) {
-		   if (iflags.sortloot == sortltype[i][0])
-		     sortname = (char *)sortltype[i];
-		}
-		if (sortname != (char *)NULL)
-		   Sprintf(buf, "%s", sortname);
-	}
-#endif /* SORTLOOT */
 	else if (!strcmp(optname, "player_selection"))
 		Sprintf(buf, "%s", iflags.wc_player_selection ? "prompts" : "dialog");
 #ifdef MSDOS

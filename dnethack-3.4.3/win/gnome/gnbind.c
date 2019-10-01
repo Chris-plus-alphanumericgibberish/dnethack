@@ -170,7 +170,7 @@ gnome_player_selection()
     if (sel == ROLE_RANDOM) {	/* Random role */
 	sel = pick_role(flags.initrace, flags.initgend,
 			  flags.initalign, PICK_RANDOM);
-	if (sel < 0) sel = randrole();
+	if (sel < 0) sel = randrole(0);
     }
 
     flags.initrole = sel;

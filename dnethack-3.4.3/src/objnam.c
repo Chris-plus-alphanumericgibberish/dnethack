@@ -530,7 +530,7 @@ char *buf;
 			Strcat(buf, (obj->known && (obj->oproperties&OPROP_UNHYW || obj->oproperties&OPROP_UNHY)) ? "unholy " : "cursed ");
 		else if (obj->blessed)
 			Strcat(buf, (obj->known && (obj->oproperties&OPROP_HOLYW || obj->oproperties&OPROP_HOLY)) ? "holy " : "blessed ");
-		else if (iflags.show_buc || ((!obj->known || !objects[obj->otyp].oc_charged ||
+		else if (((!obj->known || !objects[obj->otyp].oc_charged ||
 			(obj->oclass == ARMOR_CLASS ||
 			obj->oclass == RING_CLASS))
 			/* For most items with charges or +/-, if you know how many
@@ -1962,7 +1962,7 @@ char *
 doname_with_price(obj)
      register struct obj *obj;
 {
-    return doname_base(obj, iflags.show_shop_prices);
+    return doname_base(obj, FALSE);
 }
 
 
