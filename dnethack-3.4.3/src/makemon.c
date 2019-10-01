@@ -612,49 +612,117 @@ register struct monst *mtmp;
 			else if(mm == PM_BASTARD_OF_THE_BOREAL_VALLEY){
 				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 				otmp->obj_material = METAL;
-				otmp->spe = 0;
-				otmp->blessed = FALSE;
-				otmp->cursed = FALSE;
 				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 
-				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
+				otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
 				otmp->obj_material = METAL;
-				otmp->spe = 0;
-				otmp->blessed = FALSE;
-				otmp->cursed = FALSE;
 				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 				
-				otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
+				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
 				otmp->obj_material = METAL;
-				otmp->spe = 0;
-				otmp->blessed = FALSE;
-				otmp->cursed = FALSE;
 				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 				
 				otmp = mksobj(PONTIFF_S_CROWN, FALSE, FALSE);
 				otmp->obj_material = GOLD;
-				otmp->spe = 0;
-				otmp->blessed = FALSE;
-				otmp->cursed = FALSE;
 				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 
 				otmp = mksobj(SCYTHE, FALSE, FALSE);
 				otmp = oname(otmp, artiname(ART_FRIEDE_S_SCYTHE));
-				otmp->spe = 0;
-				otmp->blessed = FALSE;
-				otmp->cursed = FALSE;
 				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 				
 				otmp = mksobj(SCYTHE, FALSE, FALSE);
 				otmp = oname(otmp, artiname(ART_PROFANED_GREATSCYTHE));
-				otmp->spe = 0;
-				otmp->blessed = FALSE;
-				otmp->cursed = FALSE;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
+			} else if(ptr == &mons[PM_CORVIAN_KNIGHT]) {
+				//Note: monster inventories are last-in-first-out, so the offhand weapon needs to be first
+				switch(rnd(8)){
+					case 1:
+						(void)mongets(mtmp, SET_OF_CROW_TALONS);
+						(void)mongets(mtmp, SET_OF_CROW_TALONS);
+					break;
+					case 2:
+						(void)mongets(mtmp, SET_OF_CROW_TALONS);
+						(void)mongets(mtmp, CROW_QUILL);
+					break;
+					case 3:
+						otmp = mksobj(MACE, FALSE, FALSE);
+						otmp->obj_material = METAL;
+						otmp->objsize = MZ_HUGE;
+						otmp->oproperties = OPROP_COLDW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 4:
+						otmp = mksobj(LONG_SWORD, FALSE, FALSE);
+						otmp->obj_material = SILVER;
+						otmp->oproperties = OPROP_LESSW|OPROP_COLDW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 5:
+						otmp = mksobj(SCIMITAR, FALSE, FALSE);
+						otmp->obj_material = SILVER;
+						otmp->oproperties = OPROP_LESSW|OPROP_FIREW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+						
+						otmp = mksobj(SCIMITAR, FALSE, FALSE);
+						otmp->obj_material = SILVER;
+						rn2(2) ? 
+							(otmp->oproperties = OPROP_LESSW|OPROP_WATRW) :
+							(otmp->oproperties = OPROP_LESSW|OPROP_MAGCW);
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 6:
+						(void)mongets(mtmp, SET_OF_CROW_TALONS);
+						otmp = mksobj(RAPIER, FALSE, FALSE);
+						otmp->obj_material = METAL;
+						otmp->oproperties = OPROP_LESSW|OPROP_COLDW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 7:
+						(void)mongets(mtmp, KITE_SHIELD);
+						otmp = mksobj(SABER, FALSE, FALSE);
+						otmp->obj_material = SILVER;
+						otmp->oproperties = OPROP_LESSW|OPROP_COLDW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+					case 8:
+						otmp = mksobj(SCYTHE, FALSE, FALSE);
+						otmp->obj_material = SILVER;
+						otmp->oproperties = OPROP_LESSW|OPROP_COLDW;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					break;
+				}
+				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
+				otmp->obj_material = METAL;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
+
+				otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
+				otmp->obj_material = METAL;
+				otmp->bodytypeflag = MB_ANIMAL;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
+				
+				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
+				otmp->obj_material = METAL;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
+				
+				otmp = mksobj(HELMET, FALSE, FALSE);
+				otmp->obj_material = METAL;
+				otmp->bodytypeflag = MB_LONGHEAD;
 				fix_object(otmp);
 				(void) mpickobj(mtmp,otmp);
 			} else if(ptr == &mons[PM_SHATTERED_ZIGGURAT_CULTIST]) {
@@ -4820,9 +4888,17 @@ register struct monst *mtmp;
 			otmp->oeroded = 1;
 			fix_object(otmp);
 			(void) mpickobj(mtmp,otmp);
+		} else if(mm == PM_PHALANX){
+			(void) mongets(mtmp, SPEAR);
+			otmp = mksobj(ROUNDSHIELD, FALSE, FALSE);
+			otmp->obj_material = LEATHER;
+			otmp->objsize = MZ_LARGE;
+			fix_object(otmp);
+			(void) mpickobj(mtmp,otmp);
 				
-		} else {
-			if(mm == PM_SKELETAL_PIRATE){
+			(void) mongets(mtmp, SPEAR);
+			(void) mongets(mtmp, SPEAR);
+		} else if(mm == PM_SKELETAL_PIRATE){
 				otmp = rn2(2) ? mksobj(SCIMITAR, FALSE, FALSE) : mksobj(KNIFE, FALSE, FALSE);
 				// curse(otmp);
 				otmp->oeroded = 1;
@@ -4844,7 +4920,7 @@ register struct monst *mtmp;
 				otmp->owt = weight(otmp);
 				(void) mpickobj(mtmp, otmp);
 				break;
-			}
+		} else {
 			if (!rn2(4)) (void)mongets(mtmp, LEATHER_ARMOR);
 			if (!rn2(4))
 				(void)mongets(mtmp, (rn2(3) ? KNIFE : SHORT_SWORD));
@@ -5421,6 +5497,34 @@ register struct	monst	*mtmp;
 						update_mon_intrinsics(mtmp, otmp, TRUE, TRUE);
 					}
 				}
+			} else if(mtmp->data == &mons[PM_WATCHDOG_OF_THE_BOREAL_VALLEY]){
+				otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
+				otmp->objsize = MZ_HUGE;
+				otmp->obj_material = METAL;
+				otmp->oproperties = OPROP_COLD;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
+				
+				otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
+				otmp->objsize = MZ_HUGE;
+				otmp->obj_material = METAL;
+				otmp->oproperties = OPROP_COLD;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
+				
+				otmp = mksobj(GAUNTLETS, FALSE, FALSE);
+				otmp->objsize = MZ_HUGE;
+				otmp->obj_material = METAL;
+				otmp->oproperties = OPROP_COLD;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
+				
+				otmp = mksobj(HELMET, FALSE, FALSE);
+				otmp->objsize = MZ_HUGE;
+				otmp->obj_material = METAL;
+				otmp->oproperties = OPROP_COLD;
+				fix_object(otmp);
+				(void) mpickobj(mtmp,otmp);
 			}
 		case S_QUADRUPED:
 			//Escaped war-elephant

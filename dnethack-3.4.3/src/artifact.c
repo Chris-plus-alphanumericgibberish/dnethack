@@ -3102,6 +3102,21 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				*dmgptr += basedmg*.2;
 		}
 	}
+	
+	if(otmp->otyp == CROW_QUILL){
+		if(youdefend){
+			u.ustdy += 4;
+		} else if(mdef){
+			mdef->mstdy += 4;
+		}
+	}
+	if(otmp->otyp == SET_OF_CROW_TALONS){
+		if(youdefend){
+			u.ustdy += 3*otmp->ostriking + 3;
+		} else if(mdef){
+			mdef->mstdy += 3*otmp->ostriking + 3;
+		}
+	}
 	return FALSE;
 }
 

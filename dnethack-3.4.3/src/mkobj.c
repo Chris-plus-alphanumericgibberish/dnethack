@@ -227,7 +227,10 @@ boolean artif;
 
 	otmp = mkobj(let, artif);
 	
-	if(In_quest(&u.uz) && !Role_if(PM_CONVICT) && in_mklev){
+	if(In_quest(&u.uz) && in_mklev
+		&& !Role_if(PM_CONVICT)
+		&& !(Role_if(PM_NOBLEMAN) && Race_if(PM_HALF_DRAGON))
+	){
 		if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
 		if(otmp->oclass == ARMOR_CLASS){
 			if(is_suit(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
@@ -250,7 +253,10 @@ boolean init, artif;
 
 	otmp = mksobj(otyp, init, artif);
 	
-	if(In_quest(&u.uz) && !Role_if(PM_CONVICT) && in_mklev){
+	if(In_quest(&u.uz) && in_mklev
+		&& !Role_if(PM_CONVICT)
+		&& !(Role_if(PM_NOBLEMAN) && Race_if(PM_HALF_DRAGON))
+	){
 		if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
 		if(otmp->oclass == ARMOR_CLASS){
 			if(is_suit(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);

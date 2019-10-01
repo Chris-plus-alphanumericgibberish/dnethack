@@ -2742,7 +2742,7 @@ physical:{
 	
 	if(weaponhit && otmp && (otmp->opoisoned || arti_poisoned(otmp) || otmp->oartifact == ART_WEBWEAVER_S_CROOK || otmp->oartifact == ART_MOONBEAM)){
 		int viperheads;
-		for(viperheads = ((otmp && otmp->otyp == VIPERWHIP) ? (1+otmp->ostriking) : 1); viperheads; viperheads--){
+		for(viperheads = ((otmp && (otmp->otyp == VIPERWHIP || otmp->otyp == SET_OF_CROW_TALONS)) ? (1+otmp->ostriking) : 1); viperheads; viperheads--){
 			if(ispoisoned & OPOISON_BASIC || (otmp && arti_poisoned(otmp))){
 				if (resists_poison(mdef));
 				else if (rn2(10))

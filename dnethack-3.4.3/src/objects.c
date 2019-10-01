@@ -130,15 +130,15 @@ WEAPON("spike", (char *)0, /*Needs encyc entry*/
 
 /* spears */
 WEAPON("spear", (char *)0,
-	1, 1, 0, 50, 25,  3,  6,  8, 0, P,   P_SPEAR, IRON, FALSE, HI_METAL),
+	1, 0, 0, 50, 25,  3,  6,  8, 0, P,   P_SPEAR, IRON, FALSE, HI_METAL),
 WEAPON("elven spear", "runed spear",
-	0, 1, 0, 10, 10,  3,  7,  7, 2, P,   P_SPEAR, WOOD, FALSE, HI_WOOD),
+	0, 0, 0, 10, 10,  3,  7,  7, 2, P,   P_SPEAR, WOOD, FALSE, HI_WOOD),
 WEAPON("droven spear", "long spear", /*Needs encyc entry*/
-	0, 1, 1,  0, 15,  3, 12, 12, 2, P,   P_SPEAR, OBSIDIAN_MT, UNIDED, CLR_BLACK),
+	0, 0, 1,  0, 15,  3, 12, 12, 2, P,   P_SPEAR, OBSIDIAN_MT, UNIDED, CLR_BLACK),
 WEAPON("orcish spear", "crude spear",
-	0, 1, 0, 13, 25,  3,  5,  10, -1, P,   P_SPEAR, IRON, FALSE, CLR_BLACK),
+	0, 0, 0, 13, 25,  3,  5,  10, -1, P,   P_SPEAR, IRON, FALSE, CLR_BLACK),
 WEAPON("dwarvish spear", "stout spear",
-	0, 1, 0, 12, 30,  3,  9,  9, 0, P,   P_SPEAR, IRON, FALSE, HI_METAL),
+	0, 0, 0, 12, 30,  3,  9,  9, 0, P,   P_SPEAR, IRON, FALSE, HI_METAL),
 WEAPON("javelin", "throwing spear",
 	0, 1, 0, 10, 20,  3,  6,  6, 0, P,   P_SPEAR, IRON, FALSE, HI_METAL),
 

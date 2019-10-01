@@ -189,8 +189,12 @@ struct monst *mon;
 
 /*	Put weapon specific "to hit" bonuses in below:		*/
 	if(otmp->otyp == VIPERWHIP){
+		//Note: ostriking uses only 8 bits
 		otmp->ostriking = min(7,rn2(otmp->ovar1));
 		tmp += (1+otmp->ostriking) * objects[otmp->otyp].oc_hitbon;
+	} else if(otmp->otyp == SET_OF_CROW_TALONS){
+		//Note: ostriking uses only 8 bits
+		otmp->ostriking = min(7,rn2(3));
 	} else {
 		tmp += objects[otmp->otyp].oc_hitbon;
 	}
@@ -789,6 +793,7 @@ int spec;
 			spe_mult *= 2;
 		}
 		break;
+	case SET_OF_CROW_TALONS:
 	case VIPERWHIP:
 		// extra heads means more base dice of damage
 		if (otmp->ostriking > 0)
@@ -1086,6 +1091,7 @@ int spec;
 			
 			if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),dsize);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,dsize);
+			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,dsize);
 			else bonus += rnd(dsize);
 		}
 	    if (is_axe(otmp) && is_wooden(ptr))
@@ -1097,6 +1103,7 @@ int spec;
 		){
 			if(otyp == KHAKKHARA) bonus += d(rnd(3),20);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,20);
+			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,20);
 			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
 			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
 			else bonus += rnd(20);
@@ -1108,10 +1115,12 @@ int spec;
 			if(youdefend){
 				if(otyp == KHAKKHARA) bonus += d(rnd(3),u.ulevel);
 				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,mon->m_lev);
+				else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,mon->m_lev);
 				else bonus += rnd(u.ulevel);
 			} else {
 				if(otyp == KHAKKHARA) bonus += d(rnd(3),mon->m_lev);
 				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking,mon->m_lev);
+				else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking,mon->m_lev);
 				else bonus += rnd(mon->m_lev);
 			}
 		}
@@ -1139,6 +1148,7 @@ int spec;
 				bonus += d(bdm,4); //Somewhat unholy
 			else if(otyp == KHAKKHARA) bonus += d(rnd(3)*bdm,9);
 			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking*bdm,9);
+			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking*bdm,9);
 			else bonus += d(bdm, 9);
 		}
 		
@@ -1365,6 +1375,7 @@ int spot;
 				( (otmp->owt <= (30 + (mtmp->m_lev/5)*5)) 
 				|| (otmp->otyp == CHAIN && mtmp->data == &mons[PM_CATHEZAR]) 
 				|| (mtmp->data == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY])
+				|| (mtmp->data == &mons[PM_CORVIAN_KNIGHT])
 				)
 			)) &&
 			/* never a hated weapon */
@@ -1698,6 +1709,7 @@ static const NEARDATA short hwep[] = {
 	  SCYTHE/*2d4*/, 
 	  BROADSWORD/*2d4/1d6+1*/, 
 	  MORNING_STAR/*2d4/1d6+1*/, 
+	  CROW_QUILL/*1d8/1d8*/,
 	  RAKUYO_SABER/*1d8/1d8*/,
 	  SABER/*1d8/1d8*/,
 	  TRIDENT/*1d6+1/3d4*/, 
@@ -1705,6 +1717,7 @@ static const NEARDATA short hwep[] = {
 	  FLAIL/*1d6+1/2d4*/, 
 	  NAGINATA/*1d6+1/2d4*/, 
 	  SCIMITAR/*1d8/1d8*/,
+	  SET_OF_CROW_TALONS/*2d4/2d3*/,
 	  DWARVISH_SHORT_SWORD/*1d8/1d7*/, 
 	  DROVEN_DAGGER/*1d8/1d6*/, 
 	  MACE/*1d6+1/1d6*/, 
@@ -1855,6 +1868,7 @@ register struct monst *mtmp;
 	/* failure */
 	return (struct obj *)0;
 }
+
 struct obj *
 select_pick(mtmp)
 struct monst *mtmp;

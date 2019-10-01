@@ -218,6 +218,11 @@ unsigned *ospecial;
 				if(offset >= S_drkroom && offset <= S_dnladder){
 					color = offset == S_litroom ? CLR_GRAY : CLR_BLACK;
 				}
+			} else if(In_quest(&u.uz)){
+				if(Role_if(PM_NOBLEMAN) && Race_if(PM_HALF_DRAGON) && flags.initgend){
+					if (offset == S_tree)
+						color = CLR_CYAN;
+				}
 			} else if(In_cha(&u.uz)){
 				if(In_mithardir_quest(&u.uz)){
 					if(In_mithardir_desert(&u.uz) || on_level(&u.uz, &elshava_level)){

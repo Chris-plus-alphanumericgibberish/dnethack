@@ -1183,6 +1183,7 @@ register struct monst *mtmp;
 		}
 		if(MON_WEP(mtmp)->recharged < 7) MON_WEP(mtmp)->recharged++;
 		mtmp->mspec_used = 10;
+		return 0;
 	}
 
 	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID])
@@ -1199,6 +1200,24 @@ register struct monst *mtmp;
 		MON_WEP(mtmp)->age = 75000;
 		if(MON_WEP(mtmp)->recharged < 7) MON_WEP(mtmp)->recharged++;
 		mtmp->mspec_used = 10;
+		return 0;
+	}
+
+	if(mtmp->data == &mons[PM_PHALANX]
+		&& !mtmp->mcan
+		&& !(noactions(mtmp))
+	){
+		struct obj *otmp;
+		int sprcnt = 0;
+		for(otmp = mtmp->minvent; otmp; otmp = otmp->nobj)
+			if(otmp->otyp == SPEAR)
+				sprcnt++;
+		if(sprcnt < 3){
+			if(canspotmon(mtmp)) pline("%s pulls a spear out of its rotting mass.",Monnam(mtmp));
+			(void) mongets(mtmp, SPEAR);
+			init_mon_wield_item(mtmp);
+			return 0;
+		}
 	}
 
 	/* Demonic Blackmail! */

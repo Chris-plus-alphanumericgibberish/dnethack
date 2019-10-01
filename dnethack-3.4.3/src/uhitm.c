@@ -2361,7 +2361,7 @@ defaultvalue:
 			adjalign(-2);//stiffer penalty
 			if(rn2(2)) u.hod++;
 	    }
-		for(viperheads = ((obj && obj->otyp == VIPERWHIP) ? (1+obj->ostriking) : 1); viperheads; viperheads--){
+		for(viperheads = ((obj && (obj->otyp == VIPERWHIP || obj->otyp == SET_OF_CROW_TALONS)) ? (1+obj->ostriking) : 1); viperheads; viperheads--){
 			if(ispoisoned & OPOISON_BASIC || (obj && arti_poisoned(obj))){
 				if (resists_poison(mon))
 					needpoismsg = TRUE;

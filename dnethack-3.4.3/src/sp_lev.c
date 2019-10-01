@@ -1041,7 +1041,10 @@ struct mkroom	*croom;
 			otmp = mkobj_at(oclass, x, y, !named);
 		}
 	}
-	if(In_quest(&u.uz) && !Role_if(PM_CONVICT)){
+	if(In_quest(&u.uz) 
+		&& !Role_if(PM_CONVICT)
+		&& !(Role_if(PM_NOBLEMAN) && Race_if(PM_HALF_DRAGON))
+	){
 		if(otmp->oclass == WEAPON_CLASS || otmp->oclass == ARMOR_CLASS) otmp->objsize = (&mons[urace.malenum])->msize;
 		if(otmp->oclass == ARMOR_CLASS){
 			if(is_suit(otmp)) otmp->bodytypeflag = ((&mons[urace.malenum])->mflagsb&MB_BODYTYPEMASK);
@@ -1068,30 +1071,7 @@ struct mkroom	*croom;
 		else if (o->corpsenm != NON_PM) otmp->corpsenm = o->corpsenm;
 	}
 	if(otmp->otyp == CORPSE && otmp->corpsenm == PM_CROW_WINGED_HALF_DRAGON){
-		struct obj *tmpo;
-		
 		otmp->oeroded = 1;
-		
-		tmpo = mksobj_at(GAUNTLETS, x, y, FALSE, FALSE);
-		tmpo->obj_material = SILVER;
-		tmpo->objsize = MZ_LARGE;
-		fix_object(tmpo);
-		tmpo->spe = +5;
-		
-		tmpo = mksobj_at(HELMET, x, y, FALSE, FALSE);
-		tmpo->obj_material = SILVER;
-		tmpo->objsize = MZ_LARGE;
-		fix_object(tmpo);
-		tmpo->spe = +5;
-		
-		tmpo = mksobj_at(GENTLEWOMAN_S_DRESS, x, y, FALSE, FALSE);
-		tmpo->objsize = MZ_LARGE;
-		fix_object(tmpo);
-		tmpo->spe = +5;
-		
-		tmpo = mksobj_at(SPEAR, x, y, FALSE, FALSE);
-		tmpo = oname(tmpo, artiname(ART_YORSHKA_S_SPEAR));
-		tmpo->spe = +5;
 	}
 	if(otmp->otyp == STATUE && (otmp->spe&STATUE_FACELESS) && In_mithardir_quest(&u.uz)){
 		static int statuetypes[] = {PM_ELVENKING, PM_ELVENKING, PM_ELVENQUEEN, PM_ELVENQUEEN,
