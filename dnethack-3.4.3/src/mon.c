@@ -3558,7 +3558,9 @@ struct monst *mtmp;
 			newcham(mtmp, &mons[rn2(4) ? PM_ACID_BLOB : PM_BLACK_PUDDING], FALSE, FALSE);
 			return;
 		}
-	} else if(mtmp->mspec_used == 0 && is_uvuudaum(mtmp->data)){
+	} else if(mtmp->mspec_used == 0 && 
+		(is_uvuudaum(mtmp->data) || mtmp->data==&mons[PM_PRAYERFUL_THING])
+	){
 		if (cansee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
 			pline("A glowing halo forms over %s!",

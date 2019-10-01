@@ -2191,6 +2191,23 @@ not_special:
 		mtmp->mtrack[j] = mtmp->mtrack[j-1];
 	    mtmp->mtrack[0].x = omx;
 	    mtmp->mtrack[0].y = omy;
+		if(mtmp->data == &mons[PM_HEMORRHAGIC_THING]){
+			//The thing leaves bloody footprints, that appear *after* the monster has passed by
+			if(isok(mtmp->mtrack[1].x, mtmp->mtrack[1].y) && mtmp->mtrack[1].x != 0){
+				struct engr *oep = engr_at(mtmp->mtrack[1].x, mtmp->mtrack[1].y);
+				if(!oep){
+					make_engr_at(mtmp->mtrack[1].x, mtmp->mtrack[1].y,
+					 "", 0L, DUST);
+					oep = engr_at(mtmp->mtrack[1].x, mtmp->mtrack[1].y);
+				}
+				if(oep && (oep->ward_type == DUST || oep->ward_type == ENGR_BLOOD)){
+					oep->ward_id = FOOTPRINT;
+					oep->halu_ward = 1;
+					oep->ward_type = ENGR_BLOOD;
+					oep->complete_wards = 1;
+				}
+			}
+		}
 	    /* Place a segment at the old position. */
 	    if (mtmp->wormno) worm_move(mtmp);
 		

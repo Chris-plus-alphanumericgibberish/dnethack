@@ -1198,6 +1198,8 @@ boolean drained;
 			    "in touch with the cosmos." :
 			    "a strange mental acuity.");
 			HTelepat |= FROMOUTSIDE;
+			if(Hallucination)
+				u.uinsight++;
 			/* If blind, make sure monsters show up. */
 			if (Blind) see_monsters();
 		}

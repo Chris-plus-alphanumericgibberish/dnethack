@@ -194,7 +194,7 @@ const char * const monexplain[MAXMCLASSES] = {
     "mummy",			"naga",			"ogre",
     "pudding or ooze",		"quantum mechanic",	"rust monster or disenchanter",
     "snake",			"troll",		"unknown abomination",
-    "vampire",			"wraith",		"xorn",
+    "vampire",			"wraith",		"radially symmetric organism",
     "apelike creature",		"zombie",
 
     "human or elf",		"ghost",		"shade",	"golem",

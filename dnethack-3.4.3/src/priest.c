@@ -226,6 +226,11 @@ int sanctum;   /* is it the seat of the high priest? */
 			priest->ispriest = 1;
 			priest->msleeping = 0;
 		    (void) mpickobj(priest, mksobj(SPE_FIREBALL, FALSE, FALSE));
+		} else if(Is_bridge_temple(&u.uz)){
+			priest->ispriest = 1;
+			priest->msleeping = 0;
+			priest->mpeaceful = 0;
+			set_malign(priest); /* mpeaceful may have changed */
 		} else {
 			priest->mpeaceful = 1;
 			priest->ispriest = 1;
@@ -423,7 +428,7 @@ register int roomno;
 			sanctum = ( (priest->data == &mons[PM_HIGH_PRIEST] || priest->data == &mons[PM_ELDER_PRIEST]) &&
 				   (Is_sanctum(&u.uz) || In_endgame(&u.uz)));
 			can_speak = (priest->mcanmove && priest->mnotlaugh && !priest->msleeping &&
-					 flags.soundok);
+					 flags.soundok && priest->data != &mons[PM_BLASPHEMOUS_LURKER]);
 			if (can_speak) {
 				unsigned save_priest = priest->ispriest;
 				/* don't reveal the altar's owner upon temple entry in

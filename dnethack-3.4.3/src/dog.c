@@ -333,7 +333,7 @@ losedogs()
 
 	for(mtmp = migrating_mons; mtmp; mtmp = mtmp2) {
 		mtmp2 = mtmp->nmon;
-		if (mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel) {
+		if (mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel && mtmp->m_insight_level <= u.uinsight) {
 		    if(mtmp == migrating_mons)
 			migrating_mons = mtmp->nmon;
 		    else

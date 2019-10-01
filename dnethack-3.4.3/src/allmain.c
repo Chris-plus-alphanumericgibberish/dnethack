@@ -764,7 +764,8 @@ moveloop()
 			reset_mvudieroll();
 			if(u.specialSealsActive&SEAL_LIVING_CRYSTAL)
 				average_dogs();
-			for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+			for (mtmp = fmon; mtmp; mtmp = nxtmon){
+				nxtmon = mtmp->nmon;
 				if(mtmp->data == &mons[PM_HELLCAT]){
 					if(!isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
 						mtmp->minvis = TRUE;
@@ -795,6 +796,9 @@ moveloop()
 						mtmp->perminvis = FALSE;
 						newsym(mtmp->mx,mtmp->my);
 					}
+				} else if(mtmp->m_insight_level > u.uinsight){
+					migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+					continue;
 				}
 				if (mtmp->minvis){
 					newsym(mtmp->mx, mtmp->my);
@@ -1902,7 +1906,8 @@ karemade:
 	/****************************************/
 	find_ac();
 ////////////////////////////////////////////////////////////////////////////////////////////////
-	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+	for (mtmp = fmon; mtmp; mtmp = nxtmon){
+		nxtmon = mtmp->nmon;
 		if(mtmp->data == &mons[PM_HELLCAT]){
 			if(!isdark(mtmp->mx,mtmp->my) && !mtmp->minvis){
 				mtmp->minvis = TRUE;
@@ -1933,6 +1938,9 @@ karemade:
 				mtmp->perminvis = FALSE;
 				newsym(mtmp->mx,mtmp->my);
 			}
+		} else if(mtmp->m_insight_level > u.uinsight){
+			migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+			continue;
 		}
 		if (mtmp->minvis){
 			newsym(mtmp->mx, mtmp->my);

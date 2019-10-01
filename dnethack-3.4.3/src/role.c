@@ -1276,6 +1276,10 @@ god_priest(gptr, sx, sy, sanctum)
 		priest = makemon(&mons[PM_HIGH_SHAMAN], sx + 1, sy, NO_MM_FLAGS);
 		return priest;
 	}
+	else if(Is_bridge_temple(&u.uz)){
+		priest = makemon(&mons[PM_BLASPHEMOUS_LURKER], sx, sy, NO_MM_FLAGS);
+		return priest;
+	}
 	else {
 		int role = -1, galign, i;
 		

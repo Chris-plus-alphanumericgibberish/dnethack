@@ -1976,6 +1976,7 @@ get_description_of_damage_type(uchar id)
 	case AD_GOLD: return "turns victim to gold";
 	case AD_ACFR: return "holy fire";
 	case AD_DESC: return "dessication";
+	case AD_BLAS: return "blasphemy";
 	case AD_DUNSTAN: return "stones throw themselves at target";
 	case AD_IRIS: return "iridescent tentacles";
 	case AD_NABERIUS: return "tarnished bloody fangs";

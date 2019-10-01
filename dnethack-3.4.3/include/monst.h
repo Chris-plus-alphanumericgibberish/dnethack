@@ -73,6 +73,7 @@ struct monst {
 	int mstdy;		/* to record extra damage to be delt due to having been studied */
 	int ustdym;		/* to record extra damage to be delt by you due to having been studied by you*/
 	int m_san_level;/* to record sanity level at which this monster will be obscured */
+	int m_insight_level;/* to record insight level at which this monster will be reveled */
 	
 	short mstr, mdex, mcon, mint, mwis, mcha; /* Monster ability scores */
 
@@ -205,7 +206,7 @@ struct monst {
 #define	PSEUDONATURAL	FACTION_PADDING+9	/* tentacled */
 #define	TOMB_HERD	FACTION_PADDING+10	/* possessed statue */
 #define	YITH		FACTION_PADDING+11	/* possessed by the great race of yith */
-#define	CRANIUM_RAT	FACTION_PADDING+12	/* cranium rat */
+#define	CRANIUM_RAT	FACTION_PADDING+12	/* psychic rat */
 //define	HALF_DEMON	FACTION_PADDING+1	/* half-demon */
 //define	HALF_DEVIL	FACTION_PADDING+2	/* half-devil */
 //define	HALF_DRAGON	FACTION_PADDING+3	/* half-dragon */

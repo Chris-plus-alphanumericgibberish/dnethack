@@ -670,6 +670,30 @@ OBJECT:'?',"enchant weapon",(52,16)
 MONSTER:'t',"trapper",(62,03)
 MONSTER:'t',"lurker above",(43,01)
 
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(07,13)
+MONSTER[80%]:'H',"lurking one",(09,17)
+MONSTER[80%]:'H',"lurking one",(24,15)
+MONSTER[80%]:'H',"lurking one",(26,02)
+MONSTER[80%]:'H',"lurking one",(36,02)
+MONSTER[80%]:'H',"lurking one",(47,04)
+MONSTER[80%]:'H',"lurking one",(50,06)
+MONSTER[80%]:'H',"lurking one",(64,02)
+MONSTER[80%]:'H',"lurking one",(64,02)
+MONSTER[80%]:'H',"lurking one",(74,02)
+MONSTER[80%]:'H',"lurking one",(69,12)
+MONSTER[80%]:'H',"lurking one",(69,18)
+MONSTER[80%]:'H',"lurking one",(51,17)
+MONSTER[80%]:'H',"lurking one",(52,13)
+MONSTER[80%]:'H',"lurking one",(44,16)
+
+#Dolls
+MONSTER[10%]:'\'',"living doll",random
+
+#kuker
+MONSTER[10%]:'A',"kuker",random
+MONSTER[10%]:'A',"kuker",random
+
 #
 # Alternate river head - Vampires and Byakhee
 #
@@ -846,6 +870,30 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(07,13)
+MONSTER[80%]:'H',"lurking one",(09,17)
+MONSTER[80%]:'H',"lurking one",(24,15)
+MONSTER[80%]:'H',"lurking one",(26,02)
+MONSTER[80%]:'H',"lurking one",(36,02)
+MONSTER[80%]:'H',"lurking one",(47,04)
+MONSTER[80%]:'H',"lurking one",(50,06)
+MONSTER[80%]:'H',"lurking one",(64,02)
+MONSTER[80%]:'H',"lurking one",(64,02)
+MONSTER[80%]:'H',"lurking one",(74,02)
+MONSTER[80%]:'H',"lurking one",(69,12)
+MONSTER[80%]:'H',"lurking one",(69,18)
+MONSTER[80%]:'H',"lurking one",(51,17)
+MONSTER[80%]:'H',"lurking one",(52,13)
+MONSTER[80%]:'H',"lurking one",(44,16)
+
+#Dolls
+MONSTER[10%]:'\'',"living doll",random
+
+#kuker
+MONSTER[10%]:'A',"kuker",random
+MONSTER[10%]:'A',"kuker",random
+
 #
 #	The entry level for the Lethe branch.
 #
@@ -855,28 +903,32 @@ TRAP:random,random
 MAZE: "lethe-b",' '
 FLAGS: hardfloor,lethe
 GEOMETRY:center,center
+#0         1         2         3         4         5         6         7     
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-                                                                            
-   ...            ###.......  ....            ....                          
-  .....         ###   ...........           .......####                ...  
-  ....      #####    ...}}}}}}}}}}}}}}     .......    ##         ....H....  
-  ...   ##H##        . }}}}}}}}}}}}}}}}     .....      ##       .....  ...  
-   #    #   ###     ..}}}}}}}}}}}}}}}}}}       #        #        ...        
-   #H####     #     .}}}}    ....    }}}}    ###     ....          ####     
-     #        ####..}}}}.     ..      }}}}}..#    ......              #     
-     #             }}}}..      #       }}}I}     ........      .......#     
-     .  ..}I}}}}}}}}}}..   ..###      ...I}}}      .....    .... ....       
-     ....}I}I}}}}}}}}     ...      ##.... }}}}...###       ..}}}}}}}}}}}}}} 
-     .. }}}.}I}}}}}}      .....#      .....}}I}}           .}.}}}}}}}}}}}}} 
-     ..}}}}  ....          ...          .....}}}}          }}}.}}}}}}}}}}}} 
-    ..}}}}      H           #             ... }}}}}}}}}}}}}}}}}.            
-}}}}}}}}}       .....     ###           ##. ...}}}}}}}}}}}}}}}.    ...      
-}}}}}}}}.    ...........  # #  ....     #     . }}}}}}}}}}}}}.    .....     
-}}}}}}}.    .............## ##.....     #     #   .... ......    ......     
-   .....    ...........       ......#####     ###  ......         #         
-            .....  ...         ....             ####  ....####H####         
-                                                                            
+0                                                                            
+1   ...            ###.......  ....            ....                          
+2  .....         ###   ...........           .......####                ...  
+3  ....      #####    ...}}}}}}}}}}}}}}     .......    ##         ....H....  
+4  ...   ##H##        . }}}}}}}}}}}}}}}}     .....      ##       .....  ...  
+5   #    #   ###     ..}}}}}}}}}}}}}}}}}}       #        #        ...        
+6   #H####     #     .}}}}    ....    }}}}    ###     ....          ####     
+7     #        ####..}}}}.     ..      }}}}}..#    ......              #     
+8     #             }}}}..      #       }}}I}     ........      .......#     
+9     .  ..}I}}}}}}}}}}..   ..###      ...I}}}      .....    .... ....       
+0     ....}I}I}}}}}}}}     ...      ##.... }}}}...###       ..}}}}}}}}}}}}}} 
+1     .. }}}.}I}}}}}}      .....#      .....}}I}}           .}.}}}}}}}}}}}}} 
+2     ..}}}}  ....          ...          .....}}}}          }}}.}}}}}}}}}}}} 
+3    ..}}}}      H           #             ... }}}}}}}}}}}}}}}}}.            
+4}}}}}}}}}       .....     ###           ##. ...}}}}}}}}}}}}}}}.    ...      
+5}}}}}}}}.    ...........  # #  ....     #     . }}}}}}}}}}}}}.    .....     
+6}}}}}}}.    .............## ##.....     #     #   .... ......    ......     
+7   .....    ...........       ......#####     ###  ......         #         
+8            .....  ...         ....             ####  ....####H####         
+9                                                                            
 ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7     
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
 REGION:(02,01,06,04),unlit,"ordinary"
@@ -962,6 +1014,30 @@ OBJECT:'!',"water",(43,03),blessed,0
 OBJECT:'!',"gain ability",(49,08)
 MONSTER:'p',"iron piercer",(47,03)
 MONSTER:'p',random,(52,08)
+
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(02,02)
+MONSTER[80%]:'H',"lurking one",(27,01)
+MONSTER[80%]:'H',"lurking one",(44,02)
+MONSTER[80%]:'H',"lurking one",(64,04)
+MONSTER[80%]:'H',"lurking one",(73,03)
+MONSTER[80%]:'H',"lurking one",(63,08)
+MONSTER[80%]:'H',"lurking one",(59,10)
+MONSTER[80%]:'H',"lurking one",(66,15)
+MONSTER[80%]:'H',"lurking one",(54,15)
+MONSTER[80%]:'H',"lurking one",(44,14)
+MONSTER[80%]:'H',"lurking one",(29,06)
+MONSTER[80%]:'H',"lurking one",(28,11)
+MONSTER[80%]:'H',"lurking one",(31,18)
+MONSTER[80%]:'H',"lurking one",(16,18)
+MONSTER[80%]:'H',"lurking one",(07,17)
+
+#Dolls
+MONSTER[10%]:'\'',"living doll",random
+
+#kuker
+MONSTER[10%]:'A',"kuker",random
+MONSTER[10%]:'A',"kuker",random
 
 #
 #	The Ogre Stockade for the Lethe branch.
@@ -1140,7 +1216,34 @@ OBJECT[25%]:random,random,random
 OBJECT[25%]:random,random,random
 OBJECT[25%]:random,random,random
 
-#
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(02,08)
+MONSTER[80%]:'H',"lurking one",(12,05)
+MONSTER[80%]:'H',"lurking one",(11,01)
+MONSTER[80%]:'H',"lurking one",(16,03)
+MONSTER[80%]:'H',"lurking one",(32,03)
+MONSTER[80%]:'H',"lurking one",(32,03)
+MONSTER[80%]:'H',"lurking one",(55,02)
+MONSTER[80%]:'H',"lurking one",(70,02)
+MONSTER[80%]:'H',"lurking one",(70,05)
+MONSTER[80%]:'H',"lurking one",(71,09)
+MONSTER[80%]:'H',"lurking one",(71,13)
+MONSTER[80%]:'H',"lurking one",(73,14)
+MONSTER[80%]:'H',"lurking one",(59,15)
+MONSTER[80%]:'H',"lurking one",(54,14)
+MONSTER[80%]:'H',"lurking one",(44,16)
+MONSTER[80%]:'H',"lurking one",(36,15)
+MONSTER[80%]:'H',"lurking one",(20,14)
+MONSTER[80%]:'H',"lurking one",(20,14)
+MONSTER[80%]:'H',"lurking one",(13,15)
+MONSTER[80%]:'H',"lurking one",(31,11)
+
+#Dolls
+MONSTER[10%]:'\'',"living doll",random
+
+#kuker
+MONSTER[10%]:'A',"kuker",random
+MONSTER[10%]:'A',"kuker",random
 
 #
 #	The Undead Stockade for the Lethe branch.
@@ -1151,28 +1254,32 @@ OBJECT[25%]:random,random,random
 MAZE: "leth-c-2",' '
 FLAGS: hardfloor,lethe
 GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-                          }                                                 
-          ..      ........}}|.......                                        
-       ##....   ...........}|..........           ......        .......     
-  H#####  ...  .. .........}|................#+#...........#+##....\..      
-  .             ..........}}|................#+#.....{.....#+##....\.       
- ...             ......    }        -.......    .........       .......     
- ...            ....       }          .....        ....                     
- ....          ...      -}}-         ##..##                     ###.....    
-  ...##       ...       }}          ###  ####   #    .....    ###  .......  
-      #   .......      }-         ####    ####    .......####    .......  
-      ............    }}        ....##    ##......   ....           .....   
-       ... }}}}}I}}}}}}}      .......     ..........     #                
-        }}I}I}}I}}}}}}}}}     .......    .................         ....   
-       }}}II}II}I}}}}}}}}}     .....   #+..... .............   #### .....   
-}}}}}}}}}}}}     -...  }}}}           ..  .......{..... .....###  ##......  
-}}}}}}}}}    ..    H    }}}}       -....    ........ .......      # .....   
-}}}}}}}}   .....   #     }}}}}}}}}}}}}}}}   .............         #  ....   
-           ......###      }}}}}}}}}}}}}}}}      ...####           H         
-             ...           }}}}}}}}}}}}}}}}  # # # # # #   ....HHHH         
-                                        }}}}                                
+0                          }                                                 
+1          ..      ........}}|.......                                        
+2       ##....   ...........}|..........           ......        .......     
+3  H#####  ...  .. .........}|................#+#...........#+##....\..      
+4  .             ..........}}|................#+#.....{.....#+##....\.       
+5 ...             ......    }        -.......    .........       .......     
+6 ...            ....       }          .....        ....                     
+7 ....          ...      -}}-         ##..##                     ###.....    
+8  ...##       ...       }}          ###  ####   #    .....    ###  .......  
+9      #   .......      }-         ####    ####    .......####    .......  
+0      ............    }}        ....##    ##......   ....           .....   
+1       ... }}}}}I}}}}}}}      .......     ..........     #                
+2        }}I}I}}I}}}}}}}}}     .......    .................         ....   
+3       }}}II}II}I}}}}}}}}}     .....   #+..... .............   #### .....   
+4}}}}}}}}}}}}     -...  }}}}           ..  .......{..... .....###  ##......  
+5}}}}}}}}}    ..    H    }}}}       -....    ........ .......      # .....   
+6}}}}}}}}   .....   #     }}}}}}}}}}}}}}}}   .............         #  ....   
+7           ......###      }}}}}}}}}}}}}}}}      ...####           H         
+8             ...           }}}}}}}}}}}}}}}}  # # # # # #   ....HHHH         
+9                                        }}}}                                
 ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
 
 # Some random pets...
 RANDOM_MONSTERS:'D','Z','M','c','T','R'
@@ -1315,6 +1422,34 @@ OBJECT[25%]:random,random,random
 OBJECT[25%]:random,random,random
 OBJECT[25%]:random,random,random
 
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(02,08)
+MONSTER[80%]:'H',"lurking one",(11,01)
+MONSTER[80%]:'H',"lurking one",(16,03)
+MONSTER[80%]:'H',"lurking one",(32,03)
+MONSTER[80%]:'H',"lurking one",(32,03)
+MONSTER[80%]:'H',"lurking one",(55,02)
+MONSTER[80%]:'H',"lurking one",(70,02)
+MONSTER[80%]:'H',"lurking one",(70,05)
+MONSTER[80%]:'H',"lurking one",(71,09)
+MONSTER[80%]:'H',"lurking one",(71,13)
+MONSTER[80%]:'H',"lurking one",(73,14)
+MONSTER[80%]:'H',"lurking one",(59,15)
+MONSTER[80%]:'H',"lurking one",(54,14)
+MONSTER[80%]:'H',"lurking one",(44,16)
+MONSTER[80%]:'H',"lurking one",(36,15)
+MONSTER[80%]:'H',"lurking one",(20,14)
+MONSTER[80%]:'H',"lurking one",(20,14)
+MONSTER[80%]:'H',"lurking one",(13,15)
+MONSTER[80%]:'H',"lurking one",(31,11)
+
+#Dolls
+MONSTER[10%]:'\'',"living doll",random
+
+#kuker
+MONSTER[10%]:'A',"kuker",random
+MONSTER[10%]:'A',"kuker",random
+
 #
 #	The Wizards Manse
 #
@@ -1324,28 +1459,32 @@ OBJECT[25%]:random,random,random
 MAZE: "leth-d-1",' '
 FLAGS: hardfloor,lethe
 GEOMETRY:center,center
+#0         1         2   	   3	     4	       5		 6	       7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
- ------------------------------------   }}}}              -----             
- |.............T...........T........|    }}}}             |...|             
- |TTTT..TTTTT..TTT..TTTTT..TTT..TT..|  ..}}}}..           |...|             
- |......T...T...........T..T.....T..| ...}}}}...          --+--         ..  
- |..TTTTTT..T..TTTTTTT..T.....{..T..|...}}}}}}...|  -----   #          .... 
- |..........T..T.....TTTT..T.....T..|..}}}}}}}}..|  |...|   #        ##.... 
- |TTTT..TTTTT..TTTT..T..T..TTT..TT..+..}}}}}}}}..+##S...+####H###    # .... 
- |..........T........T.....T........|..}}}}}}}}..|  |...|       ###  #  ..  
- |.T..}}..T.-----------------------S|...}}}}}}...|  -----         ####      
- |....}}....|.........|..|.|..|.....-------------------  ....          #    
- |....}}....|.........|+--+--+|.....|..........|.|....| ..}}}}II       H    
- |.T..}}..T.|.........|.......|.....|........\...|....S#.}I}}}}}}}}}   ..   
- |....}}....|.........|.......|.....|..........|.S....| .}}}I}}}}}}}} ....  
- |....}}....-----+--------+------+---..........-----+--  }}}}}}}}}}}}I}}}}}}
- |.T..}}..T.+.......................+.........\..| |.|    }II}}}T.}}I}}}}}}}
- |....}}....-----+--------+------+---..........-----+--      .......I}}}}}}}
- |....}}....|.........|.......|.....|..........|.S....|          #          
- |.T..}}..T.|.........|.......|.....|........\...|....S###########          
- |..........|.........|.......|.....|..........|.|....|                     
- ------------------------------------------------------                     
+0 ------------------------------------   }}}}              -----             
+1 |.............T...........T........|    }}}}             |...|             
+2 |TTTT..TTTTT..TTT..TTTTT..TTT..TT..|  ..}}}}..           |...|             
+3 |......T...T...........T..T.....T..| ...}}}}...          --+--         ..  
+4 |..TTTTTT..T..TTTTTTT..T.....{..T..|...}}}}}}...|  -----   #          .... 
+5 |..........T..T.....TTTT..T.....T..|..}}}}}}}}..|  |...|   #        ##.... 
+6 |TTTT..TTTTT..TTTT..T..T..TTT..TT..+..}}}}}}}}..+##S...+####H###    # .... 
+7 |..........T........T.....T........|..}}}}}}}}..|  |...|       ###  #  ..  
+8 |.T..}}..T.-----------------------S|...}}}}}}...|  -----         ####      
+9 |....}}....|.........|..|.|..|.....-------------------  ....          #    
+0 |....}}....|.........|+--+--+|.....|..........|.|....| ..}}}}II       H    
+1 |.T..}}..T.|.........|.......|.....|........\...|....S#.}I}}}}}}}}}   ..   
+2 |....}}....|.........|.......|.....|..........|.S....| .}}}I}}}}}}}} ....  
+3 |....}}....-----+--------+------+---..........-----+--  }}}}}}}}}}}}I}}}}}}
+4 |.T..}}..T.+.......................+.........\..| |.|    }II}}}T.}}I}}}}}}}
+5 |....}}....-----+--------+------+---..........-----+--      .......I}}}}}}}
+6 |....}}....|.........|.......|.....|..........|.S....|          #          
+7 |.T..}}..T.|.........|.......|.....|........\...|....S###########          
+8 |..........|.........|.......|.....|..........|.|....|                     
+9 ------------------------------------------------------                     
 ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2   	   3	     4	       5		 6	       7
 # Dungeon Description
 REGION:(02,01,35,07),lit,"ordinary"
 REGION:(02,08,11,18),lit,"ordinary"
@@ -1468,6 +1607,15 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(38,03)
+MONSTER[80%]:'H',"lurking one",(37,08)
+MONSTER[80%]:'H',"lurking one",(48,08)
+MONSTER[80%]:'H',"lurking one",(46,02)
+
+MONSTER[80%]:'H',"lurking one",(73,12)
+MONSTER[80%]:'H',"lurking one",(61,15)
+MONSTER[80%]:'H',"lurking one",(57,09)
 
 #
 #	The Lichs Manse
@@ -1634,6 +1782,16 @@ TRAP:random,random
 TRAP:random,random
 TRAP:random,random
 
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(38,03)
+MONSTER[80%]:'H',"lurking one",(37,08)
+MONSTER[80%]:'H',"lurking one",(48,08)
+MONSTER[80%]:'H',"lurking one",(46,02)
+
+MONSTER[80%]:'H',"lurking one",(73,12)
+MONSTER[80%]:'H',"lurking one",(61,15)
+MONSTER[80%]:'H',"lurking one",(57,09)
+
 #
 #	Troll Bridge and Ruined Church
 #
@@ -1670,7 +1828,8 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7
 # Dungeon Description
-ALTAR:(43,02),neutral,altar
+REGION:(39,00,47,07),lit,"temple"
+ALTAR:(43,02),neutral,shrine
 
 REGION:(00,00,51,19),lit,"ordinary"
 REGION:(01,05,05,07),unlit,"ordinary"
@@ -1753,6 +1912,23 @@ TRAP:random,random
 TRAP:random,random
 TRAP[50%]:random,random
  
+#Lurking Ones
+MONSTER[80%]:'H',"lurking one",(01,06)
+MONSTER[80%]:'H',"lurking one",(10,02)
+MONSTER[80%]:'H',"lurking one",(11,13)
+MONSTER[80%]:'H',"lurking one",(13,13)
+MONSTER[80%]:'H',"lurking one",(23,11)
+MONSTER[80%]:'H',"lurking one",(33,11)
+MONSTER[80%]:'H',"lurking one",(49,08)
+MONSTER[80%]:'H',"lurking one",(55,01)
+MONSTER[80%]:'H',"lurking one",(73,05)
+MONSTER[80%]:'H',"lurking one",(64,08)
+MONSTER[80%]:'H',"lurking one",(72,09)
+MONSTER[80%]:'H',"lurking one",(69,14)
+MONSTER[80%]:'H',"lurking one",(57,13)
+MONSTER[80%]:'H',"lurking one",(34,15)
+MONSTER[80%]:'H',"lurking one",(21,15)
+
 #
 #	Temples of the Old Gods
 #
@@ -1858,9 +2034,9 @@ MONSTER[50%]:random,random,random
 CONTAINER:'`',"statue",(05,04),"oread",1
 CONTAINER:'`',"statue",(07,04),"dryad",1
 CONTAINER:'`',"statue",(06,01),"god",1,"Shub-Niggurath, Black Goat of the woods with a thousand young"
-OBJECT:')',"viperwhip",contained,blessed,+3
-OBJECT:')',"viperwhip",contained,blessed,+3
-OBJECT:')',"viperwhip",contained,blessed,+3
+OBJECT:'#',"blessed +3 bone viperwhip",contained
+OBJECT:'#',"blessed +3 bone viperwhip",contained
+OBJECT:'#',"blessed +3 bone viperwhip",contained
 REGION:(04,01,08,02),lit,"temple"
 ALTAR:(06,01),noalign,altar
 
@@ -2608,7 +2784,8 @@ DRAWBRIDGE:(28,16),west,closed
 # One secret door
 DOOR:locked,(23,18)
 #MONSTER:'?',"???",(22,18),asleep,hostile
-ENGRAVING:(22,18),burn,"This space for rent."
+MONSTER:'L',"alhoon",(22,18),asleep,hostile
+#ENGRAVING:(22,18),burn,"This space for rent."
 # One sneaky trap
 TRAP:"magic",(24,16)
 # The ??? has some guards
@@ -3016,7 +3193,7 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0          1         2   	  3	      4	    5		  6	      7
 
-# Random Places for Cthulhu, the second Alhoon, and the Silver Key
+# Random Places for Cthulhu and the Silver Key
 RANDOM_PLACES:(04,09),(04,10),(03,02),(03,17),(34,02),(44,17),(16,02),(16,17)
 
 # Non diggable walls
@@ -3116,13 +3293,13 @@ MONSTER:';',random,(70,05),asleep,hostile
 MONSTER:'h',"deep one",(72,14),asleep,hostile
 
 # Platform Guardians
-MONSTER:'h',"mind flayer",(52,02),asleep,hostile
+MONSTER:'h',"star spawn",(52,02),asleep,hostile
 OBJECT:'/',"lightning",(52,02)
 OBJECT:'(',"chest",(51,02)
 MONSTER:'g',"nightgaunt",(56,01),asleep,hostile
 MONSTER:'g',"nightgaunt",(55,02),asleep,hostile
 
-MONSTER:'h',"mind flayer",(52,17),asleep,hostile
+MONSTER:'h',"star spawn",(52,17),asleep,hostile
 OBJECT:'/',"lightning",(52,17)
 OBJECT:'(',"chest",(51,17)
 MONSTER:'g',"nightgaunt",(56,18),asleep,hostile
@@ -3200,7 +3377,7 @@ OBJECT:'/',"cold",(49,10), blessed,+3
 # Priests, in the chambers before the temple
 MONSTER:'h',"mind flayer",(35,06),asleep,hostile
 MONSTER:'h',"mind flayer",(37,06),asleep,hostile
-MONSTER:'h',"mind flayer",(39,06),asleep,hostile
+MONSTER:'h',"star spawn",(39,06),asleep,hostile
 MONSTER:'h',"mind flayer",(42,06),asleep,hostile
 MONSTER:'h',"mind flayer",(44,05),asleep,hostile
 MONSTER:'h',"mind flayer",(46,05),asleep,hostile
@@ -3233,7 +3410,8 @@ MONSTER:';',"kraken",(32,10),asleep,hostile
 MONSTER:'&',"Great Cthulhu",place[0],asleep,hostile
 
 # The second Alhoon is in another of the temples (he is generated with the key)
-MONSTER:'L',"alhoon",place[1],asleep,hostile
+#MONSTER:'L',"alhoon",place[1],asleep,hostile
+MONSTER:'h',"star spawn",place[1],hostile
 
 #The Silver Key is in ANOTHER of the temples.
 OBJECT:'(',"universal key",place[2], uncursed,0,"The Silver Key"
@@ -3242,6 +3420,7 @@ OBJECT:'(',"universal key",place[2], uncursed,0,"The Silver Key"
 MONSTER:'&',"priest of an unknown god",place[3],hostile
 MONSTER:'&',"priest of an unknown god",place[4],hostile
 
+MONSTER:'h',"star spawn",place[5],hostile
 
 # Main Temple
 TRAP:"fire",(15,06)

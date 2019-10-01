@@ -844,7 +844,7 @@ boolean called;
 	}
 
 	/* priests and minions: don't even use this function */
-	if (mtmp->ispriest || mtmp->isminion) {
+	if ((mtmp->ispriest || mtmp->isminion) && mtmp->data != &mons[PM_BLASPHEMOUS_LURKER]) {
 	    char priestnambuf[BUFSZ];
 	    char *name;
 	    long save_prop = EHalluc_resistance;

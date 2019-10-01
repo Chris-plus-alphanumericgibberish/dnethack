@@ -103,6 +103,8 @@ struct engr {
 #define NUMINA						(LAST_WARD+43)
 
 /*Some hallucinatory engravings have special properties. Keep track of them here*/
+/*default engraving, disconnected lines*/
+#define DISCONNECTED_LINES	1
 /*Functional halucinatory wards, keep in sync with engrave.c!*/
 #define CERULEAN_SIGN				2
 /*These wards move across the ground. Keep in sync with allmain*/
@@ -171,6 +173,8 @@ struct engr {
 
 #define FIRST_PLANE_SYMBOL	44
 #define LAST_PLANE_SYMBOL	59
+
+#define CLAW_MARKS		60
 
 	xchar halu_ward; /* If you draw while halucinating, you inscribe a halucinatory symbol */
 

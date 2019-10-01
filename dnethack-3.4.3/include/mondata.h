@@ -187,6 +187,7 @@
 
 #define slithy(ptr)			((ptr)->mflagsb & MB_SLITHY)
 #define humanoid_torso(ptr)	(((ptr)->mflagsb & MB_HUMANOID) != 0)
+#define humanoid_feet(ptr)	(((ptr)->mflagsb & MB_HAS_FEET) != 0)
 #define humanoid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID)
 #define animaloid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_ANIMAL)
 #define serpentine(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_SLITHY)
@@ -427,7 +428,7 @@
 		((ptr->mflagsb&MB_BODYTYPEMASK) == (obj->bodytypeflag&MB_BODYTYPEMASK))))
 #define can_wear_gloves(ptr)	(!nohands(ptr))
 #define can_wear_amulet(ptr)	(has_head(ptr))
-#define can_wear_boots(ptr)	(humanoid(ptr) && !nofeet(ptr) && !nolimbs(ptr))
+#define can_wear_boots(ptr)	((humanoid(ptr) || humanoid_feet(ptr)) && !nofeet(ptr) && !nolimbs(ptr))
 #define shirt_match(ptr,obj)	(((ptr->mflagsb&MB_HUMANOID) && (obj->bodytypeflag&MB_HUMANOID)) || \
 		(((ptr->mflagsb&MB_BODYTYPEMASK) != 0) && ((ptr->mflagsb&MB_BODYTYPEMASK) == (obj->bodytypeflag&MB_BODYTYPEMASK))))
 #define helm_match(ptr,obj)	(((ptr->mflagsb&MB_HEADMODIMASK) == (obj->bodytypeflag&MB_HEADMODIMASK)))

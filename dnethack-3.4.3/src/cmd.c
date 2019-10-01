@@ -1915,6 +1915,12 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if(u.udrunken >= u.ulevel*3) Sprintf(eos(buf), ", the maximum for an adventurer of your level");
 	you_have(buf);
 	/*** Troubles ***/
+	if(wizard){
+		Sprintf(buf, "%d sanity points", u.usanity);
+		you_have(buf);
+		Sprintf(buf, "%d insight points", u.uinsight);
+		you_have(buf);
+	}
 	if (final) {
 		if (Hallucination) you_are("hallucinating");
 		if (Stunned) you_are("stunned");

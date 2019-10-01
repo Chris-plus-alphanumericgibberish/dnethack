@@ -56,6 +56,8 @@
 #define MS_INTONE	45	/* regular songs plus black flower's songs */
 #define MS_FLOWER	46	/* black flower's songs */
 #define MS_TRUMPET	47	/* Archon's trumpet */
+#define MS_UNCURSE	48	/* Curse merchant */
+#define MS_STATS	49	/* Sells stat points */
 
 
 #define MR_FIRE			0x0001	/* 1 resists fire */
@@ -158,6 +160,7 @@
 #define MB_LONGHEAD		0x00100000L	/* has 'long' (animal) head */
 #define MB_LONGNECK		0x00200000L	/* has 'long' (snakelike) head and neck */
 #define MB_NOFEET		0x00400000L	/* no feet to wear boots */
+#define MB_HAS_FEET		0x00800000L	/* does have humanoid feet, even though it has a non-humanoid body plan */
 
 #define MB_SNAKELEG	(MB_HUMANOID|MB_SLITHY)
 #define MB_CENTAUR	(MB_HUMANOID|MB_ANIMAL)

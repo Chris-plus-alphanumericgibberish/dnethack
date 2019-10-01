@@ -2782,12 +2782,19 @@ dopois:
 		if(u.sealsActive&SEAL_HUGINN_MUNINN){
 			unbind(SEAL_HUGINN_MUNINN,TRUE);
 		} else {
+			int san = u.usanity;
 			(void) adjattrib(A_INT, -dmg, FALSE);
 			while(dmg--){
 				forget(10);	/* lose 10% of memory per point lost*/
 				exercise(A_WIS, FALSE);
 			}
+			u.usanity = san;//Having your brain eaten doesn't make you *more* sane
 		}
+		//Having your brain eaten forces a san check.
+		if(u.usanity > 0)
+			u.usanity -= u_sanity_loss(mtmp);
+		if(u.usanity < 0)
+			u.usanity = 0;
 		//begin moved brain removal messages
 		if (!uarmh || uarmh->otyp != DUNCE_CAP) {
 			if(mtmp->data == &mons[PM_MIGO_PHILOSOPHER]||mtmp->data == &mons[PM_MIGO_QUEEN])
@@ -2919,8 +2926,7 @@ dopois:
 	    case AD_VAMP:
 			hitmsg(mtmp, mattk);
 			/* if vampire biting (and also a pet) */
-			if (mattk->aatyp == AT_BITE &&
-				has_blood(youracedata) && !umechanoid
+			if (has_blood(youracedata) && !umechanoid
 				&& (mtmp->data != &mons[PM_VAMPIRE_BAT] || u.usleep)
 			) {
 			   Your("blood is being drained!");
@@ -3277,9 +3283,11 @@ dopois:
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_TENT:
 			u.ustuck = mtmp; //can steal stickage from other monsters.
-#ifdef SEDUCE
 			dotent(mtmp,dmg);
-#endif
+			if(u.usanity > 0)
+				u.usanity -= u_sanity_loss(mtmp);
+			if(u.usanity < 0)
+				u.usanity = 0;
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SAMU:
@@ -3594,6 +3602,22 @@ dopois:
 		}
 		/* plus the normal damage */
 		break;
+///////////////////////////////////////////////////////////////////////////////////////////////////
+		case AD_CNFT:{
+			static int in_conflict = 0;
+			if(in_conflict == 0){
+				struct monst *tmpm, *nmon;
+				in_conflict = 1;//don't let more than one of these trigger at once (infinite loop avoidance)
+					pline("%s reaches out, and conflict surrounds you.",
+						Monnam(mtmp));
+					exercise(A_CHA, FALSE);
+					for(tmpm = fmon; tmpm; tmpm = nmon){
+						nmon = tmpm->nmon;
+						if(tmpm != mtmp && !DEADMONSTER(tmpm)) mattacku(tmpm);
+					}
+				in_conflict = 0;
+			}
+		}break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SLIM:    
 		hitmsg(mtmp, mattk);
@@ -3828,6 +3852,10 @@ dopois:
 						(void) mpickobj(mtmp,optr);
 					}
 				}
+				if(u.usanity > 0)
+					u.usanity -= u_sanity_loss(mtmp);
+				if(u.usanity < 0)
+					u.usanity = 0;
 			}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -5503,6 +5531,15 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 		    stop_occupation();
 		break;
 endif*/
+		case AD_BLAS:{
+			int angrygod = A_CHAOTIC+rn2(3); //Note: -1 to +1
+			u.ualign.record -= rnd(20);
+			u.ualign.sins++;
+			u.hod += rnd(20);
+			u.ugangr[Align2gangr(angrygod)]++;
+			angrygods(angrygod);
+			succeeded = 1;
+		}break;
 	    default: impossible("Gaze attack %d?", mattk->adtyp);
 			succeeded=0;
 		break;

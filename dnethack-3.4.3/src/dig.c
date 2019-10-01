@@ -1876,6 +1876,20 @@ register struct monst *mtmp;
 		here->typ = DOOR;
 		here->doormask = D_NODOOR;
 	    }
+		if(mtmp->data == &mons[PM_MANY_TALONED_THING]){
+			struct engr *oep = engr_at(mtmp->mx, mtmp->my);
+			if(!oep){
+				make_engr_at(mtmp->mx, mtmp->my,
+				 "", 0L, DUST);
+				oep = engr_at(mtmp->mx, mtmp->my);
+			}
+			if(oep && (oep->ward_type == DUST || oep->ward_type == ENGR_BLOOD || oep->ward_type == ENGRAVE || oep->ward_type == MARK)){
+				oep->ward_id = CLAW_MARKS;
+				oep->halu_ward = 1;
+				oep->ward_type = ENGRAVE;
+				oep->complete_wards = 1;
+			}
+		}
 		if(Is_belial_level(&u.uz)){
 			otmp = mksobj_at(DROVEN_DAGGER, mtmp->mx, mtmp->my, FALSE, FALSE);
 			set_material(otmp, OBSIDIAN_MT);

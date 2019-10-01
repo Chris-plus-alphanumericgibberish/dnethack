@@ -719,6 +719,7 @@ struct level_map {
 	{ "spire",	&spire_level },
 	{ "sumall",	&sum_of_all_level },
 	{ "leth-a",	&lethe_headwaters },
+	{ "lethe-e",	&bridge_temple },
 	{ "lethe-f",	&lethe_temples },
 	{ "rlyeh",	&rlyeh_level },
 	/*Chaos levels*/

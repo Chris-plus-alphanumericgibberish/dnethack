@@ -709,6 +709,9 @@ const char * haluWard[] =  {
 	"a watchful eye blocking an upward arrow",					/*58*/
 	"a pitchfork thrust into the ground",						/*59*/
 	
+	/* claw marks */
+	"a set of claw-marks",
+	
 	/* Not quite */
 	"a heptagenarian",
 	"an octogram",

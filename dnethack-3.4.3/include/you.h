@@ -771,6 +771,26 @@ struct you {
 	long ufirst_sky_timeout;
 	boolean ufirst_life;
 	long ufirst_life_timeout;
+	long thoughts;
+#define	ANTI_CLOCKWISE_METAMORPHOSIS	0x00000000000000001L
+#define	CLOCKWISE_METAMORPHOSIS			0x00000000000000002L
+#define	ARCANE_BULWARK					0x00000000000000004L
+#define	DISSIPATING_BULWARK				0x00000000000000008L
+#define	SMOLDERING_BULWARK				0x00000000000000010L
+#define	FROSTED_BULWARK					0x00000000000000020L
+#define	BLOOD_RAPTURE					0x00000000000000040L
+#define	CLAWMARK						0x00000000000000080L
+#define	CLEAR_DEEPS						0x00000000000000100L
+#define	DEEP_SEA						0x00000000000000200L
+#define	COMMUNION						0x00000000000000400L
+#define	CORRUPTION						0x00000000000000800L
+#define	EYE_THOUGHT						0x00000000000001000L
+#define	FORMLESS_VOICE					0x00000000000002000L
+#define	GUIDANCE						0x00000000000004000L
+#define	IMPURITY						0x00000000000008000L
+#define	MOON							0x00000000000010000L
+#define	WRITHE							0x00000000000020000L
+#define	RADIANCE						0x00000000000040000L
 };	/* end of `struct you' */
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
 #define uandroid ((Race_if(PM_ANDROID) && !Upolyd) || (Upolyd && (youmonst.data == &mons[PM_ANDROID] || youmonst.data == &mons[PM_GYNOID])))

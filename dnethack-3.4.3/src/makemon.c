@@ -7027,6 +7027,55 @@ register int	mmflags;
 	mtmp->m_lev = adj_lev(ptr);
 	float sanlev = ((float)rand()/(float)(RAND_MAX)) * ((float)rand()/(float)(RAND_MAX));
 	mtmp->m_san_level = max(1, (int)(sanlev*100));
+	mtmp->m_insight_level = 0;
+	
+	if(mtmp->data == &mons[PM_LURKING_ONE])
+		mtmp->m_insight_level = 20+rn2(21);
+	else if(mtmp->data == &mons[PM_BLASPHEMOUS_LURKER])
+		mtmp->m_insight_level = 40;
+	else if(mtmp->data == &mons[PM_LIVING_DOLL])
+		mtmp->m_insight_level = rnd(20);
+	
+	else if(mtmp->data == &mons[PM_BESTIAL_DERVISH])
+		mtmp->m_insight_level = 20+rn2(10);
+	else if(mtmp->data == &mons[PM_ETHEREAL_DERVISH])
+		mtmp->m_insight_level = 20+rn2(10);
+	else if(mtmp->data == &mons[PM_SPARKLING_LAKE])
+		mtmp->m_insight_level = 18+rn2(9);
+	else if(mtmp->data == &mons[PM_FLASHING_LAKE])
+		mtmp->m_insight_level = 16+rn2(8);
+	else if(mtmp->data == &mons[PM_SMOLDERING_LAKE])
+		mtmp->m_insight_level = 11+rn2(6);
+	else if(mtmp->data == &mons[PM_BLOOD_SHOWER])
+		mtmp->m_insight_level = 14+rn2(7);
+	else if(mtmp->data == &mons[PM_MANY_TALONED_THING])
+		mtmp->m_insight_level = 16+rn2(8);
+	else if(mtmp->data == &mons[PM_DEEP_BLUE_CUBE])
+		mtmp->m_insight_level = 10+rn2(5);
+	else if(mtmp->data == &mons[PM_PITCH_BLACK_CUBE])
+		mtmp->m_insight_level = 22+rn2(11);
+	else if(mtmp->data == &mons[PM_PRAYERFUL_THING])
+		mtmp->m_insight_level = 25+rn2(13);
+	else if(mtmp->data == &mons[PM_HEMORRHAGIC_THING])
+		mtmp->m_insight_level = 15+rn2(8);
+	else if(mtmp->data == &mons[PM_MANY_EYED_SEEKER])
+		mtmp->m_insight_level = 17+rn2(9);
+	else if(mtmp->data == &mons[PM_VOICE_IN_THE_DARK])
+		mtmp->m_insight_level = 19+rn2(10);
+	else if(mtmp->data == &mons[PM_TINY_BEING_OF_LIGHT])
+		mtmp->m_insight_level = 13+rn2(7);
+	else if(mtmp->data == &mons[PM_MAN_FACED_MILLIPEDE])
+		mtmp->m_insight_level = 5+rn2(3);
+	else if(mtmp->data == &mons[PM_MIRRORED_MOONFLOWER])
+		mtmp->m_insight_level = 10+rn2(5);
+	else if(mtmp->data == &mons[PM_CRIMSON_WRITHER])
+		mtmp->m_insight_level = 14+rn2(7);
+	else if(mtmp->data == &mons[PM_RADIANT_PYRAMID])
+		mtmp->m_insight_level = 12+rn2(6);
+	
+	else if(mtmp->data == &mons[PM_KUKER])
+		mtmp->m_insight_level = rnd(20)+rn2(21);
+	
 	if(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH])
 		mtmp->m_lev += u.chokhmah;
 	if (is_golem(ptr)) {
@@ -9104,6 +9153,7 @@ int type;
 		case PM_SEMBLANCE: return 80;
 		case PM_ARSENAL: return 88;
 		case PM_RETRIEVER: return 120;
+		case PM_LIVING_DOLL: return 45+d(5,8);
 		case PM_FORD_GUARDIAN: return 135;//Max HP
 //		case PM_HEAD_OF_THE_UNKNOWN_GOD: return 65;
 //		case PM_BODY_OF_THE_UNKNOWN_GOD: return 65;

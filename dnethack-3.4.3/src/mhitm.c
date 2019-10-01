@@ -1860,6 +1860,7 @@ physical:{
 		tmp += destroy_mitem(mdef, POTION_CLASS, AD_COLD);
 		break;
 /////////////////////////////////////////////////
+	    case AD_BLAS:
 	    case AD_ELEC:
 		if (cancelled) {
 		    tmp = 0;
@@ -2612,6 +2613,29 @@ physical:{
 		}
 		/* plus the normal damage */
 		break;
+		case AD_CNFT:{
+			static int in_conflict = 0;
+			if(in_conflict == 0){
+				struct monst *tmpm, *nmon;
+				in_conflict = 1;//don't let more than one of these trigger at once (infinite loop avoidance)
+					pline("%s reaches out, and conflict surrounds %s.",
+						Monnam(magr), mon_nam(mdef));
+					exercise(A_CHA, FALSE);
+					for(tmpm = fmon; tmpm && !DEADMONSTER(mdef); tmpm = nmon){
+						nmon = tmpm->nmon;
+						if(tmpm != magr && tmpm != mdef && !DEADMONSTER(tmpm))
+							mattackm(tmpm, mdef);
+					}
+					if(distmin(u.ux, u.uy, mdef->mx, mdef->my) == 1 && !DEADMONSTER(mdef)){
+						flags.forcefight = 1;
+						attack(mdef);
+						flags.forcefight = 0;
+					}
+					if(DEADMONSTER(mdef))
+						return (MM_DEF_DIED | (grow_up(magr, mdef) ? 0 : MM_AGR_DIED));
+				in_conflict = 0;
+			}
+		}break;
 	    case AD_SLIM:
 		if (cancelled) break;	/* physical damage only */
 		{
