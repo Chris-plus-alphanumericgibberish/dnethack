@@ -1039,6 +1039,30 @@ MONSTER[10%]:'\'',"living doll",random
 MONSTER[10%]:'A',"kuker",random
 MONSTER[10%]:'A',"kuker",random
 
+#Visitors
+MONSTER[10%]:'X',"bestial dervish",random
+MONSTER[10%]:'X',"ethereal dervish",random
+MONSTER[10%]:'P',"sparkling lake",random
+MONSTER[10%]:'P',"flashing lake",random
+MONSTER[10%]:'P',"smoldering lake",random
+
+MONSTER[10%]:'P',"frosted lake",random
+MONSTER[10%]:'v',"blood shower",random
+MONSTER[10%]:'U',"many-taloned thing",random
+MONSTER[10%]:'b',"deep blue cube",random
+MONSTER[10%]:'b',"pitch black cube",random
+
+MONSTER[10%]:'U',"prayerful thing",random
+MONSTER[10%]:'U',"hemorrhagic thing",random
+MONSTER[10%]:'e',"many-eyed seeker",random
+MONSTER[10%]:' ',"voice in the dark",random
+MONSTER[10%]:'y',"tiny being of light",random
+
+MONSTER[10%]:'s',"man-faced millipede",random
+MONSTER[10%]:'{',"mirrored moonflower",random
+MONSTER[10%]:'w',"crimson writher",random
+MONSTER[10%]:'p',"radiant pyramid",random
+
 #
 #	The Ogre Stockade for the Lethe branch.
 #
@@ -2621,6 +2645,31 @@ TRAP:"board",random
 TRAP:"board",random
 #
 
+#Visitors
+MONSTER[75%]:'X',"bestial dervish",random
+MONSTER[75%]:'X',"ethereal dervish",random
+MONSTER[75%]:'P',"sparkling lake",random
+MONSTER[75%]:'P',"flashing lake",random
+
+MONSTER[75%]:'P',"smoldering lake",random
+MONSTER[75%]:'P',"frosted lake",random
+MONSTER[75%]:'v',"blood shower",random
+MONSTER[75%]:'U',"many-taloned thing",random
+
+MONSTER[75%]:'b',"deep blue cube",random
+MONSTER[75%]:'b',"pitch black cube",random
+MONSTER[75%]:'U',"prayerful thing",random
+MONSTER[75%]:'U',"hemorrhagic thing",random
+
+MONSTER[75%]:'e',"many-eyed seeker",random
+MONSTER[75%]:' ',"voice in the dark",random
+MONSTER[75%]:'y',"tiny being of light",random
+MONSTER[75%]:'s',"man-faced millipede",random
+
+MONSTER[75%]:'{',"mirrored moonflower",random
+MONSTER[75%]:'w',"crimson writher",random
+MONSTER[75%]:'p',"radiant pyramid",random
+
 #
 # An alternate introductory level...
 #
@@ -2739,6 +2788,31 @@ TRAP:"board",random
 TRAP:"board",random
 TRAP:"board",random
 #
+
+#Visitors
+MONSTER[75%]:'X',"bestial dervish",random
+MONSTER[75%]:'X',"ethereal dervish",random
+MONSTER[75%]:'P',"sparkling lake",random
+MONSTER[75%]:'P',"flashing lake",random
+
+MONSTER[75%]:'P',"smoldering lake",random
+MONSTER[75%]:'P',"frosted lake",random
+MONSTER[75%]:'v',"blood shower",random
+MONSTER[75%]:'U',"many-taloned thing",random
+
+MONSTER[75%]:'b',"deep blue cube",random
+MONSTER[75%]:'b',"pitch black cube",random
+MONSTER[75%]:'U',"prayerful thing",random
+MONSTER[75%]:'U',"hemorrhagic thing",random
+
+MONSTER[75%]:'e',"many-eyed seeker",random
+MONSTER[75%]:' ',"voice in the dark",random
+MONSTER[75%]:'y',"tiny being of light",random
+MONSTER[75%]:'s',"man-faced millipede",random
+
+MONSTER[75%]:'{',"mirrored moonflower",random
+MONSTER[75%]:'w',"crimson writher",random
+MONSTER[75%]:'p',"radiant pyramid",random
 
 #
 # The level with the ???'s fortress...
@@ -2891,6 +2965,31 @@ TRAP:"board",random
 TRAP:"board",(47,17)
 #
 
+#Visitors
+MONSTER[75%]:'X',"bestial dervish",random
+MONSTER[75%]:'X',"ethereal dervish",random
+MONSTER[75%]:'P',"sparkling lake",random
+MONSTER[75%]:'P',"flashing lake",random
+
+MONSTER[75%]:'P',"smoldering lake",random
+MONSTER[75%]:'P',"frosted lake",random
+MONSTER[75%]:'v',"blood shower",random
+MONSTER[75%]:'U',"many-taloned thing",random
+
+MONSTER[75%]:'b',"deep blue cube",random
+MONSTER[75%]:'b',"pitch black cube",random
+MONSTER[75%]:'U',"prayerful thing",random
+MONSTER[75%]:'U',"hemorrhagic thing",random
+
+MONSTER[75%]:'e',"many-eyed seeker",random
+MONSTER[75%]:' ',"voice in the dark",random
+MONSTER[75%]:'y',"tiny being of light",random
+MONSTER[75%]:'s',"man-faced millipede",random
+
+MONSTER[75%]:'{',"mirrored moonflower",random
+MONSTER[75%]:'w',"crimson writher",random
+MONSTER[75%]:'p',"radiant pyramid",random
+
 #
 # A third gulf level...
 #
@@ -3034,6 +3133,31 @@ TRAP:"board",random
 TRAP:"board",random
 TRAP:"board",random
 
+#Visitors
+MONSTER[75%]:'X',"bestial dervish",random
+MONSTER[75%]:'X',"ethereal dervish",random
+MONSTER[75%]:'P',"sparkling lake",random
+MONSTER[75%]:'P',"flashing lake",random
+
+MONSTER[75%]:'P',"smoldering lake",random
+MONSTER[75%]:'P',"frosted lake",random
+MONSTER[75%]:'v',"blood shower",random
+MONSTER[75%]:'U',"many-taloned thing",random
+
+MONSTER[75%]:'b',"deep blue cube",random
+MONSTER[75%]:'b',"pitch black cube",random
+MONSTER[75%]:'U',"prayerful thing",random
+MONSTER[75%]:'U',"hemorrhagic thing",random
+
+MONSTER[75%]:'e',"many-eyed seeker",random
+MONSTER[75%]:' ',"voice in the dark",random
+MONSTER[75%]:'y',"tiny being of light",random
+MONSTER[75%]:'s',"man-faced millipede",random
+
+MONSTER[75%]:'{',"mirrored moonflower",random
+MONSTER[75%]:'w',"crimson writher",random
+MONSTER[75%]:'p',"radiant pyramid",random
+
 #
 #
 # The bottom of the gulf
@@ -3156,6 +3280,31 @@ TRAP:"board",random
 TRAP:"board",random
 TRAP:"board",random
 
+
+#Visitors
+MONSTER[75%]:'X',"bestial dervish",random
+MONSTER[75%]:'X',"ethereal dervish",random
+MONSTER[75%]:'P',"sparkling lake",random
+MONSTER[75%]:'P',"flashing lake",random
+
+MONSTER[75%]:'P',"smoldering lake",random
+MONSTER[75%]:'P',"frosted lake",random
+MONSTER[75%]:'v',"blood shower",random
+MONSTER[75%]:'U',"many-taloned thing",random
+
+MONSTER[75%]:'b',"deep blue cube",random
+MONSTER[75%]:'b',"pitch black cube",random
+MONSTER[75%]:'U',"prayerful thing",random
+MONSTER[75%]:'U',"hemorrhagic thing",random
+
+MONSTER[75%]:'e',"many-eyed seeker",random
+MONSTER[75%]:' ',"voice in the dark",random
+MONSTER[75%]:'y',"tiny being of light",random
+MONSTER[75%]:'s',"man-faced millipede",random
+
+MONSTER[75%]:'{',"mirrored moonflower",random
+MONSTER[75%]:'w',"crimson writher",random
+MONSTER[75%]:'p',"radiant pyramid",random
 
 #	Cthulhu's Sanctum
 #
