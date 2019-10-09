@@ -367,7 +367,7 @@ struct you {
 	int umonster;			/* hero's "real" monster num */
 	int umonnum;			/* current monster number */
 
-	int mh, mhmax, mtimedone;	/* for polymorph-self */
+	int mh, mhmax, mhrolled, mtimedone;	/* for polymorph-self */
 #define MATTK_DSCALE 1
 #define MATTK_BREATH 2
 #define MATTK_SPIT 3
@@ -492,8 +492,11 @@ struct you {
 	uchar	sowdisc;		/* sowing discord (spirit special attack) */
 	unsigned long long int spells_maintained;
 	int maintained_en_debt;
-	int	uhp,uhpmax,uhp_real,uhpmax_real;
-	int	uen,uenmax,uen_real,uenmax_real;		/* magical energy - M. Stephenson */
+	int	uhp, uhpmax, uhprolled, uhpmultiplier, uhpbonus, uhpmod;
+	int	uen, uenmax, uenrolled, uenmultiplier, uenbonus;			/* magical energy - M. Stephenson */
+	/*"Real" numbers for a WtWalk's non-mask-based HP*/
+	int uhp_real, uhpmax_real, uhprolled_real, uhpbonus_real, uhpmod_real;
+	int uen_real, uenmax_real, uenrolled_real, uenbonus_real;
 	int ugangr[GA_NUM];			/* if the gods are angry at you */
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */

@@ -2495,6 +2495,9 @@ boot_hit:
 	
 	udr += armdr;
 	
+	if(active_glyph(DEEP_SEA))
+		udr += 3;
+	
 	if (udr > 127) udr = 127;	/* u.uac is an schar */
 	
 	return udr;
@@ -2505,11 +2508,14 @@ roll_udr(magr)
 struct monst *magr;
 {
 	int udr = slot_udr(rn2(5), magr);
+	int cap = 10;
+	if(active_glyph(DEEP_SEA))
+		cap += 3;
 	//diminishing returns after 10 points of DR.
-	if(udr > 11){
+	if(udr > (cap+1)){
 		if(u.sealsActive&SEAL_BALAM)
-			udr = 10 + max_ints(rnd(udr-10), rnd(udr-10));
-		else udr = 10 + rnd(udr-10);
+			udr = cap + max_ints(rnd(udr-cap), rnd(udr-cap));
+		else udr = cap + rnd(udr-cap);
 	}
 	return udr;
 }

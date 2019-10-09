@@ -3466,10 +3466,6 @@ dopois:
 			if (u.mh > u.mhmax) u.mh = u.mhmax;
 		    } else {
 			u.uhp += rnd(7);
-			if (!rn2(7) && u.uhpmax < 5 * u.ulevel + d(2 * u.ulevel, 10)) {
-			    /* hard upper limit via nurse care: 25 * ulevel */
-				u.uhpmax++;
-			}
 			if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 		    }
 		    if (!rn2(3)) exercise(A_STR, TRUE);
@@ -4108,15 +4104,15 @@ dopois:
 		    hpmax_p = &u.uhpmax;
 		    lowerlimit = u.ulevel;
 		}
-		if (*hpmax_p - permdmg > lowerlimit)
-		    *hpmax_p -= permdmg;
-		else if (*hpmax_p > lowerlimit)
-		    *hpmax_p = lowerlimit;
-		else	/* unlikely... */
-		    ;	/* already at or below minimum threshold; do nothing */
-		flags.botl = 1;
+		if (*hpmax_p - permdmg > lowerlimit){
+			u.uhpmod -= permdmg;
+			calc_total_maxhp();
+		} else if (*hpmax_p > lowerlimit){
+			u.uhpmod -= *hpmax_p - lowerlimit;
+			calc_total_maxhp();
+		} else	/* unlikely... */
+	    ;	/* already at or below minimum threshold; do nothing */
 	    }
-
 	    mdamageu(mtmp, dmg);
 	}
 
@@ -5885,9 +5881,9 @@ register struct monst *mon;
 			switch (rn2(5)) {
 				case 0: You_feel("drained of energy.");
 					u.uen = 0;
-					u.uenmax -= rnd(Half_physical_damage ? 5 : 10);
+					u.uenbonus -= rnd(Half_physical_damage ? 5 : 10);
 						exercise(A_CON, FALSE);
-					if (u.uenmax < 0) u.uenmax = 0;
+					calc_total_maxen();
 					break;
 				case 1: You("are down in the dumps.");
 					(void) adjattrib(A_CON, -1, TRUE);
@@ -5959,7 +5955,8 @@ register struct monst *mon;
 			switch (rn2(5)) {
 			case 0: You_feel("raised to your full potential.");
 				exercise(A_CON, TRUE);
-				u.uenmax += rnd(10)+5;
+				u.uenbonus += rnd(10)+5;
+				calc_total_maxen();
 				u.uen = min(u.uen+400,u.uenmax);
 				break;
 			case 1: You_feel("good enough to do it again.");
@@ -6380,9 +6377,9 @@ struct monst *mon;
 		switch (rn2(5)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
-				u.uenmax -= rnd(Half_physical_damage ? 45 : 90);
+				u.uenbonus -= rnd(Half_physical_damage ? 45 : 90);
 					exercise(A_CON, FALSE);
-				if (u.uenmax < 0) u.uenmax = 0;
+				calc_total_maxen();
 				break;
 			case 1: You("are down in the dumps.");
 				(void) adjattrib(A_CON, -6, TRUE);
@@ -6478,7 +6475,8 @@ struct monst *mon;
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
-			u.uenmax += rnd(10)+5;
+			u.uenbonus += rnd(10)+5;
+			calc_total_maxen();
 			u.uen = min(u.uen+400,u.uenmax);
 			exercise(A_CON, TRUE);
 			break;
@@ -6506,7 +6504,8 @@ struct monst *mon;
 			u.uhp = u.uhpmax;
 			if (Upolyd) u.mh = u.mhmax;
 			exercise(A_STR, TRUE);
-			u.uenmax += rnd(10)+5;
+			u.uenbonus += rnd(10)+5;
+			calc_total_maxen();
 			u.uen = min(u.uen+400,u.uenmax);
 			flags.botl = 1;
 			break;
@@ -6622,9 +6621,10 @@ struct monst *mon;
 		switch (rn2(5)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
-				u.uenmax -= rnd(Half_physical_damage ? 45 : 90);
+				u.uenbonus -= rnd(Half_physical_damage ? 45 : 90);
 					exercise(A_CON, FALSE);
-				if (u.uenmax < 0) u.uenmax = 0;
+				calc_total_maxen();
+
 				break;
 			case 1: You("are down in the dumps.");
 				(void) adjattrib(A_CON, -6, TRUE);
@@ -6720,7 +6720,8 @@ struct monst *mon;
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
-			u.uenmax += rnd(10)+5;
+			u.uenbonus += rnd(10)+5;
+			calc_total_maxen();
 			u.uen = min(u.uenmax, u.uen+400);
 			exercise(A_CON, TRUE);
 			break;
@@ -6748,7 +6749,8 @@ struct monst *mon;
 			u.uhp = u.uhpmax;
 			if (Upolyd) u.mh = u.mhmax;
 			exercise(A_STR, TRUE);
-			u.uenmax += rnd(10)+5;
+			u.uenbonus += rnd(10)+5;
+			calc_total_maxen();
 			u.uen = min(u.uen+400,u.uenmax);
 			flags.botl = 1;
 			break;
@@ -6901,14 +6903,14 @@ register struct monst *mon;
 		switch (rn2(8)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
-				u.uenmax -= Half_physical_damage ? 45 : 90;
+				u.uenbonus -= Half_physical_damage ? 45 : 90;
 					exercise(A_CON, FALSE);
-				if (u.uenmax < 0) u.uenmax = 0;
+				calc_total_maxen();
+
 				break;
 			case 1: You("are down in the dumps.");
-				u.uhpmax -= Half_physical_damage ? 25 : 50;
-				if(u.uhpmax < 1) u.uhpmax = 1;
-				if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+				u.uhpmod -= Half_physical_damage ? 25 : 50;
+				calc_total_maxhp();
 				(void) adjattrib(A_CON, -2, TRUE);
 				(void) adjattrib(A_STR, -2, TRUE);
 				if (diseasemu(mon->data)) You("seem to have caught a disease!"); 
@@ -6997,8 +6999,8 @@ register struct monst *mon;
 				break;
 				case 2:
 						verbalize("Truly thou art as a fountain of life!");
-						u.uhpmax = (int)(u.uhpmax*1.2);
-						u.uenmax = (int)(u.uenmax*1.2);
+						u.uhpmultiplier += 2;
+						u.uenmultiplier += 2;
 				break;
 				case 3:
 						You_feel("as though you could lift mountains!");
@@ -7083,8 +7085,8 @@ register struct monst *mon;
 		break;
 		case 6:
 				verbalize("Truly thou art as a fountain of life!");
-				u.uhpmax = (int)(u.uhpmax*1.2);
-				u.uenmax = (int)(u.uenmax*1.2);
+				u.uhpmultiplier += 2;
+				u.uenmultiplier += 2;
 		break;
 		case 7:
 				You_feel("as though you could lift mountains!");
@@ -7835,9 +7837,10 @@ register struct monst *mon;
 		switch (rn2(5)) {
 			case 0: You_feel("drained of energy.");
 				u.uen = 0;
-				u.uenmax -= rnd(Half_physical_damage ? 5 : 10);
+				u.uenbonus -= rnd(Half_physical_damage ? 5 : 10);
 					exercise(A_CON, FALSE);
-				if (u.uenmax < 0) u.uenmax = 0;
+				calc_total_maxen();
+
 				break;
 			case 1: You("are down in the dumps.");
 				(void) adjattrib(A_CON, -1, TRUE);
@@ -7927,7 +7930,8 @@ register struct monst *mon;
 		switch (rn2(5)) {
 		case 0: You_feel("raised to your full potential.");
 			exercise(A_CON, TRUE);
-			u.uenmax += rnd(10)+5;
+			u.uenbonus += rnd(10)+5;
+			calc_total_maxen();
 			u.uen = min(u.uen+400,u.uenmax);
 			break;
 		case 1: You_feel("good enough to do it again.");
@@ -8210,9 +8214,10 @@ int dmg;
 				} //else
 				You_feel("little mouths sucking on your exposed %s.",body_part(BODY_SKIN));
 				u.uen = 0;
-				if(Half_physical_damage) u.uenmax -= (int) max(.1*u.uenmax,5);
-				else u.uenmax -= (int) max(.2*u.uenmax, 10);
-				if (u.uenmax < 0) u.uenmax = 0;
+				if(Half_physical_damage) u.uenbonus -= (int) max(.1*u.uenmax,5);
+				else u.uenbonus -= (int) max(.2*u.uenmax, 10);
+				calc_total_maxen();
+
 			break;
 			case 7:
 				if(allreadydone&(0x1<<7)) break;

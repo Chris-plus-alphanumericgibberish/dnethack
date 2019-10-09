@@ -51,25 +51,6 @@ int lev;
 	// return (10000000L * ((long)(lev - 19)));
 }
 
-STATIC_OVL int
-enermod(en)
-int en;
-{
-	switch (Role_switch) {
-	case PM_PRIEST:
-	case PM_WIZARD:
-	    return(2 * en);
-	case PM_HEALER:
-	case PM_KNIGHT:
-	    return((3 * en) / 2);
-	case PM_BARBARIAN:
-	case PM_PIRATE:
-	    return((3 * en) / 4);
-	default:
-	    return (en);
-	}
-}
-
 int
 experience(mtmp, nk)	/* return # of exp points for mtmp after nk killed */
 	register struct	monst *mtmp;
@@ -208,6 +189,10 @@ void
 more_experienced(exp, rexp)
 	register int exp, rexp;
 {
+	if(active_glyph(MOON)){
+		exp *= 1.3;
+		rexp *= 1.3;
+	}
 	if(u.ulevel < u.ulevelmax){
 		//if you have lost levels to level drain, gain XP at 5x rate.
 		//if you are about to regain the last drained level, gain at least the base xp total
@@ -261,21 +246,17 @@ boolean expdrain; /* attack drains exp as well */
 		u.uexp = 0;
 	}
 	num = newhp();
-	u.uhpmax -= num;
-	if (u.uhpmax < 1) u.uhpmax = 1;
-	u.uhp -= num;
+	u.uhprolled -= num;
+	if (u.uhprolled < 1) u.uhprolled = 1;
+	u.uhp -= num + conplus(ACURR(A_CON));
+	calc_total_maxhp();
+	
 	if (u.uhp < 1) u.uhp = 1;
-	else if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 
-	if (u.ulevel < urole.xlev)
-	    num = rn1(urole.enadv.lornd + urace.enadv.lornd,
-			urole.enadv.lofix + urace.enadv.lofix + (int)ACURR(A_WIS)/4);
-	else
-	    num = rn1(urole.enadv.hirnd + urace.enadv.hirnd,
-			urole.enadv.hifix + urace.enadv.hifix + (int)ACURR(A_WIS)/4);
-	num = enermod(num);		/* M. Stephenson */
-	u.uenmax -= num;
-	if (u.uenmax < 0) u.uenmax = 0;
+	
+	num = newen();
+	u.uenrolled -= num;
+	calc_total_maxen();
 	u.uen -= num;
 	if (u.uen < 0) u.uen = 0;
 	else if (u.uen > u.uenmax) u.uen = u.uenmax;
@@ -392,22 +373,19 @@ boolean incr;	/* true iff via incremental experience growth */
 
 	if (!incr) You_feel("more experienced.");
 	num = newhp();
-	u.uhpmax += num;
-	u.uhp += num;
+	u.uhprolled += num;
+	calc_total_maxhp();
+	u.uhp += num + conplus(ACURR(A_CON));
 	if (Upolyd) {
 	    num = rnd(8);
-	    u.mhmax += num;
-	    u.mh += num;
+	    u.mhrolled += num;
+		calc_total_maxhp();
+	    u.mh += num + conplus(ACURR(A_CON));
 	}
-	if (u.ulevel < urole.xlev)
-	    num = rn1((int)ACURR(A_WIS)/2 + urole.enadv.lornd + urace.enadv.lornd,
-			urole.enadv.lofix + urace.enadv.lofix);
-	else
-	    num = rn1((int)ACURR(A_WIS)/2 + urole.enadv.hirnd + urace.enadv.hirnd,
-			urole.enadv.hifix + urace.enadv.hifix);
-	num = enermod(num);	/* M. Stephenson */
-	u.uenmax += num;
-	u.uen += num;
+	num = newen();
+	u.uenrolled += num;
+	calc_total_maxen();
+	u.uen += num + ACURR(A_WIS)/4;
 	if (u.ulevel < MAXULEV) {
 	    if (incr) {
 		long tmp = newuexp(u.ulevel + 1);

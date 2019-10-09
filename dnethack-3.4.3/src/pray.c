@@ -359,12 +359,29 @@ register int trouble;
 		       boosted to be more than that */
 		    You_feel("much better.");
 		    if (Upolyd) {
-			u.mhmax += rnd(5);
-			if (u.mhmax <= 5) u.mhmax = 5+1;
+				if (u.mhmax <= 5){
+					u.uhpmod = 5+1;
+					calc_total_maxhp();
+				}
 			u.mh = u.mhmax;
 		    }
-		    if (u.uhpmax < u.ulevel * 5 + 11) u.uhpmax += rnd(5);
-		    if (u.uhpmax <= 5) u.uhpmax = 5+1;
+		    else if (u.uhpmax < u.ulevel * 5 + 11){
+				u.uhpmod += rnd(5);
+				calc_total_maxhp();
+			}
+			if(u.uhpmax < 6){
+				if(u.uhprolled < 6)
+					u.uhprolled = 6;	/* arbitrary */
+				calc_total_maxhp();
+				if(u.uhpmax < 6 && u.uhpmod < 0){
+					u.uhpmod = 0;	/* arbitrary */
+					calc_total_maxhp();
+				}
+				if(u.uhpmax < 6 && u.uhpbonus < 0){
+					u.uhpbonus = 0;	/* arbitrary */
+					calc_total_maxhp();
+				}
+			}
 		    u.uhp = u.uhpmax;
 		    flags.botl = 1;
 		    break;
@@ -1678,8 +1695,8 @@ pleased(g_align)
 			// u.ulevelmax -= 1;	/* see potion.c */
 			pluslvl(FALSE);
 			} else {
-			u.uhpmax += 5;
-			if (Upolyd) u.mhmax += 5;
+			u.uhpbonus += 5;
+			calc_total_maxhp();
 			}
 			u.uhp = u.uhpmax;
 			if (Upolyd) u.mh = u.mhmax;

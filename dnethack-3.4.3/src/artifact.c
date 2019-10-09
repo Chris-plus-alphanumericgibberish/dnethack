@@ -8843,7 +8843,8 @@ read_necro(VOID_ARGS)
 				else if(u.uen >= 100){
 					You("grasp the basics of your weapon's use.");
 					u.uen -= 100;
-					u.uenmax -= 20;
+					u.uenbonus -= 20;
+					calc_total_maxen();
 					unrestrict_weapon_skill(objects[uwep->otyp].oc_skill);
 					u.weapon_skills[objects[uwep->otyp].oc_skill].max_skill = P_EXPERT;
 				} else You("lack the magical energy to cast this incantation.");

@@ -306,7 +306,7 @@ androidUpkeep()
 {
 	//Pay unusual upkeep here, possibly pass out
 	if(uandroid && !u.usleep){
-		int mult = 30/u.ulevel;
+		int mult = HEALCYCLE/u.ulevel;
 		//Possibly pass out if you begin this step with 0 energy.
 		if(u.uen == 0 && !rn2(10+u.ulevel) && moves >= u.nextsleep){
 			int t = rn1(u.uenmax*mult+40, u.uenmax*mult+40);
@@ -360,7 +360,7 @@ void
 you_regen_hp()
 {
 	int wtcap = near_capacity();
-	int per30 = 0;
+	int perX = 0;
 	int * hpmax;
 	int * hp;
 
@@ -389,7 +389,7 @@ you_regen_hp()
 			(*hp) = (*hpmax);
 	}
 	
-	per30 += u.uhoon;
+	perX += u.uhoon;
 	
 	//Androids regenerate from active Hoon, but not from other sources unless dormant
 	// Notably, no bonus from passive Hoon
@@ -399,21 +399,25 @@ you_regen_hp()
 	// fish out of water
 	if (youracedata->mlet == S_EEL && !is_pool(u.ux, u.uy, youracedata->msize == MZ_TINY) && !Is_waterlevel(&u.uz)) {
 		if (is_pool(u.ux, u.uy, TRUE))
-			per30 -= 30 * (youracedata->msize - 1) / (youracedata->msize);
+			perX -= HEALCYCLE * (youracedata->msize - 1) / (youracedata->msize);
 		else
-			per30 -= 30;
+			perX -= HEALCYCLE;
 		u.regen_blocked++;
 	}
 
 	// invidiaks out of dark
 	if (youracedata == &mons[PM_INVIDIAK] && !isdark(u.ux, u.uy)) {
-		per30 -= 30;
+		perX -= HEALCYCLE;
 		u.regen_blocked++;
 	}
 	
 	// regeneration 'trinsic
 	if (Regeneration){
-		per30 += 30;
+		perX += HEALCYCLE;
+	}
+	// Corruption thought
+	if(active_glyph(CORRUPTION) && (*hp < (*hpmax)*.3)){
+		perX += HEALCYCLE;
 	}
 	
 	// "Natural" regeneration has stricter limitations
@@ -445,7 +449,7 @@ you_regen_hp()
 		if (reglevel < 1)
 			reglevel = 1;
 
-		per30 += reglevel;
+		perX += reglevel;
 	}
 
 	// The Ring of Hygiene's Disciple
@@ -453,7 +457,7 @@ you_regen_hp()
 		((uleft  && uleft->oartifact == ART_RING_OF_HYGIENE_S_DISCIPLE) ||
 		(uright && uright->oartifact == ART_RING_OF_HYGIENE_S_DISCIPLE))
 		){
-		per30 += 30 * min(4, (*hpmax) / max((*hp), 1));
+		perX += HEALCYCLE * min(4, (*hpmax) / max((*hp), 1));
 	}
 
 	// Buer
@@ -461,9 +465,9 @@ you_regen_hp()
 		int dsize = spiritDsize();
 
 		if (uwep && uwep->oartifact == ART_ATMA_WEAPON && uwep->lamplit && !Drain_resistance)
-			per30 += dsize * 6 / 4;
+			perX += dsize * 6 / 4;
 		else
-			per30 += dsize * 6;
+			perX += dsize * 6;
 	}
 	
 	/* moving around while encumbered is hard work */
@@ -471,9 +475,9 @@ you_regen_hp()
 		if (*hp > 1)
 		{
 			if (wtcap < EXT_ENCUMBER)
-				per30 -= 1;
+				perX -= 1;
 			else
-				per30 -= 3;
+				perX -= 3;
 		}
 		else
 		{
@@ -483,18 +487,18 @@ you_regen_hp()
 		}
 	}
 
-	if (((per30 > 0) && ((*hp) < (*hpmax))) ||			// if regenerating
-		((per30 < 0))									// or dying
+	if (((perX > 0) && ((*hp) < (*hpmax))) ||			// if regenerating
+		((perX < 0))									// or dying
 		)
 	{
 		// update bottom line
 		flags.botl = 1;
 
-		// modify by 1/30th of per30 per turn:
-		*hp += per30 / 30;
+		// modify by 1/HEALCYCLEth of perX per turn:
+		*hp += perX / HEALCYCLE;
 		// Now deal with any remainder
-		if (((moves)*(abs(per30) % 30)) / 30 >((moves - 1)*(abs(per30) % 30)) / 30)
-			*hp += 1 * sgn(per30);
+		if (((moves)*(abs(perX) % HEALCYCLE)) / HEALCYCLE >((moves - 1)*(abs(perX) % HEALCYCLE)) / HEALCYCLE)
+			*hp += 1 * sgn(perX);
 		// cap at maxhp
 		if ((*hp) > (*hpmax))
 			(*hp) = (*hpmax);
@@ -510,7 +514,7 @@ void
 you_regen_pw()
 {
 	int wtcap = near_capacity();
-	int per30 = 0;
+	int perX = 0;
 
 	// natural power regeneration
 	if (wtcap < MOD_ENCUMBER &&		// not overly encumbered
@@ -542,7 +546,7 @@ you_regen_pw()
 		if (reglevel < 1)
 			reglevel = 1;
 
-		per30 += reglevel;
+		perX += reglevel;
 	}
 
 	// external power regeneration
@@ -550,12 +554,12 @@ you_regen_pw()
 		(u.umartial && !uarmf && IS_GRASS(levl[u.ux][u.uy].typ))	// or being a bare-foot martial-artist standing on grass
 		)
 	{
-		per30 += 30;
+		perX += HEALCYCLE;
 	}
 
 	// Unknown God
 	if (u.specialSealsActive&SEAL_UNKNOWN_GOD){
-		per30 += spiritDsize() * 6;
+		perX += spiritDsize() * 6;
 	}
 
 	// power drain from maintained spells
@@ -564,28 +568,28 @@ you_regen_pw()
 		int reglevel = u.maintained_en_debt / 3;
 		int debtpaid = 0;
 
-		if (per30 > reglevel)
+		if (perX > reglevel)
 		{// can just subtract drain from pw regeneration and still have net positive
-			per30 -= reglevel;
+			perX -= reglevel;
 			debtpaid += reglevel;
 		}
 		else
 		{// either 0 pw regen or net drain
-			// put the entirety of per30 against the debt owed
-			reglevel -= per30;
-			debtpaid += per30;
-			per30 = 0;
+			// put the entirety of perX against the debt owed
+			reglevel -= perX;
+			debtpaid += perX;
+			perX = 0;
 			// drain further if the player has reserves to burn
 			if (u.uen > 0 || Race_if(PM_INCANTIFIER))
 			{
 				debtpaid += reglevel;
-				per30 = -reglevel;
+				perX = -reglevel;
 			}
 		}
 		// settle the payment
-		u.maintained_en_debt -= debtpaid / 30;
+		u.maintained_en_debt -= debtpaid / HEALCYCLE;
 		//Now deal with any remainder
-		if (((moves)*(debtpaid % 30)) / 30 >((moves - 1)*(debtpaid % 30)) / 30)
+		if (((moves)*(debtpaid % HEALCYCLE)) / HEALCYCLE >((moves - 1)*(debtpaid % HEALCYCLE)) / HEALCYCLE)
 			u.maintained_en_debt -= 1;
 		// minimum zero
 		if (u.maintained_en_debt < 0)
@@ -602,29 +606,29 @@ you_regen_pw()
 	
 	//Naen passive bonus only partially applies to androids and incantifiers
 	if(Race_if(PM_INCANTIFIER)){
-		if(per30 < 0)
-			per30 += u.unaen;
-		if(per30 > 0)
-			per30 = 0;
+		if(perX < 0)
+			perX += u.unaen;
+		if(perX > 0)
+			perX = 0;
 	}
-	else per30 += u.unaen;
+	else perX += u.unaen;
 	
 	//Androids only regen power while asleep, but allow their rate to offset spell maintenance
-	if(uandroid && !u.usleep && per30 > 0)
+	if(uandroid && !u.usleep && perX > 0)
 		return;
 
-	if (((per30 > 0) && (u.uen < u.uenmax)) ||							// if regenerating power
-		((per30 < 0) && ((u.uen > 0) || Race_if(PM_INCANTIFIER)))		// or draining power
+	if (((perX > 0) && (u.uen < u.uenmax)) ||							// if regenerating power
+		((perX < 0) && ((u.uen > 0) || Race_if(PM_INCANTIFIER)))		// or draining power
 		)
 	{
 		//update bottom line
 		flags.botl = 1;
 
-		// modify by 1/30th of per30 per turn:
-		u.uen += per30 / 30;
+		// modify by 1/HEALCYCLEth of perX per turn:
+		u.uen += perX / HEALCYCLE;
 		// Now deal with any remainder
-		if (((moves)*(abs(per30) % 30)) / 30 >((moves - 1)*(abs(per30) % 30)) / 30)
-			u.uen += 1 * sgn(per30);
+		if (((moves)*(abs(perX) % HEALCYCLE)) / HEALCYCLE >((moves - 1)*(abs(perX) % HEALCYCLE)) / HEALCYCLE)
+			u.uen += 1 * sgn(perX);
 		// cap at maxpw
 		if (u.uen > u.uenmax)
 			u.uen = u.uenmax;
@@ -650,7 +654,6 @@ moveloop()
 	int nmonsclose,nmonsnear,enkispeedlim;
 	static boolean oldBlind = 0, oldLightBlind = 0;
 	int healing_penalty = 0;
-	static int oldCon, oldWisBon;
     int hpDiff;
 	static int oldsanity = 100;
 
@@ -689,9 +692,6 @@ moveloop()
     youmonst.movement = NORMAL_SPEED;	/* give the hero some movement points */
 	flags.move = FALSE; /* From nethack 3.6.2 */
 
-	oldCon = ACURR(A_CON);
-	oldWisBon = ACURR(A_WIS)/4;
-	
 	if(u.ualignbase[A_ORIGINAL] == A_LAWFUL && flags.initalign != 0){
 		flags.initalign = 0;
 		impossible("Bad alignment initializer detected and fixed. Save and reload.");
@@ -887,24 +887,9 @@ moveloop()
 				oldLightBlind = !!LightBlind;
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
-			if (oldCon != ACURR(A_CON)) {
-				if(conplus(oldCon) > 0) u.uhpmax -= conplus(oldCon)*u.ulevel;
-				else u.uhpmax -= conplus(oldCon)*u.ulevel;
-				
-				if(conplus(ACURR(A_CON)) > 0) u.uhpmax += conplus(ACURR(A_CON))*u.ulevel;
-				else u.uhpmax += conplus(ACURR(A_CON))*u.ulevel;
-				
-				if(u.uhpmax < 1) u.uhpmax = 1;
-				if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
-				oldCon = ACURR(A_CON);
-			}
+			calc_total_maxhp();
 ////////////////////////////////////////////////////////////////////////////////////////////////
-			if (!(oldWisBon != ACURR(A_WIS)/4)) {
-				u.uenmax += u.ulevel*(ACURR(A_WIS)/4 - oldWisBon);
-				if(u.uenmax < 0) u.uenmax = 0;
-				if(u.uen > u.uenmax) u.uen = u.uenmax;
-				oldWisBon = ACURR(A_WIS)/4;
-			}
+			calc_total_maxen();
 ////////////////////////////////////////////////////////////////////////////////////////////////
 			oldspiritAC = u.spiritAC;
 			u.spiritAC = 0; /* reset temporary spirit AC bonuses. Do this once per monster turn */
@@ -1411,12 +1396,16 @@ karemade:
 						u.ZangetsuSafe = 0;
 						losehp(5, "inadvisable haste", KILLED_BY);
 						if (Upolyd) {
-							if(u.mhmax > u.ulevel && moves % 2) u.mhmax--;
-							if (u.mh > u.mhmax) u.mh = u.mhmax;
+							if(u.mhmax > u.ulevel && moves % 2){
+								u.uhpmod--;
+								calc_total_maxhp();
+							}
 						}
 						else{
-							if(u.uhpmax > u.ulevel && moves % 2) u.uhpmax--;
-							if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+							if(u.uhpmax > u.ulevel && moves % 2){
+								u.uhpmod--;
+								calc_total_maxhp();
+							}
 						}
 	//					if( !(moves % 5) )
 						You_feel("your %s %s!", 
@@ -1471,6 +1460,8 @@ karemade:
 			if(uandroid && u.ucspeed == HIGH_CLOCKSPEED){
 				if (rn2(3) != 0) moveamt += NORMAL_SPEED / 2;
 			}
+			if(active_glyph(ANTI_CLOCKWISE_METAMORPHOSIS))
+				moveamt += 3;
 			if(u.uuur_duration)
 				moveamt += 6;
 			if(uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_SORESU && (!uarm || is_light_armor(uarm) || is_medium_armor(uarm))){
@@ -1653,8 +1644,8 @@ karemade:
 						if(u.utemp >= MELTED){
 							if(Upolyd) losehp(u.mhmax*2, "melting to slag", KILLED_BY);
 							else { /* May have been rehumanized by previous damage. In that case, still die from left over bronze on your skin! */
-								if(uclockwork) losehp(u.uhpmax*2, "melting to slag", KILLED_BY);
-								else if(!(HFire_resistance || u.sealsActive&SEAL_FAFNIR)) losehp(u.uhpmax*2, "molten bronze", KILLED_BY);
+								if(uclockwork) losehp((Upolyd ? u.mhmax : u.uhpmax)*2, "melting to slag", KILLED_BY);
+								else if(!(HFire_resistance || u.sealsActive&SEAL_FAFNIR)) losehp((Upolyd ? u.mhmax : u.uhpmax)*2, "molten bronze", KILLED_BY);
 							}
 						}
 					}
@@ -2022,20 +2013,9 @@ karemade:
 	}
 	oldLightBlind = !!LightBlind;
 ////////////////////////////////////////////////////////////////////////////////////////////////
-	if (!(oldCon != ACURR(A_CON))) {
-		int condif = conplus(ACURR(A_CON)) - conplus(oldCon);
-		if(condif != 0) u.uhpmax += u.ulevel*condif;
-		if(u.uhpmax < 1) u.uhpmax = 1;
-		if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;
-		oldCon = ACURR(A_CON);
-	}
+	calc_total_maxhp();
 ////////////////////////////////////////////////////////////////////////////////////////////////
-	if (!(oldWisBon != ACURR(A_WIS)/4)) {
-		u.uenmax += u.ulevel*(ACURR(A_WIS)/4 - oldWisBon);
-		if(u.uenmax < 0) u.uenmax = 0;
-		if(u.uen > u.uenmax) u.uen = u.uenmax;
-		oldWisBon = ACURR(A_WIS)/4;
-	}
+	calc_total_maxen();
 ////////////////////////////////////////////////////////////////////////////////////////////////
 	/*If anything we did caused us to get moved out of water, surface*/
 	if(u.usubwater && !is_pool(u.ux, u.uy, FALSE)){

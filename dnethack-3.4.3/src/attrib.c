@@ -4,6 +4,7 @@
 
 /*  attribute modification routines. */
 
+#include "math.h"
 #include "hack.h"
 
 /* #define DEBUG */	/* uncomment for debugging info */
@@ -278,12 +279,12 @@ losestr(num)	/* may kill you; cause may be poison or monster like 'a' */
 	    --num;
 	    if (Upolyd) {
 		u.mh -= 6;
-		u.mhmax -= 6;
 	    } else {
 		u.uhp -= 6;
-		u.uhpmax -= 6;
 	    }
+		u.uhpmod -= 6;
 	}
+	calc_total_maxhp();
 	(void) adjattrib(A_STR, -num, TRUE);
 }
 
@@ -923,13 +924,46 @@ newhp()
 	    }
 	}
 	
-	hp += conplus(ACURR(A_CON));
-	
 	return((hp <= 0) ? 1 : hp);
 }
 
 int
-maxhp()
+newen()
+{
+	int	en;
+
+
+	if (u.ulevel == 0) {
+	    /* Initialize energy points */
+	    en = urole.enadv.infix + urace.enadv.infix;
+	    if (urole.enadv.inrnd > 1) en += rnd(urole.enadv.inrnd);
+		else if(urole.enadv.inrnd > 0) en += rn2(urole.enadv.inrnd);
+	    if (urace.enadv.inrnd > 1) en += rnd(urace.enadv.inrnd);
+		else if(urace.enadv.inrnd > 0) en += rn2(urace.enadv.inrnd);
+
+		return en;
+	} else {
+	    if (u.ulevel < urole.xlev) {
+	    	en = urole.enadv.lofix + urace.enadv.lofix;
+	    	if (urole.enadv.lornd > 1) en += rnd(urole.enadv.lornd);
+	    	else if (urole.enadv.lornd > 0) en += rn2(2); //0-1
+	    	if (urace.enadv.lornd > 1) en += rnd(urace.enadv.lornd);
+	    	else if (urace.enadv.lornd > 0) en += rn2(2); //0-1
+	    } else {
+	    	en = urole.enadv.hifix + urace.enadv.hifix;
+	    	if (urole.enadv.hirnd > 1) en += rnd(urole.enadv.hirnd);
+	    	else if (urole.enadv.hirnd > 0) en += rn2(2); //0-1
+	    	if (urace.enadv.hirnd > 1) en += rnd(urace.enadv.hirnd);
+	    	else if (urace.enadv.hirnd > 0) en += rn2(2); //0-1
+	    }
+	}
+	
+	return((en <= 0) ? 1 : en);
+}
+
+int
+maxhp(incon)
+int incon;
 {
 	int	hp;
 	int perlevel;
@@ -938,11 +972,8 @@ maxhp()
 	/* Initialize hit points */
 	hp = urole.hpadv.infix + urace.hpadv.infix;
 	
-	if (urole.hpadv.inrnd > 1) hp += rnd(urole.hpadv.inrnd);
-	else if(urole.hpadv.inrnd > 0) hp += rn2(urole.hpadv.inrnd);
-	
-	if (urace.hpadv.inrnd > 1) hp += rnd(urace.hpadv.inrnd);
-	else if(urace.hpadv.inrnd > 0) hp += rn2(urace.hpadv.inrnd);
+	hp += urole.hpadv.inrnd;
+	hp += urace.hpadv.inrnd;
 
 	if (u.ulevel <= urole.xlev) {
 		perlevel = urole.hpadv.lofix + urace.hpadv.lofix;
@@ -964,9 +995,45 @@ maxhp()
 		hp += (u.ulevel-urole.xlev)*perlevel;
 	}
 	
-	hp += u.ulevel*conplus(ACURR(A_CON));
+	if(incon) hp += u.ulevel*conplus(ACURR(A_CON));
 	
 	return((hp <= u.ulevel) ? u.ulevel : hp);
+}
+
+int
+maxen()
+{
+	int	en;
+	int perlevel;
+
+
+	/* Initialize hit points */
+	en = urole.enadv.infix + urace.enadv.infix;
+	
+	en += urole.enadv.inrnd;
+	en += urace.enadv.inrnd;
+
+	if (u.ulevel <= urole.xlev) {
+		perlevel = urole.enadv.lofix + urace.enadv.lofix;
+		perlevel += urole.enadv.lornd;
+		perlevel += urace.enadv.lornd;
+		
+		en += (u.ulevel-1)*perlevel;
+	} else {
+		perlevel = urole.enadv.lofix + urace.enadv.lofix;
+		perlevel += urole.enadv.lornd;
+		perlevel += urace.enadv.lornd;
+		
+		en += (urole.xlev-1)*perlevel; //Full bonus from below cutoff
+		
+		perlevel = urole.enadv.hifix + urace.enadv.hifix;
+		perlevel += urole.enadv.hirnd;
+		perlevel += urace.enadv.hirnd;
+		
+		en += (u.ulevel-urole.xlev)*perlevel;
+	}
+	
+	return((en <= u.ulevel) ? u.ulevel : en);
 }
 
 int
@@ -988,6 +1055,92 @@ conplus(con)
 	else conplus = 4;
 	
 	return conplus;
+}
+
+void
+calc_total_maxhp()
+{
+	int ulev;
+	int * hpmax;
+	int * hp;
+	int * hprolled;
+	int hpcap;
+	int rawmax;
+	int maxbonus;
+	int adjbonus;
+	if (Upolyd) {
+		ulev = (int)(mons[u.umonnum].mlevel);
+		hp = &u.mh;
+		hpmax = &u.mhmax;
+		hprolled = &u.mhrolled;
+		hpcap = 24 + 2*mons[u.umonnum].mlevel*8;
+	} else {
+		ulev = u.ulevel;
+		hp = &u.uhp;
+		hpmax = &u.uhpmax;
+		hprolled = &u.uhprolled;
+		hpcap = 24 + 2*maxhp(1);
+	}
+	
+	if(u.uhpbonus > 0){
+		rawmax = *hprolled + ulev*conplus(ACURR(A_CON));
+		
+		/*Calculate Metamorphosis *before* the max bonus is determined*/
+		if(active_glyph(CLOCKWISE_METAMORPHOSIS))
+			rawmax *= 1.3;
+		
+		maxbonus = hpcap - rawmax;
+		
+		/*Calculate Malcanthet's multiplier *after* the max bonus is determined*/
+		if(u.uhpmultiplier)
+			rawmax = rawmax + (rawmax * u.uhpmultiplier / 10); /*Multiplier is in units of tenths*/
+		
+		if(maxbonus > 0){
+			adjbonus = round(2.0*maxbonus/(1+exp(-(4.0/(2.0*maxbonus))*u.uhpbonus)) - maxbonus);
+		}
+		else adjbonus = 0;
+		
+		*hpmax = rawmax + adjbonus + u.uhpmod;
+	} else {
+		rawmax = *hprolled + ulev*conplus(ACURR(A_CON));
+		
+		if(active_glyph(CLOCKWISE_METAMORPHOSIS))
+			rawmax *= 1.3;
+		
+		if(u.uhpmultiplier)
+			rawmax = rawmax + (rawmax * u.uhpmultiplier / 10); /*Multiplier is in units of tenths*/
+		
+		*hpmax = rawmax + u.uhpbonus + u.uhpmod;
+	}
+	
+	if(*hpmax < 1) *hpmax = 1;
+	// *hpmax += min(nxtra, max(0, 6*nxtra/5 - 6*nxtra*(*hpmax)*(*hpmax)/(5*hpcap*hpcap)));
+	if(*hp > *hpmax)
+		*hp = *hpmax;
+	
+	flags.botl = 1;
+}
+
+void
+calc_total_maxen()
+{
+	int en;
+	en = u.uenrolled + (u.ulevel*ACURR(A_CON))/4;
+	
+	if(active_glyph(FORMLESS_VOICE))
+		en *= 1.3;
+	
+	if(u.uenmultiplier)
+		en = en + (en * u.uhpmultiplier / 10); /*Multiplier is in units of tenths*/
+	
+	u.uenmax = en + u.uenbonus;
+	
+	if(u.uenmax < 0) u.uenmax = 0;
+	// *hpmax += min(nxtra, max(0, 6*nxtra/5 - 6*nxtra*(*hpmax)*(*hpmax)/(5*hpcap*hpcap)));
+	if(u.uen > u.uenmax)
+		u.uen = u.uenmax;
+	
+	flags.botl = 1;
 }
 
 #endif /* OVLB */

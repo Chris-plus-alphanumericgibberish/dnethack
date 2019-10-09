@@ -696,7 +696,22 @@ int how;
 		u.gevurah += 4;//cheated death.
 
 		(void) adjattrib(A_CON, -1, TRUE);
-		if(u.uhpmax <= 9) u.uhpmax = 10;	/* arbitrary */
+		if(u.uhpmax < 10){
+			if(u.uhprolled < 10){
+				u.uhprolled = 10;	/* arbitrary */
+				calc_total_maxhp();
+			}
+			if(u.uhpmax < 10 && u.uhpmod < 0){
+				u.uhpmod = 0;	/* arbitrary */
+				calc_total_maxhp();
+			}
+			if(u.uhpmax < 10 && u.uhpbonus < 0){
+				u.uhpbonus = 0;	/* arbitrary */
+				calc_total_maxhp();
+			}
+		}
+		if(youmonst.movement < 12)
+			youmonst.movement = 12;
 		savelife(how);
 		if (how == GENOCIDED)
 			pline("Unfortunately you are still genocided...");
@@ -715,7 +730,20 @@ int how;
 		if(yn("Die?") == 'y') goto die;
 		pline("OK, so you don't %s.",
 			(how == CHOKING) ? "choke" : "die");
-		if(u.uhpmax <= 0) u.uhpmax = u.ulevel * 8;	/* arbitrary */
+		if(u.uhpmax <= 9){
+			if(u.uhprolled < 10){
+				u.uhprolled = 10;	/* arbitrary */
+				calc_total_maxhp();
+			}
+			if(u.uhpmax < 10 && u.uhpmod < 0){
+				u.uhpmod = 0;	/* arbitrary */
+				calc_total_maxhp();
+			}
+			if(u.uhpmax < 10 && u.uhpbonus < 0){
+				u.uhpbonus = 0;	/* arbitrary */
+				calc_total_maxhp();
+			}
+		}
 		savelife(how);
 		u.gevurah += 4;//cheated death.
 		killer = 0;

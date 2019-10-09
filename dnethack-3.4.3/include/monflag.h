@@ -58,6 +58,7 @@
 #define MS_TRUMPET	47	/* Archon's trumpet */
 #define MS_UNCURSE	48	/* Curse merchant */
 #define MS_STATS	49	/* Sells stat points */
+#define MS_GLYPHS	50	/* Exchanges glyphs for artifacts */
 
 
 #define MR_FIRE			0x0001	/* 1 resists fire */

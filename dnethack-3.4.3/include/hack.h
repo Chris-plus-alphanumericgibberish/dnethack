@@ -25,6 +25,9 @@
 /* number of times a spellbook can be read before blanking */
 #define MAX_SPELL_STUDY 3
 
+/* Length of a healing cycle */
+#define HEALCYCLE 90
+
 /* symbolic names for capacity levels */
 #define UNENCUMBERED	0
 #define SLT_ENCUMBER	1	/* Burdened */

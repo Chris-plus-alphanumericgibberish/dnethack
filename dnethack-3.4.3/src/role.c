@@ -47,8 +47,8 @@ struct Role roles[] = {
 	{   7, 10, 10,  7,  7,  7 },
 	{  20, 20, 20, 10, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 11, 0,  0, 4,  1, 0 },	/* Hit points */
-	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
+	{ 11, 0,  0, 8,  1, 0 },	/* Hit points */
+	{  1, 0,  1, 0,  0, 1 },14,	/* Energy */
 	10, 5, 0, 2, 10, A_INT, SPE_MAGIC_MAPPING,   -9
 },
 {	{"Anachrononaut", 0}, {
@@ -73,7 +73,7 @@ struct Role roles[] = {
 	{  12, 10,  7, 10,  10,  7 },
 	{  15, 17, 15, 12, 15, 15 },
 	/* Init   Lower  Higher */
-	{ 11, 0,  0, 4,  1, 0 },	/* Hit points */
+	{ 11, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  2, 0,  0, 2,  0, 2 },14,	/* Energy */
 	10, 5, 0, 2, 10, A_INT, SPE_SLOW_MONSTER,   -9
 },
@@ -99,7 +99,7 @@ struct Role roles[] = {
 	{  16,  7,  7, 15, 16,  6 },
 	{  30,  6,  7, 20, 30,  7 },
 	/* Init   Lower  Higher */
-	{ 14, 0,  0, 6,  0, 2 },	/* Hit points */
+	{ 14, 0,  0,10,  0, 2 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
 	10, 14, 0, 0,  8, A_INT, SPE_HASTE_SELF,      -1000
 },
@@ -125,8 +125,8 @@ struct Role roles[] = {
 	{  6,  6,  6,  6,  6,  6 },
 	{ 11,  9,  9, 11, 11,  9 },
 	/* Init   Lower  Higher */
-	{ 11, 0,  0,  6,  0, 2 },	/* Hit points */
-	{  5, 0,  1,  0,  1, 0 },15,	/* Energy */
+	{ 11, 0,  0, 10,  0, 2 },	/* Hit points */
+	{  5, 0,  0,  1,  1, 0 },15,	/* Energy */
 	-5, 10, 5, 10,  25, 0/*Special*/, SPE_SLEEP, -14
 },
 {	{"Caveman", "Cavewoman"}, {
@@ -151,7 +151,7 @@ struct Role roles[] = {
 	{  10,  7,  7,  7,  8,  6 },
 	{  30,  6,  7, 20, 30,  7 },
 	/* Init   Lower  Higher */
-	{ 14, 0,  0, 4,  0, 2 },	/* Hit points */
+	{ 14, 0,  0, 8,  0, 2 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
 	0, 12, 0, 1,  8, A_INT, SPE_DIG, -1000
 },
@@ -179,7 +179,7 @@ struct Role roles[] = {
 	{  10,  7,  7,  7, 13,  6 },
 	{  20, 20, 10, 20, 20, 10 },
 	/* Init   Lower  Higher */
-	{  8, 0,  0, 4,  0, 0 },	/* Hit points */
+	{  8, 0,  0, 8,  0, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
 	-10, 5, 0, 2, 10, A_INT, SPE_TELEPORT_AWAY,   -19
 },
@@ -205,8 +205,8 @@ struct Role roles[] = {
 	{   7,  7, 13,  7, 11, 16 },
 	{  15, 20, 20, 15, 25, 5 },
 	/* Init   Lower  Higher */
-	{ 11, 0,  0, 4,  1, 0 },	/* Hit points */
-	{  1, 4,  0, 1,  0, 2 },20,	/* Energy */
+	{ 11, 0,  0, 8,  1, 0 },	/* Hit points */
+	{  1, 4,  1, 2,  0, 3 },20,	/* Energy */
 	10, 3,-3, 2, 10, A_WIS, SPE_CURE_SICKNESS,   -14
 },
 {	{"Knight", 0}, {
@@ -230,8 +230,8 @@ struct Role roles[] = {
 	{  13,  7, 14,  8, 10, 17 },
 	{  30, 15, 15, 10, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 14, 0,  0, 4,  0, 2 },	/* Hit points */
-	{  1, 4,  0, 1,  0, 2 },10,	/* Energy */
+	{ 14, 0,  0, 8,  0, 2 },	/* Hit points */
+	{  1, 4,  1, 2,  0, 3 },10,	/* Energy */
 	10, 8,-2, 0,  9, A_WIS, SPE_TURN_UNDEAD, -1000
 },
 {	{"Monk", 0}, {
@@ -257,7 +257,7 @@ struct Role roles[] = {
 	{  10,  7,  8,  8,  7,  7 },
 	{  25, 10, 20, 20, 15, 10 },
 	/* Init   Lower  Higher */
-	{ 12, 0,  0, 4,  1, 0 },	/* Hit points */
+	{ 12, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  2, 2,  0, 2,  0, 2 },10,	/* Energy */
 	10, 8,-2, 2, 20, A_WIS, SPE_RESTORE_ABILITY, -24
 },
@@ -284,7 +284,7 @@ struct Role roles[] = {
 	{   10,10,  7, 10,  7,  7 },
 	{  20, 18, 10, 20, 15, 17 },
 	/* Init   Lower  Higher */
-	{ 10, 0,  0, 4,  1, 0 },	/* Hit points */
+	{ 10, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  2, 2,  0, 2,  0, 2 },10,	/* Energy */
 	10, 4,-4, 4, 8, A_INT, SPE_PROTECTION, -1000
 },
@@ -310,8 +310,8 @@ struct Role roles[] = {
 	{   7,  7, 10,  7,  7,  7 },
 	{  15, 10, 30, 15, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 12, 0,  0, 4,  1, 0 },	/* Hit points */
-	{  4, 3,  0, 2,  0, 2 },10,	/* Energy */
+	{ 12, 0,  0, 8,  1, 0 },	/* Hit points */
+	{  4, 3,  2, 4,  0, 4 },10,	/* Energy */
 	0, 3,-2, 1, 10, A_WIS, SPE_REMOVE_CURSE,    -7
 },
 {	{"Pirate", 0}, {
@@ -336,8 +336,8 @@ struct Role roles[] = {
 	{  10,  7, 7,  10, 10,  7 },
 	{  22, 15, 10, 22, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 20, 0,  0, 3,  0, 2 },	/* Hit points (10 +d8 for 11 levels comes up a bit over 20 +d6 for 11 levels) */
-	{  1, 0,  0, 1,  0, 1 },12,	/* Energy */
+	{ 20, 0,  0, 6,  0, 2 },	/* Hit points (10 +d8 for 11 levels comes up a bit over 20 +d6 for 11 levels) */
+	{  1, 0,  0, 1,  0, 0 },12,	/* Energy */
 	10, 8, 0, 2,  9, A_INT, SPE_CAUSE_FEAR,    -1000
 },
   /* Note:  Rogue precedes Ranger so that use of `-R' on the command line
@@ -364,7 +364,7 @@ struct Role roles[] = {
 	{   7,  7,  7, 10,  7,  6 },
 	{  20, 10, 10, 30, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 10, 0,  0, 2,  1, 0 },	/* Hit points */
+	{ 10, 0,  0, 6,  1, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },11,	/* Energy */
 	10, 8, 0, 1,  9, A_INT, SPE_DETECT_TREASURE, -1000
 },
@@ -390,8 +390,8 @@ struct Role roles[] = {
 	{  13, 13, 13,  9, 13,  7 },
 	{  30, 10, 10, 20, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 13, 0,  0, 3,  1, 0 },	/* Hit points */
-	{  1, 0,  0, 1,  0, 1 },12,	/* Energy */
+	{ 13, 0,  0, 6,  1, 0 },	/* Hit points */
+	{  1, 0,  1, 0,  1, 0 },12,	/* Energy */
 	10, 9, 2, 1, 10, A_INT, SPE_INVISIBILITY,   -1000
 },
 {	{"Samurai", 0}, {
@@ -415,7 +415,7 @@ struct Role roles[] = {
 	{  10,  8,  7, 10, 17,  6 },
 	{  30, 10,  8, 30, 14,  8 },
 	/* Init   Lower  Higher */
-	{ 13, 0,  0, 4,  1, 0 },	/* Hit points */
+	{ 13, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },11,	/* Energy */
 	10, 10, 0, 0,  8, A_INT, SPE_CLAIRVOYANCE,    -10
 },
@@ -441,7 +441,7 @@ struct Role roles[] = {
 	{   7, 10,  6,  7,  7, 10 },
 	{  15, 10, 10, 15, 30, 20 },
 	/* Init   Lower  Higher */
-	{  8, 0,  0, 4,  0, 0 },	/* Hit points */
+	{  8, 0,  0, 8,  0, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
 	0, 5, 1, 2, 10, A_INT, SPE_CHARM_MONSTER,   -15
 },
@@ -470,7 +470,7 @@ struct Role roles[] = {
 	{  10, 10, 15, 25, 10, 30 },
 	/* Init   Lower  Higher */
 	{ 11, 0,  0, 4,  1, 0 },	/* Hit points */
-	{  4, 3,  0, 1,  0, 2 },10,	/* Energy */
+	{  4, 3,  1, 2,  0, 3 },10,	/* Energy */
 	10, 3,-3, 2, 9, A_INT, SPE_CREATE_MONSTER, -24
 },
 #endif
@@ -495,8 +495,8 @@ struct Role roles[] = {
 	{  12,  10, 12, 10, 10, 12 },
 	{  18,  14, 16, 18, 20, 14 },
 	/* Init   Lower  Higher */
-	{ 14, 0,  0, 4,  0, 2 },	/* Hit points */
-	{  1, 0,  0, 1,  0, 1 },10,	/* Energy */
+	{ 14, 0,  0, 8,  0, 2 },	/* Hit points */
+	{  1, 0,  2, 2,  0, 2 },10,	/* Energy */
 	0, 10,-2, 0,  9, A_WIS, SPE_CONE_OF_COLD,    -1000 /*Valks CAN ALWAYS cast Cone of Cold*/
 },
 {	{"Wizard", 0}, {
@@ -521,8 +521,8 @@ struct Role roles[] = {
 	{   7, 10,  7,  7,  7,  7 },
 	{  10, 30, 10, 20, 20, 10 },
 	/* Init   Lower  Higher */
-	{ 10, 0,  0, 4,  1, 0 },	/* Hit points */
-	{  4, 3,  0, 2,  0, 3 },12,	/* Energy */
+	{ 10, 0,  0, 4,  0, 1 },	/* Hit points */
+	{  4, 3,  2, 4,  0, 6 },12,	/* Energy */
 	0, 1, 0, 3, 10, A_INT, SPE_MAGIC_MISSILE,   -5
 },
 /* Array terminator */
@@ -552,7 +552,7 @@ const struct Role WtWrole = {
 	{  3,  3,  3,  3,  3,  3 },
 	{ 10, 10, 10, 10, 10, 10 },
 	/* Init   Lower  Higher */
-	{ 11, 0,  0, 4,  1, 0 },	/* Hit points */
+	{ 11, 0,  0, 8,  1, 0 },	/* Hit points */
 	{  1, 0,  0, 1,  0, 1 },14,	/* Energy */
 	10, 5, 0, 2, 10, A_INT, SPE_MAGIC_MAPPING,   -9
 };
@@ -751,7 +751,7 @@ const struct Race races[] = {
 	{      3,      3,  3,  3,  3,  3 },
 	{ STR19(20),  16, 16, 20, 14, 16 },
 	/* Init   Lower  Higher */
-	{  2, 0,  1, 0,  0, 1 },	/* Hit points */
+	{  5, 0,  1, 3,  1, 2 },	/* Hit points */
 	{  0, 0,  0, 0,  0, 0 },	/* Energy */
 	NORMALNIGHTVIS
 },
@@ -830,7 +830,7 @@ const struct Race races[] = {
 	{      3,      3,  3,  3,  3,  3 },
 	{ STR18(100), 18, 18, 18, 18, 18 },
 	/* Init   Lower  Higher */
-	{  2, 0,  0, 2,  0, 2 },	/* Hit points */
+	{  2, 0,  0, 2,  0, 1 },	/* Hit points */
 	{  0, 0,  100, 0, 100, 0 },		/* Energy */
 	NORMALNIGHTVIS
 },
@@ -857,7 +857,7 @@ const struct Race races[] = {
 	{   3,      3,  3,  3,  3,  3 },
 	{   18 ,   16, 16, 18, 18, 16 },
 	/* Init   Lower  Higher */
-	{  1, 0,  0, 2,  1, 0 },	/* Hit points */
+	{  1, 0,  0, 1,  0, 3 },	/* Hit points */
 	{  1, 0,  1, 0,  1, 0 },	/* Energy */
 	NIGHTVISION2
 },
@@ -883,7 +883,7 @@ const struct Race races[] = {
 	{      3,      3,  3,  3,  3,  3 },
 	{     16,     18, 18, 20, 14, 20 },
 	/* Init   Lower  Higher */
-	{  2, 0,  0, 2,  1, 0 },	/* Hit points */
+	{  2, 0,  1, 0,  0, 1 },	/* Hit points */
 	{  2, 0,  3, 0,  3, 0 },	/* Energy */
 	NORMALNIGHTVIS
 },

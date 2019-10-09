@@ -274,10 +274,16 @@ dosit()
 				case 4:
 				You_feel("much, much better!");
 				if (Upolyd) {
-					if (u.mh >= (u.mhmax - 5))  u.mhmax += 4;
+					if (u.mh >= (u.mhmax - 5)){
+						u.uhpmod += 4;
+						calc_total_maxhp();
+					}
 					u.mh = u.mhmax;
 				}
-				if(u.uhp >= (u.uhpmax - 5))  u.uhpmax += 4;
+				else if(u.uhp >= (u.uhpmax - 5)){
+					u.uhpmod += 4;
+					calc_total_maxhp();
+				}
 				u.uhp = u.uhpmax;
 				make_blinded(0L,TRUE);
 				make_sick(0L, (char *) 0, FALSE, SICK_ALL);

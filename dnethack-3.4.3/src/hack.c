@@ -2522,35 +2522,6 @@ boolean you; /**< true, if you are hit */
 }
 
 void
-check_uhpmax()
-{
-
-	if (u.uhpmax < 1)
-		u.uhpmax = 1;
-	if (u.mhmax < 1)
-		u.mhmax = 1;
-	if (u.uhp < 1)
-		u.uhp = 1;
-	if (u.mh < 1)
-		u.mh = 1;
-}
-
-void
-set_uhpmax(new_hpmax, poly)
-int new_hpmax;
-boolean poly;
-{
-	if (new_hpmax > 1) {
-		if (!poly) u.uhpmax = new_hpmax;
-		else       u.mhmax = new_hpmax;
-		return;
-	}
-	
-	if (!poly) u.uhpmax = 1;
-	else       u.mhmax = 1;
-}
-
-void
 losehp(n, knam, k_format)
 register int n;
 register const char *knam;
@@ -2558,7 +2529,7 @@ boolean k_format;
 {
 	if (Upolyd) {
 		u.mh -= n;
-		if (u.mhmax < u.mh) u.mhmax = u.mh;
+		if (u.mhmax < u.mh) u.mh = u.mhmax;
 		flags.botl = 1;
 		if (u.mh < 1)
 		    rehumanize();
@@ -2568,8 +2539,7 @@ boolean k_format;
 	}
 
 	u.uhp -= n;
-	if(u.uhp > u.uhpmax)
-		u.uhpmax = u.uhp;	/* perhaps n was negative */
+	if(u.uhp > u.uhpmax) u.uhp = u.uhpmax;	/* perhaps n was negative */
 	flags.botl = 1;
 	if(u.uhp < 1) {
 		killer_format = k_format;

@@ -183,9 +183,10 @@ change_sex()
 STATIC_OVL void
 newman()
 {
-	int tmp, oldlvl;
+	int tmp, tmpen, oldlvl;
 
 	tmp = u.uhpmax;
+	tmpen = u.uenmax;
 	oldlvl = u.ulevel;
 	u.ulevel = u.ulevel + rn1(5, -2);
 	if (u.ulevel > 127 || u.ulevel < 1) { /* level went below 0? */
@@ -210,36 +211,25 @@ newman()
 	/* random experience points for the new experience level */
 	u.uexp = rndexp(FALSE);
 
-	/* u.uhpmax * u.ulevel / oldlvl: proportionate hit points to new level
-	 * -10 and +10: don't apply proportionate HP to 10 of a starting
-	 *   character's hit points (since a starting character's hit points
-	 *   are not on the same scale with hit points obtained through level
-	 *   gain)
-	 * 9 - rn2(19): random change of -9 to +9 hit points
+	/* 
+	 * Kludge up a reroll of all dice
 	 */
-#ifndef LINT
-	u.uhpmax = ((u.uhpmax - 10) * (long)u.ulevel / oldlvl + 10) +
-		(9 - rn2(19));
-#endif
-
-#ifdef LINT
-	u.uhp = u.uhp + tmp;
-#else
-	u.uhp = u.uhp * (long)u.uhpmax/tmp;
-#endif
-
-	tmp = u.uenmax;
-#ifndef LINT
-	u.uenmax = u.uenmax * (long)u.ulevel / oldlvl + 9 - rn2(19);
-#endif
-	if (u.uenmax < 0) u.uenmax = 0;
-#ifndef LINT
-	u.uen = (tmp ? u.uen * (long)u.uenmax / tmp : u.uenmax);
-#endif
-
-	check_uhpmax();
+	u.uhprolled = d(u.ulevel, maxhp(0)/u.ulevel);
+	u.uenrolled = d(u.ulevel, maxen()/u.ulevel);
 
 	redist_attr();
+
+	calc_total_maxhp();
+	calc_total_maxen();
+
+	tmp = u.uhpmax - tmp; //Note: final - initial
+	u.uhp = u.uhp + tmp;
+	if(u.uhp < 1) u.uhp = 1;
+
+	tmpen = u.uenmax - tmpen; //Note: final - initial
+	u.uen = u.uen + tmpen;
+	if(u.uen < 1) u.uen = 1;
+
 	if(Race_if(PM_INCANTIFIER)) u.uen = min(u.uenmax, rn1(500,500));
 	else u.uhunger = rn1(500,500);
 	if (Sick) make_sick(0L, (char *) 0, FALSE, SICK_ALL);
@@ -249,7 +239,6 @@ newman()
 	if (u.uhp <= 0 || u.uhpmax <= 0) {
 		if (Polymorph_control) {
 		    if (u.uhp <= 0) u.uhp = 1;
-		    if (u.uhpmax <= 0) u.uhpmax = 1;
 		} else {
 dead: /* we come directly here if their experience level went to 0 or less */
 		    Your("new form doesn't seem healthy enough to survive.");
@@ -540,17 +529,16 @@ int	mntmp;
 	 */
 	mlvl = (int)mons[mntmp].mlevel;
 	if (youmonst.data->mlet == S_DRAGON && mntmp >= PM_GRAY_DRAGON) {
-		set_uhpmax(In_endgame(&u.uz) ? (8*mlvl) : (4*mlvl + d(mlvl,4)), TRUE);
+		u.mhrolled = In_endgame(&u.uz) ? (8*mlvl) : (4*mlvl + d(mlvl,4));
 	} else if (is_golem(youmonst.data)) {
-		set_uhpmax(golemhp(mntmp), TRUE);
+		u.mhrolled = golemhp(mntmp);
 	} else {
-		if (!mlvl) u.mhmax = rnd(4);
-		else u.mhmax = d(mlvl, 8);
-		if (is_home_elemental(&mons[mntmp])) u.mhmax *= 3;
+		if (!mlvl) u.mhrolled = rnd(4);
+		else u.mhrolled = d(mlvl, 8);
+		if (is_home_elemental(&mons[mntmp])) u.mhrolled *= 3;
 	}
+	calc_total_maxhp();
 	u.mh = u.mhmax;
-
-	check_uhpmax();
 
 	if (u.ulevel < mlvl) {
 	/* Low level characters can't become high level monsters for long */
@@ -1472,7 +1460,7 @@ doandroid()
 		u.ucspeed = NORM_CLOCKSPEED;
 		return 1;
 	} else if(newspeed == SLOW_CLOCKSPEED){
-		int mult = 30/u.ulevel;
+		int mult = HEALCYCLE/u.ulevel;
 		int duration = (u.uenmax - u.uen)*mult*2/3+30, i, lim;
 		You("enter sleep mode.");
 		u.ucspeed = NORM_CLOCKSPEED;

@@ -1731,7 +1731,13 @@ u_init()
 	u.uevent.udemigod = 0;		/* not a demi-god yet... */
 	u.udg_cnt = 0;
 	u.ill_cnt = 0;
-	u.mh = u.mhmax = u.mtimedone = 0;
+	/*Ensure that the HP and energy fields are zeroed out*/
+	u.uhp = u.uhpmax = u.uhprolled = u.uhpmultiplier = u.uhpbonus = u.uhpmod = 0;
+	u.uen = u.uenmax = u.uenrolled = u.uenmultiplier = u.uenbonus = 0;
+	u.uhp_real = u.uhpmax_real = u.uhprolled_real = u.uhpmultiplier_real = u.uhpbonus_real = u.uhpmod_real = 0;
+	u.uen_real = u.uenmax_real = u.uenrolled_real = u.uenmultiplier_real = u.uenbonus_real = 0;
+	
+	u.mh = u.mhmax = u.mhrolled = u.mtimedone = 0;
 	u.uz.dnum = u.uz0.dnum = 0;
 	u.utotype = 0;
 #endif	/* 0 */
@@ -1888,12 +1894,11 @@ u_init()
 	init_uasmon();
 
 	u.ulevel = 0;	/* set up some of the initial attributes */
-	u.uhp = u.uhpmax = newhp();
-	u.uenmax = urole.enadv.infix + urace.enadv.infix;
-	if (urole.enadv.inrnd > 0)
-	    u.uenmax += rnd(urole.enadv.inrnd);
-	if (urace.enadv.inrnd > 0)
-	    u.uenmax += rnd(urace.enadv.inrnd);
+	u.uhprolled = newhp();
+	calc_total_maxhp();
+	u.uhp = u.uhpmax;
+	u.uenrolled = newen();
+	calc_total_maxen();
 	u.uen = u.uenmax;
 	u.uspellprot = 0;
 	u.usanity = 100;
@@ -2543,10 +2548,13 @@ u_init()
 	case PM_HALF_DRAGON:
 		if(Role_if(PM_BARD)){
 			u.umartial = TRUE;
-			u.uenmax += 30;
+			u.uenbonus += 30;
+			calc_total_maxen();
 			u.uen = u.uenmax;
 		} else if(u.uenmax < 15) {
-			u.uen = u.uenmax = 15;
+			u.uenbonus += 15 - u.uenmax;
+			calc_total_maxen();
+			u.uen = u.uenmax;
 		}
 		if(flags.initgend){
 			skill_add(Skill_HD_Female);

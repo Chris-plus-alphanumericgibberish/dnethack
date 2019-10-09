@@ -2686,7 +2686,8 @@ drainhp:
                   u.mhmax -= dmg;
               } else {
                   u.uhp -= dmg;
-                  u.uhpmax -= dmg;
+                  u.uhpmod -= dmg;
+				  calc_total_maxhp();
               }
               if (u.uhp < 1 && mtmp) done_in_by(mtmp);
                /* Quest nemesis maledictions */

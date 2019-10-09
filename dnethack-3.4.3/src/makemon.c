@@ -583,6 +583,19 @@ register struct monst *mtmp;
 				(void) mpickobj(mtmp, otmp);
 				return;//no random stuff!
 			}
+			else if(mm == PM_SILENT_ONE){
+				otmp = mksobj(QUARTERSTAFF, TRUE, FALSE);
+				bless(otmp);
+				otmp->spe = 5;
+				otmp->objsize = MZ_LARGE;
+				otmp->oproperties = OPROP_PSIOW;
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(ROBE, TRUE, FALSE);
+				bless(otmp);
+				otmp->spe = 5;
+				otmp->obj_material = METAL;
+				(void) mpickobj(mtmp, otmp);
+			}
 			else if(mm == PM_DAEMON){
 				otmp = mksobj(SABER, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_ICONOCLAST));
@@ -4839,6 +4852,12 @@ register struct monst *mtmp;
 			otmp->oeroded = 1;
 			curse(otmp);
 			(void) mpickobj(mtmp, otmp);
+		} else if(mm == PM_BRIGHT_WALKER) {
+			(void) mongets(mtmp, BROADSWORD);
+			(void) mongets(mtmp, KITE_SHIELD);
+			(void) mongets(mtmp, GAUNTLETS);
+			(void) mongets(mtmp, PLATE_MAIL);
+			(void) mongets(mtmp, ARMORED_BOOTS);
 		} else if(mm == PM_NECROMANCER) {
 			otmp = mksobj(LONG_SWORD, TRUE, FALSE);
 			otmp->oproperties = OPROP_UNHYW|OPROP_MORGW;
@@ -7150,6 +7169,8 @@ register int	mmflags;
 		mtmp->m_insight_level = 16+rn2(8);
 	else if(mtmp->data == &mons[PM_SMOLDERING_LAKE])
 		mtmp->m_insight_level = 11+rn2(6);
+	else if(mtmp->data == &mons[PM_FROSTED_LAKE])
+		mtmp->m_insight_level = 12+rn2(6);
 	else if(mtmp->data == &mons[PM_BLOOD_SHOWER])
 		mtmp->m_insight_level = 14+rn2(7);
 	else if(mtmp->data == &mons[PM_MANY_TALONED_THING])
@@ -7176,6 +7197,9 @@ register int	mmflags;
 		mtmp->m_insight_level = 14+rn2(7);
 	else if(mtmp->data == &mons[PM_RADIANT_PYRAMID])
 		mtmp->m_insight_level = 12+rn2(6);
+	
+	else if(mtmp->data == &mons[PM_BRIGHT_WALKER])
+		mtmp->m_insight_level = 10;
 	
 	else if(mtmp->data == &mons[PM_KUKER])
 		mtmp->m_insight_level = rnd(20)+rn2(21);
@@ -9021,6 +9045,8 @@ struct monst *mtmp, *victim;
 			ptr == &mons[PM_DARKNESS_GIVEN_HUNGER] ||
 			ptr == &mons[PM_WATCHER_IN_THE_WATER] ||
 			ptr == &mons[PM_KETO] ||
+			ptr == &mons[PM_DRACAE_ELADRIN] ||
+			ptr == &mons[PM_MOTHERING_MASS] ||
 			ptr == &mons[PM_DURIN_S_BANE] ||
 			ptr == &mons[PM_LUNGORTHIN] ||
 			ptr == &mons[PM_CHROMATIC_DRAGON] ||

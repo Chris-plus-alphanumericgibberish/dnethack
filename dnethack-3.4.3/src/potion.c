@@ -496,7 +496,7 @@ peffects(otmp)
 			if(u.usanity > 0)
 				u.usanity--;
 			if(u.uinsight > 0)
-				u.uinsight++;
+				u.uinsight--;
 			exercise(A_WIS, FALSE);
 			exercise(A_INT, FALSE);
 		}
@@ -653,7 +653,13 @@ peffects(otmp)
 				u.uhp += u.ulevel*10;
 				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
 			}
-			if(u.udrunken < u.ulevel*3) u.udrunken++;
+			if(u.udrunken < u.ulevel*3){
+				u.udrunken++;
+				if(u.usanity < 50){
+					u.usanity += 5;
+					if(u.usanity > 50) u.usanity = 50;
+				}
+			}
 			if (!otmp->blessed)
 			    make_confused(itimeout_incr(HConfusion, d(3,8)), FALSE);
 			/* the whiskey makes us feel better */
@@ -788,6 +794,12 @@ peffects(otmp)
 		    You("suddenly fall asleep!");
 		    fall_asleep(-rn1(10, 25 - 12*bcsign(otmp)), TRUE);
 		}
+		//Sedative
+		u.usanity += 5 + 10*bcsign(otmp);
+		if(u.usanity > 100)
+			u.usanity = 100;
+		if(u.usanity < 0)
+			u.usanity = 0;
 		break;
 	case POT_MONSTER_DETECTION:
 	case SPE_DETECT_MONSTERS:
@@ -1032,7 +1044,8 @@ as_extra_healing:
 			else
 			    pline("Magical energies course through your body.");
 			num = rnd(5) + 5 * otmp->blessed + 1;
-			u.uenmax += (otmp->cursed) ? -num : num;
+			u.uenbonus += (otmp->cursed) ? -num : num;
+			calc_total_maxen();
 			u.uen += (otmp->cursed) ? -100 : (otmp->blessed) ? 200 : 100;
 			if(u.uenmax <= 0) u.uenmax = 0;
 			if(u.uen > u.uenmax) u.uen = u.uenmax;
@@ -1166,20 +1179,29 @@ healup(nhp, nxtra, curesick, cureblind)
 {
 	int * hpmax;
 	int * hp;
-	int hpcap;
+	if(active_glyph(RADIANCE))
+		nhp *= 1.3;
 	if (nhp) {
 		if (Upolyd) {
 			hp = &u.mh;
 			hpmax = &u.mhmax;
-			hpcap = 24 + 2*mons[u.umonnum].mlevel*8;
 		} else {
 			hp = &u.uhp;
 			hpmax = &u.uhpmax;
-			hpcap = 24 + 2*maxhp();
 		}
 		*hp += nhp;
 		if (*hp > *hpmax){
-			*hpmax += min(nxtra, max(0, 6*nxtra/5 - 6*nxtra*(*hpmax)*(*hpmax)/(5*hpcap*hpcap)));
+			if(u.uhpmod < 0){
+				if(u.uhpmod + nxtra > 0){
+					nxtra += u.uhpmod;
+					u.uhpmod = 0;
+					 u.uhpbonus += nxtra;
+				} else {
+					u.uhpmod += nxtra;
+				}
+			}
+			else u.uhpbonus += nxtra;
+			calc_total_maxhp();
 			*hp = *hpmax;
 		}
 	}

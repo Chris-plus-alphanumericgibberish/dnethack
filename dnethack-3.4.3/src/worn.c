@@ -946,6 +946,7 @@ struct monst *magr;
 	
 	if(mon->mtame){
 		if(u.specialSealsActive&SEAL_COSMOS) base += rnd(spiritDsize());
+		if(active_glyph(IMPURITY)) base += 3;
 	}
 	
 	//armor AC

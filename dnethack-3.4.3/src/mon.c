@@ -5126,7 +5126,7 @@ xkilled(mtmp, dest)
 	    if(wasinside) spoteffects(TRUE);
 	} else if(x != u.ux || y != u.uy) {
 		/* might be here after swallowed */
-		if (!rn2(6) && !(mvitals[mndx].mvflags & G_NOCORPSE)
+		if (!rn2(active_glyph(EYE_THOUGHT) ? 3 : 6) && !(mvitals[mndx].mvflags & G_NOCORPSE)
 					&& mdat->mlet != S_KETER
 					&& mdat->mlet != S_PLANT
 					&& !(mtmp->mvanishes >= 0)

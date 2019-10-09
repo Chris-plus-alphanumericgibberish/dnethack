@@ -709,10 +709,10 @@ boolean digest_meal;
 		if(mon->mhp < mon->mhpmax && mon_resistance(mon,REGENERATION)) mon->mhp++;
 		if(!nonliving_mon(mon)){
 			if (mon->mhp < mon->mhpmax){
-				//recover 1/30th hp per turn:
-				mon->mhp += (mon->m_lev)/30;
+				//recover 1/HEALCYCLEth hp per turn:
+				mon->mhp += (mon->m_lev)/HEALCYCLE;
 				//Now deal with any remainder
-				if(((moves)*((mon->m_lev)%30))/30 > ((moves-1)*((mon->m_lev)%30))/30) mon->mhp += 1;
+				if(((moves)*((mon->m_lev)%HEALCYCLE))/HEALCYCLE > ((moves-1)*((mon->m_lev)%HEALCYCLE))/HEALCYCLE) mon->mhp += 1;
 			}
 		}
 	}
@@ -1043,7 +1043,7 @@ register struct monst *mtmp;
 		}
 		else if(mtmp->mvar2 < 6){
 			mtmp->mvar2 += rnd(3);
-		} else {
+		} else if(!mtmp->mpeaceful){
 			int ox = mtmp->mx, oy = mtmp->my;
 			rloc(mtmp, FALSE);
 			if(mtmp->mx != ox || mtmp->my != oy){
@@ -1088,7 +1088,7 @@ register struct monst *mtmp;
 		}
 		else if(mtmp->mvar2 < 6){
 			mtmp->mvar2 += rnd(3);
-		} else {
+		} else if(!mtmp->mpeaceful){
 			int i;
 			int ox = mtmp->mx, oy = mtmp->my;
 			int type = mtmp->mvar1;

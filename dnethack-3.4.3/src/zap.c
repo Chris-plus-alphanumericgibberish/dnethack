@@ -2787,7 +2787,10 @@ int gaze_cancel;
 		    rehumanize();
 	    }
 		u.uen -= d(10,10);
-		if(!Race_if(PM_INCANTIFIER)) u.uenmax = max(u.uenmax-10,0);
+		if(!Race_if(PM_INCANTIFIER)){
+			u.uenbonus -= 10;
+			calc_total_maxen();
+		}
 		if(u.uen<0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 	} else {
 	    mdef->mcan = TRUE;

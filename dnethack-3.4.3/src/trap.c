@@ -1334,7 +1334,8 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		    You("are caught in a magical explosion!");
 		    losehp(rnd(10), "magical explosion", KILLED_BY_AN);
 		    Your("body absorbs some of the magical energy!");
-		    u.uenmax += 2;
+		    u.uenbonus += 2;
+			calc_total_maxen();
 			u.uen = min(u.uen+400, u.uenmax);
 		} else domagictrap();
 #ifdef STEED
@@ -2968,8 +2969,10 @@ struct obj *box;	/* null for floor trap */
 		u.mhmax -= rn2(min(u.mhmax,num + 1)), flags.botl = 1;
 	} else {
 	    num = d(2,4);
-	    if (u.uhpmax > u.ulevel)
-		u.uhpmax -= rn2(min(u.uhpmax,num + 1)), flags.botl = 1;
+	    if (u.uhpmax > u.ulevel){
+			u.uhpmod -= rn2(min(u.uhpmax,num + 1));
+			calc_total_maxhp();
+		}
 	}
 	if (!num) You("are uninjured.");
 	else losehp(num, tower_of_flame, KILLED_BY_AN);
@@ -3726,8 +3729,8 @@ register int n;
 			killer = antimagic_killer;
 			done(DIED);
 		}
-		u.uenmax += u.uen;
-		if(u.uenmax < 0) u.uenmax = 0;
+		u.uenbonus += u.uen;
+		calc_total_maxen();
 		u.uen = 0;
 	}
 	flags.botl = 1;

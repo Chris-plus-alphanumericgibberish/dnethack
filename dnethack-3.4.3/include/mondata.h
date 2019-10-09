@@ -32,6 +32,8 @@
 #define	resist_pierce(ptr)	((((ptr)->mflagsg & MG_RPIERCE) != 0L))
 #define	resists_all(ptr)	((((ptr)->mflagsg & MG_RALL) == MG_RALL))
 
+#define vulnerable_mask(mask)	((mask) == MG_VPIERCE || (mask) == MG_VSLASH || (mask) == MG_VBLUNT)
+
 #define resists_poly(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
 
 #define resists_confusion(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
@@ -515,6 +517,7 @@
 /* this returns the light's range, or 0 if none; if we add more light emitting
    monsters, we'll likely have to add a new light range field to mons[] */
 #define emits_light(ptr)	(((ptr)->mlet == S_LIGHT || \
+				  (ptr) == &mons[PM_BRIGHT_WALKER] || \
 				  (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				  (ptr) == &mons[PM_SHOCKING_SPHERE] || \
 				  (ptr) == &mons[PM_MOTE_OF_LIGHT] || \

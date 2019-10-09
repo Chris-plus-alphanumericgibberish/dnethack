@@ -251,7 +251,8 @@ void
 init_uhunger()
 {
 	if(Race_if(PM_INCANTIFIER)){
-		u.uenmax += 1800;
+		u.uenbonus += 1800;
+		calc_total_maxen();
 		u.uen = u.uenmax*.45;
 	} else {
 		u.uhungermax = DEFAULT_HMAX;
@@ -1251,7 +1252,8 @@ BOOLEAN_P tin, nobadeffects, drained;
 			else u.uen += amnt;
 			flags.botl = 1;
 		    if (u.uen > u.uenmax) {
-				u.uenmax+=4;
+				u.uenbonus += 4;
+				calc_total_maxen();
 				u.uen = u.uenmax;
 		    }
 		    if (old_uen != u.uen) {
@@ -1270,7 +1272,8 @@ BOOLEAN_P tin, nobadeffects, drained;
 			u.uen = u.uen + 400;
 		    u.uen += amnt;
 		    if (u.uen > u.uenmax) {
-				u.uenmax+=10;
+				u.uenbonus += 10;
+				calc_total_maxen();
 				u.uen = u.uenmax;
 		    }
 		    if (old_uen != u.uen) {

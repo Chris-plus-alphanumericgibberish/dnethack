@@ -1226,6 +1226,8 @@ int spec;
 				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
 					warnedotyp = 0;
 					warnedptr = 0;
+					if(vulnerable_mask(resistmask) && !(weaponmask|EXPLOSION))
+						tmp *= 2;
 				}
 			}
 		}

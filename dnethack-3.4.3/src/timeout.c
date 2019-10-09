@@ -830,6 +830,9 @@ boolean wakeup_msg;
 	    flags.soundok = 0;
 	    afternmv = Hear_again;	/* this won't give any messages */
 	}
+	/*Adjust Android timeouts*/
+	u.nextsleep = max(u.nextsleep, monstermoves);
+	u.lastslept = monstermoves;
 	/* early wakeup from combat won't be possible until next monster turn */
 	u.usleep = monstermoves;
 	nomovemsg = wakeup_msg ? "You wake up." : You_can_move_again;

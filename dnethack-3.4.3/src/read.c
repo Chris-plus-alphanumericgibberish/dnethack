@@ -1854,10 +1854,13 @@ struct obj	*sobj;
 	case SCR_CHARGING:
 		if (confused) {
 		    You_feel("charged up!");
-		    if (u.uen < u.uenmax)
+		    if (u.uen < u.uenmax){
 				u.uen = min(u.uen+400, u.uenmax);
-		    else
-				u.uen = (u.uenmax += d(5,4));
+			} else {
+				u.uenbonus += d(5,4);
+				calc_total_maxen();
+				u.uen = u.uenmax;
+			}
 		    flags.botl = 1;
 		    break;
 		}
@@ -2256,7 +2259,8 @@ struct obj	*sobj;
 			//Confused
 			pline("Shimmering sparks shoot into your body!");
 			if(u.uen + 400 > u.uenmax){
-				u.uenmax += 4;
+				u.uenbonus += 4;
+				calc_total_maxen();
 				u.uen = u.uenmax;
 			} else u.uen += 400;
 	break;
@@ -2529,7 +2533,7 @@ register struct obj *obj;
     obj->in_use = TRUE;	/* in case losehp() is fatal */
     Your("%s vibrates violently, and explodes!",xname(obj));
     nhbell();
-    losehp(rnd(2*(u.uhpmax+1)/3), "exploding wand", KILLED_BY_AN);
+    losehp(rnd(2*((Upolyd ? u.mhmax : u.uhpmax)+1)/3), "exploding wand", KILLED_BY_AN);
     useup(obj);
     exercise(A_STR, FALSE);
 }

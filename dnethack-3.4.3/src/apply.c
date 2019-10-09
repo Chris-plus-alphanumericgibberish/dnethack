@@ -3099,9 +3099,7 @@ struct obj *hypo;
 					You_feel("lackluster.");
 				else
 					pline("Magical energies course through your body.");
-				num = rnd(5) + 5 * amp->blessed + 1;
 				u.uen += (amp->cursed) ? -100 : (amp->blessed) ? 200 : 100;
-				if(u.uenmax <= 0) u.uenmax = 0;
 				if(u.uen > u.uenmax) u.uen = u.uenmax;
 				if(u.uen <= 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 				flags.botl = 1;
@@ -5923,6 +5921,11 @@ doapply()
 		}
 		if(Punished) unpunish();
 		
+		//Share your insanity
+		if(u.usanity < 100){
+			u.usanity += (100 - u.usanity)/2;
+		}
+			
 		if(u.wimage >= 10){
 			u.wimage = 0;
 			makemon(&mons[PM_WEEPING_ANGEL], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);

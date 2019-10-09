@@ -2878,6 +2878,27 @@ resistances_enlightenment()
 	if (Halluc_resistance)
 		enl_msg("You resist", "", "ed", " hallucinations");
 */
+	/*** Thoughts ***/
+	if (active_glyph(CLOCKWISE_METAMORPHOSIS)) putstr(en_win, 0, "A clockwise gyre turns in the depths below your id.");
+	if (active_glyph(ANTI_CLOCKWISE_METAMORPHOSIS)) putstr(en_win, 0, "An anti-clockwise gyre turns in the heights above your soul.");
+	if (active_glyph(ARCANE_BULWARK)) putstr(en_win, 0, "You remember the shores of a sparkling lake.");
+	if (active_glyph(DISSIPATING_BULWARK)) putstr(en_win, 0, "You remember a flashing storm over pure lake-water.");
+	if (active_glyph(SMOLDERING_BULWARK)) putstr(en_win, 0, "You remember embers drowning in still waters.");
+	if (active_glyph(FROSTED_BULWARK)) putstr(en_win, 0, "You remember snowflakes on the surface of a lake.");
+	if (active_glyph(BLOOD_RAPTURE)) putstr(en_win, 0, "You see rainbows in a mists of blood.");
+	if (active_glyph(CLAWMARK)) putstr(en_win, 0, "Every surface you have ever seen was scored by claws.");
+	if (active_glyph(CLEAR_DEEPS)) putstr(en_win, 0, "Your thoughts drift through blue water.");
+	if (active_glyph(DEEP_SEA)) putstr(en_win, 0, "Your fears drown in pitch-black water.");
+	if (active_glyph(COMMUNION)) putstr(en_win, 0, "A strange minister preaches continuously in your childhood home.");
+	if (active_glyph(CORRUPTION)) putstr(en_win, 0, "It weeps tears of blood.");
+	if (active_glyph(EYE_THOUGHT)) putstr(en_win, 0, "Eyes writhe inside your head.");
+	if (active_glyph(FORMLESS_VOICE)) putstr(en_win, 0, "A great voice speaks to you.");
+	if (active_glyph(GUIDANCE)) putstr(en_win, 0, "You see dancing sprites, far away in the dark behind your eyes.");
+	if (active_glyph(IMPURITY)) putstr(en_win, 0, "Red millipedes crawl through your brain.");
+	if (active_glyph(MOON)) putstr(en_win, 0, "You see the face of the sympathetic moon.");
+	if (active_glyph(WRITHE)) putstr(en_win, 0, "A subtle mucus covers your brain.");
+	if (active_glyph(RADIANCE)) putstr(en_win, 0, "Your mind is impaled on a golden pyramid.");
+	
 	/*** Troubles ***/
 	if(u_healing_penalty()) putstr(en_win, 0, "You feel itchy.");
 	if (Wounded_legs
