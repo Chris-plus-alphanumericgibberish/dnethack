@@ -1232,6 +1232,32 @@ int x;
 #endif
 }
 
+void
+change_usanity(delta)
+int delta;
+{
+	pline("Sanity change: %d + %d", u.usanity, delta);
+	u.usanity += delta;
+	if(u.usanity < 0)
+		u.usanity = 0;
+	if(u.usanity > 100)
+		u.usanity = 100;
+	pline("= %d", u.usanity);
+}
+
+void
+change_uinsight(delta)
+int delta;
+{
+	pline("Insight change: %d + %d", u.uinsight, delta);
+	u.uinsight += delta;
+	if(u.uinsight < 0)
+		u.uinsight = 0;
+	if(u.uinsight > INSIGHT_RATE/20)
+		u.uinsight = INSIGHT_RATE/20;
+	pline("= %d", u.uinsight);
+}
+
 /* condense clumsy ACURR(A_STR) value into value that fits into game formulas
  */
 schar

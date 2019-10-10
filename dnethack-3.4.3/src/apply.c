@@ -5923,7 +5923,7 @@ doapply()
 		
 		//Share your insanity
 		if(u.usanity < 100){
-			u.usanity += (100 - u.usanity)/2;
+			change_usanity((100 - u.usanity)/2);
 		}
 			
 		if(u.wimage >= 10){

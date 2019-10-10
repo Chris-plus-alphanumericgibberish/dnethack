@@ -2824,9 +2824,7 @@ dopois:
 		}
 		//Having your brain eaten forces a san check.
 		if(u.usanity > 0)
-			u.usanity -= u_sanity_loss(mtmp);
-		if(u.usanity < 0)
-			u.usanity = 0;
+			change_usanity(u_sanity_loss(mtmp));
 		//begin moved brain removal messages
 		if (!uarmh || uarmh->otyp != DUNCE_CAP) {
 			if(mtmp->data == &mons[PM_MIGO_PHILOSOPHER]||mtmp->data == &mons[PM_MIGO_QUEEN])
@@ -3316,10 +3314,7 @@ dopois:
 	    case AD_TENT:
 			u.ustuck = mtmp; //can steal stickage from other monsters.
 			dotent(mtmp,dmg);
-			if(u.usanity > 0)
-				u.usanity -= u_sanity_loss(mtmp);
-			if(u.usanity < 0)
-				u.usanity = 0;
+			change_usanity(u_sanity_loss(mtmp));
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////
 	    case AD_SAMU:
@@ -3881,9 +3876,7 @@ dopois:
 					}
 				}
 				if(u.usanity > 0)
-					u.usanity -= u_sanity_loss(mtmp);
-				if(u.usanity < 0)
-					u.usanity = 0;
+					change_usanity(u_sanity_loss(mtmp));
 			}
 		break;
 ///////////////////////////////////////////////////////////////////////////////////////////

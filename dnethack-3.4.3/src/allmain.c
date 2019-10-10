@@ -1860,15 +1860,10 @@ karemade:
 								newexplevel();
 							}
 							if(u.usanity > 0 && taxes_sanity(mtmp->data)){
-								u.usanity -= u_sanity_loss(mtmp);
-								if(u.usanity < 0) u.usanity = 0;
+								change_usanity(u_sanity_loss(mtmp));
 							}
 							if(yields_insight(mtmp->data)){
-								u.uinsight += u_insight_gain(mtmp);
-								if(u.usanity < 100){
-									u.usanity += u_sanity_gain(mtmp);
-									if(u.usanity > 100) u.usanity = 100;
-								}
+								change_uinsight(u_insight_gain(mtmp));
 							}
 						}
 					}

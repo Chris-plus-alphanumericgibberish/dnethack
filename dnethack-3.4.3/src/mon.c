@@ -5182,16 +5182,14 @@ cleanup:
 			u.hod += 10;
 			u.ualign.sins += 5;
 			if(u.usanity > 0){
-				u.usanity -= rnd(4);
-				if(u.usanity < 0)
-					u.usanity = 0;
+				change_usanity(-1*rnd(4));
 			}
 		}
 		else{
 			u.hod += 5; 
 			u.ualign.sins += 2;
 			if(u.usanity > 0){
-				u.usanity--;
+				change_usanity(-1);
 			}
 		}
 		if (Blind && !Blind_telepat)
@@ -6490,12 +6488,12 @@ struct monst *mtmp;
 	
 	if(rnd(30) > ACURR(A_WIS)){
 		if(mndx == PM_GREAT_CTHULHU)
-			return rnd(100);
-		else return rnd(monstr[mndx]);
+			return -1*rnd(100);
+		else return -1*rnd(monstr[mndx]);
 	} else {
 		if(mndx == PM_GREAT_CTHULHU)
-			return rnd(10);
-		else return rnd(max(1, monstr[mndx]-u.ulevel));
+			return -1*rnd(10);
+		else return -1*rnd(max(1, monstr[mndx]-u.ulevel));
 	}
 }
 

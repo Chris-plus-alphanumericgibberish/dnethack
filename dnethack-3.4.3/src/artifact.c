@@ -8897,9 +8897,9 @@ read_necro(VOID_ARGS)
 			}
 		}
 		if(chance > 0){
-			u.uinsight++;
+			change_uinsight(1);
 			if(u.usanity < 100 && rnd(30) < ACURR(A_WIS))
-				u.usanity++;
+				change_usanity(1);
 		}
 		switch(chance){
 			case 0:
@@ -8908,7 +8908,7 @@ read_necro(VOID_ARGS)
 				exercise(A_WIS, FALSE);
 				exercise(A_INT, FALSE);
 				if(rn2(100) < u.usanity)
-					u.usanity--;
+					change_usanity(-1);
 			break;
 			case 1:
 				if(!(artiptr->ovar1 & S_OOZE)){
@@ -9328,15 +9328,15 @@ read_lost(VOID_ARGS)
 		if(artiptr->ovar1 & putativeSeal){
 			losexp("getting lost in a book",TRUE,TRUE,TRUE);
 			if(rn2(100) < u.usanity)
-				u.usanity--;
+				change_usanity(1);
 		} else {
 			u.sealsKnown |= putativeSeal;
 			artiptr->ovar1 |= putativeSeal;
 			You("learn the name \"%s\" while studying the book.",sealNames[i]);
 			artiptr->spestudied++;
-			u.uinsight++;
+			change_uinsight(1);
 			if(u.usanity < 100 && rnd(30) < ACURR(A_WIS))
-				u.usanity++;
+				change_usanity(1);
 		}
 	}
 	else{

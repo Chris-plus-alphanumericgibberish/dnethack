@@ -1915,12 +1915,10 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if(u.udrunken >= u.ulevel*3) Sprintf(eos(buf), ", the maximum for an adventurer of your level");
 	you_have(buf);
 	/*** Troubles ***/
-	if(wizard){
-		Sprintf(buf, "%d sanity points", u.usanity);
-		you_have(buf);
-		Sprintf(buf, "%d insight points", u.uinsight);
-		you_have(buf);
-	}
+	Sprintf(buf, "%d sanity points", u.usanity);
+	you_have(buf);
+	Sprintf(buf, "%d insight points", u.uinsight);
+	you_have(buf);
 	if (final) {
 		if (Hallucination) you_are("hallucinating");
 		if (Stunned) you_are("stunned");
@@ -2900,6 +2898,22 @@ resistances_enlightenment()
 	if (active_glyph(RADIANCE)) putstr(en_win, 0, "Your mind is impaled on a golden pyramid.");
 	
 	/*** Troubles ***/
+	if(u.usanity < 50)
+		putstr(en_win, 0, "You sometimes hallucinate.");
+	else if(u.usanity < 25)
+		putstr(en_win, 0, "You often hallucinate.");
+	else if(u.usanity < 10)
+		putstr(en_win, 0, "You hallucinate frequently`.");
+	else if(u.usanity == 0)
+		putstr(en_win, 0, "You are in a constant delusional state.");
+	
+	if(u.uinsight > 40)
+		putstr(en_win, 0, "You frequently see things you wish you hadn't.");
+	else if(u.uinsight > 20)
+		putstr(en_win, 0, "You often see things you wish you hadn't.");
+	else if(u.uinsight > 1)
+		putstr(en_win, 0, "You occasionally see things you wish you hadn't.");
+	
 	if(u_healing_penalty()) putstr(en_win, 0, "You feel itchy.");
 	if (Wounded_legs
 #ifdef STEED

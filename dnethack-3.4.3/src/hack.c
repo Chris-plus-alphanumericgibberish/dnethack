@@ -2609,6 +2609,7 @@ weight_cap()
 		if (carrcap < 0) carrcap = 0;
 	}
 	if(u.sealsActive&SEAL_FAFNIR) carrcap *= 1+((double) u.ulevel)/100;
+	if(active_glyph(COMMUNION)) carrcap *= 1.25;
 	if(arti_lighten(uarm)){
 		if(uarm->blessed) carrcap *= 1.5;
 		else if(!uarm->cursed) carrcap *= 1.25;

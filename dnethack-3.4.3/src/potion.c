@@ -455,12 +455,10 @@ peffects(otmp)
 		}
 		if(!otmp->cursed){
 			//Restore sanity if blessed or uncursed
-			if(otmp->blessed){
-				if(u.usanity < 90)
-					u.usanity += 10;
-				else u.usanity=100;
-			} else if(u.usanity < 100)
-				u.usanity++;
+			if(otmp->blessed)
+				change_usanity(20);
+			else if(u.usanity < 100)
+				change_usanity(5);
 		}
 	case SPE_RESTORE_ABILITY:
 		unkn++;
@@ -494,9 +492,9 @@ peffects(otmp)
 		//Bad drugs: inflict brain damage
 		if(otmp->cursed){
 			if(u.usanity > 0)
-				u.usanity--;
+				change_usanity(-1);
 			if(u.uinsight > 0)
-				u.uinsight--;
+				change_uinsight(-1);
 			exercise(A_WIS, FALSE);
 			exercise(A_INT, FALSE);
 		}
@@ -656,8 +654,7 @@ peffects(otmp)
 			if(u.udrunken < u.ulevel*3){
 				u.udrunken++;
 				if(u.usanity < 50){
-					u.usanity += 5;
-					if(u.usanity > 50) u.usanity = 50;
+					change_usanity(min(5, 50 - u.usanity));
 				}
 			}
 			if (!otmp->blessed)
@@ -690,7 +687,7 @@ peffects(otmp)
 			You("have an uneasy feeling...");
 			exercise(A_WIS, FALSE);
 			//Malign enlightenment
-			u.uinsight++;
+			change_uinsight(1);
 		} else {
 			if (otmp->blessed) {
 				(void) adjattrib(A_INT, 1, FALSE);
@@ -754,7 +751,7 @@ peffects(otmp)
 		} else {
 			//Cursed may raise insight if it's low
 			if(!rn2(u.uinsight))
-				u.uinsight++;
+				change_uinsight(1);
 		}
 		if (otmp->blessed)
 			HSee_invisible |= FROMOUTSIDE;
@@ -795,11 +792,7 @@ peffects(otmp)
 		    fall_asleep(-rn1(10, 25 - 12*bcsign(otmp)), TRUE);
 		}
 		//Sedative
-		u.usanity += 5 + 10*bcsign(otmp);
-		if(u.usanity > 100)
-			u.usanity = 100;
-		if(u.usanity < 0)
-			u.usanity = 0;
+		change_usanity(5 + 10*bcsign(otmp));
 		break;
 	case POT_MONSTER_DETECTION:
 	case SPE_DETECT_MONSTERS:

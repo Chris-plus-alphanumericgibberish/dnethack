@@ -1200,7 +1200,7 @@ boolean drained;
 			    "a strange mental acuity.");
 			HTelepat |= FROMOUTSIDE;
 			if(Hallucination)
-				u.uinsight++;
+				change_uinsight(1);
 			/* If blind, make sure monsters show up. */
 			if (Blind) see_monsters();
 		}

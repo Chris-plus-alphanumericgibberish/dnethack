@@ -101,6 +101,8 @@ register boolean clumsy;
 				int basedamage = dmg;
 				int newdamage = dmg;
 				int roll = d(1,20);
+				if(active_glyph(GUIDANCE))
+					doguidance(mon, dmg);
 				if(uarmf->oartifact){
 					artifact_hit(&youmonst, mon, uarmf, &newdamage, roll);
 					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */

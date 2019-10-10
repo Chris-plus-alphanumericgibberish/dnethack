@@ -1305,14 +1305,14 @@ int howmuch;
 			loss = loss*howmuch/100;
 			if(loss == 0) loss = 1;
 			
-			u.usanity += loss;
+			change_usanity(loss);
 		}
 		if(u.uinsight > 0){
 			int loss = u.uinsight;
 			loss = loss*howmuch/100;
 			if(loss == 0) loss = 1;
 			
-			u.uinsight -= loss;
+			change_uinsight(loss);
 		}
 	}
 	/*

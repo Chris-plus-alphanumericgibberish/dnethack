@@ -153,6 +153,8 @@ E int NDECL(newhp);
 E int FDECL(maxhp, (int));
 E int NDECL(maxen);
 E int FDECL(conplus, (int));
+E void FDECL(change_usanity, (int));
+E void FDECL(change_uinsight, (int));
 E void NDECL(calc_total_maxhp);
 E void NDECL(calc_total_maxen);
 E schar FDECL(acurr, (int));
