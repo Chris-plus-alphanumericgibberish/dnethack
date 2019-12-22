@@ -39,6 +39,7 @@ STATIC_DCL void FDECL(create_gold, (gold *, struct mkroom *));
 STATIC_DCL void FDECL(create_feature, (int,int,struct mkroom *,int));
 STATIC_DCL boolean FDECL(search_door, (struct mkroom *, xchar *, xchar *,
 					XCHAR_P, int));
+STATIC_DCL void FDECL(undig_corridor, (int, int, schar, schar));
 STATIC_DCL void NDECL(fix_stair_rooms);
 STATIC_DCL void FDECL(create_corridor, (corridor *));
 
@@ -1456,16 +1457,21 @@ schar ftyp, btyp;
 	cct = 0;
 	while(xx != tx || yy != ty) {
 	    /* loop: dig corridor at [xx,yy] and find new [xx,yy] */
-		if (cct++ > 500 || (nxcor && !rn2(35))){
+
+		/* do we want to kill the corridor? */
+		if (/* infinite loops  */
+			cct++ > 500 ||
+			/* randomly killed optional corridor */
+			(nxcor && !rn2(35)) ||
+			/* too close to the edge of the map */
+			(xx + dx >= COLNO - 1 || xx + dx <= 0 || yy + dy <= 0 || yy + dy >= ROWNO - 1)
+			){
+			undig_corridor(xx, yy, ftyp, btyp);
 			return FALSE;
 		}
-
+		/* dig */
 	    xx += dx;
 	    yy += dy;
-
-		if (xx >= COLNO - 1 || xx <= 0 || yy <= 0 || yy >= ROWNO - 1) {
-			return FALSE;		/* impossible */
-		}
 	    crm = &levl[xx][yy];
 	    if(crm->typ == btyp) {
 		if(ftyp != CORR || rn2(100)) {
@@ -1554,10 +1560,75 @@ schar ftyp, btyp;
 		continue;
 
 		/* dead end */
+		undig_corridor(xx, yy, ftyp, btyp);
 		return FALSE;
 	}
 	return TRUE;
 }
+
+/*
+ * undig_corridor()
+ * Undoes the digging of a corridor, from its free end up to its first junction
+ * A full undigging can leave a closet (if the corridor started next to a door)
+ */
+void
+undig_corridor(initx, inity, ftyp, btyp)
+int initx;	/* x of free end */
+int inity;	/* y of free end */
+schar ftyp;	/* corridor rm type */
+schar btyp; /* dug-through rm type */
+{
+	int curx = initx;	/* current x coord */
+	int cury = inity;	/* current y coord */
+	struct rm *crm;		/* room type */
+	int adj = -1;		/* index of xdir and ydir that corresponds to the most recent CORRIDOR (typ of ftyp) */
+	int nadj = 0;		/* count of adjacent connectable space (which includes doors, secret doors) */
+	int i;				/* loop counter */
+	boolean freeend;	/* do we have a free end? */
+	
+	/* ensure we start at a corridor */
+	crm = &levl[curx][cury];
+	freeend = (crm->typ == ftyp);
+
+	while (freeend)
+	{
+		/* reset variables */
+		adj = -1;
+		nadj = 0;
+		/* check for adjacent corridors */
+		for (i = 0; i < 8; i += 2)	/* only cardinal directions */
+		{
+			if (isok(curx + xdir[i], cury + ydir[i]))
+			{
+				crm = &levl[curx + xdir[i]][cury + ydir[i]];
+				if (crm->typ == ftyp || crm->typ == SCORR) {
+					adj = i;
+					nadj++;
+				}
+				else if (IS_DOOR(crm->typ) || IS_SDOOR(crm->typ)) {
+					nadj++;
+				}
+			}
+		}
+		/* if we are a free end (only 1 connectable and it is a corridor) */
+		if (nadj == 1 && adj != -1)
+		{
+			freeend = TRUE;
+			/* undig current square */
+			levl[curx][cury].typ = btyp;
+			/* move to next */
+			curx += xdir[adj];
+			cury += ydir[adj];
+		}
+		else
+		{
+			/* stop */
+			freeend = FALSE;
+		}
+	}
+	return;
+}
+
 
 /*
  * Disgusting hack: since special levels have their rooms filled before

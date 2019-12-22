@@ -4867,6 +4867,17 @@ typfnd:
 		*wishreturn = WISH_DENIED;
 		return &zeroobj;
 	}
+	/* even more wishing abuse: if we tried to create an artifact but failed (it was already generated) we may need a new otyp */
+	if (isartifact && !otmp->oartifact) {
+		switch (otmp->otyp) {
+		case BEAMSWORD:
+			otmp = poly_obj(otmp, BROADSWORD);
+			break;
+		case UNIVERSAL_KEY:
+			otmp = poly_obj(otmp, SKELETON_KEY);
+			break;
+		}
+	}
 	
 	if (halfeaten && otmp->oclass == FOOD_CLASS) {
 		if (otmp->otyp == CORPSE)

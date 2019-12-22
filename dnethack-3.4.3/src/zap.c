@@ -3448,6 +3448,11 @@ int dx, dy;
 		dy = ydir[i];
 		bhitpos.x += dx;
 		bhitpos.y += dy;
+		if (!isok(bhitpos.x, bhitpos.y)) {
+			bhitpos.x -= dx;
+			bhitpos.y -= dy;
+			break;
+		}
 		if(MON_AT(bhitpos.x, bhitpos.y)) {
 			mtmp = m_at(bhitpos.x,bhitpos.y);
 			m_respond(mtmp);

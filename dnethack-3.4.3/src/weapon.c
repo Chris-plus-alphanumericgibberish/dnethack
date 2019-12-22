@@ -142,7 +142,6 @@ STATIC_DCL boolean FDECL(can_advance, (int, BOOLEAN_P));
 STATIC_DCL boolean FDECL(could_advance, (int));
 STATIC_DCL boolean FDECL(peaked_skill, (int));
 STATIC_DCL int FDECL(slots_required, (int));
-STATIC_DCL int FDECL(pendamage, (struct obj *,struct monst *));
 
 #ifdef OVL1
 
@@ -293,37 +292,35 @@ int otyp;
 	int dmod = 0;						/* die size modifier */
 	int spe_mult = 1;					/* multiplier for enchantment value */
 
+	int ocaa = AT_NONE;
+	int ocad = AD_PHYS;
+	int ocn = 1;
+	int ocd = 2;
+	int bonaa = AT_NONE;
+	int bonad = AD_PHYS;
+	int bonn = 0;
+	int bond = 0;
+	int flat = 0;
+
 	/* use the otyp of the object called, if we have one */
 	if (obj)
 		otyp = obj->otyp;
 
-	/* a number of definitions that will clean up the code*/
-#define ocaa	(wdice->oc.aatyp)
-#define ocad	(wdice->oc.adtyp)
-#define ocn		(wdice->oc.damn)
-#define ocd		(wdice->oc.damd)
-#define bonaa	(wdice->bon.aatyp)
-#define bonad	(wdice->bon.adtyp)
-#define bonn	(wdice->bon.damn)
-#define bond	(wdice->bon.damd)
-#define flat	(wdice->flat)
-
-	/* initialize wdice */
-	ocaa = AT_NONE;
-	ocad = AD_PHYS;
-	ocn = 1;
-	ocd = 2;
-	bonaa = AT_NONE;
-	bonad = AD_PHYS;
-	bonn = 0;
-	bond = 0;
-	flat = 0;
-
 	/* in case we are dealing with a complete lack of a weapon (!obj, !otyp)
 		* just skip everything and only initialize wdice
 		*/
-	if (!otyp)
+	if (!otyp) {
+		(wdice->oc.aatyp) = ocaa;
+		(wdice->oc.adtyp) = ocad;
+		(wdice->oc.damn) = ocn;
+		(wdice->oc.damd) = ocd;
+		(wdice->bon.aatyp) = bonaa;
+		(wdice->bon.adtyp) = bonad;
+		(wdice->bon.damn) = bonn;
+		(wdice->bon.damd) = bond;
+		(wdice->flat) = flat;
 		return 0;
+	}
 
 	/* grab ldie and sdie from the objclass definition */
 	ocd = (large ? objects[otyp].oc_wldam : objects[otyp].oc_wsdam);
@@ -420,12 +417,12 @@ int otyp;
 		else if (obj->oartifact == ART_GIANTSLAYER)
 		{
 			bonn = (large ? 2 : 1);
-			bond = 4 + 2 * dmod;
+			bond = min(4 + 2 * dmod, 2);
 		}
 		else if (obj->oartifact == ART_MJOLLNIR)
 		{
 			bonn = 2;
-			bond = 4 + 2 * dmod;
+			bond = min(4 + 2 * dmod, 2);
 			if (!large)
 				flat += 2;
 		}
@@ -436,7 +433,7 @@ int otyp;
 		else if (obj->oartifact == ART_REAVER)
 		{
 			bonn = 1;
-			bond = 8 + 2 * dmod;
+			bond = min(8 + 2 * dmod, 2);
 		}
 		else if (obj->oartifact == ART_TOBIUME)
 		{
@@ -447,22 +444,23 @@ int otyp;
 			if (large)
 			{
 				bonn = 1;
-				bond = 10 + 2 * dmod;
+				bond = min(10 + 2 * dmod, 2);
 			}
 			else
 			{
-				flat += 10 + 2 * dmod;
+				flat += min(10 + 2 * dmod, 2);
 			}
 		}
 		else if (obj->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD){
 			int wt = (int)objects[NAGINATA].oc_weight;
 			if ((int)obj->owt > wt) {
 				bonn = 1;
-				bond = 12 * ((int)obj->owt - wt) / wt;	// this appears to be a constant +1d12, since I can't find any way to change its weight.
+				bond = min(12 + 2 * dmod, 2) * ((int)obj->owt - wt) / wt;	// this appears to be a constant +1d12, since I can't find any way to change its weight.
 			}
 		}
 		else if (obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA && otyp == BULLWHIP)
 		{
+			// supposed to be like a monster scorpion's sting; not affected by dmod
 			ocn = 1;
 			ocd = 2;
 			bonn = 1;
@@ -470,10 +468,17 @@ int otyp;
 		}
 		else if (otyp == MOON_AXE)
 		{
+			/*
+			ECLIPSE_MOON	0  -  2d4 v small, 2d12 v large
+			CRESCENT_MOON	1  -  2d6
+			HALF_MOON		2  -  2d8
+			GIBBOUS_MOON	3  - 2d10
+			FULL_MOON	 	4  - 2d12 
+			 */
 			ocn = 2;
-			ocd = ocd + 2 * (obj->ovar1 - 1) + 2 * dmod;	// die size is based on axe's phase of moon (0 <= ovar1 <= 4)
-			if (!large && !obj->ovar1)			// eclipse moon axe is surprisingly effective against small creatures (2d12)
-				ocd = 12 + 2 * dmod;
+			ocd = min(4 + 2 * obj->ovar1 + 2 * dmod, 2);	// die size is based on axe's phase of moon (0 <= ovar1 <= 4)
+			if (!large && obj->ovar1 == ECLIPSE_MOON)		// eclipse moon axe is surprisingly effective against small creatures (2d12)
+				ocd = min(12 + 2 * dmod, 2);
 		}
 		else if (otyp == HEAVY_IRON_BALL) {
 			int wt = (int)objects[HEAVY_IRON_BALL].oc_weight;
@@ -487,7 +492,7 @@ int otyp;
 	}
 
 
-#define plus_base(n,x)	bonn = (n); bond = (x)
+#define plus_base(n,x)	bonn = (n); bond = min((x),2)
 #define plus(n,x)		plus_base((n), (x) + 2 * dmod)
 #define pls(x)			plus(1, (x))
 #define add(x)			flat += max(0, (x) + dmod)
@@ -585,8 +590,12 @@ int otyp;
 	if (obj && (otyp == LIGHTSABER || otyp == BEAMSWORD || otyp == DOUBLE_LIGHTSABER) && !litsaber(obj))
 	{
 		spe_mult = 1;
+		ocaa = AT_NONE;
+		ocad = AD_PHYS;
 		ocn = 1;
 		ocd = 2;
+		bonaa = AT_NONE;
+		bonad = AD_PHYS;
 		bonn = 0;
 		bond = 0;
 	}
@@ -647,7 +656,21 @@ int otyp;
 	/* the Tentacle Rod gets no damage from enchantment */
 	if (obj && obj->oartifact == ART_TENTACLE_ROD)
 		spe_mult = 0;
-	/* if bonus dice exist, their minimum size is of a d2 */
+
+	/* safety checks */
+	/* we need at least one main die */
+	if (ocn < 1) {
+		ocn = 1;
+	}
+	/* main dice have a minimum size of d2 */
+	if (ocd < 2)
+		ocd = 2;
+	/* if bonus dice do not exist, clear bonn and bond */
+	if (bonn < 1) {
+		bonn = 0; 
+		bond = 0;
+	}
+	/* if bonus dice do exist, their minimum size is of a d2 */
 	if (bonn && bond < 2)
 		bond = 2;
 	/* if bonus dice are identical in size & roll to oc dice, combine them */
@@ -657,16 +680,17 @@ int otyp;
 		bonn = 0;
 		bond = 0;
 	}
-	/* undefine the helpers */
-#undef ocaa	
-#undef ocad	
-#undef ocn		
-#undef ocd		
-#undef bonaa	
-#undef bonad	
-#undef bonn	
-#undef bond	
-#undef flat
+
+	/* plug everything into wdice */
+	(wdice->oc.aatyp)	= ocaa;
+	(wdice->oc.adtyp)	= ocad;
+	(wdice->oc.damn)	= ocn;
+	(wdice->oc.damd)	= ocd;
+	(wdice->bon.aatyp)	= bonaa;
+	(wdice->bon.adtyp)	= bonad;
+	(wdice->bon.damn)	= bonn;
+	(wdice->bon.damd)	= bond;
+	(wdice->flat)		= flat;
 	return spe_mult;
 }
 
@@ -1060,9 +1084,6 @@ int spec;
 		static int warnedotyp = 0;
 		static struct permonst *warnedptr = 0;
 		
-		if(otmp->oartifact == ART_PEN_OF_THE_VOID){
-			tmp += pendamage(otmp, mon);
-		}
 		if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS 
 			&& !otmp->blessed && !otmp->cursed
 			&& mon
@@ -1257,92 +1278,6 @@ int spec;
 	return(tmp);
 }
 
-STATIC_OVL
-int
-pendamage(pen, mon)
-struct obj *pen;
-struct monst *mon;
-{
-	boolean youdef = mon == &youmonst;
-	int dmg = 0;
-	int dnum = (Role_if(PM_EXILE) && quest_status.killed_nemesis) ? 2 : 1;
-	
-	if(u.specialSealsActive&SEAL_COSMOS || u.specialSealsActive&SEAL_LIVING_CRYSTAL || u.specialSealsActive&SEAL_TWO_TREES){
-		if(mon->data->maligntyp == A_CHAOTIC) dmg += d(2*dnum,4);
-		else if(mon->data->maligntyp == A_NEUTRAL) dmg += d(dnum,4);
-	} else if(u.specialSealsActive&SEAL_MISKA){
-		if(mon->data->maligntyp == A_LAWFUL) dmg += d(2*dnum,4);
-		else if(mon->data->maligntyp == A_NEUTRAL) dmg += d(dnum,4);
-	} else if(u.specialSealsActive&SEAL_NUDZIRATH){
-		if(mon->data->maligntyp != A_NEUTRAL) dmg += d(dnum,6);
-	} else if(u.specialSealsActive&SEAL_ALIGNMENT_THING){
-		if(rn2(3)) dmg += d(rnd(2)*dnum,4);
-	} else if(u.specialSealsActive&SEAL_UNKNOWN_GOD){
-		dmg -= pen->spe;
-	}
-	
-	if(pen->ovar1&SEAL_AMON){
-		if(youdef && !Fire_resistance) dmg += d(dnum,4);
-		else if(!youdef && !resists_fire(mon)) dmg += d(resists_cold(mon) ? 2*dnum : dnum,4);
-	}
-	if(pen->ovar1&SEAL_ASTAROTH){
-		if(youdef && !Shock_resistance) dmg += d(dnum,4);
-		else if(!youdef && !resists_elec(mon)) dmg += d(dnum,4);
-	}
-	if(pen->ovar1&SEAL_BALAM){
-		if(youdef && !Cold_resistance) dmg += d(dnum,4);
-		else if(!youdef && !resists_cold(mon)) dmg += d(resists_fire(mon) ? 2*dnum : dnum,4);
-	}
-	if(pen->ovar1&SEAL_ECHIDNA){
-		if(youdef && !Acid_resistance) dmg += d(dnum,4);
-		else if(!youdef && !resists_acid(mon)) dmg += d(dnum,4);
-	}
-	if(pen->ovar1&SEAL_FAFNIR){
-		if(youdef){
-			if(is_golem(youracedata)) dmg += d(2*dnum,4);
-			else if(nonliving(youracedata)) dmg += d(dnum,4);
-		}
-		else {
-			if(is_golem(mon->data)) dmg += d(2*dnum,4);
-			else if(nonliving_mon(mon)) dmg += d(dnum,4);
-		}
-	}
-	if(pen->ovar1&SEAL_IRIS){
-		if(youdef && !(nonliving(youracedata) || is_anhydrous(youracedata))) dmg += d(dnum,4);
-		else if(!youdef && !(nonliving_mon(mon) || is_anhydrous(mon->data))) dmg += d(dnum,4);
-	}
-	if(pen->ovar1&SEAL_ENKI){
-		if(youdef && !(nonliving(youracedata) || amphibious(youracedata))) dmg += d(dnum,4);
-		else if(!youdef && !(nonliving_mon(mon) || amphibious_mon(mon))) dmg += d(dnum,4);
-	}
-	if(pen->ovar1&SEAL_OSE){
-		if(youdef && (Blind_telepat || !rn2(5))) dmg += d(dnum,15);
-		else if(!youdef && !mindless_mon(mon) && (mon_resistance(mon,TELEPAT) || !rn2(5))) dmg += d(dnum,15);
-	}
-	if(pen->ovar1&SEAL_NABERIUS){
-		if(youdef && (Upolyd ? u.mh < .25*u.mhmax : u.uhp < .25*u.uhpmax)) dmg += d(dnum,4);
-		else if(!youdef){
-			if(mon->mflee) dmg += d(dnum,4);
-			if(mon->mpeaceful) dmg += d(dnum,4);
-		}
-	}
-	if(pen->ovar1&SEAL_HUGINN_MUNINN){
-		if(youdef){
-			if(!Blind){
-				make_blinded(Blinded+1L,FALSE);
-				dmg += d(dnum,4);
-			}
-		}
-		else if(!youdef){
-			if(mon->mcansee && haseyes(mon->data)){
-				dmg += d(dnum,4);
-				mon->mcansee = 0;
-				mon->mblinded = 1;
-			}
-		}
-	}
-	return dmg;
-}
 
 #endif /* OVLB */
 #ifdef OVL0

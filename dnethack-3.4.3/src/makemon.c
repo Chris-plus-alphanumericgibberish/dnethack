@@ -6108,9 +6108,16 @@ register struct	monst	*mtmp;
 				otmp->oward = mtmp->mfaction;
 				(void) mpickobj(mtmp, otmp);
 			} else if(ptr == &mons[PM_HUNGRY_DEAD]){
+				/* create an attached blob of preserved organs. Killing the blob will kill this hungry dead */
 				struct monst *blbtmp;
-				blbtmp = makemon(&mons[PM_BLOB_OF_PRESERVED_ORGANS], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
-				blbtmp->mvar1 = (long)mtmp->m_id;
+				if (blbtmp = makemon(&mons[PM_BLOB_OF_PRESERVED_ORGANS], mtmp->mx, mtmp->my, MM_ADJACENTOK | MM_NOCOUNTBIRTH)) {
+					/* blob created, link it */
+					blbtmp->mvar1 = (long)mtmp->m_id;
+				}
+				else {
+					/* blob creation failed; dramatically weaken this hungry dead to compensate */
+					mtmp->mhpmax = max(1, mtmp->mhpmax/8);
+				}
 			}
 		break;
 	    case S_QUANTMECH:

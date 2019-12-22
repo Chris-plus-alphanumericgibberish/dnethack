@@ -353,6 +353,8 @@ Cloak_off()
 int
 Helmet_on()
 {
+	boolean already_blind, blind_changed = FALSE;	/* blindness from wearing the helmet was set before this was called, we need a kludge*/
+	struct obj * otmp;
 	static int gcircletsa = 0;
 	if(!gcircletsa) gcircletsa = find_gcirclet();
     if (!uarmh) return 0;
@@ -423,12 +425,38 @@ Helmet_on()
 		break;
 	default: impossible(unknown_type, c_helmet, uarmh->otyp);
     }
+
+	/* putting on an opaque helmet may have effectively blindfolded you */
+	/* kludge to check if you'd be blind without it on */
+	otmp = uarmh; uarmh = (struct obj *)0;
+	already_blind = Blind;
+	uarmh = otmp;
+	if (Blind && !already_blind) {
+		blind_changed = TRUE;
+		if (flags.verbose) You_cant("see any more.");
+		/* set ball&chain variables before the hero goes blind */
+		if (Punished) set_bc(0);
+	}
+	else if (already_blind && !Blind) {
+		blind_changed = TRUE;
+		You("can see!");
+	}
+	if (blind_changed) {
+		/* blindness has just been toggled */
+		if (Blind_telepat || Infravision)
+			see_monsters();
+		vision_full_recalc = 1;	/* recalc vision limits */
+		flags.botl = 1;
+	}
+
     return 0;
 }
 
 int
 Helmet_off()
 {
+	boolean was_blind = Blind, blind_changed = FALSE;
+	struct obj * otmp = uarmh;
 	static int gcircletsa = 0;
 	if(!gcircletsa) gcircletsa = find_gcirclet();
 	
@@ -486,6 +514,31 @@ Helmet_off()
     }
     setworn((struct obj *)0, W_ARMH);
     cancelled_don = FALSE;
+
+	if (Blind) {
+		if (was_blind) {
+			/* "still cannot see" needs the helmet to possibly have been the cause of your blindness */
+			if ((otmp->otyp == CRYSTAL_HELM && is_opaque(otmp)) ||
+				(otmp->otyp == PLASTEEL_HELM && is_opaque(otmp) && otmp->obj_material != objects[otmp->otyp].oc_material))
+				You("still cannot see.");
+		}
+		else {
+			blind_changed = TRUE;	/* !was_blind */
+			You_cant("see anything now!");
+			/* set ball&chain variables before the hero goes blind */
+			if (Punished) set_bc(0);
+		}
+	}
+	else if (was_blind) {
+		blind_changed = TRUE;	/* !Blind */
+		You("can see again.");
+	}
+	if (blind_changed) {
+		/* blindness has just been toggled */
+		if (Blind_telepat || Infravision) see_monsters();
+		vision_full_recalc = 1;	/* recalc vision limits */
+		flags.botl = 1;
+	}
     return 0;
 }
 

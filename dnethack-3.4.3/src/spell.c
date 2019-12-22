@@ -3021,7 +3021,7 @@ spiriteffects(power, atme)
 		case PWR_DISGUSTED_GAZE:{
 			struct monst *mon;
 			struct obj *obj;
-			if(!uarmg && !(uarmc && uarmc->otyp == MUMMY_WRAPPING)){
+			if((!uarmg || !is_opaque(uarmg)) && !(uarmc && uarmc->otyp == MUMMY_WRAPPING)){
 				if(throwgaze()){
 					if((mon = m_at(u.dx,u.dy)) && canseemon(mon)){
 						Your("arms swing up and your hands jerk open in a single, spasmodic motion.");

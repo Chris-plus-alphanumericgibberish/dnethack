@@ -817,6 +817,7 @@ struct weapon_dice {
 				|| (otmp)->otyp == CANDELABRUM_OF_INVOCATION\
 				|| (otmp)->otyp == TALLOW_CANDLE\
 				|| (otmp)->otyp == WAX_CANDLE\
+				|| (otmp)->otyp == CANDLE_OF_INVOCATION\
 				|| (otmp)->otyp == POT_OIL)
 
 /* special stones */

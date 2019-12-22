@@ -1189,6 +1189,37 @@ dosummon()
 	return(1);
 }
 
+
+int
+dotinker()
+{
+	if (u.uen < 10) {
+	    You("lack the energy to tinker.");
+	    return(0);
+	}
+	u.uen -= 10;
+	flags.botl = 1;
+	/*Make tinkered friend*/
+	struct monst *mlocal;
+	
+	
+	if(monsndx(youracedata) == PM_HOOLOOVOO){
+		if(rn2(4)) mlocal = makemon(&mons[PM_GOLDEN_HEART], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+		else mlocal = makemon(&mons[PM_ID_JUGGERNAUT], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+	} else {
+		if(u.ulevel > 10 && !rn2(10)) mlocal = makemon(&mons[PM_FIREWORK_CART], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+		else mlocal = makemon(&mons[PM_CLOCKWORK_SOLDIER+rn2(3)], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK|MM_ADJACENTSTRICT|MM_NOCOUNTBIRTH);
+	}
+	
+	if(mlocal){
+		mlocal->mvar1 = rn2(8);
+		initedog(mlocal);
+		mlocal->mtame = 10;
+		mlocal->mpeaceful = 1;
+		newsym(mlocal->mx,mlocal->my);
+	}
+}
+
 int
 dogaze()
 {

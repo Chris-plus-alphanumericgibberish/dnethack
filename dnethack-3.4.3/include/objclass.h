@@ -93,6 +93,7 @@ struct objclass {
 #define is_damageable(otmp) (is_rustprone(otmp) || is_flammable(otmp) || \
 				is_rottable(otmp) || is_corrodeable(otmp) || is_evaporable(otmp) || is_shatterable(otmp))
 
+#define is_opaque(otmp) ((otmp)->obj_material != GLASS)
 
 #define is_boomerang(otmp) (objects[(otmp)->otyp].oc_skill == -P_BOOMERANG)
 

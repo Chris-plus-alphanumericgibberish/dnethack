@@ -129,15 +129,6 @@ hack_artifacts()
 	    if ((art->role == Role_switch || Pantheon_if(art->role)) && (art->alignment != A_NONE || Role_if(PM_BARD)))
 			art->alignment = alignmnt;
 
-	if(Race_if(PM_HALF_DRAGON) && flags.initgend){
-		int i;
-		for(i = 0; i < ART_ROD_OF_SEVEN_PARTS; i++)
-			if(artilist[i].role == Role_switch)
-				artilist[i].role = NON_PM;
-		
-		artilist[ART_LIFEHUNT_SCYTHE].role = Role_switch;
-		artilist[ART_LIFEHUNT_SCYTHE].alignment = alignmnt;
-	}
 
 	/* Excalibur can be used by any lawful character, not just knights */
 	if (!Role_if(PM_KNIGHT)){
@@ -199,6 +190,16 @@ hack_artifacts()
 				artilist[ART_KIKU_ICHIMONJI].role = PM_SAMURAI;
 			}
 		}
+	}
+	
+	if(Race_if(PM_HALF_DRAGON) && flags.initgend){
+		int i;
+		for(i = 0; i < ART_ROD_OF_SEVEN_PARTS; i++)
+			if(artilist[i].role == Role_switch)
+				artilist[i].role = NON_PM;
+		
+		artilist[ART_LIFEHUNT_SCYTHE].role = Role_switch;
+		artilist[ART_LIFEHUNT_SCYTHE].alignment = alignmnt;
 	}
 	
 	/* Fix up the crown */
@@ -2011,7 +2012,66 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	
 	buf[0] = '\0';
 	
-	if(pen->ovar1&SEAL_BERITH){
+	if(u.voidChime){
+		pline("The ringing blade hits %s.", hittee);
+		vis = FALSE;
+	}
+	
+	if (u.specialSealsActive&SEAL_COSMOS || u.specialSealsActive&SEAL_LIVING_CRYSTAL || u.specialSealsActive&SEAL_TWO_TREES){
+		*dmgptr += (mdef->data->maligntyp == A_CHAOTIC)? d(2*dnum,4) : ((mdef->data->maligntyp == A_NEUTRAL) ? d(dnum, 4) : 0);
+	} else if (u.specialSealsActive&SEAL_MISKA){
+		*dmgptr += (mdef->data->maligntyp == A_LAWFUL)? d(2*dnum,4) : ((mdef->data->maligntyp == A_NEUTRAL) ? d(dnum, 4) : 0);
+	} else if (u.specialSealsActive&SEAL_NUDZIRATH){
+		*dmgptr += (mdef->data->maligntyp != A_NEUTRAL)? d(dnum,6) : 0;
+	} else if (u.specialSealsActive&SEAL_ALIGNMENT_THING){
+		if(rn2(3)) dmgptr += d(rnd(2)*dnum,4);
+	} else if (u.specialSealsActive&SEAL_UNKNOWN_GOD){
+		*dmgptr -= pen->spe;
+	}
+	
+	if (pen->ovar1&SEAL_AHAZU && dieroll < 5){
+	    *dmgptr += d(dnum,4);
+		if(vis) {
+			pline("The blade's shadow catches on %s.", hittee);
+			and = TRUE;
+		}
+		mdef->movement -= 3;
+	}
+	if (pen->ovar1&SEAL_AMON) {
+	    if (vis){ 
+			Sprintf(buf, "fiery");
+			and = TRUE;
+		}
+	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+	    if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
+	    if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
+	    if (youdefend && Slimed) burn_away_slime();
+		if(youdefend ? !Fire_resistance : !resists_fire(mdef)){
+			*dmgptr += d(dnum,4);
+		}
+	} // triggers narrow_voidPen_hit - fire res
+	if (pen->ovar1&SEAL_ASTAROTH) {
+	    if (vis){ 
+			and ? Strcat(buf, " and crackling") : Sprintf(buf, "crackling");
+			and = TRUE;
+		}
+	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
+	    if (!rn2(5)) (void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
+		if(youdefend ? !Shock_resistance : !resists_elec(mdef)){
+			*dmgptr += d(dnum,4);
+		}
+	} // nvPh - shock res
+	if (pen->ovar1&SEAL_BALAM) {
+	    if (vis){ 
+			and ? Strcat(buf, " yet freezing") : Sprintf(buf, "freezing");
+			and = TRUE;
+		}
+	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
+		if(youdefend ? !Cold_resistance : !resists_cold(mdef)){
+			*dmgptr += d(dnum,4);
+		}
+	} // nvPh - cold res
+	if (pen->ovar1&SEAL_BERITH){
 		berithdamage = d(dnum,4);
 #ifndef GOLDOBJ
 		if (!youattack || u.ugold >= berithdamage)
@@ -2028,53 +2088,53 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			*dmgptr += berithdamage;
 		} else {
 			berithdamage = 0;
-		}
 	}
-	
-	if(u.voidChime){
-		pline("The ringing blade hits %s.", hittee);
-	} else {
-	if (pen->ovar1&SEAL_AMON) {
-	    if (vis){ 
-			Sprintf(buf, "fiery");
+		
+		if(vis && berithdamage > 0){
+			if(pen->ovar1&SEAL_AMON) and ? Strcat(buf, " and blood-crusted") : Sprintf(buf, "blood-crusted");
+			else and ? Strcat(buf, " and blood-soaked") : Sprintf(buf, "blood-soaked");
 			and = TRUE;
 		}
-	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
-	    if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
-	    if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
-	    if (youdefend && Slimed) burn_away_slime();
-		if(youdefend ? !Fire_resistance : !resists_fire(mdef)){
+	}
+	if (pen->ovar1&SEAL_BUER){
+		if(youattack) healup(d(dnum,4), 0, FALSE, FALSE);
+		else magr->mhp = min(magr->mhp + d(dnum,4),magr->mhpmax);
+	}
+	if (pen->ovar1&SEAL_CHUPOCLOPS && dieroll < 3){
+		struct trap *ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
 			*dmgptr += d(dnum,4);
+		if (ttmp2){
+			if(youdefend){
+				pline_The("webbing sticks to you. You're caught!");
+				dotrap(ttmp2, NOWEBMSG);
+#ifdef STEED
+				if (u.usteed && u.utrap) {
+				/* you, not steed, are trapped */
+				dismount_steed(DISMOUNT_FELL);
+		}
+#endif
+			}
+			else mintrap(mdef);
 		}
 	}
-	if (pen->ovar1&SEAL_BALAM) {
-	    if (vis){ 
-			and ? Strcat(buf, " yet freezing") : Sprintf(buf, "freezing");
-			and = TRUE;
-		}
-	    if (!rn2(4)) (void) destroy_mitem(mdef, POTION_CLASS, AD_COLD);
-		if(youdefend ? !Cold_resistance : !resists_cold(mdef)){
+	if (pen->ovar1&SEAL_DANTALION){
+		if(youdefend || !mindless_mon(mdef))
 			*dmgptr += d(dnum,4);
-		}
+		if(dieroll < 3){
+			if(youdefend) aggravate();
+			else probe_monster(mdef);
 	}
-	if (pen->ovar1&SEAL_ASTAROTH) {
-	    if (vis){ 
-			and ? Strcat(buf, " and crackling") : Sprintf(buf, "crackling");
-			and = TRUE;
-		}
-	    if (!rn2(5)) (void) destroy_mitem(mdef, RING_CLASS, AD_ELEC);
-	    if (!rn2(5)) (void) destroy_mitem(mdef, WAND_CLASS, AD_ELEC);
-		if(youdefend ? !Shock_resistance : !resists_elec(mdef)){
-			*dmgptr += d(dnum,4);
-		}
-	}
-	if(pen->ovar1&SEAL_BERITH && berithdamage > 0){
+	} // nvPh - !mindless
+	if (pen->ovar1&SEAL_ECHIDNA) {
 		if(vis){
-			if(pen->ovar1&SEAL_AMON) and ? Strcat(buf, " blood-crusted") : Sprintf(buf, "blood-crusted");
-			else and ? Strcat(buf, " blood-soaked") : Sprintf(buf, "blood-soaked");
+			and ? Strcat(buf, " and sizzling") : Sprintf(buf, "sizzling");
 			and = TRUE;
 		}
-	}
+	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
+		if(youdefend ? !Acid_resistance : !resists_acid(mdef)){
+			*dmgptr += d(dnum,4);
+		}
+	} // nvPh - acid res
 	if (pen->ovar1&SEAL_ENKI) {
 	    if (vis){ 
 			if(pen->ovar1&SEAL_AMON) and ? Strcat(buf, " and steaming") : Sprintf(buf, "steaming");
@@ -2133,90 +2193,57 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 				}
 			}
 		}
-	}
-	if (pen->ovar1&SEAL_IRIS) {
+	} // nvPh - water res
+	if (pen->ovar1&SEAL_FAFNIR){
 	    if (vis){ 
-			if(pen->ovar1&SEAL_ENKI) and ? Strcat(buf, " yet thirsty") : Sprintf(buf, "thirsty");
-			else and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
+			and ? Strcat(buf, " and ruinous") : Sprintf(buf, "ruinous");
 			and = TRUE;
 		}
-		if(youdefend ? !(nonliving(youracedata) || is_anhydrous(youracedata)) : !(nonliving_mon(mdef) || is_anhydrous(mdef->data))){
-			*dmgptr += d(dnum,4);
-		}
-	}
-	if (pen->ovar1&SEAL_ECHIDNA) {
-	    if (vis){ 
-			and ? Strcat(buf, " and sizzling") : Sprintf(buf, "sizzling");
-			and = TRUE;
-		}
-	    if (!rn2(2)) (void) destroy_mitem(mdef, POTION_CLASS, AD_FIRE);
-		if(youdefend ? !Acid_resistance : !resists_acid(mdef)){
-			*dmgptr += d(dnum,4);
-		}
-	}
-	
-	if(vis && (and || (pen->ovar1&SEAL_FAFNIR))){
-		pline("The %s%s blade hits %s.", !(pen->ovar1&SEAL_FAFNIR) ? "" : and ? "ruinous " : "ruinous", buf, hittee);
-		and = TRUE;
 		if(youdefend ? is_golem(youracedata) : is_golem(mdef->data)){
 			*dmgptr += d(2*dnum,4);
 		} else if(youdefend ? nonliving(youracedata) : nonliving_mon(mdef)){
 			*dmgptr += d(dnum,4);
 		}
-	}
-	}
-	if(pen->ovar1&SEAL_AHAZU && dieroll < 5){
+	} // nvPh - golem/nonliving
+	if (pen->ovar1&SEAL_HUGINN_MUNINN){
+		if(youdefend){
+			if(!Blind){
+				make_blinded(Blinded+1L,FALSE);
 	    *dmgptr += d(dnum,4);
-		if(vis) pline("The blade's shadow catches on %s.", hittee);
-		mdef->movement -= 3;
-		and = TRUE;
 	}
-	if(pen->ovar1&SEAL_BUER){
-		if(youattack) healup(d(dnum,4), 0, FALSE, FALSE);
-		else magr->mhp = min(magr->mhp + d(dnum,4),magr->mhpmax);
 	}
-	if(pen->ovar1&SEAL_CHUPOCLOPS && dieroll < 3){
-		struct trap *ttmp2 = maketrap(mdef->mx, mdef->my, WEB);
+		else if(!youdefend){
+			if(mdef->mcansee && haseyes(mdef->data)){
 	    *dmgptr += d(dnum,4);
-		if (ttmp2){
-			if(youdefend){
-				pline_The("webbing sticks to you. You're caught!");
-				dotrap(ttmp2, NOWEBMSG);
-#ifdef STEED
-				if (u.usteed && u.utrap) {
-				/* you, not steed, are trapped */
-				dismount_steed(DISMOUNT_FELL);
-				}
-#endif
+				mdef->mcansee = 0;
+				mdef->mblinded = 1;
 			}
-			else mintrap(mdef);
 		}
+	} // nvPh - blind
+	if (pen->ovar1&SEAL_IRIS) {
+	    if (vis){ 
+			if(pen->ovar1&SEAL_ENKI) and ? Strcat(buf, " yet thirsty") : Sprintf(buf, "thirsty");
+			else and ? Strcat(buf, " and thirsty") : Sprintf(buf, "thirsty");
+			and = TRUE;
 	}
-	if(pen->ovar1&SEAL_DANTALION){
-	    if(youdefend || !mindless_mon(mdef))
+		if(youdefend ? !(nonliving(youracedata) || is_anhydrous(youracedata)) : !(nonliving_mon(mdef) || is_anhydrous(mdef->data))){
 			*dmgptr += d(dnum,4);
-		if(dieroll < 3){
-			if(youdefend) aggravate();
-			else probe_monster(mdef);
 		}
-	}
-	if(pen->ovar1&SEAL_SHIRO){
-		struct obj *otmp;
-		otmp = mksobj((mvitals[PM_ACERERAK].died > 0) ? BOULDER : ROCK, TRUE, FALSE);
-		otmp->blessed = 0;
-		otmp->cursed = 0;
-		set_destroy_thrown(1); //state variable referenced in drop_throw
-			m_throw(magr, magr->mx, magr->my, mdef->mx-magr->mx, mdef->my-magr->my, 1, otmp,TRUE);
-		set_destroy_thrown(0);  //state variable referenced in drop_throw
-		if(mdef->mhp <= 0) return vis;//Monster was killed by throw and we should stop.
-	}
+	} // nvPh - hydrous
 	if(pen->ovar1&SEAL_MOTHER && dieroll <= dnum){
-		if(youdefend) nomul(5,"held by the pen of the void");
+		if(youdefend) nomul(5,"held by the Pen of the Void");
 	    else if(mdef->mcanmove || mdef->mfrozen){
 			mdef->mcanmove = 0;
 			mdef->mfrozen = max(mdef->mfrozen, 5);
 		}
 	}
+	if (pen->ovar1&SEAL_NABERIUS){
+		if(youdefend && (Upolyd ? u.mh < .25*u.mhmax : u.uhp < .25*u.uhpmax)) *dmgptr += d(dnum,4);
+		else if(!youdefend){
+			if(mdef->mflee) *dmgptr += d(dnum,4);
+			if(mdef->mpeaceful) *dmgptr += d(dnum,4);
+		}
+	} // nvPh - peaceful/fleeing
 	if(pen->ovar1&SEAL_ORTHOS && dieroll < 3){
 	    *dmgptr += d(2*dnum,8);
 		if(youdefend){
@@ -2230,7 +2257,13 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 		}
 		and = TRUE;
 	}
+	if (pen->ovar1&SEAL_OSE){
+		if(youdefend && (Blind_telepat || !rn2(5))) *dmgptr += d(dnum,15);
+		else if(!youdefend && !mindless_mon(mdef) && (mon_resistance(mdef,TELEPAT) || !rn2(5))) *dmgptr += d(dnum,15);
+	} // nvPh - telepathy
 	if(pen->ovar1&SEAL_OTIAX){
+		char bufO[BUFSZ];
+		bufO[0] = '\0';
 	    *dmgptr += d(1,dnum);
 		if(youattack){
 			if(dieroll == 1){
@@ -2276,14 +2309,14 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			}
 		} else if(youdefend){
 			if(!(u.sealsActive&SEAL_ANDROMALIUS)){
-				buf[0] = '\0';
-				switch(steal(magr, buf, FALSE, FALSE)){
+				bufO[0] = '\0';
+				switch(steal(magr, bufO, FALSE, FALSE)){
 				  case -1:
 					return vis;
 				  case 0:
 				  break;
 				  default:
-					pline("%s steals %s.", Monnam(magr), buf);
+					pline("%s steals %s.", Monnam(magr), bufO);
 				  break;
 				}
 			}
@@ -2317,8 +2350,8 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 					Strcpy(onambuf, doname(otmp));
 				(void) add_to_minv(magr, otmp);
 				if (vis) {
-					Strcpy(buf, Monnam(magr));
-					pline("%s steals %s from %s!", buf,
+					Strcpy(bufO, Monnam(magr));
+					pline("%s steals %s from %s!", bufO,
 						onambuf, mdefnambuf);
 				}
 				possibly_unwield(mdef, FALSE);
@@ -2332,7 +2365,17 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	if(pen->ovar1&SEAL_PAIMON){
 		if(youattack) u.uen = min(u.uen+dnum,u.uenmax);
 		else magr->mspec_used = max(magr->mspec_used - dnum,0);
-	}
+	} // nvPh - !cancelled
+	if (pen->ovar1&SEAL_SHIRO){
+		struct obj *otmp;
+		otmp = mksobj((mvitals[PM_ACERERAK].died > 0) ? BOULDER : ROCK, TRUE, FALSE);
+		otmp->blessed = 0;
+		otmp->cursed = 0;
+		set_destroy_thrown(1); //state variable referenced in drop_throw
+			m_throw(magr, magr->mx, magr->my, mdef->mx-magr->mx, mdef->my-magr->my, 1, otmp,TRUE);
+		set_destroy_thrown(0);  //state variable referenced in drop_throw
+		if(mdef->mhp <= 0) return vis;//Monster was killed by throw and we should stop.
+	} // nvPh potential - invisible?
 	if(pen->ovar1&SEAL_SIMURGH){
 		if(youdefend && !Blind){
 			You("are dazzled by prismatic feathers!");
@@ -2346,7 +2389,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			if(mvitals[PM_ACERERAK].died > 0) *dmgptr += d(2,4);
 		}
 		and = TRUE;
-	}
+	} // nvPh - blind
 	if(pen->ovar1&SEAL_TENEBROUS && dieroll <= dnum){
 		if(youdefend && !Drain_resistance){
 			if (Blind)
@@ -2374,8 +2417,13 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 			}
 		}
 		and = TRUE;
-	}
-	return vis&&and;
+	} // nvPh - drain res
+	
+	
+	if (buf[0] != '\0')
+		pline("The %s blade hits %s.", buf, hittee);
+	
+	return (and || vis); // vis should be redundant, but it's not a bad idea since riker can be a dumb bitch
 }
 
 /* called when someone is being hit by the pen of the void */
@@ -2386,18 +2434,24 @@ struct obj *pen;	/* Pen of the Void */
 {
 	boolean youdefend = mdef == &youmonst;
 	
-	
-	// if(pen->ovar1&SEAL_BERITH){
-		// //Requires knowing the attacker
-	// }
+	/*
+	if (u.specialSealsActive&SEAL_COSMOS || u.specialSealsActive&SEAL_LIVING_CRYSTAL || u.specialSealsActive&SEAL_TWO_TREES) {
+		if(!youdefend && (mdef->data->maligntyp == A_CHAOTIC)) return TRUE;
+	}
+	else if (u.specialSealsActive&SEAL_MISKA) {
+		if(!youdefend && (mdef->data->maligntyp == A_LAWFUL)) return TRUE;
+	}
+	else if (u.specialSealsActive&SEAL_NUDZIRATH) {
+		if(!youdefend && (mdef->data->maligntyp != A_NEUTRAL) && !rn2(2)) return TRUE;
+	}
+	else if (u.specialSealsActive&SEAL_ALIGNMENT_THING) {
+		if(!youdefend && !rn2(3)) return TRUE;
+	}
+	*/
+	// I went ahead and implemented these, not sure if they're balanced so commented out - riker	
 	
 	if (pen->ovar1&SEAL_AMON) {
 		if(youdefend ? !Fire_resistance : !resists_fire(mdef)){
-			return TRUE;
-		}
-	}
-	if (pen->ovar1&SEAL_BALAM) {
-		if(youdefend ? !Cold_resistance : !resists_cold(mdef)){
 			return TRUE;
 		}
 	}
@@ -2406,6 +2460,15 @@ struct obj *pen;	/* Pen of the Void */
 			return TRUE;
 		}
 	}
+	if (pen->ovar1&SEAL_BALAM) {
+		if(youdefend ? !Cold_resistance : !resists_cold(mdef)){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_DANTALION){
+	    if(youdefend || !mindless_mon(mdef))
+			return TRUE;
+		}
 	if (pen->ovar1&SEAL_ENKI) {
 		if(youdefend){
 			if(!((uarmc
@@ -2451,17 +2514,11 @@ struct obj *pen;	/* Pen of the Void */
 			}
 		}
 	}
-	if (pen->ovar1&SEAL_IRIS) {
-		if(youdefend ? !(nonliving(youracedata) || is_anhydrous(youracedata)) : !(nonliving_mon(mdef) || is_anhydrous(mdef->data))){
-			return TRUE;
-		}
-	}
 	if (pen->ovar1&SEAL_ECHIDNA) {
 		if(youdefend ? !Acid_resistance : !resists_acid(mdef)){
 			return TRUE;
 		}
 	}
-	
 	if(pen->ovar1&SEAL_FAFNIR){
 		if(youdefend ? is_golem(youracedata) : is_golem(mdef->data)){
 			return TRUE;
@@ -2469,10 +2526,42 @@ struct obj *pen;	/* Pen of the Void */
 			return TRUE;
 		}
 	}
-	
-	if(pen->ovar1&SEAL_DANTALION){
-	    if(youdefend || !mindless_mon(mdef))
+	if (pen->ovar1&SEAL_HUGINN_MUNINN){
+		if(youdefend && !Blind){
 			return TRUE;
+		}
+		else if(mdef->mcansee && haseyes(mdef->data)){
+			return TRUE;
+	}
+	}
+	if (pen->ovar1&SEAL_IRIS) {
+		if(youdefend ? !(nonliving(youracedata) || is_anhydrous(youracedata)) : !(nonliving_mon(mdef) || is_anhydrous(mdef->data))){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_NABERIUS){
+		if(youdefend && (Upolyd ? u.mh < .25*u.mhmax : u.uhp < .25*u.uhpmax)){
+			return TRUE;
+		}
+		else if(mdef->mflee || mdef->mpeaceful){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_OSE){
+		if(youdefend && Blind_telepat){
+			return TRUE;
+		}
+		else if(!mindless_mon(mdef) && mon_resistance(mdef,TELEPAT)){
+			return TRUE;
+		}
+	}
+	if (pen->ovar1&SEAL_PAIMON){
+		if(youdefend && (u.uen < u.uenmax/4)){
+			return TRUE;
+		}
+		else if(mdef->mcan){
+			return TRUE;
+		}
 	}
 	if(pen->ovar1&SEAL_SIMURGH){
 		if(youdefend && !Blind){
@@ -2490,6 +2579,7 @@ struct obj *pen;	/* Pen of the Void */
 			return TRUE;
 		}
 	}
+
 	return FALSE;
 }
 
@@ -6274,17 +6364,23 @@ arti_invoke(obj)
 		case DEATH_TCH:
 			getdir((char *)0);
 			if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
-			mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
 			
-			pline("You reach out and stab at %s's very soul.", mon_nam(mtmp));
+			if (mtmp = m_at(u.ux + u.dx, u.uy + u.dy)) {
+				/* message */
+				pline("You reach out and stab at %s very soul.", s_suffix(mon_nam(mtmp)));
+				/* nonliving, demons, angels are immune */
 			if (nonliving_mon(mtmp) || is_demon(mtmp->data) || is_angel(mtmp->data)) 
 				pline("... but %s seems to lack one!", mon_nam(mtmp));
+				/* circle of acheron provides protection */
 			else if (ward_at(mtmp->mx,mtmp->my) == CIRCLE_OF_ACHERON)
 				pline("But %s is already beyond Acheron.", mon_nam(mtmp));
 			else 
 				xkilled(mtmp, 1);
-			
-			 
+			}
+			else {
+				/* reset timeout; we didn't actually use the invoke */
+				obj->age = monstermoves;
+			}
 		break;
 		case PETMASTER:{
 			int pet_effect = 0;

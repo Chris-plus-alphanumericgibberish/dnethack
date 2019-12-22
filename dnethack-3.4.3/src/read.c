@@ -3078,13 +3078,14 @@ unsigned long ma_require;
 unsigned long mg_restrict;
 int gen_restrict;
 {
-	char buf[BUFSZ], *bufp, *p, monclass = MAXMCLASSES;
+	char buf[BUFSZ], *bufp, *p, *q, monclass = MAXMCLASSES;
 	int which, tries, i;
 	int undeadtype = 0;
 	struct permonst *whichpm;
 	struct monst *mtmp = (struct monst *)0;
 	boolean madeany = FALSE;
 	boolean maketame, makepeaceful, makehostile;
+	int l = 0;
 
 	tries = 0;
 	do {
@@ -3094,23 +3095,100 @@ int gen_restrict;
 		   buf);
 	    bufp = mungspaces(buf);
 	    if (*bufp == '\033') return (struct monst *)0;
-	    /* possibly allow the initial disposition to be specified */
-		switch (specify_attitude)
+
+		/* grab all prefixes -- this *requires* that NO monsters have a name overlapping with these prefixes! */
+		while (TRUE)
 		{
-		case -1:
-			if (!strncmpi(bufp, "tame ", 5)) {
-				bufp += 5;
-				maketame = TRUE;
+			if (!strncmpi(bufp, "tame ", l = 5)){
+				maketame = TRUE && (specify_attitude == -1);
 			}
-			else if (!strncmpi(bufp, "peaceful ", 9)) {
-				bufp += 9;
-				makepeaceful = TRUE;
+			else if (!strncmpi(bufp, "peaceful ", l = 9)){
+				makepeaceful = TRUE && (specify_attitude == -1);
 			}
-			else if (!strncmpi(bufp, "hostile ", 8)) {
-				bufp += 8;
-				makehostile = TRUE;
+			else if (!strncmpi(bufp, "hostile ", l = 8)) {
+				makehostile = TRUE && (specify_attitude == -1);
 			}
-			break;
+			else if (!strncmpi(bufp, "zombified ", l = 10)) {
+				undeadtype = ZOMBIFIED;
+			}
+			else if (!strncmpi(bufp, "skelified ", l = 10) ||
+					 !strncmpi(bufp, "skeletal ", l = 9)) {
+				undeadtype = SKELIFIED;
+			}
+			else if (!strncmpi(bufp, "crystalfied ", l = 12)) {
+				undeadtype = CRYSTALFIED;
+			}
+			else if (!strncmpi(bufp, "fractured ", l = 10)) {
+				undeadtype = FRACTURED;
+			}
+			else if (!strncmpi(bufp, "illuminated ", l = 12)) {
+				undeadtype = ILLUMINATED;
+			}
+			else if (!strncmpi(bufp, "vampiric ", l = 9)) {
+				undeadtype = VAMPIRIC;
+			}
+			else if (!strncmpi(bufp, "pseudonatural ", l = 14)) {
+				undeadtype = PSEUDONATURAL;
+			}
+			else if (!strncmpi(bufp, "tomb herd ", l = 10)) {
+				undeadtype = TOMB_HERD;
+			}
+			else if (!strncmpi(bufp, "yith ", l = 5)) {
+				undeadtype = YITH;
+		}
+			else if (!strncmpi(bufp, "cranium ", l = 8)) {
+				undeadtype = CRANIUM_RAT;
+			}
+			else
+				break;
+
+			bufp += l;
+		}
+		/* grab a single suffix */
+		if ((p = rindex(bufp, ' ')) != 0){	/* finds the rightmost space */
+			*p++ = 0;
+			if		(!strncmpi(p, "zombie",		6))
+					undeadtype = ZOMBIFIED;
+			else if (!strncmpi(p, "skeleton",	8))
+					undeadtype = SKELIFIED;
+			else if (!strncmpi(p, "vitrean",	7))
+					undeadtype = CRYSTALFIED;
+			else if (!strncmpi(p, "witness",	7))
+					undeadtype = FRACTURED;
+			else if (!strncmpi(p, "one", 3) && ((q = rindex(bufp, ' ')) != 0))
+			{
+				*q++ = 0;
+				if(!strncmpi(q, "shining", 7))
+					undeadtype = ILLUMINATED;
+				else
+					q[-1] = ' ';
+			}
+			else if (!strncmpi(p, "vampire",	7))
+					undeadtype = VAMPIRIC;
+			else if (!strncmpi(p, "pseudonatural",	13))
+					undeadtype = PSEUDONATURAL;
+			else if (!strncmpi(p, "tomb", 4) && ((q = rindex(bufp, ' ')) != 0))
+			{
+				*q++ = 0;
+				if (!strncmpi(q, "herd", 4))
+					undeadtype = TOMB_HERD;
+				else
+					q[-1] = ' ';
+			}
+			else if (!strncmpi(p, "yith",		4))
+					undeadtype = YITH;
+			else if (!strncmpi(p, "cranium",	7))
+					undeadtype = CRANIUM_RAT;
+				else
+				{
+				/* no suffix was used, undo the split made to search for suffixes */
+				p[-1] = ' ';
+				}
+			}
+
+	    /* possibly allow the initial disposition to be specified */
+		switch(specify_attitude)
+		{
 		case MT_DOMESTIC:
 			maketame = TRUE;
 			break;
@@ -3120,54 +3198,16 @@ int gen_restrict;
 		case MT_HOSTILE:
 			makehostile = TRUE;
 			break;
+		default:
+			/* either keep what was set above, or nothing */
+			break;
 		}
 
-		switch (specify_derivation)
+		/* possibly allow the derivation of monster to be specified */
+		if (specify_derivation != -1)
 		{
-		case -1:
-			if ((p = rindex(bufp, ' ')) != 0){
-				if (p > bufp && p[-1] == ' ') p[-1] = 0;
-				else *p = 0;
-				p++;
-				if (!strcmpi(p, "zombie"))
-					undeadtype = ZOMBIFIED;
-				else if (!strcmpi(p, "skeleton"))
-					undeadtype = SKELIFIED;
-				else if (!strcmpi(p, "vitrean"))
-					undeadtype = CRYSTALFIED;
-				else if (!strcmpi(p, "witness"))
-					undeadtype = FRACTURED;
-				else if (!strcmpi(p, "shining one") || !strcmpi(p, "illuminated"))
-					undeadtype = ILLUMINATED;
-				else if (!strcmpi(p, "vampiric"))
-					undeadtype = VAMPIRIC;
-				else if (!strcmpi(p, "pseudonatural"))
-					undeadtype = PSEUDONATURAL;
-				else if (!strcmpi(p, "tomb herd"))
-					undeadtype = TOMB_HERD;
-				else if (!strcmpi(p, "yith"))
-					undeadtype = YITH;
-				else if (!strcmpi(p, "cranium"))
-					undeadtype = CRANIUM_RAT;
-				else
-				{
-					// no undead suffix was used, undo the split
-					p--[-1] = ' ';
-				}
-			}
-			break;
-		case VAMPIRIC:
-		case ZOMBIFIED:
-		case SKELIFIED:
-		case CRYSTALFIED:
-		case FRACTURED:
-		case ILLUMINATED:
-		case PSEUDONATURAL:
-		case TOMB_HERD:
-		case YITH:
-		case CRANIUM_RAT:
+			/* possibly override prefixes/suffixes from above */
 			undeadtype = specify_derivation;
-			break;
 		}
 
 		/* decide whether a valid monster was chosen */
@@ -3256,7 +3296,7 @@ createmon:
 		    }
 		}
 		if (specify_derivation){
-			if (!mtmp->mfaction && (
+			if (mtmp && !mtmp->mfaction && (
 				undeadtype == ZOMBIFIED ? can_undead_mon(mtmp) :
 				undeadtype == SKELIFIED ? can_undead_mon(mtmp) :
 				undeadtype == VAMPIRIC ? can_undead_mon(mtmp) :

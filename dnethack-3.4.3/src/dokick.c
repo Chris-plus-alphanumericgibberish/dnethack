@@ -887,6 +887,14 @@ dokick()
 	wake_nearby();
 	u_wipe_engr(2);
 
+	/* if the location we're kicking isn't on the map, just hurt yourself */
+	/* no, not doing special cases for plane of air/water or other places that wouldn't have rock walls */
+	if (!isok(x, y))
+	{
+		maploc = &levl[0][0];	/* we need to set this to something for kickstr(); (0,0) is better than out-of-bounds. */
+		goto ouch;
+	}
+
 	maploc = &levl[x][y];
 
 	/* The next five tests should stay in    */
@@ -1418,13 +1426,15 @@ ouch:
 		    pline("Ouch!  That hurts!");
 		    exercise(A_DEX, FALSE);
 		    exercise(A_STR, FALSE);
-		    if (Blind) feel_location(x,y); /* we know we hit it */
-		    if (is_drawbridge_wall(x,y) >= 0) {
-			pline_The("drawbridge is unaffected.");
-			/* update maploc to refer to the drawbridge */
-			(void) find_drawbridge(&x,&y);
-			maploc = &levl[x][y];
-		    }
+			if (isok(x, y)) {
+			    if (Blind) feel_location(x,y); /* we know we hit it */
+			    if (is_drawbridge_wall(x,y) >= 0) {
+				pline_The("drawbridge is unaffected.");
+				/* update maploc to refer to the drawbridge */
+				(void) find_drawbridge(&x,&y);
+				maploc = &levl[x][y];
+			    }
+			}
 			static int jboots2 = 0;
 			if (!jboots2) jboots2 = find_jboots();
 		    if( !(uarmf && uarmf->otyp == jboots2) && !rn2(3)) set_wounded_legs(RIGHT_SIDE, 5 + rnd(5));

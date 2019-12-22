@@ -2742,7 +2742,7 @@ winid *datawin;
 				OBJPUTSTR(buf2);
 			}
 			if(obj->otyp == VIPERWHIP && obj->ovar1 > 1){
-				Sprintf(buf2, "May strike with up to %d heads at once, multiplying the damage accordingly.", obj->ovar1);
+				Sprintf(buf2, "May strike with up to %d heads at once, multiplying the damage accordingly.", (int)(obj->ovar1));
 				OBJPUTSTR(buf2);
 			}
 			if(obj->otyp == MIRRORBLADE){
@@ -2762,7 +2762,7 @@ winid *datawin;
 				OBJPUTSTR(buf2);
 			}
 			if(obj->otyp == RAKUYO){
-				Sprintf(buf2, "Deals an extra 1d4 vs. small or 1d3 vs large and double enchantment damage if wielded without an off-hand weapon, at the cost of an extra 1/4 move.");
+				Sprintf(buf2, "Deals an extra 1d4 vs small or 1d3 vs large and double enchantment damage if wielded without an off-hand weapon, at the cost of an extra 1/4 move.");
 				OBJPUTSTR(buf2);
 			}
 			if(fast_weapon(obj) && obj->spe >= 2){
@@ -2770,11 +2770,11 @@ winid *datawin;
 				OBJPUTSTR(buf2);
 			}
 			if(pure_weapon(obj) && obj->spe >= 6){
-				Sprintf(buf2, "Deals an 20% damage to all targets when the wielder is at full health.");
+				Sprintf(buf2, "Deals an 20%% damage to all targets when the wielder is at full health.");
 				OBJPUTSTR(buf2);
 			}
 			if(dark_weapon(obj) && obj->spe >= 6){
-				Sprintf(buf2, "Deals an 20% damage to all targets when the wielder is at 30% health or lower.");
+				Sprintf(buf2, "Deals an 20%% damage to all targets when the wielder is at 30%% health or lower.");
 				OBJPUTSTR(buf2);
 			}
 		}
@@ -2977,15 +2977,35 @@ winid *datawin;
 		}
 	}
 	if (olet == SPBOOK_CLASS) {
-		if (!(obj && oartifact))
+		if (otyp == SPE_BLANK_PAPER)
+		{
+			OBJPUTSTR("Empty book.");
+		}
+		else if (otyp == SPE_BOOK_OF_THE_DEAD)
+		{
+			OBJPUTSTR("Ancient tome.");
+		}
+		else if (oartifact)
+		{
+			OBJPUTSTR("Ancient tome.");
+			switch (oartifact)
+			{
+			case ART_NECRONOMICON:
+				OBJPUTSTR("What dark secrets still lurk in its pages?");
+				break;
+			case ART_BOOK_OF_LOST_NAMES:
+				OBJPUTSTR("Spirits from the void call out from its pages.");
+				break;
+			case ART_BOOK_OF_INFINITE_SPELLS:
+				OBJPUTSTR("Arcane magics fill its endless pages.");
+				break;
+			}
+		}
+		else
 		{
 			Sprintf(buf, "Level %d spellbook, in the %s school. %s spell.",
 				oc.oc_level, spelltypemnemonic(oc.oc_skill), dir);
 			OBJPUTSTR(buf);
-		}
-		else
-		{
-			OBJPUTSTR("Ancient tome.");
 		}
 	}
 	if (olet == WAND_CLASS) {

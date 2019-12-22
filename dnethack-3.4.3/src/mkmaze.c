@@ -573,7 +573,7 @@ fixup_special()
 			//Note: Post forest-conversion
 			place_chaos_forest_features();
 		}
-		if(on_level(&u.uz, &modor_depths_2_level)){
+		if(on_level(&u.uz, &mordor_depths_2_level)){
 			place_chaos_forest_features();
 			for (x = 1; x < COLNO - 1; x++)
 			for (y = 0; y < ROWNO - 1; y++){
@@ -581,7 +581,7 @@ fixup_special()
 			}
 			wallification(1, 0, COLNO - 1, ROWNO - 1);
 		}
-		if(on_level(&u.uz, &modor_depths_3_level)){
+		if(on_level(&u.uz, &mordor_depths_3_level)){
 			place_chaos_forest_features();
 		}
 	}

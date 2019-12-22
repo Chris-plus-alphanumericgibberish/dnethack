@@ -3919,9 +3919,9 @@ place_chaos_forest_features()
 		int i = 4 + d(4,4);
 		for(; i > 0; i--)
 			mkwraithclearing(0);
-	} else if(on_level(&u.uz, &modor_depths_2_level)){
+	} else if(on_level(&u.uz, &mordor_depths_2_level)){
 		mklavapool();
-	} else if(on_level(&u.uz, &modor_depths_3_level)){
+	} else if(on_level(&u.uz, &mordor_depths_3_level)){
 		int i = 20+ d(4,10);
 		for(; i > 0; i--)
 			mkstonepillars();

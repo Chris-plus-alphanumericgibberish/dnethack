@@ -521,38 +521,53 @@ makecorridors()
 	int a, b, i;
 	boolean any = TRUE;
 
+	/* connect rooms to their first neighbour */
 	for(a = 0; a < nroom-1; a++) {
-		if ((rooms[a].rtype == JOINEDROOM || rooms[a + 1].rtype == JOINEDROOM) && rn2(7))
+		/* connect to-and-from multi-rooms at 1/2 the rate */
+		if ((rooms[a].rtype == JOINEDROOM || rooms[a + 1].rtype == JOINEDROOM) && rn2(2))
 			continue;
+		/* join them */
 		join(a, a+1, FALSE);
-		if(!rn2(50)) break; /* allow some randomness */
+		/* allow some randomness and occasionally just stop connecting rooms in this manner */
+		if (!rn2(50))
+			break;
 	}
+	/* connect rooms to their second neighbour */
+	/* but only if they aren't connected yet */
 	for (a = 0; a < nroom - 2; a++)
 	{
 		if (smeq[a] != smeq[a + 2])
 			join(a, a + 2, FALSE);
 	}
+	/* make additional connections between rooms, at random */
+	if (nroom > 2) {
+		/* makes from 4 to (rooms+4) attempts */
+		for (i = rn2(nroom) + 4; i; i--) {
+			/* pick two rooms */
+			a = rn2(nroom);
+			b = rn2(nroom - 2);
+			if (b >= a) b += 2;
+			/* connect to-and-from multi-rooms at 1/8 the rate */
+			if ((rooms[a].rtype == JOINEDROOM || rooms[b].rtype == JOINEDROOM) && rn2(8))
+				continue;
+			/* allow join() to fail partway through making the corridor */
+			join(a, b, TRUE);
+		}
+	}
+	/* finish connecting all rooms */
+	/* but only if they aren't connected yet */
 	for(a = 0; any && a < nroom; a++) {
+		/* "any" just serves to end this loop early to reduce processing time */
 	    any = FALSE;
 		for (b = 0; b < nroom; b++)
 		{
-			if ((rooms[a].rtype == JOINEDROOM || rooms[b].rtype == JOINEDROOM) && rn2(7))
-				continue;
 			if (smeq[a] != smeq[b]) {
 				join(a, b, FALSE);
 				any = TRUE;
 			}
 		}
 	}
-	if(nroom > 2)
-	    for(i = rn2(nroom) + 4; i; i--) {
-		a = rn2(nroom);
-		b = rn2(nroom-2);
-		if(b >= a) b += 2;
-		if ((rooms[a].rtype == JOINEDROOM || rooms[b].rtype == JOINEDROOM) && rn2(7))
-			continue;
-		join(a, b, TRUE);
-	    }
+	return;
 }
 
 

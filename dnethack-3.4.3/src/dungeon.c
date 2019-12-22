@@ -744,9 +744,9 @@ struct level_map {
 	{ "mord1",&mordor_1_level },
 	{ "mord2",&mordor_2_level },
 	{ "spi1",&spider_level },
-	{ "mdpth1",&modor_depths_1_level },
-	{ "mdpth2",&modor_depths_2_level },
-	{ "mdpth3",&modor_depths_3_level },
+	{ "mdpth1",&mordor_depths_1_level },
+	{ "mdpth2",&mordor_depths_2_level },
+	{ "mdpth3",&mordor_depths_3_level },
 	{ "bore1",&borehole_1_level },
 	{ "bore2",&borehole_2_level },
 	{ "bore3",&borehole_3_level },
@@ -1589,9 +1589,9 @@ In_mordor_depths(lev)	/* are you on the chaotic quest? */
 d_level	*lev;
 {
 	return((boolean)(lev->dnum == chaos_dnum && chaos_dvariant == MORDOR && (
-		on_level(&u.uz, &modor_depths_1_level)
-		|| on_level(&u.uz, &modor_depths_2_level)
-		|| on_level(&u.uz, &modor_depths_3_level)
+		on_level(&u.uz, &mordor_depths_1_level)
+		|| on_level(&u.uz, &mordor_depths_2_level)
+		|| on_level(&u.uz, &mordor_depths_3_level)
 	)));
 }
 

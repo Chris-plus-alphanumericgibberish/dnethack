@@ -889,10 +889,10 @@ chaos3_montype()
 			case 8: return mkclass(S_SPIDER, G_NOHELL|G_HELL);
 		}
 	} else if(
-		on_level(&u.uz, &modor_depths_1_level)
-		|| on_level(&u.uz, &modor_depths_2_level)
+		on_level(&u.uz, &mordor_depths_1_level)
+		|| on_level(&u.uz, &mordor_depths_2_level)
 	){
-		switch(rn2(on_level(&u.uz, &modor_depths_2_level) ? 30 : 20)){
+		switch(rn2(on_level(&u.uz, &mordor_depths_2_level) ? 30 : 20)){
 			case 1:
 			case 2:
 			case 3:
@@ -923,7 +923,7 @@ chaos3_montype()
 			case 28:
 			case 29: return &mons[PM_MORDOR_SHAMAN];
 		}
-	} else if(on_level(&u.uz, &modor_depths_3_level)){
+	} else if(on_level(&u.uz, &mordor_depths_3_level)){
 		switch(rn2(20)){
 			case 0:
 			case 1:

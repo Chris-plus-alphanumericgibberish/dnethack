@@ -164,9 +164,9 @@ E struct dgn_topology {		/* special dungeon levels for speed */
     d_level	d_mordor_1_level;
     d_level	d_mordor_2_level;
     d_level	d_spider_level;
-    d_level	d_modor_depths_1_level;
-    d_level	d_modor_depths_2_level;
-    d_level	d_modor_depths_3_level;
+    d_level	d_mordor_depths_1_level;
+    d_level	d_mordor_depths_2_level;
+    d_level	d_mordor_depths_3_level;
     d_level	d_borehole_1_level;
     d_level	d_borehole_2_level;
     d_level	d_borehole_3_level;
@@ -278,9 +278,9 @@ E struct dgn_topology {		/* special dungeon levels for speed */
 #define mordor_1_level		(dungeon_topology.d_mordor_1_level)
 #define mordor_2_level		(dungeon_topology.d_mordor_2_level)
 #define spider_level		(dungeon_topology.d_spider_level)
-#define modor_depths_1_level		(dungeon_topology.d_modor_depths_1_level)
-#define modor_depths_2_level		(dungeon_topology.d_modor_depths_2_level)
-#define modor_depths_3_level		(dungeon_topology.d_modor_depths_3_level)
+#define mordor_depths_1_level		(dungeon_topology.d_mordor_depths_1_level)
+#define mordor_depths_2_level		(dungeon_topology.d_mordor_depths_2_level)
+#define mordor_depths_3_level		(dungeon_topology.d_mordor_depths_3_level)
 #define borehole_1_level	(dungeon_topology.d_borehole_1_level)
 #define borehole_2_level	(dungeon_topology.d_borehole_2_level)
 #define borehole_3_level	(dungeon_topology.d_borehole_3_level)
