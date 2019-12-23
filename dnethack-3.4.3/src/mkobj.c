@@ -1746,6 +1746,7 @@ struct obj* obj;
 	case MAGIC_FLUTE:
 	case HARP:
 	case MAGIC_HARP:
+	case KHAKKHARA:
 		return resonant_materials;
 	case TOOLED_HORN:
 	case FIRE_HORN:
