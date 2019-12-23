@@ -1371,10 +1371,10 @@ karemade:
 				nmonsclose = nmonsnear = 0;
 				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon){
 					if(mtmp->mpeaceful) continue;
-					if(um_dist(u.ux,u.uy,1)){
+					if(distmin(u.ux, u.uy, mtmp->mx,mtmp->my) <= 1){
 						nmonsclose++;
 						nmonsnear++;
-					} else if(um_dist(u.ux,u.uy,2)){
+					} else if(distmin(u.ux, u.uy, mtmp->mx,mtmp->my) <= 2){
 						nmonsnear++;
 					}
 				}
