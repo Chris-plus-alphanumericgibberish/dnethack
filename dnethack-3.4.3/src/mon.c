@@ -248,6 +248,7 @@ register struct monst *mtmp;
 	int x = mtmp->mx, y = mtmp->my;
 	int mndx = monsndx(mdat);
 	struct obj *otmp;
+	struct monst *mon;
 	
 	if(mtmp->mvanishes > -1){
 		return (struct obj *)0;
@@ -643,25 +644,66 @@ register struct monst *mtmp;
 			mtmp->mnamelth = 0;
 		break;
 	    case PM_ANDROID:
-			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+		    obj = mkcorpstat(BROKEN_ANDROID, KEEPTRAITS(mtmp) ? mtmp : 0,
+				     mdat, x, y, TRUE);
 		break;
 	    case PM_CRUCIFIED_ANDROID:
-			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
 			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
 			set_material(obj, IRON);
 			obj->oeroded = 1;
 			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
 			set_material(obj, IRON);
 			obj->oeroded = 1;
+			mon = makemon(&mons[PM_ANDROID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+				obj = mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			}
 		break;
 	    case PM_MUMMIFIED_ANDROID:
-			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			mon = makemon(&mons[PM_ANDROID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+				obj = mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			}
 		break;
 	    case PM_FLAYED_ANDROID:
-			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			mon = makemon(&mons[PM_ANDROID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+				obj = mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			}
 		break;
 	    case PM_PARASITIZED_ANDROID:
-			obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			mon = makemon(&mons[PM_ANDROID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mcrazed = 1;
+				mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_ANDROID, x, y, FALSE, FALSE);
+			}
 			if((In_hell(&u.uz) || In_endgame(&u.uz)) 
 				&& !is_rider(mtmp->data) 
 			) //u.uevent.invoked || 
@@ -671,25 +713,66 @@ register struct monst *mtmp;
 			fix_object(obj);
 		break;
 	    case PM_GYNOID:
-			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+		    obj = mkcorpstat(BROKEN_GYNOID, KEEPTRAITS(mtmp) ? mtmp : 0,
+				     mdat, x, y, TRUE);
 		break;
 	    case PM_CRUCIFIED_GYNOID:
-			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
 			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
 			set_material(obj, IRON);
 			obj->oeroded = 1;
 			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
 			set_material(obj, IRON);
 			obj->oeroded = 1;
+			mon = makemon(&mons[PM_GYNOID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			}
 		break;
 	    case PM_MUMMIFIED_GYNOID:
-			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			mon = makemon(&mons[PM_GYNOID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			}
 		break;
 	    case PM_FLAYED_GYNOID:
-			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			mon = makemon(&mons[PM_GYNOID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mfaction = ZOMBIFIED;
+				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			}
 		break;
 	    case PM_PARASITIZED_GYNOID:
-			obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			mon = makemon(&mons[PM_GYNOID], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mcrazed = 1;
+				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			}
 			if((In_hell(&u.uz) || In_endgame(&u.uz)) 
 				&& !is_rider(mtmp->data) 
 			) //u.uevent.invoked || 
@@ -906,8 +989,7 @@ register struct monst *mtmp;
 			obj->owt = weight(obj);
 		goto default_1;
 		break;
-	    case PM_EMBRACED_DROWESS:{
-			struct monst *mon;
+	    case PM_EMBRACED_DROWESS:
 			if((In_hell(&u.uz) || In_endgame(&u.uz)) 
 				&& !is_rider(mtmp->data) 
 				&& !(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_LIFE && mtmp->mtame)
@@ -925,9 +1007,8 @@ register struct monst *mtmp;
 			}
 			obj = mkcorpstat(CORPSE, mon, (struct permonst *)0, x, y, FALSE);
 			mongone(mon);
-		}break;
-	    case PM_PARASITIZED_EMBRACED_ALIDER:{
-			struct monst *mon;
+		break;
+	    case PM_PARASITIZED_EMBRACED_ALIDER:
 			if((In_hell(&u.uz) || In_endgame(&u.uz)) 
 				&& !is_rider(mtmp->data) 
 				&& !(uwep && uwep->oartifact == ART_SINGING_SWORD && uwep->osinging == OSING_LIFE && mtmp->mtame)
@@ -942,9 +1023,10 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mfaction = ZOMBIFIED;
+				EDOG(mon)->loyal = TRUE;
+				mkcorpstat(CORPSE, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
 			}
-			mkcorpstat(CORPSE, mon, (struct permonst *)0, x, y, FALSE);
-			mongone(mon);
 			if((In_hell(&u.uz) || In_endgame(&u.uz)) 
 				&& !is_rider(mtmp->data) 
 			) //u.uevent.invoked || 
@@ -952,7 +1034,7 @@ register struct monst *mtmp;
 			obj = mksobj_at(CORPSE, x, y, FALSE, FALSE);
 			obj->corpsenm = PM_PARASITIC_MASTER_MIND_FLAYER;
 			fix_object(obj);
-		}break;
+		break;
 	    default_1:
 	    default:
 		if (mvitals[mndx].mvflags & G_NOCORPSE)
