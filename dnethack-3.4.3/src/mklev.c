@@ -235,19 +235,21 @@ makerooms()
 			(In_mithardir_quest(&u.uz) ? (nroom<9 || rn2(MAXNROFROOMS-nroom)) : (nroom<6 || rn2(12-nroom)))
 	){
 	// while(nroom < MAXNROFROOMS && rnd_rect() && (nroom<6 || )) {
-		if(nroom >= (MAXNROFROOMS/6) && rn2(2) && !tried_vault && !wantanmivault && !wantasepulcher) {
+		if(In_mithardir_quest(&u.uz)){
+			if (!create_room(-1, -1, 2+rnd(4), 2+rnd(4), -1, -1, OROOM, -1))
+				continue;
+		}
+		else if(nroom >= (MAXNROFROOMS/6) && rn2(3) && !tried_vault && !wantanmivault && !wantasepulcher) {
 			tried_vault = TRUE;
 			if (create_vault()) {
 				vault_x = rooms[nroom].lx;
 				vault_y = rooms[nroom].ly;
 				rooms[nroom].hx = -1;
 			}
-		} else if(In_mithardir_quest(&u.uz)){
-			 if (!create_room(-1, -1, 2+rnd(4), 2+rnd(4), -1, -1, OROOM, -1))
-				continue;
-		} else
+		} else {
 		    if (!create_room(-1, -1, -1, -1, -1, -1, OROOM, -1))
 			return;
+		}
 	}
 	return;
 }
