@@ -2629,7 +2629,61 @@ u_init()
 		/* what a horrible night to have a curse */
 		horrors[j]->mlevel = 1;							/* low starting level so difficulty is based on other things*/
 		horrors[j]->mmove = rn2(7) * 2 + 6;				/* slow to very fast */
-		horrors[j]->ac = rn2(21) + (rn2(3) ? -10 : -20);/* any AC */
+		switch(rn2(4)){
+			case 0:
+				horrors[j]->nac = rn2(21) + (rn2(3) ? 0 : +10);/* any AC */
+				horrors[j]->dac = 0;
+				horrors[j]->pac = 0;
+			break;
+			case 1:
+				horrors[j]->nac = 0;
+				horrors[j]->dac = rn2(21) + (rn2(3) ? 0 : +10);/* any AC */
+				horrors[j]->pac = 0;
+			break;
+			case 2:
+				horrors[j]->nac = 0;
+				horrors[j]->dac = 0;
+				horrors[j]->pac = rn2(21) + (rn2(3) ? 0 : +10);/* any AC */
+			break;
+			case 3:
+				/* any AC (combo is slightly better) */
+				horrors[j]->nac = rn2(8) + (rn2(9) ? 0 : +5);
+				horrors[j]->dac = rn2(8) + (rn2(9) ? 0 : +5);
+				horrors[j]->pac = rn2(8) + (rn2(9) ? 0 : +5);
+			break;
+		}
+		switch(rn2(4)){
+			case 0:
+				horrors[j]->hdr = 0;
+				horrors[j]->bdr = 0;
+				horrors[j]->gdr = 0;
+				horrors[j]->ldr = 0;
+				horrors[j]->fdr = 0;
+			break;
+			case 1:{
+				schar dr = rnd(3);
+				horrors[j]->hdr = dr;
+				horrors[j]->bdr = dr;
+				horrors[j]->gdr = dr;
+				horrors[j]->ldr = dr;
+				horrors[j]->fdr = dr;
+			}break;
+			case 2:{
+				schar dr = rnd(6);
+				horrors[j]->hdr = dr;
+				horrors[j]->bdr = dr;
+				horrors[j]->gdr = dr;
+				horrors[j]->ldr = dr;
+				horrors[j]->fdr = dr;
+			}break;
+			case 3:
+				horrors[j]->hdr = rn2(10);
+				horrors[j]->bdr = rn2(10);
+				horrors[j]->gdr = rn2(10);
+				horrors[j]->ldr = rn2(10);
+				horrors[j]->fdr = rn2(10);
+			break;
+		}
 		horrors[j]->mr = rn2(11) * 10;				/* varying amounts of MR */
 		horrors[j]->maligntyp = d(2, 9) - 10;			/* any alignment */
 
