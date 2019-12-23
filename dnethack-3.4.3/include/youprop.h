@@ -511,7 +511,7 @@
 
 #define Fixed_abil		(u.uprops[FIXED_ABIL].extrinsic || u.specialSealsActive&SEAL_DAHLVER_NAR)	/* KMH */
 
-#define Lifesaved		(u.uprops[LIFESAVED].extrinsic || u.sealsActive&SEAL_JACK)
+#define Lifesaved		(u.uprops[LIFESAVED].extrinsic || u.sealsActive&SEAL_JACK || (uleft && uleft->otyp == RIN_WISHES && uleft->spe > 0) || (uright && uright->otyp == RIN_WISHES && uright->spe > 0)) /*Note: the rings only give life saving when charged, so it can't be a normal property*/
 
 #define Necrospellboost	(u.uprops[NECROSPELLS].extrinsic)
 

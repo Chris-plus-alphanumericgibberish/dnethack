@@ -690,8 +690,16 @@ int how;
 				}
 				if(uwep->lamplit) end_burn(uwep, TRUE);
 			}
+		} else if(uleft && uleft->otyp == RIN_WISHES && uleft->spe > 0){
+			You("wish that hadn't happened.");
+			pline("A star flares on your left ring-finger!");
+			uleft->spe--;
+		} else if(uright && uright->otyp == RIN_WISHES && uright->spe > 0){
+			You("wish that hadn't happened.");
+			pline("A star flares on your right ring-finger!");
+			uright->spe--;
 		} else {
-			impossible("Lifesaved with no amulet or Jack?");
+			impossible("Lifesaved with no amulet, ring, or Jack?");
 		}
 		u.gevurah += 4;//cheated death.
 
