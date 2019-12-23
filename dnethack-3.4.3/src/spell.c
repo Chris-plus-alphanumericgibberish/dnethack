@@ -2692,7 +2692,7 @@ spiriteffects(power, atme)
 			You("get ready to fire a barrage.");
 			if(uquiver){
 				barage = TRUE; //state variable
-				throw_obj(uquiver, 0, 1);
+				throw_obj(uquiver, 0, 1, TRUE);
 				barage = FALSE;
 			} else {
 				You("have nothing quivered.");

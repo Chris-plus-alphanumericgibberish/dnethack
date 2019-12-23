@@ -38,12 +38,13 @@ boolean barage=FALSE;
 
 boolean break_thrown = FALSE; /*state variable, if TRUE thrown object always breaks.*/
 
-/* Throw the selected object, asking for direction */
+/* Throw the selected object, maybe asking for direction */
 int
-throw_obj(obj, shotlimit, thrown)
+throw_obj(obj, shotlimit, thrown, ask)
 struct obj *obj;
 int shotlimit;
 int thrown;
+int ask;
 {
 	struct obj *otmp;
 	struct obj *launcher;
@@ -62,7 +63,7 @@ int thrown;
 
 	/* ask "in what direction?" */
 #ifndef GOLDOBJ
-	if (!getdir((char *)0)) {
+	if (ask && !getdir((char *)0)) {
 		if (obj->oclass == COIN_CLASS) {
 		    u.ugold += obj->quan;
 		    flags.botl = 1;
@@ -73,7 +74,7 @@ int thrown;
 
 	if(obj->oclass == COIN_CLASS) return(throw_gold(obj));
 #else
-	if (!getdir((char *)0)) {
+	if (ask && !getdir((char *)0)) {
 	    /* obj might need to be merged back into the singular gold object */
 	    freeinv(obj);
 	    addinv(obj);
@@ -605,7 +606,7 @@ dothrow()
 	/* kludge to work around parse()'s pre-decrement of 'multi' */
 	shotlimit = (multi || save_cm) ? multi + 1 : 0;
 
-	result = throw_obj(obj, shotlimit, THROW_UWEP);
+	result = throw_obj(obj, shotlimit, THROW_UWEP, TRUE);
         
 	/*
 	 * [ALI] Bug fix: Temporary paralysis (eg., from hurtle) cancels
@@ -689,6 +690,13 @@ autoquiver()
 int
 dofire()
 {
+	return dofire_core(TRUE);
+}
+
+int
+dofire_core(ask)
+int ask;
+{
 	int result, shotlimit;
 
 	if (notake(youracedata)) {
@@ -709,7 +717,7 @@ dofire()
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
 
-		return throw_obj(uwep, shotlimit, THROW_UWEP);
+		return throw_obj(uwep, shotlimit, THROW_UWEP, ask);
 	}
 	
 	if(uwep && !is_blaster(uwep) && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && Race_if(PM_ANDROID)){
@@ -717,7 +725,7 @@ dofire()
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
 
-		return throw_obj(uwep, shotlimit, THROW_UWEP);
+		return throw_obj(uwep, shotlimit, THROW_UWEP, ask);
 	}
 	
 	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep)))  && uwep->oartifact == ART_ROGUE_GEAR_SPIRITS){
@@ -734,7 +742,7 @@ dofire()
 		
 		if(shotlimit > 0) bolt->quan = min(2,shotlimit); /* Make exactly enough, so that they are destroyed by throwing. */
 		break_thrown = TRUE; /* state variable, always destroy thrown */
-		result = throw_obj(bolt, shotlimit, THROW_UWEP);
+		result = throw_obj(bolt, shotlimit, THROW_UWEP, ask);
 		break_thrown = FALSE; /* state variable, always destroy thrown */
 		return result;
 	}
@@ -749,7 +757,7 @@ dofire()
 				if((result == 1) && is_blaster(uswapwep))
 					result = fire_blaster(uswapwep, shotlimit);
 				else if ((result == 1) && uquiver)
-					result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP);
+					result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP, ask);
 				if (result > 1) result--;
 				return(result);
 			}
@@ -844,22 +852,22 @@ dofire()
 		if (!test_twoweapon()) untwoweapon();
 		else if (ammo_and_launcher(uquiver,uwep) 
 		    && ammo_and_launcher(uquiver, uswapwep)){
-			result = throw_obj(uquiver, shotlimit, THROW_UWEP);
+			result = throw_obj(uquiver, shotlimit, THROW_UWEP, ask);
 			if((result == 1) && is_blaster(uswapwep))
 				result = fire_blaster(uswapwep, shotlimit);
 			else if ((result == 1) && uquiver)
-			    result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP);
+			    result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP, ask);
 			if (result > 1) result--;
 			return(result);
 		} else if(ammo_and_launcher(uquiver,uwep)){
-			result = throw_obj(uquiver, shotlimit, THROW_UWEP);
+			result = throw_obj(uquiver, shotlimit, THROW_UWEP, ask);
 			return(result);
 		} else if(ammo_and_launcher(uquiver, uswapwep)){
-			result = throw_obj(uquiver, shotlimit, THROW_USWAPWEP);
+			result = throw_obj(uquiver, shotlimit, THROW_USWAPWEP, ask);
 			return(result);
 		}
 	}
-	result = (throw_obj(uquiver, shotlimit, THROW_UWEP));
+	result = (throw_obj(uquiver, shotlimit, THROW_UWEP, ask));
 	
 	return result;
 }
