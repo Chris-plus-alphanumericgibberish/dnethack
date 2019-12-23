@@ -2299,7 +2299,7 @@ spiriteffects(power, atme)
 								continue;
 							} else You("hit %s.", mon_nam(mon));
 							setmangry(mon);
-						} You("don't have enough gold on hand.");
+						} else You("don't have enough gold on hand.");
 					}
 				} else break;
 			}
