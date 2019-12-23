@@ -1312,7 +1312,7 @@ int howmuch;
 			loss = loss*howmuch/100;
 			if(loss == 0) loss = 1;
 			
-			change_uinsight(loss);
+			change_uinsight(-1*loss);
 		}
 	}
 	/*
