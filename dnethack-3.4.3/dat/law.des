@@ -1645,6 +1645,7 @@ OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 CONTAINER:'`',"statue",(7,15),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
@@ -1653,6 +1654,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (7,15)
 CONTAINER:'`',"statue",(7,17),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
@@ -1680,6 +1682,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (4,19)
 CONTAINER:'`',"statue",(2,19),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
@@ -1707,6 +1710,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (4,13)
 CONTAINER:'`',"statue",(2,13),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
@@ -2052,6 +2056,7 @@ OBJECT:')',"spear",contained,blessed,-7,"The Rod of Seven Parts"
 
 CONTAINER:'`',"statue",(7,15),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
@@ -2060,6 +2065,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (7,15)
 CONTAINER:'`',"statue",(7,17),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
@@ -2087,6 +2093,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (4,19)
 CONTAINER:'`',"statue",(2,19),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
@@ -2114,6 +2121,7 @@ OBJECT:random,random,contained
 TRAP:"statue", (4,13)
 CONTAINER:'`',"statue",(2,13),uncursed,"Shiere Eladrin",1
 OBJECT:'[',"crystal plate mail",contained,blessed,+0
+OBJECT:'[',"crystal gauntlets",contained,blessed,+0
 OBJECT:'[',"crystal shield",contained,blessed,+0
 OBJECT:'[',"crystal boots",contained,blessed,+0
 OBJECT:')',"crystal sword",contained,blessed,+0
