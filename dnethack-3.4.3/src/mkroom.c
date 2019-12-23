@@ -220,6 +220,7 @@ mkmivault()
 	struct obj *otmp2;
 	struct monst *mon;
 	boolean good=FALSE,okspot;
+	struct permonst *ptr;
 	while(!good && tries < 50){
 		x = rn2(COLNO-6)+1;
 		y = rn2(ROWNO-6)+1;
@@ -255,10 +256,11 @@ mkmivault()
 			otmp = mksobj_at(CHEST, x+3, y+3, TRUE, FALSE);
 			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
 			
-			mon = makemon(mivaultmon(), x+rnd(2)+1, y+rnd(2)+1, 0);
+			ptr = mivaultmon();
+			mon = makemon(ptr, x+rnd(2)+1, y+rnd(2)+1, 0);
 			// lovecraft monsters
-			if (mon->data == &mons[PM_SHOGGOTH] || mon->data == &mons[PM_NIGHTGAUNT]
-					|| mon->data == &mons[PM_DARK_YOUNG] || mon->data == &mons[PM_HUNTING_HORROR] || mon->data == &mons[PM_HUNTING_HORROR_TAIL]){
+			if (ptr == &mons[PM_SHOGGOTH] || ptr == &mons[PM_NIGHTGAUNT]
+					|| ptr == &mons[PM_DARK_YOUNG] || ptr == &mons[PM_HUNTING_HORROR] || ptr == &mons[PM_HUNTING_HORROR_TAIL]){
 				otmp2 = mksobj(FIGURINE, TRUE, FALSE);
 				switch(rn2(4)){
 					case 0:					
@@ -284,10 +286,10 @@ mkmivault()
 				add_to_container(otmp, otmp2);
 			}
 			// clockworks
-			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_ID_JUGGERNAUT] 
-					|| mon->data == &mons[PM_SCRAP_TITAN] || mon->data == &mons[PM_HELLFIRE_COLOSSUS]){
+			else if (ptr == &mons[PM_JUGGERNAUT] || ptr == &mons[PM_ID_JUGGERNAUT] 
+					|| ptr == &mons[PM_SCRAP_TITAN] || ptr == &mons[PM_HELLFIRE_COLOSSUS]){
 				if (rn2(2)){
-					add_to_container(otmp, mksobj(mon->data == &mons[PM_ID_JUGGERNAUT] ? SUBETHAIC_COMPONENT : HELLFIRE_COMPONENT, TRUE, FALSE));
+					add_to_container(otmp, mksobj(ptr == &mons[PM_ID_JUGGERNAUT] ? SUBETHAIC_COMPONENT : HELLFIRE_COMPONENT, TRUE, FALSE));
 				} else {
 					add_to_container(otmp, mksobj(SCRAP, TRUE, FALSE));
 				}
@@ -302,9 +304,9 @@ mkmivault()
 				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
 			}
 			// spellcasters
-			else if (mon->data == &mons[PM_TITAN] || mon->data == &mons[PM_EYE_OF_DOOM] 
-					|| mon->data == &mons[PM_PRIEST_OF_GHAUNADAUR] || mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
-						|| mon->data == &mons[PM_SERPENT_MAN_OF_YOTH]){
+			else if (ptr == &mons[PM_TITAN] || ptr == &mons[PM_EYE_OF_DOOM] 
+					|| ptr == &mons[PM_PRIEST_OF_GHAUNADAUR] || ptr == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+						|| ptr == &mons[PM_SERPENT_MAN_OF_YOTH]){
 				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
 				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
 				if (rn2(2)) add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
@@ -359,6 +361,7 @@ mkmivaultlolth()
 	struct obj *otmp2;
 	struct monst *mon;
 	boolean good=FALSE,okspot;
+	struct permonst *ptr;
 	while(!good && tries < 50){
 		x = rn2(COLNO-4)+1;
 		y = rn2(ROWNO-4)+1;
@@ -393,10 +396,11 @@ mkmivaultlolth()
 			otmp = mksobj_at(CHEST, x+2, y+2, TRUE, FALSE);
 			for(i = d(2,4);i>0;i--) mkmivaultitem(otmp);
 			
-			mon = makemon(mivaultmon(), x+rnd(2), y+rnd(2), 0);
+			ptr = mivaultmon();
+			mon = makemon(ptr, x+rnd(2), y+rnd(2), 0);
 			// lovecraft monsters
-			if (mon->data == &mons[PM_SHOGGOTH] || mon->data == &mons[PM_NIGHTGAUNT] 
-				|| mon->data == &mons[PM_DARK_YOUNG] || mon->data == &mons[PM_HUNTING_HORROR] || mon->data == &mons[PM_HUNTING_HORROR_TAIL]){
+			if (ptr == &mons[PM_SHOGGOTH] || ptr == &mons[PM_NIGHTGAUNT] 
+				|| ptr == &mons[PM_DARK_YOUNG] || ptr == &mons[PM_HUNTING_HORROR] || ptr == &mons[PM_HUNTING_HORROR_TAIL]){
 				otmp2 = mksobj(FIGURINE, TRUE, FALSE);
 				switch(rn2(4)){
 					case 0:					
@@ -422,10 +426,10 @@ mkmivaultlolth()
 				add_to_container(otmp, otmp2);
 			}
 			// clockworks
-			else if (mon->data == &mons[PM_JUGGERNAUT] || mon->data == &mons[PM_ID_JUGGERNAUT] 
-					|| mon->data == &mons[PM_SCRAP_TITAN] || mon->data == &mons[PM_HELLFIRE_COLOSSUS]){
+			else if (ptr == &mons[PM_JUGGERNAUT] || ptr == &mons[PM_ID_JUGGERNAUT] 
+					|| ptr == &mons[PM_SCRAP_TITAN] || ptr == &mons[PM_HELLFIRE_COLOSSUS]){
 				if (rn2(2)){
-					add_to_container(otmp, mksobj(mon->data == &mons[PM_ID_JUGGERNAUT] ? SUBETHAIC_COMPONENT : HELLFIRE_COMPONENT, TRUE, FALSE));
+					add_to_container(otmp, mksobj(ptr == &mons[PM_ID_JUGGERNAUT] ? SUBETHAIC_COMPONENT : HELLFIRE_COMPONENT, TRUE, FALSE));
 				} else {
 					add_to_container(otmp, mksobj(SCRAP, TRUE, FALSE));
 				}
@@ -440,9 +444,9 @@ mkmivaultlolth()
 				add_to_container(otmp, mksobj(CLOCKWORK_COMPONENT, TRUE, FALSE));
 			}
 			// spellcasters
-			else if (mon->data == &mons[PM_TITAN] || mon->data == &mons[PM_EYE_OF_DOOM] 
-					|| mon->data == &mons[PM_PRIEST_OF_GHAUNADAUR] || mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
-						|| mon->data == &mons[PM_SERPENT_MAN_OF_YOTH]){
+			else if (ptr == &mons[PM_TITAN] || ptr == &mons[PM_EYE_OF_DOOM] 
+					|| ptr == &mons[PM_PRIEST_OF_GHAUNADAUR] || ptr == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+						|| ptr == &mons[PM_SERPENT_MAN_OF_YOTH]){
 				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
 				add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
 				if (rn2(2)) add_to_container(otmp, mkobj(SPBOOK_CLASS, FALSE));
