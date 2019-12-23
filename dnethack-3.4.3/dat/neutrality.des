@@ -1953,6 +1953,10 @@ MONSTER[80%]:'H',"lurking one",(57,13)
 MONSTER[80%]:'H',"lurking one",(34,15)
 MONSTER[80%]:'H',"lurking one",(21,15)
 
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
+
 #
 #	Temples of the Old Gods
 #
@@ -2117,6 +2121,12 @@ OBJECT:'%',random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
+
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
 
 #
 #	The Long Hall
@@ -2335,6 +2345,10 @@ MONSTER:random,random,random
 MONSTER:random,random,random
 MONSTER:random,random,random
 
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
+
 #
 #	The gates of N'kai.
 #
@@ -2514,6 +2528,10 @@ OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 
+
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
 
 #
 #	The Gulf of N'Kai
@@ -3028,6 +3046,10 @@ REGION:(01,01,75,19),unlit,"morgue",unfilled
 #The altar of the unknown god
 MONSTER:'&',"priest of an unknown god",(35,10)
 ALTAR:(35,10),noalign,altar
+
+#Dolls
+MONSTER:'\'',"living doll",(35,10)
+
 # Stairs and Branch
 #STAIR:(05,17),down
 #STAIR:(72,02),up
