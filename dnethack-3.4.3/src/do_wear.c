@@ -2206,6 +2206,10 @@ int base_uac()
 {
 	int dexbonus = 0;
 	int uac = mons[u.umonnum].ac;
+	
+	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
+		uac += 6;
+	}
 
 	if(uwep){
 		if((is_rapier(uwep) && arti_shining(uwep)) || 
@@ -2380,6 +2384,10 @@ int base_udr()
 {
 	int udr = 0;
 
+	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
+		udr += 3;
+	}
+	
 	if(uwep){
 		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) udr += max((uwep->spe)/2,0);
 	}
@@ -2510,6 +2518,9 @@ lowertorso:
 				armdr += arm_dr_bonus(uarmh);
 				if(magr) armdr += properties_dr(uarmh, agralign, agrmoral);
 			}
+			if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
+				udr += 3;
+			}
 			udr += (u.uvaul+4)/5;
 			armdr += clkdr;
 		break;
@@ -2534,6 +2545,9 @@ boot_hit:
 				if(magr) armdr += properties_dr(uarmg, agralign, agrmoral);
 			} else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
 				armdr += max( 1 + (uwep->spe+1)/2,0);
+			}
+			if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
+				udr += 3;
 			}
 			udr += (u.uvaul+2)/5;
 		break;
