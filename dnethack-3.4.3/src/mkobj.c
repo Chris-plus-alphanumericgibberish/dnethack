@@ -1892,7 +1892,7 @@ struct obj* obj;
 	/* randomized materials */
 	random_mat_list = material_list(obj);
 	if (random_mat_list) {
-		int i = rnd(100);
+		int i = rnd(1000);
 		while (i > 0) {
 			if (i <= random_mat_list->iprob)
 				break;
