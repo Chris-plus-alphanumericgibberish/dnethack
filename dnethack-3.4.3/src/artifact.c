@@ -9424,7 +9424,7 @@ read_lost(VOID_ARGS)
 		if(artiptr->ovar1 & putativeSeal){
 			losexp("getting lost in a book",TRUE,TRUE,TRUE);
 			if(rn2(100) < u.usanity)
-				change_usanity(1);
+				change_usanity(-1);
 		} else {
 			u.sealsKnown |= putativeSeal;
 			artiptr->ovar1 |= putativeSeal;
