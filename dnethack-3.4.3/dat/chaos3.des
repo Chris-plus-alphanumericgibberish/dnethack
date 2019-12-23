@@ -1455,7 +1455,7 @@ NOMAP
 #Lava pool
 
 STAIR:(00,00,75,20),(30,00,45,20),up
-STAIR:(30,00,45,20),(30,03,45,18),down
+STAIR:(30,00,45,20),(33,03,42,17),down
 
 MONSTER: 'E', "fire elemental", random
 MONSTER: 'E', "fire elemental", random
