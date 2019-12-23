@@ -10,10 +10,17 @@
 # endif
 #endif
 
+#define 	BLESS_CURSES	1
+#define 	BLESS_LUCK		2
+#define 	BLESS_WEP		3
+#define 	UNSTERILIZE		5
+#define 	SANCTIFY_WEP	4
+
 #ifdef OVLB
 
 static const char *FDECL(DantalionRace,(int));
 int FDECL(dobinding,(int, int));
+static int NDECL(doblessmenu);
 
 static const char tools[] = { TOOL_CLASS, 0 };
 
@@ -2739,6 +2746,124 @@ int dz;
 				return 1;
 			}
 		}
+	}
+	
+	if(mtmp && mtmp->data->msound == MS_UNCURSE){
+		int gold, blessing;
+#ifndef GOLDOBJ
+		gold = u.ugold;
+#else
+		gold = money_cnt(invent);
+#endif
+		blessing = doblessmenu();
+		if(blessing){
+			struct obj *optr;
+			int cost;
+			switch(blessing){
+				case BLESS_CURSES:
+					cost = 7;
+					if(gold < cost){
+						pline("Not enough gold!");
+						return 0;
+					}
+					if(yn("That costs 7 gold.  Pay?") != 'y'){
+						return 0;
+					}
+#ifndef GOLDOBJ
+					u.ugold -= cost;
+#else
+					money2none(cost);
+#endif
+					if (Hallucination)
+						You_feel("in touch with the Universal Oneness.");
+					else
+						You_feel("like someone is helping you.");
+					for (optr = invent; optr; optr = optr->nobj) {
+						uncurse(optr);
+					}
+					if(Punished) unpunish();
+				break;
+				case BLESS_LUCK:
+					cost = 70;
+					if(gold < cost){
+						pline("Not enough gold!");
+						return 0;
+					}
+					if(yn("That costs 70 gold.  Pay?") != 'y'){
+						return 0;
+					}
+#ifndef GOLDOBJ
+					u.ugold -= cost;
+#else
+					money2none(cost);
+#endif
+					change_luck(2*LUCKMAX);
+				break;
+				case BLESS_WEP:
+					cost = 700;
+					if(gold < cost){
+						pline("Not enough gold!");
+						return 0;
+					}
+					if(yn("That costs 700 gold.  Pay?") != 'y'){
+						return 0;
+					}
+					if(!uwep){
+						impossible("Your weapon vanished between the menu and the blessing?");
+					}
+#ifndef GOLDOBJ
+					u.ugold -= cost;
+#else
+					money2none(cost);
+#endif
+					bless(uwep);
+					if(uwep->spe < 3)
+						uwep->spe++;
+				break;
+				case UNSTERILIZE:
+					cost = 7000;
+					if(gold < cost){
+						pline("Not enough gold!");
+						return 0;
+					}
+					if(yn("That costs 7,000 gold.  Pay?") != 'y'){
+						return 0;
+					}
+#ifndef GOLDOBJ
+					u.ugold -= cost;
+#else
+					money2none(cost);
+#endif
+					HSterile = 0L;
+				break;
+				case SANCTIFY_WEP:
+					cost = 70000;
+					if(gold < cost){
+						pline("Not enough gold!");
+						return 0;
+					}
+					if(yn("That costs 70,000 gold.  Pay?") != 'y'){
+						return 0;
+					}
+					if(!uwep){
+						impossible("Your weapon vanished between the menu and the blessing?");
+					}
+#ifndef GOLDOBJ
+					u.ugold -= cost;
+#else
+					money2none(cost);
+#endif
+					bless(uwep);
+					uwep->oproperties |= OPROP_HOLYW;
+					if(uwep->spe < 3)
+						uwep->spe = 3;
+					mongone(mtmp);
+				break;
+			}
+			update_inventory();
+			return 1;
+		}
+		return 0;
 	}
 	
     if ( (!mtmp || mtmp->mundetected ||
@@ -5899,6 +6024,72 @@ const char* msg;
 }
 
 #endif /* USER_SOUNDS */
+
+STATIC_OVL int
+doblessmenu()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Ask for blessing?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	incntlet = 'a';
+	
+	Sprintf(buf, "Drive out curses");
+	any.a_int = BLESS_CURSES;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	incntlet++;
+	
+	Sprintf(buf, "Blessing of good fortune");
+	any.a_int = BLESS_LUCK;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	incntlet++;
+	
+	if(uwep){
+		Sprintf(buf, "Bless wielded item");
+		any.a_int = BLESS_WEP;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	if(Sterile){
+		Sprintf(buf, "Lift sterility curse");
+		any.a_int = UNSTERILIZE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	if(uwep && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_HOLYW)){
+		Sprintf(buf, "Sanctify your weapon");
+		any.a_int = SANCTIFY_WEP;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	
+	end_menu(tmpwin, "Select blessing");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? (int)selected[0].item.a_int : 0;
+}
 
 #endif /* OVLB */
 
