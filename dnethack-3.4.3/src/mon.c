@@ -6131,6 +6131,7 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 {
 	int mhp, hpn, hpd;
 	int mndx, tryct;
+	int faceless = 0;
 	struct permonst *olddata = mtmp->data;
 	char oldname[BUFSZ];
 	
@@ -6224,11 +6225,15 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	/* take on the new form... */
 	set_mon_data(mtmp, mdat, 0);
 
-	if (emits_light(olddata) != emits_light_mon(mtmp)) {
+	if (emits_light(olddata) != emits_light_mon(mtmp)
+		|| olddata == &mons[PM_MASKED_QUEEN]
+	) {
 	    /* used to give light, now doesn't, or vice versa,
 	       or light's range has changed */
 	    if (emits_light(olddata) || mtmp->mfaction == ILLUMINATED)
-		del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
+			del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
+		if(olddata == &mons[PM_MASKED_QUEEN])
+			mtmp->mfaction = ILLUMINATED;
 	    if (emits_light_mon(mtmp))
 		new_light_source(mtmp->mx, mtmp->my, emits_light_mon(mtmp),
 				 LS_MONSTER, (genericptr_t)mtmp);
