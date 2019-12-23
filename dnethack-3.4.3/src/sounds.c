@@ -390,7 +390,7 @@ int
 active_glyph(thought)
 long int thought;
 {
-	int insightlevel = 0, sanlevel = 100;
+	int insightlevel = 0, sanlevel = 0;
 	if(!(u.thoughts&thought))
 		return 0;
 	switch(thought){
@@ -414,11 +414,9 @@ long int thought;
 		break;
 		case BLOOD_RAPTURE:
 			insightlevel = 14;
-			sanlevel = 90;
 		break;
 		case CLAWMARK:
 			insightlevel = 16;
-			sanlevel = 90;
 		break;
 		case CLEAR_DEEPS:
 			insightlevel = 10;
@@ -431,7 +429,6 @@ long int thought;
 		break;
 		case CORRUPTION:
 			insightlevel = 15;
-			sanlevel = 80;
 		break;
 		case EYE_THOUGHT:
 			insightlevel = 17;
@@ -444,14 +441,12 @@ long int thought;
 		break;
 		case IMPURITY:
 			insightlevel = 5;
-			sanlevel = 80;
 		break;
 		case MOON:
 			insightlevel = 10;
 		break;
 		case WRITHE:
 			insightlevel = 14;
-			sanlevel = 90;
 		break;
 		case RADIANCE:
 			insightlevel = 12;
@@ -461,7 +456,7 @@ long int thought;
 			return 0;
 		break;
 	}
-	if(u.uinsight >= insightlevel)
+	if(u.uinsight >= insightlevel && u.usanity <= sanlevel)
 		return 1;
 	else return 0;
 	return 0;
