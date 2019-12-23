@@ -4439,6 +4439,9 @@ typfnd:
 		typ == RED_EYED_VIBROSWORD ||
 		typ == SEISMIC_HAMMER ||
 		typ == FORCE_PIKE ||
+		typ == DOUBLE_FORCE_BLADE ||
+		typ == FORCE_BLADE ||
+		typ == FORCE_SWORD ||
 		typ == WHITE_VIBROSPEAR ||
 		typ == GOLD_BLADED_VIBROSPEAR ||
 		(typ >= PISTOL && typ <= RAYGUN) ||
