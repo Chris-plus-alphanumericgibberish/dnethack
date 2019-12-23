@@ -862,6 +862,7 @@ struct attack *uattk;
 			)
 			    && !(u.uswallow && mon == u.ustuck)
 			    && !mindless_mon(mon)
+			    && !(mon->data == &mons[PM_ASPECT_OF_THE_SILENCE])
 		) {
 		    /* maybe should regurgitate if swallowed? */
 		    if(!rn2(3)) {
