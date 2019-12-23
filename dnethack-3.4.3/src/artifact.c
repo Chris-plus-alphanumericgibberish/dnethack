@@ -9886,7 +9886,7 @@ mind_blast_items()
 
 	for (obj = fobj; obj; obj = nobj) {
 		nobj = obj->nobj;
-		if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe) && u.uinsight > rn2(INSIGHT_RATE)){
+		if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe) && u.uinsight > rn2(INSIGHT_RATE*70)){
 		// if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe)){
 			mtmp = animate_statue(obj, obj->ox, obj->oy, ANIMATE_NORMAL, (int *) 0);
 			if(mtmp){
