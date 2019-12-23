@@ -3079,6 +3079,15 @@ struct obj *hypo;
 				(void) make_hallucinated(itimeout_incr(HHallucination,
 							   rn1(200, 600 - 300 * bcsign(amp))),
 						  TRUE, 0L);
+				//Bad drugs: inflict brain damage
+				if(amp->cursed){
+					if(u.usanity > 0)
+						change_usanity(-1);
+					if(u.uinsight > 0)
+						change_uinsight(-1);
+					exercise(A_WIS, FALSE);
+					exercise(A_INT, FALSE);
+				}
 			break;
 			case POT_HEALING:
 				You_feel("better.");
@@ -3114,6 +3123,8 @@ struct obj *hypo;
 					You("suddenly fall asleep!");
 					fall_asleep(-rn1(10, 25 - 12*bcsign(amp)), TRUE);
 				}
+				//Sedative
+				change_usanity(5 + 10*bcsign(amp));
 			break;
 			case POT_FULL_HEALING:
 				You_feel("completely healed.");
