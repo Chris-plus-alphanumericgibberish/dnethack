@@ -279,6 +279,7 @@ struct obj *corpse;
 		    mptr == &mons[PM_VLAD_THE_IMPALER] || 
 		    is_keter(mptr) || 
 		    mptr == &mons[PM_HOUND_OF_TINDALOS] || 
+		    mptr == &mons[PM_CLAIRVOYANT_CHANGED] || 
 			(mptr == &mons[PM_DREAD_SERAPH] && !(mtmp->mstrategy & STRAT_WAITFORU)) || 
 			(mptr == &mons[PM_WEEPING_ANGEL] && angelnum > 0) || 
 			(is_drow(mptr) && mtmp->mfaction == LOST_HOUSE) ||
