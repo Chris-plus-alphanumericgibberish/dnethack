@@ -2222,10 +2222,14 @@ defaultvalue:
 					int dmg = rnd(8);
 					pline("%s seems weaker.",Monnam(mon));
 					mon->mhpmax -= dmg;
+					if(mon->mhpmax < 1) mon->mhpmax = 1;
 					tmp += dmg;
+					if (!mon->m_lev) {
+						pline("%s dies!", Monnam(mon));
+						xkilled(mon,0);
+					} else
 					mon->m_lev--;
 					if(obj->spestudied>0) obj->spestudied--;
-					if(mon->mhpmax < 1) mon->mhpmax = 1;
 				}
 			}
 	    }
