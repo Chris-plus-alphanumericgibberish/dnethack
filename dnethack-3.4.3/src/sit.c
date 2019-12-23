@@ -413,6 +413,7 @@ dosit()
 			{
 				u.uevent.utook_castle = 1;
 				You_feel("worthy.");
+				return 1;
 			}
 			else if (is_prince(youracedata) || Role_if(PM_NOBLEMAN))
 				You_feel("very comfortable here.");
