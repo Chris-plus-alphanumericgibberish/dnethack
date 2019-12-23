@@ -1165,8 +1165,8 @@ int spec;
 				else bonus += rnd(u.ulevel);
 			} else {
 				if(otyp == KHAKKHARA) bonus += d(rnd(3),mon->m_lev);
-				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking,mon->m_lev);
-				else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking,mon->m_lev);
+				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,mon->m_lev);
+				else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,mon->m_lev);
 				else bonus += rnd(mon->m_lev);
 			}
 		}
@@ -1193,8 +1193,8 @@ int spec;
 			else if(otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
 				bonus += d(bdm,4); //Somewhat unholy
 			else if(otyp == KHAKKHARA) bonus += d(rnd(3)*bdm,9);
-			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking*bdm,9);
-			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking*bdm,9);
+			else if(otmp->otyp == VIPERWHIP) bonus += d((otmp->ostriking+1)*bdm,9);
+			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d((otmp->ostriking+1)*bdm,9);
 			else bonus += d(bdm, 9);
 		}
 		
