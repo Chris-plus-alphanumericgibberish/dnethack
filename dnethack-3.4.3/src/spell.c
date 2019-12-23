@@ -3580,8 +3580,11 @@ spiriteffects(power, atme)
 			if(!getdir((char *)0) || (!u.dx && !u.dy)) return 0;
 			mon = m_at(u.ux+u.dx,u.uy+u.dy);
 			if(!mon) return 0;
-			if(resists_drli(mon) || nonliving_mon(mon) || mon->m_lev > u.ulevel){
+			if(resists_drli(mon) || nonliving_mon(mon)){
 				pline("You can't swallow the soul of %s.", mon_nam(mon));
+				shieldeff(mon->mx, mon->my);
+			} else if(mon->m_lev > u.ulevel){
+				pline("%s is too powerful for you to swallow their soul.", Monnam(mon));
 				shieldeff(mon->mx, mon->my);
 			} else {
 				You("suck out %s's soul.", mon_nam(mon));
