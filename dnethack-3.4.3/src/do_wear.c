@@ -2053,7 +2053,7 @@ struct obj * otmp;
 	case ART_VESTMENT_OF_HELL:
 	case ART_WEB_OF_THE_CHOSEN:
 	case ART_CLOAK_OF_THE_CONSORT:
-		def *= 1.5;
+		def *= 2;
 		break;
 	case ART_ARMOR_OF_EREBOR:
 		def += 5;
@@ -2143,7 +2143,7 @@ struct obj * otmp;
 	case ART_VESTMENT_OF_HELL:
 	case ART_WEB_OF_THE_CHOSEN:
 	case ART_CLOAK_OF_THE_CONSORT:
-		def *= 1.5;
+		def *= 2;
 		break;
 	case ART_ARMOR_OF_EREBOR:
 		def += 5;
