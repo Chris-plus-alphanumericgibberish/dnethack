@@ -2403,7 +2403,7 @@ boolean init;
 {
 	register struct obj *otmp;
 
-	if (objtype != CORPSE && objtype != STATUE)
+	if (objtype != CORPSE && objtype != STATUE && objtype != BROKEN_ANDROID && objtype != BROKEN_GYNOID)
 	    impossible("making corpstat type %d", objtype);
 	if (x == 0 && y == 0) {		/* special case - random placement */
 		otmp = mksobj(objtype, init, FALSE);
