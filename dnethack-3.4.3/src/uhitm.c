@@ -2346,10 +2346,12 @@ defaultvalue:
 		int viperheads;
 	    if Role_if(PM_SAMURAI) {
           if(!(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_NINJA)){
-			You("dishonorably use a poisoned weapon!");
 			adjalign(-sgn(u.ualign.type)*5); //stiffer penalty
-			u.ualign.sins++;
-			u.hod++;
+			if(sgn(u.ualign.type) >= 0){
+				You("dishonorably use a poisoned weapon!");
+				u.ualign.sins++;
+				u.hod++;
+			}
           } else {
 			You("dishonorably use a poisoned weapon!");
 			adjalign(5);
