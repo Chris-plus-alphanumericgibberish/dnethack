@@ -4751,6 +4751,7 @@ wisp_shdw_dhit:
 			continue;
 			/* Not break--avoid passive attacks from enemy */
 
+		case AT_TNKR:
 		case AT_BREA:
 		case AT_BEAM:
 		case AT_SPIT:
