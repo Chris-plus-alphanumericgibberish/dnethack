@@ -1522,7 +1522,7 @@ doandroid()
 	} else if(newspeed == ANDROID_COMBO){
 		struct monst *mon;
 		int tmp, weptmp, tchtmp;
-		if(!uwep){
+		if(!uwep || (is_lightsaber(uwep) && !litsaber(uwep))){
 			static struct attack unarmedcombo[] = 
 			{
 				{AT_WEAP,AD_PHYS,0,0},
@@ -1566,6 +1566,60 @@ doandroid()
 					else {
 						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
 						hmonwith(mon, tmp, weptmp, tchtmp, unarmedcombo, 4);
+					}
+				}
+			}
+			return 1;
+		} else if(is_lightsaber(uwep) && litsaber(uwep)){ //!uwep handled above
+			static struct attack lightsabercombo[] = 
+			{
+				{AT_WEAP,AD_PHYS,0,0},
+				{AT_WEAP,AD_PHYS,0,0},
+				{0,0,0,0}
+			};
+			if(!getdir((char *)0)) return 0;
+			if(u.ustuck && u.uswallow)
+				mon = u.ustuck;
+			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+			if(fast_weapon(uwep)) youmonst.movement+=2;
+			if(!mon) dofire_core(FALSE);
+			else {
+				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+				hmonwith(mon, tmp, weptmp, tchtmp, lightsabercombo, 2);
+			}
+			u.uen--;
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
+				int a = getdir((char *)0);
+				int k;
+				if(a){
+					if(u.ustuck && u.uswallow)
+						mon = u.ustuck;
+					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+					if(fast_weapon(uwep)) youmonst.movement+=2;
+					if(!mon) dofire_core(FALSE);
+					else {
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, lightsabercombo, 1);
+					}
+				}
+				k = dokick();
+				if(a || k){
+					u.uen--;
+				} else return 1;
+			}
+			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
+				int j = jump(1);
+				int d = getdir((char *)0);
+				if(!j && !d) return 1;
+				u.uen--;
+				if(d){
+					if(u.ustuck && u.uswallow)
+						mon = u.ustuck;
+					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
+					if(!mon) dofire_core(FALSE);
+					else {
+						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
+						hmonwith(mon, tmp, weptmp, tchtmp, lightsabercombo, 2);
 					}
 				}
 			}
