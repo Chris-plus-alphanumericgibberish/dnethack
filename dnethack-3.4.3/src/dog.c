@@ -584,14 +584,19 @@ long nmv;		/* number of moves */
 	else mtmp->mspec_used -= imv;
 
 	/* reduce tameness for every 150 moves you are separated */
-	if (mtmp->mtame && !mtmp->isminion && !(EDOG(mtmp)->loyal) && !(
+	if (mtmp->mtame && !mtmp->isminion && !(EDOG(mtmp)->loyal) 
+	 && !(
 		In_quest(&u.uz) && 
 		((Is_qstart(&u.uz) && !flags.stag) || 
 		 (Is_nemesis(&u.uz) && flags.stag)) &&
-	 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
-	 !(Role_if(PM_ANACHRONONAUT) && quest_status.leader_is_dead) &&
-	 !(Role_if(PM_EXILE))
-	) && !In_sokoban(&u.uz)
+		 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
+		 !(Role_if(PM_ANACHRONONAUT) && quest_status.leader_is_dead) &&
+		 !(Role_if(PM_EXILE))
+	 )
+	 && !In_sokoban(&u.uz)
+	 && !Is_gatetown(&u.uz)
+	 && !Is_minetown_level(&u.uz)
+	 && !on_level(&u.uz, &elshava_level)
 	) {
 	    int wilder = (imv + 75) / 150;
 		if(mtmp->mwait && !EDOG(mtmp)->friend) wilder = max(0, wilder - 11);
@@ -621,7 +626,11 @@ long nmv;		/* number of moves */
 			 !(Race_if(PM_DROW) && Role_if(PM_NOBLEMAN) && !flags.initgend) &&
 			 !(Role_if(PM_ANACHRONONAUT) && quest_status.leader_is_dead) &&
 			 !(Role_if(PM_EXILE))
-			) && !In_sokoban(&u.uz)
+			)
+			 && !In_sokoban(&u.uz)
+			 && !Is_gatetown(&u.uz)
+			 && !Is_minetown_level(&u.uz)
+			 && !on_level(&u.uz, &elshava_level)
 		) {
 			if ((monstermoves > edog->hungrytime + 500 && mtmp->mhp < 3) ||
 				(monstermoves > edog->hungrytime + 750)
