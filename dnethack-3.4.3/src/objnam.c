@@ -1936,6 +1936,8 @@ register struct obj *obj;
 	return FALSE;
     else if (obj->otyp == FAKE_AMULET_OF_YENDOR && !obj->known)
 	return TRUE;		/* lie */
+    else if (obj->oclass == TILE_CLASS)
+	return FALSE;		/* what's on it is unique, not the slab itself */
     else
 	return (boolean)(objects[obj->otyp].oc_unique &&
 			 (obj->known || obj->otyp == AMULET_OF_YENDOR));
@@ -2534,6 +2536,7 @@ const char *oldstr;
 				|| !strncmp(spot, " on ", 4)
 				|| !strncmp(spot, " a la ", 6)
 				|| !strncmp(spot, " with", 5)	/* " with "? */
+				|| !strncmp(spot, " bearing", 8)	/* " bearing "- */
 				|| !strncmp(spot, " de ", 4)
 				|| !strncmp(spot, " d'", 3)
 				|| !strncmp(spot, " du ", 4)) {
