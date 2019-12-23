@@ -7290,7 +7290,7 @@ register int	mmflags;
 			} else if(ptr == &mons[PM_ECLAVDRA] || ptr == &mons[PM_AVATAR_OF_LOLTH] || is_yochlol(ptr)){
 				curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_DROW_MATRON_MOTHER]){
-				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.start_house - FIRST_FALLEN_HOUSE)+FIRST_HOUSE)%(LAST_HOUSE-FIRST_HOUSE)) : LOLTH_SYMBOL;
+				if(Race_if(PM_DROW) && !Role_if(PM_EXILE)) curhouse = (Role_if(PM_NOBLEMAN) && !flags.initgend) ? (((u.start_house-FIRST_FALLEN_HOUSE+1)%(LAST_HOUSE-FIRST_HOUSE+1))+FIRST_HOUSE) : LOLTH_SYMBOL;
 				else curhouse = LOLTH_SYMBOL;
 			} else if(ptr == &mons[PM_SEYLL_AUZKOVYN] || ptr == &mons[PM_STJARNA_ALFR]){
 				curhouse = EILISTRAEE_SYMBOL;
