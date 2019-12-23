@@ -1161,7 +1161,7 @@ boolean racialexception;
 		case W_ARMH:
 			if(mon->data == &mons[PM_CATHEZAR] && obj->otyp == CHAIN)
 				break;
-		    if (!is_helmet(obj) || ((!helm_match(mon->data,obj) || !has_head(mon->data) || obj->objsize != mon->data->msize) && !is_flimsy(obj))) continue;
+		    if (!is_helmet(obj) || ((!helm_match(mon->data,obj) || !has_head_mon(mon) || obj->objsize != mon->data->msize) && !is_flimsy(obj))) continue;
 		    /* (flimsy exception matches polyself handling) */
 		    if (has_horns(mon->data) && !is_flimsy(obj)) continue;
 		    break;
@@ -1423,7 +1423,7 @@ boolean polyspot;
 		/* flimsy test for horns matches polyself handling */
 		(!is_flimsy(otmp) || is_whirly(mon->data) || noncorporeal(mon->data))
 	) {
-		if(!has_head(mon->data) || mon->data->msize != otmp->objsize || !helm_match(mon->data,otmp) || has_horns(mon->data)
+		if(!has_head_mon(mon) || mon->data->msize != otmp->objsize || !helm_match(mon->data,otmp) || has_horns(mon->data)
 			 || is_whirly(mon->data) || noncorporeal(mon->data)
 		){
 			if (vis)
