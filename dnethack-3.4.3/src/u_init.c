@@ -792,6 +792,9 @@ static struct inv_sub { short race_pm, item_otyp, subs_otyp; } inv_subs[] = {
     { PM_CLOCKWORK_AUTOMATON,	POT_BOOZE,			POT_OIL    	  },
     // Yuki-onna substitutions
     { PM_YUKI_ONNA,           RING_MAIL,   STUDDED_LEATHER_ARMOR  },
+    // Chiropteran substitutions
+    { PM_CHIROPTERAN,           HIGH_BOOTS,   GAUNTLETS  },
+    { PM_CHIROPTERAN,           LOW_BOOTS,    GLOVES  },
     { NON_PM,	STRANGE_OBJECT,		STRANGE_OBJECT	      }
 };
 
@@ -2949,6 +2952,10 @@ register struct trobj *trop;
 			}
 			if(obj->otyp == GAUNTLETS && Role_if(PM_ANACHRONONAUT)){
 				set_material(obj, COPPER);
+			}
+			if(obj->otyp == GAUNTLETS && Race_if(PM_CHIROPTERAN)){
+				obj->obj_material = LEATHER;
+				fix_object(obj);
 			}
 			if(obj->otyp == PISTOL && Role_if(PM_ANACHRONONAUT) && Race_if(PM_DWARF)){
 				set_material(obj, MITHRIL);
