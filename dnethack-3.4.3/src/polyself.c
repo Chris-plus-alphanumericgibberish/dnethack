@@ -1994,7 +1994,7 @@ int part;
 	*clockwork_parts[] = { "arm", "photoreceptor", "face", "grasping digit",
 		"digit-tip", "foot", "manipulator", "manipulatored", "head", "leg",
 		"addled", "neck", "chassis", "toe", "doll-hair",
-		"blood", "gear", "chemoreceptor", "keyhole","mainspring","metal skin",
+		"oil", "gear", "chemoreceptor", "keyhole","mainspring","metal skin",
 		"brass structure","tick","rods","phonoreceptor","creak","bend"},
 	*jelly_parts[] = { "pseudopod", "dark spot", "front",
 		"pseudopod extension", "pseudopod extremity",
