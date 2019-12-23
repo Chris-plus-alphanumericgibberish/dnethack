@@ -1905,6 +1905,7 @@ u_init()
 	u.uen = u.uenmax;
 	u.uspellprot = 0;
 	u.usanity = 100;
+	u.umadness = 0L;
 	u.uinsight = 0;
 	u.sowdisc = 0;
 	u.voidChime = 0;

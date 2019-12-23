@@ -184,7 +184,7 @@ lookat(x, y, buf, monbuf, shapebuff)
 	bhitpos.x = x;
 	bhitpos.y = y;
 	mtmp = m_at(x,y);
-	do_halu = Hallucination || (mtmp && u.usanity < mtmp->m_san_level);
+	do_halu = Hallucination || Delusion(mtmp);
 	if (mtmp != (struct monst *) 0) {
 	    char *name, monnambuf[BUFSZ];
 	    boolean accurate = !do_halu;

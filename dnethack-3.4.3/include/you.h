@@ -531,9 +531,24 @@ struct you {
 	int 	uencouraged;/* to record the buff from tame encouragement songs */
 	int		uentangled; /* to record the otyp of an item entangling you */
 	int 	usanity;	/* to record level of sanity */
+	unsigned long long int 	umadness;	/* to afflictions */
+#define	MAD_DELUSIONS		0x00000000000000001L
+#define	MAD_REAL_DELUSIONS	0x00000000000000002L
+#define	MAD_SANCTITY		0x00000000000000004L
+#define	MAD_GLUTTONY		0x00000000000000008L
+#define	MAD_SPORES			0x00000000000000010L
+#define	MAD_FRIGOPHOBIA		0x00000000000000020L
+#define	MAD_CANNIBALISM		0x00000000000000040L
+#define	MAD_RAGE			0x00000000000000080L
+#define	MAD_				0x00000000000000100L
+#define	MAD_NUDIST			0x00000000000000200L
+#define	MAD_ENTOMOPHOBIA	0x00000000000000400L
+#define	MAD_THALASSOPHOBIA	0x00000000000000800L
+#define	MAD_2				0x00000000000001000L
+#define	MAD_TALLONS			0x00000000000002000L
+	int 	uinsight;	/* to record level of insight */
 	/*Insight rate calculation: 40: "high insight" 300: "Approximate per-turn WoYendor intervention rate" 5: "total number of harmful effects" */
 #define INSIGHT_RATE (40*300*5)
-	int 	uinsight;	/* to record level of insight */
 	uchar 	wimage;		/* to record if you have the image of a Weeping Angel in your mind */
 	int 	umorgul;	/* to record the number of morgul wounds */
 	int uinvault;
