@@ -859,10 +859,10 @@ random_special_room()
 			add_rspec_room(COCKNEST		,  9, udepth > 16 && mnotgone(PM_COCKATRICE));
 			add_rspec_room(POOLROOM		, 30, udepth > 15);
 			add_rspec_room(BARRACKS		, 18, udepth > 14 && mnotgone(PM_SOLDIER));
-			add_rspec_room(ARMORY		,  8, udepth <=14 && mnotgone(PM_RUST_MONSTER));
+			add_rspec_room(ARMORY		,  8, udepth <=14 && udepth > 1 && mnotgone(PM_RUST_MONSTER));
 			add_rspec_room(MORGUE		, 10, udepth > 11);
 			add_rspec_room(LEPREHALL	, 10, udepth >  4 && mnotgone(PM_LEPRECHAUN));
-			add_rspec_room(STATUEGRDN	,  2, udepth >  1);
+			add_rspec_room(STATUEGRDN	,  2, udepth >  2);
 			add_rspec_room(TEMPLE		,  5, !level.flags.has_temple);
 			add_rspec_room(SHOPBASE		,  5, TRUE);
 			add_rspec_room(0			, 50, TRUE);
