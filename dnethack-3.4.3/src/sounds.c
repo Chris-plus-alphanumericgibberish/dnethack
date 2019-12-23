@@ -193,8 +193,9 @@ int
 count_glyphs(){
 	int i, count = 0;
 	for(i=0; i<32;i++){
-		if(((u.thoughts>>i)&1) == 1) count++;
+		if(((u.thoughts>>i)&1L) == 1L) count++;
 	}
+	return count;
 }
 
 int
