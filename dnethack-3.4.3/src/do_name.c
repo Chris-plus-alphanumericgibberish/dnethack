@@ -1496,6 +1496,7 @@ static const char * const bogusmons[] = {
 	"Euryale", "Stheno", /* Medusa's elder sisters. Oddly enough "The X" works for them,
 							as their names can be interpreted as titles. */
 	"demi lichen", "master lichen", "arch-lichen", /* lich lichens */
+	"demiwitch",
 	"priest of a well-known god", /* Not very mysterious */
 	"shallow one", /* Not very deep */
 	"fungi from your-sock", /* Not from very far away */
