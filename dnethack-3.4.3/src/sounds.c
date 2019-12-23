@@ -4021,6 +4021,7 @@ int tx,ty;
 			if(check_stinking_cloud_region((xchar)tx,(xchar)ty)
 				|| check_solid_fog_region((xchar)tx,(xchar)ty)
 				|| check_dust_cloud_region((xchar)tx,(xchar)ty)
+				|| levl[tx][ty].typ == CLOUD
 			){ 
 				You("catch a glimpse of something moving in the%s cloud....", 
 					check_solid_fog_region((xchar)tx,(xchar)ty) ? " fog" : 
