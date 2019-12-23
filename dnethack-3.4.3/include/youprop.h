@@ -494,6 +494,11 @@
 #define ESpellboost		u.uprops[SPELLBOOST].extrinsic
 #define Spellboost		(HSpellboost || ESpellboost || u.specialSealsActive&SEAL_NUDZIRATH)
 
+#define HSterile	u.uprops[STERILE].intrinsic
+#define ESterile	u.uprops[STERILE].extrinsic
+#define Sterile		(HSterile || ESterile)
+
+
 #define HFast			u.uprops[FAST].intrinsic
 #define EFast			u.uprops[FAST].extrinsic
 #define Fast			(HFast || EFast)

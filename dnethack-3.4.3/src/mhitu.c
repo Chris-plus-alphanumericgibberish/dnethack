@@ -5865,7 +5865,7 @@ register struct monst *mon;
 			pline("You and %s lie down together...",
 				noit_mon_nam(mon));
 		}
-		if (rn2(35) > ACURR(A_CHA) + ACURR(A_INT)) {
+		if (Sterile || rn2(35) > ACURR(A_CHA) + ACURR(A_INT)) {
 			/* Don't bother with mspec_used here... it didn't get tired! */
 			if(!uclockwork){
 				pline("%s seems to have enjoyed it more than you...",
@@ -6356,7 +6356,7 @@ struct monst *mon;
 		pline("You and %s lie down together...",
 			noit_mon_nam(mon));
 	}
-	if (rn2(139) > ACURR(A_CHA) + ACURR(A_INT)) {
+	if (Sterile || rn2(139) > ACURR(A_CHA) + ACURR(A_INT)) {
 		if(!uclockwork){
 			pline("%s seems to have enjoyed it more than you...",
 				noit_Monnam(mon));
@@ -6600,7 +6600,7 @@ struct monst *mon;
 		pline("You and %s lie down together...",
 			noit_mon_nam(mon));
 	}
-	if (rn2(139) > ACURR(A_CHA) + ACURR(A_INT)) {
+	if (Sterile || rn2(139) > ACURR(A_CHA) + ACURR(A_INT)) {
 		if(!uclockwork){
 			pline("%s seems to have enjoyed it more than you...",
 				noit_Monnam(mon));
@@ -6890,7 +6890,7 @@ register struct monst *mon;
 		pline("You and %s lie down together...",
 			noit_mon_nam(mon));
 	}
-	if (helpless || rn2(120) > ACURR(A_CHA) + ACURR(A_CON) + ACURR(A_INT)) {
+	if (Sterile || helpless || rn2(120) > ACURR(A_CHA) + ACURR(A_CON) + ACURR(A_INT)) {
 		if(!uclockwork){
 			pline("%s seems to have enjoyed it more than you...",
 				noit_Monnam(mon));
@@ -7229,7 +7229,7 @@ register struct monst *mon;
 		pline("You and %s lie down together...",
 			noit_mon_nam(mon));
 	}
-	if (helpless || rn2(120) > ACURR(A_CHA) + ACURR(A_CON) + ACURR(A_INT)) {
+	if (Sterile || helpless || rn2(120) > ACURR(A_CHA) + ACURR(A_CON) + ACURR(A_INT)) {
 		struct obj *optr;
 		if(!uclockwork){
 			pline("%s seems to have enjoyed it more than you...",
@@ -7568,7 +7568,7 @@ register struct monst *mon;
 		noit_mon_nam(mon));
 	pline("Suddenly, %s becomes violent!",
 		noit_Monnam(mon));
-	if (helpless || 25 + rn2(100) > ACURR(A_CHA) + ACURR(A_STR)) {
+	if (helpless || (25 + rn2(100)) > (ACURR(A_CHA) + ACURR(A_STR))) {
 		int turns = d(1, 4);
 		if(!helpless) You("are taken off guard!");
 		nomul(-(turns), "knocked reeling by a violent lover");
@@ -7821,7 +7821,7 @@ register struct monst *mon;
 		pline("You and %s lie down together...",
 			noit_mon_nam(mon));
 	}
-	if (rn2(35) > ACURR(A_CHA) + ACURR(A_INT)) {
+	if (Sterile || rn2(35) > (ACURR(A_CHA) + ACURR(A_INT))) {
 		/* Don't bother with mspec_used here... it didn't get tired! */
 		if(!uclockwork){
 			pline("%s seems to have enjoyed it more than you...",
@@ -8431,7 +8431,7 @@ const char *str;
 
 	if (!obj || !obj->owornmask) return;
 
-	if (helpless || rn2(60) < ACURR(A_CHA)) {
+	if (!helpless && rn2(60) < ACURR(A_CHA)) {
 		Sprintf(qbuf,"\"Shall I remove your %s, %s?\"",
 			str,
 			(!rn2(2) ? "lover" : !rn2(2) ? "dear" : "sweetheart"));
@@ -8467,7 +8467,7 @@ const char *str;
 	if (!obj || !obj->owornmask) return;
 	
 	her_strength = 25 + rn2(100);
-	if (helpless || her_strength < ACURR(A_STR)) {
+	if (!helpless && her_strength < ACURR(A_STR)) {
 		Sprintf(qbuf,"She tries to take off your %s, allow her?",
 			str);
 		if (yn(qbuf) == 'n') return;
@@ -8493,6 +8493,7 @@ const char *str;
 	Sprintf(qbuf,"She removes your %s!",
 		str);
 }
+
 STATIC_OVL void
 palemayberem(obj, str, helpless)
 register struct obj *obj;
