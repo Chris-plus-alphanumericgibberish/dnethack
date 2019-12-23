@@ -945,8 +945,9 @@ struct obj *obj;
 				"ugly");
 				vis = TRUE;
 			}
-			if (vis)
-			signs_mirror();
+			if (vis){
+				signs_mirror();
+			}
 		} else {
 			You_cant("see your %s %s.",
 				ACURR(A_CHA) > 14 ?
