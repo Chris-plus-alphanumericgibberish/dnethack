@@ -2205,7 +2205,10 @@ int agrmoral;
 int base_uac()
 {
 	int dexbonus = 0;
-	int uac = mons[u.umonnum].ac;
+	int uac = 10-mons[u.umonnum].nac;
+	
+	if(multi > 0)
+		uac-mons[u.umonnum].dac;
 	
 	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
 		uac += 6;
@@ -2480,7 +2483,8 @@ struct monst *magr;
 		case UPPER_TORSO_DR:
 uppertorso:
 			//Note: upper body (shirt plus torso armor)
-			if(uandroid) udr += 6; /*thick chest armor*/
+			if(!Race_if(PM_HALF_DRAGON))
+				udr += youracedata->bdr;
 			if (uarmu){
 				if(uarmu->otyp != BODYGLOVE){
 					armdr += arm_dr_bonus(uarmu);
@@ -2501,8 +2505,9 @@ lowertorso:
 				armdr += max( 1 + (uwep->spe+1)/2,0);
 			}
 			//Lower body SPECIFIC modifiers
-			if (slot != UPPER_TORSO_DR){
-				if(uandroid) udr += 3; /*flexible torso armor*/
+			if (slot == LOWER_TORSO_DR){
+				if(!Race_if(PM_HALF_DRAGON))
+					udr += youracedata->ldr;
 				if(uarmu && (uarmu->otyp == BLACK_DRESS || uarmu->otyp == VICTORIAN_UNDERWEAR)){
 					armdr += arm_dr_bonus(uarmu);
 					if(magr) armdr += properties_dr(uarmu, agralign, agrmoral);
@@ -2512,8 +2517,12 @@ lowertorso:
 			armdr += clkdr;
 		break;
 		case HEAD_DR:
-			if(!has_head(youracedata)) goto uppertorso;
-			if(uandroid) udr += 6; /*thick cranial armor*/
+			if(!has_head(youracedata)){
+				slot = UPPER_TORSO_DR;
+				goto uppertorso;
+			}
+			if(!Race_if(PM_HALF_DRAGON))
+				udr += youracedata->hdr;
 			if (uarmh){
 				armdr += arm_dr_bonus(uarmh);
 				if(magr) armdr += properties_dr(uarmh, agralign, agrmoral);
@@ -2526,8 +2535,12 @@ lowertorso:
 		break;
 		case LEG_DR:
 boot_hit:
-			if(!can_wear_boots(youracedata)) goto lowertorso;
-			if(uandroid) udr += 3; /*thinner leg armor*/
+			if(!can_wear_boots(youracedata)){
+				slot = LOWER_TORSO_DR;
+				goto lowertorso;
+			}
+			if(!Race_if(PM_HALF_DRAGON))
+				udr += youracedata->fdr;
 			if (uarmf){
 				armdr += arm_dr_bonus(uarmf);
 				if(magr) armdr += properties_dr(uarmf, agralign, agrmoral);
@@ -2538,8 +2551,12 @@ boot_hit:
 			armdr += clkdr;
 		break;
 		case ARM_DR:
-			if(!can_wear_gloves(youracedata)) goto uppertorso;
-			if(uandroid) udr += 3; /*thinner arm armor*/
+			if(!can_wear_gloves(youracedata)){
+				slot = UPPER_TORSO_DR;
+				goto uppertorso;
+			}
+			if(!Race_if(PM_HALF_DRAGON))
+				udr += youracedata->gdr;
 			if (uarmg){
 				armdr += arm_dr_bonus(uarmg);
 				if(magr) armdr += properties_dr(uarmg, agralign, agrmoral);

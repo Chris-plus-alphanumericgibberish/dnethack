@@ -135,8 +135,9 @@ ptrexperience(ptr)	/* return # of exp points for mtmp after nk killed */
 
 	tmp = 1 + ptr->mlevel * ptr->mlevel;
 
+	tmp2 = 10-(ptr->nac+ptr->dac+ptr->pac);
 /*	For higher ac values, give extra experience */
-	if ((i = ptr->ac) < 3) tmp += (7 - i) * ((i < 0) ? 2 : 1);
+	if ((i = tmp2) < 3) tmp += (7 - i) * ((i < 0) ? 2 : 1);
 
 /*	For very fast monsters, give extra experience */
 	if (ptr->mmove > NORMAL_SPEED)

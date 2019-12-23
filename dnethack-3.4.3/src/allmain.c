@@ -2651,7 +2651,7 @@ printMons(){
 			Sprintf(eos(pbuf)," |level=%d\n", mons[i].mlevel);
 			Sprintf(eos(pbuf)," |experience=%d\n", ptrexperience(ptr));
 			Sprintf(eos(pbuf)," |speed=%d\n", mons[i].mmove);
-			Sprintf(eos(pbuf)," |AC=%d\n", mons[i].ac);
+			Sprintf(eos(pbuf)," |AC=%d\n", 10-(mons[i].nac+mons[i].dac+mons[i].pac));
 			Sprintf(eos(pbuf)," |MR=%d\n", mons[i].mr);
 			Sprintf(eos(pbuf)," |align=%d\n", mons[i].maligntyp);
 			Sprintf(eos(pbuf)," |frequency=%d\n", (int)(mons[i].geno & G_FREQ));

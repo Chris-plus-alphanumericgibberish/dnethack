@@ -663,7 +663,13 @@ int
 base_mac(mon)
 struct monst *mon;
 {
-	int base = mon->data->ac, armac = 0;
+	int base = 10, armac = 0;
+	
+	base -= mon->data->nac;
+	if(!helpless(mon))
+		base -= mon->data->dac;
+	if(!mon->mcan)
+		base -= mon->data->pac;
 	
 	if(mon->data == &mons[PM_ASMODEUS] && base < -9) base = -9 + MONSTER_AC_VALUE(base+9);
 	else if(mon->data == &mons[PM_PALE_NIGHT] && base < -6) base = -6 + MONSTER_AC_VALUE(base+6);
@@ -772,8 +778,13 @@ full_mac(mon)
 struct monst *mon;
 {
 	struct obj *obj;
-	int base = mon->data->ac, armac = 0;
+	int base = 10, armac = 0;
 	long mwflags = mon->misc_worn_check;
+	base -= mon->data->nac;
+	if(!helpless(mon))
+		base -= mon->data->dac;
+	if(!mon->mcan)
+		base -= mon->data->pac;
 	
 	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
 		base -= u.chokhmah;
@@ -884,23 +895,7 @@ struct monst *mon;
 		if(mon->mvar2 & 0x4L) base = +125; //Fully Quantum Locked
 		if(mon->mvar2 & 0x2L) base = +5; //Partial Quantum Lock
 	}
-	if(mon->data == &mons[PM_SON_OF_TYPHON]){
-		base += 5;
-	}
-	if(mon->data == &mons[PM_CLOCKWORK_AUTOMATON]){
-		base += 1;
-	}
-	if(mon->data == &mons[PM_ANDROID] 
-	|| mon->data == &mons[PM_GYNOID]
-	|| mon->data == &mons[PM_FLAYED_ANDROID]
-	|| mon->data == &mons[PM_MUMMIFIED_ANDROID]
-	){
-		base += 6;
-	}
-	if(is_true_dragon(mon->data)){
-		base += 5;
-	}
-	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
+	else if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
 		base += 10;
 	
 	if(mon->mfaction == ZOMBIFIED) base += 2;
@@ -955,6 +950,7 @@ struct monst *magr;
 		if(armac < 0) armac *= -1;
 	} else {
 		struct obj *curarm;
+		int slot;
 		
 		if (which_armor(mon, W_ARMC)){
 			curarm = which_armor(mon, W_ARMC);
@@ -975,10 +971,12 @@ struct monst *magr;
 			if(magr) armac += properties_dr(curarm, agralign, agrmoral);
 		}
 		//Note: Bias this somehow?
-		switch(rn2(5)){
-			case 0:
+		slot = rn2(5);
+		switch(slot){
+			case UPPER_TORSO_DR:
 mon_uppertorso:
 				//Note: upper body (shirt plus torso armor)
+				base += mon->data->bdr;
 				if (which_armor(mon, W_ARMU)){
 					curarm = which_armor(mon, W_ARMU);
 					if(curarm->otyp != BODYGLOVE){
@@ -986,7 +984,7 @@ mon_uppertorso:
 						if(magr) armac += properties_dr(curarm, agralign, agrmoral);
 					}
 				}
-			case 1:
+			case LOWER_TORSO_DR:
 mon_lowertorso:
 				//Note: lower body (torso armor only)
 				if (which_armor(mon, W_ARM)){
@@ -998,17 +996,25 @@ mon_lowertorso:
 				} else if(MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_TENSA_ZANGETSU){
 					armac += max( 1 + (MON_WEP(mon)->spe+1)/2,0);
 				}
-				if (which_armor(mon, W_ARMU)){
-					curarm = which_armor(mon, W_ARMU);
-					if(curarm->otyp == BLACK_DRESS || curarm->otyp == VICTORIAN_UNDERWEAR){
-						armac += arm_dr_bonus(curarm);
-						if(magr) armac += properties_dr(curarm, agralign, agrmoral);
+				armac += clkdr;
+				//Lower body SPECIFIC modifiers
+				if(slot == LOWER_TORSO_DR){
+					base += mon->data->ldr;
+					if (which_armor(mon, W_ARMU)){
+						curarm = which_armor(mon, W_ARMU);
+						if(curarm->otyp == BLACK_DRESS || curarm->otyp == VICTORIAN_UNDERWEAR){
+							armac += arm_dr_bonus(curarm);
+							if(magr) armac += properties_dr(curarm, agralign, agrmoral);
+						}
 					}
 				}
-				armac += clkdr;
 			break;
-			case 2:
-				if(!has_head(mon->data)) goto mon_uppertorso;
+			case HEAD_DR:
+				if(!has_head_mon(mon)){
+					slot = UPPER_TORSO_DR;
+					goto mon_uppertorso;
+				}
+				base += mon->data->hdr;
 				if (which_armor(mon, W_ARMH)){
 					curarm = which_armor(mon, W_ARMH);
 					armac += arm_dr_bonus(curarm);
@@ -1016,8 +1022,12 @@ mon_lowertorso:
 				}
 				armac += clkdr;
 			break;
-			case 3:
-				if(!can_wear_boots(mon->data)) goto mon_lowertorso;
+			case LEG_DR:
+				if(!can_wear_boots(mon->data)){
+					slot = LOWER_TORSO_DR;
+					goto mon_lowertorso;
+				}
+				base += mon->data->fdr;
 				if (which_armor(mon, W_ARMF)){
 					curarm = which_armor(mon, W_ARMF);
 					armac += arm_dr_bonus(curarm);
@@ -1027,8 +1037,12 @@ mon_lowertorso:
 				}
 				armac += clkdr;
 			break;
-			case 4:
-				if(!can_wear_gloves(mon->data)) goto mon_uppertorso;
+			case ARM_DR:
+				if(!can_wear_gloves(mon->data)){
+					slot = UPPER_TORSO_DR;
+					goto mon_uppertorso;
+				}
+				base += mon->data->gdr;
 				if (which_armor(mon, W_ARMG)){
 					curarm = which_armor(mon, W_ARMG);
 					armac += arm_dr_bonus(curarm);

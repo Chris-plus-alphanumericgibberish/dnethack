@@ -2097,7 +2097,8 @@ get_description_of_monster_type(struct monst * mtmp, char * description)
 		if (iflags.pokedex & POKEDEX_SHOW_STATS){
 			strcat(description, "Base statistics of this monster type:");
 			strcat(description, "\n");
-			int ac = ptr->ac + (mtmp->mfaction == CRYSTALFIED ? -16 : mtmp->mfaction == SKELIFIED ? -6 : mtmp->mfaction == ZOMBIFIED ? -2 : 0);
+			int ac = 10-(ptr->nac+ptr->dac+ptr->pac);
+			ac += (mtmp->mfaction == CRYSTALFIED ? -16 : mtmp->mfaction == SKELIFIED ? -6 : mtmp->mfaction == ZOMBIFIED ? -2 : 0);
 			sprintf(temp_buf, "Base level = %d. Difficulty = %d. AC = %d. MR = %d. Alignment %d. ", ptr->mlevel, monstr[monsndx(ptr)], ac, ptr->mr, ptr->maligntyp);
 			strcat(description, temp_buf);
 			temp_buf[0] = '\0';

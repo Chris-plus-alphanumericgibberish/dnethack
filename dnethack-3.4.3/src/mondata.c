@@ -1027,11 +1027,12 @@ struct permonst *ptr;
 	if (ranged_attk(ptr)) n++;
 
 	/*	For higher ac values */
-	n += (ptr->ac < 4);
-	n += (ptr->ac < 0);
-	n += (ptr->ac < -5);
-	n += (ptr->ac < -10);
-	n += (ptr->ac < -20);
+	tmp2 = 10-(ptr->nac+ptr->dac+ptr->pac);
+	n += (tmp2 < 4);
+	n += (tmp2 < 0);
+	n += (tmp2 < -5);
+	n += (tmp2 < -10);
+	n += (tmp2 < -20);
 
 	/*	For very fast monsters */
 	n += (ptr->mmove >= 18);

@@ -70,7 +70,16 @@ struct permonst {
 	char		mlet;			/* symbol */
 	schar		mlevel,			/* base monster level */
 			mmove,			/* move speed */
-			ac,			/* (base) armor class */
+			nac,				/* Natural-armor AC */
+			dac,			/* Dodge AC */
+			pac,			/* Protection AC*/
+			
+			/* (base) dr values for head/body/gloves/legs/feet */
+			hdr,
+			bdr,
+			gdr,
+			ldr,
+			fdr, 
 			mr;			/* (base) magic resistance */
 	aligntyp	maligntyp;		/* basic monster alignment */
 	unsigned short	geno;			/* creation/geno mask value */
