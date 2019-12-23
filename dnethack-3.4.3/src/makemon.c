@@ -7159,6 +7159,9 @@ register int	mmflags;
 	mtmp->m_san_level = max(1, (int)(sanlev*100));
 	mtmp->m_insight_level = 0;
 	
+	if(mtmp->data == &mons[PM_LIVING_DOLL] || mtmp->data->msound == MS_GLYPHS)
+		mtmp->m_san_level = 1;
+		
 	if(mtmp->data == &mons[PM_LURKING_ONE])
 		mtmp->m_insight_level = 20+rn2(21);
 	else if(mtmp->data == &mons[PM_BLASPHEMOUS_LURKER])
