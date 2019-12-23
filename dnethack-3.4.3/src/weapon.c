@@ -610,10 +610,15 @@ int otyp;
 	if (obj && (otyp == LIGHTSABER || otyp == BEAMSWORD || otyp == DOUBLE_LIGHTSABER) && !litsaber(obj))
 	{
 		spe_mult = 1;
-		ocaa = AT_NONE;
-		ocad = AD_PHYS;
-		ocn = 1;
-		ocd = 2;
+		if(obj->oartifact == ART_FLUORITE_OCTAHEDRON){
+			ocn = 1;
+			ocd = 8;
+		} else {
+			ocaa = AT_NONE;
+			ocad = AD_PHYS;
+			ocn = 1;
+			ocd = 2;
+		}
 		bonaa = AT_NONE;
 		bonad = AD_PHYS;
 		bonn = 0;
