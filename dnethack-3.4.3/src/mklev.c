@@ -1381,7 +1381,7 @@ mineralize()
 	gemprob = goldprob / 4;
 	silverprob = gemprob * 2;
 	fossilprob = gemprob / 2;
-	darkprob = gemprob / 10;
+	darkprob = gemprob / 5;
 
 	/* mines have ***MORE*** goodies - otherwise why mine? */
 	if (In_mines_quest(&u.uz)) {
