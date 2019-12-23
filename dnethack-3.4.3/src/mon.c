@@ -2128,6 +2128,13 @@ movemon()
 			set_malign(mtmp);
 		}
 	}
+	if(mtmp->data->msound == MS_GLYPHS){
+		if(!mtmp->mpeaceful && mtmp->mhp >= mtmp->mhpmax && mtmp->m_lev >= mtmp->data->mlevel-1){
+			pline("%s calms down...", Amonnam(mtmp));
+			mtmp->mpeaceful = 1;
+			set_malign(mtmp);
+		}
+	}
 	if(mtmp->data == &mons[PM_DREAD_SERAPH] && 
 		mtmp->mhp == mtmp->mhpmax && 
 		!(mtmp->mstrategy&STRAT_WAITMASK) && 
