@@ -334,12 +334,12 @@ androidUpkeep()
 		}
 		//Exceeding operational time
 		static char fatigue_warning = 0;
-		if(moves >= u.nextsleep+700 && u.uen > 10 && !fatigue_warning){
+		if(moves >= u.nextsleep+1400 && u.uen > 10 && !fatigue_warning){
 			fatigue_warning = 1;
 			You_feel("fatigued.");
 		}
 		static char e_fatigued = 0;
-		if(moves >= u.nextsleep+700 && u.uen > 1 && u.uen <= 10 && !e_fatigued){
+		if(moves >= u.nextsleep+1400 && u.uen > 1 && u.uen <= 10 && !e_fatigued){
 			e_fatigued = 1;
 			You_feel("extremely fatigued.");
 		}
@@ -348,7 +348,7 @@ androidUpkeep()
 			pass_warning = 1;
 			You_feel("like you're about to pass out.");
 		}
-		if(moves > u.nextsleep+700 && u.uen > 0){
+		if(moves > u.nextsleep+1400 && u.uen > 0){
 			if(!(moves%20)) u.uen -= 1;
 		}
 	}
