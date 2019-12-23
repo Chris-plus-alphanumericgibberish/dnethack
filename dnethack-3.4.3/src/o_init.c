@@ -590,7 +590,7 @@ find_good_iring()
     register const char *s;
     register int i = find_iring();
 	
-	if(i != RIN_HUNGER)
+	if(i != RIN_POLYMORPH)
 		return i;
 	
     for (i = RIN_ADORNMENT; i <= RIN_PROTECTION_FROM_SHAPE_CHAN; i++)
