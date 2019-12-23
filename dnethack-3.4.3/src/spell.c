@@ -3894,13 +3894,13 @@ spiriteffects(power, atme)
 			for(ttmp = ftrap; ttmp; ttmp = ttmp->ntrap) {
 				if(ttmp->ttyp == MAGIC_PORTAL) {/*may be more than one portal on some levels*/
 					du = min(du, distu(ttmp->tx, ttmp->ty));
+					if (du <= 9)
+					You_feel("%s path under your feet!", In_endgame(&u.uz) ? "the":"a");
+					else if (du <= 64)
+					You_feel("%s path nearby.", In_endgame(&u.uz) ? "the":"a");
+					else if (du <= 144)
+					You_feel("%s path in the distance.", In_endgame(&u.uz) ? "the":"a");
 				}
-				if (du <= 9)
-				You_feel("%s path under your feet!", In_endgame(&u.uz) ? "the":"a");
-				else if (du <= 64)
-				You_feel("%s path nearby.", In_endgame(&u.uz) ? "the":"a");
-				else if (du <= 144)
-				You_feel("%s path in the distance.", In_endgame(&u.uz) ? "the":"a");
 			}
 		}break;
 		case PWR_GNOSIS_PREMONITION:{
