@@ -79,7 +79,7 @@ A("Stormbringer",		RUNESWORD,			0,			0,
  *	allowing those at all causes more problems than worth the effort).
  */
 A("Vorpal Blade",		LONG_SWORD,			0,			0,
-	(SPFX_RESTR|SPFX_BEHEAD|SPFX_INHER), 0,
+	(SPFX_RESTR|SPFX_BEHEAD), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(5,1),	NO_DFNS,	NO_CARY, /*Special code in weapon.c throws an extra die, so 2d8+2 vs small, 2d12+2 vs large*/	
 	0, A_NEUTRAL, NON_PM, NON_PM, 4000L, /*Vorpal Blade also uses exploading dice (roll again if maximum number is rolled)*/
@@ -191,7 +191,7 @@ A("Werebane",			SABER, 				SILVER,		0,/*Needs encyc entry*/
 A("Giantslayer",		AXE,				0,			0,
 	(SPFX_RESTR|SPFX_CON_OR), SPFX_WARN, /* deducts move from hit giants. */
 	0 /*Monster Symbol*/, 0 /*MM*/, MT_ROCKTHROW /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_GIANT /*MA*/, 0 /*MV*/,
-	PHYS(10,20),	NO_DFNS,	NO_CARY, /* also works vs a few late game enemies, and the bonus damage aplies to all large monsters. */
+	PHYS(10,20),	NO_DFNS,	NO_CARY, /* also works vs a few late game enemies, and the bonus damage applies to all large monsters. */
 	0, A_NONE, NON_PM, NON_PM, 2000L, 	 /* also gets bonus damage, +1d4/+2d4, for d6+d4/3d4 total. */
 	0,0,0),
 
@@ -299,7 +299,7 @@ A("Rhongomyniad",			LANCE, 			0,			0,/*Needs encyc entry*/
 	0,0,0), 
 
 A("The Rod of Lordly Might", MACE, 			0,			0,/*Needs encyc entry*/
-	(SPFX_RESTR|SPFX_DEFN|SPFX_INHER), 0,
+	(SPFX_RESTR|SPFX_DEFN), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(3,0),	NO_DFNS,	NO_CARY,
 	LORDLY,	A_LAWFUL, PM_NOBLEMAN, NON_PM, 4000L, 
@@ -954,7 +954,7 @@ A("The Book of Infinite Spells", SPE_SECRETS, 			0,			0,/*Needs encyc entry*/
 	it) if you are devoutly lawful. */
 	/*Clarent has been modified to make it the Knight crowning-gift*/
 A("Clarent",			LONG_SWORD, 					0,			0,/*quote (sorta)*/
-	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR), 0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_CON_OR|SPFX_INHER), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, MB_THICK_HIDE /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	PHYS(10,20),	NO_DFNS,		NO_CARY,
 	LEADERSHIP,	A_LAWFUL, PM_KNIGHT, NON_PM, 4000L, 
