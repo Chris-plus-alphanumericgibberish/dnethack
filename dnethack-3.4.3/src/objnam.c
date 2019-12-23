@@ -4408,6 +4408,13 @@ srch:
 			*wishreturn = WISH_SUCCESS;
 		    return &zeroobj;
 		}
+		if(!BSTRCMP(bp, p-5, "cloud")) {
+		    levl[u.ux][u.uy].typ = CLOUD;
+		    pline("Cloud.");
+		    newsym(u.ux, u.uy);
+			*wishreturn = WISH_SUCCESS;
+		    return &zeroobj;
+		}
 	}
 	if (!oclass)
 	{
