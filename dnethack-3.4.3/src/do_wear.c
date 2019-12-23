@@ -2405,6 +2405,9 @@ int base_udr()
 			udr += (u.ulevel)/3;
 		else udr += (u.ulevel)/6;
 	}
+	
+	if(u.sealsActive&SEAL_ECHIDNA)
+		udr += 2;
 	if(u.specialSealsActive&SEAL_COSMOS) udr += (spiritDsize()+1)/2;
 	if(u.sealsActive&SEAL_ECHIDNA) udr += max((ACURR(A_CON)-9)/4, 0);
 	if(uclockwork) udr += (u.clockworkUpgrades&ARMOR_PLATING) ? 5 : 1; /*armor bonus for automata*/
