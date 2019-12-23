@@ -2936,13 +2936,13 @@ winid *datawin;
 		break;
 		case SYLLABLE_OF_POWER__KRAU:
 			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
-			OBJPUTSTR("Temporarily empower damaging magic to 150% of normal strength.");
-			OBJPUTSTR("Permanently spell damage bonus by 1/3rd point.");
+			OBJPUTSTR("Temporarily empower damaging magic to 150%% of normal strength.");
+			OBJPUTSTR("Permanently increases spell damage bonus by 1/3rd point.");
 		break;
 		case SYLLABLE_OF_LIFE__HOON:
 			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
 			OBJPUTSTR("Temporarily regenerate an additional 10 HP per turn.");
-			OBJPUTSTR("Permanently increase natural regeneration by 1 point per 30 turns.");
+			OBJPUTSTR("Permanently increase natural regeneration by 1 point per 90 turns.");
 		break;
 		case SYLLABLE_OF_GRACE__UUR:
 			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
@@ -2951,8 +2951,8 @@ winid *datawin;
 		break;
 		case SYLLABLE_OF_THOUGHT__NAEN:
 			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
-			OBJPUTSTR("Temporarily regenerate an additional 10 power per turn and 0% spell failure.");
-			OBJPUTSTR("Permanently increase natural power regeneration by 1 point per 30 turns.");
+			OBJPUTSTR("Temporarily regenerate an additional 10 power per turn and 0%% spell failure.");
+			OBJPUTSTR("Permanently increase natural power regeneration by 1 point per 90 turns.");
 		break;
 		case SYLLABLE_OF_SPIRIT__VAUL:
 			OBJPUTSTR("Read to gain temporary and permanent bonuses.");
@@ -2962,12 +2962,12 @@ winid *datawin;
 		case FIRST_WORD:
 			OBJPUTSTR("Read to permanently learn the First Word of Creation.");
 			OBJPUTSTR("Adds a new ability to the #monster powers menu.");
-			OBJPUTSTR("Permanently grants intrinisc flying.");
+			OBJPUTSTR("Permanently grants intrinsic flying.");
 		break;
 		case DIVIDING_WORD:
 			OBJPUTSTR("Read to permanently learn the Dividing Word of Creation.");
 			OBJPUTSTR("Adds a new ability to the #monster powers menu.");
-			OBJPUTSTR("Permanently grants intrinisc water resistance.");
+			OBJPUTSTR("Permanently grants intrinsic water resistance.");
 		break;
 		case NURTURING_WORD:
 			OBJPUTSTR("Read to permanently learn the Nurturing Word of Creation.");
