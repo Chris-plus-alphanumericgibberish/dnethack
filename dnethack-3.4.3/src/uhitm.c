@@ -1468,7 +1468,7 @@ int thrown;
 				}
 			} else {
 				warnedptr = 0;
-				if(vulnerable_mask(resistmask) && !(weaponmask|EXPLOSION))
+				if(vulnerable_mask(resistmask) && !(weaponmask&EXPLOSION))
 					tmp *= 2;
 			}
 			
