@@ -1909,30 +1909,7 @@ int thrown;
 						tmp += (newdamage - basedamage);
 						newdamage = basedamage;
 					}
-					if(obj->oartifact){
-						hittxt = artifact_hit(&youmonst, mon, obj, &newdamage, dieroll);
-						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
-						if (newdamage == 0) return TRUE; /* NOTE: ditto */
-						tmp += (newdamage - basedamage);
-						newdamage = basedamage;
-					}
-					if(obj->oproperties){
-						hittxt |= oproperty_hit(&youmonst, mon, obj, &newdamage, dieroll);
-						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
-						if (newdamage == 0) return TRUE; /* NOTE: ditto */
-						tmp += (newdamage - basedamage);
-						newdamage = basedamage;
-					}
-					if(spec_prop_otyp(obj)){
-						hittxt |= otyp_hit(&youmonst, mon, obj, &newdamage, dieroll);
-						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-							return FALSE; /* NOTE: worried this might cause crash from improperly handled arrows */
-						if (newdamage == 0) return TRUE; /* NOTE: ditto */
-						tmp += (newdamage - basedamage);
-						newdamage = basedamage;
-					}
+					//Note: obj itself was done above.
 					if(uarmh && uarmh->oartifact && uarmh->oartifact == ART_HELM_OF_THE_ARCANE_ARCHER){
 						hittxt = artifact_hit(&youmonst, mon, uarmh, &newdamage, dieroll);
 						if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
