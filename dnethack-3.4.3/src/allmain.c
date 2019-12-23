@@ -1619,7 +1619,7 @@ karemade:
 					if(u.uboiler){
 						int steam = min(10,min(u.ustove,u.uboiler));
 						lesshungry(steam);
-						u.ustove-=steam;
+						u.ustove -= min(10,u.ustove);
 						u.uboiler-=steam;
 						flags.cth_attk=TRUE;//state machine stuff.
 						create_gas_cloud(u.ux+rn2(3)-1, u.uy+rn2(3)-1, 1, rnd(3));
@@ -1636,7 +1636,7 @@ karemade:
 						flags.cth_attk=TRUE;//state machine stuff.
 						create_gas_cloud(u.ux+rn2(3)-1, u.uy+rn2(3)-1, 1, rnd(6)); //Longer-lived smoke
 						flags.cth_attk=FALSE;
-						u.ustove--;
+						u.ustove -= min(10,u.ustove);
 					}
 				} else if(u.utemp) u.utemp--;
 				if(u.utemp > BURNING_HOT){
