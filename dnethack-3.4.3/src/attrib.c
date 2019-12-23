@@ -1156,6 +1156,16 @@ int x;
 {
 	register int tmp = (u.abon.a[x] + u.atemp.a[x] + u.acurr.a[x]);
 
+	if(u.ufirst_light)
+		tmp++;
+	if(u.ufirst_sky)
+		tmp++;
+	if(u.ufirst_life)
+		tmp++;
+	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
+		tmp += 6;
+	}
+	
 	if(x ==A_CHA && uwep && uwep->oartifact == ART_SODE_NO_SHIRAYUKI){
 		tmp += uwep->spe;
 	}
