@@ -508,6 +508,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 	char sym = obj->oclass;
 	int hitu, blindinc = 0;
 	int initrange = range;
+	int accumulatedTravel = 0;
 
 	bhitpos.x = x;
 	bhitpos.y = y;
@@ -678,15 +679,23 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 		    if (MON_WEP(mon) && MON_WEP(mon)->oartifact == ART_SANSARA_MIRROR && rn2(2)){
 				dx *= -1;
 				dy *= -1;
+				accumulatedTravel += initrange - range;
+				if(accumulatedTravel < 2*initrange)
 				range = initrange;
 			} else if((singleobj->otyp == LASER_BEAM || singleobj->otyp == BLASTER_BOLT || singleobj->otyp == HEAVY_BLASTER_BOLT) && mon_reflects(mtmp, (char *)0)){
 				if(mtmp->mfaction != FRACTURED){
 					dx *= -1;
 					dy *= -1;
+					accumulatedTravel += initrange - range;
+					if(accumulatedTravel < 2*initrange)
+						range = initrange;
 				} else {
 					int i = rn2(8);
 					dx = dirx[i];
 					dy = diry[i];
+					accumulatedTravel += initrange - range;
+					if(accumulatedTravel < 2*initrange)
+						range = initrange;
 				}
 		    } else if (ohitmon(mon, mtmp, singleobj, range, verbose))
 				break;
@@ -852,10 +861,14 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 				if(uwep && is_lightsaber(uwep) && litsaber(uwep) && shienuse && getdir((char *)0) && (u.dx || u.dy)){
 					dx = u.dx;
 					dy = u.dy;
+					accumulatedTravel += initrange - range;
+					if(accumulatedTravel < 2*initrange)
 					range = initrange;
 				} else {
 					dx *= -1;
 					dy *= -1;
+					accumulatedTravel += initrange - range;
+					if(accumulatedTravel < 2*initrange)
 					range = initrange;
 				}
 			}
