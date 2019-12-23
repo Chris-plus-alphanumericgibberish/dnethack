@@ -1838,19 +1838,19 @@ int splaction;
 
 	Sprintf(buf, "Words of Power");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
-	if(splaction == SPELLMENU_DESCRIBE || (u.ufirst_light && u.ufirst_light_timeout <= moves)){
+	if(u.ufirst_light && (splaction == SPELLMENU_DESCRIBE || u.ufirst_light_timeout <= moves)){
 		Sprintf(buf, "speak the First Word");
 		any.a_int = FIRST_LIGHT+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			 'q', 0, ATR_NONE, buf, MENU_UNSELECTED);
 	}
-	if(splaction == SPELLMENU_DESCRIBE || (u.ufirst_sky && u.ufirst_sky_timeout <= moves)){
+	if(u.ufirst_sky && (splaction == SPELLMENU_DESCRIBE || u.ufirst_sky_timeout <= moves)){
 		Sprintf(buf, "speak the Dividing Word");
 		any.a_int = PART_WATER+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			 'w', 0, ATR_NONE, buf, MENU_UNSELECTED);
 	}
-	if(splaction == SPELLMENU_DESCRIBE || (u.ufirst_life && u.ufirst_life_timeout <= moves)){
+	if(u.ufirst_life && (splaction == SPELLMENU_DESCRIBE || u.ufirst_life_timeout <= moves)){
 		Sprintf(buf, "speak the Nurturing Word");
 		any.a_int = OVERGROW+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
