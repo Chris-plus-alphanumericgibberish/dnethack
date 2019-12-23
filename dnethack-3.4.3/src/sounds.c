@@ -4789,8 +4789,8 @@ int tx,ty;
 						pline("In the shadow of the white plume you see an ancient battlefield.");
 						pline("Members of every race and species you have ever seen fight in the battle,");
 						pline("some on one side, some on the other, along with many more races and species you have never seen.");
-						pline("In the heart of the conflict, a onyx skinned man drives a silver spear into the heart of a demon of wolves and spiders.");
-						pline("There is a flash, and the plume of white smoke is blown appart.");
+						pline("In the heart of the conflict, a onyx skinned man drives a metallic spear into the heart of a demon of wolves and spiders.");
+						pline("There is a flash, and the plume of white smoke is blown apart.");
 					} else {
 						pline("There is a percussion and a gust of wind.");
 					}
