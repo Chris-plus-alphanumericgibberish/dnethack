@@ -207,6 +207,7 @@ STATIC_VAR int cham_to_pm[] = {
 			 ((mon)->mfaction == TOMB_HERD) ||			\
 			 ((mon)->mfaction == YITH) ||			\
 			 ((mon)->mfaction == CRANIUM_RAT) ||			\
+			 ((mon)->mfaction == MISTWEAVER) ||			\
 			 ((mon)->zombify) ||			\
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
@@ -1405,12 +1406,12 @@ mcalcdistress()
 			if(canseemon(tmpm) && canseemon(mtmp)){
 				pline("Heat shimmer dances in the air above %s.", mon_nam(tmpm));
 				pline("%s is covered in frost!", Monnam(tmpm));
-				if(resists_cold(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				if(resists_cold(tmpm) && has_head_mon(tmpm)) pline("%s looks very surprised!", Monnam(tmpm));
 				pline("The shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
 			} else if(canseemon(tmpm)){
 				pline("Heat shimmer dances in the air above %s.", mon_nam(tmpm));
 				pline("%s is covered in frost!", Monnam(tmpm));
-				if(resists_cold(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				if(resists_cold(tmpm) && has_head_mon(tmpm)) pline("%s looks very surprised!", Monnam(tmpm));
 			} else if(canseemon(mtmp)){
 				pline("Heat shimmers are drawn into the open mouth of %s.", mon_nam(mtmp));
 			}
@@ -1523,12 +1524,12 @@ mcalcdistress()
 			if(canseemon(tmpm) && canseemon(mtmp)){
 				pline("Motes of light dance in the air above %s.", mon_nam(tmpm));
 				pline("%s suddenly seems weaker!", Monnam(tmpm));
-				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				if(resists_drain(tmpm) && has_head_mon(tmpm)) pline("%s looks very surprised!", Monnam(tmpm));
 				pline("The motes are drawn into the %s of %s.", mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
 			} else if(canseemon(tmpm)){
 				pline("Motes of light dance in the air above %s.", mon_nam(tmpm));
 				pline("%s suddenly seems weaker!", Monnam(tmpm));
-				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				if(resists_drain(tmpm) && has_head_mon(tmpm)) pline("%s looks very surprised!", Monnam(tmpm));
 			} else if(canseemon(mtmp)){
 				pline("Motes of light are drawn into the %s of %s.", mtmp->data == &mons[PM_BAALPHEGOR] ? "open mouth" : "ghostly hood", mon_nam(mtmp));
 			}
@@ -1692,7 +1693,7 @@ mcalcdistress()
 			} else if(canseemon(tmpm)){
 				pline("Some unseen virtue is drawn from %s.", mon_nam(tmpm));
 //				pline("%s suddenly seems weaker!", Monnam(tmpm));
-				if(resists_drain(tmpm) && has_head(tmpm->data)) pline("%s looks very surprised!", Monnam(tmpm));
+				if(resists_drain(tmpm) && has_head_mon(tmpm)) pline("%s looks very surprised!", Monnam(tmpm));
 			} else if(canseemon(mtmp)){
 				pline("Some unseen virtue is sucked into the open mouth of %s.", mon_nam(mtmp));
 			}

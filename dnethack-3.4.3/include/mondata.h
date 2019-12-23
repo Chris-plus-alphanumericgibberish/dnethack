@@ -103,6 +103,7 @@
 #define nofeet(ptr)			((ptr)->mflagsb & MB_NOFEET)
 #define notake(ptr)		(((ptr)->mflagst & MT_NOTAKE) != 0L)
 #define has_head(ptr)		(((ptr)->mflagsb & MB_NOHEAD) == 0L)
+#define has_head_mon(mon) ((mon)->mfaction == MISTWEAVER || has_head((mon)->data))
 #define has_horns(ptr)		(num_horns(ptr) > 0)
 #define is_whirly(ptr)		((ptr)->mlet == S_VORTEX || \
 				 (ptr) == &mons[PM_AIR_ELEMENTAL] ||\

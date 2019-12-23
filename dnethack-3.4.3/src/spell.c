@@ -2203,7 +2203,7 @@ spiriteffects(power, atme)
 				if (resists_cold(mon) || is_anhydrous(mon->data)) {	/* match effect on player */
 					shieldeff(mon->mx, mon->my);
 				} else {
-					if(rn2(10) || !has_head(mon->data)){
+					if(rn2(10) || !has_head_mon(mon)){
 						dmg = d(5,dsize);
 					} else {
 						pline("An icicle grows on %s head.", s_suffix(mon_nam(mon)));

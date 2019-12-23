@@ -3322,7 +3322,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			messaged = FALSE;
 
 		if (!youdefend) {
-			if (!has_head(mdef->data) || notonhead || u.uswallow) {
+			if (!has_head_mon(mdef) || notonhead || u.uswallow) {
 				if (youattack)
 					pline("Somehow, you miss %s wildly.",
 						mon_nam(mdef));
@@ -4311,7 +4311,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 					messaged = FALSE;
 
 				if (bigmonst(mdef->data)) {
-					if (!has_head(mdef->data) || notonhead || u.uswallow) {
+					if (!has_head_mon(mdef) || notonhead || u.uswallow) {
 						if (youattack)
 							You("slice deeply into %s!",
 								mon_nam(mdef));
@@ -4392,10 +4392,10 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						((mdef->mflee && mdef->data != &mons[PM_BANDERSNATCH]) || is_blind(mdef) || !mdef->mcanmove || !mdef->mnotlaugh || 
 							mdef->mstun || mdef->mconf || mdef->mtrapped || mdef->msleeping || (mdef->mux == 0 && mdef->muy == 0) ||
 							((mdef->mux != u.ux || mdef->muy != u.uy) && 
-								(otmp->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mdef->data) && !is_unalive(mdef->data))
+								(otmp->oartifact == ART_LIFEHUNT_SCYTHE && has_head_mon(mdef) && !is_unalive(mdef->data))
 							)
 						)
-					) && has_head(mdef->data) && dieroll == 1 && otmp == uwep
+					) && has_head_mon(mdef) && dieroll == 1 && otmp == uwep
 				) {
 					if (notonhead) {
 						pline("Somehow, you miss %s wildly.",
@@ -4435,7 +4435,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 						((mdef->mflee && mdef->data != &mons[PM_BANDERSNATCH]) || is_blind(mdef) || !mdef->mcanmove || !mdef->mnotlaugh || 
 							mdef->mstun || mdef->mconf || mdef->mtrapped || mdef->msleeping
 						)
-					) && has_head(mdef->data) && dieroll == 1
+					) && has_head_mon(mdef) && dieroll == 1
 				) {
 					if (notonhead) {
 						pline("Somehow, %s misses %s wildly.",
@@ -4497,7 +4497,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 				messaged = FALSE;
 			wepdesc = artilist[otmp->oartifact].name;
 			if (!youdefend) {
-				if (!has_head(mdef->data) || notonhead || u.uswallow) {
+				if (!has_head_mon(mdef) || notonhead || u.uswallow) {
 					if (youattack)
 						pline("Somehow, you miss %s wildly.",
 							mon_nam(mdef));

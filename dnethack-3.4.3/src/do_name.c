@@ -922,6 +922,10 @@ boolean called;
 		else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, ", vampire");
 		else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, "the Pseudonatural");
 		else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, "of the Herd");
+		else if(mtmp->mfaction == MISTWEAVER){
+			if(mtmp->female) Strcat(buf, ", Daughter of the Black Goat");
+			else Strcat(buf, ", Child of the Black Goat");
+		}
 	    return buf;
 	}
 
@@ -1000,6 +1004,10 @@ boolean called;
 				else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, ", vampire");
 				else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, "the Pseudonatural");
 				else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, "of the Herd");
+				else if(mtmp->mfaction == MISTWEAVER){
+					if(mtmp->female) Strcat(buf, ", Daughter of the Black Goat");
+					else Strcat(buf, ", Child of the Black Goat");
+				}
 			} else {
 				if(mtmp->mfaction == ZOMBIFIED) Strcat(buf, " zombie");
 				else if(mtmp->mfaction == SKELIFIED) Strcat(buf, " skeleton");
@@ -1009,6 +1017,10 @@ boolean called;
 				else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, " vampire");
 				else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, " pseudonatural");
 				else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, " herd");
+				else if(mtmp->mfaction == MISTWEAVER){
+					if(mtmp->female) Strcat(buf, " dark daughter");
+					else Strcat(buf, " dark child");
+				}
 			}
 			Sprintf(eos(buf), " called %s", name);
 			
@@ -1043,6 +1055,10 @@ boolean called;
 		else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, " vampire");
 		else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, " pseudonatural");
 		else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, " herd");
+		else if(mtmp->mfaction == MISTWEAVER){
+			if(mtmp->female) Strcat(buf, " dark daughter");
+			else Strcat(buf, " dark child");
+		}
 	    name_at_start = FALSE;
 	} else {
 	    name_at_start = (boolean)type_is_pname(mdat);
@@ -1087,6 +1103,10 @@ boolean called;
 			else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, ", vampire");
 			else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, "the Pseudonatural");
 			else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, "of the Herd");
+			else if(mtmp->mfaction == MISTWEAVER){
+				if(mtmp->female) Strcat(buf, ", Daughter of the Black Goat");
+				else Strcat(buf, ", Child of the Black Goat");
+			}
 		} else {
 			if(mtmp->mfaction == ZOMBIFIED) Strcat(buf, " zombie");
 			else if(mtmp->mfaction == SKELIFIED) Strcat(buf, " skeleton");
@@ -1096,6 +1116,10 @@ boolean called;
 			else if(mtmp->mfaction == VAMPIRIC) Strcat(buf, " vampire");
 			else if(mtmp->mfaction == PSEUDONATURAL) Strcat(buf, " pseudonatural");
 			else if(mtmp->mfaction == TOMB_HERD) Strcat(buf, " herd");
+			else if(mtmp->mfaction == MISTWEAVER){
+				if(mtmp->female) Strcat(buf, " dark daughter");
+				else Strcat(buf, " dark child");
+			}
 		}
 	}
 

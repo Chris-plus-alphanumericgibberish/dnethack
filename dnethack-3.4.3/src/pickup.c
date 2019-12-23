@@ -2586,7 +2586,7 @@ struct monst *mon;
 			} else if(is_cloak(otmp) && !(mon->misc_worn_check&W_ARMC) && (abs(otmp->objsize - mon->data->msize) <= 1)){
 				addArmorMenuOption
 			} else if(is_helmet(otmp) && !(mon->misc_worn_check&W_ARMH) && 
-				((helm_match(mon->data,otmp) && has_head(mon->data) && otmp->objsize == mon->data->msize && !has_horns(mon->data))
+				((helm_match(mon->data,otmp) && has_head_mon(mon) && otmp->objsize == mon->data->msize && !has_horns(mon->data))
 				|| is_flimsy(otmp))
 			){
 				addArmorMenuOption

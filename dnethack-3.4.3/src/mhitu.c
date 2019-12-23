@@ -419,6 +419,19 @@ struct attack *alt_attk_buf;
 			attk->damn = 15;
 		}
 	}
+	else if (mtmp->mfaction == MISTWEAVER){
+		//Note: No head
+		if (attk->aatyp == AT_BITE || attk->aatyp == AT_BUTT
+			|| (!derundspec && attk->aatyp == 0 && attk->adtyp == 0 && attk->damn == 0 && attk->damd == 0)
+			|| (!derundspec && indx == NATTK - 1)
+		){
+			derundspec = TRUE;
+			attk->aatyp = AT_TENT;
+			attk->adtyp = AD_DRST;
+			attk->damd = 4;
+			attk->damn = 4;
+		}
+	}
 	else if (mtmp->mfaction == ZOMBIFIED || mtmp->mfaction == SKELIFIED || mtmp->mfaction == CRYSTALFIED){
 		if (attk->aatyp == AT_SPIT
 			|| attk->aatyp == AT_BREA

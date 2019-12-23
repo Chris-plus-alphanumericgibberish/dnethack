@@ -207,6 +207,7 @@ struct monst {
 #define	TOMB_HERD	FACTION_PADDING+10	/* possessed statue */
 #define	YITH		FACTION_PADDING+11	/* possessed by the great race of yith */
 #define	CRANIUM_RAT	FACTION_PADDING+12	/* psychic rat */
+#define	MISTWEAVER	FACTION_PADDING+13	/* daughters of shubie */
 //define	HALF_DEMON	FACTION_PADDING+1	/* half-demon */
 //define	HALF_DEVIL	FACTION_PADDING+2	/* half-devil */
 //define	HALF_DRAGON	FACTION_PADDING+3	/* half-dragon */

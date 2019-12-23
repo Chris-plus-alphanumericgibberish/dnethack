@@ -51,7 +51,7 @@ register struct obj *otmp;
     if (is_cloak(otmp) && ((abs(otmp->objsize - mtmp->data->msize) > 1)))
         return FALSE;
     
-    if (is_helmet(otmp) && (!has_head(mtmp->data) || otmp->objsize != mtmp->data->msize || !helm_match(mtmp->data,otmp)) && !is_flimsy(otmp))
+    if (is_helmet(otmp) && (!has_head_mon(mtmp) || otmp->objsize != mtmp->data->msize || !helm_match(mtmp->data,otmp)) && !is_flimsy(otmp))
         return FALSE;
     
     if (is_shield(otmp) &&

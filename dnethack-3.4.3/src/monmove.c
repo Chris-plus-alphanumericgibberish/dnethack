@@ -336,6 +336,7 @@ struct monst *mtmp;
 			mtmp->mfaction == TOMB_HERD ||
 			mtmp->mfaction == YITH ||
 			mtmp->mfaction == CRANIUM_RAT ||
+			mtmp->mfaction == MISTWEAVER ||
 			mtmp->mfaction == FRACTURED ||
 			mtmp->data == &mons[PM_GUG] ||
 			mtmp->data == &mons[PM_MIGO_WORKER] ||

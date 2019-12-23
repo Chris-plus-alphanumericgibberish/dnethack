@@ -1546,7 +1546,7 @@ int thrown;
 								(sgn(mon->mx - u.ux) != sgn(mon->mx - mon->mux)
 								&& sgn(mon->my - u.uy) != sgn(mon->my - mon->muy)) ||
 								((mon->mux != u.ux || mon->muy != u.uy) && 
-									((obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head(mon->data) && !is_unalive(mon->data))
+									((obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && has_head_mon(mon) && !is_unalive(mon->data))
 										|| distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
 								)
 						) && 
@@ -1560,7 +1560,7 @@ int thrown;
 					if((mon->mux != u.ux || mon->muy != u.uy) && distmin(u.ux, u.uy, mon->mx, mon->my) > BOLT_LIM)
 						You("snipe the flat-footed %s!", l_monnam(mon));
 					else if((mon->mux != u.ux || mon->muy != u.uy) && 
-						(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && !is_unalive(mon->data) && has_head(mon->data))
+						(obj == uwep && uwep->oartifact == ART_LIFEHUNT_SCYTHE && !is_unalive(mon->data) && has_head_mon(mon))
 					){
 						//Lifehunt scythe triggers sneak attack, but you have to actually HAVE sneak attack
 						You("strike the flat-footed %s!", l_monnam(mon));
@@ -3615,7 +3615,7 @@ register struct attack *mattk;
 			tmp += rnd(10);
 		break;
 	    case AD_DRIN:
-		if (notonhead || !has_head(mdef->data)) {
+		if (notonhead || !has_head_mon(mdef)) {
 		    pline("%s doesn't seem harmed.", Monnam(mdef));
 		    tmp = 0;
 		    if (!Unchanging && mdef->data == &mons[PM_GREEN_SLIME] && mdef->data == &mons[PM_FLUX_SLIME]) {

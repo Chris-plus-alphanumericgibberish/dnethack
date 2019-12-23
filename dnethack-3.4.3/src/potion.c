@@ -1258,7 +1258,7 @@ boolean your_fault;
 		    char *mnam = mon_nam(mon);
 		    char buf[BUFSZ];
 
-		    if(has_head(mon->data)) {
+		    if(has_head_mon(mon)) {
 			Sprintf(buf, "%s %s",
 				s_suffix(mnam),
 				(notonhead ? "body" : "head"));

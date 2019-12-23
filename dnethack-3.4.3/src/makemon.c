@@ -4376,11 +4376,15 @@ register struct monst *mtmp;
 					otmp->obj_material = BONE;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
-					otmp = mksobj(WAR_HAT, TRUE, FALSE);
-					otmp->spe = 2;
-					otmp->obj_material = BONE;
-					fix_object(otmp);
-					(void) mpickobj(mtmp, otmp);
+					if(mtmp->female && u.uinsight > (rnd(10)+rn2(11))){
+						mtmp->mfaction = MISTWEAVER;
+					} else {
+						otmp = mksobj(WAR_HAT, TRUE, FALSE);
+						otmp->spe = 2;
+						otmp->obj_material = BONE;
+						fix_object(otmp);
+						(void) mpickobj(mtmp, otmp);
+					}
 					otmp = mksobj(PLATE_MAIL, TRUE, FALSE);
 					otmp->spe = 2;
 					otmp->obj_material = BONE;
@@ -4745,6 +4749,8 @@ register struct monst *mtmp;
 						}
 					break;
 				}
+			} else if(mtmp->female && In_lost_cities(&u.uz) && u.uinsight > (rnd(10)+rn2(11))){
+				mtmp->mfaction = MISTWEAVER;
 			}
 		break;
 	    case S_CENTAUR:
@@ -4805,17 +4811,20 @@ register struct monst *mtmp;
 				m_initthrow(mtmp, CROSSBOW_BOLT, 12);
 		    }
 		}
+		if(mtmp->female && In_lost_cities(&u.uz) && u.uinsight > (rnd(10)+rn2(11))){
+			mtmp->mfaction = MISTWEAVER;
+		}
 		if(ptr == &mons[PM_MOUNTAIN_CENTAUR]){
 			chance = rnd(10);
 			if(chance == 10){
 				mongets(mtmp, CHAIN_MAIL);
-				mongets(mtmp, HELMET);
+				if(has_head_mon(mtmp)) mongets(mtmp, HELMET);
 			} else if(chance >= 7){
 				mongets(mtmp, SCALE_MAIL);
-				mongets(mtmp, HELMET);
+				if(has_head_mon(mtmp)) mongets(mtmp, HELMET);
 			} else if(chance >= 5){
 				mongets(mtmp, STUDDED_LEATHER_ARMOR);
-				mongets(mtmp, LEATHER_HELM);
+				if(has_head_mon(mtmp)) mongets(mtmp, LEATHER_HELM);
 			} else mongets(mtmp, LEATHER_ARMOR);
 		}
 		if(ptr == &mons[PM_FORMIAN_TASKMASTER]){

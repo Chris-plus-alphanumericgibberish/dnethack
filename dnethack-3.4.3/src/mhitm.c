@@ -2536,7 +2536,7 @@ physical:{
 			if(!cancelled) tmp += rnd(10);
 		break;
 	    case AD_DRIN:
-		if (notonhead || !has_head(pd)) {
+		if (notonhead || !has_head_mon(mdef)) {
 		    if (vis) pline("%s doesn't seem harmed.", Monnam(mdef));
 		    /* Not clear what to do for green slimes */
 		    tmp = 0;
