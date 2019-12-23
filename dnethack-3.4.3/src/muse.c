@@ -2705,6 +2705,12 @@ const char *str;
 			case PM_ARA_KAMEREL:
 		pline(str, s_suffix(mon_nam(mon)), "gold mirrored arcs");
 				break;
+			case PM_SUNFLOWER:
+		pline(str, s_suffix(mon_nam(mon)), "mirrored petals");
+				break;
+			case PM_MIRRORED_MOONFLOWER:
+		pline(str, s_suffix(mon_nam(mon)), "mirrored flower-bud");
+				break;
 			default:
 				impossible("Reflecting monster not listed in mon_reflects(): %s", mon_nam(mon));
 				break;
