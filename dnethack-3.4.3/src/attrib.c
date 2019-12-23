@@ -1086,8 +1086,10 @@ calc_total_maxhp()
 		rawmax = *hprolled + ulev*conplus(ACURR(A_CON));
 		
 		/*Calculate Metamorphosis *before* the max bonus is determined*/
-		if(active_glyph(CLOCKWISE_METAMORPHOSIS))
+		if(active_glyph(CLOCKWISE_METAMORPHOSIS)){
 			rawmax *= 1.3;
+			hpcap *= 1.3;
+		}
 		
 		maxbonus = hpcap - rawmax;
 		
@@ -1104,8 +1106,10 @@ calc_total_maxhp()
 	} else {
 		rawmax = *hprolled + ulev*conplus(ACURR(A_CON));
 		
-		if(active_glyph(CLOCKWISE_METAMORPHOSIS))
+		if(active_glyph(CLOCKWISE_METAMORPHOSIS)){
 			rawmax *= 1.3;
+			hpcap *= 1.3;
+		}
 		
 		if(u.uhpmultiplier)
 			rawmax = rawmax + (rawmax * u.uhpmultiplier / 10); /*Multiplier is in units of tenths*/
