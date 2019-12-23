@@ -507,15 +507,35 @@ int otyp;
 	case VIBROBLADE:			
 	case WHITE_VIBROSWORD:
 	case GOLD_BLADED_VIBROSWORD:
-	case WHITE_VIBROZANBATO:
-	case GOLD_BLADED_VIBROZANBATO:
 	case WHITE_VIBROSPEAR:
 	case GOLD_BLADED_VIBROSPEAR:
 	case FORCE_PIKE:
 	case DOUBLE_FORCE_BLADE:// external special case: wielded without twoweaponing
 	case FORCE_BLADE:
 	case FORCE_SWORD:
-								if(chrgd){ocn++;flat+=ocd/2;} break;
+								if(chrgd){
+									ocn++;
+									flat+=ocd/2;
+								} break;
+	case WHITE_VIBROZANBATO:
+	case GOLD_BLADED_VIBROZANBATO:
+								if(chrgd){
+									ocn++;
+									flat+=ocd/2;
+									if(large){
+										plus(4,6);
+										flat+=bond;
+									}
+									else {;} 
+									break;
+								}
+								else {
+									if(large){
+										plus(2,6);
+									} else {;} 
+									break;
+								}
+								break;
 	case FORCE_WHIP:
 								if(chrgd){
 									ocn++;
