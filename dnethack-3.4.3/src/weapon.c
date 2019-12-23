@@ -1191,7 +1191,7 @@ int spec;
 			else if(otmp->oartifact == ART_AMHIMITL)
 				bonus += d(3*bdm, 4); //Tyranny
 			else if(otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
-				bonus += d(bdm,4); //Somewhat unholy
+				bonus += d(2*bdm,4); //Quite unholy
 			else if(otyp == KHAKKHARA) bonus += d(rnd(3)*bdm,9);
 			else if(otmp->otyp == VIPERWHIP) bonus += d((otmp->ostriking+1)*bdm,9);
 			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d((otmp->ostriking+1)*bdm,9);
@@ -1199,7 +1199,7 @@ int spec;
 		}
 		
 		if (mon && hates_unholy_mon(mon) && otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
-			bonus += d(1, 4); // always counts as unholy regardless, but its' pretty weak
+			bonus += d(2, 4); // always counts as unholy regardless (Blood?)
 		
 		if(mon && mon->isminion){
 			if(otmp->oartifact == ART_LIFEHUNT_SCYTHE)
