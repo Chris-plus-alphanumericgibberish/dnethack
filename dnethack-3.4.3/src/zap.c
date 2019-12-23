@@ -878,7 +878,7 @@ struct monst *mon;
 	    otmp2 = otmp->nobj;
 	    if (otmp->otyp == EGG)
 		revive_egg(otmp);
-	    if (otmp->otyp != CORPSE) continue;
+	    if (otmp->otyp != CORPSE && otmp->otyp != FOSSIL) continue;
 	    /* save the name; the object is liable to go away */
 	    if (youseeit) Strcpy(corpse, corpse_xname(otmp, TRUE));
 
