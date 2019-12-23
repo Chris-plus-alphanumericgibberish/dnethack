@@ -3449,44 +3449,84 @@ register schar delta;
 	static int gcircletsa = 0;
 	if(!gcircletsa) gcircletsa = find_gcirclet();
 	
-	if (uarmg && uarmg == otmp && otmp->oartifact == ART_GAUNTLETS_OF_THE_BERSERKER) {
-		if (delta) {
-			ABON(A_DEX) += (delta);
-			ABON(A_STR) += (delta);
-			ABON(A_CON) += (delta);
-			ABON(A_INT) -= (delta);
-			ABON(A_WIS) -= (delta);
+	if (uarmh && uarmh == otmp) {
+		if(otmp->otyp == HELM_OF_BRILLIANCE){
+			if (delta) {
+				makeknown(uarmh->otyp);
+				ABON(A_INT) += (delta);
+				ABON(A_WIS) += (delta);
+				flags.botl = 1;
+			}
 		}
-		flags.botl = 1;
-	}
-	if (uarmg && uarmg == otmp && otmp->otyp == GAUNTLETS_OF_DEXTERITY) {
-		if (delta) {
-			makeknown(uarmg->otyp);
-			ABON(A_DEX) += (delta);
+		if(otmp->otyp == gcircletsa){
+			if (delta) {
+				ABON(A_CHA) += (delta);
+				flags.botl = 1;
+			}
 		}
-		flags.botl = 1;
 	}
-	if (uarmh && uarmh == otmp && otmp->otyp == HELM_OF_BRILLIANCE) {
-		if (delta) {
-			makeknown(uarmh->otyp);
-			ABON(A_INT) += (delta);
-			ABON(A_WIS) += (delta);
+	if (uarmc && uarmc == otmp) {
+		if(otmp->otyp == SMOKY_VIOLET_FACELESS_ROBE){
+			if (delta) {
+				makeknown(uarmh->otyp);
+				ABON(A_CON) += (delta);
+				ABON(A_CHA) += (delta);
+				flags.botl = 1;
+			}
 		}
-		flags.botl = 1;
 	}
-	if (uarmc && uarmc == otmp && otmp->otyp == SMOKY_VIOLET_FACELESS_ROBE) {
-		if (delta) {
-			makeknown(uarmh->otyp);
-			ABON(A_CON) += (delta);
-			ABON(A_CHA) += (delta);
+	if(uarm && uarm == otmp){
+		if(otmp->otyp == BLACK_DRESS){
+			if (delta) {
+				ABON(A_CHA) += (delta);
+				flags.botl = 1;
+			}
 		}
-		flags.botl = 1;
+		if(otmp->otyp == CONSORT_S_SUIT){
+			if (delta) {
+				ABON(A_CHA) += (delta);
+				flags.botl = 1;
+			}
+		}
+		if(otmp->otyp == NOBLE_S_DRESS || otmp->otyp == GENTLEMAN_S_SUIT){
+			if (delta) {
+				ABON(A_CHA) += 2*(delta);
+				flags.botl = 1;
+			}
+		}
 	}
-	if(uarmh && uarmh == otmp && 
-		(otmp->otyp == gcircletsa)
-	){
-		if (delta) ABON(A_CHA) += (delta);
-		flags.botl = 1;
+	if(uarmu && uarmu == otmp){
+		if(otmp->otyp == BLACK_DRESS){
+			if (delta) {
+				ABON(A_CHA) += (delta);
+				flags.botl = 1;
+			}
+		}
+		if(otmp->otyp == VICTORIAN_UNDERWEAR){
+			if (delta) {
+				ABON(A_CHA) += 2*(delta);
+				flags.botl = 1;
+			}
+		}
+	}
+	if (uarmg && uarmg == otmp) {
+		if(otmp->oartifact == ART_GAUNTLETS_OF_THE_BERSERKER){
+			if (delta) {
+				ABON(A_DEX) += (delta);
+				ABON(A_STR) += (delta);
+				ABON(A_CON) += (delta);
+				ABON(A_INT) -= (delta);
+				ABON(A_WIS) -= (delta);
+				flags.botl = 1;
+			}
+		}
+		if(otmp->otyp == GAUNTLETS_OF_DEXTERITY){
+			if (delta) {
+				makeknown(uarmg->otyp);
+				ABON(A_DEX) += (delta);
+				flags.botl = 1;
+			}
+		}
 	}
 }
 
