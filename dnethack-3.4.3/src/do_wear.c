@@ -2208,7 +2208,7 @@ int base_uac()
 	int uac = 10-mons[u.umonnum].nac;
 	
 	if(multi > 0)
-		uac-mons[u.umonnum].dac;
+		uac -= mons[u.umonnum].dac;
 	
 	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
 		uac += 6;
