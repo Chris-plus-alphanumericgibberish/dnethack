@@ -1026,7 +1026,7 @@ TOOL("upgrade kit", (char *)0,  1, 0, 0, 0,  40,100,  30, COPPER, HI_COPPER),/*N
 TOOL("power pack", "little white cube", /*Needs encyc entry*//*Needs tile*/
 								0, 1, 1, 0,   0,  1,  300, PLASTIC, CLR_WHITE),
 TOOL("trephination kit", (char *)0,  
-								1, 0, 0, 0,   0, 10,  30, METAL, HI_METAL),/*Needs encyc entry*//*Needs tile*/
+								1, 0, 0, 1,   0, 10,  30, METAL, HI_METAL),/*Needs encyc entry*//*Needs tile*/
 TOOL("tin opener", (char *)0,   1, 0, 0, 0,  20,  4,  30, IRON, HI_METAL),
 TOOL("can of grease", (char *)0,1, 0, 0, 1,  15, 15,  20, IRON, HI_METAL),
 TOOL("figurine", (char *)0,     1, 0, 1, 0,  20, 50,  80, MINERAL, HI_MINERAL),
