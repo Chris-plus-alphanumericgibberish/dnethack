@@ -339,6 +339,8 @@ WEAPON("war hammer", (char *)0,
 						/* +1 small */
 WEAPON("club", (char *)0,
 	1, 0, 0, 11, 30,  3,  6,  3, 0, B,   P_CLUB, WOOD, FALSE, HI_WOOD),
+WEAPON("clawed hand", (char *)0,
+	1, 0, 0,  0, 30, 300, 12,  6, 0, P|S,   P_CLUB, BONE, FALSE, CLR_GRAY),
 WEAPON("macuahuitl", "obsidian-edged club",
 	0, 0, 0,  0, 40, 10,  8,  6, 0, B|S,   P_CLUB, WOOD, FALSE, HI_WOOD),
 WEAPON("quarterstaff", "staff",
