@@ -3298,7 +3298,7 @@ then fill new spaces with our spawn!
  * Gnomes and Gizmos
  */
     MON("clockwork soldier", S_GNOME,//3 /*Needs encyc entry*//*Needs tile*/
-	LVL(0, 16, 10, 4, 0), (G_NOGEN|G_NOCORPSE),
+	LVL_NDR(0, 16, 8, 1, 4, 0), (G_NOGEN|G_NOCORPSE),
 	A(ATTK(AT_CLAW, AD_PHYS, 2, 8),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(100, 0, 0, MS_SILENT, MZ_TINY), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3306,7 +3306,7 @@ then fill new spaces with our spawn!
 	MB_HUMANOID /*MB*/, MG_VBLUNT|MG_NOPOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, CLR_GREEN),
     MON("clockwork dwarf", S_GNOME,//3 /*Needs encyc entry*//*Needs tile*/
-	LVL(0, 16, 10, 4, 0), (G_NOGEN|G_NOCORPSE),
+	LVL_NDR(0, 16, 8, 1, 4, 0), (G_NOGEN|G_NOCORPSE),
 	A(ATTK(AT_CLAW, AD_PHYS, 2, 6),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(90, 0, 0, MS_SILENT, MZ_TINY), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3314,7 +3314,7 @@ then fill new spaces with our spawn!
 	MB_HUMANOID /*MB*/, MG_VBLUNT|MG_NOPOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, CLR_RED),
     MON("faberge sphere", S_GNOME,//3 /*Needs encyc entry*//*Needs tile*/
-	LVL(0, 16, 10, 4, 0), (G_NOGEN|G_NOCORPSE),
+	LVL_NDR(0, 16, 8, 1, 4, 0), (G_NOGEN|G_NOCORPSE),
 	A(ATTK(AT_EXPL, AD_PHYS, 3, 6), ATTK(AT_BOOM, AD_PHYS, 3, 6),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(10, 0, 0, MS_SILENT, MZ_TINY), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3322,7 +3322,7 @@ then fill new spaces with our spawn!
 	MB_NOLIMBS|MB_NOHEAD|MB_NEUTER /*MB*/, MG_VBLUNT|MG_NOPOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, CLR_WHITE),
     MON("firework cart", S_GNOME,//3 /*Needs encyc entry*//*Needs tile*/
-	LVL(0, 18, 10, 4, 0), (G_NOGEN|G_NOCORPSE),
+	LVL_NDR(0, 18, 8, 1, 4, 0), (G_NOGEN|G_NOCORPSE),
 	A(ATTK(AT_CLAW, AD_FRWK, 2, 6), ATTK(AT_BOOM, AD_FRWK, 2, 6),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(40, 0, 0, MS_SILENT, MZ_TINY), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3354,7 +3354,7 @@ then fill new spaces with our spawn!
 	MB_FEMALE|MB_HUMANOID /*MB*/, MG_LORD|MG_NOPOLY|MG_INFRAVISIBLE /*MG*/,
 	MA_GNOME /*MA*/,  MV_LOWLIGHT2|MV_INFRAVISION /*MV*/, CLR_BLUE),
     MON("tinker gnome", S_GNOME,//5 /*Needs encyc entry*//*Needs tile*/
-	LVL(3, 6, 4, 10, 0), (G_GENO|1),
+	LVL_DEX(3, 6, 4, 10, 0), (G_GENO|1),
 	A(ATTK(AT_WEAP, AD_PHYS, 1, 6), ATTK(AT_TNKR, AD_TNKR, 0, 0),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(700, 120, 0, MS_HUMANOID, MZ_SMALL), 0, 0,
@@ -3362,7 +3362,7 @@ then fill new spaces with our spawn!
 	MB_HUMANOID /*MB*/, MG_NOPOLY|MG_INFRAVISIBLE /*MG*/,
 	MA_GNOME /*MA*/,  MV_LOWLIGHT2|MV_INFRAVISION /*MV*/, CLR_ORANGE),
     MON("gnomish wizard", S_GNOME,//5
-	LVL(3, 10, 4, 10, 0), (G_GENO|1),
+	LVL_SPE(3, 10, 4, 10, 0), (G_GENO|1),
 	A(ATTK(AT_MAGC, AD_SPEL, 0, 0),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(700, 120, 0, MS_HUMANOID, MZ_SMALL), 0, 0,
@@ -3386,7 +3386,7 @@ then fill new spaces with our spawn!
 	MB_FEMALE|MB_HUMANOID /*MB*/, MG_PRINCE|MG_NOPOLY|MG_INFRAVISIBLE /*MG*/,
 	MA_GNOME /*MA*/,  MV_LOWLIGHT2|MV_INFRAVISION /*MV*/, HI_LORD),
     MON("clockwork factory", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
-	LVL(10, 10, 10, 0, 0), (G_NOHELL|G_NOCORPSE|1),
+	LVL_NDR(10, 10, 10, 1, 0, 0), (G_NOHELL|G_NOCORPSE|1),
 	A(ATTK(AT_TNKR, AD_TNKR, 0, 0), NO_ATTK,
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(1900, 0, 0, MS_SILENT, MZ_MEDIUM), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3394,7 +3394,7 @@ then fill new spaces with our spawn!
 	MB_NOLIMBS|MB_NEUTER /*MB*/, MG_VBLUNT|MG_NASTY|MG_NOPOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, CLR_CYAN),
     MON("golden heart", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
-	LVL(10, 13, -5, 30, 0), (G_NOGEN),
+	LVL_FULL(10, 13, DETAIL_AC(2, 0, 13), FLAT_DR(1), 30, 0), (G_NOGEN),
 	A(ATTK(AT_CLAW, AD_PHYS, 1, 13),
 	  ATTK(AT_GAZE, AD_LUCK, 1, 1), 
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
@@ -3403,7 +3403,7 @@ then fill new spaces with our spawn!
 	MB_HUMANOID|MB_WINGS|MB_FEMALE /*MB*/, MG_VBLUNT|MG_NOPOLY|MG_NASTY /*MG*/,
 	MA_CLOCK|MA_ET|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, CLR_YELLOW),
     MON("juggernaut", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
-	LVL(20, 24, 0, 0, 0), (G_NOHELL|G_NOCORPSE|1),
+	LVL_NDR(20, 24, 0, 10, 0, 0), (G_NOHELL|G_NOCORPSE|1),
 	A(ATTK(AT_BUTT, AD_PHYS, 2, 8), NO_ATTK,
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(9000, 0, 0, MS_SILENT, MZ_HUGE), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3411,7 +3411,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_NOHEAD|MB_NOHANDS|MB_NEUTER /*MB*/, MG_VBLUNT|MG_NASTY|MG_NOPOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_EARTHSENSE /*MV*/, CLR_BLACK),
     MON("id juggernaut", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
-	LVL(20, 24,-10, 0, 0), (G_HELL|G_NOCORPSE|1),
+	LVL_FULL(20, 24, DETAIL_AC(10,0,10), FLAT_DR(10), 0, 0), (G_HELL|G_NOCORPSE|1),
 	A(ATTK(AT_BUTT, AD_PHYS, 2, 8), NO_ATTK,
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(9000, 0, 0, MS_SILENT, MZ_HUGE), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3419,7 +3419,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_NOHEAD|MB_NOHANDS|MB_NEUTER /*MB*/, MG_VBLUNT|MG_NASTY|MG_NOPOLY|MG_INSIGHT /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_LIFESENSE|MV_EARTHSENSE|MV_OMNI /*MV*/, CLR_BLACK),
     MON("scrap titan", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
-	LVL(20, 12, 0, 0, -10), (G_HELL|G_NOCORPSE|2),
+	LVL_NDR(20, 12, 0, 8, 0, -10), (G_HELL|G_NOCORPSE|2),
 	A(ATTK(AT_CLAW, AD_PHYS, 3,12), ATTK(AT_CLAW, AD_PHYS, 3,12),
 	  ATTK(AT_TUCH, AD_RUST, 1, 1), ATTK(AT_TUCH, AD_RUST, 1, 1),
 	  NO_ATTK, NO_ATTK),
@@ -3428,7 +3428,7 @@ then fill new spaces with our spawn!
 	MB_ANIMAL|MB_NEUTER /*MB*/, MG_VBLUNT|MG_NASTY|MG_NOPOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, CLR_BRIGHT_GREEN),
     MON("hellfire colossus", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
-	LVL(20, 12,-9, 0, 10), (G_HELL|G_NOCORPSE|2),
+	LVL_FULL(20, 12,DETAIL_AC(10,0,9), FLAT_DR(12), 99, 18), (G_HELL|G_NOCORPSE|2),
 	A(ATTK(AT_CLAW, AD_PHYS, 4, 8), ATTK(AT_CLAW, AD_PHYS, 4, 8),
 	  ATTK(AT_BUTT, AD_EFIR, 4, 8), ATTK(AT_BUTT, AD_EFIR, 4, 8),
 	  ATTK(AT_BREA, AD_FIRE, 2, 10), NO_ATTK),
@@ -3437,7 +3437,7 @@ then fill new spaces with our spawn!
 	MB_HUMANOID|MB_NEUTER /*MB*/, MG_VBLUNT|MG_NASTY|MG_NOPOLY|MG_INFRAVISIBLE|MG_HATESHOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING|MA_DEMON /*MA*/,  MV_NORMAL /*MV*/, CLR_BRIGHT_MAGENTA),
     MON("hellfire orb", S_GNOME,//3 /*Needs encyc entry*//*Needs tile*/
-	LVL(10, 16, 10, 4, 0), (G_NOGEN|G_NOCORPSE),
+	LVL_NDR(10, 16, 8, 1, 4, 0), (G_NOGEN|G_NOCORPSE),
 	A(ATTK(AT_BREA, AD_FIRE, 6, 10), ATTK(AT_BOOM, AD_FIRE, 6, 10),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(10, 0, 0, MS_SILENT, MZ_SMALL), MR_DRAIN|MR_STONE|MR_POISON|MR_SICK|MR_SLEEP, 0,
@@ -3445,7 +3445,7 @@ then fill new spaces with our spawn!
 	MB_NOLIMBS|MB_NOHEAD|MB_NEUTER /*MB*/, MG_VBLUNT|MG_NOPOLY|MG_HATESHOLY /*MG*/,
 	MA_CLOCK|MA_UNLIVING|MA_DEMON /*MA*/,  MV_NORMAL /*MV*/, CLR_RED),
     MON("clockwork automaton", S_GNOME,// /*Needs tile*/
-	LVL(20, 12, 7, 30, 0), (G_GENO|G_NOCORPSE|G_NOGEN),
+	LVL_NDR(20, 12, 8, 1, 30, 0), (G_GENO|G_NOCORPSE|G_NOGEN),
 	A( ATTK(AT_WEAP, AD_PHYS, 2, 6), ATTK(AT_XWEP, AD_PHYS, 2, 6),
      NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_HUMAN, 0, 0, MS_HUMANOID, MZ_HUMAN), 
@@ -3454,7 +3454,7 @@ then fill new spaces with our spawn!
 	MB_HUMANOID /*MB*/, MG_VBLUNT /*MG*/,
 	MA_CLOCK|MA_UNLIVING /*MA*/,  MV_NORMAL /*MV*/, HI_COPPER),
     MON("colossal clockwork war-machine", S_GNOME,// /*Needs encyc entry*//*Needs tile*/
-	LVL(45, 12,-9, 0, 10), (G_NOCORPSE|G_NOGEN),
+	LVL_NDR(45, 12,-9, 9, 0, 10), (G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_WEAP, AD_PHYS, 8, 8), ATTK(AT_XWEP, AD_PHYS, 8, 8),
 	  NO_ATTK, NO_ATTK,
 	  NO_ATTK, NO_ATTK),
@@ -3629,7 +3629,7 @@ struct permonst _mons2[] = {
 	MB_ANIMAL|MB_HAS_FEET|MB_LONGHEAD|MB_NOHANDS /*MB*/, MG_NASTY|MG_INFRAVISIBLE /*MG*/,
 	MA_AVIAN /*MA*/,  MV_NORMAL /*MV*/, CLR_BRIGHT_GREEN),
     MON("bandersnatch", S_JABBERWOCK,//
-	LVL(20, 24, -2, 50, 0), (G_GENO|G_NOHELL|1),/* Frequency should increase while hallucinating and while demigod */
+	LVL_DEX(20, 24, -2, 50, 0), (G_GENO|G_NOHELL|1),/* Frequency should increase while hallucinating and while demigod */
 	A(ATTK(AT_LNCK, AD_PHYS, 2,10), NO_ATTK,	
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_LARGE, 600, 0, MS_GROWL, MZ_LARGE), 0, 0,/* Becomes frumious instead of scared. Moves even faster and hits harder. */
@@ -3646,7 +3646,7 @@ struct permonst _mons2[] = {
 	MB_STRONG|MB_ANIMAL|MB_HAS_FEET|MB_WINGS /*MB*/, MG_INFRAVISIBLE|MG_NASTY /*MG*/,
 	0 /*MA*/,  MV_NORMAL /*MV*/, CLR_ORANGE),
 /*
- * Keter Sephiroth
+ * Keter Sephiroth AC here
  */
     MON("malkuth sephirah", S_KETER,//7
 	LVL(5, 24, 5, 5, 5), (G_LGROUP|G_NOCORPSE|G_NOGEN),
@@ -7886,7 +7886,8 @@ is a red right hand
 	MA_PRIMORDIAL|MA_FEY /*MA*/,  MV_EXTRAMISSION|MV_SEE_INVIS /*MV*/, CLR_BRIGHT_CYAN),
     MON("man-faced millipede", S_SPIDER, //4
 	LVL(22, 4,-3, 0, 0), (G_NOCORPSE|G_NOGEN),
-	A(ATTK(AT_BITE, AD_DRST, 1, 2), NO_ATTK, NO_ATTK,
+	A(ATTK(AT_BITE, AD_DRST, 1, 2), 
+	  ATTK(AT_CLAW, AD_PHYS, 16, 2), ATTK(AT_CLAW, AD_PHYS, 16, 2),
 	  NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_SMALL, CN_SMALL, 0, MS_GLYPHS, MZ_SMALL), MR_POISON, MR_POISON,
 	0 /*MM*/, MT_PEACEFUL|MT_CONCEAL|MT_OMNIVORE|MT_WAITFORU|MT_CLOSE /*MT*/,
