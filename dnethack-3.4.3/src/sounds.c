@@ -5719,6 +5719,31 @@ gnosisspirit(seal_id)
 	doredraw();
 }
 
+void
+scatter_seals()
+{
+	struct engr *oep = engr_at(u.ux,u.uy);
+	int i;
+	long seal_flag = 0x1L;
+	
+	for(i = 0; i < (QUEST_SPIRITS-FIRST_SEAL); i++){
+		seal_flag = 0x1L << i;
+		if(u.sealsActive&seal_flag){
+			if(!oep){
+				make_engr_at(u.ux, u.uy,
+				 "", 0L, DUST);
+				oep = engr_at(u.ux,u.uy);
+			}
+			oep->ward_id = (i+FIRST_SEAL);
+			oep->halu_ward = 0;
+			oep->ward_type = BURN;
+			oep->complete_wards = 1;
+			rloc_engr(oep);
+			oep = engr_at(u.ux,u.uy);
+		}
+	}
+}
+
 static
 const char *
 DantalionRace(pmon)

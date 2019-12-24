@@ -1448,30 +1448,30 @@ boolean with_price;
 		}
 	break;
 	case TILE_CLASS:
-		if (obj->dknown && !un && !ocl->oc_magic){
-			Strcat(buf, dn);
-			Strcat(buf, " ");
-		}
 		if(ocl->oc_unique)
 			Strcat(buf, "slab");
 		else
 			Strcat(buf, "shard");
 		if (!obj->dknown) break;
 		if (nn) {
-			Strcat(buf, " bearing the ");
+			if(obj->obj_material == BONE){
+				Strcat(buf, " scrimshawed with the ");
+			} else {
+				Strcat(buf, " bearing the ");
+			}
 			Strcat(buf, actualn);
 		}
 		else if (un){
 			Strcat(buf, " called ");
 			Strcat(buf, un);
 		}
-		else if (ocl->oc_magic){
-			Strcat(buf, " with a ");
-			Strcat(buf, dn);
-		}
 		else {
-		// "unlabeled scroll" should be the only case, and is already handled above.
-		;
+			if(obj->obj_material == BONE){
+				Strcat(buf, " scrimshawed with ");
+			} else {
+				Strcat(buf, " with a ");
+			}
+			Strcat(buf, dn);
 		}
 			break;
 		case WAND_CLASS:
@@ -2537,6 +2537,7 @@ const char *oldstr;
 				|| !strncmp(spot, " a la ", 6)
 				|| !strncmp(spot, " with", 5)	/* " with "? */
 				|| !strncmp(spot, " bearing", 8)	/* " bearing "- */
+				|| !strncmp(spot, " scrimshawed", 12)	/* " scrimshawed "- */
 				|| !strncmp(spot, " de ", 4)
 				|| !strncmp(spot, " d'", 3)
 				|| !strncmp(spot, " du ", 4)) {

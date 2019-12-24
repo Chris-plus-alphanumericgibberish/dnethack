@@ -2337,6 +2337,7 @@ E int NDECL(dotalk);
 E int FDECL(dochat, (BOOLEAN_P, int, int, int));
 E void FDECL(councilspirit, (int));
 E void FDECL(gnosisspirit, (int));
+E void NDECL(scatter_seals);
 E int FDECL(P_MAX_SKILL, (int));
 E int FDECL(P_SKILL, (int));
 E int FDECL(P_RESTRICTED, (int));

@@ -168,6 +168,7 @@ struct monst *mtmp;
 struct obj *cont;
 {
 	struct obj *otmp;
+	int thoughttries = 0;
 
 	uswapwep = 0; /* ensure curse() won't cause swapwep to drop twice */
 	while ((otmp = invent) != 0) {
@@ -190,6 +191,79 @@ struct obj *cont;
 		else
 			place_object(otmp, u.ux, u.uy);
 	}
+	while(u.thoughts && thoughttries++ < 5){
+		otmp = 0;
+		if(u.thoughts & ANTI_CLOCKWISE_METAMORPHOSIS){
+			u.thoughts &= ~ANTI_CLOCKWISE_METAMORPHOSIS;
+			otmp = mksobj(ANTI_CLOCKWISE_METAMORPHOSIS_G, FALSE, FALSE);
+		} else if(u.thoughts & CLOCKWISE_METAMORPHOSIS){
+			u.thoughts &= ~CLOCKWISE_METAMORPHOSIS;
+			otmp = mksobj(CLOCKWISE_METAMORPHOSIS_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & ARCANE_BULWARK){
+			u.thoughts &= ~ARCANE_BULWARK;
+			otmp = mksobj(SPARKLING_LAKE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & DISSIPATING_BULWARK){
+			u.thoughts &= ~DISSIPATING_BULWARK;
+			otmp = mksobj(FADING_LAKE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & SMOLDERING_BULWARK){
+			u.thoughts &= ~SMOLDERING_BULWARK;
+			otmp = mksobj(SMOKING_LAKE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & FROSTED_BULWARK){
+			u.thoughts &= ~FROSTED_BULWARK;
+			otmp = mksobj(FROSTED_LAKE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & BLOOD_RAPTURE){
+			u.thoughts &= ~BLOOD_RAPTURE;
+			otmp = mksobj(RAPTUROUS_EYE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & CLAWMARK){
+			u.thoughts &= ~CLAWMARK;
+			otmp = mksobj(CLAWMARK_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & CLEAR_DEEPS){
+			u.thoughts &= ~CLEAR_DEEPS;
+			otmp = mksobj(CLEAR_SEA_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & DEEP_SEA){
+			u.thoughts &= ~DEEP_SEA;
+			otmp = mksobj(DEEP_SEA_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & COMMUNION){
+			u.thoughts &= ~COMMUNION;
+			otmp = mksobj(COMMUNION_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & CORRUPTION){
+			u.thoughts &= ~CORRUPTION;
+			otmp = mksobj(CORRUPTION_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & EYE_THOUGHT){
+			u.thoughts &= ~EYE_THOUGHT;
+			otmp = mksobj(EYE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & FORMLESS_VOICE){
+			u.thoughts &= ~FORMLESS_VOICE;
+			otmp = mksobj(FORMLESS_VOICE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & GUIDANCE){
+			u.thoughts &= ~GUIDANCE;
+			otmp = mksobj(GUIDANCE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & IMPURITY){
+			u.thoughts &= ~IMPURITY;
+			otmp = mksobj(IMPURITY_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & MOON){
+			u.thoughts &= ~MOON;
+			otmp = mksobj(MOON_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & WRITHE){
+			u.thoughts &= ~WRITHE;
+			otmp = mksobj(WRITHE_GLYPH, FALSE, FALSE);
+		} else if(u.thoughts & RADIANCE){
+			u.thoughts &= ~RADIANCE;
+			otmp = mksobj(RADIANCE_GLYPH, FALSE, FALSE);
+		} else {
+			pline("Can't find glyph!");
+		}
+		if(otmp){
+			if(rn2(5)) curse(otmp);
+			if (mtmp)
+				(void) add_to_minv(mtmp, otmp);
+			else if (cont)
+				(void) add_to_container(cont, otmp);
+			else
+				place_object(otmp, u.ux, u.uy);
+		}
+	}
+	scatter_seals();
 #ifndef GOLDOBJ
 	if(u.ugold) {
 		long ugold = u.ugold;
