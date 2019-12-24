@@ -5806,7 +5806,7 @@ register struct	monst	*mtmp;
 				otmp->spe = 9;
 				otmp->oproperties = OPROP_PHSEW|OPROP_WATRW;
 				otmp->objsize = MZ_GIGANTIC;
-				otmp->obj_material = STONE;
+				otmp->obj_material = MINERAL;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 				
