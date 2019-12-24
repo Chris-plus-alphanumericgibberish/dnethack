@@ -273,9 +273,9 @@ char *buf;
 		} else if(In_mordor_quest(&u.uz)){
 			if(In_mordor_forest(&u.uz)) Sprintf(buf, "Forest %d ", dunlev(&u.uz));
 			else if(Is_ford_level(&u.uz)) Sprintf(buf, "Ford ");
-			else if(In_mordor_fields(&u.uz)) Sprintf(buf, "Field ", dunlev(&u.uz));
+			else if(In_mordor_fields(&u.uz)) Sprintf(buf, "Field ");
 			else if(In_mordor_buildings(&u.uz)) Sprintf(buf, "Fortress %d", dunlev(&u.uz)-5);
-			else if(Is_spider_cave(&u.uz)) Sprintf(buf, "Spider ", dunlev(&u.uz)-5);
+			else if(Is_spider_cave(&u.uz)) Sprintf(buf, "Spider ");
 			else if(In_mordor_depths(&u.uz)) Sprintf(buf, "Cracks %d", dunlev(&u.uz)-8);
 			else if(In_mordor_borehole(&u.uz)) Sprintf(buf, "Bore %d", dunlev(&u.uz)-11);
 		}

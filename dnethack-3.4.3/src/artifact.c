@@ -6365,7 +6365,7 @@ arti_invoke(obj)
 			getdir((char *)0);
 			if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
 			
-			if (mtmp = m_at(u.ux + u.dx, u.uy + u.dy)) {
+			if ((mtmp = m_at(u.ux + u.dx, u.uy + u.dy))) {
 				/* message */
 				pline("You reach out and stab at %s very soul.", s_suffix(mon_nam(mtmp)));
 				/* nonliving, demons, angels are immune */
