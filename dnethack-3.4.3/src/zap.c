@@ -5144,25 +5144,57 @@ int damage, tell;
 	int resisted;
 	int alev, dlev;
 
+#define LUCK_MODIFIER	if(Luck > 0) alev += rnd(Luck)/2; else if(Luck < 0) alev -= rnd(-1*Luck)/2;
+
 	/* attack level */
 	switch (oclass) {
-	    case WAND_CLASS:	alev = 12;	 break;
-	    case TOOL_CLASS:	alev = 10;	 break;	/* instrument */
-	    case WEAPON_CLASS:	alev = 10;	 break;	/* artifact */
-	    case SCROLL_CLASS:	alev =  9;	 break;
-	    case POTION_CLASS:	alev =  6;	 break;
-	    case RING_CLASS:	alev =  5;	 break;
+	    case WAND_CLASS:	
+			alev = 12;	 
+			if(!flags.mon_moving && P_SKILL(P_WAND_POWER) > 1){
+				alev += (P_SKILL(P_WAND_POWER)-1)*2;
+				LUCK_MODIFIER
+			}
+		break;
+	    case TOOL_CLASS:	/* instrument */
+			alev = 10;
+			if(!flags.mon_moving){
+				alev += (ACURR(A_CHA)-11);
+				alev += P_SKILL(P_MUSICALIZE)*2; //+0 to +8
+				LUCK_MODIFIER
+			}
+		break;	
+	    case WEAPON_CLASS:  /* artifact */
+			alev = 20;
+			if(!flags.mon_moving){
+				LUCK_MODIFIER
+			}
+		break;
+	    case SCROLL_CLASS:
+			alev =  9;
+			if(!flags.mon_moving){
+				LUCK_MODIFIER
+			}
+		break;
+	    case POTION_CLASS:
+			alev =  6;
+			if(!flags.mon_moving){
+				LUCK_MODIFIER
+			}
+		break;
+	    case RING_CLASS:/* conflict */
+			alev =  5;
+		break;
 	    default:/* spell */
 			alev = u.ulevel;
 			alev += (ACURR(A_CHA)-11);
-			if(Luck > 0) alev += rnd(Luck);
-			else if(Luck < 0) alev -= rnd(-1*Luck);
+			LUCK_MODIFIER
 		break;
 	}
+#undef LUCK_MODIFIER
 	/* defense level */
 	dlev = (int)mtmp->m_lev;
 	if (dlev > 50) dlev = 50;
-	else if (dlev < 1) dlev = is_mplayer(mtmp->data) ? u.ulevel : 1;
+	else if (dlev < 1) dlev = 1;
 
 	if(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH]) dlev+=u.chokhmah;
 	resisted = rn2(100 + alev - dlev) < mtmp->data->mr;
