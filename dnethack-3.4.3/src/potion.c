@@ -1868,7 +1868,7 @@ register struct obj *o1, *o2;
 		case POT_HEALING:
 			switch (o2->otyp) {
 			    case POT_BLOOD:
-					if(o2->corpsenm != PM_DEEP_WYRM && o2->corpsenm != PM_NEWT) break;
+					if(o2->corpsenm != PM_DEEP_DRAGON && o2->corpsenm != PM_NEWT) break;
 			    case POT_SPEED:
 			    case POT_GAIN_LEVEL:
 			    case POT_GAIN_ENERGY:
@@ -1877,7 +1877,7 @@ register struct obj *o1, *o2;
 		case POT_EXTRA_HEALING:
 			switch (o2->otyp) {
 			    case POT_BLOOD:
-					if(o2->corpsenm != PM_DEEP_WYRM && o2->corpsenm != PM_NEWT) break;
+					if(o2->corpsenm != PM_DEEP_DRAGON && o2->corpsenm != PM_NEWT) break;
 			    case POT_GAIN_LEVEL:
 			    case POT_GAIN_ENERGY:
 				return POT_FULL_HEALING;
@@ -1885,7 +1885,7 @@ register struct obj *o1, *o2;
 		case POT_FULL_HEALING:
 			switch (o2->otyp) {
 			    case POT_BLOOD:
-					if(o2->corpsenm != PM_DEEP_WYRM && o2->corpsenm != PM_NEWT) break;
+					if(o2->corpsenm != PM_DEEP_DRAGON && o2->corpsenm != PM_NEWT) break;
 			    case POT_GAIN_LEVEL:
 			    case POT_GAIN_ENERGY:
 				return POT_GAIN_ABILITY;
@@ -1949,7 +1949,7 @@ register struct obj *o1, *o2;
 		case POT_BLOOD:
 			if(o1->corpsenm == PM_MAID) switch (o2->otyp) {
 			    case POT_BLOOD:
-					if(o2->corpsenm != PM_DEEP_WYRM && o2->corpsenm != PM_NEWT) break;
+					if(o2->corpsenm != PM_DEEP_DRAGON && o2->corpsenm != PM_NEWT) break;
 			    case POT_GAIN_LEVEL:
 			    case POT_GAIN_ENERGY:
 					return POT_GAIN_ABILITY;
@@ -1964,7 +1964,7 @@ register struct obj *o1, *o2;
 			    case POT_BOOZE:
 				return POT_CONFUSION;
 			}
-			if(o1->corpsenm == PM_DEEP_WYRM || o1->corpsenm == PM_NEWT) switch (o2->otyp) {
+			if(o1->corpsenm == PM_DEEP_DRAGON || o1->corpsenm == PM_NEWT) switch (o2->otyp) {
 			    case POT_CONFUSION:
 				return (rn2(3) ? POT_BOOZE : POT_ENLIGHTENMENT);
 			    case POT_HEALING:

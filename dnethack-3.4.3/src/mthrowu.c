@@ -38,6 +38,7 @@ int atype;
 	case AD_ELEC: return "lightning";
 	case AD_DRST: return "poison gas";
 	case AD_ACID: return "acid";
+	case AD_DRLI: return "dark energy";
 	case AD_GOLD: return "gold";
 	default:
 		impossible("unaccounted-for breath type in breathwep: %d", atype);
@@ -2052,7 +2053,7 @@ breamu(mtmp, mattk)			/* monster breathes at you (ranged) */
 	    }
 	    if(!mtmp->mspec_used && rn2(3)) {
 
-		if(((typ >= AD_MAGM) && (typ <= AD_ACID)) || typ == AD_GOLD) {
+		if(((typ >= AD_MAGM) && (typ <= AD_ACID)) || typ == AD_GOLD || typ == AD_DRLI) {
 
 		    if(canseemon(mtmp))
 			pline("%s breathes %s!", Monnam(mtmp),
@@ -2149,7 +2150,7 @@ breamm(mtmp, mdef, mattk)		/* monster breathes at monst (ranged) */
 	    }
 	    if(!mtmp->mspec_used && rn2(3)) {
 
-		if(((typ >= AD_MAGM) && (typ <= AD_ACID)) || typ == AD_GOLD) {
+		if(((typ >= AD_MAGM) && (typ <= AD_ACID)) || typ == AD_GOLD || typ == AD_DRLI) {
 
 		    if(canseemon(mtmp))
 		    {

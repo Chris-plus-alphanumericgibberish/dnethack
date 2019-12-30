@@ -95,6 +95,7 @@ int adtyp, olet;
 		case AD_ELEC: return "blast of lightning";
 		case AD_DRST: return "blast of poison gas";
 		case AD_ACID: return "blast of acid";
+		case AD_DRLI: return "blast of dark energy";
 		case AD_GOLD: return "blast of golden shards";
 		default:      impossible("unknown breath damage type in flash_type: %d", adtyp);
 		}
@@ -148,6 +149,9 @@ int adtyp;
 	case AD_COLD:
 	case AD_ELEC:
 		return CLR_WHITE;
+	case AD_DRLI:
+		return CLR_MAGENTA;
+		//	return CLR_BLACK;
 	default:
 		impossible("unaccounted-for zap type in zap_glyph_color: %d", adtyp);
 		return CLR_WHITE;
@@ -3575,6 +3579,23 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		}
 		break;
 
+	case AD_DRLI:
+		if (resists_drli(mon)) {
+			sho_shieldeff = TRUE;
+			break;
+		}
+		else {
+			tmp = d(2, 6);
+			if (canseemon(mon))
+				pline("%s suddenly seems weaker!", Monnam(mon));
+			mon->mhpmax -= tmp;
+			if (mon->m_lev == 0)
+				tmp = mon->mhp;
+			else mon->m_lev--;
+			/* Automatic kill if drained past level 0 */
+		}
+		break;
+
 	case AD_DEAD:		/* death*/
 		if(mon->data==&mons[PM_METROID]){
 			pline("The metroid is irradiated with pure energy!  It divides!");
@@ -3806,6 +3827,15 @@ xchar sx, sy;
 	    }
 		if(flags.drgn_brth) make_hallucinated(HHallucination + time, TRUE, 0L);
 	}break;
+	case AD_DRLI:
+		if (Drain_resistance) {
+			shieldeff(u.ux, u.uy);
+			You("aren't affected.");
+		}
+		else {
+			losexp("life force drain", TRUE, FALSE, FALSE);
+		}
+		break;
 	case AD_DEAD:
 		if (resists_death(&youmonst) || u.sealsActive&SEAL_OSE) {
 		shieldeff(sx, sy);

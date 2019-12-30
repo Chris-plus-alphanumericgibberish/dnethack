@@ -1285,7 +1285,7 @@ BOOLEAN_P tin, nobadeffects, drained;
 	    case PM_WRAITH:
 			if(!drained || !rn2(5)) pluslvl(FALSE);
 		break;
-	    case PM_DEEP_WYRM:
+	    case PM_DEEP_DRAGON:
 			if(!drained || !rn2(5)) pluslvl(FALSE);
 		break;
 	    case PM_HUMAN_WERERAT:
