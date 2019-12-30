@@ -2624,7 +2624,11 @@ u_init()
 		break;
 	}
 
-		int j;
+	calc_total_maxhp();
+	u.uhp = u.uhpmax;
+	calc_total_maxen();
+	u.uen = u.uenmax;
+	int j;
 	for (j = 0; j < SIZE(horrors); j++)
 	{
 		/* what a horrible night to have a curse */
