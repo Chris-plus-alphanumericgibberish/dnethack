@@ -93,13 +93,22 @@ int num;
 	return((boolean)( sqrt(num) ));
 }
 
+/* Returns true if room has both an X and Y size of at least x. */
+STATIC_OVL boolean
+atleastxspace(sroom, x)
+register struct mkroom *sroom;
+int x;
+{
+	return((boolean)( ((sroom->hx - sroom-> lx)+1) >= x &&
+		(((sroom->hy - sroom->ly)+1) >=x ) ));
+}
+
 /* Returns true if room has both an X and Y size of at least five. */
 boolean
 isspacious(sroom)
 register struct mkroom *sroom;
 {
-	return((boolean)( ((sroom->hx - sroom-> lx)+1) >= 5 &&
-		(((sroom->hy - sroom->ly)+1) >=5 ) ));
+	return atleastxspace(sroom, 5);
 }
 
 /* Returns true if room has both an X and Y size of at least four. */
@@ -107,8 +116,7 @@ STATIC_OVL boolean
 issemispacious(sroom)
 register struct mkroom *sroom;
 {
-	return((boolean)( ((sroom->hx - sroom-> lx)+1) >= 4 &&
-		(((sroom->hy - sroom->ly)+1) >=4 ) ));
+	return atleastxspace(sroom, 4);
 }
 
 void
@@ -4885,7 +4893,7 @@ struct mkroom *croom; /* NULL == choose random room */
     while ((tryct++ < 25) && !maderoom) {
 	register struct mkroom *sroom = croom ? croom : &rooms[rn2(nroom)];
 	
-	if (sroom->hx < 0 || (!croom && (sroom->rtype != OROOM)))
+	if (sroom->hx < 0 || (!croom && (sroom->rtype != OROOM || (atleastxspace(sroom, 3) && !atleastxspace(sroom, 6)))))
 	    	continue;
 
 	sroom->rtype = ARMORY;
@@ -5827,7 +5835,7 @@ courtmon(kingnum)
 		case PM_ORC_OF_THE_AGES_OF_STARS:
 			i = rnd(100);
 			if(i>98)
-				return &mons[PM_DEEP_WYRM];
+				return &mons[PM_DEEP_DRAGON];
 			else if(i>96)
 				return &mons[PM_RED_DRAGON];
 			else if(i>94)
