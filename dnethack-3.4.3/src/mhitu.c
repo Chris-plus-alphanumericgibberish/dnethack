@@ -4074,7 +4074,7 @@ dopois:
 			dmg -= roll_udr(mtmp);
 			if (dmg < 1) dmg = 1;
 		} else {
-			dmg -= base_udr();
+			dmg -= (base_udr() + base_nat_udr());
 			if (dmg < 1) dmg = 1;
 		}
 	}

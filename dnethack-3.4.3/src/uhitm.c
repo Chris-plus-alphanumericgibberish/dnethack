@@ -2582,7 +2582,7 @@ defaultvalue:
 	
 	if(tmp){
 		if(phasearmor){
-			tmp -= base_mdr(mon);
+			tmp -= (base_mdr(mon) + base_nat_mdr(mon));
 		} else {
 			tmp -= roll_mdr(mon, &youmonst);
 		}
@@ -4043,7 +4043,7 @@ register struct attack *mattk;
 		if(mattk->adtyp != AD_SHDW && mattk->adtyp != AD_STAR && !phasearmor){
 			tmp -= roll_mdr(mdef, &youmonst);
 		} else {
-			tmp -= base_mdr(mdef);
+			tmp -= (base_mdr(mdef) + base_nat_mdr(mdef));
 		}
 		if(tmp < 1) tmp = 1;
 	}

@@ -2685,6 +2685,12 @@ u_init()
 				horrors[j]->fdr = rn2(10);
 			break;
 		}
+		horrors[j]->spe_hdr = 0;
+		horrors[j]->spe_bdr = 0;
+		horrors[j]->spe_gdr = 0;
+		horrors[j]->spe_ldr = 0;
+		horrors[j]->spe_fdr = 0;
+		
 		horrors[j]->mr = rn2(11) * 10;				/* varying amounts of MR */
 		horrors[j]->maligntyp = d(2, 9) - 10;			/* any alignment */
 

@@ -505,6 +505,7 @@
 				 ((ptr) <= &mons[PM_WIZARD]))
 #define is_deadly(ptr)		((ptr)->mflagsg & MG_DEADLY)
 #define is_rider(ptr)		((ptr)->mflagsg & MG_RIDER)
+#define rider_hp(ptr)		((ptr)->mflagsg & MG_RIDER_HP)
 #define is_placeholder(ptr)	((ptr) == &mons[PM_ORC] || \
 				 (ptr) == &mons[PM_GIANT] || \
 				 (ptr) == &mons[PM_ELF] || \

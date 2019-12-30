@@ -2,6 +2,7 @@
 /* Copyright (c) Stichting Mathematisch Centrum, Amsterdam, 1985. */
 /* NetHack may be freely redistributed.  See license for details. */
 
+#include <math.h>
 #include "hack.h"
 
 #ifndef OVLB
@@ -2208,7 +2209,7 @@ int base_uac()
 	int uac = 10-mons[u.umonnum].nac;
 	
 	if(multi > 0)
-		uac -= mons[u.umonnum].dac;
+		dexbonus += mons[u.umonnum].dac;
 	
 	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
 		uac += 6;
@@ -2383,19 +2384,10 @@ find_ac()
 	find_dr(); /*Also recalculate the DR*/
 }
 
-int base_udr()
+int base_nat_udr()
 {
 	int udr = 0;
 
-	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
-		udr += 3;
-	}
-	
-	if(uwep){
-		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) udr += max((uwep->spe)/2,0);
-	}
-	if (HProtection & INTRINSIC) udr += (u.ublessed)/2;
-	if(u.edenshield > moves) udr += 7;
 	if(Race_if(PM_ORC)){
 		udr += u.ulevel/10;
 	}
@@ -2408,10 +2400,29 @@ int base_udr()
 	
 	if(u.sealsActive&SEAL_ECHIDNA)
 		udr += 2;
+	
 	if(u.specialSealsActive&SEAL_COSMOS) udr += (spiritDsize()+1)/2;
 	if(u.sealsActive&SEAL_ECHIDNA) udr += max((ACURR(A_CON)-9)/4, 0);
 	if(uclockwork && u.clockworkUpgrades&ARMOR_PLATING) udr += 4; /*armor bonus for automata (stacks with the 1 natural DR)*/
 	
+	if (udr > 127) udr = 127;	/* u.uac is an schar */
+	return udr;
+}
+
+int base_udr()
+{
+	int udr = 0;
+	
+	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
+		udr += 3;
+	}
+	
+	if(uwep){
+		if(uwep->oartifact == ART_LANCE_OF_LONGINUS) udr += max((uwep->spe)/2,0);
+	}
+	if (HProtection & INTRINSIC) udr += (u.ublessed)/2;
+	if(u.edenshield > moves) udr += 7;
+
 	if (udr > 127) udr = 127;	/* u.uac is an schar */
 	return udr;
 }
@@ -2440,6 +2451,7 @@ int slot;
 struct monst *magr;
 {
 	int udr;
+	int nat_udr;
 	int agralign = 0;
 	int agrmoral = 0;
 	int armdr = 0;
@@ -2462,6 +2474,7 @@ struct monst *magr;
 	}
 	
 	udr = base_udr();
+	nat_udr = base_nat_udr();
 	
 	if (uarmc){
 		clkdr += arm_dr_bonus(uarmc);
@@ -2487,7 +2500,7 @@ struct monst *magr;
 uppertorso:
 			//Note: upper body (shirt plus torso armor)
 			if(!Race_if(PM_HALF_DRAGON))
-				udr += youracedata->bdr;
+				nat_udr += youracedata->bdr;
 			if (uarmu){
 				if(uarmu->otyp != BODYGLOVE){
 					armdr += arm_dr_bonus(uarmu);
@@ -2510,7 +2523,7 @@ lowertorso:
 			//Lower body SPECIFIC modifiers
 			if (slot == LOWER_TORSO_DR){
 				if(!Race_if(PM_HALF_DRAGON))
-					udr += youracedata->ldr;
+					nat_udr += youracedata->ldr;
 				if(uarmu && (uarmu->otyp == BLACK_DRESS || uarmu->otyp == VICTORIAN_UNDERWEAR)){
 					armdr += arm_dr_bonus(uarmu);
 					if(magr) armdr += properties_dr(uarmu, agralign, agrmoral);
@@ -2525,7 +2538,7 @@ lowertorso:
 				goto uppertorso;
 			}
 			if(!Race_if(PM_HALF_DRAGON))
-				udr += youracedata->hdr;
+				nat_udr += youracedata->hdr;
 			if (uarmh){
 				armdr += arm_dr_bonus(uarmh);
 				if(magr) armdr += properties_dr(uarmh, agralign, agrmoral);
@@ -2543,7 +2556,7 @@ boot_hit:
 				goto lowertorso;
 			}
 			if(!Race_if(PM_HALF_DRAGON))
-				udr += youracedata->fdr;
+				nat_udr += youracedata->fdr;
 			if (uarmf){
 				armdr += arm_dr_bonus(uarmf);
 				if(magr) armdr += properties_dr(uarmf, agralign, agrmoral);
@@ -2559,7 +2572,7 @@ boot_hit:
 				goto uppertorso;
 			}
 			if(!Race_if(PM_HALF_DRAGON))
-				udr += youracedata->gdr;
+				nat_udr += youracedata->gdr;
 			if (uarmg){
 				armdr += arm_dr_bonus(uarmg);
 				if(magr) armdr += properties_dr(uarmg, agralign, agrmoral);
@@ -2580,7 +2593,14 @@ boot_hit:
 			// armdr = 0;
 	// }
 	
-	udr += armdr;
+	if(armdr && nat_udr){
+		/* Assumes that dr values can't be negative */
+		udr += (int)sqrt(nat_udr*nat_udr + armdr*armdr);
+	} else if(nat_udr){
+		udr += nat_udr;
+	} else {
+		udr += armdr;
+	}
 	
 	if(active_glyph(DEEP_SEA))
 		udr += 3;

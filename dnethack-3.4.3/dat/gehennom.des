@@ -1774,7 +1774,7 @@ TELEPORT_REGION:(48,08,70,10),(0,0,0,0),up
 MONSTER:'&', "Belial", (36,09)
 MONSTER:'&', "Fierna", (37,09)
 MONSTER:'&', "pit fiend", (36,10), "Gazra", hostile
-MONSTER:'&', "pit fiend", (36,08), "Naome", hostile
+MONSTER:'&', "Naome", (36,08), hostile
 
 REGION:(72,12,75,19),lit,"ordinary"
 REGION:(72,00,75,06),lit,"ordinary"

@@ -777,7 +777,7 @@ m_throw(mon, x, y, dx, dy, range, obj, verbose)
 			    if(hitu>0) break;
 			default:
 			    dam = dmgval(singleobj, &youmonst, 0);
-				if(bypassDR) dam -= base_udr(); 
+				if(bypassDR) dam -= (base_udr() + base_nat_udr()); 
 				else dam -= roll_udr(mon);
 			    hitv = 3 - distmin(u.ux,u.uy, mon->mx,mon->my);
 			    if (hitv < -4) hitv = (hitv+4)/2-4;

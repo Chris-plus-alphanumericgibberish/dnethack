@@ -1586,6 +1586,14 @@ boolean give_feedback;
 	coord cc;
 	int illrgrd = FALSE;//teleport will be fatal to target due to ill-regard equipment)
 	
+	if(mtmp->data == &mons[PM_CREATURE_IN_THE_ICE]){
+	    if (give_feedback){
+			shieldeff(mtmp->mx, mtmp->my);
+			pline("Your magic has no effect on %s!", mon_nam(mtmp));
+		}
+		return FALSE;
+	}
+	
 	if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
 		illrgrd = TRUE;
 	}

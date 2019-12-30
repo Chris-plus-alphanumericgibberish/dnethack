@@ -31,6 +31,14 @@ register struct monst *mon;
 				mon->female = !mon->female;
 				new_were(mon);
 			}
+	    } else if (mon->data == &mons[PM_MAMMON] || mon->data == &mons[PM_GREEN_PIT_FIEND]){
+			if(!Protection_from_shape_changers 
+			&& mon->mhp < mon->mhpmax
+			&& !rn2(20)
+			){
+				//Both mammon's forms have humanoid torsos
+				new_were(mon);
+			}
 	    } else if (is_heladrin(mon->data)){
 			if(!Protection_from_shape_changers) new_were(mon);
 	    } else if (
@@ -116,6 +124,8 @@ int pm;
 		case PM_HATEFUL_WHISPERS: return(PM_ALRUNES);
 		case PM_SUCCUBUS: return(PM_INCUBUS);
 		case PM_INCUBUS: return(PM_SUCCUBUS);
+		case PM_MAMMON:			  return(PM_GREEN_PIT_FIEND);
+		case PM_GREEN_PIT_FIEND:  return(PM_MAMMON);
 		case PM_SELKIE: return(PM_SEAL);
 		case PM_SEAL: return(PM_SELKIE);
 		

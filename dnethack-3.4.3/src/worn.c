@@ -666,8 +666,6 @@ struct monst *mon;
 	int base = 10, armac = 0;
 	
 	base -= mon->data->nac;
-	if(!helpless(mon))
-		base -= mon->data->dac;
 	if(!mon->mcan)
 		base -= mon->data->pac;
 	
@@ -698,6 +696,16 @@ struct monst *mon;
 		base -= rnd(def_beastmastery());
 		if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
 	}
+	
+	if(helpless(mon))
+		base -= 5;
+	else if(which_armor(mon, W_ARM)){
+		if(is_light_armor(which_armor(mon, W_ARM)))
+			base -= mon->data->dac;
+		else if(is_medium_armor(which_armor(mon, W_ARM)))
+			base -= (mon->data->dac)/2;
+	}
+	else base -= mon->data->dac;
 	
 	return base;
 }
@@ -781,8 +789,6 @@ struct monst *mon;
 	int base = 10, armac = 0;
 	long mwflags = mon->misc_worn_check;
 	base -= mon->data->nac;
-	if(!helpless(mon))
-		base -= mon->data->dac;
 	if(!mon->mcan)
 		base -= mon->data->pac;
 	
@@ -843,6 +849,17 @@ struct monst *mon;
 	}
 
 	base -= armac;
+	
+	if(helpless(mon))
+		base -= 5;
+	else if(which_armor(mon, W_ARM)){
+		if(is_light_armor(which_armor(mon, W_ARM)))
+			base -= mon->data->dac;
+		else if(is_medium_armor(which_armor(mon, W_ARM)))
+			base -= (mon->data->dac)/2;
+	}
+	else base -= mon->data->dac;
+	
 	/* since arm_ac_bonus is positive, subtracting it increases AC */
 	return base;
 }
@@ -883,23 +900,41 @@ struct monst *mon;
 }
 
 int 
-base_mdr(mon)
+base_nat_mdr(mon)
 struct monst *mon;
 {
-	int base = 0, armac = 0;
+	int base = 0;
 	
-	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
-		base += u.chokhmah;
-	}
 	if(is_weeping(mon->data)){
 		if(mon->mvar2 & 0x4L) base = +125; //Fully Quantum Locked
 		if(mon->mvar2 & 0x2L) base = +5; //Partial Quantum Lock
 	}
-	else if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
-		base += 10;
+	
+	if(mon->mtame){
+		if(u.specialSealsActive&SEAL_COSMOS) base += rnd(spiritDsize());
+	}
 	
 	if(mon->mfaction == ZOMBIFIED) base += 2;
 	if(mon->mfaction == CRYSTALFIED) base += 8;
+	
+	return base;
+}
+
+int
+base_mdr(mon)
+struct monst *mon;
+{
+	int base = 0;
+	
+	if(mon->data == &mons[PM_CHOKHMAH_SEPHIRAH]){
+		base += u.chokhmah;
+	}
+	
+	if(mon->mtame){
+		if(active_glyph(IMPURITY)) base += 3;
+	}
+	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
+		base += 10;
 	
 	return base;
 }
@@ -910,7 +945,7 @@ struct monst *mon;
 struct monst *magr;
 {
 	struct obj *obj;
-	int base, armac = 0, clkdr = 0;
+	int base, nat_dr, armac = 0, clkdr = 0;
 	int agralign = 0;
 	int agrmoral = 0;
 	if(magr){
@@ -930,19 +965,7 @@ struct monst *magr;
 	}
 	
 	base = base_mdr(mon);
-	
-	if(mon->data == &mons[PM_GIANT_TURTLE]){
-		if(mon->mflee || rn2(2))
-			base += 5;
-	}
-	if(is_uvuudaum(mon->data)){
-		base += 10;//stoneskin
-	}
-	
-	if(mon->mtame){
-		if(u.specialSealsActive&SEAL_COSMOS) base += rnd(spiritDsize());
-		if(active_glyph(IMPURITY)) base += 3;
-	}
+	nat_dr = base_nat_mdr(mon);
 	
 	//armor AC
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
@@ -970,13 +993,19 @@ struct monst *magr;
 			armac += arm_dr_bonus(curarm);
 			if(magr) armac += properties_dr(curarm, agralign, agrmoral);
 		}
-		//Note: Bias this somehow?
-		slot = rn2(5);
+		if(mon->data == &mons[PM_GIANT_TURTLE] && (mon->mflee || rn2(2))){
+			slot = UPPER_TORSO_DR;
+		} else {
+			//Note: Bias this somehow?
+			slot = rn2(5);
+		}
 		switch(slot){
 			case UPPER_TORSO_DR:
 mon_uppertorso:
 				//Note: upper body (shirt plus torso armor)
-				base += mon->data->bdr;
+				nat_dr += mon->data->bdr;
+				if(!mon->mcan)
+					base += mon->data->spe_bdr;
 				if (which_armor(mon, W_ARMU)){
 					curarm = which_armor(mon, W_ARMU);
 					if(curarm->otyp != BODYGLOVE){
@@ -999,7 +1028,9 @@ mon_lowertorso:
 				armac += clkdr;
 				//Lower body SPECIFIC modifiers
 				if(slot == LOWER_TORSO_DR){
-					base += mon->data->ldr;
+					nat_dr += mon->data->ldr;
+					if(!mon->mcan)
+						base += mon->data->spe_ldr;
 					if (which_armor(mon, W_ARMU)){
 						curarm = which_armor(mon, W_ARMU);
 						if(curarm->otyp == BLACK_DRESS || curarm->otyp == VICTORIAN_UNDERWEAR){
@@ -1014,7 +1045,9 @@ mon_lowertorso:
 					slot = UPPER_TORSO_DR;
 					goto mon_uppertorso;
 				}
-				base += mon->data->hdr;
+				nat_dr += mon->data->hdr;
+				if(!mon->mcan)
+					base += mon->data->spe_hdr;
 				if (which_armor(mon, W_ARMH)){
 					curarm = which_armor(mon, W_ARMH);
 					armac += arm_dr_bonus(curarm);
@@ -1027,7 +1060,9 @@ mon_lowertorso:
 					slot = LOWER_TORSO_DR;
 					goto mon_lowertorso;
 				}
-				base += mon->data->fdr;
+				nat_dr += mon->data->fdr;
+				if(!mon->mcan)
+					base += mon->data->spe_fdr;
 				if (which_armor(mon, W_ARMF)){
 					curarm = which_armor(mon, W_ARMF);
 					armac += arm_dr_bonus(curarm);
@@ -1042,7 +1077,9 @@ mon_lowertorso:
 					slot = UPPER_TORSO_DR;
 					goto mon_uppertorso;
 				}
-				base += mon->data->gdr;
+				nat_dr += mon->data->gdr;
+				if(!mon->mcan)
+					base += mon->data->spe_gdr;
 				if (which_armor(mon, W_ARMG)){
 					curarm = which_armor(mon, W_ARMG);
 					armac += arm_dr_bonus(curarm);
@@ -1062,7 +1099,14 @@ mon_lowertorso:
 	
 	if(armac > 11) armac = rnd(armac-10) + 10; /* high armor dr values act like player ac values */
 
-	base += armac;
+	if(nat_dr && armac){
+		base += sqrt(nat_dr*nat_dr + armac*armac);
+	} else if(nat_dr){
+		base += nat_dr;
+	} else {
+		base += armac;
+	}
+	
 	/* since arm_ac_bonus is positive, subtracting it increases AC */
 	return base;
 }

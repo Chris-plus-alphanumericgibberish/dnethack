@@ -80,6 +80,12 @@ struct permonst {
 			gdr,
 			ldr,
 			fdr, 
+			/* (special) dr values for head/body/gloves/legs/feet */
+			spe_hdr,
+			spe_bdr,
+			spe_gdr,
+			spe_ldr,
+			spe_fdr, 
 			mr;			/* (base) magic resistance */
 	aligntyp	maligntyp;		/* basic monster alignment */
 	unsigned short	geno;			/* creation/geno mask value */

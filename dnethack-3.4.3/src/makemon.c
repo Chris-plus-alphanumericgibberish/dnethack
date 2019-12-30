@@ -511,7 +511,7 @@ register struct monst *mtmp;
 				otmp->cursed = TRUE;
 				(void) mpickobj(mtmp,otmp);
 				otmp = mksobj(find_gcirclet(), FALSE, FALSE);
-				otmp->spe = 3;
+				otmp->spe = 9;
 				otmp->cursed = TRUE;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
@@ -1379,17 +1379,17 @@ register struct monst *mtmp;
 			} else if (is_elf(ptr) && ptr != &mons[PM_HALF_ELF_RANGER]) {
 				if(mm == PM_GALADRIEL){
 					/*Dress*/
-					otmp = mksobj(GENTLEWOMAN_S_DRESS, TRUE, FALSE);
+					otmp = mksobj(ELVEN_TOGA, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 0;
+					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
 					otmp = mksobj(VICTORIAN_UNDERWEAR, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 0;
+					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					/*Ring*/
 					otmp = mksobj(find_silver_ring(), TRUE, FALSE);
@@ -1399,7 +1399,7 @@ register struct monst *mtmp;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 0;
+					otmp->spe = 7;
 					(void) mpickobj(mtmp, otmp);
 					/*phial*/
 					otmp = mksobj(POT_STARLIGHT, TRUE, FALSE);
@@ -1431,14 +1431,14 @@ register struct monst *mtmp;
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 0;
+					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					/*boots*/
 					otmp = mksobj(ELVEN_BOOTS, TRUE, FALSE);
 					otmp->blessed = TRUE;
 					otmp->cursed = FALSE;
 					otmp->oerodeproof = TRUE;
-					otmp->spe = 0;
+					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 				} else if(mm == PM_ALABASTER_ELF){
 					if(rn2(3)){
@@ -1907,12 +1907,12 @@ register struct monst *mtmp;
 					
 					otmp = mksobj(KITE_SHIELD, FALSE, FALSE);
 					bless(otmp);
-					otmp->spe = 0;
+					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
 					bless(otmp);
-					otmp->spe = 5;
+					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(find_gcirclet(), FALSE, FALSE);
@@ -1922,13 +1922,13 @@ register struct monst *mtmp;
 					
 					otmp = mksobj(GAUNTLETS, FALSE, FALSE);
 					bless(otmp);
-					otmp->spe = 0;
+					otmp->spe = 3;
 					(void) mpickobj(mtmp, otmp);
 					
 					otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
 					otmp->obj_material = IRON;
 					bless(otmp);
-					otmp->spe = 0;
+					otmp->spe = 3;
 					fix_object(otmp);
 					(void) mpickobj(mtmp, otmp);
 				} else if (mm == PM_GRAND_MASTER){
@@ -2166,6 +2166,32 @@ register struct monst *mtmp;
 				(void) mpickobj(mtmp, otmp);
 				begin_burn(otmp, FALSE);
 // #endif /* CONVICT */
+			} else if (mm == PM_ASHIKAGA_TAKAUJI) {
+					otmp = mksobj(HELMET, FALSE, FALSE);
+					otmp->spe = 4;
+					otmp->oerodeproof = 1;
+					otmp->obj_material = IRON;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(SPLINT_MAIL, FALSE, FALSE);
+					otmp->spe = 4;
+					otmp->oerodeproof = 1;
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(GAUNTLETS, FALSE, FALSE);
+					otmp->spe = 4;
+					otmp->oerodeproof = 1;
+					otmp->obj_material = IRON;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
+					
+					otmp = mksobj(ARMORED_BOOTS, FALSE, FALSE);
+					otmp->spe = 4;
+					otmp->oerodeproof = 1;
+					otmp->obj_material = IRON;
+					fix_object(otmp);
+					(void) mpickobj(mtmp, otmp);
 			} else {
 				switch(mm){
 				case PM_SIR_GARLAND:
@@ -5683,8 +5709,15 @@ register struct	monst	*mtmp;
 			}
 		break;
 	    case S_NYMPH:
-		if(!rn2(2)) (void) mongets(mtmp, MIRROR);
-		if(!rn2(2)) (void) mongets(mtmp, POT_OBJECT_DETECTION);
+		if(ptr == &mons[PM_NIMUNE]){
+			(void) mongets(mtmp, GENTLEWOMAN_S_DRESS);
+			(void) mongets(mtmp, VICTORIAN_UNDERWEAR);
+			(void) mongets(mtmp, LONG_GLOVES);
+			(void) mongets(mtmp, STILETTOS);
+		} else {
+			if(!rn2(2)) (void) mongets(mtmp, MIRROR);
+			if(!rn2(2)) (void) mongets(mtmp, POT_OBJECT_DETECTION);
+		}
 		break;
 		case S_CENTAUR:
  		break;
@@ -6396,8 +6429,10 @@ register struct	monst	*mtmp;
 				otmp->spe = 2;
 				otmp->oerodeproof = TRUE;
 				(void) mpickobj(mtmp, otmp);
+				(void) mongets(mtmp, RUFFLED_SHIRT);
 				(void) mongets(mtmp, GENTLEMAN_S_SUIT);
 				(void) mongets(mtmp, HIGH_BOOTS);
+				(void) mongets(mtmp, GLOVES);
 				(void) mongets(mtmp, SPE_CHARM_MONSTER);
 				(void) mongets(mtmp, SCR_TAMING);
 				(void) mongets(mtmp, SCR_TAMING);
@@ -6441,6 +6476,35 @@ register struct	monst	*mtmp;
 			case PM_FIERNA:
 				(void)mongets(mtmp, WAN_DIGGING);
 				(void) mongets(mtmp, LEATHER_ARMOR);
+				otmp = mksobj(CHAIN, FALSE, FALSE);
+				otmp->obj_material = GOLD;
+				otmp->cursed = TRUE;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				// (void) mongets(mtmp, POT_FULL_HEALING);
+			break;
+			case PM_NAOME:
+				otmp = mksobj(ARCHAIC_HELM, FALSE, FALSE);
+				otmp->spe = 4;
+				curse(otmp);
+				otmp->objsize = mtmp->data->msize;
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(ARCHAIC_PLATE_MAIL, FALSE, FALSE);
+				otmp->spe = 4;
+				curse(otmp);
+				otmp->objsize = mtmp->data->msize;
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
+				otmp = mksobj(BUCKLER, FALSE, FALSE);
+				otmp->spe = 4;
+				curse(otmp);
+				otmp->objsize = mtmp->data->msize;
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+				(void) mpickobj(mtmp, otmp);
 				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_BELIAL:
@@ -6464,8 +6528,11 @@ register struct	monst	*mtmp;
 				otmp = oname(otmp, artiname(ART_DIADEM_OF_AMNESIA));		
 				otmp->blessed = FALSE;
 				otmp->cursed = TRUE;
-				otmp->spe = 5;
+				otmp->spe = 9;
+				otmp->bodytypeflag = MB_LONGHEAD;
+				otmp->objsize = MZ_HUGE;
 				otmp->oerodeproof = TRUE;
+				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, WAN_CANCELLATION);
 				(void)mongets(mtmp, POT_AMNESIA);
@@ -6547,14 +6614,8 @@ register struct	monst	*mtmp;
 				otmp->cursed = TRUE;
 				otmp->spe = 7;
 				otmp->oerodeproof = TRUE;
-				(void) mpickobj(mtmp, otmp);
-				(void)mongets(mtmp, RIN_FREE_ACTION);
-				// (void) mongets(mtmp, POT_FULL_HEALING);
-				otmp = mksobj(ARCHAIC_HELM, FALSE, FALSE);
-				otmp->cursed = TRUE;
 				otmp->obj_material = GOLD;
 				otmp->objsize = MZ_LARGE;
-				otmp->spe = 7;
 				fix_object(otmp);
 				(void) mpickobj(mtmp, otmp);
 				otmp = mksobj(ARCHAIC_PLATE_MAIL, FALSE, FALSE);
@@ -6589,6 +6650,10 @@ register struct	monst	*mtmp;
 				(void) mpickobj(mtmp, otmp);
 				(void)mongets(mtmp, HELM_OF_BRILLIANCE);
 				(void)mongets(mtmp, ROBE);
+				(void)mongets(mtmp, RUFFLED_SHIRT);
+				(void)mongets(mtmp, GENTLEMAN_S_SUIT);
+				(void)mongets(mtmp, HIGH_BOOTS);
+				(void)mongets(mtmp, GLOVES);
 				// (void) mongets(mtmp, POT_FULL_HEALING);
 			break;
 			case PM_BAALPHEGOR:
@@ -7227,7 +7292,7 @@ register int	mmflags;
 		mtmp->m_lev += u.chokhmah;
 	if (is_golem(ptr)) {
 	    mtmp->mhpmax = mtmp->mhp = golemhp(mndx);
-	} else if (is_rider(ptr)) {
+	} else if (rider_hp(ptr)) {
 	    /* We want low HP, but a high mlevel so they can attack well */
 	    mtmp->mhpmax = mtmp->mhp = d(10,8);
 	} else if (ptr->mlevel > 49) {
@@ -9126,7 +9191,7 @@ struct monst *mtmp, *victim;
 	if (mtmp->mhpmax <= hp_threshold)
 	    return ptr;		/* doesn't gain a level */
 
-	if (is_mplayer(ptr) || ptr == &mons[PM_BYAKHEE] || ptr == &mons[PM_LILLEND] || ptr == &mons[PM_MAID]
+	if (is_mplayer(ptr) || ptr == &mons[PM_BYAKHEE] || ptr == &mons[PM_LILLEND] || ptr == &mons[PM_ERINYS] || ptr == &mons[PM_MAID]
 	|| ptr == &mons[PM_CROW_WINGED_HALF_DRAGON] || ptr == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY]
 	|| ptr == &mons[PM_UNDEAD_KNIGHT] || ptr == &mons[PM_WARRIOR_OF_SUNLIGHT]
 	|| ptr == &mons[PM_FORMIAN_CRUSHER]

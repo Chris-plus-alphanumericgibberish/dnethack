@@ -1336,6 +1336,7 @@ int spot;
 			(spot!=W_SWAPWEP || (!(otmp->owornmask & (W_WEP)) && (!otmp->cursed || is_weldproof_mon(mtmp)) && !bimanual(otmp, mtmp->data) && (mtmp->misc_worn_check & W_ARMS) == 0 && 
 				( (otmp->owt <= (30 + (mtmp->m_lev/5)*5)) 
 				|| (otmp->otyp == CHAIN && mtmp->data == &mons[PM_CATHEZAR]) 
+				|| (otmp->otyp == CHAIN && mtmp->data == &mons[PM_FIERNA])
 				|| (mtmp->data == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY])
 				|| (mtmp->data == &mons[PM_CORVIAN_KNIGHT])
 				)
