@@ -551,6 +551,7 @@ read_tile(scroll)
 struct obj *scroll;
 {
 	int duration;
+	long int thought;
 	
 	if(!scroll->dknown){
 		You("have never seen it!");
@@ -649,153 +650,172 @@ struct obj *scroll;
 		u.uvaul_duration += duration;
 		if(!scroll->cursed) u.uvaul++;
 	} else if(scroll->otyp == CLOCKWISE_METAMORPHOSIS_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&CLOCKWISE_METAMORPHOSIS)){
+		thought = CLOCKWISE_METAMORPHOSIS;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A clockwise gyre forms in your mind.");
-			u.thoughts |= CLOCKWISE_METAMORPHOSIS;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == ANTI_CLOCKWISE_METAMORPHOSIS_G){
-		if(count_glyphs() < 3 && !(u.thoughts&ANTI_CLOCKWISE_METAMORPHOSIS)){
+		thought = ANTI_CLOCKWISE_METAMORPHOSIS;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("An anti-clockwise gyre forms in your mind.");
-			u.thoughts |= ANTI_CLOCKWISE_METAMORPHOSIS;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == SPARKLING_LAKE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&ARCANE_BULWARK)){
+		thought = ARCANE_BULWARK;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A great volume of sparkling water pours into your mind.");
-			u.thoughts |= ARCANE_BULWARK;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == FADING_LAKE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&DISSIPATING_BULWARK)){
+		thought = DISSIPATING_BULWARK;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A great volume of pure water pours into your mind.");
-			u.thoughts |= DISSIPATING_BULWARK;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == SMOKING_LAKE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&SMOLDERING_BULWARK)){
+		thought = SMOLDERING_BULWARK;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A great volume of ash-filled water pours into your mind.");
-			u.thoughts |= SMOLDERING_BULWARK;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == FROSTED_LAKE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&FROSTED_BULWARK)){
+		thought = FROSTED_BULWARK;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A great volume of freezing water pours into your mind.");
-			u.thoughts |= FROSTED_BULWARK;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == RAPTUROUS_EYE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&BLOOD_RAPTURE)){
+		thought = BLOOD_RAPTURE;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A rapturous shower of blood drifts through your mind.");
-			u.thoughts |= BLOOD_RAPTURE;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == CLAWMARK_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&CLAWMARK)){
+		thought = CLAWMARK;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A many-taloned clawmark is scoured into your mind.");
-			u.thoughts |= CLAWMARK;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == CLEAR_SEA_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&CLEAR_DEEPS)){
+		thought = CLEAR_DEEPS;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A deep sea of blue water fills your mind.");
-			u.thoughts |= CLEAR_DEEPS;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == DEEP_SEA_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&DEEP_SEA)){
+		thought = DEEP_SEA;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A deep sea of pitch-black water fills your mind.");
-			u.thoughts |= DEEP_SEA;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == COMMUNION_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&COMMUNION)){
+		thought = COMMUNION;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A strange minister's prayer echoes in you mind.");
-			u.thoughts |= COMMUNION;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == CORRUPTION_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&CORRUPTION)){
+		thought = CORRUPTION;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("Thoughts of weeping form in your mind.");
-			u.thoughts |= CORRUPTION;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == EYE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&EYE_THOUGHT)){
+		thought = EYE_THOUGHT;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A seeking eye opens in your mind.");
-			u.thoughts |= EYE_THOUGHT;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == FORMLESS_VOICE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&FORMLESS_VOICE)){
+		thought = FORMLESS_VOICE;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("The voice of a formless thing speaks in your mind.");
-			u.thoughts |= FORMLESS_VOICE;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == GUIDANCE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&GUIDANCE)){
+		thought = GUIDANCE;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("You see tiny spirits dancing in the nothing behind your eyes.");
-			u.thoughts |= GUIDANCE;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == IMPURITY_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&IMPURITY)){
+		thought = IMPURITY;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("Vermin writhe in the filth inside your head.");
-			u.thoughts |= IMPURITY;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == MOON_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&MOON)){
+		thought = MOON;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A reflection of the sympathetic moon fills your mind.");
-			u.thoughts |= MOON;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == WRITHE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&WRITHE)){
+		thought = WRITHE;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("A subtle mucus is revealed in the blood in your brain.");
-			u.thoughts |= WRITHE;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
 		}
 	} else if(scroll->otyp == RADIANCE_GLYPH){
-		if(count_glyphs() < 3 && !(u.thoughts&RADIANCE)){
+		thought = RADIANCE;
+		if(count_glyphs() < 3 && !(u.thoughts&thought) && u.uinsight >= glyph_insight(thought) /*&& u.usanity <= glyph_sanity(thought)*/){
 			pline("An irregular golden pyramid rises from the depths of your mind.");
-			u.thoughts |= RADIANCE;
+			u.thoughts |= thought;
 		} else {
 			pline("Nothing happens.");
 			return 0;
@@ -804,12 +824,15 @@ struct obj *scroll;
 		impossible("bad shard");
 		return 0;
 	}
-	useup(scroll);
-	
 	//Speak one word of power per move free.
-	if(objects[scroll->otyp].oc_magic)
+	if(objects[scroll->otyp].oc_magic){
+		useup(scroll);
 		return partial_action();
-	else return 1;
+	}
+	else {
+		useup(scroll);
+		return 1;
+	}
 }
 
 static int delay = 0;
@@ -1197,6 +1220,20 @@ int curse_bless;
 			if(is_blessed) obj->spe = 25;
 			else if(is_cursed) obj->spe = 0;
 			else obj->spe = rn1(12,12);
+		break;
+	    case TREPHINATION_KIT:
+		if (is_cursed) stripspe(obj);
+		else if (is_blessed) {
+		    obj->spe += rnd(3);
+		    p_glow2(obj, NH_BLUE);
+			if(obj->spe > 6)
+				obj->spe = 6;
+		} else {
+		    if (obj->spe < 5) {
+			obj->spe++;
+			p_glow1(obj);
+		    } else pline1(nothing_happens);
+		}
 		break;
 	    case CRYSTAL_BALL:
 		if (is_cursed) stripspe(obj);

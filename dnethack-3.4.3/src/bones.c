@@ -254,6 +254,18 @@ struct obj *cont;
 			pline("Can't find glyph!");
 		}
 		if(otmp){
+			if(Race_if(PM_ANDROID)){
+				otmp->obj_material = PLASTIC;
+				fix_object(otmp);
+			}
+			if(Race_if(PM_CLOCKWORK_AUTOMATON)){
+				otmp->obj_material = COPPER;
+				fix_object(otmp);
+			}
+			if(Race_if(PM_WORM_THAT_WALKS)){
+				otmp->obj_material = SHELL;
+				fix_object(otmp);
+			}
 			if(rn2(5)) curse(otmp);
 			if (mtmp)
 				(void) add_to_minv(mtmp, otmp);

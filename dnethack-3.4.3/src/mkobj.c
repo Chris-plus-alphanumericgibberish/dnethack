@@ -826,6 +826,7 @@ boolean artif;
 		case CAN_OF_GREASE:	otmp->spe = rnd(25);
 					blessorcurse(otmp, 10);
 		break;
+		case TREPHINATION_KIT:
 		case CRYSTAL_BALL:	otmp->spe = rnd(5);
 					blessorcurse(otmp, 2);
 		break;

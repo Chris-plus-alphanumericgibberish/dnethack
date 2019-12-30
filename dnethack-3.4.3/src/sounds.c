@@ -394,12 +394,67 @@ int dmg;
 }
 
 int
-active_glyph(thought)
+glyph_sanity(thought)
 long int thought;
 {
-	int insightlevel = 0, sanlevel = 0;
-	if(!(u.thoughts&thought))
+	int sanlevel = 1000;
+	switch(thought){
+		case ANTI_CLOCKWISE_METAMORPHOSIS:
+		break;
+		case CLOCKWISE_METAMORPHOSIS:
+		break;
+		case ARCANE_BULWARK:
+		break;
+		case DISSIPATING_BULWARK:
+		break;
+		case SMOLDERING_BULWARK:
+		break;
+		case FROSTED_BULWARK:
+		break;
+		case BLOOD_RAPTURE:
+			sanlevel = 90;
+		break;
+		case CLAWMARK:
+			sanlevel = 90;
+		break;
+		case CLEAR_DEEPS:
+		break;
+		case DEEP_SEA:
+		break;
+		case COMMUNION:
+		break;
+		case CORRUPTION:
+			sanlevel = 80;
+		break;
+		case EYE_THOUGHT:
+		break;
+		case FORMLESS_VOICE:
+		break;
+		case GUIDANCE:
+		break;
+		case IMPURITY:
+			sanlevel = 80;
+		break;
+		case MOON:
+		break;
+		case WRITHE:
+			sanlevel = 90;
+		break;
+		case RADIANCE:
+		break;
+		default:
+			impossible("bad glyph %s in active_glyph!", thought);
 		return 0;
+		break;
+	}
+	return sanlevel;
+}
+
+int
+glyph_insight(thought)
+long int thought;
+{
+	int insightlevel = 0;
 	switch(thought){
 		case ANTI_CLOCKWISE_METAMORPHOSIS:
 			insightlevel = 20;
@@ -463,6 +518,18 @@ long int thought;
 			return 0;
 		break;
 	}
+	return insightlevel;
+}
+
+int
+active_glyph(thought)
+long int thought;
+{
+	int insightlevel = 0, sanlevel = 1000;
+	if(!(u.thoughts&thought))
+		return 0;
+	insightlevel = glyph_insight(thought);
+	// sanlevel = glyph_sanity(thought);
 	if(u.uinsight >= insightlevel && u.usanity <= sanlevel)
 		return 1;
 	else return 0;

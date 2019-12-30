@@ -32,6 +32,8 @@ STATIC_DCL int FDECL(use_rakuyo, (struct obj *));
 STATIC_DCL int FDECL(use_force_blade, (struct obj *));
 STATIC_DCL void FDECL(light_cocktail, (struct obj *));
 STATIC_DCL void FDECL(light_torch, (struct obj *));
+STATIC_DCL void FDECL(remove_thought, (int));
+STATIC_DCL void FDECL(use_trephination_kit, (struct obj *));
 STATIC_DCL void FDECL(use_tinning_kit, (struct obj *));
 STATIC_DCL void FDECL(use_figurine, (struct obj **));
 STATIC_DCL void FDECL(use_grease, (struct obj *));
@@ -57,6 +59,7 @@ STATIC_DCL int FDECL(do_carve_obj, (struct obj *));
 STATIC_PTR int FDECL(pick_rune, (BOOLEAN_P));
 STATIC_DCL void FDECL(describe_rune, (int));
 STATIC_PTR char NDECL(pick_carvee);
+STATIC_DCL int NDECL(dotrephination_menu);
 
 
 #ifdef	AMIGA
@@ -2055,6 +2058,127 @@ struct obj *corpse;
 	if (corpse->odrained) return 0;
 	if (!mons[corpse->corpsenm].cnutrit) return 0;
 	return 1;
+}
+
+
+STATIC_OVL void
+remove_thought(otyp)
+int otyp;
+{
+	if(otyp == ANTI_CLOCKWISE_METAMORPHOSIS_G){
+		u.thoughts &= ~ANTI_CLOCKWISE_METAMORPHOSIS;
+
+	} else if(otyp == CLOCKWISE_METAMORPHOSIS_GLYPH){
+		u.thoughts &= ~CLOCKWISE_METAMORPHOSIS;
+
+	} else if(otyp == SPARKLING_LAKE_GLYPH){
+		u.thoughts &= ~ARCANE_BULWARK;
+
+	} else if(otyp == FADING_LAKE_GLYPH){
+		u.thoughts &= ~DISSIPATING_BULWARK;
+
+	} else if(otyp == SMOKING_LAKE_GLYPH){
+		u.thoughts &= ~SMOLDERING_BULWARK;
+
+	} else if(otyp == FROSTED_LAKE_GLYPH){
+		u.thoughts &= ~FROSTED_BULWARK;
+
+	} else if(otyp == RAPTUROUS_EYE_GLYPH){
+		u.thoughts &= ~BLOOD_RAPTURE;
+
+	} else if(otyp == CLAWMARK_GLYPH){
+		u.thoughts &= ~CLAWMARK;
+
+	} else if(otyp == CLEAR_SEA_GLYPH){
+		u.thoughts &= ~CLEAR_DEEPS;
+
+	} else if(otyp == DEEP_SEA_GLYPH){
+		u.thoughts &= ~DEEP_SEA;
+
+	} else if(otyp == COMMUNION_GLYPH){
+		u.thoughts &= ~COMMUNION;
+
+	} else if(otyp == CORRUPTION_GLYPH){
+		u.thoughts &= ~CORRUPTION;
+
+	} else if(otyp == EYE_GLYPH){
+		u.thoughts &= ~EYE_THOUGHT;
+
+	} else if(otyp == FORMLESS_VOICE_GLYPH){
+		u.thoughts &= ~FORMLESS_VOICE;
+
+	} else if(otyp == GUIDANCE_GLYPH){
+		u.thoughts &= ~GUIDANCE;
+
+	} else if(otyp == IMPURITY_GLYPH){
+		u.thoughts &= ~IMPURITY;
+
+	} else if(otyp == MOON_GLYPH){
+		u.thoughts &= ~MOON;
+
+	} else if(otyp == WRITHE_GLYPH){
+		u.thoughts &= ~WRITHE;
+
+	} else if(otyp == RADIANCE_GLYPH){
+		u.thoughts &= ~RADIANCE;
+
+	} else {
+		impossible("Can't find glyph!");
+	}
+}
+
+STATIC_OVL void
+use_trephination_kit(obj)
+register struct obj *obj;
+{
+	int otyp;
+	struct obj *glyph;
+	if(u.uinsight < 10 || !u.thoughts){
+		You("examine the drills in the kit, but have know idea how to use them!");
+		return;
+	}
+	
+	if(Upolyd && u.uinsight < 20){
+		You("can't get at your own brain right now!");
+		return;
+	}
+	
+	otyp = dotrephination_menu();
+	if(!otyp)
+		return;
+	
+	glyph = mksobj(otyp, FALSE, FALSE);
+	
+	if(glyph){
+		remove_thought(otyp);
+		if(Race_if(PM_ANDROID)){
+			glyph->obj_material = PLASTIC;
+			fix_object(glyph);
+		}
+		if(Race_if(PM_CLOCKWORK_AUTOMATON)){
+			glyph->obj_material = COPPER;
+			fix_object(glyph);
+		}
+		if(Race_if(PM_WORM_THAT_WALKS)){
+			glyph->obj_material = SHELL;
+			fix_object(glyph);
+		}
+		hold_another_object(glyph, "You drop %s!", doname(glyph), (const char *)0);
+		if(ACURR(A_WIS)>ATTRMIN(A_WIS)){
+			adjattrib(A_WIS, -1, FALSE);
+		}
+		if(ACURR(A_INT)>ATTRMIN(A_INT)){
+			adjattrib(A_INT, -1, FALSE);
+		}
+		if(ACURR(A_CON)>ATTRMIN(A_CON)){
+			adjattrib(A_CON, -1, FALSE);
+		}
+		change_usanity(-10);
+		u.uhp -= u.uhp/2; //Note: chopped, so 0 to 1/2 max-HP lost.
+	} else {
+		impossible("Shard creation failed in use_trephination_kit??");
+	}
+	return;
 }
 
 STATIC_OVL void
@@ -5627,6 +5751,9 @@ doapply()
 	case TINNING_KIT:
 		use_tinning_kit(obj);
 		break;
+	case TREPHINATION_KIT:
+		use_trephination_kit(obj);
+		break;
 	case LEASH:
 		use_leash(obj);
 		break;
@@ -6165,6 +6292,186 @@ unfixable_trouble_count(is_horn)
 	    if (HStun) unfixable_trbl++;
 	}
 	return unfixable_trbl;
+}
+
+STATIC_OVL int
+dotrephination_menu()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Extract what?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	incntlet = 'a';
+	
+	if (u.thoughts&CLOCKWISE_METAMORPHOSIS){
+		Sprintf(buf, "Extract clockwise gyre");
+		any.a_int = CLOCKWISE_METAMORPHOSIS_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&ANTI_CLOCKWISE_METAMORPHOSIS){
+		Sprintf(buf, "Extract anti-clockwise gyre");
+		any.a_int = ANTI_CLOCKWISE_METAMORPHOSIS_G;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&ARCANE_BULWARK){
+		Sprintf(buf, "Extract memory of a sparking lake-shore");
+		any.a_int = SPARKLING_LAKE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&DISSIPATING_BULWARK){
+		Sprintf(buf, "Extract memory of a pure lake-shore");
+		any.a_int = FADING_LAKE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&SMOLDERING_BULWARK){
+		Sprintf(buf, "Extract memory of embers drowning in still water");
+		any.a_int = SMOKING_LAKE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&FROSTED_BULWARK){
+		Sprintf(buf, "Extract memory of snowflakes on a lake");
+		any.a_int = FROSTED_LAKE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&BLOOD_RAPTURE){
+		Sprintf(buf, "Extract memory of blood-mist rainbows");
+		any.a_int = RAPTUROUS_EYE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&CLAWMARK){
+		Sprintf(buf, "Extract memory of clawmarks");
+		any.a_int = CLAWMARK_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&CLEAR_DEEPS){
+		Sprintf(buf, "Extract the deep blue waters");
+		any.a_int = CLEAR_SEA_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&DEEP_SEA){
+		Sprintf(buf, "Extract the pitch-black waters");
+		any.a_int = DEEP_SEA_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&COMMUNION){
+		Sprintf(buf, "Extract memory of the strange minister's sermon");
+		any.a_int = COMMUNION_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&CORRUPTION){
+		Sprintf(buf, "Extract the bloody tears");
+		any.a_int = CORRUPTION_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&EYE_THOUGHT){
+		Sprintf(buf, "Extract the writhing eyes");
+		any.a_int = EYE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&FORMLESS_VOICE){
+		Sprintf(buf, "Extract sound of the great voice");
+		any.a_int = FORMLESS_VOICE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&GUIDANCE){
+		Sprintf(buf, "Extract the sight of the dancing sprites");
+		any.a_int = GUIDANCE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&IMPURITY){
+		Sprintf(buf, "Extract the red millipedes");
+		any.a_int = IMPURITY_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&MOON){
+		Sprintf(buf, "Extract memory of the face of the moon");
+		any.a_int = MOON_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&WRITHE){
+		Sprintf(buf, "Extract subtle mucus from your brain");
+		any.a_int = WRITHE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if (u.thoughts&RADIANCE){
+		Sprintf(buf, "Extract the golden pyramid");
+		any.a_int = RADIANCE_GLYPH;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	
+	end_menu(tmpwin, "Pick thought to extract");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? (int)selected[0].item.a_int : 0;
 }
 
 //Returns 0 if this is the first time its called this round, 1 otherwise.

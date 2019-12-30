@@ -2345,6 +2345,9 @@ E int FDECL(P_RESTRICTED, (int));
 E boolean FDECL(spiritSkill, (int));
 E boolean FDECL(roleSkill, (int));
 E void FDECL(doguidance, (struct monst *, int));
+E int NDECL(count_glyphs);
+E int FDECL(glyph_sanity, (long int));
+E int FDECL(glyph_insight, (long int));
 E int FDECL(active_glyph, (long int));
 E int FDECL(domonnoise,(struct monst *, BOOLEAN_P));
 #ifdef USER_SOUNDS
