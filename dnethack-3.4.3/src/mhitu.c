@@ -2586,6 +2586,7 @@ hitmu(mtmp, mattk)
 				pline_The("frost doesn't seem cold!");
 				dmg = 0;
 		    } 
+			roll_frigophobia();
 			if(!InvCold_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(POTION_CLASS, AD_COLD);
@@ -2607,6 +2608,7 @@ hitmu(mtmp, mattk)
 				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON
 			) dmg = 0; //Deeper link
 		}
+		roll_frigophobia();
 		if(!InvCold_resistance){
 			if((int) mtmp->m_lev > rn2(20))
 			destroy_item(POTION_CLASS, AD_COLD);
@@ -4060,6 +4062,49 @@ dopois:
 		dmg += u.ustdy;
 		u.ustdy /= 2;
 	}
+	if((mtmp->data->mlet == S_SNAKE
+		|| mtmp->data->mlet == S_NAGA
+		|| mtmp->data == &mons[PM_COUATL]
+		|| mtmp->data == &mons[PM_LILLEND]
+		|| mtmp->data == &mons[PM_MEDUSA]
+		|| mtmp->data == &mons[PM_MARILITH]
+		|| mtmp->data == &mons[PM_MAMMON]
+		|| mtmp->data == &mons[PM_SHAKTARI]
+		|| mtmp->data == &mons[PM_DEMOGORGON]
+		|| mtmp->data == &mons[PM_GIANT_EEL]
+		|| mtmp->data == &mons[PM_ELECTRIC_EEL]
+		|| mtmp->data == &mons[PM_KRAKEN]
+		|| mtmp->data == &mons[PM_SALAMANDER]
+		|| mtmp->data == &mons[PM_KARY__THE_FIEND_OF_FIRE]
+		|| mtmp->data == &mons[PM_CATHEZAR]
+	) && u.umadness&MAD_OPHIDIOPHOBIA && u.usanity < 100){
+		dmg += (100 - u.usanity)/5;
+	}
+	
+	if(!mtmp->female && humanoid_upperbody(mtmp->data) && u.umadness&MAD_ARGENT_SHEEN && u.usanity < 100){
+		dmg += (100 - u.usanity)/5;
+	}
+	
+	if((is_insectoid(mtmp->data) || is_arachnid(mtmp->data)) && u.umadness&MAD_ENTOMOPHOBIA && u.usanity < 100){
+		dmg += (100 - u.usanity)/5;
+	}
+	
+	if(is_aquatic(mtmp->data) && u.umadness&MAD_THALASSOPHOBIA && u.usanity < 100){
+		dmg += (100 - u.usanity)/5;
+	}
+	
+	if((is_spider(mtmp->data) 
+		|| mtmp->data == &mons[PM_SPROW]
+		|| mtmp->data == &mons[PM_DRIDER]
+		|| mtmp->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+		|| mtmp->data == &mons[PM_AVATAR_OF_LOLTH]
+	) && u.umadness&MAD_ARACHNOPHOBIA && u.usanity < 100){
+		dmg += (100 - u.usanity)/5;
+	}
+	
+	if(mtmp->female && humanoid_upperbody(mtmp->data) && u.umadness&MAD_ARACHNOPHOBIA && u.usanity < 100){
+		dmg += (100 - u.usanity)/5;
+	}
 	
 	if(attacktype_fordmg(youracedata, AT_NONE, AD_STAR)){
 		if(otmp && otmp == MON_WEP(mtmp) && !otmp->oartifact && otmp->spe <= 0) dmg = 0;
@@ -4333,6 +4378,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 				} else {
 					You("are freezing to death!");
 				}
+				roll_frigophobia();
 				if (!InvCold_resistance) {
 					if((int) mtmp->m_lev > rn2(20))
 						destroy_item(POTION_CLASS, AD_COLD);
@@ -4348,6 +4394,7 @@ gulpmu(mtmp, mattk)	/* monster swallows you, or damage if u.uswallow */
 			} else {
 				You("are freezing to death!");
 			}
+			roll_frigophobia();
 			if (!InvCold_resistance) {
 				if((int) mtmp->m_lev > rn2(20))
 					destroy_item(POTION_CLASS, AD_COLD);
@@ -4673,6 +4720,7 @@ common:
 				destroy_item(RING_CLASS, AD_ELEC);
 			}
 		} else if(mattk->adtyp == AD_COLD || mattk->adtyp == AD_ECLD){
+			roll_frigophobia();
 			if(!InvCold_resistance){
 				if((int) mtmp->m_lev > rn2(20))
 				destroy_item(POTION_CLASS, AD_COLD);
@@ -5249,6 +5297,7 @@ gazemu(mtmp, mattk)	/* monster gazes at you */
 				dmg = 0;
 				succeeded=0;
 		    }
+			roll_frigophobia();
 			if(!InvCold_resistance){
 				if ((int) mtmp->m_lev > rn2(20))
 					destroy_item(POTION_CLASS, AD_COLD);

@@ -1924,6 +1924,11 @@ struct monst *mtmp;
 	if (mtmp->cham && !rn2(6))
 	    (void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 	were_change(mtmp);
+	if(u.umadness&MAD_REAL_DELUSIONS && u.usanity < mtmp->m_san_level*0.8){
+		if(!(mtmp->data->geno&(G_UNIQ|G_NOGEN))){
+			newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
+		}
+	}
 	
 	if(!mtmp->mcansee && (mtmp->data == &mons[PM_SHOGGOTH] || mtmp->data == &mons[PM_PRIEST_OF_GHAUNADAUR])){
 		if(canspotmon(mtmp)) pline("%s forms new eyes!",Monnam(mtmp));
@@ -3977,6 +3982,10 @@ register struct monst *mtmp;
 			verbalize("**ALERT: citizen %d vital signs terminated**", (int)(mtmp->m_id));
 		}
 	}
+	if(mtmp->mtame && roll_madness(MAD_TALONS)){
+		You("panic after losing a pet!");
+		nomul(-1*rnd(6), "panicking");
+	}
 #ifdef RECORD_ACHIEVE
 	if(mtmp->data == &mons[PM_LUCIFER]){
 		achieve.killed_lucifer = 1;
@@ -5533,6 +5542,10 @@ int  typ, fatal, opoistype;
 		if(Poison_resistance) {
 			if(!strcmp(string, "blast")) shieldeff(u.ux, u.uy);
 			pline_The("poison doesn't seem to affect you.");
+			if(roll_madness(MAD_OPHIDIOPHOBIA)){
+				You("panic anyway!");
+				nomul(-1*rnd(3), "panicking");
+			}
 		} else {
 			/* suppress killer prefix if it already has one */
 			if ((i = name_to_mon(pname)) >= LOW_PM && mons[i].geno & G_UNIQ) {
@@ -5564,6 +5577,10 @@ int  typ, fatal, opoistype;
 				/* "Poisoned by a poisoned ___" is redundant */
 				done(strstri(pname, "poison") ? DIED : POISONING);
 			}
+			if(roll_madness(MAD_OPHIDIOPHOBIA)){
+				You("panic!");
+				nomul(-1*rnd(6), "panicking");
+			}
 			(void) encumber_msg();
 		}
 	}
@@ -5591,6 +5608,10 @@ int  typ, fatal, opoistype;
 	if(opoistype & OPOISON_BLIND){
 		if(Poison_resistance) {
 			pline_The("poison doesn't seem to affect you.");
+			if(roll_madness(MAD_OPHIDIOPHOBIA)){
+				You("panic anyway!");
+				nomul(-1*rnd(3), "panicking");
+			}
 		} else if(!rn2((fatal/3) + 20*thrown_weapon)){
 			i = thrown_weapon ? 3 : 8;
 			if(Half_physical_damage) i = (i+1) / 2;
@@ -5598,16 +5619,28 @@ int  typ, fatal, opoistype;
 			losehp(i, pname, kprefix);
 			make_blinded(rn1(20, 25),
 					 (boolean)!Blind);
+			if(roll_madness(MAD_OPHIDIOPHOBIA)){
+				You("panic!");
+				nomul(-1*rnd(6), "panicking");
+			}
 		} else{
 			i = thrown_weapon ? rnd(3) : rn1(5,3);
 			if(Half_physical_damage) i = (i+1) / 2;
 			if(u.uvaul_duration) i = (i + 1) / 2;
 			losehp(i, pname, kprefix);
+			if(roll_madness(MAD_OPHIDIOPHOBIA)){
+				You("panic!");
+				nomul(-1*rnd(6), "panicking");
+			}
 		}
 	}
 	if(opoistype & OPOISON_PARAL){
 		if(Free_action) {
 			pline_The("poison doesn't seem to affect you.");
+			if(roll_madness(MAD_OPHIDIOPHOBIA)){
+				You("panic anyway!");
+				nomul(-1*rnd(3), "panicking");
+			}
 		} else if(!rn2((fatal) + 20*thrown_weapon)){
 			i = thrown_weapon ? 6 : 16;
 			if(Half_physical_damage) i = (i+1) / 2;
@@ -5619,6 +5652,10 @@ int  typ, fatal, opoistype;
 			if(Half_physical_damage) i = (i+1) / 2;
 			if(u.uvaul_duration) i = (i + 1) / 2;
 			losehp(i, pname, kprefix);
+			if(roll_madness(MAD_OPHIDIOPHOBIA)){
+				You("panic!");
+				nomul(-1*rnd(6), "panicking");
+			}
 		}
 	}
 	if(opoistype & OPOISON_AMNES){

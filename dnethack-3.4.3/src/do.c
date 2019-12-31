@@ -46,6 +46,11 @@ dodrop()
 	if (*u.ushops) sellobj_state(SELL_NORMAL);
 	reset_occupations();
 
+	if(result && roll_madness(MAD_TALONS)){
+		You("panic after giving up a belonging!");
+		nomul(-1*rnd(6),"panic");
+	}
+	
 	return result;
 }
 
@@ -678,6 +683,10 @@ doddrop()
 	if (*u.ushops) sellobj_state(SELL_NORMAL);
 	reset_occupations();
 
+	if(result && roll_madness(MAD_TALONS)){
+		You("panic after giving up your property!");
+		nomul(-1*rnd(6),"panic");
+	}
 	return result;
 }
 

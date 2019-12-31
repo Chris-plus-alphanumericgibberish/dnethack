@@ -5410,6 +5410,22 @@ int spell;
 	 */
 	chance = chance * (20-splcaster) / 15 - splcaster;
 	
+	if(u.umadness&MAD_RAGE){
+		int delta = 100 - u.usanity;
+		chance -= delta;
+	}
+	if(u.umadness&MAD_NUDIST && u.usanity < 100){
+		int delta = 100 - u.usanity;
+		int discomfort = u_clothing_discomfort();
+		if (discomfort) {
+			chance -= (discomfort * delta)/10;
+		} else {
+			if (!uwep && !uarms) {
+				chance += delta/10;
+			}
+		}
+	}
+	
 	if(flags.silence_level){
 		struct monst *cmon;
 		int dist = 0;

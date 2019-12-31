@@ -1707,8 +1707,13 @@ opentin()		/* called during each move whilst opening a tin */
 	    u.uconduct.food++;
 	    if (!vegan(&mons[tin.tin->corpsenm]))
 		u.uconduct.unvegan++;
-	    if (!vegetarian(&mons[tin.tin->corpsenm]))
-		violated_vegetarian();
+	    if (!vegetarian(&mons[tin.tin->corpsenm])){
+			violated_vegetarian();
+		} else {
+			if(roll_madness(MAD_CANNIBALISM)){
+				make_vomiting(6+rn1(15,10), TRUE);
+			}
+		}
 
 	    tin.tin->dknown = tin.tin->known = TRUE;
 	    cprefx(tin.tin->corpsenm, FALSE, FALSE);
@@ -1938,7 +1943,13 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 
 	/* KMH, conduct */
 	if (!vegan(&mons[mnum])) u.uconduct.unvegan++;
-	if (!vegetarian(&mons[mnum])) violated_vegetarian();
+	if (!vegetarian(&mons[mnum])){
+		violated_vegetarian();
+	} else {
+		if(roll_madness(MAD_CANNIBALISM)){
+			make_vomiting((3 + (mons[mnum].cwt >> 6))+rn1(15,10), TRUE);
+		}
+	}
 
 	if (mnum != PM_LIZARD && mnum != PM_SMALL_CAVE_LIZARD && mnum != PM_CAVE_LIZARD 
 		&& mnum != PM_LARGE_CAVE_LIZARD && mnum != PM_LICHEN && mnum != PM_BEHOLDER
@@ -2034,6 +2045,7 @@ eatcorpse(otmp)		/* called when a corpse is selected as food */
 	} if (freezing(&mons[mnum]) && !Cold_resistance) {
 		tp++;
 		You("feel your stomach freeze!"); /* not body_part() */
+		roll_frigophobia();
 		losehp(rnd(12) + rnd(12), "cryonic corpse", KILLED_BY_AN);
 	} if (burning(&mons[mnum]) && !Fire_resistance) {
 		tp++;
@@ -2882,7 +2894,7 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 	    return 0;
 	}
 	if((otmp->otyp == CORPSE || (otmp->otyp == TIN && otmp->spe != 1)) && your_race(&mons[otmp->corpsenm]) && !is_animal(&mons[otmp->corpsenm]) && !mindless(&mons[otmp->corpsenm])
-		&& !CANNIBAL_ALLOWED() && (u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS)))
+		&& !CANNIBAL_ALLOWED() && ((u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS))) && !roll_madness(MAD_CANNIBALISM))
 	){
 		char buf[BUFSZ];
 		Sprintf(buf, "You feel a deep sense of kinship to %s!  Eat %s anyway?",
@@ -3575,12 +3587,18 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 
 	    material = otmp->obj_material;
 	    if (material == LEATHER ||
-		material == EYEBALL || material == SEVERED_HAND ||
-		material == BONE || material == DRAGON_HIDE) {
-		u.uconduct.unvegan++;
-		violated_vegetarian();
-	    } else if (material == WAX)
+			material == EYEBALL || material == SEVERED_HAND ||
+			material == BONE || material == DRAGON_HIDE
+		) {
 			u.uconduct.unvegan++;
+			violated_vegetarian();
+	    } else {
+			if(roll_madness(MAD_CANNIBALISM)){
+				make_vomiting(victual.reqtime+rn1(15,10), TRUE);
+			}
+			if (material == WAX)
+				u.uconduct.unvegan++;
+		}
 	    u.uconduct.food++;
 	    
 	    if (otmp->cursed)
@@ -3781,6 +3799,9 @@ doeat()		/* generic "eat" command funtion (see cmd.c) */
 		    otmp->otyp == LUMP_OF_PRIESTESS_S_JELLY ||
 		    otmp->otyp == LUMP_OF_RHETOR_S_JELLY
 		) u.uconduct.unvegan++;
+		if(roll_madness(MAD_CANNIBALISM)){
+			make_vomiting(objects[otmp->otyp].oc_delay+rn1(15,10), TRUE);
+		}
 		break;
 	    }
 
@@ -3903,6 +3924,25 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 			else u.uhunger -= 9;
 		}
 	}
+	
+	if ((!inediate(youracedata) || Race_if(PM_INCANTIFIER))
+		&& !uclockwork
+		&& u.usanity < 100
+		&& u.umadness&MAD_GLUTTONY
+	){
+		int delta = 100 - u.usanity;
+		if(Race_if(PM_INCANTIFIER)) u.uen -= delta/25;
+		else u.uhunger -= delta/25;
+		//remainder
+		delta = delta%25;
+		if(delta){
+			if (((moves)*(delta)) / 25 > ((moves - 1)*(delta)) / 25){
+				if(Race_if(PM_INCANTIFIER)) u.uen--;
+				else u.uhunger--;
+			}
+		}
+	}
+	
 	if(uclockwork){
 		if(u.ucspeed == SLOW_CLOCKSPEED){
 			if(!(moves%(10+u.slowclock))){

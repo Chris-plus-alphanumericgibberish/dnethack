@@ -190,6 +190,7 @@
 
 #define slithy(ptr)			((ptr)->mflagsb & MB_SLITHY)
 #define humanoid_torso(ptr)	(((ptr)->mflagsb & MB_HUMANOID) != 0)
+#define humanoid_upperbody(ptr)	(humanoid_torso(ptr) && (((ptr)->mflagsb&(MB_LONGHEAD|MB_LONGNECK)) == 0))
 #define humanoid_feet(ptr)	(((ptr)->mflagsb & MB_HAS_FEET) != 0)
 #define humanoid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_HUMANOID)
 #define animaloid(ptr)		(((ptr)->mflagsb & MB_BODYTYPEMASK) == MB_ANIMAL)
@@ -202,6 +203,9 @@
 
 #define is_animal(ptr)		(((ptr)->mflagst & MT_ANIMAL) != 0L)
 #define is_plant(ptr)		(((ptr)->mflagsa & MA_PLANT) != 0L)
+#define is_insectoid(ptr)		(((ptr)->mflagsa & MA_INSECTOID) != 0L)
+#define is_arachnid(ptr)		(((ptr)->mflagsa & MA_ARACHNID) != 0L)
+#define is_aquatic(ptr)		(((ptr)->mflagsa & MA_AQUATIC) != 0L)
 #define is_wooden(ptr)		((ptr) == &mons[PM_WOOD_GOLEM] || (ptr) == &mons[PM_LIVING_LECTERN] || is_plant(ptr))
 #define thick_skinned(ptr)	(((ptr)->mflagsb & MB_THICK_HIDE) != 0L)
 #define lays_eggs(ptr)		(((ptr)->mflagsb & MB_OVIPAROUS) != 0L)

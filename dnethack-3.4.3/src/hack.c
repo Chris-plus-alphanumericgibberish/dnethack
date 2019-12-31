@@ -1016,12 +1016,12 @@ domove()
 		}
 
 		/* check slippery ice */
-		on_ice = !Levitation && is_ice(u.ux, u.uy);
+		on_ice = !Levitation && !Flying && is_ice(u.ux, u.uy);
 		if (on_ice) {
 		    static int skates = 0;
 		    if (!skates) skates = find_skates();
 		    if ((uarmf && uarmf->otyp == skates)
-			    || resists_cold(&youmonst) || Flying
+			    || resists_cold(&youmonst)
 			    || mon_resistance(&youmonst,LEVITATION) || is_clinger(youracedata)
 			    || is_whirly(youracedata))
 			on_ice = FALSE;

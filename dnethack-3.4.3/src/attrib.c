@@ -4,6 +4,7 @@
 
 /*  attribute modification routines. */
 
+#include <limits.h>
 #include "math.h"
 #include "hack.h"
 
@@ -1270,6 +1271,206 @@ int delta;
 	if(u.uinsight > INSIGHT_RATE/20)
 		u.uinsight = INSIGHT_RATE/20;
 	pline("= %d", u.uinsight);
+}
+
+void
+doguidance(mdef, dmg)
+struct monst *mdef;
+int dmg;
+{
+	if (mdef && mdef->mattackedu) {
+		int life = (int)(dmg*0.2+1);
+		healup(life, 0, FALSE, FALSE);
+	}
+}
+
+int
+glyph_sanity(thought)
+long int thought;
+{
+	int sanlevel = 1000;
+	switch(thought){
+		case ANTI_CLOCKWISE_METAMORPHOSIS:
+		break;
+		case CLOCKWISE_METAMORPHOSIS:
+		break;
+		case ARCANE_BULWARK:
+		break;
+		case DISSIPATING_BULWARK:
+		break;
+		case SMOLDERING_BULWARK:
+		break;
+		case FROSTED_BULWARK:
+		break;
+		case BLOOD_RAPTURE:
+			sanlevel = 90;
+		break;
+		case CLAWMARK:
+			sanlevel = 90;
+		break;
+		case CLEAR_DEEPS:
+		break;
+		case DEEP_SEA:
+		break;
+		case COMMUNION:
+		break;
+		case CORRUPTION:
+			sanlevel = 80;
+		break;
+		case EYE_THOUGHT:
+		break;
+		case FORMLESS_VOICE:
+		break;
+		case GUIDANCE:
+		break;
+		case IMPURITY:
+			sanlevel = 80;
+		break;
+		case MOON:
+		break;
+		case WRITHE:
+			sanlevel = 90;
+		break;
+		case RADIANCE:
+		break;
+		default:
+			impossible("bad glyph %s in active_glyph!", thought);
+			return 0;
+		break;
+	}
+	return sanlevel;
+}
+
+int
+glyph_insight(thought)
+long int thought;
+{
+	int insightlevel = 0;
+	switch(thought){
+		case ANTI_CLOCKWISE_METAMORPHOSIS:
+			insightlevel = 20;
+		break;
+		case CLOCKWISE_METAMORPHOSIS:
+			insightlevel = 20;
+		break;
+		case ARCANE_BULWARK:
+			insightlevel = 18;
+		break;
+		case DISSIPATING_BULWARK:
+			insightlevel = 16;
+		break;
+		case SMOLDERING_BULWARK:
+			insightlevel = 11;
+		break;
+		case FROSTED_BULWARK:
+			insightlevel = 12;
+		break;
+		case BLOOD_RAPTURE:
+			insightlevel = 14;
+		break;
+		case CLAWMARK:
+			insightlevel = 16;
+		break;
+		case CLEAR_DEEPS:
+			insightlevel = 10;
+		break;
+		case DEEP_SEA:
+			insightlevel = 22;
+		break;
+		case COMMUNION:
+			insightlevel = 25;
+		break;
+		case CORRUPTION:
+			insightlevel = 15;
+		break;
+		case EYE_THOUGHT:
+			insightlevel = 17;
+		break;
+		case FORMLESS_VOICE:
+			insightlevel = 19;
+		break;
+		case GUIDANCE:
+			insightlevel = 13;
+		break;
+		case IMPURITY:
+			insightlevel = 5;
+		break;
+		case MOON:
+			insightlevel = 10;
+		break;
+		case WRITHE:
+			insightlevel = 14;
+		break;
+		case RADIANCE:
+			insightlevel = 12;
+		break;
+		default:
+			impossible("bad glyph %s in active_glyph!", thought);
+			return 0;
+		break;
+	}
+	return insightlevel;
+}
+
+int
+active_glyph(thought)
+long int thought;
+{
+	int insightlevel = 0, sanlevel = 1000;
+	if(!(u.thoughts&thought))
+		return 0;
+	insightlevel = glyph_insight(thought);
+	// sanlevel = glyph_sanity(thought);
+	if(u.uinsight >= insightlevel && u.usanity <= sanlevel)
+		return 1;
+	else return 0;
+	return 0;
+}
+
+int
+roll_madness(madness)
+long int madness;
+{
+	int sanlevel;
+	if(!(u.umadness&madness))
+		return 0;
+	
+	sanlevel = (int)(((float)rand()/(float)(RAND_MAX)) * ((float)rand()/(float)(RAND_MAX)) * 100);
+	
+	if(u.usanity < sanlevel)
+		return 1;
+	return 0;
+}
+
+int
+mad_turn(madness)
+long int madness;
+{
+	int sanlevel;
+	unsigned long hashed = hash((unsigned long) (moves + madness)); //Offset the different madnesses before hashing
+	if(!(u.umadness&madness))
+		return 0;
+	
+	sanlevel = max_ints(1,(int)(((float)hashed/ULONG_MAX) * ((float)hashed/ULONG_MAX) * 100));
+	
+	if(u.usanity < sanlevel)
+		return 1;
+	return 0;
+}
+
+void
+roll_frigophobia()
+{
+	if(roll_madness(MAD_FRIGOPHOBIA)){
+		if(!Cold_resistance){
+			You("panic from the cold!");
+			nomul(-1*rnd(6), "panicking");
+		}
+		else if(roll_madness(MAD_FRIGOPHOBIA)){//Very scared of ice
+			You("panic from the chill!");
+			nomul(-1*rnd(3), "panicking");
+		}
+	}
 }
 
 /* condense clumsy ACURR(A_STR) value into value that fits into game formulas

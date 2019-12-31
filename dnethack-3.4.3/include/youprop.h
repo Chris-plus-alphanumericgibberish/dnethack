@@ -175,7 +175,7 @@
 				 (Upolyd && dmgtype(youmonst.data, AD_HALU)))
 #define Hallucination		(HHallucination && !Halluc_resistance)
 
-#define Delusion(mon)	((mon) && (u.umadness&MAD_DELUSIONS || u.umadness&MAD_REAL_DELUSIONS) && (mon)->m_san_level < u.usanity)
+#define Delusion(mon)	((mon) && ((u.umadness&MAD_DELUSIONS && u.usanity < (mon)->m_san_level) || (u.umadness&MAD_REAL_DELUSIONS && u.usanity < (mon)->m_san_level*0.8)))
 
 /* Timeout, plus a worn mask */
 #define HFumbling		u.uprops[FUMBLING].intrinsic

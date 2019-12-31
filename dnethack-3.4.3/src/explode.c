@@ -287,6 +287,7 @@ boolean yours; /* is it your fault (for killing monsters) */
 				break;
 			case AD_COLD:
 				explmask = !!Cold_resistance;
+				roll_frigophobia();
 				break;
 			case AD_DISN:
 				explmask = !!Disint_resistance;
@@ -501,6 +502,26 @@ boolean yours; /* is it your fault (for killing monsters) */
 			    if (!silent && cansee(xi,yi))
 				pline("%s resists the %s!", Monnam(mtmp), str);
 			    mdam = dam/2;
+			}
+			if(yours && mtmp->female && humanoid_torso(mtmp->data) && roll_madness(MAD_SANCTITY)){
+			    mdam /= 4;
+			}
+			if(yours && roll_madness(MAD_ARGENT_SHEEN)){
+			    mdam /= 6;
+			}
+			if(yours && (is_spider(mtmp->data) 
+				|| mtmp->data == &mons[PM_SPROW]
+				|| mtmp->data == &mons[PM_DRIDER]
+				|| mtmp->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+				|| mtmp->data == &mons[PM_AVATAR_OF_LOLTH]
+			) && roll_madness(MAD_ARACHNOPHOBIA)){
+			    mdam /= 4;
+			}
+			if(yours && mtmp->female && humanoid_upperbody(mtmp->data) && roll_madness(MAD_ARACHNOPHOBIA)){
+			    mdam /= 2;
+			}
+			if(yours && is_aquatic(mtmp->data) && roll_madness(MAD_THALASSOPHOBIA)){
+			    mdam /= 10;
 			}
 			if (mtmp == u.ustuck && x==u.ux && y==u.uy)
 				mdam *= 2;

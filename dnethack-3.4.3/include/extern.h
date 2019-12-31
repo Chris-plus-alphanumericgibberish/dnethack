@@ -155,6 +155,12 @@ E int NDECL(maxen);
 E int FDECL(conplus, (int));
 E void FDECL(change_usanity, (int));
 E void FDECL(change_uinsight, (int));
+E int FDECL(glyph_sanity, (long int));
+E int FDECL(glyph_insight, (long int));
+E int FDECL(active_glyph, (long int));
+E int FDECL(roll_madness, (long int));
+E int FDECL(mad_turn, (long int));
+E void NDECL(roll_frigophobia);
 E void NDECL(calc_total_maxhp);
 E void NDECL(calc_total_maxen);
 E schar FDECL(acurr, (int));
@@ -950,6 +956,7 @@ E int NDECL(phase_of_the_moon);
 E boolean NDECL(friday_13th);
 E int NDECL(night);
 E int NDECL(midnight);
+E unsigned long int FDECL(hash, (unsigned long int));
 
 /* ### invent.c ### */
 
@@ -1033,6 +1040,7 @@ E struct obj *NDECL(getnextgetobj);
 E int FDECL(sortloot_cmp, (struct obj *, struct obj *));
 #endif
 E int NDECL(u_healing_penalty);
+E int NDECL(u_clothing_discomfort);
 E struct obj * FDECL(outermost_armor, (struct monst *));
 
 /* ### ioctl.c ### */
@@ -2346,9 +2354,6 @@ E boolean FDECL(spiritSkill, (int));
 E boolean FDECL(roleSkill, (int));
 E void FDECL(doguidance, (struct monst *, int));
 E int NDECL(count_glyphs);
-E int FDECL(glyph_sanity, (long int));
-E int FDECL(glyph_insight, (long int));
-E int FDECL(active_glyph, (long int));
 E int FDECL(domonnoise,(struct monst *, BOOLEAN_P));
 #ifdef USER_SOUNDS
 E int FDECL(add_sound_mapping, (const char *));

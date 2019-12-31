@@ -448,6 +448,22 @@ boolean phasing;
 	    }
 	}
 
+	if(u.umadness&MAD_NUDIST && u.usanity < 100){
+		int delta = 100 - u.usanity;
+		int discomfort = u_clothing_discomfort();
+		static boolean clothmessage = TRUE;
+	    if (discomfort) {
+			if(clothmessage) Your("clothing is rather uncomfortable...");
+			clothmessage = FALSE;
+			tmp -= (discomfort * delta)/10;
+	    } else {
+			if(!clothmessage) clothmessage = TRUE;
+			if (!uwep && !uarms) {
+				tmp += delta/10;
+			}
+	    }
+	}
+
 /*	with a lot of luggage, your agility diminishes */
 	if ((tmp2 = near_capacity()) != 0) tmp -= (tmp2*2) - 1;
 	if (u.utrap) tmp -= 3;
@@ -970,9 +986,64 @@ struct attack *uattk;
 	boolean malive;
 	int mhit = (tmp > (dieroll = rnd(20)) || u.uswallow);
 	
+	if(mon->female && humanoid_torso(mon->data) && roll_madness(MAD_SANCTITY)){
+		You("can't bring yourself to strike %s!", mon_nam(mon));
+		return TRUE;
+	}
+	
+	if((mon->data->mlet == S_SNAKE
+		|| mon->data->mlet == S_NAGA
+		|| mon->data == &mons[PM_COUATL]
+		|| mon->data == &mons[PM_LILLEND]
+		|| mon->data == &mons[PM_MEDUSA]
+		|| mon->data == &mons[PM_MARILITH]
+		|| mon->data == &mons[PM_MAMMON]
+		|| mon->data == &mons[PM_SHAKTARI]
+		|| mon->data == &mons[PM_DEMOGORGON]
+		|| mon->data == &mons[PM_GIANT_EEL]
+		|| mon->data == &mons[PM_ELECTRIC_EEL]
+		|| mon->data == &mons[PM_KRAKEN]
+		|| mon->data == &mons[PM_SALAMANDER]
+		|| mon->data == &mons[PM_KARY__THE_FIEND_OF_FIRE]
+		|| mon->data == &mons[PM_CATHEZAR]
+	) && roll_madness(MAD_OPHIDIOPHOBIA)){
+		pline("You're afraid to go near that horrid serpent!");
+		return TRUE;
+	}
+	
+	if((is_insectoid(mon->data) || is_arachnid(mon->data)) && roll_madness(MAD_ENTOMOPHOBIA)){
+		pline("You're afraid to go near that frightful bug!");
+		return TRUE;
+	}
+	
+	if((is_spider(mon->data) 
+		|| mon->data == &mons[PM_SPROW]
+		|| mon->data == &mons[PM_DRIDER]
+		|| mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+		|| mon->data == &mons[PM_AVATAR_OF_LOLTH]
+	) && roll_madness(MAD_ARACHNOPHOBIA)){
+		pline("You're afraid to go near that terrifying spider!");
+		return TRUE;
+	}
+	
+	if(mon->female && humanoid_upperbody(mon->data) && roll_madness(MAD_ARACHNOPHOBIA)){
+		You("can't bring yourself to strike %s!", mon_nam(mon));
+		return TRUE;
+	}
+	
+	if(is_aquatic(mon->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		pline("You're afraid to go near that sea monster!");
+		return TRUE;
+	}
+	
+	if(u.umadness&MAD_PARANOIA && u.usanity < rnd(100)){
+		You("attack %s's hallucinatory twin!", mon_nam(mon));
+		return TRUE;
+	}
+	
 	if(mhit && mon_resistance(mon,DISPLACED) && rn2(2)){
 		if(has_passthrough_displacement(mon->data)){
-			Your("attack passes harmlessly through %s!", the(mon_nam(mon)));
+			Your("attack passes harmlessly through %s!", mon_nam(mon));
 		} else {
 			You("hit a displaced image!");
 		}
@@ -4048,6 +4119,10 @@ register struct attack *mattk;
 		if(tmp < 1) tmp = 1;
 	}
 	
+	if(is_aquatic(mdef->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		tmp /= 10;
+	}
+	
 	if(tmp > 1){
 		if(mattk->adtyp == AD_SHDW){
 			use_skill(P_BARE_HANDED_COMBAT,1);
@@ -4477,9 +4552,64 @@ register int tmp, weptmp, tchtmp;
 		mas = youmonst.data;
 	}
 	
+	if(mon->female && humanoid_torso(mon->data) && roll_madness(MAD_SANCTITY)){
+		You("can't bring yourself to strike %s!", mon_nam(mon));
+		return TRUE;
+	}
+	
+	if((mon->data->mlet == S_SNAKE
+		|| mon->data->mlet == S_NAGA
+		|| mon->data == &mons[PM_COUATL]
+		|| mon->data == &mons[PM_LILLEND]
+		|| mon->data == &mons[PM_MEDUSA]
+		|| mon->data == &mons[PM_MARILITH]
+		|| mon->data == &mons[PM_MAMMON]
+		|| mon->data == &mons[PM_SHAKTARI]
+		|| mon->data == &mons[PM_DEMOGORGON]
+		|| mon->data == &mons[PM_GIANT_EEL]
+		|| mon->data == &mons[PM_ELECTRIC_EEL]
+		|| mon->data == &mons[PM_KRAKEN]
+		|| mon->data == &mons[PM_SALAMANDER]
+		|| mon->data == &mons[PM_KARY__THE_FIEND_OF_FIRE]
+		|| mon->data == &mons[PM_CATHEZAR]
+	) && roll_madness(MAD_OPHIDIOPHOBIA)){
+		pline("You're afraid to go near that horrid serpent!");
+		return TRUE;
+	}
+	
+	if((is_insectoid(mon->data) || is_arachnid(mon->data)) && roll_madness(MAD_ENTOMOPHOBIA)){
+		pline("You're afraid to go near that frightful bug!");
+		return TRUE;
+	}
+	
+	if((is_spider(mon->data) 
+		|| mon->data == &mons[PM_SPROW]
+		|| mon->data == &mons[PM_DRIDER]
+		|| mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+		|| mon->data == &mons[PM_AVATAR_OF_LOLTH]
+	) && roll_madness(MAD_ARACHNOPHOBIA)){
+		pline("You're afraid to go near that terrifying spider!");
+		return TRUE;
+	}
+	
+	if(mon->female && humanoid_upperbody(mon->data) && roll_madness(MAD_ARACHNOPHOBIA)){
+		You("can't bring yourself to strike %s!", mon_nam(mon));
+		return TRUE;
+	}
+	
+	if(is_aquatic(mon->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		pline("You're afraid to go near that sea monster!");
+		return TRUE;
+	}
+	
+	if(u.umadness&MAD_PARANOIA && u.usanity < rnd(100)){
+		You("attack %s's hallucinatory twin!", mon_nam(mon));
+		return TRUE;
+	}
+	
 	if(mon_resistance(mon,DISPLACED) && rn2(2)){
 		if(has_passthrough_displacement(mon->data)){
-			Your("attack passes harmlessly through %s!", the(mon_nam(mon)));
+			Your("attack passes harmlessly through %s!", mon_nam(mon));
 		} else {
 			You("attack a displaced image!");
 		}
@@ -4800,9 +4930,64 @@ int nattk;
 	struct attack *mattk;
 	boolean Old_Upolyd = Upolyd;
 	
+	if(mon->female && humanoid_torso(mon->data) && roll_madness(MAD_SANCTITY)){
+		You("can't bring yourself to strike %s!", mon_nam(mon));
+		return TRUE;
+	}
+	
+	if((mon->data->mlet == S_SNAKE
+		|| mon->data->mlet == S_NAGA
+		|| mon->data == &mons[PM_COUATL]
+		|| mon->data == &mons[PM_LILLEND]
+		|| mon->data == &mons[PM_MEDUSA]
+		|| mon->data == &mons[PM_MARILITH]
+		|| mon->data == &mons[PM_MAMMON]
+		|| mon->data == &mons[PM_SHAKTARI]
+		|| mon->data == &mons[PM_DEMOGORGON]
+		|| mon->data == &mons[PM_GIANT_EEL]
+		|| mon->data == &mons[PM_ELECTRIC_EEL]
+		|| mon->data == &mons[PM_KRAKEN]
+		|| mon->data == &mons[PM_SALAMANDER]
+		|| mon->data == &mons[PM_KARY__THE_FIEND_OF_FIRE]
+		|| mon->data == &mons[PM_CATHEZAR]
+	) && roll_madness(MAD_OPHIDIOPHOBIA)){
+		pline("You're afraid to go near that horrid serpent!");
+		return TRUE;
+	}
+	
+	if((is_insectoid(mon->data) || is_arachnid(mon->data)) && roll_madness(MAD_ENTOMOPHOBIA)){
+		pline("You're afraid to go near that frightful bug!");
+		return TRUE;
+	}
+	
+	if((is_spider(mon->data) 
+		|| mon->data == &mons[PM_SPROW]
+		|| mon->data == &mons[PM_DRIDER]
+		|| mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+		|| mon->data == &mons[PM_AVATAR_OF_LOLTH]
+	) && roll_madness(MAD_ARACHNOPHOBIA)){
+		pline("You're afraid to go near that terrifying spider!");
+		return TRUE;
+	}
+	
+	if(mon->female && humanoid_upperbody(mon->data) && roll_madness(MAD_ARACHNOPHOBIA)){
+		You("can't bring yourself to strike %s!", mon_nam(mon));
+		return TRUE;
+	}
+	
+	if(is_aquatic(mon->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		pline("You're afraid to go near that sea monster!");
+		return TRUE;
+	}
+	
+	if(u.umadness&MAD_PARANOIA && u.usanity < rnd(100)){
+		You("attack %s's hallucinatory twin!", mon_nam(mon));
+		return TRUE;
+	}
+	
 	if(mon_resistance(mon,DISPLACED) && rn2(2)){
 		if(has_passthrough_displacement(mon->data)){
-			Your("attack passes harmlessly through %s!", the(mon_nam(mon)));
+			Your("attack passes harmlessly through %s!", mon_nam(mon));
 		} else {
 			You("attack a displaced image!");
 		}
@@ -5108,6 +5293,13 @@ uchar aatyp, adtyp;
 		&& mon_reflects(mon,"You catch a glimpse of a stranger's reflection in %s %s.")
 	){
 		if(u.sealsActive&SEAL_IRIS) unbind(SEAL_IRIS,TRUE);
+	}
+	else if(!Blind && canseemon(mon) && !Invisible
+		&& !is_vampire(youracedata)
+		&& roll_madness(MAD_ARGENT_SHEEN)
+		&& mon_reflects(mon,"You admire your reflection in %s %s.")
+	){
+		nomul(-1*rnd(6), "posing in front of a mirror.");
 	}
 	
 	if (mhit && aatyp == AT_BITE && is_vampire(youracedata)) {
@@ -5532,9 +5724,11 @@ dobpois:
 			    if(Cold_resistance) {
 					shieldeff(u.ux, u.uy);
 					You_feel("a mild chill.");
+					roll_frigophobia();
 					ugolemeffects(AD_COLD, tmp);
 					break;
 			    }
+				roll_frigophobia();
 			    You("are suddenly very cold!");
 			    mdamageu(mon, tmp);
 			/* monster gets stronger with your heat! */

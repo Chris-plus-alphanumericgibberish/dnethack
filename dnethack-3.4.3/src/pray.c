@@ -2169,7 +2169,7 @@ dosacrifice()
 				You("find the idea very satisfying.");
 				exercise(A_WIS, TRUE);
 			} else if (u.ualign.type != A_CHAOTIC || altaralign != A_CHAOTIC) {
-				if(u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS))){
+				if((u.ualign.record >= 20 || ACURR(A_WIS) >= 20 || u.ualign.record >= rnd(20-ACURR(A_WIS))) && !roll_madness(MAD_CANNIBALISM)){
 					char buf[BUFSZ];
 					Sprintf(buf, "You feel a deep sense of kinship to %s!  Sacrifice %s anyway?",
 						the(xname(otmp)), (otmp->quan == 1L) ? "it" : "one");

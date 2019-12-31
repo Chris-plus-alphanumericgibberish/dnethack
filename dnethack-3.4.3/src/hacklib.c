@@ -611,6 +611,19 @@ midnight()
 {
 	return(getlt()->tm_hour == 0);
 }
+
+//Integer hash function courtesy of Thomas Mueller via Stackoverflow
+// Assumes that an int is 32 bits (gets good mixing in that case)
+unsigned long int
+hash(x)
+unsigned long int x;
+{
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = ((x >> 16) ^ x) * 0x45d9f3b;
+    x = (x >> 16) ^ x;
+    return x;
+}
+
 #endif /* OVL2 */
 
 /*hacklib.c*/

@@ -163,6 +163,10 @@ stealarm(VOID_ARGS)
 			   so we don't set mavenge bit here. */
 			monflee(mtmp, 0, FALSE, FALSE);
 			if (!tele_restrict(mtmp)) (void) rloc(mtmp, FALSE);
+			if(roll_madness(MAD_TALONS)){
+				You("panic after having your property stolen!!");
+				nomul(-1*rnd(6),"panic");
+			}
 		        break;
 		    }
 		}
@@ -438,6 +442,10 @@ gotobj:
 	if (could_petrify && !(mtmp->misc_worn_check & W_ARMG)) {
 	    minstapetrify(mtmp, TRUE);
 	    return -1;
+	}
+	if(roll_madness(MAD_TALONS)){
+		You("panic after having your property stolen!");
+		nomul(-1*rnd(6),"panic");
 	}
 	return((multi < 0) ? 0 : 1);
 }

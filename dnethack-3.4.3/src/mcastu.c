@@ -1461,6 +1461,7 @@ cold_spell:
 			pline("But you resist the effects.");
 			dmg = 0;
 		}
+		roll_frigophobia();
 		if(!InvCold_resistance) destroy_item(POTION_CLASS, AD_COLD);
 		stop_occupation();
 		break;
@@ -1808,6 +1809,7 @@ int spellnum;
 	} else {
 	    dmg += Half_spell_damage ? (d(4, 8)+1)/2 : d(4, 8);
 	}
+	roll_frigophobia();
 	if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 	if (!InvCold_resistance) {
 		destroy_item(POTION_CLASS, AD_COLD);
@@ -1835,6 +1837,7 @@ int spellnum;
 		} else {
 			dmg += Half_spell_damage ? (hfdmg+1)/2 : hfdmg;
 		}
+		roll_frigophobia();
 		if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 		if (!InvCold_resistance) {
 			if(hfdmg > rnd(20)) destroy_item(POTION_CLASS, AD_COLD);

@@ -154,6 +154,7 @@ dosit()
 
 	    You(sit_message, defsyms[S_ice].explanation);
 	    if (!Cold_resistance) pline_The("ice feels cold.");
+		roll_frigophobia();
 
 	} else if (typ == DRAWBRIDGE_DOWN) {
 

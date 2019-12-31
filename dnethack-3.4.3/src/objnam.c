@@ -1467,7 +1467,7 @@ boolean with_price;
 		}
 		else {
 			if(obj->obj_material == BONE){
-				Strcat(buf, " scrimshawed with ");
+				Strcat(buf, " scrimshawed with a ");
 			} else {
 				Strcat(buf, " with a ");
 			}

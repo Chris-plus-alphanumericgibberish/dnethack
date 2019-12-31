@@ -1268,25 +1268,25 @@ POTION("blood", "blood-red",            0, 0,          18, 50,  CLR_RED),
 #define BONE_TILE(name,text,prob) OBJECT( \
 		OBJ(name,text), BITS(0,1,0,0,0,0,0,0,0,0,0,P_NONE,BONE, IDED|UNIDED), 0, \
 		TILE_CLASS, prob, 0, 3, 300, 0, 0, 0, 0, 0, 6, CLR_GRAY )
-	BONE_TILE("anti-clockwise metamorphosis glyph",  "a counterclockwise cross",   0),	// ANTI_CLOCKWISE_METAMORPHOSIS
-	BONE_TILE("clockwise metamorphosis glyph",  "a clockwise cross",   0),				// CLOCKWISE_METAMORPHOSIS
-	BONE_TILE("sparkling lake glyph",  "a sparkling horizontal line",   0),	// ARCANE_BULWARK
-	BONE_TILE("fading lake glyph",  "a fading horizontal line",   0),			// DISSIPATING_BULWARK
-	BONE_TILE("smoking lake glyph",  "a smoking horizontal line",   0),		// SMOLDERING_BULWARK
-	BONE_TILE("frosted lake glyph",  "a frosted horizontal line",   0),		// FROSTED_BULWARK
-	BONE_TILE("rapturous eye glyph",  "a long-lashed eye",   0),				// BLOOD_RAPTURE
-	BONE_TILE("clawmark glyph",  "many vertical lines",   0),				// CLAWMARK
-	BONE_TILE("clear sea glyph",  "coalescing vertical lines",   0),		// CLEAR_DEEPS
-	BONE_TILE("deep sea glyph",  "coalescing vertical marks",   0),			// DEEP_SEA
-	BONE_TILE("communion glyph",  "a weeping-eyed leaf",   0),				// COMMUNION
-	BONE_TILE("corruption glyph",  "a bleeding caduceus",   0),				// CORRUPTION
-	BONE_TILE("eye glyph",  "a pentagonal eye",   0),							// EYE_THOUGHT
-	BONE_TILE("formless voice glyph",  "a thrice-sealed eye",   0),			// FORMLESS_VOICE
-	BONE_TILE("guidance glyph",  "a long-tailed watcher",   0),					// GUIDANCE
-	BONE_TILE("impurity glyph",  "a once-sealed six-sworn eye",   0),			// IMPURITY
-	BONE_TILE("moon glyph",  "a sword-crossed eye",   0),						// MOON
-	BONE_TILE("writhe glyph",  "a writhing vesica piscis",   0),				// WRITHE
-	BONE_TILE("radiance glyph",  "an eyed triangle",   0),						// RADIANCE
+	BONE_TILE("anti-clockwise metamorphosis glyph",  "counterclockwise-rotated cross",   0),	// ANTI_CLOCKWISE_METAMORPHOSIS
+	BONE_TILE("clockwise metamorphosis glyph",  "clockwise-rotated cross",   0),				// CLOCKWISE_METAMORPHOSIS
+	BONE_TILE("sparkling lake glyph",  "sparkling horizontal line",   0),	// ARCANE_BULWARK
+	BONE_TILE("fading lake glyph",  "fading horizontal line",   0),			// DISSIPATING_BULWARK
+	BONE_TILE("smoking lake glyph",  "smoking horizontal line",   0),		// SMOLDERING_BULWARK
+	BONE_TILE("frosted lake glyph",  "frosted horizontal line",   0),		// FROSTED_BULWARK
+	BONE_TILE("rapturous eye glyph",  "long-lashed eye",   0),				// BLOOD_RAPTURE
+	BONE_TILE("clawmark glyph",  "set of many vertical lines",   0),				// CLAWMARK
+	BONE_TILE("clear sea glyph",  "set of coalescing vertical lines",   0),		// CLEAR_DEEPS
+	BONE_TILE("deep sea glyph",  "set of coalescing vertical marks",   0),			// DEEP_SEA
+	BONE_TILE("communion glyph",  "weeping-eyed leaf",   0),				// COMMUNION
+	BONE_TILE("corruption glyph",  "bleeding caduceus",   0),				// CORRUPTION
+	BONE_TILE("eye glyph",  "pentagonal eye",   0),							// EYE_THOUGHT
+	BONE_TILE("formless voice glyph",  "thrice-sealed eye",   0),			// FORMLESS_VOICE
+	BONE_TILE("guidance glyph",  "long-tailed watcher",   0),					// GUIDANCE
+	BONE_TILE("impurity glyph",  "once-sealed six-sworn eye",   0),			// IMPURITY
+	BONE_TILE("moon glyph",  "sword-crossed eye",   0),						// MOON
+	BONE_TILE("writhe glyph",  "writhing vesica piscis",   0),				// WRITHE
+	BONE_TILE("radiance glyph",  "eyed triangle",   0),						// RADIANCE
 #undef BONE_TILE
 #define METALIC_SLAB(name,text, clr) OBJECT( \
 		OBJ(name,text), BITS(0,0,0,0,1,0,1,1,1,0,0,P_NONE,METAL, IDED|UNIDED), 0, \

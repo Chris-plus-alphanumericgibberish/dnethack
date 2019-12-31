@@ -2336,6 +2336,9 @@ struct obj *otmp;
 	else if (str < STR19(25)) bonus = 7;
 	else /*  str ==25*/bonus = 8;
 	
+	if(u.umadness&MAD_RAGE){
+		bonus += (100 - u.usanity)/10;
+	}
 	if(otmp){
 		if((bimanual(otmp,youracedata) ||
 			(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)

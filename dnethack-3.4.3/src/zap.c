@@ -2419,6 +2419,7 @@ boolean ordinary;
 				You("imitate a popsicle!");
 				damage = d(12,6);
 		    }
+			roll_frigophobia();
 			if(!InvCold_resistance){
 				destroy_item(POTION_CLASS, AD_COLD);
 			}
@@ -3754,8 +3755,29 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		Spellboost)
 	) tmp *= 2;
 	if (tmp > 0 && yours && (adtyp != -1) &&
-		resist(mon, (olet==WAND_CLASS) ? WAND_CLASS : '\0', 0, NOTELL))
+		resist(mon, (olet==WAND_CLASS) ? WAND_CLASS : '\0', 0, NOTELL)
+	)
 	    tmp /= 2;
+	if(yours && mon->female && humanoid_torso(mon->data) && roll_madness(MAD_SANCTITY)){
+	    tmp /= 4;
+	}
+	if(yours && roll_madness(MAD_ARGENT_SHEEN)){
+	    tmp /= 6;
+	}
+	if(yours && (is_spider(mon->data) 
+		|| mon->data == &mons[PM_SPROW]
+		|| mon->data == &mons[PM_DRIDER]
+		|| mon->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+		|| mon->data == &mons[PM_AVATAR_OF_LOLTH]
+	) && roll_madness(MAD_ARACHNOPHOBIA)){
+	    tmp /= 4;
+	}
+	if(yours && mon->female && humanoid_upperbody(mon->data) && roll_madness(MAD_ARACHNOPHOBIA)){
+	    tmp /= 2;
+	}
+	if(yours && is_aquatic(mon->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		tmp /= 10;
+	}
 	if (tmp < 0) tmp = 0;		/* don't allow negative damage */
 #ifdef WIZ_PATCH_DEBUG
 	pline("zapped monster hp = %d (= %d - %d)", mon->mhp-tmp,mon->mhp,tmp);
@@ -3812,6 +3834,7 @@ xchar sx, sy;
 			else dam = flat;
 			if(Reflecting) dam = dam/2+1;
 	    }
+		roll_frigophobia();
 		if(!InvCold_resistance){
 			if (flags.drgn_brth || !rn2(3)) destroy_item(POTION_CLASS, AD_COLD);
 			if (flags.drgn_brth) destroy_item(POTION_CLASS, AD_COLD);
@@ -5236,6 +5259,27 @@ int damage, tell;
 	    damage = (damage + 1) / 2;
 	}
 
+	if(!flags.mon_moving && mtmp->female && humanoid_torso(mtmp->data) && roll_madness(MAD_SANCTITY)){
+		damage /= 4;
+	}
+	if(!flags.mon_moving && roll_madness(MAD_ARGENT_SHEEN)){
+		damage /= 6;
+	}
+	if(!flags.mon_moving && (is_spider(mtmp->data) 
+		|| mtmp->data == &mons[PM_SPROW]
+		|| mtmp->data == &mons[PM_DRIDER]
+		|| mtmp->data == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
+		|| mtmp->data == &mons[PM_AVATAR_OF_LOLTH]
+	) && roll_madness(MAD_ARACHNOPHOBIA)){
+		damage /= 4;
+	}
+	if(!flags.mon_moving && mtmp->female && humanoid_upperbody(mtmp->data) && roll_madness(MAD_ARACHNOPHOBIA)){
+		damage /= 2;
+	}
+	if(!flags.mon_moving && is_aquatic(mtmp->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		damage /= 10;
+	}
+	
 	if (damage) {
 	    mtmp->mhp -= damage;
 	    if (mtmp->mhp < 1) {

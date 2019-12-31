@@ -749,6 +749,16 @@ moveloop()
 				&& couldsee(mtmp->mx, mtmp->my)
 			) m_respond(mtmp);
 		}
+		if(is_ice(u.ux, u.uy) && roll_madness(MAD_FRIGOPHOBIA)){
+			if(!Flying && !Levitation){
+				You("panic from setting foot on ice!");
+				nomul(-1*rnd(6), "panicking");
+			}
+			else if(roll_madness(MAD_FRIGOPHOBIA)){//Very scared of ice
+				You("panic from traveling over ice!");
+				nomul(-1*rnd(3), "panicking");
+			}
+		}
 		
 	    do { /* hero can't move this turn loop */
 		wtcap = encumber_msg();
@@ -1501,10 +1511,41 @@ karemade:
 			default: break;
 		    }
 			
+			if(u.umadness&MAD_NUDIST && u.usanity < 100){
+				int delta = 100 - u.usanity;
+				int discomfort = u_clothing_discomfort();
+				discomfort = (discomfort * delta)/100;
+				if (moveamt - discomfort < NORMAL_SPEED/2) {
+					moveamt = min(moveamt, NORMAL_SPEED/2);
+				}
+				else moveamt -= discomfort;
+			}
+			
 		    if(In_fog_cloud(&youmonst)) moveamt = max(moveamt/3, 1);
 		    youmonst.movement += moveamt;
 			//floor how far into movement-debt you can fall.
 		    if (youmonst.movement < -2*NORMAL_SPEED) youmonst.movement = -2*NORMAL_SPEED;
+			
+			if(!rn2(66) && roll_madness(MAD_SPORES)
+				&& !Race_if(PM_ANDROID) && !Race_if(PM_CLOCKWORK_AUTOMATON)
+			){
+				make_hallucinated(itimeout_incr(HHallucination, 100), TRUE, 0L);
+				if(roll_madness(MAD_SPORES)){//Second roll for more severe symptoms
+					make_stunned(itimeout_incr(HStun, 100), TRUE);
+					make_confused(itimeout_incr(HConfusion, 100), FALSE);
+					losehp(u.ulevel, "brain-eating fungal spores", KILLED_BY);
+					exercise(A_INT, FALSE);exercise(A_WIS, FALSE);exercise(A_CHA, FALSE);
+					exercise(A_INT, FALSE);exercise(A_WIS, FALSE);exercise(A_CHA, FALSE);
+					exercise(A_INT, FALSE);exercise(A_WIS, FALSE);exercise(A_CHA, FALSE);
+				}
+				else {
+					make_confused(itimeout_incr(HConfusion, 100), TRUE);
+					losehp(u.ulevel/2, "brain-eating fungal spores", KILLED_BY);
+					exercise(A_INT, FALSE);
+					exercise(A_WIS, FALSE);
+					exercise(A_CHA, FALSE);
+				}
+			}
 			
 			if(u.uentangled){ //Note: the normal speed calculations include important hunger modifiers, so just calculate speed then 0 it out if needed.
 				if(!ubreak_entanglement()){

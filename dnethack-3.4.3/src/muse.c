@@ -2555,6 +2555,7 @@ struct monst *mon;
 const char *str;
 {
 	struct obj *orefl = which_armor(mon, W_ARMS);
+	int sheen_turn = mad_turn(MAD_ARGENT_SHEEN);
 
 	if ((orefl) && (
 		objects[orefl->otyp].oc_oprop == REFLECTING
@@ -2674,7 +2675,7 @@ const char *str;
 		pline(str, s_suffix(mon_nam(mon)), "fractured surface");
 		return TRUE;
 	}
-	if (species_reflects(mon)){
+	if (species_reflects(mon) || sheen_turn){
 	    if (str)
 		{
 			switch (monsndx(mon->data))
@@ -2712,6 +2713,9 @@ const char *str;
 		pline(str, s_suffix(mon_nam(mon)), "mirrored flower-bud");
 				break;
 			default:
+				if(sheen_turn)
+		pline(str, s_suffix(mon_nam(mon)), "argent sheen");
+				else
 				impossible("Reflecting monster not listed in mon_reflects(): %s", mon_nam(mon));
 				break;
 			}

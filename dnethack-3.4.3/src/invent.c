@@ -4795,7 +4795,78 @@ u_healing_penalty()
 	if(is_demon(youracedata) || is_undead(youracedata)){
 		penalty += (4*u_bcu_next_to_skin(1)+1)/2;
 	}
+	if(u.umadness&MAD_NUDIST && u.usanity < 100){
+		int delta = 100 - u.usanity;
+		penalty += (u_clothing_discomfort() * delta)/10;
+	}
 	return penalty;
+}
+
+int
+u_clothing_discomfort()
+{
+	int count = 0;
+	if(uarmh){
+		count++;
+		if(uarmh->otyp ==  find_vhelm())
+			count++;
+		if(uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || uarmh->otyp == PONTIFF_S_CROWN)
+			count+=2;
+	}
+	if(uarm){
+		count++;
+		if(is_medium_armor(uarm))
+			count++;
+		else if(!is_light_armor(uarm))
+			count += 2;//Not medium or light, so heavy
+	}
+	else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
+		count++;
+	}
+	if(uarmu){
+		count++;
+		if(uarmu->otyp == BLACK_DRESS)
+			count++;
+		else if(uarmu->otyp == BODYGLOVE || uarmu->otyp == VICTORIAN_UNDERWEAR)
+			count += 2;
+	}
+	if(uarmg){
+		count++;
+		if(uarmg->otyp == LONG_GLOVES)
+			count++;
+	}
+	if(uarmf){
+		count++;
+		if(uarmf->otyp == HEELED_BOOTS)
+			count += 2;
+		else if(uarmf->otyp != LOW_BOOTS && uarmf->otyp == SHOES)
+			count++;
+	}
+	if(uarmc){
+		count+=3;
+		if(uarmc->otyp == MUMMY_WRAPPING 
+			|| uarmc->otyp == WHITE_FACELESS_ROBE
+			|| uarmc->otyp == BLACK_FACELESS_ROBE
+			|| uarmc->otyp == SMOKY_VIOLET_FACELESS_ROBE
+		)
+			count += 3;
+	}
+	if(uamul){
+		count++;
+	}
+	if(uleft) count++;
+	if(uright) count++;
+	if(ublindf){
+		count++;
+		if(ublindf->otyp == BLINDFOLD
+		|| ublindf->otyp == ANDROID_VISOR
+		|| ublindf->otyp == TOWEL
+		|| ublindf->otyp == MASK
+		|| ublindf->otyp == LIVING_MASK
+		)
+			count++;
+	}
+	return count; //0-25
 }
 
 STATIC_OVL int

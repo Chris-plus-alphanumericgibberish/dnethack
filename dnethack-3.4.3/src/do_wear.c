@@ -2295,7 +2295,21 @@ int base_uac()
 	if(multi < 0){
 		dexbonus = -5;
 	} else {
-		dexbonus = (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
+		dexbonus += (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
+		if(u.umadness&MAD_RAGE){
+			dexbonus -= (100 - u.usanity)/10;
+		}
+		if(u.umadness&MAD_NUDIST && u.usanity < 100){
+			int delta = 100 - u.usanity;
+			int discomfort = u_clothing_discomfort();
+			if (discomfort) {
+				dexbonus -= (discomfort * delta)/20;
+			} else {
+				if (!uwep && !uarms) {
+					dexbonus += delta/10;
+				}
+			}
+		}
 		if(Race_if(PM_ORC)){
 			dexbonus += (u.ulevel+1)/3;
 		}
@@ -2423,7 +2437,16 @@ int base_udr()
 	if (HProtection & INTRINSIC) udr += (u.ublessed)/2;
 	if(u.edenshield > moves) udr += 7;
 
-	if (udr > 127) udr = 127;	/* u.uac is an schar */
+	if(u.umadness&MAD_NUDIST && u.usanity < 100){
+		int delta = 100 - u.usanity;
+		int discomfort = u_clothing_discomfort();
+		if (discomfort) {
+			udr -= (discomfort * delta)/100;
+		}
+	}
+
+	if (udr > 127) udr = 127;
+	if (udr < 0) udr = 0;
 	return udr;
 }
 

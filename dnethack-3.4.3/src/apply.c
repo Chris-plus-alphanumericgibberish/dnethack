@@ -932,6 +932,9 @@ struct obj *obj;
 				pline("What?  Who is that in the mirror!?");
 				unbind(SEAL_IRIS,TRUE);
 				vis = FALSE;
+		    } else if (roll_madness(MAD_ARGENT_SHEEN)) {
+				You("admire your reflection in the mirror.");
+				nomul(-1*rnd(6), "posing in front of a mirror.");
 		    } else if (Hallucination) {
 				You(look_str, hcolor((char *)0));
 				vis = TRUE;
