@@ -1306,6 +1306,7 @@ int force_linedup;
 			|| (attacktype(mtmp->data, AT_SPIT) && mlined_up(mtmp, mtmp2, FALSE))
 			|| (attacktype(mtmp->data, AT_TNKR) && mlined_up(mtmp, mtmp2, FALSE))
 			|| (attacktype(mtmp->data, AT_ARRW) && mlined_up(mtmp, mtmp2, FALSE))
+			|| (attacktype(mtmp->data, AT_BEAM) && mlined_up(mtmp, mtmp2, FALSE))
 			|| (attacktype(mtmp->data, AT_MAGC) && !mtmp->mcan && (
 			  ((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp <= AD_SPC2) ||
 			  ((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp == AD_RBRE) ||
@@ -1349,6 +1350,7 @@ int force_linedup;
 			|| (attacktype(mtmp->data, AT_SPIT) && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_TNKR) && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_ARRW) && lined_up(mtmp))
+			|| (attacktype(mtmp->data, AT_BEAM) && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_MAGC) && !mtmp->mcan && (
 			  ((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp <= AD_SPC2) ||
 			  ((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp == AD_RBRE) ||
@@ -1419,6 +1421,7 @@ int force_linedup;
 			|| (attacktype(mtmp->data, AT_SPIT) && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_TNKR) && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_ARRW) && lined_up(mtmp))
+			|| (attacktype(mtmp->data, AT_BEAM) && lined_up(mtmp))
 			|| (attacktype(mtmp->data, AT_MAGC) && !mtmp->mcan && (
 			  ((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp <= AD_SPC2) ||
 			  ((attacktype_fordmg(mtmp->data, AT_MAGC, AD_ANY))->adtyp == AD_RBRE) ||
