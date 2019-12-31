@@ -2806,17 +2806,22 @@ dopois:
 			&& rn2(100) >= 4){	return 0;
 		}
 		hitmsg(mtmp, mattk);
-		if (defends(AD_DRIN, uwep) || !has_head(youracedata) || umechanoid) {
-		    You("don't seem harmed.");
-		    /* Not clear what to do for green slimes */
-		    break;
-		}
 		if (u_slip_free(mtmp,mattk)) break;
 
 		if (uarmh && (uarmh->otyp == PLASTEEL_HELM || uarmh->otyp == CRYSTAL_HELM || uarmh->otyp == PONTIFF_S_CROWN || rn2(8))) {
 		    /* not body_part(HEAD) */
 		    Your("helmet blocks the attack to your head.");
 		    break;
+		}
+		
+		if (defends(AD_DRIN, uwep) || !has_head(youracedata) || umechanoid) {
+		    You("don't seem harmed.");
+		    /* Not clear what to do for green slimes */
+			if(mattk->adtyp == AT_TENT && roll_madness(MAD_HELMINTHOPHOBIA)){
+				You("panic anyway!");
+				nomul(-1*rnd(3),"panicking");
+			}
+	    break;
 		}
 		if (Half_physical_damage) dmg = (dmg+1) / 2;
 		mdamageu(mtmp, dmg);
@@ -2876,6 +2881,10 @@ dopois:
 				}
 		    }
 		}
+		if(mattk->adtyp == AT_TENT && roll_madness(MAD_HELMINTHOPHOBIA)){
+			You("panic from the burrowing tentacles!");
+			nomul(-1*rnd(6),"panicking");
+		}
 		//end moved brain removal msgs
 		if(mtmp->data == &mons[PM_MIGO_PHILOSOPHER]||mtmp->data == &mons[PM_MIGO_QUEEN])
 			return 3;
@@ -2893,6 +2902,19 @@ dopois:
 				nomul(-dmg, "paralyzed by a monster");
 				exercise(A_DEX, FALSE);
 		    }
+		}
+		break;
+/////////////////////////////////////////////////////////////////////////////////////////////////
+	    case AD_HALU:
+		hitmsg(mtmp, mattk);
+		if (uncancelled && !hallucinogenic(youracedata)) {
+		    boolean chg;
+		    if (!Hallucination)
+				pline("Your vision blurs!");
+		    chg = make_hallucinated(HHallucination + (long)dmg*100,FALSE,0L);
+		    You("%s.", chg ? "are freaked out" : "seem otherwise unaffected");
+			if(chg && Hallucination && mtmp->data == &mons[PM_DAUGHTER_OF_BEDLAM])
+				u.umadness |= MAD_DELUSIONS;
 		}
 		break;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -2924,6 +2946,10 @@ dopois:
 						uwepgone();
 						freeinv(optr);
 						(void) dropy(optr);
+						if(roll_madness(MAD_TALONS)){
+							You("panic after having dropping your weapon!");
+							nomul(-1*rnd(6),"panic");
+						}
 					 }
 					 else{
 						You("keep a tight grip on your %s!",u.twoweap?"weapons":"weapon");
@@ -2940,6 +2966,10 @@ dopois:
 				(void) Cloak_off();
 				freeinv(optr);
 				(void) dropy(optr);
+				if(roll_madness(MAD_TALONS)){
+					You("panic after having your cloak taken!");
+					nomul(-1*rnd(6),"panic");
+				}
 			}
 		}
 		else if(uwep && uwep->oartifact == ART_TENSA_ZANGETSU){
@@ -2953,6 +2983,10 @@ dopois:
 					setuswapwep((struct obj *)0);
 					freeinv(optr);
 					(void) mpickobj(mtmp,optr);
+					if(roll_madness(MAD_TALONS)){
+						You("panic after having your property stolen!");
+						nomul(-1*rnd(6),"panic");
+					}
 				}
 			} else if(uarm){
 				You_feel("horrible fingers work at your armor.");
@@ -2963,6 +2997,10 @@ dopois:
 					(void) Armor_gone();
 					freeinv(optr);
 					(void) dropy(optr);
+					if(roll_madness(MAD_TALONS)){
+						You("panic after having your armor taken!");
+						nomul(-1*rnd(6),"panic");
+					}
 				}
 			}
 		}
@@ -4078,6 +4116,12 @@ dopois:
 		|| mtmp->data == &mons[PM_KARY__THE_FIEND_OF_FIRE]
 		|| mtmp->data == &mons[PM_CATHEZAR]
 	) && u.umadness&MAD_OPHIDIOPHOBIA && u.usanity < 100){
+		dmg += (100 - u.usanity)/5;
+	}
+	
+	if((mtmp->data->mlet == S_WORM
+		|| attacktype(mtmp->data, AT_TENT)
+	) && u.umadness&MAD_HELMINTHOPHOBIA && u.usanity < 100){
 		dmg += (100 - u.usanity)/5;
 	}
 	
@@ -8044,9 +8088,9 @@ int dmg;
 			if(uarmu && n){
 				n--;
 				if(!u_slip_free(mon, &bodyblow)){
-					You_feel("the tentacles squirm under your shirt.");
+					You_feel("the tentacles squirm under your underclothes.");
 					if( d(1,100) > 15){
-						pline("The tentacles begin to tear at your shirt!");
+						pline("The tentacles begin to tear at your underclothes!");
 						 if(uarmu->spe > 1){
 							for(i=rn2(4); i>=0; i--)
 								drain_item(uarmu);
@@ -8054,15 +8098,21 @@ int dmg;
 						 }
 						 else{
 							tent_destroy_arm(uarmu);
+							if(!uarmu) change_usanity(u_sanity_loss(mon)/2); /*Forces a san check*/
 						 }
 					}
 					else{
-						pline("The tentacles pull your shirt off!");
+						pline("The tentacles pull your underclothes off!");
 						otmp = uarmu;
 						if (donning(otmp)) cancel_don();
 						(void) Shirt_off();
 						freeinv(otmp);
 						(void) mpickobj(mon,otmp);
+						change_usanity(u_sanity_loss(mon)/2); /*Forces a san check*/
+						if(roll_madness(MAD_TALONS)){
+							You("panic after having your underclothes pulled off!");
+							nomul(-1*rnd(6),"panicking");
+						}
 					}
 				}
 			}
@@ -8085,6 +8135,7 @@ int dmg;
 					 }
 					 else{
 						tent_destroy_arm(uarm);
+						if(!uarm) change_usanity(u_sanity_loss(mon)/2); /*Forces a san check*/
 					 }
 				}
 				else{
@@ -8094,6 +8145,11 @@ int dmg;
 					(void) Armor_gone();
 					freeinv(otmp);
 					(void) mpickobj(mon,otmp);
+					change_usanity(u_sanity_loss(mon)/2); /*Forces a san check*/
+					if(roll_madness(MAD_TALONS)){
+						You("panic after having your armor removed!");
+						nomul(-1*rnd(6),"panicking");
+					}
 				}
 		  }
 		 }
@@ -8120,6 +8176,10 @@ int dmg;
 					(void) Cloak_off();
 					freeinv(otmp);
 					(void) mpickobj(mon,otmp);
+					if(roll_madness(MAD_TALONS)){
+						You("panic after having your cloak taken!");
+						nomul(-1*rnd(6),"panicking");
+					}
 				}
 			}
 		}
@@ -8157,6 +8217,10 @@ int dmg;
 							(void) Boots_off();
 							freeinv(otmp);
 							(void) mpickobj(mon,otmp);
+							if(roll_madness(MAD_TALONS)){
+								You("panic after having your boots sucked off!");
+								nomul(-1*rnd(6),"panicking");
+							}
 						}
 					}
 				}
@@ -8174,6 +8238,10 @@ int dmg;
 					uwepgone();
 					freeinv(otmp);
 					(void) mpickobj(mon,otmp);
+					if(roll_madness(MAD_TALONS)){
+						You("panic after having your weapon taken!");
+						nomul(-1*rnd(6),"panicking");
+					}
 				 }
 				 else{
 					You("keep a tight grip on your weapon!");
@@ -8205,6 +8273,10 @@ int dmg;
 						(void) Gloves_off();
 						freeinv(otmp);
 						(void) mpickobj(mon,otmp);
+						if(roll_madness(MAD_TALONS)){
+							You("panic after having your gloves sucked off!");
+							nomul(-1*rnd(6),"panicking");
+						}
 					}
 				}
 			}
@@ -8222,6 +8294,10 @@ int dmg;
 					Shield_off();
 					freeinv(otmp);
 					(void) mpickobj(mon,otmp);
+					if(roll_madness(MAD_TALONS)){
+						You("panic after having your shield taken!");
+						nomul(-1*rnd(6),"panicking");
+					}
 				 }
 				 else{
 					You("keep a tight grip on your shield!");
@@ -8244,6 +8320,7 @@ int dmg;
 						 }
 						 else{
 							tent_destroy_arm(uarmh);
+							if(!uarmh) change_usanity(u_sanity_loss(mon)/2); /*Forces a san check*/
 						 }
 					}
 					else{
@@ -8253,6 +8330,11 @@ int dmg;
 						(void) Helmet_off();
 						freeinv(otmp);
 						(void) mpickobj(mon,otmp);
+						change_usanity(u_sanity_loss(mon)/2); /*Forces a san check*/
+						if(roll_madness(MAD_TALONS)){
+							You("panic after having your helmet stolen!");
+							nomul(-1*rnd(6),"panicking");
+						}
 					}
 				}
 			}
@@ -8272,7 +8354,7 @@ int dmg;
 				if(Half_physical_damage) u.uenbonus -= (int) max(.1*u.uenmax,5);
 				else u.uenbonus -= (int) max(.2*u.uenmax, 10);
 				calc_total_maxen();
-
+				change_usanity(u_sanity_loss(mon)); /*Forces a san check*/
 			break;
 			case 7:
 				if(allreadydone&(0x1<<7)) break;
@@ -8325,6 +8407,7 @@ int dmg;
 					}
 				}
 				losehp(Half_physical_damage ? dmg/2 + 1 : dmg, "head trauma", KILLED_BY);
+				change_usanity(u_sanity_loss(mon)); /*Forces a san check*/
 				
 			break;
 			case 8:
@@ -8351,9 +8434,10 @@ int dmg;
 					You_feel("violated and very fragile. Your soul seems a thin and tattered thing.");
 				} else {
 					(void) adjattrib(A_CON, -2, 1);
-					You_feel("a bit fragile, but strangly whole.");
+					You_feel("a bit fragile, but strangely whole.");
 				}
 				losehp(Half_physical_damage ? dmg/4+1 : dmg/2+1, "drilling tentacles", KILLED_BY);
+				change_usanity(u_sanity_loss(mon)); /*Forces a san check*/
 			break;
 			case 9:
 				if(allreadydone&(0x1<<9)) break;
@@ -8368,6 +8452,7 @@ int dmg;
 				(void) adjattrib(A_STR, -6, 1);
 				(void) adjattrib(A_CON, -3, 1);
 				You_feel("weak and helpless in their grip!");
+				change_usanity(u_sanity_loss(mon)); /*Forces a san check*/
 			break;
 			case 10:
 				if(allreadydone&(0x1<<10)) break;
@@ -8399,6 +8484,10 @@ int dmg;
 			break;
 		}
 		}
+	if(roll_madness(MAD_HELMINTHOPHOBIA)){
+		You("panic from the squirming tentacles!");
+		nomul(-1*rnd(6),"panicking");
+	}
 	return 1;
 }
 

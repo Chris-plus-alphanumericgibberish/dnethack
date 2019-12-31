@@ -281,9 +281,19 @@ map_invisible(x, y)
 register xchar x, y;
 {
     if (x != u.ux || y != u.uy) { /* don't display I at hero's location */
-	if (level.flags.hero_memory)
-	    levl[x][y].glyph = GLYPH_INVISIBLE;
-	show_glyph(x, y, GLYPH_INVISIBLE);
+		if (level.flags.hero_memory)
+		    levl[x][y].glyph = GLYPH_INVISIBLE;
+		show_glyph(x, y, GLYPH_INVISIBLE);
+		if(u.umadness&MAD_PARANOIA && u.usanity < 80+rnd(20)){
+			int x2, y2;
+			x2 = u.ux + (u.ux-x);
+			y2 = u.uy + (u.uy-y);
+			if(isok(x2,y2)){
+				if (level.flags.hero_memory)
+					levl[x2][y2].glyph = GLYPH_INVISIBLE;
+				show_glyph(x2, y2, GLYPH_INVISIBLE);
+			}
+		}
     }
 }
 

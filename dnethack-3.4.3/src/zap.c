@@ -4935,6 +4935,7 @@ register int osym, dmgtyp;
 	register long i, cnt, quan;
 	register int dindx;
 	const char *mult;
+	int loststuff = 0;
 
 	if(osym == RING_CLASS && dmgtyp == AD_ELEC) return; /*Rings aren't destroyed by electrical damage anymore*/
 	
@@ -5049,6 +5050,7 @@ register int osym, dmgtyp;
 			if (obj == current_wand) current_wand = 0;	/* destroyed */
 			for (i = 0; i < cnt; i++)
 				useup(obj);
+			loststuff++;
 		}
 		
 		if(dmg) {
@@ -5065,6 +5067,12 @@ register int osym, dmgtyp;
 		    }
 		}
 	    }
+	}
+	if(loststuff && roll_madness(MAD_TALONS)){
+		if(loststuff > 1)
+			You("panic after some of your possessions are destroyed!");
+		else You("panic after one of your possessions is destroyed!");
+		nomul(-1*rnd(6), "panicking");
 	}
 	return;
 }

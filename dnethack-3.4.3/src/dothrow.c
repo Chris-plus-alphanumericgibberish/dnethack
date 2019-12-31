@@ -615,6 +615,10 @@ dothrow()
 	// if (multi >= 0)
 	    // multi = oldmulti;
     save_cm = oldsave_cm;
+	if(result && roll_madness(MAD_TALONS)){
+		You("panic after giving up your property!");
+		nomul(-1*rnd(6),"panic");
+	}
     return (result);
 }
 
@@ -717,7 +721,14 @@ int ask;
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
 
-		return throw_obj(uwep, shotlimit, THROW_UWEP, ask);
+		result = throw_obj(uwep, shotlimit, THROW_UWEP, ask);
+		
+		if(result && roll_madness(MAD_TALONS)){
+			You("panic after throwing your property!");
+			nomul(-1*rnd(6),"panic");
+		}
+		
+		return result;
 	}
 	
 	if(uwep && !is_blaster(uwep) && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep))) && Race_if(PM_ANDROID)){
@@ -725,12 +736,18 @@ int ask;
 		shotlimit = (multi || save_cm) ? multi + 1 : 0;
 		multi = 0;		/* reset; it's been used up */
 
-		return throw_obj(uwep, shotlimit, THROW_UWEP, ask);
+		result = throw_obj(uwep, shotlimit, THROW_UWEP, ask);
+
+		if(result && roll_madness(MAD_TALONS)){
+			You("panic after throwing your property!");
+			nomul(-1*rnd(6),"panic");
+		}
+		
+		return result;
 	}
 	
 	if(uwep && (!uquiver || (is_ammo(uquiver) && !ammo_and_launcher(uquiver, uwep)))  && uwep->oartifact == ART_ROGUE_GEAR_SPIRITS){
 		struct obj *bolt = mksobj(CROSSBOW_BOLT, FALSE, FALSE);
-		int result;
 		bolt->spe = min(0,uwep->spe);
 		bolt->blessed = uwep->blessed;
 		bolt->cursed = uwep->cursed;
@@ -744,6 +761,7 @@ int ask;
 		break_thrown = TRUE; /* state variable, always destroy thrown */
 		result = throw_obj(bolt, shotlimit, THROW_UWEP, ask);
 		break_thrown = FALSE; /* state variable, always destroy thrown */
+		//Doesn't trigger talons, didn't exist before being fired
 		return result;
 	}
 	
@@ -858,16 +876,33 @@ int ask;
 			else if ((result == 1) && uquiver)
 			    result += throw_obj(uquiver, shotlimit, THROW_USWAPWEP, ask);
 			if (result > 1) result--;
+			if(result && roll_madness(MAD_TALONS)){
+				You("panic after giving up your property!");
+				nomul(-1*rnd(6),"panic");
+			}
 			return(result);
 		} else if(ammo_and_launcher(uquiver,uwep)){
 			result = throw_obj(uquiver, shotlimit, THROW_UWEP, ask);
+			if(result && roll_madness(MAD_TALONS)){
+				You("panic after giving up your property!");
+				nomul(-1*rnd(6),"panic");
+			}
 			return(result);
 		} else if(ammo_and_launcher(uquiver, uswapwep)){
 			result = throw_obj(uquiver, shotlimit, THROW_USWAPWEP, ask);
+			if(result && roll_madness(MAD_TALONS)){
+				You("panic after giving up your property!");
+				nomul(-1*rnd(6),"panic");
+			}
 			return(result);
 		}
 	}
 	result = (throw_obj(uquiver, shotlimit, THROW_UWEP, ask));
+	
+	if(result && roll_madness(MAD_TALONS)){
+		You("panic after throwing your property!");
+		nomul(-1*rnd(6),"panic");
+	}
 	
 	return result;
 }

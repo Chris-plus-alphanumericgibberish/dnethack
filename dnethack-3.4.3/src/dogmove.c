@@ -872,7 +872,7 @@ register struct monst *mtmp;
 //	pline("testing for betrayal");
     if ( (udist < 4 || !rn2(3)) 
 			&& has_edog
-		    && can_betray(mtmp->data)
+		    && (can_betray(mtmp->data) || roll_madness(MAD_PARANOIA))
 		    && mtmp->mhp >= u.uhp	/* Pet is buff enough */
 		    && rn2(22) > mtmp->mtame  - 10	/* Roll against tameness */
 		    && rn2(edog->abuse + 2)) {

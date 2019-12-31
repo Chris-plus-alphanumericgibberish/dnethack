@@ -548,6 +548,8 @@ struct you {
 #define	MAD_THALASSOPHOBIA	0x00000000000002000L
 #define	MAD_PARANOIA		0x00000000000004000L
 #define	MAD_TALONS			0x00000000000008000L
+#define	MAD_DREAMS			0x00000000000010000L
+#define	MAD_HELMINTHOPHOBIA	0x00000000000020000L
 	int 	uinsight;	/* to record level of insight */
 	/*Insight rate calculation: 40: "high insight" 300: "Approximate per-turn WoYendor intervention rate" 5: "total number of harmful effects" */
 #define INSIGHT_RATE (40*300*5)

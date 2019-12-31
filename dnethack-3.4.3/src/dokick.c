@@ -51,6 +51,10 @@ register boolean clumsy;
 	if(resist_attacks(mon->data))
 		dmg = 0;
 
+	if(is_aquatic(mon->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		dmg /= 10;
+	}
+	
 	if ((hates_holy_mon(mon)) && uarmf &&
 		uarmf->blessed){
 	    blessed_foot_damage = 1;

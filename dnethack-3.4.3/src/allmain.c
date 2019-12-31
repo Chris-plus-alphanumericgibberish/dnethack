@@ -28,6 +28,8 @@ STATIC_DCL void NDECL(printDPR);
 STATIC_DCL int NDECL(do_inheritor_menu);
 STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
 STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
+STATIC_DCL void NDECL(see_nearby_monsters);
+STATIC_DCL void NDECL(cthulhu_mind_blast);
 
 #ifdef OVL0
 
@@ -998,6 +1000,8 @@ moveloop()
 				}
 			}
 ////////////////////////////////////////////////////////////////////////////////////////////////
+			see_nearby_monsters();
+////////////////////////////////////////////////////////////////////////////////////////////////
 		    if (youmonst.movement >= NORMAL_SPEED)
 			break;	/* it's now your turn */
 		} while (monscanmove);
@@ -1547,6 +1551,10 @@ karemade:
 				}
 			}
 			
+			if((u.usleep || !rn2(5)) && roll_madness(MAD_DREAMS)){
+				cthulhu_mind_blast();
+			}
+			
 			if(u.uentangled){ //Note: the normal speed calculations include important hunger modifiers, so just calculate speed then 0 it out if needed.
 				if(!ubreak_entanglement()){
 					youmonst.movement = 0;
@@ -1894,30 +1902,7 @@ karemade:
 				}
 			}
 	    }
-		if(!Blind){
-			int dx, dy;
-			
-			for(dx=-1; dx<2; dx++){
-				for(dy=-1; dy<2; dy++){
-					if(isok(u.ux+dx, u.uy+dy)){
-						if((mtmp = m_at(u.ux+dx, u.uy+dy)) && !mtmp->mtame && canseemon(mtmp) && !(mvitals[monsndx(mtmp->data)].seen)){
-							mvitals[monsndx(mtmp->data)].seen = 1;
-							if(Role_if(PM_TOURIST)){
-								more_experienced(experience(mtmp,0),0);
-								newexplevel();
-							}
-							if(u.usanity > 0 && taxes_sanity(mtmp->data)){
-								change_usanity(u_sanity_loss(mtmp));
-							}
-							if(yields_insight(mtmp->data)){
-								change_uinsight(u_insight_gain(mtmp));
-								change_usanity(u_sanity_gain(mtmp));
-							}
-						}
-					}
-				}
-			}
-		}
+		see_nearby_monsters();
 		if(u.uinwater){//Moving around will also call this, so your stuff degrades faster if you move
 			water_damage(invent, FALSE, FALSE, level.flags.lethe, &youmonst);
 		}
@@ -3129,6 +3114,79 @@ printAttacks(buf, ptr)
 		}
 	}
 	return;
+}
+
+STATIC_OVL void
+cthulhu_mind_blast()
+{
+	struct monst *mon, *nmon;
+	int nd = 1;
+	if(on_level(&rlyeh_level,&u.uz))
+		nd = 5;
+	if (Unblind_telepat || (Blind_telepat && rn2(2)) || !rn2(10)) {
+		int dmg;
+		pline("It locks on to your %s!",
+			Unblind_telepat ? "telepathy" :
+			Blind_telepat ? "latent telepathy" : "mind");
+		dmg = d(nd,15);
+		if(Half_spell_damage) dmg = (dmg+1) / 2;
+		if(u.uvaul_duration) dmg = (dmg + 1) / 2;
+		losehp(dmg, "psychic blast", KILLED_BY_AN);
+		make_stunned(HStun + dmg*10, TRUE);
+		if (Sleep_resistance){
+			if(!on_level(&rlyeh_level,&u.uz)) fall_asleep(-1*dmg, TRUE);
+			if(!rn2(10)) change_usanity(-1);
+		} else {
+			if(!on_level(&rlyeh_level,&u.uz)) fall_asleep(-100*dmg, TRUE);
+			change_usanity(-1);
+		}
+	}
+	for(mon=fmon; mon; mon = nmon) {
+		nmon = mon->nmon;
+		if (DEADMONSTER(mon)) continue;
+		if (is_mind_flayer(mon->data)) continue;
+		if (mindless_mon(mon)) continue;
+		if (mon_resistance(mon,TELEPAT) || !rn2(5)){
+			mon->mhp -= d(nd,15);
+			if (mon->mhp <= 0) mondied(mon);
+			else {
+				mon->mconf = 1;
+				mon->msleeping = 1;
+				slept_monst(mon);
+			}
+		}
+		else mon->msleeping = 0;
+	}
+}
+
+STATIC_OVL void
+see_nearby_monsters()
+{
+	if(!Blind){
+		int dx, dy;
+		struct monst *mtmp;
+		
+		for(dx=-1; dx<2; dx++){
+			for(dy=-1; dy<2; dy++){
+				if(isok(u.ux+dx, u.uy+dy)){
+					if((mtmp = m_at(u.ux+dx, u.uy+dy)) && !mtmp->mtame && canseemon(mtmp) && !(mvitals[monsndx(mtmp->data)].seen)){
+						mvitals[monsndx(mtmp->data)].seen = 1;
+						if(Role_if(PM_TOURIST)){
+							more_experienced(experience(mtmp,0),0);
+							newexplevel();
+						}
+						if(u.usanity > 0 && taxes_sanity(mtmp->data)){
+							change_usanity(u_sanity_loss(mtmp));
+						}
+						if(yields_insight(mtmp->data)){
+							change_uinsight(u_insight_gain(mtmp));
+							change_usanity(u_sanity_gain(mtmp));
+						}
+					}
+				}
+			}
+		}
+	}
 }
 
 #endif /* OVLB */

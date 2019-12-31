@@ -588,6 +588,7 @@
 
 #define is_mind_flayer(ptr)	((ptr) == &mons[PM_MIND_FLAYER] || \
 				 (ptr) == &mons[PM_MASTER_MIND_FLAYER] || \
+				 (ptr) == &mons[PM_STAR_SPAWN] || \
 				 (ptr) == &mons[PM_PARASITIZED_ANDROID] || \
 				 (ptr) == &mons[PM_PARASITIZED_GYNOID] || \
 				 (ptr) == &mons[PM_PARASITIC_MIND_FLAYER] || \
