@@ -4480,7 +4480,7 @@ boolean incr;
 		case SATIATED:
 	        if (clockwork){
 			  if(u.ucspeed == SLOW_CLOCKSPEED){
-				pline("There is now too much tension in your mainspring to maintain a slow clock-speed");
+				pline("There is now too much tension in your mainspring to maintain a slow clock-speed.");
 				u.ucspeed = NORM_CLOCKSPEED;
 			  }
 			}
@@ -4488,7 +4488,7 @@ boolean incr;
 		case FAINTING:
 	        if (clockwork){
 			  if(u.ucspeed == HIGH_CLOCKSPEED){
-				pline("There is no longer sufficient tension in your mainspring to maintain a high clock-speed");
+				pline("There is no longer sufficient tension in your mainspring to maintain a high clock-speed.");
 				u.ucspeed = NORM_CLOCKSPEED;
 			  }
 			}
