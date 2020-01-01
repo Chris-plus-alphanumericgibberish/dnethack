@@ -2292,7 +2292,7 @@ int base_uac()
 	)
 		 uac -= 8;
 	if(u.specialSealsActive&SEAL_UNKNOWN_GOD && uwep && uwep->oartifact == ART_PEN_OF_THE_VOID) uac -= 2*uwep->spe;
-	if(multi < 0){
+	if(multi < 0 || mad_turn(MAD_SUICIDAL)){
 		dexbonus = -5;
 	} else {
 		dexbonus += (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
@@ -2327,6 +2327,9 @@ int base_uac()
 		if(uarm && uarm->otyp == CONSORT_S_SUIT){
 			dexbonus = min(dexbonus,0);
 		}
+		
+		if(dexbonus < -5)
+			dexbonus = -5;
 		
 		if(dexbonus > 0 && uarm){
 			if(is_medium_armor(uarm))

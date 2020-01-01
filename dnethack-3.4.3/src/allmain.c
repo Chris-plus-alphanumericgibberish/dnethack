@@ -1530,7 +1530,8 @@ karemade:
 			//floor how far into movement-debt you can fall.
 		    if (youmonst.movement < -2*NORMAL_SPEED) youmonst.movement = -2*NORMAL_SPEED;
 			
-			if(!rn2(66) && roll_madness(MAD_SPORES)
+			//Aprox one check per six monster-gen periods
+			if(!rn2(70*6) && roll_madness(MAD_SPORES)
 				&& !Race_if(PM_ANDROID) && !Race_if(PM_CLOCKWORK_AUTOMATON)
 			){
 				make_hallucinated(itimeout_incr(HHallucination, 100), TRUE, 0L);
@@ -1551,7 +1552,8 @@ karemade:
 				}
 			}
 			
-			if((u.usleep || !rn2(5)) && roll_madness(MAD_DREAMS)){
+			//Aprox one check per five monster-gen periods, or one per five while sleeping (averages one additional blast per sleep, so it's really bad.
+			if((u.usleep || !rn2(70)) && !rn2(5) && roll_madness(MAD_DREAMS)){
 				cthulhu_mind_blast();
 			}
 			
@@ -3175,6 +3177,7 @@ see_nearby_monsters()
 							more_experienced(experience(mtmp,0),0);
 							newexplevel();
 						}
+						give_madness(mtmp);
 						if(u.usanity > 0 && taxes_sanity(mtmp->data)){
 							change_usanity(u_sanity_loss(mtmp));
 						}

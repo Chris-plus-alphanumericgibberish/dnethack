@@ -1728,6 +1728,7 @@ mcalcdistress()
 			&& !is_demon(youracedata)
 		){
 			pline("Some unseen virtue is drawn from you.");
+			u.umadness |= MAD_COLD_NIGHT;
 			if(canseemon(mtmp)){
 				pline("The virtue is sucked into the open mouth of %s.", mon_nam(mtmp));
 			}
@@ -1817,6 +1818,7 @@ mcalcdistress()
 						}
 					}
 				}
+				u.umadness |= MAD_COLD_NIGHT;
 			} else {
 				struct monst *targ = 0;
 				struct obj *otmp;

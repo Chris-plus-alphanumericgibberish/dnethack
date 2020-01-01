@@ -4100,6 +4100,11 @@ dopois:
 		dmg += u.ustdy;
 		u.ustdy /= 2;
 	}
+	
+	if(u.umadness&MAD_SUICIDAL){
+		dmg += ((100 - u.usanity)*u.ulevel)/200;
+	}
+	
 	if((mtmp->data->mlet == S_SNAKE
 		|| mtmp->data->mlet == S_NAGA
 		|| mtmp->data == &mons[PM_COUATL]

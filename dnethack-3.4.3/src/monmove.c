@@ -1465,7 +1465,10 @@ register struct monst *mtmp;
 				if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 				losehp(dmg, "psychic blast", KILLED_BY_AN);
 				if(mdat == &mons[PM_SEMBLANCE]) make_hallucinated(HHallucination + dmg, FALSE, 0L);
-				if(mdat == &mons[PM_GREAT_CTHULHU]) make_stunned(HStun + dmg*10, TRUE);
+				if(mdat == &mons[PM_GREAT_CTHULHU]){
+					make_stunned(HStun + dmg*10, TRUE);
+					u.umadness |= MAD_DREAMS;
+				}
 				if (mdat == &mons[PM_ELDER_BRAIN]) {
 					for (m2 = fmon; m2; m2 = nmon) {
 						nmon = m2->nmon;

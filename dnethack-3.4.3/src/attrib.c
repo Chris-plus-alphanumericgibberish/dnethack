@@ -1473,6 +1473,70 @@ roll_frigophobia()
 	}
 }
 
+int
+give_madness(mon)
+struct monst *mon;
+{
+	int mm = monsndx(mon->data);
+	switch(mm){
+		case PM_ALDINACH:
+			u.umadness |= MAD_REAL_DELUSIONS;
+		break;
+		case PM_ALRUNES:
+		case PM_HATEFUL_WHISPERS:
+			u.umadness |= MAD_SANCTITY;
+		break;
+		case PM_JUIBLEX:
+			u.umadness |= MAD_GLUTTONY;
+		break;
+		case PM_ZUGGTMOY:
+			u.umadness |= MAD_SPORES;
+		break;
+		case PM_KOSTCHTCHIE:
+			u.umadness |= MAD_FRIGOPHOBIA;
+		break;
+		case PM_BAPHOMET:
+			u.umadness |= MAD_RAGE;
+		break;
+		case PM_YEENOGHU:
+			u.umadness |= MAD_CANNIBALISM;
+		break;
+		case PM_MALCANTHET:
+			u.umadness |= MAD_NUDIST;
+		break;
+		case PM_SHAKTARI:
+			u.umadness |= MAD_OPHIDIOPHOBIA;
+		break;
+		case PM_AVATAR_OF_LOLTH:
+			u.umadness |= MAD_ARACHNOPHOBIA;
+		break;
+		case PM_GRAZ_ZT:
+			u.umadness |= MAD_ARGENT_SHEEN;
+		break;
+		case PM_ORCUS:
+			u.umadness |= MAD_SUICIDAL;
+		break;
+		case PM_DAGON:
+			u.umadness |= MAD_THALASSOPHOBIA;
+		break;
+		case PM_OBOX_OB:
+			u.umadness |= MAD_ENTOMOPHOBIA;
+		break;
+		case PM_LAMASHTU:
+			u.umadness |= MAD_TALONS;
+		break;
+		case PM_DEMOGORGON:
+			u.umadness |= MAD_PARANOIA;
+		break;
+		case PM_ELDER_PRIEST:
+			u.umadness |= MAD_HELMINTHOPHOBIA;
+		break;
+		case PM_GREAT_CTHULHU:
+			// u.umadness |= ;
+		break;
+	}
+}
+
 /* condense clumsy ACURR(A_STR) value into value that fits into game formulas
  */
 schar

@@ -108,6 +108,10 @@ boolean burn;
 			u.ustdy /= 2;
 		}
 		
+		if(u.umadness&MAD_SUICIDAL){
+			dam += ((100 - u.usanity)*u.ulevel)/200;
+		}
+		
 		if(dam < 1) dam = 1;
 		
 		if(Blind || !flags.verbose) You("are hit!");

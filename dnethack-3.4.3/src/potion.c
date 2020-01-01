@@ -653,6 +653,8 @@ peffects(otmp)
 			}
 			if(u.udrunken < u.ulevel*3){
 				u.udrunken++;
+				change_usanity(5);
+			} else {
 				if(u.usanity < 50){
 					change_usanity(min(5, 50 - u.usanity));
 				}

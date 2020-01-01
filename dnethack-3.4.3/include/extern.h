@@ -161,6 +161,7 @@ E int FDECL(active_glyph, (long int));
 E int FDECL(roll_madness, (long int));
 E int FDECL(mad_turn, (long int));
 E void NDECL(roll_frigophobia);
+E int FDECL(give_madness, (struct monst *));
 E void NDECL(calc_total_maxhp);
 E void NDECL(calc_total_maxen);
 E schar FDECL(acurr, (int));
