@@ -1193,7 +1193,7 @@ domove()
 		if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) displacer = TRUE;
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
-		else if (attack2(mtmp)){
+		else if(attack2(mtmp)){
 			if(uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				coord cc;
 				if(!u.utrap && tt_findadjacent(&cc, mtmp) && (cc.x != u.ux || cc.y != u.uy)){
@@ -1439,7 +1439,7 @@ domove()
 	     * If a monster attempted to displace us but failed
 	     * then we are entitled to our normal attack.
 	     */
-	    if (!attack2(mtmp)) {
+	    if(!attack2(mtmp)) {
 		flags.move = 0;
 		nomul(0, NULL);
 	    }

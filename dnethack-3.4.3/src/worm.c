@@ -309,9 +309,9 @@ wormhitu(worm)
  *  before we decide to do this.
  */
 	seg = wtails[wnum];
-    for (seg = seg->nseg; seg && seg->nseg; seg = seg->nseg)
-		if (distu(seg->wx, seg->wy) < 3){
-			if (xmeleehity(worm, &youmonst, &mattk, (struct obj *)0, -1, 0, FALSE) > 1)	// some result other than hit or miss
+    for(seg = seg->nseg; seg && seg->nseg; seg = seg->nseg)
+		if(distu(seg->wx, seg->wy) < 3){
+			if(xmeleehity(worm, &youmonst, &mattk, (struct obj *)0, -1, 0, FALSE) > 1)	// some result other than hit or miss
 				break;
 		}
 }

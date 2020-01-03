@@ -1700,7 +1700,7 @@ int style;
 				miss(xname(singleobj), mtmp);
 			if (used_up)
 				break;
-			}
+		}
 		else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
 			if (multi) nomul(0, NULL);
 			if (!u.uinvulnerable){

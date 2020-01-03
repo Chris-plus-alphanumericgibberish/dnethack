@@ -780,8 +780,8 @@ struct obj *obj;			/* only scatter this obj        */
 						boolean wepgone = FALSE;
 						hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, stmp->obj, (struct obj *)0, TRUE,
 							0, 0, TRUE, dieroll, FALSE, -1, &wepgone);
-					stmp->range -= 3;
-					stop_occupation();
+						stmp->range -= 3;
+						stop_occupation();
 				    }
 					else {
 						if (Blind || !flags.verbose) pline("It misses.");
