@@ -3431,69 +3431,6 @@ boolean *obj_destroyed;/* has object been deallocated? Pointer to boolean, may b
 	return (struct monst *)0;
 }
 
-struct monst *
-boomhit(obj, dx, dy)
-struct obj *obj;
-int dx, dy;
-{
-	register int i, ct;
-	int boom = S_boomleft;	/* showsym[] index  */
-	struct monst *mtmp;
-
-	bhitpos.x = u.ux;
-	bhitpos.y = u.uy;
-
-	for (i = 0; i < 8; i++) if (xdir[i] == dx && ydir[i] == dy) break;
-	tmp_at(DISP_FLASH, cmap_to_glyph(boom));
-	for (ct = 0; ct < 10; ct++) {
-		if(i == 8) i = 0;
-		boom = (boom == S_boomleft) ? S_boomright : S_boomleft;
-		tmp_at(DISP_CHANGE, cmap_to_glyph(boom));/* change glyph */
-		dx = xdir[i];
-		dy = ydir[i];
-		bhitpos.x += dx;
-		bhitpos.y += dy;
-		if (!isok(bhitpos.x, bhitpos.y)) {
-			bhitpos.x -= dx;
-			bhitpos.y -= dy;
-			break;
-		}
-		if(MON_AT(bhitpos.x, bhitpos.y)) {
-			mtmp = m_at(bhitpos.x,bhitpos.y);
-			m_respond(mtmp);
-			tmp_at(DISP_END, 0);
-			return(mtmp);
-		}
-		if(!ZAP_POS(levl[bhitpos.x][bhitpos.y].typ) ||
-		   closed_door(bhitpos.x, bhitpos.y)) {
-			bhitpos.x -= dx;
-			bhitpos.y -= dy;
-			break;
-		}
-		if(bhitpos.x == u.ux && bhitpos.y == u.uy) { /* ct == 9 */
-			if(Fumbling || (!obj->oartifact && rn2(18) >= ACURR(A_DEX))) {
-				/* we hit ourselves */
-				(void) thitu(10, rnd(10), (struct obj *)0,
-					"boomerang", FALSE);
-				break;
-			} else {	/* we catch it */
-				tmp_at(DISP_END, 0);
-				You("skillfully catch the boomerang.");
-				return(&youmonst);
-			}
-		}
-		tmp_at(bhitpos.x, bhitpos.y);
-		delay_output();
-		if(ct % 5 != 0) i++;
-#ifdef SINKS
-		if(IS_SINK(levl[bhitpos.x][bhitpos.y].typ))
-			break;	/* boomerang falls on sink */
-#endif
-	}
-	tmp_at(DISP_END, 0);	/* do not leave last symbol */
-	return (struct monst *)0;
-}
-
 STATIC_OVL int
 zhitm(mon, adtyp, olet, yours, nd, flat, ootmp)			/* returns damage to mon */
 struct monst *mon;
@@ -4029,6 +3966,58 @@ xchar sx, sy;
 	    dam = (dam + 1) / 2;
 	losehp(dam, fltxt, KILLED_BY_AN);
 	return;
+}
+
+int
+flash_hits_mon(mtmp, otmp)
+struct monst *mtmp;
+struct obj *otmp;	/* source of flash */
+{
+	int tmp, amt, res = 0, useeit = canseemon(mtmp);
+
+	if (mtmp->msleeping) {
+	    mtmp->msleeping = 0;
+	    if (useeit) {
+		pline_The("flash awakens %s.", mon_nam(mtmp));
+		res = 1;
+	    }
+	} else if (mtmp->data->mlet != S_LIGHT) {
+	    if (!resists_blnd(mtmp)) {
+		tmp = dist2(otmp->ox, otmp->oy, mtmp->mx, mtmp->my);
+		if (useeit) {
+		    pline("%s is blinded by the flash!", Monnam(mtmp));
+		    res = 1;
+		}
+		if (mtmp->data == &mons[PM_GREMLIN]) {
+		    /* Rule #1: Keep them out of the light. */
+		    amt = otmp->otyp == WAN_LIGHT ? d(1 + otmp->spe, 4) :
+		          rn2(min(mtmp->mhp,4));
+		    pline("%s %s!", Monnam(mtmp), amt > mtmp->mhp / 2 ?
+			  "wails in agony" : "cries out in pain");
+		    if ((mtmp->mhp -= amt) <= 0) {
+			if (flags.mon_moving)
+			    monkilled(mtmp, (char *)0, AD_BLND);
+			else
+			    killed(mtmp);
+		    } else if (cansee(mtmp->mx,mtmp->my) && !canspotmon(mtmp)){
+			map_invisible(mtmp->mx, mtmp->my);
+		    }
+			if(mtmp && amt > 0) mtmp->uhurtm = TRUE;
+		}
+		if (mtmp->mhp > 0) {
+		    if (!flags.mon_moving) setmangry(mtmp);
+		    if (tmp < 9 && !mtmp->isshk && rn2(4)) {
+			if (rn2(4))
+			    monflee(mtmp, rnd(100), FALSE, TRUE);
+			else
+			    monflee(mtmp, 0, FALSE, TRUE);
+		    }
+		    mtmp->mcansee = 0;
+		    mtmp->mblinded = (tmp < 3) ? 0 : rnd(1 + 50/tmp);
+		}
+	    }
+	}
+	return res;
 }
 
 #endif /*OVL1*/

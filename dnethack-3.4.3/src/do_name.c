@@ -1427,6 +1427,33 @@ char *outbuf;
     return outbuf;
 }
 
+/* mon_nam_too()
+ *
+ * returns mon_nam(mon) relative to other_mon; normal name unless they're
+ * the same, in which case the reference is to {him|her|it} self
+ */
+char *
+mon_nam_too(mon, other_mon)
+struct monst *mon;
+struct monst *other_mon;
+{
+	if (mon == other_mon) {
+		if (mon == &youmonst)
+			return "yourself";
+		else {
+			switch (pronoun_gender(mon)) {
+			case 0:		return "himself";
+			case 1:		return "herself";
+			default:	return "itself";
+			}
+		}
+	}
+	// default case; mon != other_mon
+	if (mon == &youmonst)
+		return "you";
+	return mon_nam(mon);
+}
+
 char *
 getDrowHouse(hnum)
 long hnum;

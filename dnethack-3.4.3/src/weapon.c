@@ -187,16 +187,7 @@ struct monst *mon;
 	}
 
 /*	Put weapon specific "to hit" bonuses in below:		*/
-	if(otmp->otyp == VIPERWHIP){
-		//Note: ostriking uses only 8 bits
-		otmp->ostriking = min(7,rn2(otmp->ovar1));
-		tmp += (1+otmp->ostriking) * objects[otmp->otyp].oc_hitbon;
-	} else if(otmp->otyp == SET_OF_CROW_TALONS){
-		//Note: ostriking uses only 8 bits
-		otmp->ostriking = min(7,rn2(3));
-	} else {
-		tmp += objects[otmp->otyp].oc_hitbon;
-	}
+	tmp += objects[otmp->otyp].oc_hitbon;
 	
 	if (is_lightsaber(otmp) && otmp->altmode) tmp += objects[otmp->otyp].oc_hitbon;
 	//But DON'T double the to hit bonus from spe for double lightsabers in dual bladed mode. It gets harder to use, not easier.
@@ -417,12 +408,12 @@ int otyp;
 		else if (obj->oartifact == ART_GIANTSLAYER)
 		{
 			bonn = (large ? 2 : 1);
-			bond = min(4 + 2 * dmod, 2);
+			bond = max(4 + 2 * dmod, 2);
 		}
 		else if (obj->oartifact == ART_MJOLLNIR)
 		{
 			bonn = 2;
-			bond = min(4 + 2 * dmod, 2);
+			bond = max(4 + 2 * dmod, 2);
 			if (!large)
 				flat += 2;
 		}
@@ -433,7 +424,7 @@ int otyp;
 		else if (obj->oartifact == ART_REAVER)
 		{
 			bonn = 1;
-			bond = min(8 + 2 * dmod, 2);
+			bond = max(8 + 2 * dmod, 2);
 		}
 		else if (obj->oartifact == ART_TOBIUME)
 		{
@@ -444,18 +435,18 @@ int otyp;
 			if (large)
 			{
 				bonn = 1;
-				bond = min(10 + 2 * dmod, 2);
+				bond = max(10 + 2 * dmod, 2);
 			}
 			else
 			{
-				flat += min(10 + 2 * dmod, 2);
+				flat += max(10 + 2 * dmod, 2);
 			}
 		}
 		else if (obj->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD){
 			int wt = (int)objects[NAGINATA].oc_weight;
 			if ((int)obj->owt > wt) {
 				bonn = 1;
-				bond = min(12 + 2 * dmod, 2) * ((int)obj->owt - wt) / wt;	// this appears to be a constant +1d12, since I can't find any way to change its weight.
+				bond = max(12 + 2 * dmod, 2) * ((int)obj->owt - wt) / wt;	// this appears to be a constant +1d12, since I can't find any way to change its weight.
 			}
 		}
 		else if (obj->oartifact == ART_GOLDEN_SWORD_OF_Y_HA_TALLA && otyp == BULLWHIP)
@@ -465,6 +456,17 @@ int otyp;
 			ocd = 2;
 			bonn = 1;
 			bond = 4;
+		}
+		else if (obj->oartifact == ART_LIECLEAVER) {
+			ocn = 1;	/* plus another 1d10 from being an artifact */
+			ocd = 10;
+			bonn = 2;
+			bond = 12;
+			spe_mult = 2;
+		}
+		else if (obj->oartifact == ART_ROGUE_GEAR_SPIRITS) {
+			ocn = 1;
+			ocd = (large ? 2 : 4);
 		}
 		else if (otyp == MOON_AXE)
 		{
@@ -476,9 +478,9 @@ int otyp;
 			FULL_MOON	 	4  - 2d12 
 			 */
 			ocn = 2;
-			ocd = min(4 + 2 * obj->ovar1 + 2 * dmod, 2);	// die size is based on axe's phase of moon (0 <= ovar1 <= 4)
+			ocd = max(4 + 2 * obj->ovar1 + 2 * dmod, 2);	// die size is based on axe's phase of moon (0 <= ovar1 <= 4)
 			if (!large && obj->ovar1 == ECLIPSE_MOON)		// eclipse moon axe is surprisingly effective against small creatures (2d12)
-				ocd = min(12 + 2 * dmod, 2);
+				ocd = max(12 + 2 * dmod, 2);
 		}
 		else if (otyp == HEAVY_IRON_BALL) {
 			int wt = (int)objects[HEAVY_IRON_BALL].oc_weight;
@@ -492,7 +494,7 @@ int otyp;
 	}
 
 
-#define plus_base(n,x)	bonn = (n); bond = min((x),2)
+#define plus_base(n,x)	bonn = (n); bond = max((x),2)
 #define plus(n,x)		plus_base((n), (x) + 2 * dmod)
 #define pls(x)			plus(1, (x))
 #define add(x)			flat += max(0, (x) + dmod)
@@ -583,7 +585,7 @@ int otyp;
 	case ELVEN_MACE:			if(large){;} else {add(1);} break;
 	case MORNING_STAR:			if(large){add(1);} else {pls(4);} break;
 	case WAR_HAMMER:			if(large){;} else {add(1);} break;
-	case KAMEREL_VAJRA:			if(large){;} else {;} break;	// external special case: lightsaber forms
+	case KAMEREL_VAJRA:			if(large){;} else {;} break;	// external special case: lightsaber forms, being unlit
 	case FLAIL:					if(large){pls(4);} else {add(1);} break;
 	case VIPERWHIP:				if(large){;} else {;} break;	// external special case: number of heads striking
 	case BULLET:				ocn++; flat += 4; break;
@@ -625,19 +627,27 @@ int otyp;
 		bond = 0;
 	}
 	/* kamerel vajra */
-	if (obj && otyp == KAMEREL_VAJRA && litsaber(obj))
+	if (obj && otyp == KAMEREL_VAJRA)
 	{
-		if (obj->where == OBJ_MINVENT && obj->ocarry->data == &mons[PM_ARA_KAMEREL])
-		{
-			spe_mult = 3;
-			ocn *= 3;
-			flat *= 3;
+		if (litsaber(obj)) {
+			if (obj->where == OBJ_MINVENT && obj->ocarry->data == &mons[PM_ARA_KAMEREL])
+			{
+				spe_mult = 3;
+				ocn *= 3;
+				flat *= 3;
+			}
+			else
+			{
+				spe_mult = 2;
+				ocn *= 2;
+				flat *= 2;
+			}
 		}
-		else
-		{
-			spe_mult = 2;
-			ocn *= 2;
-			flat *= 2;
+		else {
+			/* equivalent to small mace */
+			ocn = 1;
+			ocd = 4;
+			flat = (large ? 0 : 1);
 		}
 	}
 	/* Infinity's Mirrored Arc */
@@ -816,7 +826,6 @@ int spec;
 	/* special cases of otyp not covered by dmgval_core:
 	 *  - rakuyo					- add bonus damage
 	 *  - double vibro blade		- double all damage
-	 *  - viperwhips				- add ostriking
 	 *  - mirrorblades				- total replacement
 	 *  - crystal sword				- bonus enchantment damage
 	 *  - seismic hammer			- damage die based on enchantment
@@ -840,17 +849,6 @@ int spec;
 			wdice.bon.damd = max(2, ((bigmonst(ptr) ? 3 : 4) + 2 * (otmp->objsize - MZ_MEDIUM + !!(spec & SPEC_MARIONETTE))));
 			// doubled enchantment
 			spe_mult *= 2;
-		}
-		break;
-	case SET_OF_CROW_TALONS:
-	case VIPERWHIP:
-		// extra heads means more base dice of damage
-		if (otmp->ostriking > 0)
-		{
-			/* modify wdice's dice */
-			// 1 additional die for every extra head striking
-			wdice.oc.damn += otmp->ostriking;
-			spe_mult += otmp->ostriking;
 		}
 		break;
 	case MIRRORBLADE:{
@@ -1087,199 +1085,23 @@ int spec;
 		if (tmp < 0)
 			tmp = 0;
 	}
-
-	if (otmp->obj_material <= LEATHER && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA)) && !(is_lightsaber(otmp) && litsaber(otmp)))
-		/* thick skinned/scaled creatures don't feel it */
-		tmp = 0;
-
-	if (otmp->oproperties&OPROP_FLAYW && (thick_skinned(ptr) || (youdefend && u.sealsActive&SEAL_ECHIDNA) || (mon && some_armor(mon))))
+	/* Flaying weapons don't damage armored foes */
+	if (otmp->oproperties&OPROP_FLAYW && mon && some_armor(mon))
 		tmp = 1;
-	
-	if(is_stabbing(otmp) && ptr == &mons[PM_SMAUG]) tmp += rnd(20);
+	/* Smaug gets stabbed */
+	if(is_stabbing(otmp) && ptr == &mons[PM_SMAUG])
+		tmp += rnd(20);
+	/* axes deal more damage to wooden foes */
+	if (is_axe(otmp) && is_wooden(ptr))
+		tmp += rnd(4);
+	/* Plants? Hoe 'em down! */
 	if(is_farm(otmp) && ptr->mlet == S_PLANT){
 		tmp *= 2;
 		tmp += rnd(20);
-	} if(u.sealsActive&SEAL_EVE && !youdefend && ptr->mlet == S_PLANT) tmp *= 2;
-/*	Put weapon vs. monster type damage bonuses in below:	*/
-	if (Is_weapon || otmp->oclass == GEM_CLASS ||
-		otmp->oclass == BALL_CLASS || otmp->oclass == CHAIN_CLASS) {
-	    int bonus = 0;
-		int resistmask = 0;
-		int weaponmask = 0;
-		static int warnedotyp = 0;
-		static struct permonst *warnedptr = 0;
-		
-		if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS 
-			&& !otmp->blessed && !otmp->cursed
-			&& mon
-			&& (holy_damage(mon) || hates_unholy_mon(mon))
-		){
-			bonus += rnd(10);
-		}
-	    if (otmp->blessed && mon && (holy_damage(mon))){
-			int dsize = 4;
-			if(otmp->obj_material == GOLD && !(is_lightsaber(otmp) && litsaber(otmp)))
-				dsize = 20;
-			
-			if(otmp->oartifact == ART_EXCALIBUR) bonus += d(3,7); //Quite holy
-			else if(otmp->oartifact == ART_JINJA_NAGINATA)
-				bonus += rnd(12); //Quite holy
-			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
-				bonus += d(3,7); //Quite holy
-			else if(otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && !otmp->lamplit)
-				bonus += rnd(10) + otmp->spe; //Quite holy
-			else if(otmp->oartifact == ART_VAMPIRE_KILLER) 
-					bonus += 7; //Quite holy
-			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
-				bonus += rnd(20); //Divinity
-			else if(otmp->oartifact == ART_AMHIMITL)
-				bonus += d(3,4);
-			
-			if(otmp->otyp == KHAKKHARA) bonus += d(rnd(3),dsize);
-			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,dsize);
-			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,dsize);
-			else bonus += rnd(dsize);
-		}
-	    if (is_axe(otmp) && is_wooden(ptr))
-			bonus += rnd(4);
-	    if ((otmp->obj_material == SILVER || arti_silvered(otmp))
-			&& hates_silver(ptr)
-			&& !(is_lightsaber(otmp) && litsaber(otmp))
-			&& (!youdefend || !(u.sealsActive&SEAL_EDEN))
-		){
-			if(otyp == KHAKKHARA) bonus += d(rnd(3),20);
-			else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,20);
-			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,20);
-			else if(otmp->oartifact == ART_PEN_OF_THE_VOID && mvitals[PM_ACERERAK].died > 0) bonus += d(2,20);
-			else if(otmp->oartifact == ART_SILVER_STARLIGHT) bonus += d(2,20);
-			else bonus += rnd(20);
-		}
-	    if (otmp->obj_material == IRON 
-			&& hates_iron(ptr)
-			&& !(is_lightsaber(otmp) && litsaber(otmp))
-		){
-			if(youdefend){
-				if(otyp == KHAKKHARA) bonus += d(rnd(3),u.ulevel);
-				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,mon->m_lev);
-				else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,mon->m_lev);
-				else bonus += rnd(u.ulevel);
-			} else {
-				if(otyp == KHAKKHARA) bonus += d(rnd(3),mon->m_lev);
-				else if(otmp->otyp == VIPERWHIP) bonus += d(otmp->ostriking+1,mon->m_lev);
-				else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d(otmp->ostriking+1,mon->m_lev);
-				else bonus += rnd(mon->m_lev);
 			}
-		}
-	    if (otmp->oartifact == ART_GLAMDRING && (is_orc(ptr) || is_demon(ptr))){
-			bonus += rnd(20);
-		}
-	    if (is_unholy(otmp)
-			&& mon && hates_unholy_mon(mon)
-		){
-			int bdm = 1;
-			if(otmp->obj_material == GOLD && !(is_lightsaber(otmp) && litsaber(otmp)))
-				bdm = 2;
-			
-			if(otmp->oartifact == ART_STORMBRINGER)
-				bonus += d(4*bdm,9); //Extra unholy (4d9 vs excal's 3d7)
-			else if(otmp->oartifact == ART_LANCE_OF_LONGINUS)
-				bonus += d(3*bdm,9); //Quite unholy
-			else if(otmp->oartifact == ART_SCEPTRE_OF_THE_FROZEN_FLOO)
-				bonus += 8*bdm; //Extra unholy
-			else if(otmp->oartifact == ART_ROD_OF_SEVEN_PARTS)
-				bonus += d(bdm, 20); //Tyranny
-			else if(otmp->oartifact == ART_AMHIMITL)
-				bonus += d(3*bdm, 4); //Tyranny
-			else if(otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
-				bonus += d(2*bdm,4); //Quite unholy
-			else if(otyp == KHAKKHARA) bonus += d(rnd(3)*bdm,9);
-			else if(otmp->otyp == VIPERWHIP) bonus += d((otmp->ostriking+1)*bdm,9);
-			else if(otmp->otyp == SET_OF_CROW_TALONS) bonus += d((otmp->ostriking+1)*bdm,9);
-			else bonus += d(bdm, 9);
-		}
-		
-		if (mon && hates_unholy_mon(mon) && otmp->oartifact == ART_TECPATL_OF_HUHETOTL)
-			bonus += d(2, 4); // always counts as unholy regardless (Blood?)
-		
-		if(mon && mon->isminion){
-			if(otmp->oartifact == ART_LIFEHUNT_SCYTHE)
-				bonus += d(4,4) + otmp->spe; //Occult
-		}
-		
-		
-		if(otmp->oclass == WEAPON_CLASS && otmp->obj_material == WOOD && otmp->otyp != MOON_AXE
-			&& (otmp->oward & WARD_VEIOISTAFUR) && ptr->mlet == S_EEL) bonus += rnd(20);
-		
-
-	    /* if the weapon is going to get a double damage bonus, adjust
-	       this bonus so that effectively it's added after the doubling */
-	    if (bonus > 1){
-			if(otmp->oartifact){
-				int dbonus = spec_dbon(otmp, mon, 100);
-				if(dbonus >= 100) bonus = (bonus + 1) / (1+dbonus/100);
-			}
-			if(otmp->oproperties){
-				int dbonus = oproperty_dbon(mon, otmp, 100);
-				if(dbonus >= 100) bonus = (bonus + 1) / (1+dbonus/100);
-			}
-		}
-		
-		if(mon && (((resists_all(ptr) && !narrow_spec_applies(otmp, mon))) || resist_attacks(ptr))){
-			tmp /= 4;
-			if(!flags.mon_moving && !youdefend && warnedptr != ptr){
-				pline("Weapons are ineffective against %s.", mon_nam(mon));
-				warnedptr = ptr;
-			}
-		} else {
-			if(is_bludgeon(otmp) 
-				|| otmp->oartifact == ART_YORSHKA_S_SPEAR 
-				|| otmp->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD
-			){
-				weaponmask |= WHACK;
-			}
-			if(is_stabbing(otmp)){
-				weaponmask |= PIERCE;
-			}
-			if(is_slashing(otmp)){
-				weaponmask |= SLASH;
-			}
-			if(is_blasting(otmp) 
-				|| (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit)
-				|| otmp->oartifact == ART_FIRE_BRAND
-				|| otmp->oartifact == ART_FROST_BRAND
-			){
-				weaponmask |= EXPLOSION;
-			}
-			
-			if(resist_blunt(ptr) || (!youdefend && mon && (mon->mfaction == ZOMBIFIED))){
-				resistmask |= WHACK;
-			}
-			if(resist_pierce(ptr) || (!youdefend && mon && (mon->mfaction == ZOMBIFIED || mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
-				resistmask |= PIERCE;
-			}
-			if(resist_slash(ptr) || (!youdefend && mon && (mon->mfaction == SKELIFIED || mon->mfaction == CRYSTALFIED))){
-				resistmask |= SLASH;
-			}
-			
-			if(mon && (weaponmask & ~(resistmask)) == 0L && !narrow_spec_applies(otmp, mon)){
-				tmp /= 4;
-				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
-					pline("%s is ineffective against %s.", The(xname(otmp)), mon_nam(mon));
-					warnedotyp = otmp->otyp;
-					warnedptr = ptr;
-				}
-			} else {
-				if(!flags.mon_moving && !youdefend && (warnedotyp != otmp->otyp || warnedptr != ptr)){
-					warnedotyp = 0;
-					warnedptr = 0;
-					if(vulnerable_mask(resistmask) && !(weaponmask&EXPLOSION))
-						tmp *= 2;
-				}
-			}
-		}
-		
-	    tmp += bonus;
-	}
+	/* Eve slays plants too */
+	if(u.sealsActive&SEAL_EVE && !youdefend && ptr->mlet == S_PLANT)
+		tmp *= 2;
 
 	if (tmp > 0) {
 		/* It's debateable whether a rusted blunt instrument
@@ -1291,13 +1113,6 @@ int spec;
 		   damage for blunt anymore */
 		if(!is_bludgeon(otmp)) tmp -= greatest_erosion(otmp);
 		if (tmp < 1) tmp = 1;
-	}
-	
-	if (insubstantial(ptr)){
-		if(!insubstantial_aware(mon, otmp, otmp == uwep || otmp == uswapwep || otmp == uarmf))
-			tmp = 0;
-		else
-			tmp = insubstantial_damage(mon, otmp, tmp, otmp == uwep || otmp == uswapwep || otmp == uarmf);
 	}
 	
 	return(tmp);

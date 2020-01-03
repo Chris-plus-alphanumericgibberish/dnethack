@@ -2160,19 +2160,24 @@ get_description_of_monster_type(struct monst * mtmp, char * description)
 			strcat(description, "\n");
 			strcat(description, "Attacks:");
 			strcat(description, "\n");
-			struct attack *mattk;
-			struct attack alt_attk;
-			int sum[NATTK];
-			int i;
-
-			for (i = 0; i < NATTK; i++) {
-				sum[i] = 1;
-				mattk = getmattk(mtmp, ptr, i, sum, &alt_attk);
+			struct attack * attk;
+			struct attack prev_attk;
+			int res[3];
+			int indexnum = 0;
+			int tohitmod = 0;
+			int subout = 0;
+			/* zero out res[] */
+			res[0] = MM_MISS;
+			res[1] = MM_MISS;
+			res[2] = MM_MISS;
+			do {
+				/* get next attack */
+				attk = getattk(mtmp, res, &indexnum, &prev_attk, TRUE, &subout, &tohitmod);
 
 				main_temp_buf[0] = '\0';
-				get_description_of_attack(mattk, temp_buf);
+				get_description_of_attack(attk, temp_buf);
 				if (temp_buf[0] == '\0') {
-					if (i == 0) {
+					if (indexnum == 0) {
 #ifndef USE_TILES
 						strcat(description, "    ");
 #endif
@@ -2187,7 +2192,7 @@ get_description_of_monster_type(struct monst * mtmp, char * description)
 				strcat(main_temp_buf, temp_buf);
 				strcat(main_temp_buf, "\n");
 				strcat(description, main_temp_buf);
-			}
+			} while (!((attk)->aatyp == 0 && (attk)->adtyp == 0 && (attk)->damn == 0 && (attk)->damd == 0));		/* no more attacks */
 		}
 	}
 	return description;

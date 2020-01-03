@@ -588,15 +588,12 @@ drag:
 
 		You("are jerked back by the iron ball!");
 		if ((victim = m_at(uchain->ox, uchain->oy)) != 0) {
-		    int tmp;
-
-		    tmp = -2 + Luck + find_mac(victim);
-		    tmp += omon_adj(victim, uball, TRUE);
-		    if (tmp >= rnd(20))
-			(void) hmon(victim,uball,1);
+			int dieroll = rnd(20);
+			boolean wepgone = FALSE;
+			if (tohitval((struct monst *)0, victim, (struct attack *)0, uball, (struct obj *)0, TRUE, 0) >= dieroll)
+				(void)hmon2point0((struct monst *)0, victim, (struct attack *)0, uball, (struct obj *)0, TRUE, 0, 0, TRUE, dieroll, FALSE, TRUE, &wepgone);
 		    else
-			miss(xname(uball), victim);
-
+				miss(xname(uball), victim);
 		}		/* now check again in case mon died */
 		if (!m_at(uchain->ox, uchain->oy)) {
 		    u.ux = uchain->ox;

@@ -1606,7 +1606,7 @@ struct obj *obj;
 		(obj->otyp == SEISMIC_HAMMER) ? HAMMER_TYP : 
 		AXE_TYP);
 
-	if (u.uswallow && attack(u.ustuck)) {
+	if (u.uswallow && attack2(u.ustuck)) {
 		;  /* return(1) */
 	} else if (Underwater) {
 		pline("Turbulence torpedoes your %s attempts.", verbing);
@@ -1643,7 +1643,7 @@ struct obj *obj;
 			return(1);
 		}
 		lev = &levl[rx][ry];
-		if(MON_AT(rx, ry) && attack(m_at(rx, ry)))
+		if(MON_AT(rx, ry) && attack2(m_at(rx, ry)))
 			return(1);
 		dig_target = dig_typ(obj, rx, ry);
 		if (dig_target == DIGTYP_UNDIGGABLE) {

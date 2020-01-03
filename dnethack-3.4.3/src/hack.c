@@ -5,7 +5,6 @@
 #include "hack.h"
 
 #ifdef OVL1
-STATIC_DCL void NDECL(maybe_wail);
 #endif /*OVL1*/
 STATIC_DCL int NDECL(moverock);
 STATIC_DCL int FDECL(still_chewing,(XCHAR_P,XCHAR_P));
@@ -1194,7 +1193,7 @@ domove()
 		if(u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) displacer = TRUE;
 		/* try to attack; note that it might evade */
 		/* also, we don't attack tame when _safepet_ */
-		else if(attack(mtmp)){
+		else if (attack2(mtmp)){
 			if(uwep && is_lightsaber(uwep) && litsaber(uwep) && u.fightingForm == FFORM_ATARU && (!uarm || is_light_armor(uarm))){
 				coord cc;
 				if(!u.utrap && tt_findadjacent(&cc, mtmp) && (cc.x != u.ux || cc.y != u.uy)){
@@ -1440,7 +1439,7 @@ domove()
 	     * If a monster attempted to displace us but failed
 	     * then we are entitled to our normal attack.
 	     */
-	    if (!attack(mtmp)) {
+	    if (!attack2(mtmp)) {
 		flags.move = 0;
 		nomul(0, NULL);
 	    }
@@ -1465,7 +1464,7 @@ domove()
 	    /* [ALI] This can't happen at present, but if it did we would
 	     * also need to worry about the call to drag_ball above.
 	     */
-	    if (displacer) (void)attack(mtmp);
+	    if (displacer) (void)attack2(mtmp);
 #endif
 	    return;
 	}
@@ -1640,22 +1639,7 @@ domove()
 	spoteffects(TRUE);
 	
 	if(u.specialSealsActive&SEAL_BLACK_WEB && u.spiritPColdowns[PWR_WEAVE_BLACK_WEB] > moves+20){
-		static struct attack webattack[] = 
-		{
-			{AT_SHDW,AD_SHDW,4,8},
-			{0,0,0,0}
-		};
-		struct monst *mon;
-		int i, tmp, weptmp, tchtmp;
-		for(i=0; i<8;i++){
-			if(isok(u.ux+xdir[i],u.uy+ydir[i])){
-				mon = m_at(u.ux+xdir[i],u.uy+ydir[i]);
-				if(mon && !mon->mpeaceful){
-					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-					hmonwith(mon, tmp, weptmp, tchtmp, webattack, 1);
-				}
-			}
-		}
+		weave_black_web((struct monst *)0);
 	}
 	
 	/* delay next move because of ball dragging */
@@ -2474,7 +2458,7 @@ const char *msg_override;
 #endif /* OVL2 */
 #ifdef OVL1
 
-STATIC_OVL void
+void
 maybe_wail()
 {
     static short powers[] = { TELEPORT, SEE_INVIS, POISON_RES, COLD_RES,
@@ -2548,6 +2532,34 @@ boolean k_format;
 		done(DIED);
 	} else if (n > 0 && u.uhp*10 < u.uhpmax) {
 		maybe_wail();
+	}
+}
+
+void
+mdamageu(mtmp, n)	/* mtmp hits you for n points damage */
+register struct monst *mtmp;
+register int n;
+{
+	flags.botl = 1;
+	//ifdef BARD
+	if (n > 0){
+		n += mtmp->encouraged;
+		if (uwep && uwep->oartifact == ART_SINGING_SWORD && !mindless_mon(mtmp) && !is_deaf(mtmp)){
+			if (uwep->osinging == OSING_DIRGE && !mtmp->mtame){
+				n -= uwep->spe + 1;
+			}
+		}
+		if (n < 0) n = 0;
+	}
+	//endif
+	if (n > 0) mtmp->mhurtu = TRUE;
+	if (Upolyd) {
+		u.mh -= n;
+		if (u.mh < 1) rehumanize();
+	}
+	else {
+		u.uhp -= n;
+		if (u.uhp < 1) done_in_by(mtmp);
 	}
 }
 

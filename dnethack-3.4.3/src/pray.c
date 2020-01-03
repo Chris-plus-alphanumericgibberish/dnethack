@@ -5,6 +5,7 @@
 #include "hack.h"
 #include "epri.h"
 #include "artifact.h"
+#include "artilist.h"
 
 extern const int monstr[];
 
@@ -1425,6 +1426,41 @@ gcrownu()
 				if(obj->oartifact == ART_BOOK_OF_INFINITE_SPELLS) 
 					obj->ovar1 = SPE_FINGER_OF_DEATH;
 		}
+	} else if (Pantheon_if(PM_ARCHEOLOGIST) || Role_if(PM_ARCHEOLOGIST)) {
+		if (class_gift != STRANGE_OBJECT) {
+			;		/* already got bonus above for some reason */
+		} else if (!already_exists) {
+			if (u.uevent.uhand_of_elbereth == 37){
+				obj = mksobj(AMULET_OF_MAGICAL_BREATHING, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_EHECAILACOCOZCATL));
+				expert_weapon_skill(P_ATTACK_SPELL);
+				
+			} else if (u.uevent.uhand_of_elbereth == 38){
+				obj = mksobj(JAVELIN, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_AMHIMITL));
+				expert_weapon_skill(P_SPEAR);
+			} else {
+				obj = mksobj(TECPATL, FALSE, FALSE);
+				obj = oname(obj, artiname(ART_TECPATL_OF_HUHETOTL));
+				expert_weapon_skill(P_DAGGER);
+				expert_weapon_skill(P_CLERIC_SPELL);
+			}
+			if(obj){
+				obj->spe = 1;
+				obj = hold_another_object(obj, 
+					"A %s appears at your feet!", 
+					u.uevent.uhand_of_elbereth == 37 ? "conch shell" : (u.uevent.uhand_of_elbereth == 38 ? "harpoon": "sacrificial dagger"),
+					(const char *)0);
+			}
+
+			u.ugifts++;
+		}
+		if (obj && obj->oartifact == ART_EHECAILACOCOZCATL)
+			discover_artifact(ART_EHECAILACOCOZCATL);
+		else if(obj && obj->oartifact == ART_AMHIMITL)
+			discover_artifact(ART_AMHIMITL);
+		else if(obj && obj->oartifact == ART_TECPATL_OF_HUHETOTL)
+			discover_artifact(ART_TECPATL_OF_HUHETOTL);
 	} else if (Pantheon_if(PM_NOBLEMAN) || Role_if(PM_NOBLEMAN)) {
 		if (class_gift != STRANGE_OBJECT) {
 			;		/* already got bonus above for some reason */
@@ -1826,6 +1862,7 @@ water_prayer(bless_water)
 {
     register struct obj* otmp;
     register long changed = 0;
+	int non_water_changed = 0;
     boolean other = FALSE, bc_known = !(Blind || Hallucination);
 
     for(otmp = level.objects[u.ux][u.uy]; otmp; otmp = otmp->nexthere) {
@@ -2664,6 +2701,11 @@ dosacrifice()
 			u.reconciled = REC_NONE;
 			u.lastprayresult = PRAY_GIFT;
 		    exercise(A_WIS, TRUE);
+		    if (!flags.debug && otmp->oartifact) {
+				char llog[BUFSZ+22];
+				Sprintf(llog, "was given %s", the(artilist[otmp->oartifact].name));
+				livelog_write_string(llog);
+		    }
 		    /* make sure we can use this weapon */
 		    unrestrict_weapon_skill(weapon_type(otmp));
 		    discover_artifact(otmp->oartifact);

@@ -1656,9 +1656,9 @@ struct monst *mtmp;
 			pline("%s hurls %s!", Monnam(mtmp),
 						singular(otmp, doname));
 		}
-		m_throw(mtmp, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby),
-			distmin(mtmp->mx,mtmp->my,mtmp->mux,mtmp->muy), otmp,
-			TRUE);
+		
+		projectile(mtmp, otmp, (struct obj *)0, FALSE, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby), 0, distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy), FALSE, FALSE, FALSE);
+
 		if(u.ux != mtmp->mux || u.uy != mtmp->muy){
 			mtmp->mux = mtmp->muy = 0;
 		}

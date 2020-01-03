@@ -1192,7 +1192,7 @@ register struct monst *mtmp;
 						Sprintf(buf,"%s can see", Monnam(mtmp));
 						pline("%s %s...", buf, mon_nam(gazemon));
 					}*/
-					(void) gazemm(gazemon, mtmp, &gazemon->data->mattk[i]);
+					(void) xgazey(gazemon, mtmp, &gazemon->data->mattk[i], -1);
 					break;
 				 }
 		}
@@ -1589,7 +1589,7 @@ toofar:
 			res = (mtmp2 == &youmonst) ? mattacku(mtmp)
 		                           : mattackm(mtmp, mtmp2);
 			/* note: mattacku and mattackm have different returns */
-			if ((mtmp2 == &youmonst) ? (res == 1) : (res & MM_AGR_DIED)) return 1; /* Oops. */
+			if (res & MM_AGR_DIED) return 1; /* Oops. */
 
 			if(!(mon_ranged_gazeonly))
 				return 0; /* that was our move for the round */
@@ -1674,7 +1674,7 @@ toofar:
 			    /* a monster that's digesting you can move at the
 			     * same time -dlc
 			     */
-			    return(mattacku(mtmp));
+			    return(!!(mattacku(mtmp)&MM_AGR_DIED));
 			} else
 				return(0);
 			/*NOTREACHED*/
@@ -1688,7 +1688,7 @@ toofar:
 	if (!mtmp->mpeaceful || mdat == &mons[PM_NURSE] ||
 	    (Conflict && !resist(mtmp, RING_CLASS, 0, 0))) {
 	    if(inrange && !noattacks(mdat) && u.uhp > 0 && !scared && tmp != 3)
-			if(mattacku(mtmp)) return(1); /* monster died (e.g. exploded) */
+			if((mattacku(mtmp)&MM_AGR_DIED)) return(1); /* monster died (e.g. exploded) */
 	}
 	/* special speeches for quest monsters */
 	if (!mtmp->msleeping && mtmp->mcanmove && mtmp->mnotlaugh && nearby)

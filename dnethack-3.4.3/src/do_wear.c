@@ -3716,14 +3716,10 @@ dosymbiotic()
 	int clockwisex[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
 	int clockwisey[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
 	int i = rnd(8),j, lim=0;
-	struct attack symbiote[] = 
-	{
-		{AT_TENT,AD_PHYS,3,3},
-		{0,0,0,0}
-	};
+	struct attack symbiote = { AT_TENT, AD_PHYS, 3, 3 };
 	//2 pips on a die is +1 on average
 	if(uarm)
-		symbiote[0].damd = max(1, 3 + uarm->spe);
+		symbiote.damd = max(1, 3 + uarm->spe);
 	for(j=8;j>=1;j--){
 		if(u.ustuck && u.uswallow)
 			mon = u.ustuck;
@@ -3736,8 +3732,7 @@ dosymbiotic()
 		) continue;
 		
 		if(mon && !mon->mtame){
-			find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-			hmonwith(mon, tmp, weptmp, tchtmp, symbiote, 1);
+			xmeleehity(&youmonst, mon, &symbiote, (struct obj *)0, -1, 0, FALSE);
 			morehungry(1);
 			lim++;
 			if(lim > 4) break;

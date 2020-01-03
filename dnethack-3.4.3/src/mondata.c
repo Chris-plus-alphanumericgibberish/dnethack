@@ -122,6 +122,19 @@ int atyp;
     return attacktype_fordmg(ptr, atyp, AD_ANY) ? TRUE : FALSE;
 }
 
+boolean
+noattacks(ptr)			/* returns TRUE if monster has no non-passive attacks */
+struct permonst *ptr;
+{
+	int i;
+
+	for (i = 0; i < NATTK; i++)
+	if (ptr->mattk[i].aatyp)
+		return FALSE;
+
+	return TRUE;
+}
+
 int
 attackindex(ptr, atyp, dtyp)
 struct permonst *ptr;

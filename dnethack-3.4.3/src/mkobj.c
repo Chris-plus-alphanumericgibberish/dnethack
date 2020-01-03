@@ -18,7 +18,7 @@ STATIC_DCL int FDECL(maid_clean, (struct monst *, struct obj *));
 #endif
 #endif /* OVL1 */
 
-extern struct obj *thrownobj;		/* defined in dothrow.c */
+//extern struct obj *thrownobj;		/* defined in dothrow.c */
 
 /*#define DEBUG_EFFECTS*/	/* show some messages for debugging */
 
@@ -3116,7 +3116,7 @@ dealloc_obj(obj)
      */
 	del_light_source(LS_OBJECT, (genericptr_t) obj, TRUE);
 
-    if (obj == thrownobj) thrownobj = (struct obj*)0;
+    //if (obj == thrownobj) thrownobj = (struct obj*)0;
 
     free((genericptr_t) obj);
 }

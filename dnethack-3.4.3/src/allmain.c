@@ -772,8 +772,6 @@ moveloop()
 			 /*once-per-monster-moving things go here*/
 			/****************************************/
 ////////////////////////////////////////////////////////////////////////////////////////////////
-			reset_mvmdieroll();
-			reset_mvudieroll();
 			if(u.specialSealsActive&SEAL_LIVING_CRYSTAL)
 				average_dogs();
 			for (mtmp = fmon; mtmp; mtmp = nxtmon){
@@ -1855,7 +1853,6 @@ karemade:
 	      /******************************************/
 	     /* once-per-hero-took-time things go here */
 	    /******************************************/
-		reset_udieroll();
 		
 		if(u.ustdy > 0) u.ustdy -= 1;
 		

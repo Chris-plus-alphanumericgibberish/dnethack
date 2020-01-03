@@ -1627,6 +1627,62 @@ struct obj *obj;
     return 0;
 }
 
+/* magic_negation()
+ * 
+ * armor that sufficiently covers the body might be able to block magic 
+ */
+int
+magic_negation(mon)
+struct monst *mon;
+{
+	struct obj *armor;
+	int armpro = 0;
+	int cpro = 0;
+	
+	if(u.sealsActive&SEAL_PAIMON && mon == &youmonst) return 3;
+
+	armor = (mon == &youmonst) ? uarm : which_armor(mon, W_ARM);
+	if (armor && armpro < objects[armor->otyp].a_can)
+	    armpro = objects[armor->otyp].a_can;
+	armor = (mon == &youmonst) ? uarmc : which_armor(mon, W_ARMC);
+	if(armor){
+		cpro = armor->otyp == DROVEN_CLOAK ? 
+			objects[armor->otyp].a_can - armor->ovar1 :
+			objects[armor->otyp].a_can;
+		if(armpro < cpro) armpro = cpro;
+	}
+	armor = (mon == &youmonst) ? uarmh : which_armor(mon, W_ARMH);
+	if (armor && armpro < objects[armor->otyp].a_can)
+	    armpro = objects[armor->otyp].a_can;
+	if(mon == &youmonst && !uarmc && 
+		uwep && uwep->oartifact==ART_TENSA_ZANGETSU) armpro = max(armpro, 2); //magic cancelation for tensa zangetsu
+
+	/* armor types for shirt, gloves, shoes, and shield may not currently
+	   provide any magic cancellation but we should be complete */
+	armor = (mon == &youmonst) ? uarmu : which_armor(mon, W_ARMU);
+	if (armor && armpro < objects[armor->otyp].a_can)
+	    armpro = objects[armor->otyp].a_can;
+	armor = (mon == &youmonst) ? uarmg : which_armor(mon, W_ARMG);
+	if (armor && armpro < objects[armor->otyp].a_can)
+	    armpro = objects[armor->otyp].a_can;
+	armor = (mon == &youmonst) ? uarmf : which_armor(mon, W_ARMF);
+	if (armor && armpro < objects[armor->otyp].a_can)
+	    armpro = objects[armor->otyp].a_can;
+	armor = (mon == &youmonst) ? uarms : which_armor(mon, W_ARMS);
+	if (armor && armpro < 3){
+	    armpro = min(3, armpro+objects[armor->otyp].a_can);
+	}
+
+#ifdef STEED
+	/* this one is really a stretch... */
+	armor = (mon == &youmonst) ? 0 : which_armor(mon, W_SADDLE);
+	if (armor && armpro < objects[armor->otyp].a_can)
+	    armpro = objects[armor->otyp].a_can;
+#endif
+
+	return armpro;
+}
+
 void
 light_damage(arg, timeout)
 genericptr_t arg;

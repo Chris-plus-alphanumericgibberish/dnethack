@@ -634,8 +634,8 @@ int	mntmp;
 		pline(use_thec,monsterc,"scream");
 	    if (youmonst.data == &mons[PM_TOVE])
 		pline(use_thec,monsterc,"gimble a hole in the ground");
-	    if (youmonst.data == &mons[PM_BANDERSNATCH])
-		pline(use_thec,monsterc,"snap at a distant target");
+		if (attacktype(youracedata, AT_LNCK) || attacktype(youracedata, AT_LRCH))
+		pline(use_thec,monsterc,"attack a distant target");
 	    if (lays_eggs(youmonst.data) && flags.female)
 		pline(use_thec,"sit","lay an egg");
 	}
@@ -1029,13 +1029,11 @@ dospit()
 {
 	struct obj *otmp;
 
-	if (!getdir((char *)0)) return(0);
-	otmp = mksobj(u.umonnum==PM_COBRA ? BLINDING_VENOM 
-									  : (u.umonnum==PM_SPROW || u.umonnum==PM_DRIDER) ? BALL_OF_WEBBING 
-									  : ACID_VENOM,
-			TRUE, FALSE);
-	otmp->spe = 1; /* to indicate it's yours */
-	throwit(otmp, 0L, FALSE, 0);
+	if (!getdir((char *)0))
+		return(0);
+	else {
+		xspity(&youmonst, attacktype_fordmg(youracedata, AT_SPIT, AD_ANY), 0, 0);
+	}
 	return(1);
 }
 
@@ -1224,22 +1222,95 @@ int
 dogaze()
 {
 	register struct monst *mtmp;
+	struct attack * attk = attacktype_fordmg(youracedata, AT_GAZE, AD_ANY);
+	int result;
+
+	if (Blind) {
+		You_cant("see anything to gaze at.");
+		return 0;
+	}
+	if (u.uen < 15) {
+		You("lack the energy to use your special gaze!");
+		return(0);
+	}
+	if (!throwgaze()) {
+		/* player cancelled targetting or picked a not-allowed location */
+		return 0;
+	}
+	else {
+		u.uen -= 15;
+		flags.botl = 1;
+
+		if ((mtmp = m_at(u.dx, u.dy)) && canseemon(mtmp)) {
+			result = xgazey(&youmonst, mtmp, attk, -1);
+
+			if (!result) {
+				pline("%s seemed not to notice.", Monnam(mtmp));
+			}
+
+
+			/* deliberately gazing at some things is dangerous. This is inconsistent with monster agr gazes, but whatever */
+
+			/* For consistency with passive() in uhitm.c, this only
+			* affects you if the monster is still alive.
+			*/
+			if (!DEADMONSTER(mtmp) &&
+				(mtmp->data == &mons[PM_FLOATING_EYE]) && !mtmp->mcan) {
+				if (!Free_action) {
+					You("are frozen by %s gaze!",
+						s_suffix(mon_nam(mtmp)));
+					nomul((u.ulevel > 6 || rn2(4)) ?
+						-d((int)mtmp->m_lev + 1,
+						(int)mtmp->data->mattk[0].damd)
+						: -200, "frozen by a monster's gaze");
+					return 1;
+				}
+				else
+					You("stiffen momentarily under %s gaze.",
+					s_suffix(mon_nam(mtmp)));
+			}
+			/* Technically this one shouldn't affect you at all because
+			* the Medusa gaze is an active monster attack that only
+			* works on the monster's turn, but for it to *not* have an
+			* effect would be too weird.
+			*/
+			if (!DEADMONSTER(mtmp) &&
+				(mtmp->data == &mons[PM_MEDUSA]) && !mtmp->mcan) {
+				pline(
+					"Gazing at the awake %s is not a very good idea.",
+					l_monnam(mtmp));
+				/* as if gazing at a sleeping anything is fruitful... */
+				You("turn to stone...");
+				killer_format = KILLED_BY;
+				killer = "deliberately meeting Medusa's gaze";
+				done(STONING);
+			}
+		}
+		else {
+			You("gaze at empty space.");
+		}
+	}
+}
+#if 0
+{
+	register struct monst *mtmp;
 	int looked = 0;
 	char qbuf[QBUFSZ];
 	int i;
+	int dmg = 0;
 	uchar adtyp = 0;
+	uchar damn = 0;
+	uchar damd = 0;
+	const int elementalgaze[] = {AD_FIRE,AD_COLD,AD_ELEC};
 
 	for (i = 0; i < NATTK; i++) {
 	    if(youracedata->mattk[i].aatyp == AT_GAZE) {
 		adtyp = youracedata->mattk[i].adtyp;
+		damn = youracedata->mattk[i].damn;
+		damd = youracedata->mattk[i].damd;
 		break;
 	    }
 	}
-	if (adtyp != AD_CONF && adtyp != AD_FIRE) {
-	    impossible("gaze attack %d?", adtyp);
-	    return 0;
-	}
-
 
 	if (Blind) {
 	    You_cant("see anything to gaze at.");
@@ -1269,7 +1340,7 @@ dogaze()
 		  && mtmp->mtame) {
 		    You("avoid gazing at %s.", y_monnam(mtmp));
 		} else {
-		    if (flags.confirm && mtmp->mpeaceful && !Confusion
+		    if (iflags.attack_mode != ATTACK_MODE_FIGHT_ALL && mtmp->mpeaceful && !Confusion
 							&& !Hallucination) {
 			Sprintf(qbuf, "Really %s %s?",
 			    (adtyp == AD_CONF) ? "confuse" : "attack",
@@ -1285,15 +1356,19 @@ dogaze()
 		    /* No reflection check for consistency with when a monster
 		     * gazes at *you*--only medusa gaze gets reflected then.
 		     */
-		    if (adtyp == AD_CONF) {
+		    if(adtyp == AD_RETR)
+			adtyp = elementalgaze[rn2(SIZE(elementalgaze))];	//flat random member of elementalgaze
+		    switch(adtyp){
+		   	 case AD_CONF:
 			if (!mtmp->mconf)
 			    Your("gaze confuses %s!", mon_nam(mtmp));
 			else
 			    pline("%s is getting more and more confused.",
 							Monnam(mtmp));
 			mtmp->mconf = 1;
-		    } else if (adtyp == AD_FIRE) {
-			int dmg = d(2,6);
+		   	 break;
+		   	 case AD_FIRE:
+		   	     dmg = d(damn,damd);
 			You("attack %s with a fiery gaze!", mon_nam(mtmp));
 			if (resists_fire(mtmp)) {
 			    pline_The("fire doesn't burn %s!", mon_nam(mtmp));
@@ -1305,9 +1380,99 @@ dogaze()
 			    (void) destroy_mitem(mtmp, POTION_CLASS, AD_FIRE);
 			if((int) u.ulevel > rn2(25))
 			    (void) destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
+		   	 break;
+		   	 case AD_COLD:
+		   	     dmg = d(damn,damd);
+		   	     You("attack %s with a cold gaze!", mon_nam(mtmp));
+		   	     if (resists_cold(mtmp)) {
+		   	         pline_The("cold doesn't freeze %s!", mon_nam(mtmp));
+		   	         dmg = 0;
+		   	     }
+		   	     if((int) u.ulevel > rn2(20))
+		   	         (void) destroy_mitem(mtmp, POTION_CLASS, AD_COLD);
+		   	 break;
+		   	 case AD_ELEC:
+		   	     dmg = d(damn,damd);
+		   	     You("attack %s with an electrifying gaze!", mon_nam(mtmp));
+		   	     if (resists_elec(mtmp)) {
+		   	         pline_The("electricity doesn't shock %s!", mon_nam(mtmp));
+		   	         dmg = 0;
+		   	     }
+		   	 break;
+			 case AD_STDY:
+				You("study %s carefully.",mon_nam(mtmp));
+				mtmp->mstdy = max(d(damn,damd),mtmp->mstdy);
+			 break;
+			 case AD_PLYS:{
+				int plys;
+				if(damn == 0 || damd == 0) 
+					plys = rnd(10);
+				else plys = d(damn, damd);
+		    		mtmp->mcanmove = 0;
+		    		mtmp->mfrozen = plys;
+				You("mesmerize %s!", mon_nam(mtmp));
+			     }
+			 break;
+			 case AD_SPOR:
+			 case AD_MIST:{
+				int n;
+				int mndx;
+				struct monst *mtmp2;
+				struct monst *mtmp3;
+				if(youracedata ==  &mons[PM_MIGO_PHILOSOPHER]){
+					n = rnd(4);
+					pline("Whirling snow swirls out from around you.");
+					mndx = PM_ICE_VORTEX;
+				} else if(youracedata == &mons[PM_MIGO_QUEEN]){
+					n = rnd(2);
+					pline("Scalding steam swirls out from around you.");
+					mndx = PM_STEAM_VORTEX;
+				} else if(youracedata == &mons[PM_SWAMP_FERN]){
+					n = 1;
+					You("release a spore.");
+					mndx = PM_SWAMP_FERN_SPORE;
+				} else if(youracedata == &mons[PM_BURNING_FERN]){
+					n = 1;
+					You("release a spore.");
+					mndx = PM_BURNING_FERN_SPORE;
+				} else if(adtyp == AD_SPOR){
+					n = 1;
+					You("release a spore.");
+					mndx = PM_DUNGEON_FERN_SPORE;
+				} else {
+					n = rnd(4);
+					pline("fog billows out from around you.");
+					mndx = PM_FOG_CLOUD;
+				}
+				for(i=0;i<n;i++){
+					mtmp3 = makemon(&mons[mndx], u.ux, u.uy, MM_ADJACENTOK|MM_ADJACENTSTRICT);
+				 	if (mtmp3 && (mtmp2 = tamedog(mtmp3, (struct obj *)0)) != 0){
+						mtmp3 = mtmp2;
+						mtmp3->mtame = 30;
+						mtmp3->mvanishes = 10;
+					} else mongone(mtmp3);
+				}
+			 }
+			 break;
+			 case AD_BLND:{
+			 	register unsigned rnd_tmp;
+				if (!is_blind(mtmp))
+			 	   pline("%s is blinded.", Monnam(mtmp));
+				rnd_tmp = d(damn, damd);
+				pline("%d",rnd_tmp);
+				if ((rnd_tmp += mtmp->mblinded) > 127) rnd_tmp = 127;
+				mtmp->mblinded = rnd_tmp;
+				mtmp->mcansee = 0;
+				mtmp->mstrategy &= ~STRAT_WAITFORU;
+			 }
+			 break;
+			 default:
+	    			impossible("gaze attack %d?", adtyp);
+	    			return 0;
+			 break;
+		     }
 			if (dmg && !DEADMONSTER(mtmp)) mtmp->mhp -= dmg;
 			if (mtmp->mhp <= 0) killed(mtmp);
-		    }
 		    /* For consistency with passive() in uhitm.c, this only
 		     * affects you if the monster is still alive.
 		     */
@@ -1347,6 +1512,7 @@ dogaze()
 	if (!looked) You("gaze at no place in particular.");
 	return 1;
 }
+#endif
 
 int
 dohide()
@@ -1520,302 +1686,7 @@ doandroid()
 	    update_inventory();
 		return 1;
 	} else if(newspeed == ANDROID_COMBO){
-		struct monst *mon;
-		int tmp, weptmp, tchtmp;
-		if(!uwep || (is_lightsaber(uwep) && !litsaber(uwep))){
-			static struct attack unarmedcombo[] = 
-			{
-				{AT_WEAP,AD_PHYS,0,0},
-				{AT_WEAP,AD_PHYS,0,0},
-				{AT_KICK,AD_PHYS,0,0},
-				{AT_KICK,AD_PHYS,0,0},
-				{0,0,0,0}
-			};
-			if(!getdir((char *)0)) return 0;
-			if(u.ustuck && u.uswallow)
-				mon = u.ustuck;
-			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-			if(!mon) You("swing wildly!");
-			else {
-				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-				hmonwith(mon, tmp, weptmp, tchtmp, unarmedcombo, 2);
-			}
-			u.uen--;
-			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_SKILLED && u.uen > 0){
-				if(dokick()){
-					u.uen--;
-				} else return 1;
-			}
-			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_EXPERT && u.uen > 0){
-				int j = jump(1);
-				int k = dokick();
-				if(j || k){
-					u.uen--;
-				} else return 1;
-			}
-			if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_MASTER && u.uen > 0){
-				int j = jump(1);
-				int d = getdir((char *)0);
-				if(!j && !d) return 1;
-				u.uen--;
-				if(d){
-					if(u.ustuck && u.uswallow)
-						mon = u.ustuck;
-					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-					if(!mon) You("swing wildly!");
-					else {
-						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-						hmonwith(mon, tmp, weptmp, tchtmp, unarmedcombo, 4);
-					}
-				}
-			}
-			return 1;
-		} else if(is_lightsaber(uwep) && litsaber(uwep)){ //!uwep handled above
-			static struct attack lightsabercombo[] = 
-			{
-				{AT_WEAP,AD_PHYS,0,0},
-				{AT_WEAP,AD_PHYS,0,0},
-				{0,0,0,0}
-			};
-			if(!getdir((char *)0)) return 0;
-			if(u.ustuck && u.uswallow)
-				mon = u.ustuck;
-			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-			if(fast_weapon(uwep)) youmonst.movement+=2;
-			if(!mon) dofire_core(FALSE);
-			else {
-				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-				hmonwith(mon, tmp, weptmp, tchtmp, lightsabercombo, 2);
-			}
-			u.uen--;
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
-				int a = getdir((char *)0);
-				int k;
-				if(a){
-					if(u.ustuck && u.uswallow)
-						mon = u.ustuck;
-					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-					if(fast_weapon(uwep)) youmonst.movement+=2;
-					if(!mon) dofire_core(FALSE);
-					else {
-						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-						hmonwith(mon, tmp, weptmp, tchtmp, lightsabercombo, 1);
-					}
-				}
-				k = dokick();
-				if(a || k){
-					u.uen--;
-				} else return 1;
-			}
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
-				int j = jump(1);
-				int d = getdir((char *)0);
-				if(!j && !d) return 1;
-				u.uen--;
-				if(d){
-					if(u.ustuck && u.uswallow)
-						mon = u.ustuck;
-					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-					if(!mon) dofire_core(FALSE);
-					else {
-						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-						hmonwith(mon, tmp, weptmp, tchtmp, lightsabercombo, 2);
-					}
-				}
-			}
-			return 1;
-		} else if(objects[uwep->otyp].oc_skill == P_SPEAR || objects[uwep->otyp].oc_skill == P_LANCE){ //!uwep handled above
-			static struct attack spearcombo[] = 
-			{
-				{AT_WEAP,AD_PHYS,0,0},
-				{AT_WEAP,AD_PHYS,0,0},
-				{0,0,0,0}
-			};
-			if(!getdir((char *)0)) return 0;
-			if(fast_weapon(uwep)) youmonst.movement+=2;
-			if(u.ustuck && u.uswallow)
-				mon = u.ustuck;
-			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-			if(!mon) You("stab wildly!");
-			else {
-				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-				hmonwith(mon, tmp, weptmp, tchtmp, spearcombo, 2);
-			}
-			u.uen--;
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
-				if(!getdir((char *)0)) return 1;
-				if(u.ustuck && u.uswallow)
-					mon = u.ustuck;
-				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon) You("stab wildly!");
-				else {
-					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-					hmonwith(mon, tmp, weptmp, tchtmp, spearcombo, 2);
-				}
-				u.uen--;
-			}
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
-				if(!getdir((char *)0)) return 1;
-				if(u.ustuck && u.uswallow)
-					mon = u.ustuck;
-				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(!mon) You("stab wildly!");
-				else {
-					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-					hmonwith(mon, tmp, weptmp, tchtmp, spearcombo, 2);
-				}
-				u.uen--;
-			}
-			return 1;
-		} else if(objects[uwep->otyp].oc_skill == P_WHIP){ //!uwep handled above
-			static struct attack whipcombo[] = 
-			{
-				{AT_WEAP,AD_PHYS,0,0},
-				{AT_WEAP,AD_PHYS,0,0},
-				{0,0,0,0}
-			};
-			if(!getdir((char *)0)) return 0;
-			if(u.ustuck && u.uswallow)
-				mon = u.ustuck;
-			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-			if(fast_weapon(uwep)) youmonst.movement+=2;
-			if(!mon) You("swing wildly!");
-			else {
-				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-				hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 2);
-			}
-			u.uen--;
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
-				if(!use_whip(uwep)) return 1;
-				u.uen--;
-				if(u.ustuck && u.uswallow)
-					mon = u.ustuck;
-				else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-				if(mon){
-					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-					hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 1);
-				}
-			}
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
-				if(!use_whip(uwep)) return 1;
-				u.uen--;
-				if(!uwep) return 1;
-				if(uwep->otyp == FORCE_WHIP){
-					use_force_sword(uwep);
-					if(u.ustuck && u.uswallow)
-						mon = u.ustuck;
-					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-					if(mon){
-						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-						hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 2);
-					}
-				} else {
-					if(!use_whip(uwep)) return 1;
-					u.uen--;
-					if(u.ustuck && u.uswallow)
-						mon = u.ustuck;
-					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-					if(mon){
-						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-						hmonwith(mon, tmp, weptmp, tchtmp, whipcombo, 1);
-					}
-				}
-			}
-			return 1;
-		} else if(!bimanual(uwep,youracedata)){ //!uwep handled above
-			static struct attack onehandercombo[] = 
-			{
-				{AT_WEAP,AD_PHYS,0,0},
-				{AT_WEAP,AD_PHYS,0,0},
-				{0,0,0,0}
-			};
-			if(!getdir((char *)0)) return 0;
-			if(u.ustuck && u.uswallow)
-				mon = u.ustuck;
-			else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-			if(fast_weapon(uwep)) youmonst.movement+=2;
-			if(!mon) You("swing wildly!");
-			else {
-				find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-				hmonwith(mon, tmp, weptmp, tchtmp, onehandercombo, 2);
-			}
-			u.uen--;
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
-				if(dofire()){
-					u.uen--;
-				} else return 1;
-			}
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
-				if(dofire()){
-					u.uen--;
-					if(uwep){
-						if(u.ustuck && u.uswallow)
-							mon = u.ustuck;
-						else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-						if(mon){
-							find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-							hmonwith(mon, tmp, weptmp, tchtmp, onehandercombo, 1);
-						}
-					}
-				} else return 1;
-			}
-			return 1;
-		} else if(bimanual(uwep,youracedata)){ //!uwep handled above
-			int clockwisex[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
-			int clockwisey[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
-			int i,j;
-			static struct attack twohandercombo[] = 
-			{
-				{AT_WEAP,AD_PHYS,0,0},
-				{0,0,0,0}
-			};
-			if(!getdir((char *)0)) return 0;
-			if(fast_weapon(uwep)) youmonst.movement+=2;
-			for(i=7;i>=0;i--)
-				if(clockwisex[i] == u.dx && clockwisey[i] == u.dy)
-					break;
-			for(j=8;j>=0;j--){
-				if(u.ustuck && u.uswallow)
-					mon = u.ustuck;
-				else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
-				if(mon && !mon->mtame){
-					find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-					hmonwith(mon, tmp, weptmp, tchtmp, twohandercombo, 1);
-				}
-			}
-			u.uen--;
-			youmonst.movement -= 3;
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
-				if(!dokick()) return 1;
-				for(i=0;i<8;i++)
-					if(clockwisex[i] == u.dx && clockwisey[i] == u.dy)
-						break;
-				for(j=0;j<=8;j++){
-					if(u.ustuck && u.uswallow)
-						mon = u.ustuck;
-					else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
-					if(mon && !mon->mtame){
-						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-						hmonwith(mon, tmp, weptmp, tchtmp, twohandercombo, 1);
-					}
-				}
-				u.uen--;
-				youmonst.movement -= 3;
-			}
-			if(uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_EXPERT && u.uen > 0){
-				if(dofire()){
-					u.uen--;
-					if(u.ustuck && u.uswallow)
-						mon = u.ustuck;
-					else mon = m_at(u.ux+u.dx, u.uy+u.dy);
-					if(mon){
-						find_to_hit_rolls(mon,&tmp,&weptmp,&tchtmp);
-						hmonwith(mon, tmp, weptmp, tchtmp, twohandercombo, 1);
-					}
-				} else return 1;
-			}
-			return 1;
-		}
+		return android_combo();	/* in xhity.c */
 	}
 	return 0;
 }

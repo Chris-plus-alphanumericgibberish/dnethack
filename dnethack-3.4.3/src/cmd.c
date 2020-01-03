@@ -638,7 +638,7 @@ domonability()
 			MENU_UNSELECTED);
 		atleastone = TRUE;
 	}
-	if(youracedata == &mons[PM_BANDERSNATCH]){
+	if (attacktype(youracedata, AT_LNCK) || attacktype(youracedata, AT_LRCH)){
 		Sprintf(buf, "Reach Attack");
 		any.a_int = MATTK_REACH;	/* must be non-zero */
 		incntlet = 'r';
@@ -922,10 +922,7 @@ use_reach_attack()
 
 	    bhitpos = cc;
 	    check_caitiff(mtmp);
-		
-		find_to_hit_rolls(mtmp, &tmp, &tmpw, &tmpt);
-		
-	    (void) hmonas(mtmp, tmp, tmpw, tmpt);
+		(void)xattacky(&youmonst, mtmp, cc.x, cc.y);
 	} else
 	    /* Now you know that nothing is there... */
 	    pline("%s", nothing_happens);

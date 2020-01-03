@@ -22,7 +22,10 @@ STATIC_DCL void FDECL(drop_to, (coord *,SCHAR_P));
 
 static NEARDATA struct obj *kickobj;
 
-static const char kick_passes_thru[] = "kick passes harmlessly through";
+static struct attack basickick = { AT_KICK, AD_PHYS, 0, 0 };
+
+//definition of an extern in you.h
+boolean onlykicks = FALSE;
 
 void
 kickdmg(mon, clumsy)
@@ -31,183 +34,22 @@ register boolean clumsy;
 {
 	int mdx, mdy;
 	struct permonst *mdat = mon->data;
-	int dmg = ( ACURRSTR + ACURR(A_DEX) + ACURR(A_CON) )/ 15;
-	int kick_skill = P_NONE;
-	int blessed_foot_damage = 0;
+	int kick_skill = (martial() ? P_MARTIAL_ARTS : P_NONE);
 	boolean trapkilled = FALSE;
-	boolean silvermsg = FALSE, silverobj = FALSE;
-	boolean ironmsg = FALSE, ironobj = FALSE;
-	boolean unholymsg = FALSE, unholyobj = FALSE;
-
-	if (uarmf && uarmf->otyp == KICKING_BOOTS)
-	    dmg += 5;
-	
-	/* excessive wt affects dex, so it affects dmg */
-	if (clumsy) dmg /= 2;
-
-	/* kicking a dragon or an elephant will not harm it */
-	if (thick_skinned(mon->data) && !(uarmf && (uarmf->otyp == STILETTOS || uarmf->otyp == HEELED_BOOTS || uarmf->otyp == KICKING_BOOTS))) dmg = 0;
-
-	if(resist_attacks(mon->data))
-		dmg = 0;
-
-	if(is_aquatic(mon->data) && roll_madness(MAD_THALASSOPHOBIA)){
-		dmg /= 10;
-	}
-	
-	if ((hates_holy_mon(mon)) && uarmf &&
-		uarmf->blessed){
-	    blessed_foot_damage = 1;
-	}
-
-	if (uarmf && (uarmf->obj_material == SILVER || arti_silvered(uarmf) )
-		&& hates_silver(mdat)) {
-			silvermsg = TRUE; silverobj = TRUE;
-	}
-	if (uarmf && (uarmf->obj_material == IRON)
-		&& hates_iron(mdat)) {
-			ironmsg = TRUE; ironobj = TRUE;
-	}
-	if (uarmf && is_unholy(uarmf)
-		&& hates_unholy_mon(mon)) {
-			unholymsg = TRUE; unholyobj = TRUE;
-	}
-	
-	/* attacking a shade may be useless */
-	if (insubstantial(mon->data) && !insubstantial_aware(mon, uarmf, TRUE)) {
-	    pline_The("%s.", kick_passes_thru);
-	    dmg = 0;
-	    /* doesn't exercise skill or abuse alignment or frighten pet,
-	       and shades have no passive counterattack */
-	    return;
-	}
+	int result;
 
 	if(mon->m_ap_type) seemimic(mon);
-
 	check_caitiff(mon);
 
-	/* squeeze some guilt feelings... */
-	if(mon->mtame) {
-	    abuse_dog(mon);
-	    if (mon->mtame)
-		monflee(mon, (dmg ? rnd(dmg) : 1), FALSE, FALSE);
-	    else if(mon->data == &mons[PM_BANDERSNATCH]) mon->mflee = 1;
-	    else mon->mflee = 0;
-	}
+	result = xmeleehity(&youmonst, mon, &basickick, (struct obj *)0, -1, 0, FALSE);
+	result = xpassivey(&youmonst, mon, &basickick, (struct obj *)0, -1, result, mdat, TRUE);
 
-	if (dmg > 0) {
-		/* convert potential damage to actual damage */
-		dmg = rnd(dmg);
-		if (martial()) {
-		    if (dmg > 1) kick_skill = P_MARTIAL_ARTS;
-		    dmg += rn2(ACURR(A_DEX)/2 + 1);
-			if(uarmf){
-				int basedamage = dmg;
-				int newdamage = dmg;
-				int roll = d(1,20);
-				if(active_glyph(GUIDANCE))
-					doguidance(mon, dmg);
-				if(uarmf->oartifact){
-					artifact_hit(&youmonst, mon, uarmf, &newdamage, roll);
-					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-						return;
-					if (newdamage == 0) return;
-					dmg += newdamage - basedamage;
-					newdamage = basedamage;
-				}
-				if(uarmf->oproperties){
-					(void)oproperty_hit(&youmonst, mon, uarmf, &newdamage, roll);
-					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-						return;
-					if (newdamage == 0) return;
-					dmg += (newdamage - basedamage);
-					newdamage = basedamage;
-				}
-				if(spec_prop_otyp(uarmf)){
-					(void)otyp_hit(&youmonst, mon, uarmf, &newdamage, roll);
-					if(mon->mhp <= 0 || migrating_mons == mon) /* artifact killed or levelported monster */
-						return;
-					if (newdamage == 0) return;
-					dmg += (newdamage - basedamage);
-					newdamage = basedamage;
-				}
-			}
-		}
+	if (result) {
 		/* a good kick exercises your dex */
 		exercise(A_DEX, TRUE);
-	}
-	
-	if(uarmf && (uarmf->otyp == STILETTOS || uarmf->otyp == HEELED_BOOTS)){
-		dmg += rnd(bigmonst(mon->data) ? 2 : 6);
-	}
-	
-	if(uarmf && (uarmf->otyp == KICKING_BOOTS)){
-		dmg += bigmonst(mon->data) ? rnd(6) : (rnd(6)+1);
-	}
-	
-	if (silverobj) {
-		dmg += rnd(20);
-	}
-	if (ironobj) {
-		dmg += rnd(mon->m_lev);
-	}
-	if (unholyobj) {
-		dmg += rnd(9);
-	}
-	
-	if (blessed_foot_damage) dmg += rnd(4);
-	
-	if (uarmf) dmg += uarmf->spe;
-	dmg += u.udaminc;	/* add ring(s) of increase damage */
-	dmg += aeshbon();
-	if (dmg > 0)
-		mon->mhp -= dmg;
-	if (silvermsg) {
-		const char *fmt;
-		char *whom = mon_nam(mon);
 
-		if (canspotmon(mon)) {
-			fmt = "Your silver shoes sear %s!";
-		} else {
-		    *whom = highc(*whom);	/* "it" -> "It" */
-		    fmt = "%s is seared!";
-		}
-		/* note: s_suffix returns a modifiable buffer */
-		if (!noncorporeal(mdat))
-		    whom = strcat(s_suffix(whom), " flesh");
-		pline(fmt, whom);
-	}
-	if (ironmsg) {
-		const char *fmt;
-		char *whom = mon_nam(mon);
-
-		if (canspotmon(mon)) {
-			fmt = "Your cold-iron shoes sear %s!";
-		} else {
-		    *whom = highc(*whom);	/* "it" -> "It" */
-		    fmt = "%s is seared!";
-		}
-		/* note: s_suffix returns a modifiable buffer */
-		if (!noncorporeal(mdat))
-		    whom = strcat(s_suffix(whom), " flesh");
-		pline(fmt, whom);
-	}
-	if (unholymsg) {
-		const char *fmt;
-		char *whom = mon_nam(mon);
-
-		if (canspotmon(mon)) {
-			fmt = "Your cursed shoes sear %s!";
-		} else {
-		    *whom = highc(*whom);	/* "it" -> "It" */
-		    fmt = "%s is seared!";
-		}
-		/* note: s_suffix returns a modifiable buffer */
-		if (!noncorporeal(mdat))
-		    whom = strcat(s_suffix(whom), " flesh");
-		pline(fmt, whom);
-	}
-	if (mon->mhp > 0 && martial() && !bigmonst(mon->data) && !rn2(3) &&
+		/* possibly send the monster reeling back */
+		if (!DEADMONSTER(mon) && martial() && !bigmonst(mon->data) && !rn2(3) &&
 	    mon->mcanmove && mon != u.ustuck && !mon->mtrapped) {
 		/* see if the monster has a place to move into */
 		mdx = mon->mx + u.dx;
@@ -224,13 +66,10 @@ register boolean clumsy;
 			}
 		}
 	}
-
-	(void) passive(mon, TRUE, mon->mhp > 0, AT_KICK, AD_PHYS);
-	if (mon->mhp <= 0 && !trapkilled) killed(mon);
-
 	/* may bring up a dialog, so put this after all messages */
 	if (kick_skill != P_NONE)	/* exercise proficiency */
 	    use_skill(kick_skill, 1);
+}
 }
 
 STATIC_OVL void
@@ -243,7 +82,7 @@ register xchar x, y;
 
 	bhitpos.x = x;
 	bhitpos.y = y;
-	if (attack_checks(mon, (struct obj *)0)) return;
+	if (!attack_checks(mon, (struct obj *)0)) return;
 	setmangry(mon);
 
 	/* Kick attacks by kicking monsters are normal attacks, not special.
@@ -253,58 +92,10 @@ register xchar x, y;
 	 * If you have >1 kick attack, you get all of them.
 	 */
 	if (Upolyd && attacktype(youmonst.data, AT_KICK)) {
-	    struct attack *uattk;
-	    int sum;
-	    int tmp = find_roll_to_hit(mon, (uarmf && arti_shining(uarmf)) || u.sealsActive&SEAL_CHUPOCLOPS);
-		boolean silverobj = FALSE;
-		boolean ironobj = FALSE;
-		boolean unholyobj = FALSE;
-		boolean blessed_foot_damage = FALSE;
-		
-	    for (i = 0; i < NATTK; i++) {
-		/* first of two kicks might have provoked counterattack
-		   that has incapacitated the hero (ie, floating eye) */
-		if (multi < 0) break;
-		
-		uattk = &youmonst.data->mattk[i];
-		/* we only care about kicking attacks here */
-		if (uattk->aatyp != AT_KICK) continue;
-
-		if ((hates_holy_mon(mon)) && uarmf &&
-			uarmf->blessed){
-			blessed_foot_damage = TRUE;
-		}
-		if (uarmf && (uarmf->obj_material == SILVER || arti_silvered(uarmf) )
-			&& hates_silver(mon->data)) {
-				silverobj = TRUE;
-		}
-		if (uarmf && (uarmf->obj_material == IRON)
-			&& hates_iron(mon->data)) {
-				ironobj = TRUE;
-		}
-		if (uarmf && is_unholy(uarmf)
-			&& hates_unholy_mon(mon)) {
-				unholyobj = TRUE;
-		}
-		
-		if (insubstantial(mon->data) &&
-			!insubstantial_aware(mon, uarmf, TRUE)
-		) {
-		    /* doesn't matter whether it would have hit or missed,
-		       and shades have no passive counterattack */
-		    Your("%s %s.", kick_passes_thru, mon_nam(mon));
-		    break;	/* skip any additional kicks */
-		} else if (tmp > rnd(20)) {
-		    You("kick %s.", mon_nam(mon));
-		    sum = damageum(mon, uattk);
-		    (void)passive(mon, (boolean)(sum > 0), (sum != 2), AT_KICK, AD_PHYS);
-		    if (sum == 2)
-			break;		/* Defender died */
-		} else {
-		    missum(mon, uattk);
-		    (void)passive(mon, 0, 1, AT_KICK, AD_PHYS);
-		}
-	    }
+		/* state variable to signify we are only doing kick attacks */
+		onlykicks = TRUE;
+		xattacky(&youmonst, mon, x, y);
+		onlykicks = FALSE;
 	    return;
 	}
 
@@ -312,7 +103,7 @@ register xchar x, y;
 	   !mon_resistance(mon,FLYING)) {
 		pline("Floating in the air, you miss wildly!");
 		exercise(A_DEX, FALSE);
-		(void) passive(mon, FALSE, 1, AT_KICK, AD_PHYS);
+		xpassivey(&youmonst, mon, &basickick, (struct obj *)0, -1, MM_MISS, mon->data, TRUE);
 		return;
 	}
 
@@ -323,7 +114,7 @@ register xchar x, y;
 		if(!rn2((i < j/10) ? 2 : (i < j/5) ? 3 : 4)) {
 			if(martial() && !rn2(2)) goto doit;
 			Your("clumsy kick does no damage.");
-			(void) passive(mon, FALSE, 1, AT_KICK, AD_PHYS);
+			xpassivey(&youmonst, mon, &basickick, (struct obj *)0, -1, MM_MISS, mon->data, TRUE);
 			return;
 		}
 		if(i < j/10) clumsy = TRUE;
@@ -335,7 +126,7 @@ register xchar x, y;
 	else if(uarm && objects[uarm->otyp].oc_bulky && ACURR(A_DEX) < rnd(25))
 		clumsy = TRUE;
 doit:
-	You("kick %s.", mon_nam(mon));
+	//You("kick %s.", mon_nam(mon));
 	if(!rn2(clumsy ? 3 : 4) && (clumsy || !bigmonst(mon->data)) &&
 	   !is_blind(mon) && !mon->mtrapped && !thick_skinned(mon->data) &&
 	   mon->data->mlet != S_EEL && haseyes(mon->data) && mon->mcanmove &&
@@ -344,7 +135,7 @@ doit:
 		if(!nohands(mon->data) && !rn2(martial() ? 5 : 3)) {
 		    pline("%s blocks your %skick.", Monnam(mon),
 				clumsy ? "clumsy " : "");
-		    (void) passive(mon, FALSE, 1, AT_KICK, AD_PHYS);
+			xpassivey(&youmonst, mon, &basickick, (struct obj *)0, -1, MM_MISS, mon->data, TRUE);
 		    return;
 		} else {
 		    mnexto(mon);
@@ -361,7 +152,7 @@ doit:
 					"slides" : "jumps"),
 				clumsy ? "easily" : "nimbly",
 				clumsy ? "clumsy " : "");
-			(void) passive(mon, FALSE, 1, AT_KICK, AD_PHYS);
+			xpassivey(&youmonst, mon, &basickick, (struct obj *)0, -1, MM_MISS, mon->data, TRUE);
 			return;
 		    }
 		}
@@ -713,8 +504,12 @@ xchar x, y;
 		    kickobj->where == OBJ_MINVENT && kickobj->ocarry == mon)
 		return 1;	/* alert shk caught it */
 	    notonhead = (mon->mx != bhitpos.x || mon->my != bhitpos.y);
-	    if (isgold ? ghitm(mon, kickobj) :	/* caught? */
-		    thitmonst(mon, kickobj, 0))	/* hit && used up? */
+		boolean gone = FALSE;
+		if (isgold)
+			gone = ghitm(mon, kickobj);
+		else
+			(void)hmon2point0(&youmonst, mon, (struct attack *)0, kickobj, (struct obj *)0, 2, 0, 0, TRUE, rn1(18, 2), FALSE, TRUE, &gone);
+		if (gone)
 		return(1);
 	}
 

@@ -6935,6 +6935,33 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 	return m2;
 }
 
+/* cloneu()
+ * 
+ * clones the player, making a tame creature
+ */
+struct monst *
+cloneu()
+{
+	register struct monst *mon;
+	int mndx = monsndx(youracedata);
+
+	if (u.mh <= 1) return(struct monst *)0;
+	if (mvitals[mndx].mvflags & G_EXTINCT && !In_quest(&u.uz)) return(struct monst *)0;
+	mon = makemon(youracedata, u.ux, u.uy, NO_MINVENT | MM_EDOG);
+	if (mon) {
+		mon = christen_monst(mon, plname);
+		initedog(mon);
+		mon->m_lev = youracedata->mlevel;
+		mon->mhpmax = u.mhmax;
+		mon->mhp = u.mh / 2;
+		mon->mclone = 1;
+		u.mh -= mon->mhp;
+		flags.botl = 1;
+	}
+	return(mon);
+}
+
+
 /*
  * Propagate a species
  *

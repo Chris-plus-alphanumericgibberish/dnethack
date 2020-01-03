@@ -209,9 +209,11 @@
  *  any or all of the following can be returned.  See mattackm() for more
  *  details.
  */
-#define MM_MISS		0x0	/* aggressor missed */
-#define MM_HIT		0x1	/* aggressor hit defender */
-#define MM_DEF_DIED	0x2	/* defender died */
-#define MM_AGR_DIED	0x4	/* aggressor died */
+#define MM_MISS		0x00	/* aggressor missed */
+#define MM_HIT		0x01	/* aggressor hit defender */
+#define MM_DEF_DIED	0x02	/* defender died */
+#define MM_AGR_DIED	0x04	/* aggressor died */
+#define MM_AGR_STOP 0x08	/* aggressor stopped attacking for some reason other than being fully dead */
+#define MM_DEF_LSVD 0x10	/* defender died and was lifesaved */
 
 #endif /* MONATTK_H */

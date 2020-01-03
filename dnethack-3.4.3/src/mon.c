@@ -1468,9 +1468,9 @@ mcalcdistress()
 				mtmp->muy = u.uy;
 			}
 			
-			if(!mtmp->mtame && !mtmp->mpeaceful && lined_up(mtmp)){
+			if (!mtmp->mtame && !mtmp->mpeaceful && m_online(mtmp, &youmonst, mtmp->mux, mtmp->muy, FALSE, FALSE)){
 				flags.drgn_brth = 1;
-				breamu(mtmp, &mattk);
+				xbreathey(mtmp, &mattk, mtmp->mux, mtmp->muy);
 				flags.drgn_brth = 0;
 			} else {
 				for(tmpm = fmon; tmpm; tmpm = tmpm->nmon){
@@ -1478,12 +1478,12 @@ mcalcdistress()
 						&& tmpm->mpeaceful != mtmp->mpeaceful
 						&& tmpm->mtame != mtmp->mtame
 						&& !resists_cold(tmpm)
-						&& mlined_up(mtmp, tmpm, TRUE)
+						&& m_online(mtmp, tmpm, tmpm->mx, tmpm->my, !(mtmp->mtame && !mtmp->mconf), FALSE)
 						&& !DEADMONSTER(tmpm)
 						&& !(tmpm->mtrapped && t_at(tmpm->mx, tmpm->my) && t_at(tmpm->mx, tmpm->my)->ttyp == VIVI_TRAP)
 					){
 						flags.drgn_brth = 1;
-						breamm(mtmp, tmpm, &mattk);
+						xbreathey(mtmp, &mattk, tmpm->mx, tmpm->my);
 						flags.drgn_brth = 0;
 						break;
 					};
@@ -5726,12 +5726,12 @@ register struct monst *mtmp;
 	for(i = 0; i < NATTK; i++)
 		 if(mtmp->data->mattk[i].aatyp == AT_WDGZ) {
 			 if (!(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD))	// the Eyes of the Overworld protect you from whatever you might see
-				(void) gazemu(mtmp, &mtmp->data->mattk[i]);
+				(void) xgazey(mtmp, &youmonst, &mtmp->data->mattk[i], -1);
 		 }
     if(is_weeping(mtmp->data)) {
 		for(i = 0; i < NATTK; i++)
 			 if(mtmp->data->mattk[i].aatyp == AT_GAZE) {
-			 (void) gazemu(mtmp, &mtmp->data->mattk[i]);
+			 (void) xgazey(mtmp, &youmonst, &mtmp->data->mattk[i], -1);
 			 break;
 			 }
     }

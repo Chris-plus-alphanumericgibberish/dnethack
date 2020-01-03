@@ -795,19 +795,7 @@ unsigned trflags;
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
-		if (thitu(8, dmgval(otmp, &youmonst, 0), otmp, "arrow", shienuse) || shienuse) {
-		    obfree(otmp, (struct obj *)0);
-		} else {
-			if (is_shatterable(otmp)){
-				breaks(otmp, u.ux, u.uy);
-			}
-			else {
-				place_object(otmp, u.ux, u.uy);
-				if (!Blind) otmp->dknown = 1;
-				stackobj(otmp);
-				newsym(u.ux, u.uy);
-			}
-		}
+		projectile((struct monst *)0, otmp, (struct obj *)0, TRUE, trap->tx, trap->ty, 0, 0, 0, 0, FALSE, FALSE, FALSE);
 		break;
 	    case DART_TRAP:
 		if (trap->once && trap->tseen && !rn2(15)) {
@@ -830,21 +818,22 @@ unsigned trflags;
 		if (u.usteed && !rn2(2) && steedintrap(trap, otmp)) /* nothing */;
 		else
 #endif
-		if (thitu(7, dmgval(otmp, &youmonst, 0), otmp, "little dart", shienuse) || shienuse) {
-		    if (otmp->opoisoned && !shienuse)
-			poisoned("dart", A_CON, "little dart", -10, otmp->opoisoned);
-		    obfree(otmp, (struct obj *)0);
-		} else {
-			if (is_shatterable(otmp)){
-				breaks(otmp, u.ux, u.uy);
-			}
-			else {
-				place_object(otmp, u.ux, u.uy);
-				if (!Blind) otmp->dknown = 1;
-				stackobj(otmp);
-				newsym(u.ux, u.uy);
-			}
-		}
+		projectile((struct monst *)0, otmp, (struct obj *)0, TRUE, trap->tx, trap->ty, 0, 0, 0, 0, FALSE, FALSE, FALSE);
+		//if (thitu(7, dmgval(otmp, &youmonst, 0), otmp, "little dart", shienuse) || shienuse) {
+		//    if (otmp->opoisoned && !shienuse)
+		//	poisoned("dart", A_CON, "little dart", -10, otmp->opoisoned);
+		//    obfree(otmp, (struct obj *)0);
+		//} else {
+		//	if (is_shatterable(otmp)){
+		//		breaks(otmp, u.ux, u.uy);
+		//	}
+		//	else {
+		//		place_object(otmp, u.ux, u.uy);
+		//		if (!Blind) otmp->dknown = 1;
+		//		stackobj(otmp);
+		//		newsym(u.ux, u.uy);
+		//	}
+		//}
 		break;
 	    case ROCKTRAP:
 		if (trap->once && trap->tseen && !rn2(15)) {
@@ -1703,17 +1692,30 @@ int style;
 				break;
 			    }
 			}
-			if (ohitmon((struct monst *)0,mtmp,singleobj,
-					(style==ROLL) ? -1 : dist, FALSE)) {
-				used_up = TRUE;
+			/* boulder may hit creature */
+			int dieroll = rnd(20);
+			if (tohitval((struct monst *)0, mtmp, (struct attack *)0, singleobj, (struct obj *)0, 1, 0) >= dieroll)
+				(void)hmon2point0((struct monst *)0, mtmp, (struct attack *)0, singleobj, (struct obj *)0, TRUE, 0, 0, TRUE, dieroll, FALSE, canseemon(mtmp), &used_up);
+			else if (cansee(bhitpos.x, bhitpos.y))
+				miss(xname(singleobj), mtmp);
+			if (used_up)
 				break;
 			}
-		} else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
+		else if (bhitpos.x == u.ux && bhitpos.y == u.uy) {
 			if (multi) nomul(0, NULL);
-			if (!u.uinvulnerable && thitu(9 + singleobj->spe,
-				  dmgval(singleobj, &youmonst, 0),
-				  singleobj, (char *)0, FALSE))
+			if (!u.uinvulnerable){
+				/* boulder may hit you */
+				int dieroll = rnd(20);
+				if (tohitval((struct monst *)0, &youmonst, (struct attack *)0, singleobj, (struct obj *)0, 1, 0) >= dieroll)
+					(void)hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, singleobj, (struct obj *)0, TRUE, 0, 0, TRUE, dieroll, FALSE, canseemon(mtmp), &used_up);
+				else if (!Blind)
+					pline("%s missses!", The(xname(singleobj)));
+				else
+					pline("It misses.");
+				if (used_up)
+					break;
 			    stop_occupation();
+			}
 		}
 		if (style == ROLL) {
 		    if (down_gate(bhitpos.x, bhitpos.y) != -1) {

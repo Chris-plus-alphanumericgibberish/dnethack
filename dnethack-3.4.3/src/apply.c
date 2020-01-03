@@ -3591,7 +3591,7 @@ struct obj *obj;
     if (proficient > 3) proficient = 3;
     if (proficient < 0) proficient = 0;
 
-    if (u.uswallow && attack(u.ustuck)) {
+    if (u.uswallow && attack2(u.ustuck)) {
 	There("is not enough room to flick your whip.");
 
     } else if (Underwater) {
@@ -3666,7 +3666,7 @@ struct obj *obj;
 			if (bigmonst(mtmp->data)) {
 			wrapped_what = strcpy(buf, mon_nam(mtmp));
 			} else if (proficient) {
-			if (attack(mtmp)) return 1;
+			if (attack2(mtmp)) return 1;
 			else pline("%s", msg_snap);
 			}
 		}
@@ -3743,14 +3743,17 @@ struct obj *obj;
 				/* proficient with whip, but maybe not
 				   so proficient at catching weapons */
 				int hitu, hitvalu;
-
-				hitvalu = 8 + otmp->spe;
-				hitu = thitu(hitvalu,
-						 dmgval(otmp, &youmonst, 0),
-						 otmp, (char *)0, FALSE);
-				if (hitu) {
-					pline_The("%s hits you as you try to snatch it!",
-					the(onambuf));
+				int dieroll;
+				hitvalu = tohitval((struct monst *)0, &youmonst, (struct attack *)0, otmp, (struct obj *)0, TRUE, 8);
+				if(hitvalu > (dieroll = rnd(20))) {
+					boolean wepgone = FALSE;
+					pline_The("%s hits you as you try to snatch it!" the(onambuf));
+					hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, otmp, (struct obj *)0, TRUE,
+						0, 0, FALSE, dieroll, FALSE, -1, &wepgone);
+				}
+				else {
+					if(Blind || !flags.verbose) pline("It misses.");
+					else You("are almost hit by %s.", the(onambuf));
 				}
 				place_object(otmp, u.ux, u.uy);
 				stackobj(otmp);
@@ -3793,7 +3796,7 @@ struct obj *obj;
 			stumble_onto_mimic(mtmp);
 			else You("flick your whip towards %s.", mon_nam(mtmp));
 			if (proficient) {
-			if (attack(mtmp)) return 1;
+			if (attack2(mtmp)) return 1;
 			else pline("%s", msg_snap);
 			}
 		}
@@ -3867,17 +3870,11 @@ use_pole (obj)
 
 	/* Attack the monster there */
 	if ((mtmp = m_at(cc.x, cc.y)) != (struct monst *)0) {
-	    int oldhp = mtmp->mhp;
-
 	    bhitpos = cc;
 	    check_caitiff(mtmp);
-	    (void) thitmonst(mtmp, uwep, 0);
-	    /* check the monster's HP because thitmonst() doesn't return
-	     * an indication of whether it hit.  Not perfect (what if it's a
-	     * non-silver weapon on a shade?)
-	     */
-	    if (mtmp->mhp < oldhp)
-		u.uconduct.weaphit++;
+		if (u_pole_pound(mtmp)) {
+			u.uconduct.weaphit++;
+		}
 	} else if(levl[cc.x][cc.y].typ == GRASS){
 		   levl[cc.x][cc.y].typ = SOIL;
 		   if(!rn2(3)) mksobj_at(SHEAF_OF_HAY,cc.x,cc.y,TRUE,FALSE);
@@ -4025,9 +4022,9 @@ use_grapple (obj)
 		mtmp->mundetected = 0;
 		rloc_to(mtmp, cc.x, cc.y);
 		return (1);
-	    } else if ((!bigmonst(mtmp->data) && !strongmonst(mtmp->data)) ||
-		       rn2(4)) {
-		(void) thitmonst(mtmp, uwep, 0);
+		}
+		else if ((!bigmonst(mtmp->data) && !strongmonst(mtmp->data)) || rn2(4)) {
+			u_pole_pound(mtmp);
 		return (1);
 	    }
 	    /* FALL THROUGH */
@@ -4130,7 +4127,9 @@ use_crook (obj)
 	    break;
 	case 1:	/*Hit Monster */
 	    if ((mtmp = m_at(cc.x, cc.y)) == (struct monst *)0) break;
-		(void) thitmonst(mtmp, uwep, 0);
+		else {
+			u_pole_pound(mtmp);
+		}
 		return (1);
 	break;
 	case 2:	/*Hook Monster */
@@ -4162,7 +4161,7 @@ use_crook (obj)
 			} else if ((!bigmonst(mtmp->data) && !strongmonst(mtmp->data)) ||
 				   rn2(P_SKILL(typ))
 			) {
-				(void) thitmonst(mtmp, uwep, 0);
+				u_pole_pound(mtmp);
 				return (1);
 			} else {
 				You("are yanked toward %s!", mon_nam(mtmp));
