@@ -115,6 +115,7 @@ extern int NDECL(doorganize); /**/
 static int NDECL((*timed_occ_fn));
 #endif /* OVL1 */
 
+STATIC_DCL int FDECL(entangle_blacklist, (register char *));
 STATIC_DCL int NDECL(use_reach_attack);
 STATIC_PTR int NDECL(doprev_message);
 STATIC_PTR int NDECL(timed_occupation);
@@ -4104,223 +4105,223 @@ int final;
 #endif
 
 static const struct func_tab cmdlist[] = {
-	{C('d'), FALSE, dokick}, /* "D" is for door!...?  Msg is in dokick.c */
+	{C('d'), FALSE, FALSE, dokick}, /* "D" is for door!...?  Msg is in dokick.c */
 #ifdef WIZARD
-	{C('g'), TRUE, wiz_genesis},
-	{C('i'), TRUE, wiz_identify},
+	{C('g'), TRUE, TRUE, wiz_genesis},
+	{C('i'), TRUE, TRUE, wiz_identify},
 #endif
-	{C('l'), TRUE, doredraw}, /* if number_pad is set */
-	{C('n'), TRUE, donamelevel}, /* if number_pad is set */
-	{C('o'), TRUE, dooverview_or_wiz_where}, /* depending on wizard status */
- 	{C('p'), TRUE, doprev_message},
-	{C('r'), TRUE, doredraw},
-	{C('t'), TRUE, dotele},
+	{C('l'), TRUE, TRUE, doredraw}, /* if number_pad is set */
+	{C('n'), TRUE, TRUE, donamelevel}, /* if number_pad is set */
+	{C('o'), TRUE, TRUE, dooverview_or_wiz_where}, /* depending on wizard status */
+ 	{C('p'), TRUE, TRUE, doprev_message},
+	{C('r'), TRUE, TRUE, doredraw},
+	{C('t'), TRUE, TRUE, dotele},
 #ifdef WIZARD
-	{C('v'), TRUE, wiz_level_tele},
+	{C('v'), TRUE, TRUE, wiz_level_tele},
 #endif
-	{C('x'), TRUE, doattributes},
+	{C('x'), TRUE, TRUE, doattributes},
 #ifdef SUSPEND
-	{C('z'), TRUE, dosuspend},
+	{C('z'), TRUE, TRUE, dosuspend},
 #endif
-	{'a', FALSE, doapply},
-	{'A', FALSE, doddoremarm},
-	{C('a'), TRUE, domountattk},
-	{M('a'), TRUE, doorganize},
+	{'a', FALSE, FALSE, doapply},
+	{'A', FALSE, FALSE, doddoremarm},
+	{C('a'), FALSE, FALSE, domountattk},
+	{M('a'), TRUE, TRUE, doorganize},
 /*	'b', 'B' : go sw */
-	{'B', FALSE, domonability},
-	{C('b'), FALSE, domonability},
-	{'c', FALSE, doclose},
-	{'C', TRUE, do_mname},
-	{M('c'), TRUE, dotalk},
-	{'d', FALSE, dodrop},
-	{'D', FALSE, doddrop},
-	{M('d'), FALSE, dodip},
-	{'e', FALSE, doeat},
+	{'B', TRUE, TRUE, domonability},
+	{C('b'), TRUE, TRUE, domonability},
+	{'c', FALSE, FALSE, doclose},
+	{'C', TRUE, TRUE, do_mname},
+	{M('c'), TRUE, TRUE, dotalk},
+	{'d', FALSE, FALSE, dodrop},
+	{'D', FALSE, FALSE, doddrop},
+	{M('d'), FALSE, FALSE, dodip},
+	{'e', FALSE, FALSE, doeat},
 /*	{'E', FALSE, doengward},*/
-	{'E', FALSE, doengrave},
-	{C('e'), TRUE, doseal},
-	{M('e'), TRUE, enhance_weapon_skill},
-	{'f', FALSE, dofire},
+	{'E', FALSE, FALSE, doengrave},
+	{C('e'), FALSE, FALSE, doseal},
+	{M('e'), TRUE, TRUE, enhance_weapon_skill},
+	{'f', FALSE, FALSE, dofire},
 /*	'F' : fight (one time) */
-	{M('f'), FALSE, doforce},
-	{C('f'), TRUE, dospirit},
+	{M('f'), FALSE, FALSE, doforce},
+	{C('f'), TRUE, FALSE, dospirit},
 /*	'g', 'G' : multiple go */
 /*	'h', 'H' : go west */
-	{'h', TRUE, dohelp}, /* if number_pad is set */
-	{'i', TRUE, ddoinv},
-	{'I', TRUE, dotypeinv},		/* Robert Viduya */
-	{M('i'), TRUE, doinvoke},
+	{'h', TRUE, TRUE, dohelp}, /* if number_pad is set */
+	{'i', TRUE, TRUE, ddoinv},
+	{'I', TRUE, TRUE, dotypeinv},		/* Robert Viduya */
+	{M('i'), TRUE, TRUE, doinvoke},
 /*	'j', 'J', 'k', 'K', 'l', 'L', 'm', 'M', 'n', 'N' : move commands */
-	{'j', FALSE, dojump}, /* if number_pad is on */
-	{M('j'), FALSE, dojump},
-	{'k', FALSE, dokick}, /* if number_pad is on */
-	{'l', FALSE, doloot}, /* if number_pad is on */
-	{M('l'), FALSE, doloot},
+	{'j', FALSE, FALSE, dojump}, /* if number_pad is on */
+	{M('j'), FALSE, FALSE, dojump},
+	{'k', FALSE, FALSE, dokick}, /* if number_pad is on */
+	{'l', FALSE, FALSE, doloot}, /* if number_pad is on */
+	{M('l'), FALSE, FALSE, doloot},
 /*	'n' prefixes a count if number_pad is on */
-	{M('m'), TRUE, domonability},
-	{'N', TRUE, ddocall}, /* if number_pad is on */
-	{M('n'), TRUE, ddocall},
-	{M('N'), TRUE, ddocall},
-	{'o', FALSE, doopen},
-	{'O', TRUE, doset},
-	{M('o'), FALSE, dosacrifice},
-	{'p', FALSE, dopay},
-	{'P', FALSE, doputon},
-	{M('p'), TRUE, dopray},
-	{'q', FALSE, dodrink},
-	{'Q', FALSE, dowieldquiver},
-	{C('q'), FALSE, doward},
-	{M('q'), TRUE, done2},
-	{'r', FALSE, doread},
-	{'R', FALSE, doremring},
-	{M('r'), FALSE, dorub},
-	{'s', TRUE, dosearch, "searching"},
-	{'S', TRUE, dosave},
-//	{C('s'), FALSE, doseal}, 
-	{M('s'), FALSE, dosit},
-	{'t', FALSE, dothrow},
-	{'T', FALSE, dotakeoff},
-	{M('t'), TRUE, doturn},
+	{M('m'), TRUE, TRUE, domonability},
+	{'N', TRUE, TRUE, ddocall}, /* if number_pad is on */
+	{M('n'), TRUE, TRUE, ddocall},
+	{M('N'), TRUE, TRUE, ddocall},
+	{'o', FALSE, FALSE, doopen},
+	{'O', TRUE, TRUE, doset},
+	{M('o'), FALSE, FALSE, dosacrifice},
+	{'p', FALSE, FALSE, dopay},
+	{'P', FALSE, TRUE, doputon},
+	{M('p'), TRUE, TRUE, dopray},
+	{'q', FALSE, FALSE, dodrink},
+	{'Q', FALSE, FALSE, dowieldquiver},
+	{C('q'), FALSE, FALSE, doward},
+	{M('q'), TRUE, TRUE, done2},
+	{'r', FALSE, FALSE, doread},
+	{'R', FALSE, TRUE, doremring},
+	{M('r'), FALSE, FALSE, dorub},
+	{'s', TRUE, FALSE, dosearch, "searching"},
+	{'S', TRUE, TRUE, dosave},
+//	{C('s'), FALSE, FALSE, doseal}, 
+	{M('s'), FALSE, FALSE, dosit},
+	{'t', FALSE, FALSE, dothrow},
+	{'T', FALSE, FALSE, dotakeoff},
+	{M('t'), TRUE, TRUE, doturn},
 /*	'u', 'U' : go ne */
-	{'u', FALSE, dountrap}, /* if number_pad is on */
-	{M('u'), FALSE, dountrap},
-	{'v', TRUE, doversion},
-	{'V', TRUE, dohistory},
-	{M('v'), TRUE, doextversion},
-	{'w', FALSE, dowield},
-	{'W', FALSE, dowear},
-	{C('w'), TRUE, doward},
-	{M('w'), FALSE, dowipe},
-	{'x', FALSE, doswapweapon},
+	{'u', FALSE, FALSE, dountrap}, /* if number_pad is on */
+	{M('u'), FALSE, FALSE, dountrap},
+	{'v', TRUE, TRUE, doversion},
+	{'V', TRUE, TRUE, dohistory},
+	{M('v'), TRUE, TRUE, doextversion},
+	{'w', FALSE, FALSE, dowield},
+	{'W', FALSE, FALSE, dowear},
+	{C('w'), FALSE, FALSE, doward},
+	{M('w'), FALSE, FALSE, dowipe},
+	{'x', FALSE, FALSE, doswapweapon},
 /*	{'X', TRUE, enter_explore_mode},*/
-	{'X', TRUE, dotwoweapon},
+	{'X', TRUE, TRUE, dotwoweapon},
 /*	'y', 'Y' : go nw */
-	{'z', FALSE, dozap},
-	{'Z', TRUE, docast},
-	{'<', FALSE, doup},
-	{'>', FALSE, dodown},
-	{'/', TRUE, dowhatis},
-	{'&', TRUE, dowhatdoes},
-	{'?', TRUE, dohelp},
-	{M('?'), TRUE, doextlist},
+	{'z', FALSE, TRUE, dozap},
+	{'Z', TRUE, FALSE, docast},
+	{'<', FALSE, FALSE, doup},
+	{'>', FALSE, FALSE, dodown},
+	{'/', TRUE, TRUE, dowhatis},
+	{'&', TRUE, TRUE, dowhatdoes},
+	{'?', TRUE, TRUE, dohelp},
+	{M('?'), TRUE, TRUE, doextlist},
 #ifdef SHELL
-	{'!', TRUE, dosh},
+	{'!', TRUE, TRUE, dosh},
 #endif
-	{'.', TRUE, donull, "waiting"},
-	{' ', TRUE, donull, "waiting"},
-	{',', FALSE, dopickup},
-	{':', TRUE, dolook},
-	{';', TRUE, doquickwhatis},
-	{'^', TRUE, doidtrap},
-	{'\\', TRUE, dodiscovered},		/* Robert Viduya */
-	{'@', TRUE, dotogglepickup},
-	{M('2'), FALSE, dotwoweapon},
-	{WEAPON_SYM,  TRUE, doprwep},
-	{ARMOR_SYM,  TRUE, doprarm},
-	{RING_SYM,  TRUE, doprring},
-	{AMULET_SYM, TRUE, dopramulet},
-	{TOOL_SYM, TRUE, doprtool},
-	{'*', TRUE, doprinuse},	/* inventory of all equipment in use */
-	{GOLD_SYM, TRUE, doprgold},
-	{SPBOOK_SYM, TRUE, dovspell},			/* Mike Stephenson */
-	{'#', TRUE, doextcmd},
-	{'_', TRUE, dotravel},
-	{0,0,0,0}
+	{'.', TRUE, FALSE, donull, "waiting"},
+	{' ', TRUE, FALSE, donull, "waiting"},
+	{',', FALSE, FALSE, dopickup},
+	{':', TRUE, TRUE, dolook},
+	{';', TRUE, TRUE, doquickwhatis},
+	{'^', TRUE, TRUE, doidtrap},
+	{'\\', TRUE, TRUE, dodiscovered},		/* Robert Viduya */
+	{'@', TRUE, TRUE, dotogglepickup},
+	{M('2'), FALSE, FALSE, dotwoweapon},
+	{WEAPON_SYM,  TRUE, TRUE, doprwep},
+	{ARMOR_SYM,  TRUE, TRUE, doprarm},
+	{RING_SYM,  TRUE, TRUE, doprring},
+	{AMULET_SYM, TRUE, TRUE, dopramulet},
+	{TOOL_SYM, TRUE, TRUE, doprtool},
+	{'*', TRUE, TRUE, doprinuse},	/* inventory of all equipment in use */
+	{GOLD_SYM, TRUE, TRUE, doprgold},
+	{SPBOOK_SYM, TRUE, TRUE, dovspell},			/* Mike Stephenson */
+	{'#', TRUE, TRUE, doextcmd},
+	{'_', TRUE, FALSE, dotravel},
+	{0,0,0,0,0}
 };
 
 struct ext_func_tab extcmdlist[] = {
-	{"adjust", "adjust inventory letters", doorganize, TRUE},
-	{"annotate", "name current level", donamelevel, TRUE},
-	{"chat", "talk to someone", dotalk, TRUE},	/* converse? */
-	{"come", "order pets to come", docome, TRUE},
-	{"conduct", "list which challenges you have adhered to", doconduct, TRUE},
-	{"dip", "dip an object into something", dodip, FALSE},
+	{"adjust", "adjust inventory letters", doorganize, TRUE, TRUE},
+	{"annotate", "name current level", donamelevel, TRUE, TRUE},
+	{"chat", "talk to someone", dotalk, TRUE, TRUE},	/* converse? */
+	{"come", "order pets to come", docome, TRUE, TRUE},
+	{"conduct", "list which challenges you have adhered to", doconduct, TRUE, TRUE},
+	{"dip", "dip an object into something", dodip, FALSE, FALSE},
 	{"enhance", "advance or check weapons skills", enhance_weapon_skill,
-							TRUE},
-	{"equip", "give a pet an item", dopetequip, FALSE},
-	{"force", "force a lock", doforce, FALSE},
-	{"invoke", "invoke an object's powers", doinvoke, TRUE},
-	{"jump", "jump to a location", dojump, FALSE},
-	{"loot", "loot a box on the floor", doloot, FALSE},
-	{"monster", "use a monster's special ability", domonability, TRUE},
-	{"mount", "order mount to attack", domountattk, TRUE},
-	{"name", "name an item or type of object", ddocall, TRUE},
-	{"offer", "offer a sacrifice to the gods", dosacrifice, FALSE},
-	{"overview", "show an overview of the dungeon", dooverview, TRUE},
-	{"pray", "pray to the gods for help", dopray, TRUE},
-	{"quit", "exit without saving current game", done2, TRUE},
-	{"reorder", "reorder spirit powers", reorder_spirit_powers, TRUE},
+							TRUE, TRUE},
+	{"equip", "give a pet an item", dopetequip, FALSE, FALSE},
+	{"force", "force a lock", doforce, FALSE, FALSE},
+	{"invoke", "invoke an object's powers", doinvoke, TRUE, TRUE},
+	{"jump", "jump to a location", dojump, FALSE, FALSE},
+	{"loot", "loot a box on the floor", doloot, FALSE, FALSE},
+	{"monster", "use a monster's special ability", domonability, TRUE, TRUE},
+	{"mount", "order mount to attack", domountattk, FALSE, FALSE},
+	{"name", "name an item or type of object", ddocall, TRUE, TRUE},
+	{"offer", "offer a sacrifice to the gods", dosacrifice, FALSE, FALSE},
+	{"overview", "show an overview of the dungeon", dooverview, TRUE, TRUE},
+	{"pray", "pray to the gods for help", dopray, TRUE, TRUE},
+	{"quit", "exit without saving current game", done2, TRUE, TRUE},
+	{"reorder", "reorder spirit powers", reorder_spirit_powers, TRUE, TRUE},
 #ifdef STEED
-	{"ride", "ride (or stop riding) a monster", doride, FALSE},
+	{"ride", "ride (or stop riding) a monster", doride, FALSE, FALSE},
 #endif
-	{"rub", "rub a lamp or a stone", dorub, FALSE},
-	{"sit", "sit down", dosit, FALSE},
-	{"swim", "swim under water", dodeepswim, FALSE},
-	{"style", "switch fighting style", dofightingform, TRUE},
-	{"turn", "turn undead", doturn, TRUE},
-	{"twoweapon", "toggle two-weapon combat", dotwoweapon, FALSE},
-	{"untrap", "untrap something", dountrap, FALSE},
-	{"unmaintain", "stop maintaining a spell", dounmaintain, TRUE},
+	{"rub", "rub a lamp or a stone", dorub, FALSE, FALSE},
+	{"sit", "sit down", dosit, FALSE, FALSE},
+	{"swim", "swim under water", dodeepswim, FALSE, FALSE},
+	{"style", "switch fighting style", dofightingform, TRUE, TRUE},
+	{"turn", "turn undead", doturn, TRUE, TRUE},
+	{"twoweapon", "toggle two-weapon combat", dotwoweapon, FALSE, FALSE},
+	{"untrap", "untrap something", dountrap, FALSE, FALSE},
+	{"unmaintain", "stop maintaining a spell", dounmaintain, TRUE, TRUE},
 	{"version", "list compile time options for this version of NetHack",
-		doextversion, TRUE},
-	{"wait", "order pets to wait", dowait, FALSE},
-	{"wipe", "wipe off your face", dowipe, FALSE},
-	{"?", "get this list of extended commands", doextlist, TRUE},
+		doextversion, TRUE, TRUE},
+	{"wait", "order pets to wait", dowait, FALSE, FALSE},
+	{"wipe", "wipe off your face", dowipe, FALSE, FALSE},
+	{"?", "get this list of extended commands", doextlist, TRUE, TRUE},
 #if defined(WIZARD)
 	/*
 	 * There must be a blank entry here for every entry in the table
 	 * below.
 	 */
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
 #ifdef DEBUG_MIGRATING_MONS
-	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
 #ifdef PORT_DEBUG
 	{(char *)0, (char *)0, donull, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE},
-    {(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
-	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+    {(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
 #ifdef DEBUG
-	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE},
+	{(char *)0, (char *)0, donull, TRUE, TRUE},
 #endif
-	{(char *)0, (char *)0, donull, TRUE}	/* sentinel */
+	{(char *)0, (char *)0, donull, TRUE, TRUE}	/* sentinel */
 };
 
 #if defined(WIZARD)
 static const struct ext_func_tab debug_extcmdlist[] = {
-	{"levelchange", "change experience level", wiz_level_change, TRUE},
-	{"lightsources", "show mobile light sources", wiz_light_sources, TRUE},
-	{"detect", "do wizard detection", wiz_detect, TRUE},
-	{"map", "map the current level", wiz_map, TRUE},
+	{"levelchange", "change experience level", wiz_level_change, TRUE, TRUE},
+	{"lightsources", "show mobile light sources", wiz_light_sources, TRUE, TRUE},
+	{"detect", "do wizard detection", wiz_detect, TRUE, TRUE},
+	{"map", "map the current level", wiz_map, TRUE, TRUE},
 #ifdef DEBUG_MIGRATING_MONS
-	{"migratemons", "migrate n random monsters", wiz_migrate_mons, TRUE},
+	{"migratemons", "migrate n random monsters", wiz_migrate_mons, TRUE, TRUE},
 #endif
-	{"monpolycontrol", "control monster polymorphs", wiz_mon_polycontrol, TRUE},
-	{"panic", "test panic routine (fatal to game)", wiz_panic, TRUE},
-	{"polyself", "polymorph self", wiz_polyself, TRUE},
+	{"monpolycontrol", "control monster polymorphs", wiz_mon_polycontrol, TRUE, TRUE},
+	{"panic", "test panic routine (fatal to game)", wiz_panic, TRUE, TRUE},
+	{"polyself", "polymorph self", wiz_polyself, TRUE, TRUE},
 #ifdef PORT_DEBUG
-	{"portdebug", "wizard port debug command", wiz_port_debug, TRUE},
+	{"portdebug", "wizard port debug command", wiz_port_debug, TRUE, TRUE},
 #endif
-	{"seenv", "show seen vectors", wiz_show_seenv, TRUE},
-	{"stats", "show memory statistics", wiz_show_stats, TRUE},
-	{"timeout", "look at timeout queue", wiz_timeout_queue, TRUE},
-	{"vision", "show vision array", wiz_show_vision, TRUE},
-	{"wish", "make a wizard wish", wiz_wish, TRUE},
+	{"seenv", "show seen vectors", wiz_show_seenv, TRUE, TRUE},
+	{"stats", "show memory statistics", wiz_show_stats, TRUE, TRUE},
+	{"timeout", "look at timeout queue", wiz_timeout_queue, TRUE, TRUE},
+	{"vision", "show vision array", wiz_show_vision, TRUE, TRUE},
+	{"wish", "make a wizard wish", wiz_wish, TRUE, TRUE},
 #ifdef DEBUG
-	{"wizdebug", "wizard debug command", wiz_debug_cmd, TRUE},
+	{"wizdebug", "wizard debug command", wiz_debug_cmd, TRUE, TRUE},
 #endif
-	{"wmode", "show wall modes", wiz_show_wmodes, TRUE},
+	{"wmode", "show wall modes", wiz_show_wmodes, TRUE, TRUE},
 	{(char *)0, (char *)0, donull, TRUE}
 };
 
@@ -4352,6 +4353,34 @@ add_debug_extended_commands()
 	}
 }
 
+//Which commands are blacklisted while entangled?
+STATIC_OVL int
+entangle_blacklist(cmd)
+register char *cmd;
+{
+	register const struct func_tab *tlist;
+	if(*cmd == '5'
+		|| *cmd == M('5')
+		|| *cmd == 'g'
+		|| *cmd == M('g')
+		|| *cmd == 'G'
+		|| *cmd == M('G')
+		|| *cmd == M('I')
+		|| *cmd == '-'
+		|| *cmd == 'F'
+		|| *cmd == 'm'
+		|| *cmd == 'M'
+		|| *cmd == CMD_TRAVEL
+		|| movecmd(*cmd)
+		|| (*cmd == ' ' && !flags.rest_on_space)
+	)
+		return TRUE;
+	for (tlist = cmdlist; tlist->f_char; tlist++) {
+		if ((*cmd & 0xff) != (tlist->f_char & 0xff)) continue;
+		return tlist->can_if_entangled;
+	}
+	return FALSE;
+}
 
 static const char template[] = "%-18s %4ld  %6ld";
 static const char count_str[] = "                   count  bytes";
@@ -4641,6 +4670,37 @@ register char *cmd;
 		    case M('0'):    *cmd = 'I'; break;
         	}
         }
+	if(u.uentangled){
+		if(entangle_blacklist(cmd)){
+			if(*cmd == '.' || (*cmd == ' ' && flags.rest_on_space)){
+				You("carefully try to work free of your bonds.");
+				if(rn2(2)) uescape_entanglement();
+				return;
+			} else {
+				You("struggle against your bonds!");
+				if(!ubreak_entanglement()){
+					// youmonst.movement = 0;
+					if(u.uentangled == RAZOR_WIRE){
+						int dmg = d(1,6);
+						int beat;
+						if(hates_silver(youracedata) && entangle_material(&youmonst, SILVER))
+							dmg += rnd(20);
+						if(hates_iron(youracedata) && entangle_material(&youmonst, IRON))
+							dmg += rnd(u.ulevel);
+						beat = entangle_beatitude(&youmonst, -1);
+						if(hates_unholy(youracedata) && beat)
+							dmg += beat == 2 ? d(2,9) : rnd(9);
+						beat = entangle_beatitude(&youmonst, 1);
+						if(hates_holy(youracedata) && beat)
+							dmg += beat == 2 ? rnd(20) : rnd(4);
+						losehp(dmg, "being sliced to ribbons by razor wire", KILLED_BY);
+					}
+					uescape_entanglement();
+				}
+				return;
+			}
+		}
+	}
 	/* handle most movement commands */
 	do_walk = do_rush = prefix_seen = FALSE;
 	flags.travel = iflags.travel1 = 0;
