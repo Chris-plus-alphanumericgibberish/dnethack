@@ -5854,7 +5854,7 @@ boolean ranged;
 			/* spaghetti code alert: many paths of code in here return early */
 			switch (attk->adtyp) {
 			case AD_SITM:
-				if (!u.sealsActive&SEAL_ANDROMALIUS
+				if (!(u.sealsActive&SEAL_ANDROMALIUS)
 					&& notmcan){
 					switch (steal(magr, buf, FALSE, TRUE))
 					{
@@ -6055,11 +6055,13 @@ boolean ranged;
 			return result;
 
 		/* youdef vs youagr vs mvm are all separate */
-		if (youdef) {
-			if (notmcan
+		if(youdef){
+			if(notmcan
 				&& !(pd->mlet == pa->mlet)
-				&& !u.sealsActive&SEAL_ANDROMALIUS)
+				&& !(u.sealsActive&SEAL_ANDROMALIUS)
+			){
 				stealgold(magr);
+			}
 		}
 		else if (youagr) {
 #ifndef GOLDOBJ
