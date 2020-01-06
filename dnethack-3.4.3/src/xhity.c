@@ -12338,7 +12338,7 @@ boolean * wepgone;		/* used to return an additional result: was [weapon] destroy
 	/* Apply DR */
 	if (subtotl > 0){
 		if (phase_armor){
-			subtotl -= (youdef ? base_udr() : base_mdr(mdef));
+			subtotl -= (youdef ? (base_udr() + base_nat_udr()) : (base_mdr(mdef) + base_nat_mdr(mdef)));
 		}
 		else {
 			subtotl -= (youdef ? roll_udr(magr) : roll_mdr(mdef, magr));
