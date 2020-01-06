@@ -3630,7 +3630,7 @@ register schar delta;
 	if (uarmh && uarmh == otmp) {
 		if(otmp->otyp == HELM_OF_BRILLIANCE){
 			if (delta) {
-				makeknown(uarmh->otyp);
+				makeknown(otmp->otyp);
 				ABON(A_INT) += (delta);
 				ABON(A_WIS) += (delta);
 				flags.botl = 1;
@@ -3646,7 +3646,6 @@ register schar delta;
 	if (uarmc && uarmc == otmp) {
 		if(otmp->otyp == SMOKY_VIOLET_FACELESS_ROBE){
 			if (delta) {
-				makeknown(uarmh->otyp);
 				ABON(A_CON) += (delta);
 				ABON(A_CHA) += (delta);
 				flags.botl = 1;
@@ -3700,7 +3699,7 @@ register schar delta;
 		}
 		if(otmp->otyp == GAUNTLETS_OF_DEXTERITY){
 			if (delta) {
-				makeknown(uarmg->otyp);
+				makeknown(otmp->otyp);
 				ABON(A_DEX) += (delta);
 				flags.botl = 1;
 			}
