@@ -6331,7 +6331,6 @@ boolean msg;		/* "The oldmon turns into a newmon!" */
 	if (!(mtmp->misc_worn_check & W_ARMG))
 	    mselftouch(mtmp, "No longer petrify-resistant, ",
 			!flags.mon_moving);
-	m_dowear(mtmp, FALSE);
 
 	/* This ought to re-test can_carry() on each item in the inventory
 	 * rather than just checking ex-giants & boulders, but that'd be
