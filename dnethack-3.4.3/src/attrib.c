@@ -1447,11 +1447,11 @@ mad_turn(madness)
 long int madness;
 {
 	int sanlevel;
-	unsigned long hashed = hash((unsigned long) (moves + madness)); //Offset the different madnesses before hashing
+	unsigned long hashed = hash((unsigned long) (moves + hash((unsigned long)madness))); //Offset the different madnesses before hashing
 	if(!(u.umadness&madness))
 		return 0;
 	
-	sanlevel = max_ints(1,(int)(((float)hashed/ULONG_MAX) * ((float)hashed/ULONG_MAX) * 100));
+	sanlevel = max_ints(1,(int)(((float)hashed/ULONG_MAX) * ((float)hash(hashed)/ULONG_MAX) * 100));
 	
 	if(u.usanity < sanlevel)
 		return 1;
