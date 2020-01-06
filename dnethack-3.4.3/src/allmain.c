@@ -2923,9 +2923,9 @@ printAttacks(buf, ptr)
 		"Whip",	/*18*/
 		"Reach",	/*19*/
 		"Your weapon",	/*20*/
-		"Reach",	/*21*/
+		"Long-necked bite",	/*21*/
 		"Magic",	/*22*/
-		"Engulf",	/*23*/
+		"Droplet storm",	/*23*/
 		"Automatic hit",	/*24*/
 		"Mist tendrils",	/*25*/
 		"Tinker",	/*26*/
@@ -2933,8 +2933,9 @@ printAttacks(buf, ptr)
 		"Beam",	/*28*/
 		"Deva Arms",	/*29*/
 		"Five-square-reach touch",	/*30*/
-		"Wide-angle (passive) gaze"	/*31*/
-		"Rend"	/*32*/
+		"Five-square-reach bite",	/*31*/
+		"Wide-angle (passive) gaze",/*32*/
+		"Rend"	/*33*/
 	};
 	static char *damageKey[] = {
 		"physical",				/*0*/
@@ -3058,28 +3059,30 @@ printAttacks(buf, ptr)
 		"Silver mirror shards", /*118*/
 		"Mercury blade",		/*119*/
 		"Gold transmutation", 	/*120*/
-		"Holy fire", 			/*121*/
+		"[[Holy fire]]", 		/*121*/
+		"[[Dessication]]",		/*122*/
+		"[[Anger god]]",		/*123*/
 		// "[[ahazu abduction]]",	/**/
-		"[[stone choir]]",		/*122*/
-		"[[water vampire]]",	/*123*/
-		"[[bloody fangs]]",		/*124*/
-		"[[item freeing]]",		/*125*/
-		"[[rainbow feathers]]",	/*126*/
-		"[[Vorlon explosion]]",	/*127*/
-		"[[cold explosion]]",	/*128*/
-		"[[fire explosion]]",	/*129*/
-		"[[shock explosion]]",	/*130*/
-		"[[physical explosion]]",/*131*/
-		"[[Vorlon missile]]",	/*132*/
-		"[[Warmachine missile]]",/*133*/
-		"[[clerical spell]]",	/*134*/
-		"[[mage spell]]",		/*135*/
-		"[[random breath type]]",/*136*/
-		"[[random gaze type]]",	/*137*/
-		"[[random elemental gaze]]",/*138*/
-		"[[Amulet theft]]",		/*139*/
-		"[[Intrinsic theft]]",	/*140*/
-		"[[Quest Artifact theft]]"/*141*/
+		"[[stone choir]]",		/*124*/
+		"[[water vampire]]",	/*125*/
+		"[[bloody fangs]]",		/*126*/
+		"[[item freeing]]",		/*127*/
+		"[[rainbow feathers]]",	/*128*/
+		"[[Vorlon explosion]]",	/*129*/
+		"[[cold explosion]]",	/*130*/
+		"[[fire explosion]]",	/*131*/
+		"[[shock explosion]]",	/*132*/
+		"[[physical explosion]]",/*133*/
+		"[[Vorlon missile]]",	/*134*/
+		"[[Warmachine missile]]",/*135*/
+		"[[clerical spell]]",	/*136*/
+		"[[mage spell]]",		/*137*/
+		"[[random breath type]]",/*138*/
+		"[[random gaze type]]",	/*139*/
+		"[[random elemental gaze]]",/*140*/
+		"[[Amulet theft]]",		/*141*/
+		"[[Intrinsic theft]]",	/*142*/
+		"[[Quest Artifact theft]]"/*143*/
 	};
 	for(i = 0; i<6; i++){
 		attk = &ptr->mattk[i];
