@@ -2129,6 +2129,58 @@ abon()		/* attack bonus for strength & dexterity */
 #ifdef OVL1
 
 int
+m_dbon(mon, otmp)		/* damage bonus for a monster's strength, only checks GoP */
+struct monst *mon;
+struct obj *otmp;
+{
+	int bonus = 0;
+	struct obj *arm;
+	struct obj *arms;
+	struct obj *mwp;
+	struct obj *mswp;
+	
+	arm = which_armor(mon, W_ARMG);
+	arms = which_armor(mon, W_ARMS);
+	mwp = MON_WEP(mon);
+	mswp = MON_SWEP(mon);
+	
+	if(arm && arm->otyp == GAUNTLETS_OF_POWER)
+		bonus += 8;
+	
+	if(otmp){
+		if((bimanual(otmp,mon->data)||
+				(otmp->oartifact==ART_PEN_OF_THE_VOID && otmp->ovar1&SEAL_MARIONETTE && mvitals[PM_ACERERAK].died > 0)
+			) && !arms && !mswp
+		) bonus *= 2;
+		else if(otmp->otyp == FORCE_SWORD && !arms && !mswp)
+			bonus *= 2;
+		else if(otmp->otyp == KATANA && !arms && !mswp)
+			bonus *= 1.5;
+		else if(is_vibrosword(otmp) && !arms && !mswp)
+			bonus *= 1.5;
+		
+		if(otmp==mwp 
+		&& (is_rapier(otmp)
+			|| (otmp->otyp == LIGHTSABER && otmp->oartifact != ART_ANNULUS && otmp->ovar1 == 0)
+			|| otmp->oartifact == ART_LIFEHUNT_SCYTHE
+			|| otmp->oartifact == ART_FRIEDE_S_SCYTHE
+		)){
+			if(is_rakuyo(otmp))
+				bonus = 0;
+			else bonus /= 2; /*Half strength bonus/penalty*/
+			
+			if(arm && arm->oartifact == ART_PREMIUM_HEART) bonus += 8;
+			else if(arm && arm->otyp == GAUNTLETS_OF_DEXTERITY) bonus += arm->spe;
+//			else bonus += ; Something with dex ac?  That would be a bad idea.
+			
+			if(is_rakuyo(otmp))
+				bonus *= 2;
+		}
+	}
+	return bonus;
+}
+
+int
 dbon(otmp)		/* damage bonus for strength */
 struct obj *otmp;
 {

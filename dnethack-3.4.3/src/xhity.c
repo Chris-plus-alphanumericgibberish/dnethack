@@ -12024,30 +12024,53 @@ boolean * wepgone;		/* used to return an additional result: was [weapon] destroy
 		if (youagr && unarmed_punch && u.specialSealsActive&SEAL_DAHLVER_NAR) {
 			bonsdmg += d(2, 6) + min(u.ulevel / 2, (u.uhpmax - u.uhp) / 10);
 		}
-		/* general damage bonus -- player attacks only */
-		if (youagr && real_attack && (valid_weapon_attack || fake_valid_weapon_attack || unarmed_punch || unarmed_kick)) {
-			int bon_damage = 0;
+		/* general damage bonus */
+		if(real_attack){
+			/* The player has by-far the most detailed attacks */
+			if (youagr && (valid_weapon_attack || fake_valid_weapon_attack || unarmed_punch || unarmed_kick || natural_strike)) {
+				int bon_damage = 0;
 
-			bon_damage += u.udaminc;
-			bon_damage += aeshbon();
-			/* If you throw using a propellor, you don't get a strength
-			* bonus but you do get an increase-damage bonus.
-			*/
-			if (!thrown)
-				bon_damage += dbon(weapon);
-			else{ //thrown
-				if (!fired)
-					bon_damage += dbon(weapon); // thrown by hand, get strength bonus
-				else if (launcher && objects[launcher->otyp].oc_skill == P_SLING)
-					bon_damage += dbon(launcher); // fired by a sling, get strength bonus
-				else if (launcher && launcher->otyp == ATLATL)
-					bon_damage += dbon(launcher) * 2; // fired by an atlatl, get 2x strength bonus
-				//else no bonus
+				bon_damage += u.udaminc;
+				bon_damage += aeshbon();
+				/* If you throw using a propellor, you don't get a strength
+				* bonus but you do get an increase-damage bonus.
+				*/
+				if(natural_strike)
+					bon_damage += dbon((struct obj *)0);
+				else if (!thrown)
+					bon_damage += dbon(weapon);
+				else{ //thrown
+					if (!fired)
+						bon_damage += dbon(weapon); // thrown by hand, get strength bonus
+					else if (launcher && objects[launcher->otyp].oc_skill == P_SLING)
+						bon_damage += dbon(launcher); // fired by a sling, get strength bonus
+					else if (launcher && launcher->otyp == ATLATL)
+						bon_damage += dbon(launcher) * 2; // fired by an atlatl, get 2x strength bonus
+					//else no bonus
+				}
+				bonsdmg += bon_damage;
+			} else if(!youagr){
+				int bon_damage = 0;
+
+				/* 
+				* Monsters don't actually have anything other than a str bonus, and then only from items.
+				*/
+				if (!thrown)
+					bon_damage += m_dbon(magr, weapon);
+				else{ //thrown
+					if (!fired)
+						bon_damage += m_dbon(magr, weapon); // thrown by hand, get strength bonus
+					else if (launcher && objects[launcher->otyp].oc_skill == P_SLING)
+						bon_damage += m_dbon(magr, launcher); // fired by a sling, get strength bonus
+					else if (launcher && launcher->otyp == ATLATL)
+						bon_damage += m_dbon(magr, launcher) * 2; // fired by an atlatl, get 2x strength bonus
+					//else no bonus
+				}
+				bonsdmg += bon_damage;
 			}
-			bonsdmg += bon_damage;
 		}
 		/* skill damage bonus */
-		if (youagr && (valid_weapon_attack || fake_valid_weapon_attack || unarmed_punch)) {
+		if(youagr && (valid_weapon_attack || fake_valid_weapon_attack || unarmed_punch)){
 			/* note: unarmed kicks do not get skill bonus damage */
 			int skill_damage = 0;
 			int wtype;
