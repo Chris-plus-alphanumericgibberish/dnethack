@@ -201,13 +201,7 @@ STATIC_VAR int cham_to_pm[] = {
 #define KEEPTRAITS(mon)	((mon)->isshk || (mon)->mtame ||		\
 			 ((mon)->data->geno & G_UNIQ) ||		\
 			 is_reviver((mon)->data) ||			\
-			 ((mon)->mfaction == ZOMBIFIED) ||			\
-			 ((mon)->mfaction == VAMPIRIC) ||			\
-			 ((mon)->mfaction == PSEUDONATURAL) ||			\
-			 ((mon)->mfaction == TOMB_HERD) ||			\
-			 ((mon)->mfaction == YITH) ||			\
-			 ((mon)->mfaction == CRANIUM_RAT) ||			\
-			 ((mon)->mfaction == MISTWEAVER) ||			\
+			 ((mon)->mfaction) ||			\
 			 ((mon)->zombify) ||			\
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
