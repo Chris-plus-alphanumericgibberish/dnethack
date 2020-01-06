@@ -14304,6 +14304,7 @@ android_combo()
 
 	static struct attack weaponhit =	{ AT_WEAP, AD_PHYS, 0, 0 };
 	static struct attack kickattack =	{ AT_KICK, AD_PHYS, 1, 2 };
+	static struct attack finisher =		{ AT_CLAW, AD_PHYS,16, 8 };
 
 	/* unarmed */
 	if (!uwep){
@@ -14355,6 +14356,19 @@ android_combo()
 					xmeleehity(&youmonst, mdef, &kickattack, (struct obj *)0, vis, 0, FALSE);
 					xmeleehity(&youmonst, mdef, &kickattack, (struct obj *)0, vis, 0, FALSE);
 				}
+			}
+		}
+		if(P_SKILL(P_BARE_HANDED_COMBAT) >= P_GRAND_MASTER && u.uen > 0){
+			if(!getdir((char *)0)) return 1;
+			u.uen--;
+			if (u.ustuck && u.uswallow)
+				mdef = u.ustuck;
+			else
+				mdef = m_at(u.ux + u.dx, u.uy + u.dy);
+			if (!mdef)
+				You("swing wildly!");
+			else {
+				xmeleehity(&youmonst, mdef, &finisher,   (struct obj *)0, vis, 0, FALSE);
 			}
 		}
 		return TRUE;
