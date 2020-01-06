@@ -943,7 +943,7 @@ int aatyp;
 	case AT_MAGC:
 	case AT_MMGC:
 	case AT_BEAM:
-	case AT_SHDW:
+	case AT_SRPR:
 	case AT_WISP:
 	case AT_REND:		/* If the previous attacks were OK, this one is too */
 		w_mask = ~0L;		/* special case; no defense needed */

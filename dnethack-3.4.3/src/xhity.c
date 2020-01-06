@@ -822,7 +822,7 @@ int tary;
 		case AT_WISP:	// 
 		case AT_HITS:	// always hits
 		case AT_TUCH:	// uses touch accuracy
-		case AT_SHDW:	// should be removed, replaced by AT_TUCH
+		case AT_SRPR:	// uses touch accuracy
 		case AT_REND:	// hits if previous 2 attacks hit
 		case AT_HUGS:	// hits if previous 2 attacks hit, or if magr and mdef are stuck together
 			/* not in range */
@@ -1747,7 +1747,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		if ((attk->aatyp == AT_WEAP && !uwep) ||
 			(attk->aatyp == AT_XWEP && !uswapwep && u.twoweap)) {
 			/* replace the attack */
-			attk->aatyp = AT_TUCH;
+			attk->aatyp = AT_SRPR;
 			attk->adtyp = AD_SHDW;
 			attk->damn = 4;
 			attk->damd = 8;
@@ -1779,7 +1779,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		attk->aatyp == AT_ARRW ||
 		attk->aatyp == AT_MMGC ||
 		attk->aatyp == AT_TNKR ||
-		attk->aatyp == AT_SHDW ||
+		attk->aatyp == AT_SRPR ||
 		attk->aatyp == AT_BEAM ||
 		attk->aatyp == AT_MAGC ||
 		(attk->aatyp == AT_TENT && magr->mfaction == SKELIFIED))
@@ -2313,19 +2313,22 @@ struct attack *attk;
 		case AT_BUTT:
 			if (!verb) verb = "butt";
 			// fall through
+		case AT_SRPR:
+				if (!verb){
+					verb = "slash";
+					if ((attk->adtyp == AD_SHDW) || (attk->adtyp == AD_STAR) || (attk->adtyp == AD_BLUD)) {
+						ending = (attk->adtyp == AD_SHDW) ? " with bladed shadows!" :
+							(attk->adtyp == AD_STAR) ? " with a starlight rapier!" :
+							(attk->adtyp == AD_MERC) ? " with a blade of mercury!" :
+							(attk->adtyp == AD_BLUD) ? " with a blade of blood!" : "!";
+					}
+					if (youdef)
+						specify_you = TRUE;
+				}
 		case AT_5SQR:
 		case AT_TUCH:
 			if (!verb) {
-				if ((attk->adtyp == AD_SHDW) || (attk->adtyp == AD_STAR) || (attk->adtyp == AD_BLUD)) {
-					verb = "slash";
-					ending = (attk->adtyp == AD_SHDW) ? " with bladed shadows!" :
-						(attk->adtyp == AD_STAR) ? " with a starlight rapier!" :
-						(attk->adtyp == AD_MERC) ? " with a blade of mercury!" :
-						(attk->adtyp == AD_BLUD) ? " with a blade of blood!" : "!";
-				}
-				else {
-					verb = "touch";
-				}
+				verb = "touch";
 				if (youdef)
 					specify_you = TRUE;
 			}
@@ -3203,7 +3206,7 @@ int flat_acc;
 	if ((youagr && u.sealsActive&SEAL_CHUPOCLOPS && !thrown) ||
 		(weapon && arti_shining(weapon)) ||
 		(!thrown && attk->aatyp == AT_TUCH) ||
-		(!thrown && attk->aatyp == AT_SHDW)) {
+		(!thrown && attk->aatyp == AT_SRPR)) {
 		if (youdef) {
 			defn_acc += AC_VALUE(base_uac() + u.uspellprot) + 10 - u.uspellprot;
 		}
@@ -3400,7 +3403,7 @@ boolean ranged;
 	case AT_WISP:
 	case AT_HITS:	// always hits
 	case AT_TUCH:	// uses touch accuracy
-	case AT_SHDW:	// should be removed, replaced by AT_TUCH
+	case AT_SRPR:	// uses touch accuracy
 	/* ranged attack types that are also melee */
 	case AT_LNCK:
 	case AT_5SBT:
@@ -11948,7 +11951,7 @@ boolean * wepgone;		/* used to return an additional result: was [weapon] destroy
 	basedmg *= (precision_mult ? precision_mult : 1);
 
 	/* fakewep: Sword of Blood bonus damage */
-	if (attk && attk->adtyp == AD_BLUD)
+	if (attk->aatyp == AT_SRPR && attk->adtyp == AD_BLUD)
 	{
 		if (has_blood(pd)) {
 			specdmg += mlev(mdef);
@@ -11979,8 +11982,7 @@ boolean * wepgone;		/* used to return an additional result: was [weapon] destroy
 	phase_armor = (
 		(weapon && arti_shining(weapon)) ||
 		(youagr && u.sealsActive&SEAL_CHUPOCLOPS) ||
-		(attk && attk->adtyp == AD_STAR) ||
-		(attk && attk->adtyp == AD_SHDW) ||
+		(attk && attk->aatyp == AT_SRPR && attk->aatyp != AD_BLUD) ||
 		(swordofblood) /* this touch adtyp is only conditionally phasing */
 		);
 
@@ -13123,7 +13125,7 @@ int
 shadow_strike(mdef)
 struct monst * mdef;
 {
-	static struct attack shadowblade = { AT_TUCH, AD_SHDW, 4, 8 };
+	static struct attack shadowblade = { AT_SRPR, AD_SHDW, 4, 8 };
 	int tohitmod = 0;	/* necessary to call xmeleehity */
 
 	if (mdef){

@@ -34,7 +34,7 @@
 #define AT_HITS		24	/* Automatic hit, no contact */
 #define AT_WISP		25	/* Attack with wisps of mist, no contact */
 #define AT_TNKR		26	/* Tinker attacks */
-#define AT_SHDW		27	/* Phased non-contact attack */
+#define AT_SRPR		27	/* Phased non-contact attack, "spiritual rapier" */
 #define AT_BEAM		28	/* non-contact ranged beam attack */
 #define AT_DEVA		29	/* million-arm weapon attack */
 #define AT_5SQR		30	/* five square reach touch */
