@@ -4748,8 +4748,8 @@ boolean ranged;
 			xyhitmsg(magr, mdef, attk);
 		}
 
-		/* biting to drain blood */
-		if (attk->aatyp == AT_BITE
+		/* Vampiric attacks drain blood, even if those that aren't bites */
+		if (attk->adtyp == AD_VAMP
 			&& has_blood_mon(mdef)
 			&& !(pa == &mons[PM_VAMPIRE_BAT] && !(youdef ? u.usleep : mdef->msleeping))	/* vampire bats need sleeping victims */
 			) {
@@ -4765,7 +4765,7 @@ boolean ranged;
 			}
 
 			/* tame vampires gain nutrition */
-			if (uncancelled && !youagr && magr->mtame && !magr->isminion && is_vampire(pa))
+			if (uncancelled && !youagr && magr->mtame && !magr->isminion)
 				EDOG(magr)->hungrytime += ((int)((mdef->data)->cnutrit / 20) + 1);
 		}
 		/* level-draining effect doesn't actually need blood, it drains life force */
@@ -4783,14 +4783,14 @@ boolean ranged;
 			if (!youagr && is_metroid(pa)) {
 				*hpmax(magr) += d(1, 4);
 				heal(magr, d(1, 6));
-				/* tame metroids gain nutrition (does not stack with for-vampires above) */
+				/* tame metroids gain nutrition (does not stack with for-vampires above, since they have lifedrain instead of bloodsuck attacks) */
 				if (magr->mtame && !magr->isminion){
 					EDOG(magr)->hungrytime += pd->cnutrit / 4;  //400/4 = human nut/4
 				}
 			}
 
 			/* this line should NOT be displayed in addition to "your blood is being drained" */
-			if (youdef && !(attk->aatyp == AT_BITE && has_blood_mon(mdef)))
+			if (youdef && !(attk->adtyp == AD_VAMP && has_blood_mon(mdef)))
 				pline("%s feeds on your life force!", Monnam(magr));
 
 			/* drain life! */
@@ -4827,7 +4827,7 @@ boolean ranged;
 			}
 		}
 
-		/* wraithworms have poisonous vampiric bites */
+		/* wraithworms have poisonous negative-energy bites */
 		if ((pa == &mons[PM_WRAITHWORM]
 			|| pa == &mons[PM_FIRST_WRAITHWORM])) {
 			alt_attk.adtyp = AD_DRST;
