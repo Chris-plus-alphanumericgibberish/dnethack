@@ -1479,11 +1479,10 @@ int * subout;					/* records what attacks have been subbed out */
 #define SUBOUT_BAEL2	0x0008	/* Bael's marilith-hands attack chain */
 #define SUBOUT_DEMO1	0x0010	/* Demogorgon's shredding rend */
 #define SUBOUT_DEMO2	0x0020	/* Demogorgon's item steal */
-#define SUBOUT_MARIWRAP	0x0040	/* Marilith's wrap */
-#define SUBOUT_SPIRITS	0x0080	/* Player's bound spirits */
-#define SUBOUT_BARB1	0x0100	/* 1st bit of barbarian bonus attacks */
-#define SUBOUT_BARB2	0x0200	/* 2nd bit of barbarian bonus attacks, must directly precede the 1st bit */
-#define SUBOUT_MAINWEPB	0x0400	/* Bonus attack caused by the wielded *mainhand* weapon */
+#define SUBOUT_SPIRITS	0x0040	/* Player's bound spirits */
+#define SUBOUT_BARB1	0x0080	/* 1st bit of barbarian bonus attacks */
+#define SUBOUT_BARB2	0x0100	/* 2nd bit of barbarian bonus attacks, must directly precede the 1st bit */
+#define SUBOUT_MAINWEPB	0x0200	/* Bonus attack caused by the wielded *mainhand* weapon */
 #define SUBOUT_XWEP		0x1000	/* when giving additional attacks, whether or not to use AT_XWEP or AT_WEAP this call */
 int * tohitmod;					/* some attacks are made with decreased accuracy */
 {
@@ -1586,18 +1585,6 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			}
 			break;
 		}
-	}
-	/* Mariliths (and family) get a wrap attack after their mainhand and offhand hits, before their marilith-hand attacks */
-	if (*indexnum == 2 && fromlist &&
-		!(*subout&SUBOUT_MARIWRAP) &&
-		(pa == &mons[PM_MARILITH] || pa == &mons[PM_SHAKTARI] || pa == &mons[PM_KARY__THE_FIEND_OF_FIRE])
-		){
-		*subout |= SUBOUT_MARIWRAP;
-		attk->aatyp = AT_HUGS;
-		attk->adtyp = AD_WRAP;
-		attk->damn = (pa == &mons[PM_SHAKTARI] ? 8 : 4);
-		attk->damd = 6;
-		fromlist = FALSE;
 	}
 
 	/* the Five Fiends spellcasting -- not shown in pokedex */
@@ -1961,7 +1948,6 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 #undef SUBOUT_BAEL2
 #undef SUBOUT_DEMO1
 #undef SUBOUT_DEMO2
-#undef SUBOUT_MARIWRAP
 #undef SUBOUT_SPIRITS
 #undef SUBOUT_BARB1
 #undef SUBOUT_BARB2
