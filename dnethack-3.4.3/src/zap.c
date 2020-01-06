@@ -3536,22 +3536,26 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 
 	case AD_DEAD:		/* death*/
 		if(mon->data==&mons[PM_METROID]){
-			pline("The metroid is irradiated with pure energy!  It divides!");
+			if (canseemon(mon))
+				pline("The metroid is irradiated with pure energy!  It divides!");
 			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
 			break;
 		}
 		else if(mon->data==&mons[PM_ALPHA_METROID]||mon->data==&mons[PM_GAMMA_METROID]){
-			pline("The metroid is irradiated with pure energy!  It buds off a baby metroid!");
+			if (canseemon(mon))
+				pline("The metroid is irradiated with pure energy!  It buds off a baby metroid!");
 			makemon(&mons[PM_BABY_METROID], mon->mx, mon->my, MM_ADJACENTOK);
 			break;
 		}
 		else if(mon->data==&mons[PM_ZETA_METROID]||mon->data==&mons[PM_OMEGA_METROID]){
-			pline("The metroid is irradiated with pure energy!  It buds off another metroid!");
+			if (canseemon(mon))
+				pline("The metroid is irradiated with pure energy!  It buds off another metroid!");
 			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
 			break;
 		}
 		else if(mon->data==&mons[PM_METROID_QUEEN]){
-			pline("The metroid queen is irradiated with pure energy!  She buds off more metroids!");
+			if (canseemon(mon))
+				pline("The metroid queen is irradiated with pure energy!  She buds off more metroids!");
 			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
 			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
 			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
