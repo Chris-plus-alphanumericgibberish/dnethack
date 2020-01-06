@@ -145,7 +145,7 @@ typedef struct branch {
 
 //Chaos quest 2
 #define Is_elshava(x)		(on_level(x,&elshava_level))
-#define Is_last_spire(x)		(on_level(x,&lastspire_level))
+#define Is_last_spire(x)	(on_level(x,&lastspire_level))
 
 //Chaos quest 3
 #define Is_ford_level(x)	(on_level(x,&ford_level))
