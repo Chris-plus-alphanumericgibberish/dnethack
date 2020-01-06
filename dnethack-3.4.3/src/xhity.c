@@ -1090,6 +1090,11 @@ int tary;
 	if (attacksmade > 0)
 		allres |= MM_HIT;		/* signifies that the attack action was indeed taken, even if no attacks hit */
 
+	if(youdef && is_aquatic(magr->data) && roll_madness(MAD_THALASSOPHOBIA)){
+		You("panic after being attacked by a sea monster!");
+		nomul(-1*rnd(6), "panicking");
+	}
+	
 	return allres;
 }// xattacky
 
