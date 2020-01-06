@@ -12361,8 +12361,8 @@ boolean * wepgone;		/* used to return an additional result: was [weapon] destroy
 	totldmg = subtotl + seardmg + heatdmg + poisdmg + specdmg;
 	lethaldamage = (totldmg >= *hp(mdef));
 
-	if (wizard && ublindf && ublindf->otyp == LENSES) {
-		pline("dmg = (%d + %d + %d + %d + %d - defense) = %d; + %d = %d",
+	if (wizard && ublindf && (ublindf->otyp == LENSES || ublindf->otyp == ANDROID_VISOR)) {
+		pline("dmg = (b:%d + art:%d + bon:%d + mon:%d + s/j:%d - defense) = %d; + add:%d = %d",
 			basedmg,
 			artidmg,
 			bonsdmg,
