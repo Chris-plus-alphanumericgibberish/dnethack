@@ -225,6 +225,7 @@
 #define MG_SANLOSS		0x04000000L /* Seeing the monster damages sanity */
 #define MG_INSIGHT		0x08000000L /* Seeing the monster grants insight */
 #define MG_RIDER_HP		0x10000000L /* Has 10d8 HP */
+#define MG_FUTURE_WISH	0x20000000L /* Wishable by tourists only */
 
 //Monster rAce
 #define MA_UNDEAD		0x00000001L	/* is walking dead */
