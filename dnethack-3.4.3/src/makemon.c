@@ -1808,7 +1808,7 @@ register struct monst *mtmp;
 					otmp->owt = weight(otmp);
 					(void) mpickobj(mtmp, otmp);
 					
-					otmp = mksobj(JACKET, FALSE, FALSE);
+					otmp = mksobj(GENTLEMAN_S_SUIT, FALSE, FALSE);
 					bless(otmp);
 					otmp->spe = 5;
 					otmp->owt = weight(otmp);
