@@ -906,4 +906,55 @@ register struct obj *obj;
 	obj->owornmask = savewornmask;
 }
 
+boolean
+bimanual(otmp, ptr)
+struct obj * otmp;
+struct permonst * ptr;
+{
+	int wielder_size;	/* uses standard MZ_ values */
+	int eff_size;		/* uses standard MZ_ values */
+	int size_mod;		/* otyp's size modifier; halve */
+
+	/* we *need* an object to get its size */
+	if (!otmp)
+		return FALSE;
+	/* only weapons and tools are valid twohanded weapons */
+	if (otmp->oclass != WEAPON_CLASS && otmp->oclass != TOOL_CLASS)
+		return FALSE;
+	/* get wielder's size -- optional, will assume medium (human) */
+	wielder_size = (ptr ? ptr->msize : MZ_MEDIUM);
+
+	/* Some creatures are specifically always able to wield any weapon in one hand */
+	if (ptr && (
+		ptr == &mons[PM_THRONE_ARCHON] ||
+		ptr == &mons[PM_LUNGORTHIN] ||
+		ptr == &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY]
+		))
+		return FALSE;
+
+	/* get object size */
+	size_mod = objects[otmp->otyp].oc_size - MZ_MEDIUM;
+
+	if (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit)
+		size_mod += 4;	/* medium (2)           -> huge  (4) */
+	if (otmp->oartifact == ART_FRIEDE_S_SCYTHE)
+		size_mod -= 1;	/* large (3)            -> somewhat large (2.5) */
+	if (otmp->otyp == DOUBLE_LIGHTSABER)
+		size_mod += 3;	/* somewhat small (1.5) -> large (3) */
+
+	/* add size_mod/2 to the object's visible size, rounding down final effective size */
+	eff_size = (2 * otmp->objsize + size_mod) / 2;
+	
+	/* bound to real sizes */
+	if (eff_size < MZ_TINY)
+		eff_size = MZ_TINY;
+	if (eff_size > MZ_GIGANTIC)
+		eff_size = MZ_GIGANTIC;
+	if (eff_size > MZ_HUGE && eff_size != MZ_GIGANTIC)
+		eff_size = MZ_HUGE;
+
+	/* bimanual rule: Needs two hands if [object's size] > [wielder's size] by 1 full size */
+	return (eff_size > wielder_size);
+}
+
 /*wield.c*/

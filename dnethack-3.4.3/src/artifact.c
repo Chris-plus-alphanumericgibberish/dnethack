@@ -7651,7 +7651,11 @@ arti_invoke(obj)
 		obj->age = monstermoves + (long)(rnz(100)*(Role_if(PM_PRIEST) ? .75 : 1));
 	}
 
-	if ((eprop & ~W_ARTI) || iprop) {
+	if ((eprop & ~W_ARTI) ||
+		(iprop && !(
+		oart->inv_prop == FAST	/* Fast has a noticable difference between intrinsic and extrinsic effects */
+		)
+		)){	
 nothing_special:
 	    /* you had the property from some other source too */
 	    if (carried(obj))
@@ -7660,8 +7664,8 @@ nothing_special:
 	}
 	switch(oart->inv_prop) {
 	case FAST:
-	    if(on) You("speed up.");
-	    else You("slow down.");
+	    if(on) You_feel("yourself speed up%s.", (iprop ? "a bit more" : ""));
+		else You_feel("yourself slow down%s.", (iprop ? "a bit" : ""));
 	    break;
 	case CONFLICT:
 	    if(on) You_feel("like a rabble-rouser.");

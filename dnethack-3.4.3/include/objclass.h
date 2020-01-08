@@ -24,9 +24,11 @@ struct objclass {
 	Bitfield(oc_unique,1);	/* special one-of-a-kind object */
 	Bitfield(oc_nowish,1);	/* cannot wish for this object */
 
-	Bitfield(oc_big,1);
-#define oc_bimanual	oc_big	/* for weapons & tools used as weapons */
-#define oc_bulky	oc_big	/* for armor */
+	Bitfield(oc_size, 3);	/* inherent size of the item; modifies size by about half */
+
+	/* TODO: change all places oc_bimanual and oc_bulky are used */
+#define oc_bimanual	oc_size==MZ_HUGE	/* for weapons & tools used as weapons */
+#define oc_bulky	oc_size==MZ_HUGE	/* for armor */
 	Bitfield(oc_tough,1);	/* hard gems/rings */
 
 	Bitfield(oc_dir,4);

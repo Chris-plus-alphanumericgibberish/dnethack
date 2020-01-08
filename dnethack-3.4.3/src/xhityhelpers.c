@@ -1221,6 +1221,7 @@ struct obj * otmp;
 	//struct permonst * pa = youagr ? youracedata : magr->data;
 	struct permonst * pd = youdef ? youracedata : mdef->data;
 
+	boolean vulnerable = insubstantial(pd);
 	int diesize;
 	int ndice;
 
@@ -1242,7 +1243,7 @@ struct obj * otmp;
 		else if(otmp->otyp == KHAKKHARA)
 			ndice = rnd(3);
 		/* calculate */
-		dmg += d(ndice, diesize);
+		dmg += (vulnerable ? ndice*diesize : d(ndice, diesize));
 	}
 	if (hates_iron(pd) &&
 		otmp->obj_material == IRON) {
@@ -1253,7 +1254,7 @@ struct obj * otmp;
 		if (otmp->otyp == KHAKKHARA)
 			ndice = rnd(3);
 		/* calculate */
-		dmg += d(ndice, diesize);
+		dmg += (vulnerable ? ndice*diesize : d(ndice, diesize));
 	}
 	if (hates_holy_mon(mdef) &&
 		otmp->blessed) {
@@ -1282,7 +1283,7 @@ struct obj * otmp;
 			diesize = 20;
 		}
 		/* calculate dice */
-		dmg += d(ndice, diesize);
+		dmg += (vulnerable ? ndice*diesize : d(ndice, diesize));
 	}
 	if (hates_unholy_mon(mdef) &&
 		is_unholy(otmp)) {
@@ -1310,7 +1311,7 @@ struct obj * otmp;
 		}
 		/* calculate */
 		if (ndice)
-			dmg += d(ndice, diesize);
+			dmg += (vulnerable ? ndice*diesize : d(ndice, diesize));
 	}
 
 	/* the Rod of Seven Parts gets a bonus vs holy and unholy when uncursed */
@@ -1318,24 +1319,24 @@ struct obj * otmp;
 		&& !otmp->blessed && !otmp->cursed
 		&& (hates_holy_mon(mdef) || hates_unholy_mon(mdef))
 		){
-		dmg += d(1, 10);
+		dmg += (vulnerable ? 10 : rnd(10));
 	}
 
 	/* Glamdring sears orcs and demons */
 	if (otmp->oartifact == ART_GLAMDRING &&
 		(is_orc(pd) || is_demon(pd)))
-		dmg += rnd(20);
+		dmg += (vulnerable ? 20 : rnd(20));
 
 	/* The Veioistafur stave hurts sea creatures */
 	if (otmp->obj_material == WOOD && otmp->otyp != MOON_AXE
 		&& (otmp->oward & WARD_VEIOISTAFUR) && pd->mlet == S_EEL) {
-		dmg += rnd(20);	
+		dmg += (vulnerable ? 20 : rnd(20));
 	}
 
 	/* The Lifehunt Scythe is occult */
 	if (mdef && mdef->isminion){
 		if (otmp->oartifact == ART_LIFEHUNT_SCYTHE)
-			dmg += d(4, 4) + otmp->spe;
+			dmg += (vulnerable ? 16 : d(4, 4)) + otmp->spe;
 	}
 
 	return dmg;

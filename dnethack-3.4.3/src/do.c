@@ -167,7 +167,7 @@ const char *verb;
 			if (!mon_resistance(mtmp,PASSES_WALLS) &&
 				!throws_rocks(mtmp->data)) {
 				boolean wepgone = FALSE;
-				if (hmon2point0(&youmonst, mtmp, (struct attack *)0, obj, (struct obj *)0, TRUE, 0, 0, TRUE, rnd(20), FALSE, -1, &wepgone) != 2
+				if (hmon2point0(&youmonst, mtmp, (struct attack *)0, obj, (struct obj *)0, TRUE, 0, 0, TRUE, rnd(20), FALSE, -1, &wepgone, FALSE) != 2
 					&& !is_whirly(mtmp->data))
 				return FALSE;	/* still alive */
 			}

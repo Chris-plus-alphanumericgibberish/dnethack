@@ -500,22 +500,6 @@ struct weapon_dice {
 			 objects[(o)->otyp].oc_skill != P_NONE)
 #define is_instrument(o)	((o)->otyp >= FLUTE && \
 			 (o)->otyp <= DRUM_OF_EARTHQUAKE)
-#define bimanual(otmp,ptr)	(otmp && (otmp->oclass == WEAPON_CLASS || \
-			 otmp->oclass == TOOL_CLASS) && \
-			 ptr != &mons[PM_THRONE_ARCHON] && \
-			 ptr != &mons[PM_LUNGORTHIN] && \
-			 ptr != &mons[PM_BASTARD_OF_THE_BOREAL_VALLEY] && \
-			 (otmp->oartifact == ART_HOLY_MOONLIGHT_SWORD && otmp->lamplit ?\
-			  (objects[otmp->otyp].oc_bimanual ? \
-				((ptr)->msize - otmp->objsize - 2 <=  0):\
-				((ptr)->msize - otmp->objsize - 2 <= -1)) :\
-			  (otmp->oartifact == ART_FRIEDE_S_SCYTHE ? \
-				((ptr)->msize - otmp->objsize <= -1) :\
-				  (objects[otmp->otyp].oc_bimanual ? \
-					((ptr)->msize - otmp->objsize <=  0):\
-					((ptr)->msize - otmp->objsize <= -1))\
-			   )\
-			))
 #define is_lightsaber(otmp) ((otmp)->otyp == LIGHTSABER || \
 							 (otmp)->otyp == KAMEREL_VAJRA || \
 							 (otmp)->otyp == BEAMSWORD || \

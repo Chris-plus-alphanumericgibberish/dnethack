@@ -149,7 +149,7 @@ register int x, y, n;
 			do {
 				mm.x = rn1(COLNO-3,2);
 				mm.y = rn2(ROWNO);
-			} while(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS) &&
+			} while(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS) ||
 				(tryct++ < 200 && ((tryct < 100 && couldsee(mm.x, mm.y)) || (tryct < 150 && cansee(mm.x, mm.y)) || distmin(mm.x,mm.y,u.ux,u.uy) < BOLT_LIM)));
 			if(!goodpos(mm.x, mm.y, &fakemon, NO_MM_FLAGS))
 				return;
@@ -7082,7 +7082,7 @@ register int	mmflags;
 		do {
 			x = rn1(COLNO-3,2);
 			y = rn2(ROWNO);
-		} while(!goodpos(x, y, ptr ? &fakemon : (struct monst *)0, Is_waterlevel(&u.uz) ? gpflags|MM_IGNOREWATER : gpflags) &&
+		} while(!goodpos(x, y, ptr ? &fakemon : (struct monst *)0, Is_waterlevel(&u.uz) ? gpflags|MM_IGNOREWATER : gpflags) ||
 			(tryct++ < 150 && ((tryct < 50 && couldsee(x, y)) || ((tryct < 100 && cansee(x, y))) || distmin(x,y,u.ux,u.uy) < BOLT_LIM)));
 		if(tryct >= 150){
 			return((struct monst *)0);
@@ -8209,6 +8209,9 @@ register int	mmflags;
 	    if (mtmp->minvent) discard_minvent(mtmp);
 	    mtmp->minvent = (struct obj *)0;    /* caller expects this */
 	}
+	/* set weaponcheck for weapon-toting monsters */
+	if (is_armed(ptr))
+		mtmp->weapon_check = NEED_WEAPON;
 	if(zombiepm >= 0){
 		//wasn't used
 		zombiepm = -1;

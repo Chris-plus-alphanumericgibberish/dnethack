@@ -1164,6 +1164,7 @@ boolean * wepgone;				/* pointer to: TRUE if projectile has been destroyed */
 		(mdef->mtame && dogfood(mdef, thrownobj) <= 2)) {	/* 2 <=> ACCFOOD */
 		if (tamedog(mdef, thrownobj))
 		{
+			*wepgone = TRUE;
 			return MM_HIT;           	/* obj is gone */
 		}
 		else {
@@ -1188,7 +1189,7 @@ boolean * wepgone;				/* pointer to: TRUE if projectile has been destroyed */
 			exercise(A_DEX, TRUE);
 		/* call hmon to make the projectile hit */
 		/* hmon will do hitmsg */
-		result = hmon2point0(magr, mdef, &dummy, thrownobj, launcher, (misfired ? 2 : 1), 0, 0, TRUE, dieroll, FALSE, vis, wepgone);
+		result = hmon2point0(magr, mdef, &dummy, thrownobj, launcher, (misfired ? 2 : 1), 0, 0, TRUE, dieroll, FALSE, vis, wepgone, FALSE);
 
 		/* wake up defender */
 		wakeup2(mdef, youagr);
@@ -2877,7 +2878,7 @@ struct attack * attk;
 int tarx;
 int tary;
 {
-	struct obj * qvr;				/* quiver of projectiles to use */
+	struct obj * qvr = (struct obj *)0;				/* quiver of projectiles to use */
 	boolean youagr = (magr == &youmonst);
 	struct permonst * pa = youagr ? youracedata : magr->data;
 	int typ = attk->adtyp;
@@ -2987,16 +2988,17 @@ int tary;
 		break;
 	default:
 		ammo_type = ARROW;
-		/* quiver from inventory */
-		for (qvr = (youagr ? invent : magr->minvent); qvr; qvr = qvr->nobj){
-			if (qvr->otyp == ammo_type) break;
-		}
 		break;
 	}
 
 	if (!qvr){
+		/* quiver from inventory */
+		for (qvr = (youagr ? invent : magr->minvent); qvr; qvr = qvr->nobj){
+			if (qvr->otyp == ammo_type) break;
+		}
 		/* No ammo of the right type found, nothing happened, took no time */
-		return FALSE; 
+		if (!qvr)
+			return FALSE; 
 	}
 
 	/* check that attacker is in range of target */

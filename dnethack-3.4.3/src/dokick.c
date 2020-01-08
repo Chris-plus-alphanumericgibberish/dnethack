@@ -123,7 +123,7 @@ register xchar x, y;
 
 	if(Fumbling) clumsy = TRUE;
 
-	else if(uarm && objects[uarm->otyp].oc_bulky && ACURR(A_DEX) < rnd(25))
+	else if(uarm && !is_light_armor(uarm) && !is_medium_armor(uarm) && ACURR(A_DEX) < rnd(25))
 		clumsy = TRUE;
 doit:
 	//You("kick %s.", mon_nam(mon));
@@ -508,7 +508,7 @@ xchar x, y;
 		if (isgold)
 			gone = ghitm(mon, kickobj);
 		else
-			(void)hmon2point0(&youmonst, mon, (struct attack *)0, kickobj, (struct obj *)0, 2, 0, 0, TRUE, rn1(18, 2), FALSE, TRUE, &gone);
+			(void)hmon2point0(&youmonst, mon, (struct attack *)0, kickobj, (struct obj *)0, 2, 0, 0, TRUE, rn1(18, 2), FALSE, TRUE, &gone, FALSE);
 		if (gone)
 		return(1);
 	}

@@ -1141,6 +1141,10 @@ int chance;
 
 	for (r = &rooms[level.flags.sp_lev_nroom]; r != &rooms[nroom]; r++)
 	{
+		/* hx == -1 is sometimes set as a special flag, which then means we can't find the walls of this room to damage it */
+		if (r->hx < 0)
+			continue;
+
 		if (!special_room_requires_full_walls(r->rtype) && !r->rlit && (rn2(100) < chance))
 		{
 			wallsgone = 0x15;

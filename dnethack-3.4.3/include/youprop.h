@@ -422,7 +422,7 @@
 #define EMagical_breathing	u.uprops[MAGICAL_BREATHING].extrinsic
 #define Amphibious		(HMagical_breathing || EMagical_breathing || \
 				 u.sealsActive&SEAL_ASTAROTH || \
-				 (u.divetimer > 0 && u.usubwater) || \
+				 (Swimming && u.divetimer > 0 && u.usubwater) || \
 				 amphibious(youracedata))
 	/* Get wet, may go under surface */
 

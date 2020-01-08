@@ -2449,17 +2449,14 @@ winid *datawin;
 
 		/* Object classes currently with no special messages here: amulets. */
 	if (olet == WEAPON_CLASS || (olet == TOOL_CLASS && oc.oc_skill)) {
-		boolean otyp_is_launcher = (((oc.oc_skill >= P_BOW && oc.oc_skill <= P_CROSSBOW) || otyp == ATLATL) &&
-			(otyp != HAND_BLASTER && otyp != ARM_BLASTER && otyp != MASS_SHADOW_PISTOL && otyp != CUTTING_LASER && otyp != RAYGUN));
+		boolean otyp_is_blaster = (otyp == HAND_BLASTER || otyp == ARM_BLASTER || otyp == MASS_SHADOW_PISTOL || otyp == CUTTING_LASER || otyp == RAYGUN);
+		boolean otyp_is_launcher = (((oc.oc_skill >= P_BOW && oc.oc_skill <= P_CROSSBOW) || otyp == ATLATL) && !otyp_is_blaster);
 		if (oc.oc_skill >= 0) {
 			if (obj) {
-				Sprintf(buf, "%s-handed %s%s%s",
-					(oc.oc_bimanual ? "Two" : "Single"), 
-					(otyp_is_launcher ? "launcher" : "weapon"),
-					(is_weptool(obj) && !otyp_is_launcher ? "-tool" : ""),
-					(oc.oc_bimanual == bimanual(obj, youmonst.data) ? "." :
-					bimanual(obj, youmonst.data) ? ", but large enough you actually need two hands."
-					: ", but you can wield it one-handed.")
+				Sprintf(buf, "%s-handed %s%s.", 
+					((obj ? bimanual(obj, youmonst.data) : oc.oc_bimanual) ? "Two" : "One"),
+					(otyp_is_blaster ? "blaster" : otyp_is_launcher ? "launcher" : "weapon"),
+					((obj && is_weptool(obj)) && !otyp_is_launcher ? "-tool" : "")
 					);
 			}
 			else {
@@ -2478,9 +2475,12 @@ winid *datawin;
 		OBJPUTSTR(buf);
 
 		/* weapon dice! */
-		/* Does not apply for launchers.
-		 * Liecleaver doesn't count here because its melee damage isn't in dmgval -- TODO? */
-		if (!otyp_is_launcher)
+		/* Does not apply for launchers. */
+		/* the melee-weapon artifact launchers need obj to exist because dmgval_core needs obj to find artifact. */
+		if ((!otyp_is_launcher && !otyp_is_blaster) || (
+			(obj && oartifact == ART_LIECLEAVER) ||
+			(obj && oartifact == ART_ROGUE_GEAR_SPIRITS)
+			))
 		{
 			// note: dmgval_core can handle not being given an obj; it will attempt to use otyp instead
 			struct weapon_dice wdice[2];
@@ -3299,6 +3299,28 @@ winid *datawin;
 		Strcpy(buf2, material_name(obj, FALSE));
 
 		Sprintf(buf, "Made of %s.", buf2);
+		OBJPUTSTR(buf);
+	}
+	/* Approximate size */
+	if (obj) {
+		static const char * sizestrings[] = {
+			"tiny",				/* index 0; size 0.0 */
+			"very small",		/* index 1; size 0.5 */
+			"small",			/* index 2; size 1.0 */
+			"somewhat small",	/* index 3; size 1.5 */
+			"medium-sized",		/* index 4; size 2.0 */
+			"somewhat large",	/* index 5; size 2.5 */
+			"large",			/* index 6; size 3.0 */
+			"very large",		/* index 7; size 3.5 */
+			"huge",				/* index 8; size 4.0 */
+			"gigantic"			/* index 9; size 7.0 */
+		};
+		int sz = max(0, obj->objsize * 2 + (oc.oc_size - 2));
+		if (sz >= 14)
+			sz = 9;
+		else if (sz > 8)
+			sz = 8;
+		Sprintf(buf, "Is a %s item.", sizestrings[sz]);
 		OBJPUTSTR(buf);
 	}
 	if (obj && is_evaporable(obj)) {
