@@ -1088,6 +1088,7 @@ boolean * wepgone;				/* pointer to: TRUE if projectile has been destroyed */
 					"You catch, but drop, %s.", xname(thrownobj),
 					"You catch:");
 			}
+			*wepgone = TRUE;
 			return MM_HIT;
 		}
 		else if(youagr)
@@ -1103,8 +1104,7 @@ boolean * wepgone;				/* pointer to: TRUE if projectile has been destroyed */
 					pline("%s catches %s.", Monnam(mdef), the(xname(thrownobj)));
 				}
 				if (gem_accept(mdef, thrownobj)) {
-					/* caught gem; unlink thrownobj */
-					thrownobj = (struct obj *)0;
+					*wepgone = TRUE;
 					return MM_HIT;
 				}
 					
@@ -1123,6 +1123,7 @@ boolean * wepgone;				/* pointer to: TRUE if projectile has been destroyed */
 		mdef->mstrategy &= ~STRAT_WAITMASK;
 		if (mdef->mcanmove) {
 			quest_art_swap(thrownobj, mdef, wepgone);
+			*wepgone = TRUE;
 			return MM_HIT;
 		}
 		else {
