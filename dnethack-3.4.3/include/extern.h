@@ -151,6 +151,7 @@ E void FDECL(init_attr, (int));
 E void NDECL(redist_attr);
 E void FDECL(adjabil, (int,int));
 E int NDECL(newhp);
+E int NDECL(newen);
 E int FDECL(maxhp, (int));
 E int NDECL(maxen);
 E int FDECL(conplus, (int));
