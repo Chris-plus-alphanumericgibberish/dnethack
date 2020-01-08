@@ -2892,6 +2892,15 @@ u_init()
 
 	u.oonaenergy = !rn2(3) ? AD_FIRE : rn2(2) ? AD_COLD : AD_ELEC;
 	dungeon_topology.alt_tower = !rn2(8);
+	dungeon_topology.alt_tulani = !rn2(3);
+	
+	if(dungeon_topology.alt_tulani){
+		unsigned short genotmp = mons[PM_TULANI_ELADRIN].geno;
+		mons[PM_TULANI_ELADRIN].geno = mons[PM_GAE_ELADRIN].geno;
+		mons[PM_GAE_ELADRIN].geno = genotmp;
+	}
+
+	dungeon_topology.eprecursor_typ = rnd(8);
 	if(Race_if(PM_HALF_DRAGON) && Role_if(PM_NOBLEMAN)){
 		if(flags.initgend)
 			flags.HDbreath = AD_COLD;

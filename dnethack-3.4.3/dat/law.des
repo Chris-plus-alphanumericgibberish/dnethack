@@ -1718,7 +1718,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,13)
 
-CONTAINER:'`',"statue",(1,15),uncursed,"Tulani Eladrin",1
+CONTAINER:'`',"statue",(1,15),uncursed,"Tulani Eladrin",17
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0
@@ -1730,7 +1730,7 @@ OBJECT:random,random,contained
 OBJECT:random,random,contained
 OBJECT:random,random,contained
 TRAP:"statue", (1,15)
-CONTAINER:'`',"statue",(1,17),uncursed,"Tulani Eladrin",1
+CONTAINER:'`',"statue",(1,17),uncursed,"Tulani Eladrin",17
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0
@@ -2129,7 +2129,7 @@ OBJECT:'/',"striking",contained,blessed,+3
 OBJECT:random,random,contained
 TRAP:"statue", (2,13)
 
-CONTAINER:'`',"statue",(1,15),uncursed,"Tulani Eladrin",1
+CONTAINER:'`',"statue",(1,15),uncursed,"Tulani Eladrin",17
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0
@@ -2141,7 +2141,7 @@ OBJECT:random,random,contained
 OBJECT:random,random,contained
 OBJECT:random,random,contained
 TRAP:"statue", (1,15)
-CONTAINER:'`',"statue",(1,17),uncursed,"Tulani Eladrin",1
+CONTAINER:'`',"statue",(1,17),uncursed,"Tulani Eladrin",17
 OBJECT:'[',"elven toga",contained,blessed,+0
 OBJECT:'[',"cloak of magic resistance",contained,blessed,+0
 OBJECT:'[',"elven boots",contained,blessed,+0

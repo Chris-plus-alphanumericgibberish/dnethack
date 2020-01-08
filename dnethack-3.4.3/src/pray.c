@@ -93,7 +93,8 @@ static int p_type; /* (-1)-3: (-1)=really naughty, 3=really good */
  * order to have the values be meaningful.
  */
 
-#define TROUBLE_STONED			15
+#define TROUBLE_STONED			16
+#define TROUBLE_FROZEN_AIR		15
 #define TROUBLE_SLIMED			14
 #define TROUBLE_STRANGLED		13
 #define TROUBLE_LAVA			12
@@ -165,6 +166,7 @@ in_trouble()
 	 */
 	if(Stoned) return(TROUBLE_STONED);
 	if(Golded) return(TROUBLE_STONED);
+	if(FrozenAir) return(TROUBLE_FROZEN_AIR);
 	if(Slimed) return(TROUBLE_SLIMED);
 	if(Strangled) return(TROUBLE_STRANGLED);
 	if(u.utrap && u.utraptype == TT_LAVA) return(TROUBLE_LAVA);
@@ -317,6 +319,12 @@ register int trouble;
 	    case TROUBLE_SLIMED:
 		    pline_The("slime disappears.");
 		    Slimed = 0;
+		    flags.botl = 1;
+		    delayed_killer = 0;
+		    break;
+	    case TROUBLE_FROZEN_AIR:
+		    pline_The("frozen air vaporizes.");
+		    FrozenAir = 0;
 		    flags.botl = 1;
 		    delayed_killer = 0;
 		    break;

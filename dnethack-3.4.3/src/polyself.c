@@ -520,6 +520,14 @@ int	mntmp;
 		flags.botl = 1;
 	    }
 	}
+	if(FrozenAir){
+	    if (flaming(youmonst.data)) {
+			pline_The("frozen air vaporizes!");
+			FrozenAir = 0L;
+			flags.botl = 1;
+		}
+	}
+	
 	if (nohands(youmonst.data) || nolimbs(youmonst.data)) Glib = 0;
 
 	/*

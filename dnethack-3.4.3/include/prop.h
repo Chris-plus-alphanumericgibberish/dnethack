@@ -46,7 +46,8 @@
 #define STONED						1 + WOUNDED_LEGS				
 #define GOLDED						1 + STONED						
 #define STRANGLED					1 + GOLDED						
-#define HALLUC						1 + STRANGLED					
+#define FROZEN_AIR					1 + STRANGLED						
+#define HALLUC						1 + FROZEN_AIR					
 #define HALLUC_RES					1 + HALLUC						
 #define FUMBLING					1 + HALLUC_RES					
 #define JUMPING						1 + FUMBLING					

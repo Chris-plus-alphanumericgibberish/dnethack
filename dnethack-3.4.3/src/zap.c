@@ -2403,6 +2403,7 @@ boolean ordinary;
 				destroy_item(SPBOOK_CLASS, AD_FIRE);
 			}
 		    burn_away_slime();
+		    melt_frozen_air();
 		    (void) burnarmor(&youmonst);
 		    break;
 
@@ -3764,6 +3765,7 @@ xchar sx, sy;
 			burnarmor(&youmonst);
 		}
 	    burn_away_slime();
+	    melt_frozen_air();
     break;
 	case AD_COLD:
 	    if (Cold_resistance) {

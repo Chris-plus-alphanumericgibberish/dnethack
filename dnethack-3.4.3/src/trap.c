@@ -552,6 +552,8 @@ int *fail_reason;
 			 * when makemon() is called, so we have to
 			 * check the field before calling newcham().
 			 */
+			if(statue->spe&STATUE_EPRE && dungeon_topology.eprecursor_typ == PRE_POLYP)
+				mon->ispolyp = TRUE;
 			if (mon->cham == CHAM_DOPPELGANGER)
 				(void) newcham(mon, mptr, FALSE, FALSE);
 			}
@@ -561,6 +563,8 @@ int *fail_reason;
 			} else {
 				mon = makemon(mptr, x, y, (NO_MINVENT | MM_ADJACENTOK));
 			}
+			if(mon && statue->spe&STATUE_EPRE && dungeon_topology.eprecursor_typ == PRE_POLYP)
+				mon->ispolyp = TRUE;
 		}
 	}
 
@@ -2983,6 +2987,7 @@ struct obj *box;	/* null for floor trap */
 	else losehp(num, tower_of_flame, KILLED_BY_AN);
 	
 	burn_away_slime();
+	melt_frozen_air();
 
 	if (burnarmor(&youmonst) || (rn2(3) && !InvFire_resistance)) {
 	    destroy_item(SCROLL_CLASS, AD_FIRE);
@@ -4953,6 +4958,7 @@ lava_effects()
     boolean usurvive;
 
     burn_away_slime();
+    melt_frozen_air();
     if (likes_lava(youracedata)) return FALSE;
 
     if (!Fire_resistance) {

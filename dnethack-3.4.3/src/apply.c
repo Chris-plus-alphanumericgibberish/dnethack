@@ -6291,6 +6291,7 @@ unfixable_trouble_count(is_horn)
 #endif
 				) unfixable_trbl++;
 	if (Slimed) unfixable_trbl++;
+	if (FrozenAir) unfixable_trbl++;
 	/* lycanthropy is not desirable, but it doesn't actually make you feel
 	   bad */
 

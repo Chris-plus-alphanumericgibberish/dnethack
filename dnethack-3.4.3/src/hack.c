@@ -1015,7 +1015,7 @@ domove()
 		}
 
 		/* check slippery ice */
-		on_ice = !Levitation && !Flying && is_ice(u.ux, u.uy);
+		on_ice = !Levitation && !Flying && (is_ice(u.ux, u.uy) || mad_turn(MAD_COLD_NIGHT));
 		if (on_ice) {
 		    static int skates = 0;
 		    if (!skates) skates = find_skates();

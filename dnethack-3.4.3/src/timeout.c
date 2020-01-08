@@ -30,6 +30,7 @@ const struct propname {
 } propertynames[] = {
     { INVULNERABLE, "invulnerable" },
     { STONED, "petrifying" },
+    { FROZEN_AIR, "frozen air" },
     { SLIMED, "becoming slime" },
     { STRANGLED, "strangling" },
     { SICK, "fatally sick" },
@@ -279,6 +280,19 @@ burn_away_slime()
 	    pline_The("slime that covers you is burned away!");
 	    Slimed = 0L;
 	    flags.botl = 1;
+		delayed_killer = 0;
+	}
+	return;
+}
+
+void
+melt_frozen_air()
+{
+	if (FrozenAir) {
+	    pline_The("frozen air around you vaporizes!");
+	    FrozenAir = 0L;
+	    flags.botl = 1;
+		delayed_killer = 0;
 	}
 	return;
 }
@@ -569,12 +583,12 @@ nh_timeout()
 			}
 		}
 	}
-	if(Strangled){
+	if(Strangled || FrozenAir){
 		if(Breathless);//Do nothing
 		else if(u.divetimer > 1) u.divetimer--;
 		else {
 			killer_format = KILLED_BY;
-			killer = (u.uburied) ? "suffocation" : "strangulation";
+			killer = (u.uburied || FrozenAir) ? "suffocation" : "strangulation";
 			done(DIED);
 		}
 	} else if((u.usubwater || is_3dwater(u.ux,u.uy)) && u.divetimer > 0 && !Breathless && !amphibious(youracedata)){
@@ -684,6 +698,9 @@ nh_timeout()
 			}
 			done(GOLDING);
 			break;
+		case FROZEN_AIR:
+			pline("The frozen air surrounding you becomes vapor.");
+		break;
 		case SLIMED:
 			if (delayed_killer && !killer) {
 				killer = delayed_killer;

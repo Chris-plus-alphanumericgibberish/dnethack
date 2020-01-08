@@ -202,6 +202,7 @@ STATIC_VAR int cham_to_pm[] = {
 			 ((mon)->data->geno & G_UNIQ) ||		\
 			 is_reviver((mon)->data) ||			\
 			 ((mon)->mfaction) ||			\
+			 ((mon)->ispolyp) ||			\
 			 ((mon)->zombify) ||			\
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
@@ -2041,6 +2042,12 @@ movemon()
 	/* Find a monster that we have not treated yet.	 */
 	if(DEADMONSTER(mtmp))
 	    continue;
+	if(u.specialSealsActive&SEAL_LIVING_CRYSTAL)
+		average_dogs();
+	if(mtmp->m_insight_level > u.uinsight){
+		migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+		continue;
+	}
 	if(mtmp->movement < NORMAL_SPEED)
 	    continue;
 
@@ -3629,28 +3636,6 @@ struct monst *mtmp;
 		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
 		mtmp->mhp = mtmp->mhpmax;
 		return;
-	} else if(!rn2(20) && (mtmp->data == &mons[PM_ALABASTER_ELF]
-		|| mtmp->data == &mons[PM_ALABASTER_ELF_ELDER]
-		|| is_alabaster_mummy(mtmp->data)
-	)){
-		if (cansee(mtmp->mx, mtmp->my)) {
-			pline("%s putrefies with impossible speed!",Monnam(mtmp));
-			mtmp->mcanmove = 1;
-			mtmp->mfrozen = 0;
-			if (mtmp->mtame && !mtmp->isminion) {
-				wary_dog(mtmp, FALSE);
-			}
-			mtmp->mhp = mtmp->mhpmax;
-			mtmp->mspec_used = 0;
-			if(is_alabaster_mummy(mtmp->data) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
-				mksobj_at(mtmp->mvar1, mtmp->mx, mtmp->my, TRUE, FALSE);
-				if(mtmp->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
-					mtmp->mintrinsics[(DISPLACED-1)/32] &= ~(1 << (DISPLACED-1)%32);
-				mtmp->mvar1 = 0; //Lose the bonus if resurrected
-			}
-			newcham(mtmp, &mons[rn2(4) ? PM_ACID_BLOB : PM_BLACK_PUDDING], FALSE, FALSE);
-			return;
-		}
 	} else if(mtmp->mspec_used == 0 && 
 		(is_uvuudaum(mtmp->data) || mtmp->data==&mons[PM_PRAYERFUL_THING])
 	){
@@ -3706,6 +3691,28 @@ struct monst *mtmp;
 		} else
 			return;
 		/*Under this point, the only resurrection effects should be those affecting undead, or that the monster wouldn't WANT to trigger*/
+	} else if(!rn2(20) && (mtmp->data == &mons[PM_ALABASTER_ELF]
+		|| mtmp->data == &mons[PM_ALABASTER_ELF_ELDER]
+		|| is_alabaster_mummy(mtmp->data)
+	)){
+		if (cansee(mtmp->mx, mtmp->my)) {
+			pline("%s putrefies with impossible speed!",Monnam(mtmp));
+			mtmp->mcanmove = 1;
+			mtmp->mfrozen = 0;
+			if (mtmp->mtame && !mtmp->isminion) {
+				wary_dog(mtmp, FALSE);
+			}
+			mtmp->mhp = mtmp->mhpmax;
+			mtmp->mspec_used = 0;
+			if(is_alabaster_mummy(mtmp->data) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
+				mksobj_at(mtmp->mvar1, mtmp->mx, mtmp->my, TRUE, FALSE);
+				if(mtmp->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
+					mtmp->mintrinsics[(DISPLACED-1)/32] &= ~(1 << (DISPLACED-1)%32);
+				mtmp->mvar1 = 0; //Lose the bonus if resurrected
+			}
+			newcham(mtmp, &mons[rn2(4) ? PM_ACID_BLOB : PM_BLACK_PUDDING], FALSE, FALSE);
+			return;
+		}
 	} else if(mtmp->mfaction == FRACTURED && !rn2(2)){
 		if (couldsee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
@@ -3722,6 +3729,30 @@ struct monst *mtmp;
 		mtmp->mhpmax = d(mtmp->m_lev, 8);
 		mtmp->mhp = mtmp->mhpmax;
 		return;
+	} else if(mtmp->ispolyp && !stoned && !golded && !glassed){
+		if(mtmp->mfaction == ILLUMINATED && rn2(3)){ /*Don't use up Illuminated status until it's all out of masks!*/
+			if (couldsee(mtmp->mx, mtmp->my)) {
+				pline("But wait...");
+				pline("A glowing halo forms over %s!",
+					mon_nam(mtmp));
+			}
+			mtmp->mcanmove = 1;
+			mtmp->mfrozen = 0;
+			mtmp->mhp = mtmp->mhpmax;
+			return;
+		} else {
+			if (couldsee(mtmp->mx, mtmp->my)){
+				pline("But wait...");
+				pline("%s's mask breaks!", Monnam(mtmp));
+				mtmp->mcanmove = 1;
+				mtmp->mfrozen = 0;
+				mtmp->mhp = mtmp->mhpmax;
+				mtmp->ispolyp = 0;
+				newcham(mtmp, &mons[PM_POLYPOID_BEING], FALSE, FALSE);
+				mtmp->m_insight_level = 40;
+				return;
+			}
+		}
 	} else if(mtmp->mfaction == ILLUMINATED && !stoned && !golded && !glassed){
 		if (couldsee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
@@ -3739,7 +3770,7 @@ struct monst *mtmp;
 						 LS_MONSTER, (genericptr_t)mtmp);
 		}
 		return;
-	} else if(mtmp->zombify && is_kamerel(mtmp->data)){
+	} else if(mtmp->zombify && is_kamerel(mtmp->data) && !stoned && !golded && !glassed){
 		if (couldsee(mtmp->mx, mtmp->my)) {
 			pline("But wait...");
 			if(canseemon(mtmp))
@@ -3988,6 +4019,7 @@ register struct monst *mtmp;
 	}
 	else if(mtmp->data == &mons[PM_ASMODEUS]){
 		achieve.killed_asmodeus = 1;
+		u.umadness |= MAD_OVERLORD;
 	}
 	else if(mtmp->data == &mons[PM_DEMOGORGON]){
 		achieve.killed_demogorgon = 1;

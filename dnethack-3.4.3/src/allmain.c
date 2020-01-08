@@ -744,6 +744,10 @@ moveloop()
 		/**************************************************/
 		for (mtmp = fmon; mtmp; mtmp = nxtmon){
 			nxtmon = mtmp->nmon;
+			if(mtmp->m_insight_level > u.uinsight){
+				migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+				continue;
+			}
 			if (!DEADMONSTER(mtmp)
 				&& attacktype(mtmp->data, AT_WDGZ)
 				&& !(controlledwidegaze(mtmp->data) && (mtmp->mpeaceful || mtmp->mtame))
@@ -751,7 +755,7 @@ moveloop()
 				&& couldsee(mtmp->mx, mtmp->my)
 			) m_respond(mtmp);
 		}
-		if(is_ice(u.ux, u.uy) && roll_madness(MAD_FRIGOPHOBIA)){
+		if((is_ice(u.ux, u.uy) || mad_turn(MAD_COLD_NIGHT)) && roll_madness(MAD_FRIGOPHOBIA)){
 			if(!Flying && !Levitation){
 				You("panic from setting foot on ice!");
 				nomul(-1*rnd(6), "panicking");
@@ -806,7 +810,8 @@ moveloop()
 						mtmp->perminvis = FALSE;
 						newsym(mtmp->mx,mtmp->my);
 					}
-				} else if(mtmp->m_insight_level > u.uinsight){
+				}
+				if(mtmp->m_insight_level > u.uinsight){
 					migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
 					continue;
 				}
@@ -1549,6 +1554,38 @@ karemade:
 					exercise(A_CHA, FALSE);
 				}
 			}
+			if(!rn2(8) && !flaming(youracedata) && roll_madness(MAD_COLD_NIGHT)){
+				if(u.usanity <= 88 && !rn2(11)){
+					if(!Breathless && !Blind)
+						Your("breath crystallizes in the airless void!");
+					FrozenAir += (100-u.usanity)/12;
+					delayed_killer = "the cold night";
+					nomul(0, NULL);
+				}
+				roll_av_frigophobia();
+				if(!InvCold_resistance || !rn2(11)){
+					destroy_item(POTION_CLASS, AD_COLD);
+				}
+			} else if(FrozenAir){
+				roll_av_frigophobia();
+				if(!InvCold_resistance || !rn2(11)){
+					destroy_item(POTION_CLASS, AD_COLD);
+				}
+			}
+			
+			if(!rn2(9) && roll_madness(MAD_OVERLORD)){
+				You("feel its burning gaze upon you!");
+				u.ustdy += 9;
+				if(!InvFire_resistance || !rn2(11)){
+					destroy_item(POTION_CLASS, AD_FIRE);
+					destroy_item(SCROLL_CLASS, AD_FIRE);
+				}
+				if(!rn2(11) && roll_madness(MAD_OVERLORD)){
+					u.ustdy += 90;
+					destroy_item(SPBOOK_CLASS, AD_FIRE);
+				}
+				nomul(0, NULL);
+			}
 			
 			//Aprox one check per five monster-gen periods, or one per five while sleeping (averages one additional blast per sleep, so it's really bad.
 			if((u.usleep || !rn2(70)) && !rn2(5) && roll_madness(MAD_DREAMS)){
@@ -1956,7 +1993,8 @@ karemade:
 				mtmp->perminvis = FALSE;
 				newsym(mtmp->mx,mtmp->my);
 			}
-		} else if(mtmp->m_insight_level > u.uinsight){
+		}
+		if(mtmp->m_insight_level > u.uinsight){
 			migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
 			continue;
 		}

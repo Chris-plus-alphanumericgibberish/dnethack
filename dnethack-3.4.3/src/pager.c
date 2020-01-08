@@ -1828,6 +1828,7 @@ get_description_of_attack_type(uchar id)
 	case AT_TENT: return "tentacles";
 	case AT_ARRW: return "launch ammo";
 	case AT_WHIP: return "whip";
+	case AT_VINE: return "vines";
 	case AT_LRCH: return "reaching attack";
 	case AT_HODS: return "mirror attack";
 	case AT_LNCK: return "reaching bite";
@@ -1977,6 +1978,8 @@ get_description_of_damage_type(uchar id)
 	case AD_ACFR: return "holy fire";
 	case AD_DESC: return "dessication";
 	case AD_BLAS: return "blasphemy";
+	case AD_SESN: return "four seasons";
+	case AD_POLN: return "pollen";
 	case AD_DUNSTAN: return "stones throw themselves at target";
 	case AD_IRIS: return "iridescent tentacles";
 	case AD_NABERIUS: return "tarnished bloody fangs";

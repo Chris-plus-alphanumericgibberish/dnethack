@@ -1951,6 +1951,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (Stoned) you_are("turning to stone");
 	if (Golded) you_are("turning to gold");
 	if (Slimed) you_are("turning into slime");
+	if (FrozenAir) you_are("suffocating in the cold night");
 	if (Strangled) you_are((u.uburied) ? "buried" : "being strangled");
 	if (Glib) {
 		Sprintf(buf, "slippery %s", makeplural(body_part(FINGER)));
@@ -2593,6 +2594,7 @@ int final;
 	if (Stoned) dump(youwere, "turning to stone");
 	if (Golded) dump(youwere, "turning to gold");
 	if (Slimed) dump(youwere, "turning into slime");
+	if (FrozenAir) dump(youwere, "suffocating in the cold night");
 	if (Strangled)
 		dump(youwere, (u.uburied) ? "buried" : "being strangled");
 	if (Glib) {

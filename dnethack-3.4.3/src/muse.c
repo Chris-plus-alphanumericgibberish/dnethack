@@ -1617,6 +1617,7 @@ struct monst *mtmp;
 			if (Fire_resistance)
 			    You("are not harmed.");
 			burn_away_slime();
+			melt_frozen_air();
 			if (Half_spell_damage) num = (num+1) / 2;
 			if(u.uvaul_duration) num = (num + 1) / 2;
 			losehp(num, "scroll of fire", KILLED_BY_AN);
@@ -1850,6 +1851,7 @@ struct monst *mtmp;
 #define MUSE_SCR_AMNESIA 12
 #define MUSE_POT_AMNESIA 13
 #define MUSE_POT_GAIN_ABILITY 14
+#define MUSE_MASK 15
 
 boolean
 find_misc(mtmp)
@@ -1924,6 +1926,11 @@ struct monst *mtmp;
 			    (!mtmp->isgd && !mtmp->isshk && !mtmp->ispriest))) {
 			m.misc = obj;
 			m.has_misc = MUSE_POT_GAIN_LEVEL;
+		}
+		nomore(MUSE_MASK);
+		if(obj->otyp == MASK && !obj->oartifact && mtmp->data == &mons[PM_POLYPOID_BEING] && !(mons[obj->corpsenm].geno&G_UNIQ)){
+			m.misc = obj;
+			m.has_misc = MUSE_MASK;
 		}
 		nomore(MUSE_POT_GAIN_ENERGY);
 		if(!nomouth && obj->otyp == POT_GAIN_ABILITY && (!obj->cursed ||
@@ -2366,6 +2373,17 @@ museamnesia:
 		}
 		m_useup(mtmp, otmp);
 	        return 0;
+	case MUSE_MASK:{
+		int pm = otmp->corpsenm;
+		if(canseemon(mtmp))
+			pline("%s puts on a mask!", Monnam(mtmp));
+		m_useup(mtmp, otmp);
+		mtmp->ispolyp = TRUE;
+		newcham(mtmp, &mons[pm], FALSE, FALSE);
+		mtmp->m_insight_level = 0;
+		m_dowear(mtmp, TRUE);
+		init_mon_wield_item(mtmp);
+	}break;
 	case 0: return 0; /* i.e. an exploded wand */
 	default: impossible("%s wanted to perform action %d?", Monnam(mtmp),
 			m.has_misc);

@@ -1878,6 +1878,7 @@ int tmp;
 			if(Strangled) multiplier++;
 			if(Vomiting) multiplier++;
 			if(Slimed) multiplier++;
+			if(FrozenAir) multiplier++;
 			if(Hallucination) multiplier++;
 			if(Fumbling) multiplier++;
 			if(Wounded_legs) multiplier++;
@@ -2046,6 +2047,7 @@ char *hittee;			/* target's name: "you" or mon_nam(mdef) */
 	    if (!rn2(4)) (void) destroy_mitem(mdef, SCROLL_CLASS, AD_FIRE);
 	    if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
 	    if (youdefend && Slimed) burn_away_slime();
+	    if (youdefend && FrozenAir) melt_frozen_air();
 		if(youdefend ? !Fire_resistance : !resists_fire(mdef)){
 			*dmgptr += d(dnum,4);
 		}
@@ -3778,6 +3780,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 			if (!rn2(7)) (void) destroy_mitem(mdef, SPBOOK_CLASS, AD_FIRE);
 		}
 	    if (youdefend && Slimed) burn_away_slime();
+	    if (youdefend && FrozenAir) melt_frozen_air();
 	    messaged = realizes_damage;
 	}
 	if (attacks(AD_COLD, otmp) && (get_artifact(otmp)->inv_prop != ICE_SHIKAI || u.SnSd3duration > monstermoves) ) {

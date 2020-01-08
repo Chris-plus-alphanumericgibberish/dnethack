@@ -515,9 +515,9 @@ unsigned int type;
            return (rn2(2) ? CURSE_ITEMS : (rn2(2) ? DESTRY_WEPN : DROP_BOULDER));
 
        case PM_TITAN:
-           return (rn2(2) ? DROP_BOULDER : LIGHTNING);
+           return (rn2(2) ? DROP_BOULDER : LIGHTNING_BOLT);
        case PM_THRONE_ARCHON:
-           return (rn2(2) ? SUMMON_ANGEL : LIGHTNING);
+           return (rn2(2) ? SUMMON_ANGEL : LIGHTNING_BOLT);
        case PM_KI_RIN:
            return FIRE_PILLAR;
 
@@ -774,6 +774,38 @@ unsigned int type;
 			break;
 		}
 	break;
+	case PM_GAE_ELADRIN:
+		switch (rnd(4)) {
+			case 1:
+				return ICE_STORM;
+			break;
+			case 2:
+				return LIGHTNING;
+			break;
+			case 3:
+				return FIRE_PILLAR;
+			break;
+			case 4:
+				return STERILITY_CURSE;
+			break;
+		}
+	break;
+	case PM_WARDEN_TREE:
+		switch (rnd(4)) {
+			case 1:
+				return ICE_STORM;
+			break;
+			case 2:
+				return GEYSER;
+			break;
+			case 3:
+				return MASS_CURE_CLOSE;
+			break;
+			case 4:
+				return STERILITY_CURSE;
+			break;
+		}
+	break;
 	case PM_KUKER:
 		switch (rnd(6)) {
 			case 6:
@@ -906,7 +938,7 @@ unsigned int type;
 		} else {
 			if(mtmp->mvar2 > 3) mtmp->mvar1 = 0;
 			switch(mtmp->mvar2++){
-				case 0: return LIGHTNING;
+				case 0: return LIGHTNING_BOLT;
 				case 1: return MON_POISON_GAS;
 				case 2: return ICE_STORM;
 				case 3: return FIRE_PILLAR;
@@ -1449,6 +1481,7 @@ fire_spell:
 			if(!rn2(10)) destroy_item(SPBOOK_CLASS, AD_FIRE);
 		}
 		burn_away_slime();
+		melt_frozen_air();
 		stop_occupation();
 		break;
 	    case AD_COLD:
@@ -1786,6 +1819,7 @@ int spellnum;
 	if (Half_spell_damage) dmg = (dmg + 1) / 2;
 	if(u.uvaul_duration) dmg = (dmg + 1) / 2;
 	burn_away_slime();
+	melt_frozen_air();
 	(void) burnarmor(&youmonst);
 	(void) burn_floor_paper(u.ux, u.uy, TRUE, FALSE);
 	stop_occupation();
@@ -1842,36 +1876,36 @@ int spellnum;
 		}
 		stop_occupation();
 	}break;
-    case LIGHTNING:
-		if (mtmp && !dmgtype(mtmp->data, AD_CLRC)) {
+    case LIGHTNING_BOLT:
+		if (mtmp) {
 		   zap = AD_ELEC;
 		   goto ray;
-		} else {
-			boolean reflects;
+		} //else fall through
+    case LIGHTNING:{
+		boolean reflects;
 
-			pline("A bolt of lightning strikes down at you from above!");
-			reflects = ureflects("It bounces off your %s%s.", "");
-			if (reflects || Shock_resistance) {
-				shieldeff(u.ux, u.uy);
-				dmg = 0;
-				if (reflects) break;
-			} else {
-				dmg = d(8, 6);
-			}
-			if (!(reflects || InvShock_resistance)) {
-				destroy_item(WAND_CLASS, AD_ELEC);
-				destroy_item(RING_CLASS, AD_ELEC);
-			}
-			if (Half_spell_damage) dmg = (dmg + 1) / 2;
-			if(u.uvaul_duration) dmg = (dmg + 1) / 2;
-			if (!resists_blnd(&youmonst)) {
-			   You("are blinded by the flash!");
-			   make_blinded((long)rnd(100),FALSE);
-			   if (!Blind) Your1(vision_clears);
-			}
-			stop_occupation();
-			break;
+		pline("A bolt of lightning strikes down at you from above!");
+		reflects = ureflects("It bounces off your %s%s.", "");
+		if (reflects || Shock_resistance) {
+			shieldeff(u.ux, u.uy);
+			dmg = 0;
+			if (reflects) break;
+		} else {
+			dmg = d(8, 6);
 		}
+		if (!(reflects || InvShock_resistance)) {
+			destroy_item(WAND_CLASS, AD_ELEC);
+			destroy_item(RING_CLASS, AD_ELEC);
+		}
+		if (Half_spell_damage) dmg = (dmg + 1) / 2;
+		if(u.uvaul_duration) dmg = (dmg + 1) / 2;
+		if (!resists_blnd(&youmonst)) {
+		   You("are blinded by the flash!");
+		   make_blinded((long)rnd(100),FALSE);
+		   if (!Blind) Your1(vision_clears);
+		}
+		stop_occupation();
+	}break;
 	case SILVER_RAYS:{
 		int n = 0;
 		char * rays;
@@ -2617,8 +2651,15 @@ summon_alien:
 	}
 	stop_occupation();
     break;
+    case STERILITY_CURSE:
+		if(!HSterile && !Drain_resistance){
+			You_feel("old!");
+			HSterile |= FROMOUTSIDE;
+			break;
+		}
+		// else fall through
     case DRAIN_LIFE:  /* simulates player spell "drain life" */
-		if(!mtmp || distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2){
+		if(!mtmp || distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 2 || spellnum == STERILITY_CURSE){
 			if (Drain_resistance) {
 				/* note: magic resistance doesn't protect
 			 * against "drain life" spell
@@ -3202,12 +3243,14 @@ int spellnum;
 		spellnum == PARALYZE || spellnum == CONFUSE_YOU ||
 		spellnum == STUN_YOU || spellnum == DRAIN_ENERGY) && Antimagic) ||
 		((spellnum == MAGIC_MISSILE || spellnum == SLEEP ||
-		spellnum == CONE_OF_COLD || spellnum == LIGHTNING) && Reflecting) ||
+		spellnum == CONE_OF_COLD || spellnum == LIGHTNING ||
+		spellnum == LIGHTNING_BOLT) && Reflecting) ||
 		((spellnum == STUN_YOU || spellnum == PARALYZE) && Free_action) ||
 		(spellnum == FIRE_PILLAR && Fire_resistance) ||
 		(spellnum == CONE_OF_COLD && Cold_resistance) ||
 		(spellnum == SLEEP && Sleep_resistance) ||
 		(spellnum == LIGHTNING && Shock_resistance) ||
+		(spellnum == LIGHTNING_BOLT && Shock_resistance) ||
 		(spellnum == ACID_RAIN && Acid_resistance) ||
 		(spellnum == DRAIN_LIFE && Drain_resistance) ||
 		(spellnum == PLAGUE && Sick_resistance) ||
@@ -3220,7 +3263,7 @@ int spellnum;
 	  return TRUE;
        /* ray attack when monster isn't lined up */
        if(!lined_up(mtmp) && (spellnum == MAGIC_MISSILE ||
-              spellnum == SLEEP || spellnum == CONE_OF_COLD || spellnum == LIGHTNING))
+              spellnum == SLEEP || spellnum == CONE_OF_COLD || spellnum == LIGHTNING_BOLT))
           return TRUE;
        /* drain energy when you have less than 5 */
        if(spellnum == DRAIN_ENERGY && u.uen < 5) return TRUE;
@@ -4623,6 +4666,7 @@ uspsibolt:
 	destroy_mitem(mtmp, SPBOOK_CLASS, AD_FIRE);
 	(void) burn_floor_paper(mtmp->mx, mtmp->my, TRUE, FALSE);
 	break;
+    case LIGHTNING_BOLT:
     case LIGHTNING:
     {
 	boolean reflects;

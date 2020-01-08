@@ -1253,7 +1253,9 @@ int delta;
 {
 	pline("Sanity change: %d + %d", u.usanity, delta);
 	u.usanity += delta;
-	if(u.usanity < 0)
+	if(!u.umadness && u.usanity < 50)
+		u.usanity = 50;
+	else if(u.usanity < 0)
 		u.usanity = 0;
 	if(u.usanity > 100)
 		u.usanity = 100;
@@ -1469,6 +1471,26 @@ roll_frigophobia()
 		else if(roll_madness(MAD_FRIGOPHOBIA)){//Very scared of ice
 			You("panic from the chill!");
 			nomul(-1*rnd(3), "panicking");
+		}
+	}
+}
+
+
+/* Airless Void-aware frigophobia */
+void
+roll_av_frigophobia()
+{
+	if(roll_madness(MAD_FRIGOPHOBIA)){
+		if(FrozenAir && !Breathless){
+			You("panic in the airless void!");
+			nomul(-1*rnd(8), "panicking");
+		} else if(!Cold_resistance){
+			You("panic in the cold!");
+			nomul(-1*rnd(6), "panicking");
+		}
+		else if(roll_madness(MAD_FRIGOPHOBIA)){//Very scared of ice
+			You("panic beneath the airless heavens!");
+			nomul(-1*rnd(4), "panicking");
 		}
 	}
 }

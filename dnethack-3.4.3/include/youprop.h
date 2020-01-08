@@ -166,6 +166,7 @@
 #define Vomiting		u.uprops[VOMITING].intrinsic
 #define Glib			u.uprops[GLIB].intrinsic
 #define Slimed			u.uprops[SLIMED].intrinsic	/* [Tom] */
+#define FrozenAir		u.uprops[FROZEN_AIR].intrinsic
 
 /* Hallucination is solely a timeout; its resistance is extrinsic */
 #define HHallucination		u.uprops[HALLUC].intrinsic

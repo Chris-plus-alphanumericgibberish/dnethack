@@ -3231,6 +3231,19 @@ register struct monst *mtmp;
 					case 5:
 					break;
 				}
+			} else if(ptr == &mons[PM_POLYPOID_BEING]){
+				int masktypes[] = {PM_ELVENKING, PM_ELVENQUEEN, PM_ALABASTER_ELF_ELDER, PM_GROVE_GUARDIAN, 
+								   PM_TULANI_ELADRIN, PM_GAE_ELADRIN, PM_LILLEND, 
+								   PM_DARK_YOUNG, PM_GOAT_SPAWN, PM_TITAN};
+				int i;
+				for(i = d(3,3); i > 0; i--){
+					otmp = mksobj(MASK, FALSE, FALSE);
+					otmp->obj_material = WOOD;
+					otmp->corpsenm = masktypes[rn2(SIZE(masktypes))];
+					fix_object(otmp);
+					bless(otmp);
+					(void) mpickobj(mtmp, otmp);
+				}
 			} else if(ptr == &mons[PM_GWYNHARWYF]){
 				(void)mongets(mtmp, CLOAK);
 				(void)mongets(mtmp, HIGH_BOOTS);
@@ -6865,6 +6878,7 @@ xchar x, y;	/* clone's preferred location or 0 (near mon) */
 	m2->my = mm.y;
 
 	m2->minvent = (struct obj *) 0; /* objects don't clone */
+	m2->ispolyp = FALSE; //real
 	m2->mclone = TRUE; //no death drop
 	m2->mleashed = FALSE;
 #ifndef GOLDOBJ
@@ -7314,6 +7328,9 @@ register int	mmflags;
 	
 	else if(mtmp->data == &mons[PM_KUKER])
 		mtmp->m_insight_level = rnd(20)+rn2(21);
+	
+	else if(mtmp->data == &mons[PM_POLYPOID_BEING])
+		mtmp->m_insight_level = 40;
 	
 	if(mtmp->data == &mons[PM_CHOKHMAH_SEPHIRAH])
 		mtmp->m_lev += u.chokhmah;
@@ -9232,6 +9249,7 @@ struct monst *mtmp, *victim;
 	|| ptr == &mons[PM_ARGENACH_RILMANI] || ptr == &mons[PM_AURUMACH_RILMANI]
 	|| ptr == &mons[PM_ANDROID] || ptr == &mons[PM_GYNOID]
 	) lev_limit = 30;	/* same as player */
+	else if (mtmp && mtmp->ispolyp) lev_limit = max(lev_limit, 30);
 	else if (ptr == &mons[PM_PLUMACH_RILMANI] || ptr == &mons[PM_FERRUMACH_RILMANI]) lev_limit = 20;
 	else if (is_eladrin(ptr) && ptr->mlevel <= 20) lev_limit = 30;
 	else if (ptr == &mons[PM_OONA]) lev_limit = 60;

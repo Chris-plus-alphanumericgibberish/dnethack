@@ -561,7 +561,10 @@ boolean yours; /* is it your fault (for killing monsters) */
 			damu += rnd(20);
 		}
 		/* do property damage first, in case we end up leaving bones */
-		if (adtyp == AD_FIRE) burn_away_slime();
+		if (adtyp == AD_FIRE){
+			burn_away_slime();
+			melt_frozen_air();
+		}
 		if (Invulnerable) {
 		    damu = 0;
 		    You("are unharmed!");

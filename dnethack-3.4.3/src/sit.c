@@ -99,6 +99,7 @@ dosit()
 	    /* must be WWalking */
 	    You(sit_message, "lava");
 	    burn_away_slime();
+	    melt_frozen_air();
 	    if (likes_lava(youracedata)) {
 		pline_The("lava feels warm.");
 		return 1;

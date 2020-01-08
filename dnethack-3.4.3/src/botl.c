@@ -350,6 +350,7 @@ bot2()
 	if(Stunned)	   Sprintf(nb = eos(nb), " Stun");
 	if(Hallucination)  Sprintf(nb = eos(nb), " Hallu");
 	if(Slimed)         Sprintf(nb = eos(nb), " Slime");
+	if(FrozenAir || Strangled)      Sprintf(nb = eos(nb), " Sufct");
 	if(cap > UNENCUMBERED)
 		Sprintf(nb = eos(nb), " %s", enc_stat[cap]);
 	curs(WIN_STATUS, 1, 1);

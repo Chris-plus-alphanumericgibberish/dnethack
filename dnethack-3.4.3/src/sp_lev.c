@@ -1079,13 +1079,16 @@ struct mkroom	*croom;
 		}
 	}
 	if(otmp->otyp == STATUE && (otmp->spe&STATUE_FACELESS) && In_mithardir_quest(&u.uz)){
-		static int statuetypes[] = {PM_ELVENKING, PM_ELVENKING, PM_ELVENQUEEN, PM_ELVENQUEEN,
+		int statuetypes[] = {PM_ELVENKING, PM_ELVENKING, PM_ELVENQUEEN, PM_ELVENQUEEN,
 			PM_ELF_LORD, PM_ELF_LORD, PM_ELF_LADY, PM_ELF_LADY, PM_DOPPELGANGER, PM_DOPPELGANGER,
 			PM_NOBLEMAN, PM_NOBLEMAN, PM_NOBLEWOMAN, PM_NOBLEWOMAN, PM_DARK_YOUNG, PM_COURE_ELADRIN,
 			PM_NOVIERE_ELADRIN, PM_BRALANI_ELADRIN, PM_FIRRE_ELADRIN, PM_SHIERE_ELADRIN, PM_GHAELE_ELADRIN,
-			PM_TULANI_ELADRIN, PM_MASKED_QUEEN, PM_QUEEN_OF_STARS,
+			PM_TULANI_ELADRIN, PM_DRACAE_ELADRIN, PM_MASKED_QUEEN, PM_QUEEN_OF_STARS,
 			PM_GOD,  PM_DREAD_SERAPH, PM_TITAN, PM_TITAN, PM_TITAN};
 		otmp->corpsenm = statuetypes[rn2(SIZE(statuetypes))];
+		if(otmp->corpsenm == PM_DRACAE_ELADRIN){
+			otmp->spe |= STATUE_EPRE;
+		}
 		if(otmp->corpsenm == PM_MASKED_QUEEN || otmp->corpsenm == PM_GOD)
 			otmp->spe &= ~STATUE_FACELESS;
 		if(otmp->corpsenm == PM_GOD) switch(rn2(3)){
@@ -1099,6 +1102,21 @@ struct mkroom	*croom;
 			otmp = oname(otmp, "the wandering dancer");
 			break;
 		}
+		fix_object(otmp);
+	}
+	
+	/* Note: fixes the output of the previous code-block, too */
+	if(otmp->spe&STATUE_EPRE){
+		if(dungeon_topology.eprecursor_typ == PRE_DRACAE){
+			otmp->corpsenm = PM_DRACAE_ELADRIN;
+		} else {
+			otmp->corpsenm = PM_TULANI_ELADRIN;
+		}
+		fix_object(otmp);
+	}
+	/* Note: fixes the output of the previous two code-blocks, too */
+	if(otmp->corpsenm == PM_TULANI_ELADRIN && dungeon_topology.alt_tulani){
+		otmp->corpsenm = PM_GAE_ELADRIN;
 		fix_object(otmp);
 	}
 	

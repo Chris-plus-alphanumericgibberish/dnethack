@@ -422,6 +422,13 @@ unsigned int *stuckid, *steedid;	/* STEED */
 	mread(fd, (genericptr_t) &mons[PM_WANDERING_HORROR], sizeof(struct permonst));
 	mons[PM_WANDERING_HORROR].mname = tname;
 	}
+	
+	/* Fix up the highest ranking eladrins */
+	if(dungeon_topology.alt_tulani){
+		unsigned short genotmp = mons[PM_TULANI_ELADRIN].geno;
+		mons[PM_TULANI_ELADRIN].geno = mons[PM_GAE_ELADRIN].geno;
+		mons[PM_GAE_ELADRIN].geno = genotmp;
+	}
 	/* Fix up the alignment quest nemesi */
 	mons[PM_OONA].mcolor = (u.oonaenergy == AD_FIRE) ? CLR_RED 
 						 : (u.oonaenergy == AD_COLD) ? CLR_CYAN 

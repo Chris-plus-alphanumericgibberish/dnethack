@@ -711,17 +711,22 @@ struct attack *mattk;
 		it's better than "sting" when not a stinging attack... */
 		return (!mwep || !mwep->opoisoned) ? "attack" : "weapon";
 	}
-	else if (mattk->adtyp == AD_SHDW){
+	else if(mattk->aatyp == AT_SRPR){
+		if (mattk->adtyp == AD_SHDW){
 		return "shadow blade";
 	}
 	else if (mattk->adtyp == AD_STAR){
 		return "starlight rapier";
 	}
+		else if (mattk->adtyp == AD_BLUD){
+			return "blade of rotted blood";
+		}
+		else {
+			return "blade";
+		}
+	}
 	else if (mattk->adtyp == AD_MERC){
 		return "blade of metallic mercury";
-	}
-	else if (mattk->adtyp == AD_BLUD){
-		return "blade of rotted blood";
 	}
 	else if (mattk->aatyp == AT_HODS){
 		struct obj *mwep = uwep;

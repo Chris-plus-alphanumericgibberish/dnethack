@@ -821,6 +821,7 @@ int tary;
 		case AT_BUTT:	// 
 		case AT_TENT:	// 
 		case AT_WHIP:	// 
+		case AT_VINE:	// uses touch accuracy
 		case AT_WISP:	// 
 		case AT_HITS:	// always hits
 		case AT_TUCH:	// uses touch accuracy
@@ -1487,7 +1488,7 @@ struct attack * prev_and_buf;	/* double-duty pointer: 1st, is the previous attac
 boolean by_the_book;			/* if true, gives the "standard" attacks for [magr]. Useful for the pokedex. */
 int * subout;					/* records what attacks have been subbed out */
 #define SUBOUT_UNDEAD	0x0001	/* derived undead special attack */
-#define SUBOUT_FIENDS	0x0002	/* Five Fiends of Chaos1 spellcasting */
+#define SUBOUT_SPELLS	0x0002	/* Spellcasting attack instead (Five Fiends of Chaos1 and Gae) */
 #define SUBOUT_BAEL1	0x0004	/* Bael's Sword Archon attack chain */
 #define SUBOUT_BAEL2	0x0008	/* Bael's marilith-hands attack chain */
 #define SUBOUT_DEMO1	0x0010	/* Demogorgon's shredding rend */
@@ -1617,14 +1618,33 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 				(pa == &mons[PM_TIAMAT__THE_FIEND_OF_WIND] && !rn2(4)) ||
 				(pa == &mons[PM_CHAOS] && rn2(3))
 				){
-				*subout |= SUBOUT_FIENDS;
+				*subout |= SUBOUT_SPELLS;
 				attk->aatyp = AT_MAGC;
 				attk->adtyp = AD_SPEL;
 				attk->damn = 0;
 				attk->damd = 0;
 			}
 		}
-		else if (*subout&SUBOUT_FIENDS){
+		else if (*subout&SUBOUT_SPELLS){
+			/* If spellcasting, stop after the first index */
+			return &noattack;
+		}
+	}
+	if(!by_the_book && pa == &mons[PM_GAE_ELADRIN]){
+		// first index -- determing if using the alternate attack set (solo spellcasting)
+		if (*indexnum == 0){
+			if (!magr->mcan
+				&& !magr->mspec_used
+				&& !rn2(3)
+			){
+				*subout |= SUBOUT_SPELLS;
+				attk->aatyp = AT_MAGC;
+				attk->adtyp = AD_CLRC;
+				attk->damn = 0;
+				attk->damd = 6;
+			}
+		}
+		else if (*subout&SUBOUT_SPELLS){
 			/* If spellcasting, stop after the first index */
 			return &noattack;
 		}
@@ -1956,7 +1976,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 	return attk;
 }
 #undef SUBOUT_UNDEAD
-#undef SUBOUT_FIENDS
+#undef SUBOUT_SPELLS
 #undef SUBOUT_BAEL1
 #undef SUBOUT_BAEL2
 #undef SUBOUT_DEMO1
@@ -2321,6 +2341,17 @@ struct attack *attk;
 							(attk->adtyp == AD_MERC) ? " with a blade of mercury!" :
 							(attk->adtyp == AD_BLUD) ? " with a blade of blood!" : "!";
 					}
+					if (youdef)
+						specify_you = TRUE;
+				}
+		case AT_VINE:
+				if (!verb){
+					verb = "touch";
+					ending = (attk->adtyp == AD_DRLI) ? " with withering vines!" :
+						(attk->adtyp == AD_ECLD) ? " with hoarfrosted vines!" :
+						(attk->adtyp == AD_SHRD) ? " with growing vines!" :
+						(attk->adtyp == AD_POLN) ? " with flowering vines!" : 
+						" with crawling vines!";
 					if (youdef)
 						specify_you = TRUE;
 				}
@@ -3224,6 +3255,7 @@ int flat_acc;
 	if ((youagr && u.sealsActive&SEAL_CHUPOCLOPS && !thrown) ||
 		(weapon && arti_shining(weapon)) ||
 		(!thrown && attk->aatyp == AT_TUCH) ||
+		(!thrown && attk->aatyp == AT_VINE) ||
 		(!thrown && attk->aatyp == AT_SRPR)) {
 		if (youdef) {
 			defn_acc += AC_VALUE(base_uac() + u.uspellprot) + 10 - u.uspellprot;
@@ -3418,6 +3450,7 @@ boolean ranged;
 	case AT_BUTT:
 	case AT_TENT:
 	case AT_WHIP:
+	case AT_VINE:	// uses touch accuracy
 	case AT_WISP:
 	case AT_HITS:	// always hits
 	case AT_TUCH:	// uses touch accuracy
@@ -3829,8 +3862,10 @@ boolean ranged;
 			}
 
 			/* burn away slime (player-only) */
-			if (youdef)
+			if (youdef){
 				burn_away_slime();
+				melt_frozen_air();
+			}
 
 			/* destory items in inventory */
 			/* damage can only kill the player, right now, but it will injure monsters */
@@ -4534,6 +4569,38 @@ boolean ranged;
 		}
 		return result;
 
+	case AD_POLN:
+		/* make physical attack */
+		if (vis && dohitmsg){
+			xyhitmsg(magr, mdef, attk);
+		}
+		alt_attk.adtyp = AD_PHYS;
+		result = xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, FALSE, dmg, dieroll, vis, ranged);
+		/* return early if cannot continue the attack */
+		if (result&(MM_DEF_DIED|MM_DEF_LSVD))
+			return result;
+		
+		if(youdef){
+			You("are covered in pollen!");
+			if(!Breathless && !nonliving(pd)){
+				You("start sneezing uncontrollably!");
+				nomul(-1, "paralyzed by an allergy fit");
+			}
+		}
+		else {
+			if(canseemon(mdef))
+				pline("%s is covered in pollen!", Monnam(mdef));
+			if(!breathless_mon(mdef) && !nonliving_mon(mdef)){
+				if(canseemon(mdef))
+					pline("%s starts sneezing uncontrollably!", Monnam(mdef));
+				mdef->mcanmove = 0;
+				mdef->mfrozen = rnd(6);
+				mdef->mstrategy &= ~STRAT_WAITFORU;
+			}
+		}
+		
+		return result;
+
 //////////////////////////////////////////////////////////////
 // PHYSICAL DAMAGE AFTER SPECIAL EFFECTS
 //////////////////////////////////////////////////////////////
@@ -4801,6 +4868,13 @@ boolean ranged;
 			&& !(pa == &mons[PM_VAMPIRE_BAT] && !(youdef ? u.usleep : mdef->msleeping))	/* vampire bats need sleeping victims */
 			&& !rn2(3)
 			) {
+			if(attk->aatyp == AT_VINE && youdef && !HSterile){
+				You_feel("old.");
+				HSterile |= FROMOUTSIDE;
+				alt_attk.adtyp = AD_PHYS;
+				/* make attack without hitmsg */
+				return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, FALSE, dmg, dieroll, vis, ranged);
+			}
 			/* blood bloaters split (but not the player) */
 			if (!youagr && pa == &mons[PM_BLOOD_BLOATER]){
 				(void)split_mon(magr, 0);
@@ -4817,8 +4891,12 @@ boolean ranged;
 			}
 
 			/* this line should NOT be displayed in addition to "your blood is being drained" */
-			if (youdef && !(attk->adtyp == AD_VAMP && has_blood_mon(mdef)))
-				pline("%s feeds on your life force!", Monnam(magr));
+			if(youdef){
+				if(attk->aatyp == AT_VINE && attk->adtyp == AD_DRLI){
+					if(dohitmsg) Your("life force withers as well!");
+				} else if (!(attk->adtyp == AD_VAMP && has_blood_mon(mdef)))
+					pline("%s feeds on your life force!", Monnam(magr));
+			}
 
 			/* drain life! */
 			if (youdef) {
@@ -5216,6 +5294,12 @@ boolean ranged;
 					break;
 				case AT_TENT:
 					pline("%s tentacles catch on %s armor!",
+						(youagr ? "Your" : s_suffix(Monnam(magr))),
+						(youdef ? "your" : s_suffix(mon_nam(mdef)))
+						);
+					break;
+				case AT_VINE:
+					pline("%s vines grow into %s armor!",
 						(youagr ? "Your" : s_suffix(Monnam(magr))),
 						(youdef ? "your" : s_suffix(mon_nam(mdef)))
 						);
@@ -7125,7 +7209,28 @@ boolean ranged;
 	case AD_OONA:
 		/* use correct damage type */
 		alt_attk.adtyp = u.oonaenergy;
-		return xmeleehurty(magr, mdef, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+
+	case AD_SESN:
+		switch(rnd(4)){
+			case 1:
+				//Winter: Frozen
+				alt_attk.adtyp = AD_ECLD;
+			break;
+			case 2:
+				//Spring: Growing
+				alt_attk.adtyp = AD_SHRD;
+			break;
+			case 3:
+				//Summer: 
+				alt_attk.adtyp = AD_POLN;
+			break;
+			case 4:
+				//Fall: Withering
+				alt_attk.adtyp = AD_DRLI;
+			break;
+		}
+		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
 
 	case AD_HDRG:
 		/* use halfdragon's breath type */
@@ -7135,7 +7240,7 @@ boolean ranged;
 			alt_attk.adtyp = magr->mvar1;
 		else
 			alt_attk.adtyp = AD_COLD;
-		return xmeleehurty(magr, mdef, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
 
 	case AD_RBRE:	/* should actually be breath-only */
 	case AD_RETR:
@@ -7146,7 +7251,7 @@ boolean ranged;
 		case 1: alt_attk.adtyp = AD_COLD; break;
 		case 2: alt_attk.adtyp = AD_ELEC; break;
 		}
-		return xmeleehurty(magr, mdef, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
 
 //////////////////////////////////////////////////////////////
 // BINDER SPIRIT ATTACKS
@@ -8794,8 +8899,10 @@ int vis;
 			else
 				golemeffects(mdef, AD_FIRE, fulldmg);
 			/* burn away slime */
-			if (youdef)
+			if (youdef){
 				burn_away_slime();
+				melt_frozen_air();
+			}
 		}
 		else
 			dmg = 0;
@@ -9502,8 +9609,10 @@ int vis;
 				destroy_item2(mdef, SPBOOK_CLASS, AD_FIRE, youdef);
 		}
 
-		if (youdef)
+		if (youdef){
 			burn_away_slime();
+			melt_frozen_air();
+		}
 
 		if (dmg)
 			result = xdamagey(magr, mdef, attk, dmg, FALSE);
@@ -10889,7 +10998,7 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 			unarmed_punch = TRUE;
 		else if (attk->aatyp == AT_KICK && !thrown)	/* monsdmg == 0 for a player's basic kick, monsdmg == -1 for a player's clumsy kick -- different from a horse's kick! */
 			unarmed_kick = TRUE;
-		else if (attk->aatyp == AT_TUCH && (attk->adtyp == AD_SHDW || attk->adtyp == AD_STAR || attk->adtyp == AD_BLUD || attk->adtyp == AD_MERC) && !thrown)
+		else if ((attk->aatyp == AT_SRPR || attk->adtyp == AD_MERC) && !thrown)
 			fake_valid_weapon_attack = TRUE;
 		else
 			natural_strike = TRUE;

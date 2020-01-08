@@ -2171,6 +2171,7 @@ struct obj	*sobj;
 		else {
 		    pline_The("scroll erupts in a tower of flame!");
 		    burn_away_slime();
+		    melt_frozen_air();
 		}
 		explode(u.ux, u.uy, AD_FIRE, SCROLL_CLASS, (2*(rn1(damlevel, damlevel) - (damlevel-1) * cval) + 1)/3,
 							EXPL_FIERY, 1);

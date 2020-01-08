@@ -117,6 +117,7 @@ boolean pushing;
 		    You("are hit by molten lava%c",
 			Fire_resistance ? '.' : '!');
 			burn_away_slime();
+			melt_frozen_air();
 		    losehp(d((Fire_resistance ? 1 : 3), 6),
 			   "molten lava", KILLED_BY);
 		} else if (!fills_up && flags.verbose &&
