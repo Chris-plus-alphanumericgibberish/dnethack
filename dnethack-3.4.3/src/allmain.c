@@ -3100,27 +3100,29 @@ printAttacks(buf, ptr)
 		"[[Holy fire]]", 		/*121*/
 		"[[Dessication]]",		/*122*/
 		"[[Anger god]]",		/*123*/
+		"[[four seasons]]",		/*124*/
+		"[[pollen]]",			/*125*/
 		// "[[ahazu abduction]]",	/**/
-		"[[stone choir]]",		/*124*/
-		"[[water vampire]]",	/*125*/
-		"[[bloody fangs]]",		/*126*/
-		"[[item freeing]]",		/*127*/
-		"[[rainbow feathers]]",	/*128*/
-		"[[Vorlon explosion]]",	/*129*/
-		"[[cold explosion]]",	/*130*/
-		"[[fire explosion]]",	/*131*/
-		"[[shock explosion]]",	/*132*/
-		"[[physical explosion]]",/*133*/
-		"[[Vorlon missile]]",	/*134*/
-		"[[Warmachine missile]]",/*135*/
-		"[[clerical spell]]",	/*136*/
-		"[[mage spell]]",		/*137*/
-		"[[random breath type]]",/*138*/
-		"[[random gaze type]]",	/*139*/
-		"[[random elemental gaze]]",/*140*/
-		"[[Amulet theft]]",		/*141*/
-		"[[Intrinsic theft]]",	/*142*/
-		"[[Quest Artifact theft]]"/*143*/
+		"[[stone choir]]",		/*126*/
+		"[[water vampire]]",	/*127*/
+		"[[bloody fangs]]",		/*128*/
+		"[[item freeing]]",		/*129*/
+		"[[rainbow feathers]]",	/*130*/
+		"[[Vorlon explosion]]",	/*131*/
+		"[[cold explosion]]",	/*132*/
+		"[[fire explosion]]",	/*133*/
+		"[[shock explosion]]",	/*134*/
+		"[[physical explosion]]",/*135*/
+		"[[Vorlon missile]]",	/*136*/
+		"[[Warmachine missile]]",/*137*/
+		"[[clerical spell]]",	/*138*/
+		"[[mage spell]]",		/*139*/
+		"[[random breath type]]",/*140*/
+		"[[random gaze type]]",	/*141*/
+		"[[random elemental gaze]]",/*142*/
+		"[[Amulet theft]]",		/*143*/
+		"[[Intrinsic theft]]",	/*144*/
+		"[[Quest Artifact theft]]"/*145*/
 	};
 	for(i = 0; i<6; i++){
 		attk = &ptr->mattk[i];
