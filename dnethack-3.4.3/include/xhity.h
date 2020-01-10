@@ -40,12 +40,7 @@
 #define ATTACKCHECK_BLDTHRST	0x02	/* attack against the player's will */
 
 /* TODO: put these in their specified header files */
-/* additional TODO: add these to monsters in monst.c */
-#define MB_IRON				0x01000000L
-#define MB_SILVER			0x02000000L
 /* mondata.h */
-#define is_iron_mon(mon)	(((mon)->data->mflagsb & MB_IRON) != 0L)
-#define is_silver_mon(mon)	(((mon)->data->mflagsb & MB_SILVER) != 0L || ((mon)==&youmonst && u.sealsActive&SEAL_EDEN))
 #define is_holy_mon(mon)	(is_uvuudaum((mon)->data) || ((mon)->mfaction == ILLUMINATED))
 #define is_unholy_mon(mon)	((mon)->data == &mons[PM_UVUUDAUM])
 /* obj. h*/

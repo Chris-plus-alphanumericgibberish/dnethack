@@ -115,6 +115,25 @@
 				 (ptr) == &mons[PM_FLAMING_SPHERE] || \
 				 (ptr) == &mons[PM_FIRE_ELEMENTAL] || \
 				 (ptr) == &mons[PM_SALAMANDER])
+#define is_gold(ptr)	((ptr) == &mons[PM_GOLD_GOLEM] || \
+				 (ptr) == &mons[PM_GOLDEN_HEART] || \
+				 (ptr) == &mons[PM_TREASURY_GOLEM] || \
+				 (ptr) == &mons[PM_AURUMACH_RILMANI] || \
+				 (ptr) == &mons[PM_ARA_KAMEREL] || \
+				 (ptr) == &mons[PM_ACERERAK] || \
+				 (ptr) == &mons[PM_RADIANT_PYRAMID])
+#define is_iron(ptr)	((ptr) == &mons[PM_IRON_PIERCER] || \
+				 (ptr) == &mons[PM_IRON_GOLEM] || \
+				 (ptr) == &mons[PM_CHAIN_GOLEM] || \
+				 (ptr) == &mons[PM_SCRAP_TITAN] || \
+				 (ptr) == &mons[PM_HELLFIRE_COLOSSUS] || \
+				 (ptr) == &mons[PM_HELLFIRE_ORB] || \
+				 (ptr) == &mons[PM_FERRUMACH_RILMANI])
+#define is_iron_mon(mon)	(is_iron((mon)->data))
+#define is_silver(ptr)	((ptr) == &mons[PM_ARGENACH_RILMANI] || \
+				 (ptr) == &mons[PM_AMM_KAMEREL] || \
+				 (ptr) == &mons[PM_ARGENTUM_GOLEM])
+#define is_silver_mon(mon)	(is_silver((mon)->data))
 #define is_stone(ptr)	((ptr) == &mons[PM_DUST_VORTEX] || \
 				 (ptr) == &mons[PM_EARTH_ELEMENTAL] || \
 				 (ptr) == &mons[PM_TERRACOTTA_SOLDIER] || \

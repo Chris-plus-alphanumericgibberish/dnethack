@@ -3580,9 +3580,8 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 		break;
 		
 	case AD_GOLD:
-		if (resists_ston(mon)) {
-		sho_shieldeff = TRUE;
-		} else if (mon->misc_worn_check & W_ARMS && (*ootmp = which_armor(mon, W_ARMS)) && (*ootmp)->obj_material != GOLD) {
+		/* Note: handled elsewhere, this only figures out which items should be affected */
+		if (mon->misc_worn_check & W_ARMS && (*ootmp = which_armor(mon, W_ARMS)) && (*ootmp)->obj_material != GOLD) {
 			/* destroy shield; victim survives */
 		} else if (mon->misc_worn_check & W_ARMC && (*ootmp = which_armor(mon, W_ARMC)) && (*ootmp)->obj_material != GOLD) {
 			/* destroy cloak */
@@ -3834,7 +3833,7 @@ xchar sx, sy;
 		} else {
 			struct obj *itemp, *inext;
 			if (!Golded && !(Stone_resistance && youracedata != &mons[PM_STONE_GOLEM])
-				&& youracedata != &mons[PM_GOLD_GOLEM]
+				&& !is_gold(youracedata)
 				&& !(poly_when_golded(youracedata) &&
 				polymon(PM_GOLD_GOLEM))
 			) {
@@ -4307,6 +4306,7 @@ int dx, dy, range, flat;
 								inext = itemp->nobj;
 								set_material(itemp, GOLD);
 							}
+							if(!resists_ston(mon) && !is_gold(mon->data))
 							minstagoldify(mon,FALSE);
 						}
 					} else if (tmp == MAGIC_COOKIE) { /* disintegration */
