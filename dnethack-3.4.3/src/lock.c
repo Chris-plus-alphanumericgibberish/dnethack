@@ -217,6 +217,8 @@ forcelock()	/* try to force a locked chest */
 			observe_quantum_cat(xlock.box, TRUE); //TRUE: use past tense
 		}else if(xlock.box->spe == 4){
 			open_coffin(xlock.box, TRUE); //TRUE: use past tense
+		}else if(xlock.box->spe == 5){
+			open_sarcophagus(xlock.box, TRUE); //TRUE: use past tense
 		}
 		while ((otmp = xlock.box->cobj) != 0) {
 		obj_extract_self(otmp);

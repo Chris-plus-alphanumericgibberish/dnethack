@@ -1863,6 +1863,7 @@ E void NDECL(getlock);
 
 E void FDECL(observe_quantum_cat, (struct obj *, BOOLEAN_P));
 E void FDECL(open_coffin, (struct obj *, BOOLEAN_P));
+E void FDECL(open_sarcophagus, (struct obj *, BOOLEAN_P));
 #ifdef GOLDOBJ
 E int FDECL(collect_obj_classes,
 	(char *,struct obj *,BOOLEAN_P,boolean FDECL((*),(OBJ_P)), int *));

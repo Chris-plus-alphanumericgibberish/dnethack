@@ -2242,6 +2242,8 @@ register struct obj *obj;
 			wt += mons[PM_HOUSECAT].cwt;
 		}else if(obj->spe == 4){
 			wt += mons[PM_VAMPIRE].cwt;
+		}else if(obj->spe == 5){
+			wt += mons[PM_NITOCRIS].cwt;
 		}
 	}
 	if ((Is_container(obj) && obj->otyp != MAGIC_CHEST) || obj->otyp == STATUE) {

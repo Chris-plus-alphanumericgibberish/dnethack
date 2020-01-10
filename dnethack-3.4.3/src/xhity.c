@@ -5981,6 +5981,8 @@ boolean ranged;
 #ifdef SEDUCE
 	case AD_SSEX:
 #endif
+	{
+		boolean goatspawn = (pa == &mons[PM_SMALL_GOAT_SPAWN] || pa == &mons[PM_GOAT_SPAWN] || pa == &mons[PM_GIANT_GOAT_SPAWN]);
 		/* make physical attack */
 		alt_attk.adtyp = AD_PHYS;
 		result = xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
@@ -6032,6 +6034,14 @@ boolean ranged;
 				}
 				if ((pa == &mons[PM_FIERNA] || pa == &mons[PM_PALE_NIGHT]) && rnd(20) < 15) return MM_HIT;
 				if (((MON_WEP(magr)) && pa == &mons[PM_ALRUNES]) && !rn2(20)) return MM_HIT;
+				if (goatspawn && (
+					dmgtype(youracedata, AD_SEDU)
+					|| dmgtype(youracedata, AD_SSEX)
+					|| dmgtype(youracedata, AD_LSEX)
+					|| magr->mcan 
+					|| engring
+					|| !(uarm || uarmu || uarmh || uarmg || uarmf || uarmc || uwep || uswapwep)
+				)) return MM_HIT;
 				if (dmgtype(youracedata, AD_SEDU)
 #ifdef SEDUCE
 					|| dmgtype(youracedata, AD_SSEX) || dmgtype(youracedata, AD_LSEX)
@@ -6064,10 +6074,14 @@ boolean ranged;
 					m_dowear(magr, FALSE);
 					return MM_HIT;
 				default:
-					if (!tele_restrict(magr))
-						(void)rloc(magr, FALSE);
-					monflee(magr, 0, FALSE, FALSE);
-					return MM_AGR_STOP;
+					if(goatspawn){
+						return MM_AGR_STOP;
+					} else {
+						if (!tele_restrict(magr))
+							(void)rloc(magr, FALSE);
+						monflee(magr, 0, FALSE, FALSE);
+						return MM_AGR_STOP;
+					}
 				}
 				break;
 
@@ -6132,6 +6146,13 @@ boolean ranged;
 		}
 		/* monsters just steal items from each other */
 		else {
+			if (goatspawn && (
+				magr->mcan 
+				|| !(which_armor(mdef, W_ARM) || which_armor(mdef, W_ARMU) || which_armor(mdef, W_ARMH) || 
+					 which_armor(mdef, W_ARMG) || which_armor(mdef, W_ARMF) || which_armor(mdef, W_ARMC) ||
+					 MON_WEP(mdef) || MON_SWEP(mdef)
+				)
+			)) return MM_HIT;
 			if (notmcan) {
 				/* select item from defender's inventory */
 				for (otmp = mdef->minvent; otmp; otmp = otmp->nobj)
@@ -6174,8 +6195,11 @@ boolean ranged;
 					mselftouch(mdef, (const char *)0, FALSE);
 					if (mdef->mhp <= 0)
 						return (MM_HIT | MM_DEF_DIED | ((youagr || grow_up(magr, mdef)) ? 0 : MM_AGR_DIED));
-					if (magr->data->mlet == S_NYMPH &&
-						!tele_restrict(magr)) {
+					if(goatspawn)
+						result |= MM_AGR_STOP;
+					else if (magr->data->mlet == S_NYMPH &&
+						!tele_restrict(magr)
+					){
 						(void)rloc(magr, FALSE);
 						result |= MM_AGR_STOP;
 						if (vis && !canspotmon(magr))
@@ -6186,7 +6210,7 @@ boolean ranged;
 			}
 		}
 		return result;
-
+	} //end of seduction block
 		/* steal gold is... similar in that it steals items? */
 	case AD_SGLD:
 		/* make physical attack */

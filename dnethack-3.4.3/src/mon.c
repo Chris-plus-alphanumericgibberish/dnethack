@@ -21,6 +21,7 @@ extern int monstr[];
 
 STATIC_DCL boolean FDECL(restrap,(struct monst *));
 STATIC_DCL int FDECL(scent_callback,(genericptr_t, int, int));
+STATIC_DCL void FDECL(dead_familiar,(long));
 int scentgoalx, scentgoaly;
 
 #ifdef OVL2
@@ -3305,9 +3306,13 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 
 	/* undead vs civs */
 	if(!(In_quest(&u.uz) || u.uz.dnum == temple_dnum || u.uz.dnum == tower_dnum || In_cha(&u.uz) || Is_rogue_level(&u.uz) || Inhell || Is_astralevel(&u.uz))){
-		if(is_undead_mon(magr) && (!always_hostile_mon(mdef) && !is_undead_mon(mdef) && !(is_animal(md) && !is_domestic(md)) && !mindless_mon(mdef)))
+		if(is_undead_mon(magr) && 
+			(!is_witch_mon(mdef) && !always_hostile_mon(mdef) && !is_undead_mon(mdef) && !(is_animal(md) && !is_domestic(md)) && !mindless_mon(mdef))
+		)
 			return ALLOW_M|ALLOW_TM;
-		if((!always_hostile_mon(magr) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr)) && is_undead_mon(mdef))
+		if((!always_hostile_mon(magr) && !is_witch_mon(magr) && !is_undead_mon(magr) && !(is_animal(ma) && !is_domestic(ma)) && !mindless_mon(magr))
+			&& is_undead_mon(mdef)
+		)
 			return ALLOW_M|ALLOW_TM;
 	}
 	
@@ -3827,6 +3832,10 @@ register struct monst *mtmp;
 		set_mon_data(mtmp, &mons[PM_HUMAN_WERERAT], -1);
 	else if (mtmp->data == &mons[PM_ANUBAN_JACKAL])
 		set_mon_data(mtmp, &mons[PM_ANUBITE], -1);
+
+	if(mtmp->data == &mons[PM_WITCH_S_FAMILIAR]){
+		dead_familiar(mtmp->mvar1);
+	}
 
 	/* if MAXMONNO monsters of a given type have died, and it
 	 * can be done, extinguish that monster.
@@ -6673,6 +6682,18 @@ struct monst *mtmp;
 	int mndx = monsndx(mtmp->data);
 	
 	return max(1, monstr[mndx]/10);
+}
+
+STATIC_OVL void
+dead_familiar(id)
+long id;
+{
+	struct monst *mtmp;
+	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+		if(id == (long)mtmp->m_id){
+			pline("%s screams in dismay!", Monnam(mtmp));
+			monflee(mtmp, 0, FALSE, TRUE);
+		}
 }
 
 #endif /* OVLB */

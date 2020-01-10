@@ -369,6 +369,7 @@ Helmet_on()
 	case PONTIFF_S_CROWN:
 	case SEDGE_HAT:
 	case WAR_HAT:
+	case WITCH_HAT:
 	case ELVEN_HELM:
 	case ARCHAIC_HELM:
 	case LEATHER_HELM:
@@ -473,6 +474,7 @@ Helmet_off()
 	case PONTIFF_S_CROWN:
 	case SEDGE_HAT:
 	case WAR_HAT:
+	case WITCH_HAT:
 	case ELVEN_HELM:
 	case ARCHAIC_HELM:
 	case LEATHER_HELM:

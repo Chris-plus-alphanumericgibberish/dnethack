@@ -2421,6 +2421,33 @@ boolean past;
     return;
 }
 
+void
+open_sarcophagus(box, past)
+struct obj *box;
+boolean past;
+{
+    struct monst *mummy;
+    xchar ox, oy;
+
+	pline(past ? "That wasn't %s, it was a sarcophagus!" : "This isn't %s, it's a sarcophagus!", an(simple_typename(box->otyp)));
+    box->spe = 3;		/* box->owt will be updated below */
+    if (get_obj_location(box, &ox, &oy, 0))
+		box->ox = ox, box->oy = oy;	/* in case it's being carried */
+
+    mummy = makemon(&mons[PM_NITOCRIS], box->ox, box->oy, NO_MM_FLAGS);
+	set_malign(mummy);
+	if (!canspotmon(mummy)){
+	    You("think %s brushed against your %s.", something, body_part(HAND));
+	}
+	else{
+	    if(Hallucination) 
+			pline("You want your mummy. Fortunately, she's right here!");
+	    else pline(past ? "There was a black-wrapped mummy in the sarcophagus! She rises." : "There is a black-wrapped mummy in the sarcophagus! She rises.");
+	}
+    box->owt = weight(box);
+    return;
+}
+
 #undef Icebox
 STATIC_OVL
 char
@@ -2715,6 +2742,10 @@ register int held;
 	    quantum_cat = TRUE;	/* for adjusting "it's empty" message */
 	}else if(obj->spe == 4){
 	    open_coffin(obj, FALSE); //FALSE: the box was not destroyed. Use present tense.
+	    used = 1;
+		return used;
+	}else if(obj->spe == 5){
+	    open_sarcophagus(obj, FALSE); //FALSE: the box was not destroyed. Use present tense.
 	    used = 1;
 		return used;
 	}

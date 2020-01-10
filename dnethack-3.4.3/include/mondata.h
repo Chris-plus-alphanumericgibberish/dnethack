@@ -140,6 +140,7 @@
 				 || (ptr) == &mons[PM_LETHE_ELEMENTAL] \
 				 )
 #define is_uvuudaum(ptr)	(ptr == &mons[PM_UVUUDAUM] || ptr == &mons[PM_MASKED_QUEEN])
+#define is_witch_mon(mon)	((mon)->data == &mons[PM_APPRENTICE_WITCH] || (mon)->data == &mons[PM_WITCH] || (mon)->data == &mons[PM_COVEN_LEADER])
 #define removed_innards(ptr)	(((ptr) == &mons[PM_HUNGRY_DEAD]) || \
 						 ((ptr) == &mons[PM_KOBOLD_MUMMY]) || \
 						 ((ptr) == &mons[PM_GNOME_MUMMY]) || \
@@ -154,6 +155,7 @@
 						 ((ptr) == &mons[PM_SHAMBLING_HORROR] && u.shambin == 3) || \
 						 ((ptr) == &mons[PM_STUMBLING_HORROR] && u.stumbin == 3) || \
 						 ((ptr) == &mons[PM_WANDERING_HORROR] && u.wandein == 3) || \
+						 ((ptr) == &mons[PM_NITOCRIS]) || \
 						 ((ptr) == &mons[PM_PHARAOH]) \
 						)
 #define skeleton_innards(ptr)	(((ptr) == &mons[PM_SKELETON]) || \

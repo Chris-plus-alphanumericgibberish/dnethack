@@ -18,6 +18,7 @@ STATIC_DCL boolean FDECL(spell_would_be_useless,(struct monst *,int));
 STATIC_DCL boolean FDECL(mspell_would_be_useless,(struct monst *,struct monst *,int));
 STATIC_DCL boolean FDECL(uspell_would_be_useless,(struct monst *,int));
 STATIC_DCL void FDECL(ucast_spell,(struct monst *,struct monst *,int,int));
+STATIC_DCL int FDECL(needs_familiar,(struct monst *));
 
 #ifdef OVL0
 
@@ -968,6 +969,54 @@ unsigned int type;
 			}
 		}
 	break;
+       case PM_WITCH_S_FAMILIAR:
+			return OPEN_WOUNDS;
+	   break;
+       case PM_APPRENTICE_WITCH:
+			switch(rnd(2)){
+				case 1: return PSI_BOLT;
+				case 2: return EVIL_EYE;
+			}
+	   break;
+       case PM_WITCH:
+			switch(rnd(4)){
+				case 1: return PSI_BOLT;
+				case 2: return EVIL_EYE;
+				case 3: return CURSE_ITEMS;
+				case 4: return ACID_RAIN;
+			}
+	   break;
+       case PM_COVEN_LEADER:
+			switch(rnd(8)){
+				case 1: return PSI_BOLT;
+				case 2: return EVIL_EYE;
+				case 3: return CURSE_ITEMS;
+				case 4: return ACID_RAIN;
+				case 5: return SUMMON_DEVIL;
+				case 6: return SUMMON_ALIEN;
+				case 7: return DEATH_TOUCH;
+				case 8: return DRAIN_LIFE;
+			}
+	   break;
+       case PM_NITOCRIS:
+			switch(rnd(9)){
+				case 1: 
+				case 2: 
+				return GEYSER;
+				case 3: 
+				case 4: 
+				return CURSE_ITEMS;
+				case 5: 
+				case 6: 
+				return FIRE_PILLAR;
+				case 7: 
+				return INSECTS;
+				case 8: 
+				return DARKNESS;
+				case 9: 
+				return PLAGUE;
+			}
+	   break;
 	case PM_SHOGGOTH:
 		if(!rn2(20)) return SUMMON_MONS; 
 		else return 0;
@@ -1313,7 +1362,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns_mon(mtmp)) || !ml || u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
+	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns_mon(mtmp)) || !ml || u.uinvulnerable || needs_familiar(mtmp) || u.spiritPColdowns[PWR_PHASE_STEP] >= moves+20) {
 	    cursetxt(mtmp, is_undirected_spell(spellnum));
 	    return(0);
 	}
@@ -1741,6 +1790,10 @@ int spellnum;
 			dmg = 0;
 		} else if(uarmh && uarmh->otyp == WAR_HAT) {
 			pline("It runs off the brim of your wide helm.");
+			erode_obj(uarmh, TRUE, FALSE);
+			dmg = 0;
+		} else if(uarmh && uarmh->otyp == WITCH_HAT) {
+			pline("It runs off the brim of your wide conical hat.");
 			erode_obj(uarmh, TRUE, FALSE);
 			dmg = 0;
 		} else {
@@ -3406,9 +3459,8 @@ castmm(mtmp, mdef, mattk)
 		    mspell_would_be_useless(mtmp, mdef, spellnum));
 	    if (cnt == 0) return 0;
 	}
-
 	/* monster unable to cast spells? */
-	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns_mon(mtmp)) || !ml) {
+	if(mtmp->mcan || (mtmp->mspec_used && !nospellcooldowns_mon(mtmp)) || !ml || needs_familiar(mtmp)) {
 		if(mtmp->data == &mons[PM_HOUND_OF_TINDALOS])
 			return 0;
 	    if (canseemon(mtmp) && couldsee(mtmp->mx, mtmp->my))
@@ -5165,6 +5217,19 @@ uspsibolt:
 	    else monkilled(mtmp, "", AD_CLRC);
 	}
     }
+}
+
+STATIC_OVL int
+needs_familiar(mon)
+struct monst *mon;
+{
+	struct monst *mtmp;
+	if(!is_witch_mon(mon))
+		return FALSE;
+	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
+		if(mtmp->data == &mons[PM_WITCH_S_FAMILIAR] && mtmp->mvar1 == (long)mon->m_id)
+			return FALSE;
+	return TRUE;
 }
 
 #endif /* OVL0 */

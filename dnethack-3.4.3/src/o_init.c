@@ -1545,6 +1545,7 @@ struct obj *otmp;
 										CLR_BRIGHT_BLUE : CLR_BLUE;
 	case ART_AIR_CRYSTAL:		return  mvitals[PM_TIAMAT__THE_FIEND_OF_WIND].died ? 
 										CLR_BRIGHT_GREEN : CLR_GREEN;
+	case ART_PRAYER_WARDED_WRAPPINGS_OF:		return CLR_BLACK;
 	}
 	/* gold pieces are yellow */
 	if (otmp->otyp == GOLD_PIECE)

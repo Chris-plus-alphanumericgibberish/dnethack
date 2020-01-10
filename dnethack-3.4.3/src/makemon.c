@@ -1625,6 +1625,53 @@ register struct monst *mtmp;
 				if(!rn2(2)) curse(otmp);
 				(void) mpickobj(mtmp, otmp);
 				}
+			} else if(ptr == &mons[PM_APPRENTICE_WITCH]){
+				struct monst *familliar;
+				familliar = makemon(&mons[PM_WITCH_S_FAMILIAR], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+				if(familliar){
+					familliar->m_lev = mtmp->m_lev;
+					familliar->mhp = mtmp->mhp;
+					familliar->mhpmax = mtmp->mhpmax;
+					familliar->mvar1 = (long)mtmp->m_id;
+					familliar->mpeaceful = mtmp->mpeaceful;
+				}
+				mongets(mtmp, HIGH_BOOTS);
+				mongets(mtmp, BLACK_DRESS);
+				mongets(mtmp, WITCH_HAT);
+				mongets(mtmp, KNIFE);
+			} else if(ptr == &mons[PM_WITCH]){
+				struct monst *familliar;
+				familliar = makemon(&mons[PM_WITCH_S_FAMILIAR], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+				if(familliar){
+					familliar->m_lev = mtmp->m_lev;
+					familliar->mhp = mtmp->mhp;
+					familliar->mhpmax = mtmp->mhpmax;
+					familliar->mvar1 = (long)mtmp->m_id;
+					familliar->mpeaceful = mtmp->mpeaceful;
+				}
+				mongets(mtmp, HIGH_BOOTS);
+				mongets(mtmp, BLACK_DRESS);
+				mongets(mtmp, CLOAK);
+				mongets(mtmp, GLOVES);
+				mongets(mtmp, WITCH_HAT);
+				mongets(mtmp, rn2(10) ? STILETTO : ATHAME);
+			} else if(ptr == &mons[PM_COVEN_LEADER]){
+				struct monst *familliar;
+				familliar = makemon(&mons[PM_WITCH_S_FAMILIAR], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+				if(familliar){
+					familliar->m_lev = mtmp->m_lev;
+					familliar->mhp = mtmp->mhp;
+					familliar->mhpmax = mtmp->mhpmax;
+					familliar->mvar1 = (long)mtmp->m_id;
+					familliar->mpeaceful = mtmp->mpeaceful;
+				}
+				mongets(mtmp, HIGH_BOOTS);
+				mongets(mtmp, BLACK_DRESS);
+				mongets(mtmp, LEATHER_ARMOR);
+				mongets(mtmp, CLOAK);
+				mongets(mtmp, GLOVES);
+				mongets(mtmp, WITCH_HAT);
+				mongets(mtmp, QUARTERSTAFF);
 			} else if(mm >= PM_STUDENT && mm <= PM_APPRENTICE){
 				if(mm == PM_STUDENT){
 					(void)mongets(mtmp, PICK_AXE);
@@ -4850,8 +4897,10 @@ register struct monst *mtmp;
 				m_initthrow(mtmp, CROSSBOW_BOLT, 12);
 		    }
 		}
-		if(mtmp->female && In_lost_cities(&u.uz) && u.uinsight > (rnd(10)+rn2(11))){
-			mtmp->mfaction = MISTWEAVER;
+		if(ptr == &mons[PM_FOREST_CENTAUR] || ptr == &mons[PM_PLAINS_CENTAUR] || ptr == &mons[PM_PLAINS_CENTAUR]){
+			if(mtmp->female && In_lost_cities(&u.uz) && u.uinsight > (rnd(10)+rn2(11))){
+				mtmp->mfaction = MISTWEAVER;
+			}
 		}
 		if(ptr == &mons[PM_MOUNTAIN_CENTAUR]){
 			chance = rnd(10);
@@ -6086,6 +6135,14 @@ register struct	monst	*mtmp;
 			otmp->obj_material = LEATHER;
 			fix_object(otmp);
 			(void) mpickobj(mtmp, otmp);
+		} else if(ptr == &mons[PM_NITOCRIS]){
+			otmp = mksobj(MUMMY_WRAPPING, FALSE, FALSE);
+			otmp = oname(otmp, artiname(ART_PRAYER_WARDED_WRAPPINGS_OF));		
+			otmp->blessed = FALSE;
+			otmp->cursed = TRUE;
+			otmp->spe = 7;
+			otmp->oerodeproof = TRUE;
+			(void) mpickobj(mtmp, otmp);
 		} else {
 			(void)mongets(mtmp, ptr == &mons[PM_DROW_MUMMY] ? DROVEN_CLOAK : MUMMY_WRAPPING);
 		}
@@ -6122,6 +6179,34 @@ register struct	monst	*mtmp;
 			
 			otmp = mksobj(rnd_good_amulet(), TRUE, FALSE);
 			otmp->obj_material = GOLD;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+		} else if(ptr == &mons[PM_NITOCRIS]){
+			otmp = mksobj(FLAIL, TRUE, FALSE);
+			if (otmp->spe < 2) otmp->spe = rnd(3);
+			otmp->obj_material = METAL;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(SHEPHERD_S_CROOK, TRUE, FALSE);
+			if (otmp->spe < 2) otmp->spe = rnd(3);
+			otmp->obj_material = METAL;
+			otmp->objsize = MZ_SMALL;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(MASK, TRUE, FALSE);
+			otmp->corpsenm = PM_PHARAOH;
+			otmp->obj_material = METAL;
+			fix_object(otmp);
+			curse(otmp);
+			(void) mpickobj(mtmp, otmp);
+			
+			otmp = mksobj(rnd_good_amulet(), TRUE, FALSE);
+			otmp->obj_material = METAL;
 			fix_object(otmp);
 			curse(otmp);
 			(void) mpickobj(mtmp, otmp);

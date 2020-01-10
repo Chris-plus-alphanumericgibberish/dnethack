@@ -491,6 +491,8 @@ HELM("fedora", (char *)0,
 HELM("cornuthaum", "conical hat",
 		0, 1,  CLAIRVOYANT,
 					3, 1,  4,  80,10, 0, 2, CLOTH, CLR_BLUE),
+HELM("witch hat", "wide-brimmed conical hat",
+		0, 1,  0,   0, 1,  4,  80,10, 0, 2, CLOTH, CLR_BLACK),
 HELM("dunce cap", "conical hat",
 		0, 1,  0,	3, 1,  4,   1, 10, 0, 0, CLOTH, CLR_BLUE),
 HELM("war hat", "wide helm", /*Needs encyc entry*//*Needs tile*/

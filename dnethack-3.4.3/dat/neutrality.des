@@ -690,9 +690,9 @@ MONSTER[80%]:'H',"lurking one",(44,16)
 #Dolls
 MONSTER[10%]:'\'',"living doll",random
 
-#kuker
-MONSTER[10%]:'A',"kuker",random
-MONSTER[10%]:'A',"kuker",random
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
 
 #
 # Alternate river head - Vampires and Byakhee
@@ -890,9 +890,9 @@ MONSTER[80%]:'H',"lurking one",(44,16)
 #Dolls
 MONSTER[10%]:'\'',"living doll",random
 
-#kuker
-MONSTER[10%]:'A',"kuker",random
-MONSTER[10%]:'A',"kuker",random
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
 
 #
 #	The entry level for the Lethe branch.
@@ -1035,9 +1035,9 @@ MONSTER[80%]:'H',"lurking one",(07,17)
 #Dolls
 MONSTER[10%]:'\'',"living doll",random
 
-#kuker
-MONSTER[10%]:'A',"kuker",random
-MONSTER[10%]:'A',"kuker",random
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
 
 #Visitors
 MONSTER[10%]:'X',"bestial dervish",random
@@ -1265,9 +1265,9 @@ MONSTER[80%]:'H',"lurking one",(31,11)
 #Dolls
 MONSTER[10%]:'\'',"living doll",random
 
-#kuker
-MONSTER[10%]:'A',"kuker",random
-MONSTER[10%]:'A',"kuker",random
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
 
 #
 #	The Undead Stockade for the Lethe branch.
@@ -1470,9 +1470,9 @@ MONSTER[80%]:'H',"lurking one",(31,11)
 #Dolls
 MONSTER[10%]:'\'',"living doll",random
 
-#kuker
-MONSTER[10%]:'A',"kuker",random
-MONSTER[10%]:'A',"kuker",random
+#Kukeri
+MONSTER[7%]:'A',"kuker",random
+MONSTER[7%]:'A',"kuker",random
 
 #
 #	The Wizards Manse
@@ -1992,26 +1992,6 @@ MAP
 ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7
-# Dungeon Description
-REGION:(00,00,75,19),lit,"ordinary"
-REGION:(02,01,02,02),lit,"ordinary"
-REGION:(02,16,07,18),unlit,"ordinary"
-REGION:(14,15,18,18),unlit,"ordinary"
-REGION:(28,16,33,18),unlit,"ordinary"
-REGION:(41,03,45,05),unlit,"ordinary"
-REGION:(48,08,53,11),unlit,"ordinary"
-REGION:(71,01,74,02),lit,"ordinary"
-REGION:(64,14,71,16),lit,"ordinary"
-REGION:(69,12,73,12),lit,"ordinary"
-# Stairs
-STAIR:(05,17),down
-STAIR:(30,17),up 
-# Doors
-DOOR:closed,(06,03)
-DOOR:locked,(03,01)
-DOOR:closed,(70,02)
-DOOR:locked,(63,16)
-DOOR:closed,(71,13)
 # Black Goat in the west 
 MONSTER:'q',"dark young",(13,03)
 MONSTER:'q',"dark young",(09,06)
@@ -2068,12 +2048,15 @@ OBJECT:'#',"blessed +3 bone viperwhip",contained
 REGION:(04,01,08,02),lit,"temple"
 ALTAR:(06,01),noalign,altar
 
+#+5 means that it's Nitocris's sarcophagus.  One only please!
+CONTAINER:'#',"trapped metal box",(74,01), cursed, +5
 CONTAINER:'`',"statue",(74,01),uncursed,"god",1,"the God of the Bloody Tongue"
 OBJECT:'/',"death",contained
 OBJECT:'/',"undead turning",contained
+MONSTER:'@',"coven leader",(74,02)
 
 CONTAINER:'`',"statue",(67,15),"god",1,"Father Dagon"
-OBJECT:'"',"amulet of magical breathing",contained
+OBJECT:'#',"gold amulet of magical breathing",contained
 OBJECT:'*',"star sapphire",contained
 OBJECT:'*',"star sapphire",contained
 
@@ -2089,12 +2072,6 @@ OBJECT:'(',"chest",(73,12)
 OBJECT:'?',"create monster",(70,15),cursed,0
 # A stray amulet
 OBJECT:'"',random,(26,08)
-# A few random traps
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP:random,random
-TRAP[50%]:random,random
 # Fishes in the river...
 MONSTER:';',random,(23,15) 
 MONSTER:';',random,(19,11) 
@@ -2121,6 +2098,157 @@ OBJECT:'%',random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random
+
+##Random goat cultists
+
+#0         1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+GEOMETRY:center,center
+MAP
+0 ---------                                                                  
+1 | S     |    eeeeeeeee                                                     
+2 | |     |eeeeeeeeeeeeee                                                    
+3 -----+---eeeeee eeeeeee                                                    
+4    eeeeeeeeeeeeeeeeee}}}                                                   
+5  eeeeeeeeeeeeeeeee}}}}}}                                                   
+6 eeeee eeeee eeee}}}}}}}}                                                   
+7 eeee eeeeeeeee}}}}}}}}                                                     
+8  eeeeeeeeeeee}}}}}}}}                                                      
+9   eeeeeee ee}}}}}}}}                                                       
+0     ee eeeee}}}}}}}}}                                                      
+1       eeeeeee}}}}}}}}}                                                     
+2       #   eeee e}}}}}}                                                     
+3      ##   # eeeeee}}}}                                                     
+4     ##    #        }}}                                                     
+5     #   #H##        }}}}                                                   
+6        H#  ##       }}}}                                                   
+7                     }}}}                                                   
+8                    }}}}                                                    
+9                   }}}}                                                     
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7
+
+MONSTER:'h',"small goat spawn",random
+MONSTER:'h',"small goat spawn",random
+MONSTER:'h',"small goat spawn",random
+MONSTER:'h',"small goat spawn",random
+MONSTER:'h',"small goat spawn",random
+
+MONSTER:'@',"goat spawn",random
+MONSTER:'@',"goat spawn",random
+MONSTER:'@',"goat spawn",random
+
+MONSTER:'H',"giant goat spawn",random
+
+MONSTER:'C',"plains centaur",random
+MONSTER:'C',"plains centaur",random
+MONSTER:'C',"plains centaur",random
+
+MONSTER:'C',"plains centaur",random
+MONSTER:'C',"plains centaur",random
+MONSTER:'C',"plains centaur",random
+
+#0         1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+GEOMETRY:center,center
+MAP
+                                                                      ------
+                                                         eeeeee-eeeeee|..  |
+                                             #####   eeeeeee eeeee eee+..  |
+                                         .....   ##eeeee eeeeeeeeeeeee------
+                                         ..}..     ee eeeeeeee eeee eeee    
+                                          ...       eeeeeeeeeeee eeee}}}}}}}
+                                            ###      eeee eeeeeeeee}}}}}}}}}
+                                              #       eeeeeee eee}}}}}}}}}}}
+                                              ##...    eee eeee}}}}}}}}}}}} 
+                                                ....    eeeee}}}}}}}}}}     
+                                                 ....     ee}}}}}}}}        
+                                                   ...    }}}}}}            
+                                                         }}}}}              
+                                                            }               
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+                                                                            
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7
+
+##Random Nyarlathotep cultists 
+
+MONSTER:'@',"apprentice witch",random
+MONSTER:'@',"apprentice witch",random
+MONSTER:'@',"apprentice witch",random
+
+MONSTER:'@',"apprentice witch",random
+MONSTER:'@',"apprentice witch",random
+MONSTER:'@',"apprentice witch",random
+
+MONSTER:'@',"apprentice witch",random
+MONSTER:'@',"apprentice witch",random
+MONSTER:'@',"apprentice witch",random
+
+MONSTER:'@',"witch",random
+MONSTER:'@',"witch",random
+MONSTER:'@',"witch",random
+
+#0         1         2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+GEOMETRY:center,center
+MAP
+ ---------                                                            ------
+ |.S.....|    eeeeeeeee    ######                        eeeeee-eeeeee|....|
+ |.|.....|eeeeeeeeeeeeeeH###    #######      #####   eeeeeee eeeee eee+....|
+ -----+---eeeeee eeeeeee              ###.....   ##eeeee eeeeeeeeeeeee------
+    eeeeeeeeeeeeeeeeee}}}}}}}}}}}}}}}    ..}..     ee eeeeeeee eeee eeee    
+  eeeeeeeeeeeeeeeee}}}}}}}}}}}}}}}}}}}    ...       eeeeeeeeeeee eeee}}}}}}}
+ eeeee eeeee eeee}}}}}}}}}}}}}}}}}}}}}}     ###      eeee eeeeeeeee}}}}}}}}}
+ eeee eeeeeeeee}}}}}}}}  eeeeee }}}}}}}}      #       eeeeeee eee}}}}}}}}}}}
+  eeeeeeeeeeee}}}}}}}}    ee  #  }}}}}}}}}    ##...    eee eeee}}}}}}}}}}}} 
+   eeeeeee ee}}}}}}}}         ##  }}}}}}}}}}    ....    eeeee}}}}}}}}}}     
+     ee eeeee}}}}}}}}}e        ###e}}}ee}}}}ee   ....     ee}}}}}}}}        
+       eeeeeee}}}}}}}}}e           e}}}ee}}}}}ee # ...    }}}}}}    ------- 
+       #   eeee e}}}}}}ee           e}}e e}}}}}eee       }}}}}      |.....| 
+      ##   # eeeeee}}}}}e            ee}}ee}}}e}} ee    }}}}}  --------S--- 
+     ##    #        }}}}ee       ###  }}e}}}}ee}}}}}e} }}}}}   |...{....|   
+     #   #H##  ....  }}}}e#####  H ##  e}e}}}e}e}}}}}e}}}}}    |..{.{...|   
+    ....H#  ##.....  }}}}e    .. .  ###ee}e}e}}}e}}}}}e}}ee####+...{....|   
+  .....       ....   }}}}   ......      ee}e -}}}e}}}}}ee      ----------   
+   .....       ...  }}}}    .....                                           
+                   }}}}                                                     
+ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0         1         2         3         4         5         6         7
+RANDOM_PLACES:(05,17),(02,02),(73,01),(71,12)
+# Dungeon Description
+REGION:(00,00,75,19),lit,"ordinary"
+REGION:(02,01,02,02),lit,"ordinary"
+REGION:(02,16,07,18),unlit,"ordinary"
+REGION:(14,15,18,18),unlit,"ordinary"
+REGION:(28,16,33,18),unlit,"ordinary"
+REGION:(41,03,45,05),unlit,"ordinary"
+REGION:(48,08,53,11),unlit,"ordinary"
+REGION:(71,01,74,02),lit,"ordinary"
+REGION:(64,14,71,16),lit,"ordinary"
+REGION:(69,12,73,12),lit,"ordinary"
+# Stairs
+STAIR:place[0],down
+STAIR:(30,17),up 
+# Doors
+DOOR:closed,(06,03)
+DOOR:locked,(03,01)
+DOOR:closed,(70,02)
+DOOR:locked,(63,16)
+DOOR:closed,(71,13)
+# A few random traps
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP:random,random
+TRAP[50%]:random,random
 
 #Kukeri
 MONSTER[7%]:'A',"kuker",random
