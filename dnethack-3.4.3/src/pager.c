@@ -2175,7 +2175,7 @@ get_description_of_monster_type(struct monst * mtmp, char * description)
 			res[2] = MM_MISS;
 			do {
 				/* get next attack */
-				attk = getattk(mtmp, res, &indexnum, &prev_attk, TRUE, &subout, &tohitmod);
+				attk = getattk(mtmp, (struct monst *)0, res, &indexnum, &prev_attk, TRUE, &subout, &tohitmod);
 
 				main_temp_buf[0] = '\0';
 				get_description_of_attack(attk, temp_buf);

@@ -1190,7 +1190,7 @@ boolean * wepgone;				/* pointer to: TRUE if projectile has been destroyed */
 			exercise(A_DEX, TRUE);
 		/* call hmon to make the projectile hit */
 		/* hmon will do hitmsg */
-		result = hmon2point0(magr, mdef, &dummy, thrownobj, launcher, (misfired ? 2 : 1), 0, 0, TRUE, dieroll, FALSE, vis, wepgone, FALSE);
+		result = hmon2point0(magr, mdef, &dummy, &dummy, thrownobj, launcher, (misfired ? 2 : 1), 0, 0, TRUE, dieroll, FALSE, vis, wepgone, FALSE);
 
 		/* wake up defender */
 		wakeup2(mdef, youagr);
@@ -2127,16 +2127,8 @@ dofire()
 					case RAYGUN:
 						/* create fake ammo in order to calculate multishot correctly */
 						ammo = blaster_ammo(launcher);
-						if (!getdir((char *)0))
+						if (getdir((char *)0))
 							result += zap_raygun(launcher, calc_multishot(&youmonst, ammo, launcher, shotlimit), shotlimit);
-						/* TODO: */
-						// find in zap_raygun() in dothrow:
-						//if ((shots > 1 || shotlimit > 0) && !Hallucination) {
-						//	You("fire %d %s.",
-						//		shots,	/* (might be 1 if player gave shotlimit) */
-						//		(shots == 1) ? "ray" : "rays");
-						//}
-						// and only display that message if shots>0
 						/* destroy ammo and don't go through uthrow */
 						obfree(ammo, 0);
 						ammo = (struct obj *)0;

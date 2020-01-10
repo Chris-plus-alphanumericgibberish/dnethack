@@ -765,7 +765,7 @@ struct obj *obj;			/* only scatter this obj        */
 					boolean used_up = FALSE;
 					int dieroll = rnd(20);
 					if (tohitval((struct monst *)0, mtmp, (struct attack *)0, stmp->obj, (struct obj *)0, 1, 0) >= dieroll)
-						(void)hmon2point0((struct monst *)0, mtmp, (struct attack *)0, stmp->obj, (struct obj *)0, TRUE, 0, 0, TRUE, dieroll, FALSE, canseemon(mtmp), &used_up, FALSE);
+						(void)hmon2point0((struct monst *)0, mtmp, (struct attack *)0, (struct attack *)0, stmp->obj, (struct obj *)0, TRUE, 0, 0, TRUE, dieroll, FALSE, canseemon(mtmp), &used_up, FALSE);
 					else
 						miss(xname(stmp->obj), mtmp);
 					if (used_up) {
@@ -783,7 +783,7 @@ struct obj *obj;			/* only scatter this obj        */
 						boolean wepgone = FALSE;
 						killer = "flying object";
 						killer_format = KILLED_BY_AN;
-						hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, stmp->obj, (struct obj *)0, TRUE,
+						hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, (struct attack *)0, stmp->obj, (struct obj *)0, TRUE,
 							0, 0, TRUE, dieroll, FALSE, -1, &wepgone, TRUE);
 						stmp->range -= 3;
 						stop_occupation();

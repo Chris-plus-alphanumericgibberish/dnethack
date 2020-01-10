@@ -32,7 +32,7 @@ STATIC_DCL int FDECL(xtinkery, (struct monst *, struct monst *, struct attack *,
 STATIC_DCL int FDECL(xengulfhity, (struct monst *, struct monst *, struct attack *, int));
 STATIC_DCL int FDECL(xengulfhurty, (struct monst *, struct monst *, struct attack *, int));
 STATIC_DCL int FDECL(xexplodey, (struct monst *, struct monst *, struct attack *, int));
-STATIC_DCL int FDECL(hmoncore, (struct monst *, struct monst *, struct attack *, struct obj *, struct obj *, int, int, int, boolean, int, boolean, int, boolean *, boolean));
+STATIC_DCL int FDECL(hmoncore, (struct monst *, struct monst *, struct attack *, struct attack *, struct obj *, struct obj *, int, int, int, boolean, int, boolean, int, boolean *, boolean));
 STATIC_DCL int FDECL(shadow_strike, (struct monst *));
 STATIC_DCL int FDECL(xpassivehity, (struct monst *, struct monst *, struct attack *, struct attack *, struct obj *, int, int, struct permonst *, boolean));
 
@@ -329,7 +329,8 @@ int tary;
 		marinum = 0,/* number of AT_MARI weapons used */
 		subout = 0,	/* remembers what attack substitutions have been made for [magr]'s attack chain */
 		res[3];		/* results of previous 2 attacks ([0] -> current attack, [1] -> 1 ago, [2] -> 2 ago) -- this is dynamic! */
-	int attacklimit, attacksmade;
+	int attacklimit = 0;
+	int attacksmade = 0;
 	struct attack *attk;
 	struct attack prev_attk = noattack;
 	struct obj *otmp;
@@ -571,7 +572,7 @@ int tary;
 		res[1] = res[0];
 		res[0] = MM_MISS;
 		/* get next attack */
-		attk = getattk(magr, res, &indexnum, &prev_attk, FALSE, &subout, &tohitmod);
+		attk = getattk(magr, mdef, res, &indexnum, &prev_attk, FALSE, &subout, &tohitmod);
 		/* set aatyp, adtyp */
 		aatyp = attk->aatyp;
 		adtyp = attk->adtyp;
@@ -581,11 +582,6 @@ int tary;
 			result = MM_AGR_STOP;
 			continue;
 		}
-		
-		/* if you are the target and are engulfed, you are only targettable by engulf attacks */
-		if (youdef && u.uswallow && (aatyp != AT_ENGL && aatyp != AT_ILUR))
-			continue;
-
 		/* Some armor completely covers the face and prevents bite attacks*/
 		if (aatyp == AT_BITE || aatyp == AT_LNCK || aatyp == AT_5SBT ||
 			(aatyp == AT_ENGL && !(youdef && u.uswallow)) ||
@@ -604,27 +600,6 @@ int tary;
 				)
 				continue;
 		}
-
-		/* Illurien can only engulf the player, and only if she is stuck to you */
-		if (pa == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] && aatyp == AT_ENGL &&
-			(!youdef || u.ustuck != magr)) {
-			continue;
-		}
-
-		/* Rend attacks only happen if the previous two attacks hit */
-		/* Hugs attacks are similar, but also happen if magr and mdef are stuck together */
-		if ((res[1] == MM_MISS || res[2] == MM_MISS) && (
-			(attk->aatyp == AT_REND) ||
-			(attk->aatyp == AT_HUGS && !((youdef && u.ustuck == magr) || (youagr && u.ustuck == mdef)))
-			)) {
-			continue;
-		}
-
-		/* If the player was using 'k' to kick, they are only performing kick attacks */
-		/* onlykicks is a state variable defined in dokick.c */
-		if (youagr && onlykicks && attk->aatyp != AT_KICK)
-			continue;
-
 		/* based on the attack type... */
 		switch (aatyp)
 		{
@@ -784,6 +759,8 @@ int tary;
 				/* if the attack hits, or if the creature is able to notice it was attacked (but the attack missed) it wakes up */
 				if (youdef ||(!(result&MM_DEF_DIED) && (result || (!mdef->msleeping && mdef->mcanmove))))
 					wakeup2(mdef, youagr);
+				/* increment number of attacks made */
+				attacksmade++;
 			}
 			else {
 				/* make ranged attack */
@@ -806,6 +783,8 @@ int tary;
 						/* if the attack was made, defender can wake up (reduced chance vs melee) */
 						if ((youdef || (!(result&MM_DEF_DIED) && result)) && !rn2(3))
 							wakeup2(mdef, youagr);
+						/* increment number of attacks made */
+						attacksmade++;
 					}
 				}
 			}
@@ -837,6 +816,7 @@ int tary;
 			/* check for wild misses */
 			if (missedyou) {
 				wildmiss(magr, attk, otmp, ranged);
+				attacksmade++;
 				result |= MM_AGR_STOP;	/* it knows you aren't there */
 				continue;
 			}
@@ -847,6 +827,8 @@ int tary;
 			/* if the attack hits, or if the creature is able to notice it was attacked (but the attack missed) it wakes up */
 			if (youdef || (!(result&MM_DEF_DIED) && (result || (!mdef->msleeping && mdef->mcanmove))))
 				wakeup2(mdef, youagr);
+			/* increment number of attacks made */
+			attacksmade++;
 			break;
 
 			/* engulfing attacks */
@@ -861,11 +843,14 @@ int tary;
 			/* check for wild misses */
 			if (missedyou) {
 				wildmiss(magr, attk, otmp, ranged);
+				attacksmade++;
 				result |= MM_AGR_STOP;	/* it knows you aren't there */
 				continue;
 			}
 			/* make the attack */
 			result = xengulfhity(magr, mdef, attk, vis);
+			/* increment number of attacks made */
+			attacksmade++;
 			break;
 
 			/* explodes, killing itself */
@@ -878,6 +863,8 @@ int tary;
 				continue;
 			/* explode -- this function handles wild misses */
 			result = xexplodey(magr, mdef, attk, vis);
+			/* increment number of attacks made */
+			attacksmade++;
 			break;
 
 //////////////////////////////////////////////////////////////
@@ -955,13 +942,17 @@ int tary;
 				break;
 			}
 
-			/* note: can't tell if mdef lifesaved */
-			if (*hp(mdef) < 1)
-				result |= MM_DEF_DIED;
+			if (result) {
+				/* increment number of attacks made */
+				attacksmade++;
+				/* note: can't tell if mdef lifesaved */
+				if (*hp(mdef) < 1)
+					result |= MM_DEF_DIED;
+				/* defender can wake up (reduced chance vs melee) */
+				if ((youdef || !(result&MM_DEF_DIED)) && !rn2(3))
+					wakeup2(mdef, youagr);
+			}
 
-			/* if the attack was made, defender can wake up (reduced chance vs melee) */
-			if ((youdef || (!(result&MM_DEF_DIED) && result)) && !rn2(3))
-				wakeup2(mdef, youagr);
 			break;
 
 			/* ranged maybe-not-on-line attacks */
@@ -982,6 +973,7 @@ int tary;
 			/* check for wild misses */
 			if (missedyou) {
 				wildmiss(magr, attk, otmp, ranged);
+				attacksmade++;
 				result |= MM_AGR_STOP;	/* it knows you aren't there */
 				continue;
 			}
@@ -993,6 +985,8 @@ int tary;
 			/* if the attack hits, or if the creature is able to notice it was attacked (but the attack missed) it wakes up */
 			if (youdef || (!(result&MM_DEF_DIED) && (result || (!mdef->msleeping && mdef->mcanmove))))
 				wakeup2(mdef, youagr);
+			/* increment number of attacks made */
+			attacksmade++;
 			break;
 
 			/* targeted gazes */
@@ -1008,6 +1002,10 @@ int tary;
 			}
 			else {
 				result = xgazey(magr, mdef, attk, vis);
+				if (result) {
+					/* increment number of attacks made */
+					attacksmade++;
+				}
 			}
 			break;
 			/* wide (passive) gaze */
@@ -1024,6 +1022,8 @@ int tary;
 				continue;
 			/* do the tinkering */
 			result = xtinkery(magr, mdef, attk, vis);
+			/* increment number of attacks made */
+			attacksmade++;
 			break;
 			/* magic */
 		case AT_MAGC:
@@ -1037,13 +1037,15 @@ int tary;
 
 			result = xcasty(magr, mdef, attk, vis);
 
-			/* if the spell was successful, the defender may wake up (MM_MISS -> no spell cast, no chance to wake) */
-			if (result)
+			if (result) {
+				/* if the spell was successful, the defender may wake up (MM_MISS -> no spell cast, no chance to wake) */
 				wakeup2(mdef, youagr);
-
-			/* Asmodeus randomly stops his casting early? */
-			if (pa == &mons[PM_ASMODEUS] && !rn2(3))
-				result |= MM_AGR_STOP;
+				/* increment number of attacks made */
+				attacksmade++;
+				/* Asmodeus randomly stops his casting early? */
+				if (pa == &mons[PM_ASMODEUS] && !rn2(3))
+					result |= MM_AGR_STOP;
+			}
 			break;
 		}//switch (aatyp)
 
@@ -1071,8 +1073,6 @@ int tary;
 		if (*hp(mdef) < 1)
 			result |= MM_DEF_DIED;
 
-		/* increment number of attacks made */
-		attacksmade++;
 		/* save result to res, allres */
 		res[0] = result;
 		allres |= result;
@@ -1094,12 +1094,18 @@ int tary;
 	if (!youagr && pa == &mons[PM_LILLEND])
 		magr->mvar2 = 0;
 
-	if (attacksmade > 0)
-		allres |= MM_HIT;		/* signifies that the attack action was indeed taken, even if no attacks hit */
-
-	if(youdef && is_aquatic(magr->data) && roll_madness(MAD_THALASSOPHOBIA)){
-		You("panic after being attacked by a sea monster!");
-		nomul(-1*rnd(6), "panicking");
+	/* do some things only if attacks were made */
+	if (attacksmade > 0) {
+		/* signify that the attack action was indeed taken, even if no attacks hit */
+		allres |= MM_HIT;
+		/* player multi-tile movements are interrupted */
+		if (youdef)
+			nomul(0, NULL);
+		/* player panics after being attacked by a sea creature */
+		if(youdef && is_aquatic(magr->data) && roll_madness(MAD_THALASSOPHOBIA)){
+			You("panic after being attacked by a sea monster!");
+			nomul(-1*rnd(6), "panicking");
+		}
 	}
 	
 	return allres;
@@ -1480,8 +1486,9 @@ boolean fresh;
  * inside the function
  */
 struct attack *
-getattk(magr, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod)
+getattk(magr, mdef, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod)
 struct monst * magr;			/* attacking monster */
+struct monst * mdef;			/* defending monster -- OPTIONAL */
 int * prev_res;					/* results of previous attacks; ignored if by_the_book is true */
 int * indexnum;					/* index number to use, incremented HERE (if actually pulling the attack from the monster's index) */
 struct attack * prev_and_buf;	/* double-duty pointer: 1st, is the previous attack; 2nd, is a pointer to allocated memory */
@@ -1503,6 +1510,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 	struct attack * attk;
 	struct attack prev_attack = *prev_and_buf;
 	boolean youagr = (magr == &youmonst);
+	boolean youdef = (mdef == &youmonst);
 	boolean fromlist;
 	struct permonst * pa = youagr ? youracedata : magr->data;
 
@@ -1539,7 +1547,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			*indexnum += 1;
 			*prev_and_buf = prev_attack;
 			fromlist = TRUE;
-			return getattk(magr, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod);
+			return getattk(magr, mdef, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod);
 		}
 
 		/* if twoweaponing, make an xwep attack after each weap attack, if it isn't in the inherent attack chain */
@@ -1812,7 +1820,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		*indexnum += 1;
 		*prev_and_buf = prev_attack;
 		fromlist = TRUE;
-		return getattk(magr, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod);
+		return getattk(magr, mdef, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod);
 	}
 	/* derived undead modify some attacks, and add attacks to the end of their attack chain */
 	if (!youagr) {
@@ -1944,17 +1952,6 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 	if (!youagr && magr->mflee && pa == &mons[PM_BANDERSNATCH] && !by_the_book)
 		attk->damn *= 2;
 
-	/* twoweapon symmetry -- if the previous attack missed, do not make an offhand attack -- obviously not shown in the pokedex */
-	if (!by_the_book && *indexnum > 0 && prev_res[1] == MM_MISS && attk->aatyp == AT_XWEP)
-	{
-		/* just get the next attack */
-		if (fromlist) {
-			*indexnum += 1;
-		}
-		*prev_and_buf = prev_attack;
-		return getattk(magr, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod);
-	}
-
 	/* prevent a monster with two consecutive disease or hunger attacks
 	from hitting with both of them on the same turn; if the first has
 	already hit, switch to a stun attack for the second */
@@ -1966,6 +1963,30 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		attk->adtyp == prev_attack.adtyp
 		) {
 		attk->adtyp = AD_STUN;
+	}
+	/* Specific cases that prevent attacks */
+	if (!by_the_book && (
+		/* twoweapon symmetry -- if the previous attack missed, do not make an offhand attack*/
+		(*indexnum > 0 && prev_res[1] == MM_MISS && attk->aatyp == AT_XWEP) ||
+		/* If player is the target and is engulfed, only targetable by engulf attacks */
+		(youdef && u.uswallow && (attk->aatyp != AT_ENGL && attk->aatyp != AT_ILUR)) ||
+		/* If player was using 'k' to kick, they are only performing kick attacks (onlykicks is a state variable defined in dokick.c) */
+		(youagr && onlykicks && attk->aatyp != AT_KICK) ||
+		/* Illurien can only engulf targets she is stuck to */
+		(youdef && mdef && pa == &mons[PM_ILLURIEN_OF_THE_MYRIAD_GLIMPSES] && attk->aatyp == AT_ENGL && (u.ustuck != magr)) ||
+		/* Rend attacks only happen if the previous two attacks hit */
+		(attk->aatyp == AT_REND && (prev_res[1] == MM_MISS || prev_res[2] == MM_MISS)) ||
+		/* Hugs attacks are similar, but will still happen if magr and mdef are stuck together */
+		(attk->aatyp == AT_HUGS && (prev_res[1] == MM_MISS || prev_res[2] == MM_MISS)
+			&& !(mdef && ((youdef && u.ustuck == magr) || (youagr && u.ustuck == mdef))))
+		))
+	{
+		/* just get the next attack */
+		if (fromlist) {
+			*indexnum += 1;
+		}
+		*prev_and_buf = prev_attack;
+		return getattk(magr, mdef, prev_res, indexnum, prev_and_buf, by_the_book, subout, tohitmod);
 	}
 
 	/* possibly increment indexnum, if we want to move on in the monster's attack list 
@@ -2109,7 +2130,7 @@ boolean allow_lethal;
 			else							mult = "One of ";
 			pline("%s%s %s %s!",
 				mult,
-				(youdef) ? ((mult) ? "your" : "Your") : ((mult) ? s_suffix(mon_nam(mtmp)) : s_suffix(Monnam(mtmp))),
+				(youdef) ? ((mult != "") ? "your" : "Your") : ((mult != "") ? s_suffix(mon_nam(mtmp)) : s_suffix(Monnam(mtmp))),
 				xname(obj),
 				(cnt > 1L) ? destroy_strings[dindx * 3 + 1]
 				: destroy_strings[dindx * 3]);
@@ -2291,11 +2312,9 @@ struct attack *attk;
 		pline("%s %s %s %s.",
 			(youagr ? "You" : Monnam(magr)),
 			(youagr ?
-				((is_silent_mon(magr)) ? "smile at" :
-				(is_blind(mdef)) ? "talk to" : "move near")
+				(!is_blind(mdef) ? "smile at" : !is_silent_mon(magr) ? "talk to" : "motion at")
 				:
-				((is_silent_mon(magr)) ? "smiles at" :
-				(is_blind(mdef)) ? "talks to" : "moves near")
+				(!is_blind(mdef) ? "smiles at" : !is_silent_mon(magr) ? "talks to" : "motions at")
 				),
 			((youdef && !youagr) ? "you" : mon_nam_too(mdef, magr)),
 			compat == 2 ? "engagingly" : "seductively");
@@ -2363,11 +2382,12 @@ struct attack *attk;
 					specify_you = TRUE;
 			}
 			/* print the message */
+			/* weeping angels are present tense "The weeping angel is touching foo" only if you are neither magr nor mdef */
 			pline("%s %s%s%s%s%s%s",
 				(youagr ? "You" : Monnam(magr)),
-				(is_weeping(pa) && !youagr ? "is " : ""),
-				(youagr && !is_weeping(pa) ? verb : makeplural(verb)),
-				(is_weeping(pa) && !youagr ? "ing" : ""),
+				(is_weeping(pa) && !youagr && !youdef ? "is " : ""),
+				(youagr || (is_weeping(pa) && !youdef) ? verb : makeplural(verb)),
+				(is_weeping(pa) && !youagr && !youdef ? "ing" : ""),
 				((youdef && !youagr && !specify_you) ? "" : " "),
 				((youdef && !youagr && !specify_you) ? "" : mon_nam_too(mdef, magr)),
 				ending
@@ -3786,13 +3806,13 @@ boolean ranged;
 			dohitmsg = FALSE;
 		}
 		/* hit with [weapon] */
-		result = hmon2point0(magr, mdef, attk, weapon, (struct obj *)0, (weapon && ranged), 0, dmg, dohitmsg, dieroll, FALSE, vis, &wepgone, FALSE);
+		result = hmon2point0(magr, mdef, attk, originalattk, weapon, (struct obj *)0, (weapon && ranged), 0, dmg, dohitmsg, dieroll, FALSE, vis, &wepgone, FALSE);
 		if (result&(MM_DEF_DIED|MM_DEF_LSVD|MM_AGR_DIED))
 			return result;
 		if (weapon && multistriking(weapon) && weapon->ostriking) {
 			int i;
 			for (i = 0; (i < weapon->ostriking); i++) {
-				result = hmon2point0(magr, mdef, attk, weapon, (struct obj *)0, (weapon && ranged), 0, 0, FALSE, dieroll, TRUE, vis, &wepgone, FALSE);
+				result = hmon2point0(magr, mdef, attk, originalattk, weapon, (struct obj *)0, (weapon && ranged), 0, 0, FALSE, dieroll, TRUE, vis, &wepgone, FALSE);
 				if (result&(MM_DEF_DIED|MM_DEF_LSVD|MM_AGR_DIED))
 					return result;
 			}
@@ -3811,7 +3831,7 @@ boolean ranged;
 	case AD_MAGM:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* does it do anything? Nullmagic gives utter and total immunity. MR gives immunity to the damage. */
 		if (uncancelled
@@ -3848,7 +3868,7 @@ boolean ranged;
 	case AD_FIRE:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* does it do anything? */
 		if (uncancelled || attk->adtyp == AD_EFIR)
@@ -3979,7 +3999,7 @@ boolean ranged;
 	case AD_COLD:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* does it do anything? */
 		if (uncancelled || attk->adtyp == AD_ECLD)
@@ -4056,7 +4076,7 @@ boolean ranged;
 	case AD_ELEC:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* does it do anything? */
 		if (uncancelled || attk->adtyp == AD_EELC)
@@ -4131,7 +4151,7 @@ boolean ranged;
 	case AD_ACID:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* active? */
 		if ((notmcan && !rn2(3)) || attk->adtyp == AD_EACD) {
@@ -4194,7 +4214,7 @@ boolean ranged;
 	case AD_DISE:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* asymetric: diseasemu prints out messages, applies sickness to player*/
 		if (youdef) {
@@ -4223,7 +4243,7 @@ boolean ranged;
 	case AD_POSN:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 
 		if (Poison_res(mdef)){
@@ -4573,7 +4593,7 @@ boolean ranged;
 	case AD_POLN:
 		/* make physical attack */
 		if (vis && dohitmsg){
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		alt_attk.adtyp = AD_PHYS;
 		result = xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, FALSE, dmg, dieroll, vis, ranged);
@@ -4614,7 +4634,7 @@ boolean ranged;
 	case AD_RUST:
 		/* print hitmessage */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 
 		/* no special effect if cancelled */
@@ -4661,7 +4681,7 @@ boolean ranged;
 	case AD_DCAY:
 		/* print hitmessage */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 
 		/* no special effect if cancelled */
@@ -4710,7 +4730,7 @@ boolean ranged;
 	case AD_CORR:
 		/* print hitmessage */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* corrode armor */
 		if (youdef) {
@@ -4728,7 +4748,7 @@ boolean ranged;
 	case AD_LETHE:
 		/* print hitmessage */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 			if (youdef)
 				You("are soaking wet!");
 			else if (vis&VIS_MDEF)
@@ -4743,7 +4763,7 @@ boolean ranged;
 	case AD_ENCH:
 		/* print hitmessage */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* disenchant */
 		if (uncancelled) {
@@ -4781,7 +4801,7 @@ boolean ranged;
 		}
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* only activates 1/8 times even when uncancelled */
 		if (uncancelled && !rn2(8)) {
@@ -4840,7 +4860,7 @@ boolean ranged;
 	case AD_DRLI:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 
 		/* Vampiric attacks drain blood, even if those that aren't bites */
@@ -4949,7 +4969,7 @@ boolean ranged;
 	case AD_DESC:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		if (nonliving(pd) || is_anhydrous(pd)){
 			if (vis) {
@@ -4978,7 +4998,7 @@ boolean ranged;
 	case AD_STON:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 
 		/* 1/3 chance of special effects */
@@ -5024,7 +5044,7 @@ boolean ranged;
 	case AD_SLIM:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		if (uncancelled) {
 			/* flaming immunity to slime */
@@ -5083,7 +5103,7 @@ boolean ranged;
 	case AD_WISD:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* maybe drain WIS */
 		if (uncancelled && !rn2(8)) {
@@ -5107,7 +5127,7 @@ boolean ranged;
 	case AD_NPDC:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* maybe drain CON */
 		if (uncancelled) {
@@ -5131,7 +5151,7 @@ boolean ranged;
 	case AD_CURS:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		if ((notmcan && (!rn2(10) || pa == &mons[PM_PALE_NIGHT]))
 			&& !(pa == &mons[PM_GREMLIN] && !night())
@@ -5207,7 +5227,7 @@ boolean ranged;
 		else {
 			/* print basic hit message */
 			if (vis && dohitmsg) {
-				xyhitmsg(magr, mdef, attk);
+				xyhitmsg(magr, mdef, originalattk);
 			}
 		}
 
@@ -5393,7 +5413,7 @@ boolean ranged;
 	case AD_MALK:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* attempt to stick */
 		if ((youagr || youdef)					/* the player must be involved in a sticking situation (gameplay limitation) */
@@ -5431,7 +5451,7 @@ boolean ranged;
 	case AD_TCKL:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* weeping angels are entirely immune to the special effects */
 		if (!is_weeping(pd)) {
@@ -5580,7 +5600,7 @@ boolean ranged;
 						mon_nam(magr));
 				}
 				else if (vis && dohitmsg) {
-					xyhitmsg(magr, mdef, attk);
+					xyhitmsg(magr, mdef, originalattk);
 				}
 				/* 1/10 chance to twist legs (player-only) */
 				if (youdef && !rn2(10)) {
@@ -5775,7 +5795,7 @@ boolean ranged;
 	case AD_UVUU:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* chance for vorpal-esque headsmashing */
 		if (!rn2(20)){
@@ -5877,7 +5897,7 @@ boolean ranged;
 	case AD_TENT:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* the tentacle attack is only implemented vs the player */
 		if (youdef) {
@@ -5897,7 +5917,7 @@ boolean ranged;
 	case AD_WEBS:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		if (TRUE) {
 			struct trap *ttmp2 = maketrap(x(mdef), y(mdef), WEB);
@@ -6249,7 +6269,7 @@ boolean ranged;
 	case AD_SAMU:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* only special vs the player */
 		if (youdef) {
@@ -6265,7 +6285,7 @@ boolean ranged;
 	case AD_SQUE:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* only special vs the player */
 		if (youdef) {
@@ -6281,7 +6301,7 @@ boolean ranged;
 	case AD_STTP:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* only implemented vs player */
 		if (youdef) {
@@ -6528,7 +6548,7 @@ boolean ranged;
 	case AD_DISN:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* maybe print glowy message */
 		if (!Blind && (youdef || canseemon(mdef))){
@@ -6605,7 +6625,7 @@ boolean ranged;
 
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 
 		/* entirely unharmed */
@@ -7043,7 +7063,7 @@ boolean ranged;
 	case AD_CHRN:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* vs player, do special effects like as a unicorn horn */
 		if (youdef) {
@@ -7209,10 +7229,13 @@ boolean ranged;
 //////////////////////////////////////////////////////////////
 	case AD_OONA:
 		/* use correct damage type */
+		/* note: replaces originalattk */
 		alt_attk.adtyp = u.oonaenergy;
-		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+		return xmeleehurty(magr, mdef, &alt_attk, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
 
 	case AD_SESN:
+		/* use random damage type */
+		/* note: replaces originalattk */
 		switch(rnd(4)){
 			case 1:
 				//Winter: Frozen
@@ -7231,28 +7254,30 @@ boolean ranged;
 				alt_attk.adtyp = AD_DRLI;
 			break;
 		}
-		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+		return xmeleehurty(magr, mdef, &alt_attk, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
 
 	case AD_HDRG:
 		/* use halfdragon's breath type */
+		/* note: replaces originalattk */
 		if (youagr && Race_if(PM_HALF_DRAGON))
 			alt_attk.adtyp = flags.HDbreath;
 		else if (is_half_dragon(pa))
 			alt_attk.adtyp = magr->mvar1;
 		else
 			alt_attk.adtyp = AD_COLD;
-		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+		return xmeleehurty(magr, mdef, &alt_attk, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
 
 	case AD_RBRE:	/* should actually be breath-only */
 	case AD_RETR:
 		/* random between fire/cold/elec damage */
+		/* note: replaces originalattk */
 		switch (rn2(3))
 		{
 		case 0: alt_attk.adtyp = AD_FIRE; break;
 		case 1: alt_attk.adtyp = AD_COLD; break;
 		case 2: alt_attk.adtyp = AD_ELEC; break;
 		}
-		return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+		return xmeleehurty(magr, mdef, &alt_attk, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
 
 //////////////////////////////////////////////////////////////
 // BINDER SPIRIT ATTACKS
@@ -7260,7 +7285,7 @@ boolean ranged;
 	case AD_IRIS:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* note when the player last made an Iris attack */
 		if (youagr) {
@@ -7296,7 +7321,7 @@ boolean ranged;
 	case AD_NABERIUS:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		if (!youdef && mdef->mflee) {	/* what would be an acceptable condition for the player to be affected? */
 			if ((*hp(magr) < *hpmax(magr)) && vis) {
@@ -7331,7 +7356,7 @@ boolean ranged;
 	case AD_OTIAX:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 		/* note when the player last made an Otiax attack */
 		if (youagr) {
@@ -7397,7 +7422,7 @@ boolean ranged;
 	case AD_SIMURGH:
 		/* print a basic hit message */
 		if (vis && dohitmsg) {
-			xyhitmsg(magr, mdef, attk);
+			xyhitmsg(magr, mdef, originalattk);
 		}
 
 		/* 4/5 chance of just iron-hating damage */
@@ -9265,7 +9290,7 @@ boolean
 umetgaze(mtmp)
 struct monst *mtmp;
 {
-	return (canseemon_eyes(mtmp) && couldsee(mtmp->mx, mtmp->my) && !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) && !(multi < 0));
+	return (canseemon_eyes(mtmp) && couldsee(mtmp->mx, mtmp->my) && !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD));
 }
 
 boolean
@@ -9424,9 +9449,9 @@ int vis;
 		))
 		||
 		(needs_mdef_eyes && (
-		(youdef  && !umetgaze(magr)) ||
-		(youagr  && mon_can_see_you(mdef)) ||
-		(!youagr && !youdef && !mmetgaze(magr, mdef))
+		(youdef  && (!umetgaze(magr) || multi >= 0)) ||
+		(youagr  && (mon_can_see_you(mdef))) ||
+		(!youagr && !youdef && (!mmetgaze(magr, mdef)))
 		))){
 		/* gaze fails because the appropriate gazer/gazee eye (contact?) is not available */
 		return MM_MISS;
@@ -10704,10 +10729,11 @@ boolean * hittxt;
  * are called after the player hits, while letting hmoncore have messy returns wherever it wants
  */
 int
-hmon2point0(magr, mdef, attk, weapon, launcher, thrown, flatbasedmg, monsdmg, dohitmsg, dieroll, recursed, vis, wepgone, killerset)
+hmon2point0(magr, mdef, attk, originalattk, weapon, launcher, thrown, flatbasedmg, monsdmg, dohitmsg, dieroll, recursed, vis, wepgone, killerset)
 struct monst * magr;	/* attacker */
 struct monst * mdef;	/* defender */
 struct attack * attk;	/* attack structure to use -- if this does not exist, we MUST have a weapon */
+struct attack * originalattk;	/* original attack structure, used for messages */
 struct obj * weapon;	/* weapon to hit with */
 struct obj * launcher;	/* launcher weapon was fired with */
 int thrown;				/* was [weapon] thrown or thrust? 0:No 1:thrown properly 2:thrown improperly*/
@@ -10733,9 +10759,9 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 	else
 		u_anger_guards = FALSE;
 
-	result = hmoncore(magr, mdef, attk, weapon, launcher, thrown, flatbasedmg, monsdmg, dohitmsg, dieroll, recursed, vis, wepgone, killerset);
+	result = hmoncore(magr, mdef, attk, originalattk, weapon, launcher, thrown, flatbasedmg, monsdmg, dohitmsg, dieroll, recursed, vis, wepgone, killerset);
 
-	if (mdef->ispriest && !rn2(2))
+	if (magr == &youmonst && mdef->ispriest && !rn2(2))
 		ghod_hitsu(mdef);
 	if (u_anger_guards)
 		(void)angry_guards(!flags.soundok);
@@ -10744,10 +10770,11 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 }
 
 int
-hmoncore(magr, mdef, attk, weapon, launcher, thrown, flatbasedmg, monsdmg, dohitmsg, dieroll, recursed, vis, wepgone, killerset)
+hmoncore(magr, mdef, attk, originalattk, weapon, launcher, thrown, flatbasedmg, monsdmg, dohitmsg, dieroll, recursed, vis, wepgone, killerset)
 struct monst * magr;	/* attacker */
 struct monst * mdef;	/* defender */
 struct attack * attk;	/* attack structure to use */
+struct attack * originalattk;	/* original attack structure, used for messages */
 struct obj * weapon;	/* weapon to hit with */
 struct obj * launcher;	/* launcher weapon was fired with */
 int thrown;				/* was [weapon] thrown or thrust? 0:No 1:thrown properly 2:thrown improperly*/
@@ -12587,7 +12614,7 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 				!(youagr && lethaldamage) &&
 				!(youagr && sneak_attack))
 			{
-				xyhitmsg(magr, mdef, attk);
+				xyhitmsg(magr, mdef, originalattk);
 			}
 		}
 	}
@@ -13424,7 +13451,7 @@ boolean endofchain;			/* if the attacker has finished their attack chain */
 		res[1] = res[0];
 		res[0] = MM_MISS;
 		/* get next attack */
-		passive = getattk(mdef, res, &indexnum, &prev_attk, FALSE, &subout, &tohitmod);
+		passive = getattk(mdef, magr, res, &indexnum, &prev_attk, FALSE, &subout, &tohitmod);
 		/* if we don't have a passive attack, continue */
 		if (is_null_attk(passive) || passive->aatyp != AT_NONE)
 			continue;
@@ -13606,7 +13633,7 @@ boolean endofchain;			/* if the attacker has finished their attack chain */
 				/* grab the first weapon attack mdef has, or else use a basic 1d4 attack */
 				do {
 					/* we'll ignore res[], tohitmod, and prev_attk, resusing them from earlier */
-					counter = getattk(mdef, res, &indexnum2, &prev_attk, FALSE, &subout2, &tohitmod);
+					counter = getattk(mdef, magr, res, &indexnum2, &prev_attk, FALSE, &subout2, &tohitmod);
 				} while (counter->aatyp != AT_WEAP && !is_null_attk(counter));
 				if (is_null_attk(counter))
 					counter = &basicattack;
