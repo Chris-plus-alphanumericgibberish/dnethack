@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "eshk.h"
 #include "artifact.h"
 /* #define DEBUG */	/* uncomment to enable new eat code debugging */
 
@@ -4122,23 +4123,41 @@ int perturn;
 	if(price){
 	Sprintf(qbuf, "That will be %ld %s. (Pay?)", price, currency(price));
 	if(yn(qbuf)=='y'){
+		struct eshk *eshkp = 0;
+		int credit = 0;
+		if(mon->isshk)
+			eshkp = ESHK(mon);
+		if(eshkp && eshkp->credit > 0)
+			credit = eshkp->credit;
+		if (credit >= price) {
+			Your("credit of %ld %s is used to cover the bill.", credit);
+			eshkp->credit -= price;
+		}
 #ifndef GOLDOBJ
-		if (price > u.ugold) {
+		else if (price > u.ugold+credit) {
 			You("don't have enough %s!", currency(price));
 			return 0;
 		} else {
+			if(credit){
+				Your("credit of %ld %s is used to cover part of the bill.", credit);
+				price -= credit;
+			}
 			You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+			u.ugold -= price;
+			mon->mgold += price;
 		}
-		u.ugold -= price;
-		mon->mgold += price;
 #else
 		if (price > umoney) {
 			You("don't have enough %s!", currency(price));
 			return 0;
 		} else {
+			if(credit){
+				Your("credit of %ld %s is used to cover part of the bill.", credit);
+				price -= credit;
+			}
 			You("give %s %ld %s.", mon_nam(mon), price, currency(price));
+			(void) money2mon(mon, price);
 		}
-		(void) money2mon(mon, price);
 #endif
 	return turns;
 	} else{
