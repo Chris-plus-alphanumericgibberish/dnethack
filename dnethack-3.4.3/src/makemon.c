@@ -3076,8 +3076,10 @@ register struct monst *mtmp;
 			} else if(ptr == &mons[PM_SURYA_DEVA]){
 				struct monst *dancer;
 				dancer = makemon(&mons[PM_DANCING_BLADE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
-				dancer->mvar1 = (long)mtmp->m_id;
-				dancer->mpeaceful = mtmp->mpeaceful;
+				if(dancer){
+					dancer->mvar1 = (long)mtmp->m_id;
+					dancer->mpeaceful = mtmp->mpeaceful;
+				}
 				
 			    otmp = mksobj(PLATE_MAIL, FALSE, FALSE);
 			    bless(otmp);

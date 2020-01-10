@@ -875,7 +875,7 @@ random_special_room_default_room_and_corridors:
 			add_rspec_room(COCKNEST		, 16, udepth > 16 && mnotgone(PM_COCKATRICE));
 			add_rspec_room(POOLROOM		, 15, udepth > 15);
 			add_rspec_room(BARRACKS		, 17, udepth > 14 && mnotgone(PM_SOLDIER));
-			add_rspec_room(ARMORY		,  8, udepth <=14 && mnotgone(PM_RUST_MONSTER));
+			add_rspec_room(ARMORY		,  8, udepth <=14 && udepth > 1 && mnotgone(PM_RUST_MONSTER));
 			add_rspec_room(ANTHOLE		, 14, udepth > 12);
 			add_rspec_room(MORGUE		, 18, udepth > 11);
 			add_rspec_room(BEEHIVE		,  8, udepth >  9 && mnotgone(PM_KILLER_BEE));
@@ -883,7 +883,7 @@ random_special_room_default_room_and_corridors:
 			add_rspec_room(GARDEN		, 13, udepth >  7);
 			add_rspec_room(ZOO       	, 12, udepth >  6);
 			add_rspec_room(LEPREHALL	, 10, udepth >  4 && mnotgone(PM_LEPRECHAUN));
-			add_rspec_room(STATUEGRDN	,  2, udepth >  1);
+			add_rspec_room(STATUEGRDN	,  2, udepth >  2);
 			add_rspec_room(0			, 50, TRUE);
 		}
 	}

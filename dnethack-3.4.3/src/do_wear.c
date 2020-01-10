@@ -2214,7 +2214,7 @@ int base_uac()
 		dexbonus += mons[u.umonnum].dac;
 	
 	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
-		uac += 6;
+		uac -= 6;
 	}
 
 	if(uwep){

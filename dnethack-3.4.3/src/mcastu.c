@@ -442,28 +442,6 @@ unsigned int type;
 		   else if(rn2(2)) return MASS_CURE_CLOSE;
 		   else return SLEEP;
 	   break;
-       case PM_MAHADEVA:
-		switch(rn2(10)){
-			case 0:
-				return MASS_CURE_CLOSE;
-			break;
-			case 1:
-			case 2:
-			case 3:
-				return ARROW_RAIN;
-			break;
-			case 4:
-			case 5:
-			case 6:
-				return ICE_STORM;
-			break;
-			case 7:
-			case 8:
-			case 9:
-				return GEYSER;
-			break;
-		}
-	   break;
        case PM_MOVANIC_DEVA:
 		return MASS_CURE_FAR;
 	   break;
@@ -543,44 +521,6 @@ unsigned int type;
        case PM_BARROW_WIGHT:
            return (!rn2(3) ? DARKNESS : (rn2(2) ? MAKE_WEB : SLEEP));
 
-       case PM_BAELNORN:
-			switch(rnd(6)){
-				case 1: return ACID_RAIN;
-				case 2: return CURSE_ITEMS;
-				case 3: return MASS_CURE_CLOSE;
-				case 4: return SLEEP;
-				case 5: return DARKNESS;
-				case 6: return CONFUSE_YOU;
-			}
-	   break;
-	   case PM_ALABASTER_ELF_ELDER:
-			switch (rnd(8)) {
-				case 8:
-				return MASS_CURE_FAR;
-				break;
-				case 7:
-				return AGGRAVATION;
-				break;
-				case 6:
-				return MASS_CURE_CLOSE;
-				break;
-				case 5:
-				return MASS_CURE_FAR;
-				break;
-				case 4:
-				return SLEEP;
-				break;
-				case 3:
-				return BLIND_YOU;
-				break;
-				case 2:
-				return CONFUSE_YOU;
-				break;
-				case 1:
-				return DISAPPEAR;
-				break;
-			}
-	   break;
        case PM_PRIEST_OF_GHAUNADAUR:
            if (rn2(2)) return FIRE_PILLAR;
 		   else if(rn2(2)) return MON_FIRAGA;
@@ -775,6 +715,28 @@ unsigned int type;
 			break;
 		}
 	break;
+       case PM_MAHADEVA:
+		switch(rn2(10)){
+			case 0:
+				return MASS_CURE_CLOSE;
+			break;
+			case 1:
+			case 2:
+			case 3:
+				return ARROW_RAIN;
+			break;
+			case 4:
+			case 5:
+			case 6:
+				return ICE_STORM;
+			break;
+			case 7:
+			case 8:
+			case 9:
+				return GEYSER;
+			break;
+		}
+	   break;
 	case PM_GAE_ELADRIN:
 		switch (rnd(4)) {
 			case 1:
@@ -886,6 +848,16 @@ unsigned int type;
 			case 6: return PRISMATIC_SPRAY;
 		}
 	break;
+	case PM_BAELNORN:
+		switch(rnd(6)){
+			case 1: return ACID_RAIN;
+			case 2: return CURSE_ITEMS;
+			case 3: return MASS_CURE_CLOSE;
+			case 4: return SLEEP;
+			case 5: return DARKNESS;
+			case 6: return CONFUSE_YOU;
+		}
+	break;
 	case PM_UVUUDAUM:
 	case PM_MASKED_QUEEN:
 		switch(rn2(8)){
@@ -969,6 +941,34 @@ unsigned int type;
 			}
 		}
 	break;
+	   case PM_ALABASTER_ELF_ELDER:
+			switch (rnd(8)) {
+				case 8:
+				return MASS_CURE_FAR;
+				break;
+				case 7:
+				return AGGRAVATION;
+				break;
+				case 6:
+				return MASS_CURE_CLOSE;
+				break;
+				case 5:
+				return MASS_CURE_FAR;
+				break;
+				case 4:
+				return SLEEP;
+				break;
+				case 3:
+				return BLIND_YOU;
+				break;
+				case 2:
+				return CONFUSE_YOU;
+				break;
+				case 1:
+				return DISAPPEAR;
+				break;
+			}
+	   break;
        case PM_WITCH_S_FAMILIAR:
 			return OPEN_WOUNDS;
 	   break;

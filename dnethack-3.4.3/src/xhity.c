@@ -2130,7 +2130,7 @@ boolean allow_lethal;
 			else							mult = "One of ";
 			pline("%s%s %s %s!",
 				mult,
-				(youdef) ? ((mult != "") ? "your" : "Your") : ((mult != "") ? s_suffix(mon_nam(mtmp)) : s_suffix(Monnam(mtmp))),
+				(youdef) ? ((mult[0] != '\0') ? "your" : "Your") : ((mult[0] != '\0') ? s_suffix(mon_nam(mtmp)) : s_suffix(Monnam(mtmp))),
 				xname(obj),
 				(cnt > 1L) ? destroy_strings[dindx * 3 + 1]
 				: destroy_strings[dindx * 3]);
@@ -10833,6 +10833,7 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 		ironobj = 0L,
 		holyobj = 0L,
 		unholyobj = 0L,
+		uuvuglory = 0L,
 		otherobj = 0L;
 	int poisons_resisted = 0,
 		poisons_minoreff = 0,
@@ -11396,15 +11397,23 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 			ironobj |= W_SKIN;
 			seardmg += rnd(mlev(mdef));
 		}
-		if (hates_holy_mon(mdef) &&
-			is_holy_mon(magr)) {
-			holyobj |= W_SKIN;
-			seardmg += d(3, 7);
+		if (hates_holy_mon(mdef)){
+			if(is_holy_mon(magr)) {
+				holyobj |= W_SKIN;
+				seardmg += d(3, 7);
+			} else if(magr->data == &mons[PM_UVUUDAUM]){
+				uuvuglory |= W_SKIN;
+				seardmg += d(4, 9);
+			}
 		}
-		if (hates_unholy_mon(mdef) &&
-			is_unholy_mon(magr)) {
-			unholyobj |= W_SKIN;
-			seardmg += d(4, 9);
+		if (hates_unholy_mon(mdef)){
+			if(is_unholy_mon(magr)) {
+				unholyobj |= W_SKIN;
+				seardmg += d(4, 9);
+			} else if(magr->data == &mons[PM_UVUUDAUM]){
+				uuvuglory |= W_SKIN;
+				seardmg += d(3, 7);
+			}
 		}
 
 		/* rings, for an unarmed punch/claw attack */
@@ -12877,6 +12886,10 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 		}
 	}
 
+	if(uuvuglory){
+		pline("%s's glory sears %s", Monnam(magr), youdef ? "you" : mon_nam(mdef));
+	}
+	
 	/* Searing messages */
 	if ((silverobj || jadeobj || ironobj || holyobj || unholyobj || otherobj) && (youdef || canseemon(mdef)) && !recursed) {
 		long active_slots = (silverobj | jadeobj | ironobj | holyobj | unholyobj | otherobj);
@@ -14485,7 +14498,7 @@ struct attack * passive;	/* specific passive attack being used */
 	{
 	case AD_EACD:
 	case AD_ACID:
-		if (!rn2(attk->adtyp == AD_EACD ? 2 : 6)) {
+		if (!rn2(passive->adtyp == AD_EACD ? 2 : 6)) {
 			erode_obj(otmp, TRUE, FALSE);
 		}
 		break;

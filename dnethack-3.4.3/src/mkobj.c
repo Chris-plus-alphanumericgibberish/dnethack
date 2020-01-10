@@ -2150,7 +2150,7 @@ int mat;
 			else if (mat == GEMSTONE && oldmat == GLASS)
 				obj->otyp = MAGICITE_CRYSTAL + rn2(LAST_GEM - MAGICITE_CRYSTAL + 1);
 			else if (mat == GLASS && oldmat == GEMSTONE)
-				obj->otyp == LAST_GEM + rnd(9);
+				obj->otyp = LAST_GEM + rnd(9);
 			obj->obj_material = mat;
 		break;
 		default:
