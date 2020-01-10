@@ -7181,9 +7181,13 @@ register int	mmflags;
 		do {
 			x = rn1(COLNO-3,2);
 			y = rn2(ROWNO);
-		} while(!goodpos(x, y, ptr ? &fakemon : (struct monst *)0, Is_waterlevel(&u.uz) ? gpflags|MM_IGNOREWATER : gpflags) ||
-			(tryct++ < 150 && ((tryct < 50 && couldsee(x, y)) || ((tryct < 100 && cansee(x, y))) || distmin(x,y,u.ux,u.uy) < BOLT_LIM)));
-		if(tryct >= 150){
+			tryct++;
+		} while(tryct < 400 && (!goodpos(x, y, ptr ? &fakemon : (struct monst *)0, Is_waterlevel(&u.uz) ? gpflags|MM_IGNOREWATER : gpflags))
+			|| (tryct < 300 && distmin(x,y,u.ux,u.uy) < BOLT_LIM)
+			|| (tryct < 200 && cansee(x, y))
+			|| (tryct < 100 && couldsee(x, y))
+			);
+		if(tryct >= 400){
 			return((struct monst *)0);
 		}
 		if(ptr && PM_ARCHEOLOGIST <= monsndx(ptr) && monsndx(ptr) <= PM_WIZARD && !(mmflags & MM_EDOG)){

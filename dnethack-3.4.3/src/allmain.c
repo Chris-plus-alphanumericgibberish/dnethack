@@ -2314,6 +2314,8 @@ newgame()
 	 */
 	if(MON_AT(u.ux, u.uy)) mnexto(m_at(u.ux, u.uy));
 	(void) makedog();
+	if(Race_if(PM_ANDROID))
+		scatter_weapons();
 	docrt();
 #ifdef CONVICT
        if (Role_if(PM_CONVICT)) {

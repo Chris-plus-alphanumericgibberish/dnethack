@@ -17,7 +17,6 @@ STATIC_DCL void FDECL(ini_inv, (struct trobj *));
 STATIC_DCL void FDECL(knows_object,(int));
 STATIC_DCL void FDECL(knows_class,(CHAR_P));
 STATIC_DCL boolean FDECL(restricted_spell_discipline, (int));
-STATIC_DCL void NDECL(scatter_weapons);
 
 #define UNDEF_TYP	0
 #define UNDEF_SPE	'\177'
@@ -1962,7 +1961,6 @@ u_init()
 		else if(Race_if(PM_ANDROID)){
 			if(!flags.female) ini_inv(Anachrononaut_Mal_Clk);
 			else ini_inv(Anachrononaut_Fem_Clk);
-			scatter_weapons();
 		}
 		else ini_inv(Anachrononaut_Hu);
 		knows_object(FLINTLOCK);

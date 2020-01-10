@@ -2574,6 +2574,7 @@ E int NDECL(uescape_entanglement);
 /* ### u_init.c ### */
 
 E void NDECL(u_init);
+E void NDECL(scatter_weapons);
 
 /* ### unixmain.c ### */
 
