@@ -1394,7 +1394,7 @@ start_corpse_timeout(body)
 	when += (long)(rnz(rot_adjust) - rot_adjust);
 	
 //	pline("corpse type: %d, %c",mons[body->corpsenm].mlet,def_monsyms[mons[body->corpsenm].mlet]);
-	if(is_migo(&mons[body->corpsenm])){
+	if(is_migo(&mons[body->corpsenm]) || body->corpsenm == PM_DEEP_DWELLER){
 		when = when/10 + 1;
 	}
 

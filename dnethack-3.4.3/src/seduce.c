@@ -61,6 +61,9 @@ struct attack *mattk;
 		)
 		return 0;
 
+	if(pagr == &mons[PM_SMALL_GOAT_SPAWN] || pagr == &mons[PM_GOAT_SPAWN] || pagr == &mons[PM_GIANT_GOAT_SPAWN])
+		return 1;
+	
 	if(pagr->mlet == S_NYMPH || pagr == &mons[PM_INCUBUS] || pagr == &mons[PM_SUCCUBUS]
 			|| pagr == &mons[PM_CARMILLA] || pagr == &mons[PM_VLAD_THE_IMPALER] || pagr == &mons[PM_LEVISTUS]){
 		if(genagr == 1 - gendef)

@@ -1983,9 +1983,9 @@ MAP
 1       .......}}}}}}}}}.           .}}}..}}}}}.. # ...    }}}}}}    ------- 
 2       #   .... .}}}}}}..           .}}. .}}}}}...       }}}}}      |.....| 
 3      ##   # ......}}}}}.            ..}}..}}}.}} ..    }}}}}  --------S--- 
-4     ##    #        }}}}..       ###  }}.}}}}..}}}}}.} }}}}}   |...{....|   
-5     #   #H##  ....  }}}}.#####  H ##  .}.}}}.}.}}}}}.}}}}}    |..{.{...|   
-6    ....H#  ##.....  }}}}.    .. .  ###..}.}.}}}.}}}}}.}}..####+...{....|   
+4     ##    #        }}}}..       ###  }}.}}}}..}}}}}.} }}}}}   |}}w{wwww|   
+5     #   #H##  ....  }}}}.#####  H ##  .}.}}}.}.}}}}}.}}}}}    |}w{.{ww}|   
+6    ....H#  ##.....  }}}}.    .. .  ###..}.}.}}}.}}}}}.}}..####+www{ww}}|   
 7  .....       ....   }}}}   ......      ..}. -}}}.}}}}}..      ----------   
 8   .....       ...  }}}}    .....                                           
 9                   }}}}                                                     
@@ -1993,6 +1993,10 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7
 # Black Goat in the west 
+MONSTER:'q',"blessed",(06,02)
+MONSTER[20%]:'q',"blessed",(06,07)
+MONSTER[10%]:'q',"blessed",(23,02)
+MONSTER[10%]:'q',"blessed",(11,12)
 MONSTER:'q',"dark young",(13,03)
 MONSTER:'q',"dark young",(09,06)
 MONSTER:'q',"dark young",(06,09)
@@ -2055,6 +2059,15 @@ OBJECT:'/',"death",contained
 OBJECT:'/',"undead turning",contained
 MONSTER:'@',"coven leader",(74,02)
 
+CONTAINER:'`',"statue",(67,15),"god",1,"Mother Hydra"
+OBJECT:'*',"ruby",contained
+OBJECT:'*',"ruby",contained
+OBJECT:'*',"ruby",contained
+OBJECT:'*',"ruby",contained
+OBJECT:'*',"ruby",contained
+OBJECT:'*',"ruby",contained
+OBJECT:'*',"ruby",contained
+OBJECT:'*',"ruby",contained
 CONTAINER:'`',"statue",(67,15),"god",1,"Father Dagon"
 OBJECT:'#',"gold amulet of magical breathing",contained
 OBJECT:'*',"star sapphire",contained
@@ -2064,9 +2077,11 @@ OBJECT:'`',"statue",(38,10), "god", 1, "something long since forgotten"
 MONSTER:'&',"priest of an unknown god",(38,11)
 
 # Deep one servitors for the temple of Dagon
+MONSTER:'q',"deep dweller",(64,14),asleep
 MONSTER:'h',"deep one",(65,14),asleep
 MONSTER[50%]:'h',"deep one",(65,16),asleep
 MONSTER:'h',"deeper one",(70,15),asleep
+MONSTER:'q',"deep dweller",(71,16),asleep
 OBJECT:'(',"chest",(69,12)
 OBJECT:'(',"chest",(73,12)
 OBJECT:'?',"create monster",(70,15),cursed,0
@@ -2213,9 +2228,9 @@ MAP
        eeeeeee}}}}}}}}}e           e}}}ee}}}}}ee # ...    }}}}}}    ------- 
        #   eeee e}}}}}}ee           e}}e e}}}}}eee       }}}}}      |.....| 
       ##   # eeeeee}}}}}e            ee}}ee}}}e}} ee    }}}}}  --------S--- 
-     ##    #        }}}}ee       ###  }}e}}}}ee}}}}}e} }}}}}   |...{....|   
-     #   #H##  ....  }}}}e#####  H ##  e}e}}}e}e}}}}}e}}}}}    |..{.{...|   
-    ....H#  ##.....  }}}}e    .. .  ###ee}e}e}}}e}}}}}e}}ee####+...{....|   
+     ##    #        }}}}ee       ###  }}e}}}}ee}}}}}e} }}}}}   |}}w{wwww|   
+     #   #H##  ....  }}}}e#####  H ##  e}e}}}e}e}}}}}e}}}}}    |}w{.{ww}|   
+    ....H#  ##.....  }}}}e    .. .  ###ee}e}e}}}e}}}}}e}}ee####+www{ww}}|   
   .....       ....   }}}}   ......      ee}e -}}}e}}}}}ee      ----------   
    .....       ...  }}}}    .....                                           
                    }}}}                                                     

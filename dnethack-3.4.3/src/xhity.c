@@ -552,6 +552,12 @@ int tary;
 		if (!Blind && pa != &mons[PM_LILLEND] && canseemon(magr))
 			pline("%s uses a %s mask!", Monnam(magr), pa->mname);
 	}
+	
+	/* deliriums use random form */
+	if (pa == &mons[PM_WALKING_DELIRIUM] && !youagr){
+		magr->mvar2 = select_newcham_form(magr);
+	}
+	
 	/* zero out res[] */
 	res[0] = MM_MISS;
 	res[1] = MM_MISS;
@@ -1093,6 +1099,8 @@ int tary;
 	/* reset lillend mask usage */
 	if (!youagr && pa == &mons[PM_LILLEND])
 		magr->mvar2 = 0;
+	if (!youagr && pa == &mons[PM_WALKING_DELIRIUM])
+		magr->mvar2 = 0;
 
 	/* do some things only if attacks were made */
 	if (attacksmade > 0) {
@@ -1498,13 +1506,12 @@ int * subout;					/* records what attacks have been subbed out */
 #define SUBOUT_SPELLS	0x0002	/* Spellcasting attack instead (Five Fiends of Chaos1 and Gae) */
 #define SUBOUT_BAEL1	0x0004	/* Bael's Sword Archon attack chain */
 #define SUBOUT_BAEL2	0x0008	/* Bael's marilith-hands attack chain */
-#define SUBOUT_DEMO1	0x0010	/* Demogorgon's shredding rend */
-#define SUBOUT_DEMO2	0x0020	/* Demogorgon's item steal */
-#define SUBOUT_SPIRITS	0x0040	/* Player's bound spirits */
-#define SUBOUT_BARB1	0x0080	/* 1st bit of barbarian bonus attacks */
-#define SUBOUT_BARB2	0x0100	/* 2nd bit of barbarian bonus attacks, must directly precede the 1st bit */
-#define SUBOUT_MAINWEPB	0x0200	/* Bonus attack caused by the wielded *mainhand* weapon */
-#define SUBOUT_XWEP		0x1000	/* when giving additional attacks, whether or not to use AT_XWEP or AT_WEAP this call */
+#define SUBOUT_SPIRITS	0x0010	/* Player's bound spirits */
+#define SUBOUT_BARB1	0x0020	/* 1st bit of barbarian bonus attacks */
+#define SUBOUT_BARB2	0x0040	/* 2nd bit of barbarian bonus attacks, must directly precede the 1st bit */
+#define SUBOUT_MAINWEPB	0x0080	/* Bonus attack caused by the wielded *mainhand* weapon */
+#define SUBOUT_XWEP		0x0100	/* when giving additional attacks, whether or not to use AT_XWEP or AT_WEAP this call */
+#define SUBOUT_GOATSPWN	0x0200	/* Goat spawn: seduction */
 int * tohitmod;					/* some attacks are made with decreased accuracy */
 {
 	struct attack * attk;
@@ -1513,10 +1520,11 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 	boolean youdef = (mdef == &youmonst);
 	boolean fromlist;
 	struct permonst * pa = youagr ? youracedata : magr->data;
+	struct permonst * pd = youdef ? youracedata : mdef ? mdef->data : (struct permonst *)0;
 
 	/* lillends are able to use the attacks of another monster */
 	/* modify pa here, but only here (when getting attacks) */
-	if (pa == &mons[PM_LILLEND] && magr->mvar2) {
+	if ((pa == &mons[PM_LILLEND] || pa == &mons[PM_WALKING_DELIRIUM]) && magr->mvar2) {
 		pa = &mons[magr->mvar2];
 	}
 
@@ -1617,7 +1625,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		(pa == &mons[PM_TIAMAT__THE_FIEND_OF_WIND]) ||
 		(pa == &mons[PM_CHAOS]))
 		){
-		// first index -- determing if using the alternate attack set (solo spellcasting)
+		// first index -- determine if using the alternate attack set (solo spellcasting)
 		if (*indexnum == 0){
 			if (
 				(pa == &mons[PM_LICH__THE_FIEND_OF_EARTH] && rn2(4)) ||
@@ -1639,7 +1647,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		}
 	}
 	if(!by_the_book && pa == &mons[PM_GAE_ELADRIN]){
-		// first index -- determing if using the alternate attack set (solo spellcasting)
+		// first index -- determine if using the alternate attack set (solo spellcasting)
 		if (*indexnum == 0){
 			if (!magr->mcan
 				&& !magr->mspec_used
@@ -1655,6 +1663,80 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		else if (*subout&SUBOUT_SPELLS){
 			/* If spellcasting, stop after the first index */
 			return &noattack;
+		}
+	}
+	if(!by_the_book && 
+		(pa == &mons[PM_SMALL_GOAT_SPAWN] || pa == &mons[PM_GOAT_SPAWN] || pa == &mons[PM_GIANT_GOAT_SPAWN])
+	){
+		// first index -- determine if using the alternate attack set (one seduction attack)
+		if (*indexnum == 0){
+			if (youdef){
+				static int engagering6 = 0;
+				boolean engring = FALSE;
+				if (!engagering6) engagering6 = find_engagement_ring();
+				if ((uleft && uleft->otyp == engagering6) || (uright && uright->otyp == engagering6)) engring = TRUE;
+				if(pd && (!(dmgtype(pd, AD_SEDU)
+					|| dmgtype(pd, AD_SSEX)
+					|| dmgtype(pd, AD_LSEX)
+					|| magr->mcan 
+					|| engring
+					|| !(uarm || uarmu || uarmh || uarmg || uarmf || uarmc || uwep || uswapwep)
+				))){
+					*subout |= SUBOUT_GOATSPWN;
+					attk->aatyp = AT_CLAW;
+					attk->adtyp = AD_SEDU;
+					attk->damn = 0;
+					attk->damd = 0;
+				}
+			} else {
+				if(pd && (!(dmgtype(pd, AD_SEDU)
+					|| dmgtype(pd, AD_SSEX)
+					|| dmgtype(pd, AD_LSEX)
+					|| magr->mcan 
+					|| (mdef && !(which_armor(mdef, W_ARM) || which_armor(mdef, W_ARMU) || which_armor(mdef, W_ARMH) || 
+						 which_armor(mdef, W_ARMG) || which_armor(mdef, W_ARMF) || which_armor(mdef, W_ARMC) ||
+						 MON_WEP(mdef) || MON_SWEP(mdef)
+					))
+				))){
+					*subout |= SUBOUT_GOATSPWN;
+					attk->aatyp = AT_CLAW;
+					attk->adtyp = AD_SEDU;
+					attk->damn = 0;
+					attk->damd = 0;
+				}
+			}
+		}
+		else if (*subout&SUBOUT_GOATSPWN){
+			/* If spellcasting, stop after the first index */
+			return &noattack;
+		}
+	}
+	// if(magr->mfaction == GOAT_VORTEX){
+		// if(){
+		// }
+	// }
+	if(attk->aatyp == AT_BKGT){
+		switch(rnd(5)){
+			case 1:
+				attk->aatyp = AT_TUCH;
+				//Use noted ad type
+			break;
+			case 2:
+				attk->aatyp = AT_BITE;
+				attk->adtyp = AD_PHYS;
+			break;
+			case 3:
+				attk->aatyp = AT_KICK;
+				attk->adtyp = AD_PHYS;
+			break;
+			case 4:
+				attk->aatyp = AT_BUTT;
+				attk->adtyp = AD_PHYS;
+			break;
+			case 5:
+				attk->aatyp = AT_GAZE;
+				attk->adtyp = AD_STDY;
+			break;
 		}
 	}
 	/* Bael has alternate attack routines -- not shown in pokedex */
@@ -6034,14 +6116,6 @@ boolean ranged;
 				}
 				if ((pa == &mons[PM_FIERNA] || pa == &mons[PM_PALE_NIGHT]) && rnd(20) < 15) return MM_HIT;
 				if (((MON_WEP(magr)) && pa == &mons[PM_ALRUNES]) && !rn2(20)) return MM_HIT;
-				if (goatspawn && (
-					dmgtype(youracedata, AD_SEDU)
-					|| dmgtype(youracedata, AD_SSEX)
-					|| dmgtype(youracedata, AD_LSEX)
-					|| magr->mcan 
-					|| engring
-					|| !(uarm || uarmu || uarmh || uarmg || uarmf || uarmc || uwep || uswapwep)
-				)) return MM_HIT;
 				if (dmgtype(youracedata, AD_SEDU)
 #ifdef SEDUCE
 					|| dmgtype(youracedata, AD_SSEX) || dmgtype(youracedata, AD_LSEX)
@@ -6146,13 +6220,6 @@ boolean ranged;
 		}
 		/* monsters just steal items from each other */
 		else {
-			if (goatspawn && (
-				magr->mcan 
-				|| !(which_armor(mdef, W_ARM) || which_armor(mdef, W_ARMU) || which_armor(mdef, W_ARMH) || 
-					 which_armor(mdef, W_ARMG) || which_armor(mdef, W_ARMF) || which_armor(mdef, W_ARMC) ||
-					 MON_WEP(mdef) || MON_SWEP(mdef)
-				)
-			)) return MM_HIT;
 			if (notmcan) {
 				/* select item from defender's inventory */
 				for (otmp = mdef->minvent; otmp; otmp = otmp->nobj)
@@ -9134,8 +9201,10 @@ int vis;
 						You("are caught in a blast of kaleidoscopic light!");
 					chg = make_hallucinated(HHallucination + (long)dmg, FALSE, 0L);
 					You("%s.", chg ? "are freaked out" : "seem unaffected");
-					if (chg && Hallucination && magr->data == &mons[PM_DAUGHTER_OF_BEDLAM])
+					if (chg && Hallucination && magr->data == &mons[PM_DAUGHTER_OF_BEDLAM]){
 						u.umadness |= MAD_DELUSIONS;
+						change_usanity(-1*rnd(6)); //Deals sanity damage
+					}
 				}
 				else {
 					if (youagr && vis&VIS_MDEF) {
@@ -12581,7 +12650,11 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 	
 	/* Apply DR */
 	if (subtotl > 0){
-		if (phase_armor){
+		if(pd == &mons[PM_DEEP_DWELLER] && !rn2(10)){
+			//Brain struck.  Ouch.
+			*hp(mdef) = 1;
+		}
+		else if (phase_armor){
 			subtotl -= (youdef ? (base_udr() + base_nat_udr()) : (base_mdr(mdef) + base_nat_mdr(mdef)));
 		}
 		else {

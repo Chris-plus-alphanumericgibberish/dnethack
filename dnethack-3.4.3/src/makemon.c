@@ -596,6 +596,11 @@ register struct monst *mtmp;
 				otmp->obj_material = METAL;
 				(void) mpickobj(mtmp, otmp);
 			}
+			else if(mm == PM_GOAT_SPAWN) {
+				if(mtmp->female && In_lost_cities(&u.uz) && u.uinsight > (rnd(10)+rn2(11))){
+					mtmp->mfaction = MISTWEAVER;
+				}
+			}
 			else if(mm == PM_DAEMON){
 				otmp = mksobj(SABER, TRUE, FALSE);
 				otmp = oname(otmp, artiname(ART_ICONOCLAST));
@@ -3691,6 +3696,10 @@ register struct monst *mtmp;
 			otmp->blessed = TRUE;
 			otmp->cursed = FALSE;
 			(void) mpickobj(mtmp, otmp);
+		} else if(mm == PM_SMALL_GOAT_SPAWN) {
+			if(mtmp->female && In_lost_cities(&u.uz) && u.uinsight > (rnd(10)+rn2(11))){
+				mtmp->mfaction = MISTWEAVER;
+			}
 		} else if(mm == PM_GNOLL) {
 			switch(rnd(4)){
 			case 1:
@@ -5664,6 +5673,8 @@ register struct	monst	*mtmp;
 					}
 				}
 			}
+			if(mtmp->data == &mons[PM_BLESSED])
+				mongets(mtmp, ROBE);
 		break;
 		case S_RODENT:
 			//6) There is obviously no "underground kingdom beneath London, inhabited by huge, intelligent rodents."
@@ -6007,7 +6018,10 @@ register struct	monst	*mtmp;
 			otmp->cursed = FALSE;
 			fix_object(otmp);
 			(void) mpickobj(mtmp, otmp);
-					
+		} else if(ptr == &mons[PM_GIANT_GOAT_SPAWN]) {
+			if(mtmp->female && In_lost_cities(&u.uz) && u.uinsight > (rnd(10)+rn2(11))){
+				mtmp->mfaction = MISTWEAVER;
+			}
 		} else if (is_giant(ptr)) {
 		    for (cnt = rn2((int)(mtmp->m_lev / 2)); cnt; cnt--) {
 			otmp = mksobj(rnd_class(DILITHIUM_CRYSTAL,LUCKSTONE-1),
@@ -7419,6 +7433,9 @@ register int	mmflags;
 	
 	else if(mtmp->data == &mons[PM_KUKER])
 		mtmp->m_insight_level = rnd(20)+rn2(21);
+	
+	else if(mtmp->data == &mons[PM_BLESSED])
+		mtmp->m_insight_level = 40;
 	
 	else if(mtmp->data == &mons[PM_POLYPOID_BEING])
 		mtmp->m_insight_level = 40;

@@ -18,7 +18,6 @@ STATIC_DCL boolean FDECL(spell_would_be_useless,(struct monst *,int));
 STATIC_DCL boolean FDECL(mspell_would_be_useless,(struct monst *,struct monst *,int));
 STATIC_DCL boolean FDECL(uspell_would_be_useless,(struct monst *,int));
 STATIC_DCL void FDECL(ucast_spell,(struct monst *,struct monst *,int,int));
-STATIC_DCL int FDECL(needs_familiar,(struct monst *));
 
 #ifdef OVL0
 
@@ -5219,7 +5218,7 @@ uspsibolt:
     }
 }
 
-STATIC_OVL int
+int
 needs_familiar(mon)
 struct monst *mon;
 {

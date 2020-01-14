@@ -1291,6 +1291,10 @@ struct monst *mon;
 		mmove *= 2;
 	}
 	
+	if(is_pool(mon->mx, mon->my, FALSE) && mon->data == &mons[PM_DEEP_DWELLER]){
+		mmove = mmove*12/7;
+	}
+	
 	if(mon->data == &mons[PM_PYTHON] && !no_upos(mon) && 
 		dist2(mon->mx, mon->my, mon->mux, mon->muy) <= 8)
 		mmove *= 4;
@@ -5348,6 +5352,13 @@ cleanup:
 	tmp = experience(mtmp, (int)mvitals[mndx].died + 1);
 	more_experienced(tmp, 0);
 	newexplevel();		/* will decide if you go up */
+	if(!mvitals[mndx].onekill){
+		mvitals[mndx].onekill = 1;
+		if(yields_insight(mtmp->data)){
+			change_uinsight(u_insight_gain(mtmp));
+			change_usanity(u_sanity_gain(mtmp));
+		}
+	}
 
 	/* adjust alignment points */
 	if (mtmp->m_id == quest_status.leader_m_id && !is_derived_undead_mon(mtmp)) {
@@ -6136,7 +6147,7 @@ pick_animal()
 	return animal_list[rn2(animal_list_count)];
 }
 
-STATIC_OVL int
+int
 select_newcham_form(mon)
 struct monst *mon;
 {
@@ -6651,14 +6662,16 @@ struct monst *mtmp;
 	int mndx = monsndx(mtmp->data);
 	
 	
-	if(rnd(30) > ACURR(A_WIS)){
-		if(mndx == PM_GREAT_CTHULHU)
-			return -1*rnd(100);
-		else return -1*rnd(monstr[mndx]);
-	} else {
+	if((uwep && uwep->oartifact == ART_NODENSFORK)
+	 || (rnd(30) < ACURR(A_WIS))
+	){
 		if(mndx == PM_GREAT_CTHULHU)
 			return -1*rnd(10);
 		else return -1*((monstr[mndx]-u.ulevel)/4 + rnd(max(1, (monstr[mndx]-u.ulevel)/4)));
+	} else {
+		if(mndx == PM_GREAT_CTHULHU)
+			return -1*rnd(100);
+		else return -1*rnd(monstr[mndx]);
 	}
 }
 
@@ -6669,7 +6682,9 @@ struct monst *mtmp;
 	int mndx = monsndx(mtmp->data);
 	
 	
-	if(rnd(30) < ACURR(A_WIS)){
+	if((uwep && uwep->oartifact == ART_HOLY_MOONLIGHT_SWORD)
+		|| (rnd(30) < ACURR(A_WIS))
+	){
 		return max(1, monstr[mndx]/10);
 	}
 	else return 0;
@@ -6691,8 +6706,16 @@ long id;
 	struct monst *mtmp;
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
 		if(id == (long)mtmp->m_id){
-			pline("%s screams in dismay!", Monnam(mtmp));
-			monflee(mtmp, 0, FALSE, TRUE);
+			if(mtmp->data == &mons[PM_COVEN_LEADER]){
+				pline("%s screams in rage!", Monnam(mtmp));
+				mtmp->mspec_used = 4;
+				mtmp->encouraged += 8;
+			} else {
+				pline("%s screams in dismay!", Monnam(mtmp));
+				monflee(mtmp, 0, FALSE, TRUE);
+				if(mtmp->data == &mons[PM_WITCH])
+					mtmp->mspec_used = 10;
+			}
 		}
 }
 

@@ -30,6 +30,7 @@ STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
 STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
 STATIC_DCL void NDECL(see_nearby_monsters);
 STATIC_DCL void NDECL(cthulhu_mind_blast);
+STATIC_DCL void FDECL(blessed_spawn, (struct monst *));
 
 #ifdef OVL0
 
@@ -1171,6 +1172,15 @@ karemade:
 					}
 				}
 				
+				if(mtmp->data == &mons[PM_WALKING_DELIRIUM] && canseemon(mtmp) && distmin(mtmp->mx, mtmp->my, u.ux, u.uy) <= 1){
+					static long lastusedmove = 0;
+					if(lastusedmove != moves){
+						pline("%s takes on forms new and terrible!", Monnam(mtmp));
+						lastusedmove = moves;
+						change_usanity(u_sanity_loss(mtmp)/2-1);
+					}
+				}
+				
 				if(mtmp->data == &mons[PM_DREADBLOSSOM_SWARM]){
 					if(canseemon(mtmp) || u.ustuck == mtmp) mtmp->movement += mcalcmove(mtmp);
 					else {
@@ -1624,6 +1634,12 @@ karemade:
 		    /********************************/
 			/* Environment effects */
 			dust_storm();
+			/* Unseen monsters may take action */
+			for(mtmp = migrating_mons; mtmp; mtmp = mtmp->nmon){
+				if(mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel && mtmp->data == &mons[PM_BLESSED])
+					blessed_spawn(mtmp);
+			}
+			
 			/* Item attacks */
 			mind_blast_items();
 			if(uarm && 
@@ -3224,12 +3240,34 @@ see_nearby_monsters()
 							change_usanity(u_sanity_loss(mtmp));
 						}
 						if(yields_insight(mtmp->data)){
-							change_uinsight(u_insight_gain(mtmp));
-							change_usanity(u_sanity_gain(mtmp));
+							change_uinsight(1);
 						}
 					}
 				}
 			}
+		}
+	}
+}
+
+static int goatkids[] = {PM_SMALL_GOAT_SPAWN, PM_GOAT_SPAWN, PM_GIANT_GOAT_SPAWN, 
+						 PM_SWIRLING_MIST, PM_DUST_STORM, PM_ICE_STORM, PM_THUNDER_STORM, PM_FIRE_STORM, 
+						 PM_PLAINS_CENTAUR, PM_FOREST_CENTAUR, PM_MOUNTAIN_CENTAUR,
+						 PM_QUICKLING, PM_DRYAD, PM_NAIAD, PM_OREAD, PM_YUKI_ONNA, PM_DEMINYMPH};
+STATIC_OVL
+void
+blessed_spawn(mon)
+struct monst *mon;
+{
+	struct monst *mtmp;
+	xchar xlocale, ylocale, xyloc;
+	xyloc	= mon->mtrack[0].x;
+	xlocale = mon->mtrack[1].x;
+	ylocale = mon->mtrack[1].y;
+	if(xyloc == MIGR_EXACT_XY && !mon->mpeaceful && !rn2(70)){
+		mtmp = makemon(&mons[goatkids[rn2(SIZE(goatkids))]], xlocale, ylocale, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
+		if(mtmp){
+			mtmp->mpeaceful = 0;
+			set_malign(mtmp);
 		}
 	}
 }

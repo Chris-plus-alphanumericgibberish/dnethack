@@ -497,6 +497,7 @@ E NEARDATA struct mvitals {
 	uchar	died;
 	uchar	mvflags;
 	Bitfield(seen,1);
+	Bitfield(onekill,1);
 } mvitals[NUMMONS];
 
 E NEARDATA struct c_color_names {

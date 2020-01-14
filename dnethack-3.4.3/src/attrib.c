@@ -1501,6 +1501,9 @@ struct monst *mon;
 {
 	int mm = monsndx(mon->data);
 	switch(mm){
+		case PM_WALKING_DELIRIUM:
+			u.umadness |= MAD_DELUSIONS;
+		break;
 		case PM_ALDINACH:
 			u.umadness |= MAD_REAL_DELUSIONS;
 		break;
