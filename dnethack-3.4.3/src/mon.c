@@ -26,7 +26,6 @@ int scentgoalx, scentgoaly;
 
 #ifdef OVL2
 STATIC_DCL int NDECL(pick_animal);
-STATIC_DCL int FDECL(select_newcham_form, (struct monst *));
 STATIC_DCL void FDECL(kill_eggs, (struct obj *));
 #endif
 
