@@ -1170,6 +1170,10 @@ register const char *let,*word;
 		    (otyp != HELLFIRE_COMPONENT))
 		|| (!strcmp(word, "build a scrap maw with") &&
 		    (otyp != SCRAP))
+		|| (!strcmp(word, "create a skeletal minion of") &&
+		    !(otyp == CORPSE))
+		|| (!strcmp(word, "feed blood to") &&
+		    !(otyp == CORPSE && otmp->odrained && (peek_at_iced_corpse_age(otmp) + 20) >= monstermoves))
 		    )
 			foo--;
 		/* ugly check for unworn armor that can't be worn */
@@ -3242,6 +3246,7 @@ winid *datawin;
 	if (otyp == RIN_INCREASE_ACCURACY)			OBJPUTSTR("Increases your to-hit modifier.");
 	if (otyp == AMULET_VERSUS_CURSES ||
 		oartifact == ART_HELPING_HAND ||
+		oartifact == ART_STAFF_OF_NECROMANCY ||
 		oartifact == ART_TREASURY_OF_PROTEUS ||
 		oartifact == ART_TENTACLE_ROD ||
 		oartifact == ART_MAGICBANE)			OBJPUTSTR("Protects your inventory from being cursed.");

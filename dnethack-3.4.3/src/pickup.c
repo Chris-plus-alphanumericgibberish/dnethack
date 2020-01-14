@@ -1822,7 +1822,15 @@ gotit:
 	    return timepassed;
 	}
 	mtmp = m_at(cc.x, cc.y);
-	if (mtmp) timepassed = loot_mon(mtmp, &prev_inquiry, &prev_loot);
+	if (mtmp) {
+		if (costly_spot(mtmp->mx, mtmp->my)) {
+			verbalize("Not in my store!");
+			timepassed = 1;
+		}
+		else {
+			timepassed = loot_mon(mtmp, &prev_inquiry, &prev_loot);
+		}
+	}
 
 	/* Preserve pre-3.3.1 behaviour for containers.
 	 * Adjust this if-block to allow container looting

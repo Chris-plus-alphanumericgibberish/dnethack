@@ -278,6 +278,7 @@ register int x, y, typ;
 		}
 		statue->owt = weight(statue);
 		mongone(mtmp);
+		ttmp->statueid = statue->o_id;
 		break;
 	      }
 	    case ROLLING_BOULDER_TRAP:	/* boulder will roll towards trigger */
@@ -645,8 +646,10 @@ xchar x, y;
 boolean shatter;
 {
 	struct monst *mtmp = (struct monst *)0;
-	struct obj *otmp = sobj_at(STATUE, x, y);
+	struct obj *otmp;
+	struct obj *nobj;
 	int fail_reason;
+	unsigned int oid = trap->statueid;
 
 	/*
 	 * Try to animate the first valid statue.  Stop the loop when we
@@ -654,13 +657,13 @@ boolean shatter;
 	 * the mon was unique.
 	 */
 	deltrap(trap);
-	while (otmp) {
-	    mtmp = animate_statue(otmp, x, y,
-		    shatter ? ANIMATE_SHATTER : ANIMATE_NORMAL, &fail_reason);
-	    if (mtmp || fail_reason != AS_MON_IS_UNIQUE) break;
-
-	    while ((otmp = otmp->nexthere) != 0)
-		if (otmp->otyp == STATUE) break;
+	for (otmp = level.objects[x][y]; otmp; otmp = nobj)
+	{
+		nobj = otmp->nexthere;
+		if (otmp && otmp->o_id == oid)
+		{
+			mtmp = animate_statue(otmp, x, y, shatter ? ANIMATE_SHATTER : ANIMATE_NORMAL, &fail_reason);
+		}
 	}
 
 	if (Blind) feel_location(x, y);

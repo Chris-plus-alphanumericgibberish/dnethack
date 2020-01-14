@@ -17,9 +17,14 @@ struct trap_loaded_obj {
 };
 
 union vlaunchinfo {
+	/* 16 bits */
+	/* arrow/dart */
 	struct trap_loaded_obj v_loaded_obj;	/* bitfield struct to make projectiles consistent from launcher traps */
+	/* rolling boulder */
 	short v_launch_otyp;	/* type of object to be triggered */
 	coord v_launch2;	/* secondary launch point (for boulders) */
+	/* statue */
+	unsigned int v_statue_oid;	/* object id of original statue trap on square to activate */
 };
 
 struct trap {
@@ -45,6 +50,7 @@ struct trap {
 #define launch_enchant vl.v_loaded_obj.o_pm_one
 #define launch_otyp	vl.v_launch_otyp
 #define launch2		vl.v_launch2
+#define statueid       vl.v_statue_oid
 };
 
 extern struct trap *ftrap;

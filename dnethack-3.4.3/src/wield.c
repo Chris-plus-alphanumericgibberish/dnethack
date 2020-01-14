@@ -52,7 +52,7 @@
  */
 
 
-STATIC_DCL int FDECL(ready_weapon, (struct obj *));
+STATIC_DCL int FDECL(ready_weapon, (struct obj *, boolean));
 
 /* used by will_weld() */
 /* probably should be renamed */
@@ -129,8 +129,9 @@ register struct obj *obj;
 }
 
 STATIC_OVL int
-ready_weapon(wep)
+ready_weapon(wep, quietly)
 struct obj *wep;
+boolean quietly;	/* hide the basic message saying what you are now wielding */
 {
 	/* Separated function so swapping works easily */
 	int res = 0;
@@ -140,12 +141,13 @@ struct obj *wep;
 	if (!wep) {
 	    /* No weapon */
 	    if (uwep) {
-			You("are empty %s.", body_part(HANDED));
+			if (!quietly) You("are empty %s.", body_part(HANDED));
 			setuwep((struct obj *) 0);
 		if(!stealthy && Stealth) pline("Now you can move stealthily.");
 			res++;
-	    } else
-			You("are already empty %s.", body_part(HANDED));
+		}
+		else
+			if (!quietly) You("are already empty %s.", body_part(HANDED));
 	} else if (!uarmg && !Stone_resistance && wep->otyp == CORPSE
 				&& touch_petrifies(&mons[wep->corpsenm])) {
 	    /* Prevent wielding cockatrice when not wearing gloves --KAA */
@@ -184,15 +186,17 @@ struct obj *wep;
 		 * Lifesaved rewielding.  Yet we want the message to
 		 * say "weapon in hand", thus this kludge.
 		 */
-		long dummy = wep->owornmask;
-		wep->owornmask |= W_WEP;
-		prinv((char *)0, wep, 0L);
-		wep->owornmask = dummy;
+			if (!quietly) {
+				long dummy = wep->owornmask;
+				wep->owornmask |= W_WEP;
+				prinv((char *)0, wep, 0L);
+				wep->owornmask = dummy;
+		    }
 	    }
 	    setuwep(wep);
 
 	    /* KMH -- Talking artifacts are finally implemented */
-	    arti_speak(wep);
+		if (!quietly) arti_speak(wep);
 
 	    if (artifact_light(wep) && !wep->lamplit) {
 			begin_burn(wep, FALSE);
@@ -217,7 +221,7 @@ struct obj *wep;
 	    }
 #endif
 
-	    if (wep->unpaid) {
+	    if (wep->unpaid && !quietly) {
 		struct monst *this_shkp;
 
 		if ((this_shkp = shop_keeper(inside_shop(u.ux, u.uy))) !=
@@ -310,7 +314,7 @@ dowield()
 
 	/* Set your new primary weapon */
 	oldwep = uwep;
-	result = ready_weapon(wep);
+	result = ready_weapon(wep, FALSE);
 	if (flags.pushweapon && oldwep && uwep != oldwep)
 		setuswapwep(oldwep);
 	
@@ -345,7 +349,7 @@ doswapweapon()
 	setuswapwep((struct obj *) 0);
 
 	/* Set your new primary weapon */
-	result = ready_weapon(oldswap);
+	result = ready_weapon(oldswap, FALSE);
 
 	/* Set your new secondary weapon */
 	if (uwep == oldwep)
@@ -435,6 +439,25 @@ dowieldquiver()
 	setuqwep(newquiver);
 	/* Take no time since this is a convenience slot */
 	return (0);
+}
+/* use to re-wield a returned thrown weapon */
+void
+rewield(obj, slot)
+struct obj * obj;
+long slot;
+{
+	switch (slot) {
+	case W_WEP:
+		ready_weapon(obj, TRUE);
+		break;
+	case W_SWAPWEP:
+		setuswapwep(obj);
+		break;
+	case W_QUIVER:
+		setuqwep(obj);
+		break;
+	}
+	return;
 }
 
 /* used for #rub and for applying pick-axe, whip, grappling hook, or polearm */

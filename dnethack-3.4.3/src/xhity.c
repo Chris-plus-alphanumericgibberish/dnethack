@@ -1775,27 +1775,6 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			*attk = marilithHands[*indexnum];
 		}
 	}
-	/* Demogorgon gets additional shred and steal attacks, which puts him over 6 attacks */
-	if (pa == &mons[PM_DEMOGORGON]) {
-		/* rend */
-		if (*indexnum == 2 && fromlist && !(*subout&SUBOUT_DEMO1)) {
-			*subout |= SUBOUT_DEMO1;
-			attk->aatyp = AT_REND;
-			attk->adtyp = AD_SHRD;
-			attk->damn = 3;
-			attk->damd = 12;
-			fromlist = FALSE;
-		}
-		/* steal */
-		if (*indexnum == 4 && fromlist && !(*subout&SUBOUT_DEMO2)) {
-			*subout |= SUBOUT_DEMO2;
-			attk->aatyp = AT_REND;
-			attk->adtyp = AD_SEDU;
-			attk->damn = 1;
-			attk->damd = 1;
-			fromlist = FALSE;
-		}
-	}
 	/* Various weapons can cause an additional full attack to be made */
 	/* This only works if it is wielded in the mainhand, and a weapon attack is being made with it (AT_WEAP, AT_DEVA) */
 	/* not shown in pokedex */
@@ -2047,7 +2026,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		attk->adtyp = AD_STUN;
 	}
 	/* Specific cases that prevent attacks */
-	if (!by_the_book && (
+	if (!by_the_book && !is_null_attk(attk) && (
 		/* twoweapon symmetry -- if the previous attack missed, do not make an offhand attack*/
 		(*indexnum > 0 && prev_res[1] == MM_MISS && attk->aatyp == AT_XWEP) ||
 		/* If player is the target and is engulfed, only targetable by engulf attacks */
@@ -2060,7 +2039,10 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 		(attk->aatyp == AT_REND && (prev_res[1] == MM_MISS || prev_res[2] == MM_MISS)) ||
 		/* Hugs attacks are similar, but will still happen if magr and mdef are stuck together */
 		(attk->aatyp == AT_HUGS && (prev_res[1] == MM_MISS || prev_res[2] == MM_MISS)
-			&& !(mdef && ((youdef && u.ustuck == magr) || (youagr && u.ustuck == mdef))))
+			&& !(mdef && ((youdef && u.ustuck == magr) || (youagr && u.ustuck == mdef)))) ||
+		/* Demogorgon's item-stealing gaze only happens if previous two gazes worked AND he is close to his target */
+		(pa == &mons[PM_DEMOGORGON] && mdef && attk->aatyp == AT_GAZE && attk->adtyp == AD_SEDU && (
+			prev_res[1] == MM_MISS || prev_res[2] == MM_MISS))
 		))
 	{
 		/* just get the next attack */
@@ -9383,7 +9365,7 @@ boolean
 umetgaze(mtmp)
 struct monst *mtmp;
 {
-	return (canseemon_eyes(mtmp) && couldsee(mtmp->mx, mtmp->my) && !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD));
+	return (canseemon_eyes(mtmp) && couldsee(mtmp->mx, mtmp->my) && !(ublindf && ublindf->oartifact == ART_EYES_OF_THE_OVERWORLD) && multi>=0);
 }
 
 boolean
@@ -9542,9 +9524,9 @@ int vis;
 		))
 		||
 		(needs_mdef_eyes && (
-		(youdef  && (!umetgaze(magr) || multi >= 0)) ||
-		(youagr  && (mon_can_see_you(mdef))) ||
-		(!youagr && !youdef && (!mmetgaze(magr, mdef)))
+		(youdef  && !umetgaze(magr)) ||
+		(youagr  && mon_can_see_you(mdef)) ||
+		(!youagr && !youdef && !mmetgaze(magr, mdef))
 		))){
 		/* gaze fails because the appropriate gazer/gazee eye (contact?) is not available */
 		return MM_MISS;
@@ -10544,6 +10526,8 @@ int vis;
 				) return MM_MISS;//fail
 			//else
 			if (pa == &mons[PM_DEMOGORGON]){
+				You("have met the twin gaze of Demogorgon, Prince of Demons!");
+				You("feel his command within you!");
 				buf[0] = '\0';
 				steal(magr, buf, FALSE, FALSE);
 				m_dowear(magr, FALSE);

@@ -1195,6 +1195,56 @@ dosummon()
 	return(1);
 }
 
+static NEARDATA const char food_types[] = { FOOD_CLASS, 0 };
+
+int
+dovampminion()
+{
+	struct obj *otmp;
+	struct obj *corpse;
+	boolean onfloor = FALSE;
+	char qbuf[QBUFSZ];
+	char c;
+	
+	for (otmp = level.objects[u.ux][u.uy]; otmp; otmp = otmp->nexthere) {
+		if(otmp->otyp==CORPSE && otmp->odrained
+			&& ((peek_at_iced_corpse_age(otmp) + 20) >= monstermoves)) {
+		
+			Sprintf(qbuf, "There %s %s here; feed blood to %s?",
+				otense(otmp, "are"),
+				doname(otmp),
+				(otmp->quan == 1L) ? "it" : "one");
+			if((c = yn_function(qbuf,ynqchars,'n')) == 'y'){
+				corpse = otmp;
+				onfloor = TRUE;
+				break;
+			}
+			else if(c == 'q')
+				break;
+		}
+	}
+	if (!corpse) corpse = getobj(food_types, "feed blood to");
+	if (!corpse) return(0);
+
+	struct permonst *pm = &mons[corpse->corpsenm];
+	if (!has_blood(pm)){
+		pline("You can't put blood in a monster that didn't start with blood!");
+		return(0);
+	} else if (is_untamable(pm) || (pm->geno & G_UNIQ)){
+		pline("You can't create a minion of that type of monster!");
+		return(0);
+	} else {
+		struct monst *mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+		mtmp = tamedog(mtmp, (struct obj *) 0);
+		mtmp->mfaction = VAMPIRIC;
+
+		if (onfloor) useupf(corpse, 1);
+		else useup(corpse);
+		losexp("donating blood", TRUE, TRUE, FALSE);
+	}	
+	
+	return(1);
+}
 
 int
 dotinker()

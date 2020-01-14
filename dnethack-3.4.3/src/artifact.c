@@ -6359,6 +6359,11 @@ arti_invoke(obj)
 			}
 		break;
 		case DEATH_TCH:
+			if (uwep && uwep != obj){
+				You_feel("that you should be wielding %s.", the(xname(obj)));;
+				obj->age = monstermoves;
+				return(0);
+			}
 			getdir((char *)0);
 			if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
 			
@@ -6379,6 +6384,77 @@ arti_invoke(obj)
 				obj->age = monstermoves;
 			}
 		break;
+		case SKELETAL_MINION:
+		{
+			if (uwep && uwep != obj){
+				You_feel("that you should be wielding %s.", the(xname(obj)));;
+				obj->age = monstermoves;
+				return(0);
+			}
+			char food_types[] = { FOOD_CLASS, 0 };
+			struct obj *otmp = (struct obj *) 0;
+			struct obj *corpse = (struct obj *) 0;
+			boolean onfloor = FALSE;
+			char qbuf[QBUFSZ];
+			char c;
+			int lvl;
+	
+			for (otmp = level.objects[u.ux][u.uy]; otmp; otmp = otmp->nexthere) {
+				if(otmp->otyp==CORPSE) {
+		
+					Sprintf(qbuf, "There %s %s here; create a skeletal minion of %s?",
+						otense(otmp, "are"),
+						doname(otmp),
+						(otmp->quan == 1L) ? "it" : "one");
+					if((c = yn_function(qbuf,ynqchars,'n')) == 'y'){
+						corpse = otmp;
+						onfloor = TRUE;
+						break;
+					}
+					else if(c == 'q')
+						break;
+				}
+			}
+			if (!corpse) corpse = getobj(food_types, "make a skeletal minion of");
+			if (!corpse) {
+				obj->age = monstermoves;
+				return(0);
+			}
+
+			struct permonst *pm = &mons[corpse->corpsenm];
+
+			if (!(humanoid(pm) || is_insectoid(pm) || is_arachnid(pm) || is_bird(pm) || 
+				(((pm)->mflagsa & MA_ANIMAL) != 0L) || (((pm)->mflagsa & MA_REPTILIAN) != 0L)
+			) || (is_clockwork(pm) || is_unalive(pm))){
+				pline("That creature has no bones!");
+				obj->age = monstermoves;
+				return(0);
+			} else if (undiffed_innards(pm) || no_innards(pm)){
+				pline("That creature has no bones!");
+				obj->age = monstermoves;
+				return(0);
+			} else if (is_untamable(pm) || (pm->geno & G_UNIQ)){
+				pline("You can't create a minion of that type of monster!");
+				obj->age = monstermoves;
+				return(0);
+			}
+			if (is_mind_flayer(pm)){
+				lvl = pm->mlevel;
+				pm = &mons[PM_HUMAN];
+				pm->mlevel = lvl;
+			}
+			
+			struct monst *mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
+			mtmp = tamedog(mtmp, (struct obj *) 0);
+			
+			if (mtmp->data != &mons[PM_SKELETON])
+				mtmp->mfaction = SKELIFIED;
+
+			if (onfloor) useupf(corpse, 1);
+			else useup(corpse);
+
+		break;
+		}
 		case PETMASTER:{
 			int pet_effect = 0;
 			if(uarm && uarm == obj && yn("Take something out of your pockets?") == 'y'){

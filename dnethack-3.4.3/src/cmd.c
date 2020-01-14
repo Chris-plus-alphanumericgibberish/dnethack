@@ -531,6 +531,15 @@ domonability()
 			MENU_UNSELECTED);
 		atleastone = TRUE;
 	}
+	if(is_vampire(youracedata) && u.ulevel > 1){
+		Sprintf(buf, "Create Minion");
+		any.a_int = MATTK_VAMP;	/* must be non-zero */
+		incntlet = 'V';
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		atleastone = TRUE;	
+	}
 	if(can_breathe(youmonst.data) || Race_if(PM_HALF_DRAGON)){
 		Sprintf(buf, "Breath Weapon");
 		any.a_int = MATTK_BREATH;	/* must be non-zero */
@@ -735,6 +744,7 @@ domonability()
 	case MATTK_GAZE: return dogaze();
 	case MATTK_TNKR: return dotinker();
 	case MATTK_SUMM: return dosummon();
+	case MATTK_VAMP: return dovampminion();
 	case MATTK_WEBS: return dospinweb();
 	case MATTK_HIDE: return dohide();
 	case MATTK_MIND: return domindblast();

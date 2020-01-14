@@ -507,6 +507,7 @@ struct weapon_dice {
 							 (otmp)->otyp == DOUBLE_LIGHTSABER)
 #define is_vibroweapon(otmp) (force_weapon(otmp) || \
 							  is_vibrosword(otmp) || \
+							  otmp->otyp == VIBROBLADE || \
 							  is_vibropike(otmp))
 #define is_vibrosword(otmp)	 ((otmp)->otyp == WHITE_VIBROSWORD || \
 						  (otmp)->otyp == GOLD_BLADED_VIBROSWORD || \

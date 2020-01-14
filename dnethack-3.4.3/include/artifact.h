@@ -346,7 +346,8 @@ struct artifact {
 #define SINGING         (LAST_PROP+70)
 #define WIND_PETS		(LAST_PROP+71)
 #define DEATH_TCH		(LAST_PROP+72)
-#define ORACLE          (LAST_PROP+73)
+#define SKELETAL_MINION		(LAST_PROP+73)
+#define ORACLE          (LAST_PROP+74)
 
 
 #define MASTERY_ARTIFACT_LEVEL 20

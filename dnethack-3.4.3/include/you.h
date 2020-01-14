@@ -390,6 +390,8 @@ struct you {
 #define MATTK_DROID 20
 #define MATTK_WORD 21
 #define MATTK_TNKR 22
+#define MATTK_VAMP 23
+
 	struct attribs	macurr,		/* for monster attribs */
 			mamax;		/* for monster attribs */
 	int ulycn;			/* lycanthrope type */

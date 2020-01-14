@@ -2375,6 +2375,7 @@ struct monst * commander;
 			break;
 		case PM_PIT_FIEND:
 		case PM_NESSIAN_PIT_FIEND:
+		case PM_GREEN_PIT_FIEND:
 			tmp = d(1, 9);
 			break;
 		case PM_MARILITH:
@@ -3687,7 +3688,7 @@ int tx,ty;
 				}
 				else{
 					if(!Blind) {
-						pline("His myriad faces study you with disapproval, and he departs as suddenly as he arived.");
+						pline("His myriad faces study you with disapproval, and he departs as suddenly as he arrived.");
 					}
 					// u.sealTimeout[DANTALION-FIRST_SEAL] = moves + bindingPeriod/10;
 				}

@@ -1540,33 +1540,12 @@ struct obj * thrownobj;
 		obj = thrownobj;
 	}
 	if (obj->owornmask != old_wep_mask) {
-		switch (old_wep_mask)
-		{
-		case W_WEP:
-			if (youagr) {
-				setuwep(obj);
-				u.twoweap = u_was_twoweap;
-			}
-			else
-				setmwielded(magr, obj, old_wep_mask);
-			break;
-		case W_SWAPWEP:
-			if (youagr) {
-				setuswapwep(obj);
-				u.twoweap = u_was_twoweap;
-			}
-			else
-				setmwielded(magr, obj, old_wep_mask);
-			break;
-		case W_QUIVER:
-			if (youagr)
-				setuqwep(obj);
-			/* else nothing, monsters don't quiver ammo */
-			break;
-		default:
-			impossible("unexpected wornmask in return_thrownobj()");
-			break;
+		if (youagr) {
+			rewield(obj, old_wep_mask);
+			u.twoweap = u_was_twoweap;
 		}
+		else
+			setmwielded(magr, obj, old_wep_mask);
 	}
 	return;
 }

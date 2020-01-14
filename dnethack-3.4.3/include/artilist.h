@@ -319,6 +319,12 @@ A("Xiuhcoatl",	ATLATL,			0,			0,/*Needs encyc entry*/
 	LORDLY,	A_LAWFUL, PM_ARCHEOLOGIST, NON_PM, 4000L, 
 	0,0,0), 
 
+A("Staff of Necromancy", 		QUARTERSTAFF, 			0,			0,/*invoke for skeletons, life draining */
+	(SPFX_RESTR|SPFX_INHER|SPFX_ATTK),0,
+	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
+	DRLI(5,0),	COLD(0,0),	NO_CARY, /*Needs encyc entry*/
+	SKELETAL_MINION, A_CHAOTIC, NON_PM, PM_VAMPIRE, 6660L, 
+	0,0,0),
 
 /*
  *	Magicbane is a bit different!  Its magic fanfare

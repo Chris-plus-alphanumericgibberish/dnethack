@@ -1209,6 +1209,22 @@ struct mkroom	*croom;
 			otmp->record_achieve_special = 1;
 	}
 #endif
+	/* statues placed on top of existing statue traps replace the statue there and attach itself to the trap */
+	if (otmp->otyp == STATUE) {
+		struct trap * ttmp = t_at(x, y);
+		struct obj * statue;
+		if (ttmp && ttmp->ttyp == STATUE_TRAP) {
+			ttmp->statueid = otmp->o_id;
+			//for (statue = level.objects[x][y]; statue; statue = statue->nobj)
+			//{
+			//	if (statue->o_id == ttmp->statueid)
+			//	{
+			//		//obfree(statue, (struct obj *)0);
+			//		
+			//	}
+			//}
+		}
+	}
 
 	stackobj(otmp);
 	if(Is_paradise(&u.uz) && (otmp->otyp == FIGURINE || otmp->otyp == CHEST)) bury_an_obj(otmp);

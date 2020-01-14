@@ -6146,9 +6146,13 @@ is a red right hand
 	MA_DEMON /*MA*/,  MV_CATSIGHT|MV_INFRAVISION|MV_SEE_INVIS /*MV*/, HI_LORD),
     MON("Demogorgon", S_DEMON,//61
 	LVL_FULL(108, 18, DETAIL_AC(20,4,12), SLOT_AURA_DR(0,0,6,6,6, 12), 95, -20), (G_HELL|G_NOCORPSE|G_NOGEN|G_UNIQ),
-	A(ATTK(AT_CLAW, AD_DISE, 3, 12), ATTK(AT_CLAW, AD_DISE, 3, 12),//+shread armor or you
-	  ATTK(AT_GAZE, AD_DRLI, 1, 1), ATTK(AT_GAZE, AD_PLYS, 1, 1),//+stealing
-	  ATTK(AT_MAGC, AD_SPEL, 1, 12), ATTK(AT_MAGC, AD_SPEL, 1, 12)),
+	A_EXPLICIT(
+	  ATTK(AT_CLAW, AD_DISE, 3, 12), ATTK(AT_CLAW, AD_DISE, 3, 12),
+	  ATTK(AT_REND, AD_SHRD, 3, 12),
+	  ATTK(AT_GAZE, AD_DRLI, 1, 1),  ATTK(AT_GAZE, AD_PLYS, 1, 1),
+	  ATTK(AT_GAZE, AD_SEDU, 1, 1),	/* special cased to only activate if previous two gazes hit */
+	  ATTK(AT_MAGC, AD_SPEL, 1, 12), ATTK(AT_MAGC, AD_SPEL, 1, 12),
+	  NO_ATTK, NO_ATTK),
 	SIZ(WT_HUGE, 500, 0, MS_SHRIEK, MZ_HUGE), //int[0]: # of gazes that hit,
 	MR_FIRE|MR_POISON|MR_ACID|MR_STONE|MR_SICK, 0,		//int[1]: # of claws that hit
 	MM_FLY /*MM*/, MT_STALK|MT_HOSTILE|MT_WAITFORU|MT_WANTSAMUL|MT_ROCKTHROW|MT_TRAITOR /*MT*/,

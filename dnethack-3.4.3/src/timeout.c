@@ -2179,7 +2179,8 @@ end_burn(obj, timer_attached)
 	}
 	// if(darksight(youracedata) || catsight(youracedata)) doredraw();
 	// So many different vision systems, just do a redraw
-	doredraw();
+	//doredraw();
+	vision_full_recalc = 1;
 }
 
 #endif /* OVL1 */

@@ -480,6 +480,9 @@ rndcurse()			/* curse a few inventory items at random! */
 	} else if (uwep && (uwep->oartifact == ART_MAGICBANE) && rn2(20)) {
 	    You(mal_aura, "the magic-absorbing blade");
 		return FALSE;
+	} else if (uwep && (uwep->oartifact == ART_STAFF_OF_NECROMANCY) && rn2(20)) {
+	    You(mal_aura, "the skeletal staff");
+		return FALSE;
 	} else if (uwep && (uwep->oartifact == ART_TECPATL_OF_HUHETOTL) && rn2(20)) {
 	    You(mal_aura, "the bloodstained dagger");
 		return FALSE;
@@ -599,6 +602,11 @@ register struct monst *mtmp;
 	if (MON_WEP(mtmp) &&
 	    (MON_WEP(mtmp)->oartifact == ART_MAGICBANE) && rn2(20)) {
 		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "magic-absorbing blade");
+		return FALSE;
+	}
+	if (MON_WEP(mtmp) &&
+	    (MON_WEP(mtmp)->oartifact == ART_STAFF_OF_NECROMANCY) && rn2(20)) {
+		if (visible) You(mons_item_mal_aura, s_suffix(mon_nam(mtmp)), "skeletal staff");
 		return FALSE;
 	}
 	if (MON_WEP(mtmp) &&
