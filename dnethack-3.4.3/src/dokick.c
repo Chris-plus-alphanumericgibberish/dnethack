@@ -406,7 +406,8 @@ xchar x, y;
 	/* Mjollnir is magically too heavy to kick */
 	if(kickobj->oartifact == ART_MJOLLNIR || 
 		kickobj->oartifact == ART_SICKLE_MOON || 
-		kickobj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS) range = 1;
+		kickobj->oartifact == ART_AXE_OF_THE_DWARVISH_LORDS ||
+		(kickobj->otyp == MAGIC_CHEST && kickobj->obolted)) range = 1;
 
 	/* see if the object has a place to move into */
 	if(!ZAP_POS(levl[x+u.dx][y+u.dy].typ) || closed_door(x+u.dx, y+u.dy))
@@ -448,14 +449,15 @@ xchar x, y;
 
 	/* a box gets a chance of breaking open here */
 	if(Is_box(kickobj)) {
-		boolean otrp = kickobj->otrapped;
+		boolean otrp = (kickobj->otrapped && kickobj->otyp != MAGIC_CHEST);
 
 		if(range < 2) pline("THUD!");
 
 		container_impact_dmg(kickobj);
 
 		if (kickobj->olocked) {
-		    if (!rn2(5) || (martial() && !rn2(2))) {
+			/* magic chests cannot be kicked open */
+			if ((!rn2(5) || (martial() && !rn2(2))) && kickobj->otyp != MAGIC_CHEST) {
 			You("break open the lock!");
 			kickobj->olocked = 0;
 			kickobj->obroken = 1;
@@ -1430,6 +1432,8 @@ xchar x, y, dlev;
 		/* number of objects in the pile */
 		oct += obj->quan;
 		if(obj == uball || obj == uchain) continue;
+		/* bolted magic chests can't fall */
+		if(obj->otyp == MAGIC_CHEST && obj->obolted) continue;
 		/* boulders can fall too, but rarely & never due to rocks */
 		if((isrock && is_boulder(obj) ) ||
 		   rn2(is_boulder(obj) ? 30 : 3)) continue;

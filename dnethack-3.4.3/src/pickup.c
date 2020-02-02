@@ -1407,6 +1407,10 @@ boolean telekinesis;	/* not picking it up directly by hand */
 		return 1;	/* tried to pick something up and failed, but
 				   don't want to terminate pickup loop yet   */
 	    }
+	} else if (obj->otyp == MAGIC_CHEST && obj->obolted) {
+		pline_The("chest is bolted down!");
+		return 1;	/* tried to pick something up and failed, but
+				   don't want to terminate pickup loop yet   */
 	}
 
 	if ((res = lift_object(obj, (struct obj *)0, &count, telekinesis)) <= 0)
@@ -2732,7 +2736,7 @@ register int held;
 	    pline("%s to be locked.", Tobjnam(obj, "seem"));
 	    if (held) You("must put it down to unlock.");
 	    return 0;
-	} else if (obj->otrapped) {
+	} else if (obj->otrapped && (obj->otyp != MAGIC_CHEST)) {
 	    if (held) You("open %s...", the(xname(obj)));
 	    (void) chest_trap(obj, HAND, FALSE);
 	    /* even if the trap fails, you've used up this turn */

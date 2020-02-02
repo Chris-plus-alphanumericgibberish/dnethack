@@ -93,16 +93,17 @@ static int p_type; /* (-1)-3: (-1)=really naughty, 3=really good */
  * order to have the values be meaningful.
  */
 
-#define TROUBLE_STONED			16
-#define TROUBLE_FROZEN_AIR		15
-#define TROUBLE_SLIMED			14
-#define TROUBLE_STRANGLED		13
-#define TROUBLE_LAVA			12
-#define TROUBLE_SICK			11
-#define TROUBLE_STARVING		10
-#define TROUBLE_HIT			 	9
-#define TROUBLE_WIMAGE		 	8
-#define TROUBLE_MORGUL		 	7
+#define TROUBLE_STONED			17
+#define TROUBLE_FROZEN_AIR		16
+#define TROUBLE_SLIMED			15
+#define TROUBLE_STRANGLED		14
+#define TROUBLE_LAVA			13
+#define TROUBLE_SICK			12
+#define TROUBLE_STARVING		11
+#define TROUBLE_HIT			 	10
+#define TROUBLE_WIMAGE		 	9
+#define TROUBLE_MORGUL		 	8
+#define TROUBLE_HPMOD		 	7
 #define TROUBLE_LYCANTHROPE		 6
 #define TROUBLE_COLLAPSING		 5
 #define TROUBLE_STUCK_IN_WALL		 4
@@ -176,6 +177,7 @@ in_trouble()
 		(u.uhp <= 5 || u.uhp*7 <= u.uhpmax)) return TROUBLE_HIT;
 	if(u.wimage >= 10 && on_altar()) return(TROUBLE_WIMAGE);
 	if(u.umorgul && on_altar()) return(TROUBLE_MORGUL);
+	if(u.uhpmod < -18 && on_altar()) return(TROUBLE_HPMOD);
 	if(u.ulycn >= LOW_PM) return(TROUBLE_LYCANTHROPE);
 	if(near_capacity() >= EXT_ENCUMBER && AMAX(A_STR)-ABASE(A_STR) > 3)
 		return(TROUBLE_COLLAPSING);
@@ -442,6 +444,11 @@ register int trouble;
 			pline("The chill of death fades away.");
 			//Destroy the blades.
 		    u.umorgul = 0;
+		    break;
+	    case TROUBLE_HPMOD:
+			You_feel("restored to health.");
+		    u.uhpmod = max(u.uhpmod, 0);
+		    calc_total_maxhp();
 		    break;
 	    case TROUBLE_LYCANTHROPE:
 		    you_unwere(TRUE);

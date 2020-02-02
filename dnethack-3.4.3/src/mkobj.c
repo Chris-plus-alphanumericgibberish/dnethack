@@ -816,6 +816,7 @@ boolean artif;
 					break;
 		case MAGIC_CHEST:
 			otmp->olocked = 1;
+			otmp->obolted = 0;
 		break;
 #ifdef TOURIST
 		case EXPENSIVE_CAMERA:
@@ -1522,8 +1523,8 @@ register struct obj *otmp;
 	    set_moreluck();
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
-	else if (artifact_light(otmp) && otmp->lamplit)
-		begin_burn(otmp, FALSE);
+	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit)
+		begin_burn(otmp, TRUE);
 	else if (otmp->otyp == FIGURINE && otmp->timed)
 		(void) stop_timer(FIG_TRANSFORM, (genericptr_t) otmp);
 	return;
@@ -1538,8 +1539,8 @@ register struct obj *otmp;
 	    set_moreluck();
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
-	else if (artifact_light(otmp) && otmp->lamplit)
-		begin_burn(otmp, FALSE);
+	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit)
+		begin_burn(otmp, TRUE);
 
 }
 
@@ -1573,8 +1574,8 @@ register struct obj *otmp;
 	    set_moreluck();
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
-	else if (artifact_light(otmp) && otmp->lamplit) 
-		begin_burn(otmp, FALSE);
+	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit) 
+		begin_burn(otmp, TRUE);
 	else if (otmp->otyp == FIGURINE) {
 		if (otmp->corpsenm != NON_PM
 		    && !dead_species(otmp->corpsenm,TRUE)
@@ -1595,8 +1596,8 @@ register struct obj *otmp;
 	    otmp->owt = weight(otmp);
 	else if (otmp->otyp == FIGURINE && otmp->timed)
 	    (void) stop_timer(FIG_TRANSFORM, (genericptr_t) otmp);
-	else if (artifact_light(otmp) && otmp->lamplit)
-		begin_burn(otmp, FALSE);
+	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit)
+		begin_burn(otmp, TRUE);
 
 	return;
 }
@@ -2187,7 +2188,8 @@ weight(obj)
 register struct obj *obj;
 {
 	int wt = objects[obj->otyp].oc_weight;
-	if(obj->oartifact == ART_ROD_OF_LORDLY_MIGHT) wt = objects[MACE].oc_weight;
+	if (obj->otyp == MAGIC_CHEST && obj->obolted) wt = 99999;	/* impossibly heavy */
+	else if(obj->oartifact == ART_ROD_OF_LORDLY_MIGHT) wt = objects[MACE].oc_weight;
 	else if(obj->oartifact == ART_ANNULUS) wt = objects[BELL_OF_OPENING].oc_weight;
 	else if(obj->oartifact == ART_SCEPTRE_OF_LOLTH) wt = 3*objects[MACE].oc_weight;
 	else if(obj->oartifact == ART_ROD_OF_THE_ELVISH_LORDS) wt = objects[ELVEN_MACE].oc_weight;
@@ -2622,6 +2624,9 @@ int x, y;
     otmp->nobj = fobj;
     fobj = otmp;
     if (otmp->timed) obj_timer_checks(otmp, x, y, 0);
+	/* relight lightsources that should always be lit */
+	if (obj_eternal_light(otmp) && !otmp->lamplit)
+		begin_burn(otmp, FALSE);
 }
 
 #define ON_ICE(a) ((a)->recharged)

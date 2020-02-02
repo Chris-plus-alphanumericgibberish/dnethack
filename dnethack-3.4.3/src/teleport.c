@@ -1483,6 +1483,8 @@ register struct obj *obj;
 	if (obj->otyp == CORPSE && is_rider(&mons[obj->corpsenm])) {
 	    if (revive_corpse(obj, REVIVE_MONSTER)) return;
 	}
+	if (obj->otyp == MAGIC_CHEST && obj->obolted)
+		return;
 
 	obj_extract_self(obj);
 	otx = obj->ox;

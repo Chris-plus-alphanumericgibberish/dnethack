@@ -1385,7 +1385,7 @@ struct obj *obj;
 {
 	xchar x, y;
 
-	if (!obj->lamplit && (obj->otyp == MAGIC_LAMP || ignitable(obj))) {
+	if (!obj->lamplit && ignitable(obj)) {
 	    if ((obj->otyp == MAGIC_LAMP ||
 		 obj->otyp == CANDELABRUM_OF_INVOCATION) &&
 		obj->spe == 0)
@@ -6077,6 +6077,7 @@ doapply()
 			change_usanity((100 - u.usanity)/2);
 		}
 			
+			
 		if(u.wimage >= 10){
 			u.wimage = 0;
 			makemon(&mons[PM_WEEPING_ANGEL], u.ux, u.uy, MM_ADJACENTOK|NO_MINVENT|MM_NOCOUNTBIRTH);
@@ -6100,11 +6101,21 @@ doapply()
 			}
 			if(Blind) pline("The effigy bursts into flames!");
 			else pline("The effigy burns with sickly flames!");
+		} else if (u.uhpmod < -18){
+			if(Blind) pline("The effigy drips with a sticky liquid!");
+			else pline("The effigy is scored by wounds!");
 		} else {
 			if(Blind) pline("The effigy bursts into flames!");
 			else pline("The effigy burns with sickly flames!");
 		}
+		
 		u.wimage = 0; //Sub-critical images are removed anyway.
+		
+		if (u.uhpmod < 0){
+			u.uhpmod /= 2; // we only print a message if it's a lot, but fix regardless
+			calc_total_maxhp();		
+		}
+		
 		if(obj->quan>1)
 			useup(obj);
 		else{

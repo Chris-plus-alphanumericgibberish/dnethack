@@ -1922,6 +1922,178 @@ lightsaber_deactivate (obj, timer_attached)
 	if ((obj == uwep) || (u.twoweap && obj != uswapwep)) unweapon = TRUE;
 	end_burn(obj, timer_attached);
 }
+
+/* returns the correct light/dark radius for obj, if it were lit */
+int
+lightsource_radius(obj)
+struct obj * obj;
+{
+	int radius = 0;
+
+	if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD){
+		radius = 1;
+	}
+	else switch (obj->otyp) 
+	{
+	case MAGIC_LAMP:
+	case DWARVISH_HELM:
+	case LANTERN:
+	case OIL_LAMP:
+	case CANDLE_OF_INVOCATION:
+		radius = 3;
+		break;
+	case GNOMISH_POINTY_HAT:
+	case POT_STARLIGHT:
+		radius = 2;
+		break;
+	case CHUNK_OF_FOSSIL_DARK:
+		radius = 2;
+		break;
+	case POT_OIL:
+	case STICK_OF_DYNAMITE:
+		radius = 1;     /* very dim light */
+		break;
+	case CANDELABRUM_OF_INVOCATION:
+	case TALLOW_CANDLE:
+	case WAX_CANDLE:
+		radius = candle_light_range(obj);
+		break;
+	case SUNROD:
+	case TORCH:
+	case SHADOWLANDER_S_TORCH:
+		/* magic times are 150, 50, and 0 */
+		/* sunrods are more extreme: 5/3/1 vs 4/3/2 */
+		if (obj->age > 150L){
+			radius = 4 + (obj->otyp == SUNROD);
+		}
+		else if (obj->age > 50L){
+			radius = 3;
+		}
+		else {
+			radius = 2 - (obj->otyp == SUNROD);
+		}
+		break;
+	case DOUBLE_LIGHTSABER:
+	case LIGHTSABER:
+	case BEAMSWORD:
+		if (obj->cobj && obj->cobj->oartifact == obj->oartifact && arti_light(obj->cobj))
+			radius = (obj->cobj->blessed ? 3 : (obj->cobj->cursed ? 1 : 2));
+		else if (obj->cobj && obj->cobj->otyp == JET) /*'mirrored' lightsaber*/
+			radius = 0;
+		else radius = 1;
+		break;
+	default:
+		/* [ALI] Support artifact light sources */
+		if (artifact_light(obj) || arti_light(obj)) {
+			radius = (obj->blessed ? 3 : (obj->cursed ? 1 : 2));
+		}
+		break;
+	}
+	return radius;
+}
+
+long
+lightsource_turns(obj)
+struct obj * obj;
+{
+	long turns = 0;
+
+	if (obj->oartifact == ART_HOLY_MOONLIGHT_SWORD){
+		turns = 1;
+	}
+	else switch (obj->otyp) {
+	case DOUBLE_LIGHTSABER:
+	case LIGHTSABER:
+	case BEAMSWORD:
+		turns = 1;
+		break;
+
+	case POT_OIL:
+	case STICK_OF_DYNAMITE:
+		turns = obj->age;
+		break;
+
+	case GNOMISH_POINTY_HAT:
+		turns = obj->age;
+		if (obj->age > 75L)
+			turns = obj->age - 75L;
+		else if (obj->age > 15L)
+			turns = obj->age - 15L;
+		break;
+
+	case DWARVISH_HELM:
+	case LANTERN:
+	case OIL_LAMP:
+		/* magic times are 150, 100, 50, 25, and 0 */
+		if (obj->age > 150L)
+			turns = obj->age - 150L;
+		else if (obj->age > 100L)
+			turns = obj->age - 100L;
+		else if (obj->age > 50L)
+			turns = obj->age - 50L;
+		else if (obj->age > 25L)
+			turns = obj->age - 25L;
+		else
+			turns = obj->age;
+		break;
+
+	case CANDELABRUM_OF_INVOCATION:
+	case TALLOW_CANDLE:
+	case WAX_CANDLE:
+		/* magic times are 75, 15, and 0 */
+		if (obj->age > 75L)
+			turns = obj->age - 75L;
+		else if (obj->age > 15L)
+			turns = obj->age - 15L;
+		else
+			turns = obj->age;
+		break;
+
+	case SUNROD:
+	case TORCH:
+	case SHADOWLANDER_S_TORCH:
+		/* magic times are 150, 50, and 0 */
+		if (obj->age > 150L){
+			turns = obj->age - 150L;
+		}
+		else if (obj->age > 50L){
+			turns = obj->age - 50L;
+		}
+		else {
+			turns = obj->age;
+		}
+		break;
+
+	default:
+		turns = 0;
+		break;
+	}
+	return turns;
+}
+
+boolean
+lightsource_timed(obj)
+struct obj * obj;
+{
+	return (obj && (
+		(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD) ||	/* ??? */
+		(obj->otyp == DOUBLE_LIGHTSABER) ||
+		(obj->otyp == LIGHTSABER) ||
+		(obj->otyp == BEAMSWORD) ||
+		(obj->otyp == POT_OIL) ||
+		(obj->otyp == STICK_OF_DYNAMITE) ||
+		(obj->otyp == GNOMISH_POINTY_HAT) ||
+		(obj->otyp == DWARVISH_HELM) ||
+		(obj->otyp == LANTERN) ||
+		(obj->otyp == OIL_LAMP) ||
+		(obj->otyp == CANDELABRUM_OF_INVOCATION) ||
+		(obj->otyp == TALLOW_CANDLE) ||
+		(obj->otyp == WAX_CANDLE) ||
+		(obj->otyp == SUNROD) ||
+		(obj->otyp == TORCH) ||
+		(obj->otyp == SHADOWLANDER_S_TORCH)));
+}
+
 /*
  * Start a burn timeout on the given object. If not "already lit" then
  * create a light source for the vision system.  There had better not
@@ -1964,6 +2136,7 @@ begin_burn(obj, already_lit)
 	
 	radius = 3;
 
+	/* othere than these, lightsources don't work when age==0 */
 	if (obj->age == 0 && 
 		obj->otyp != MAGIC_LAMP && 
 		obj->otyp != CANDLE_OF_INVOCATION &&
@@ -1975,150 +2148,35 @@ begin_burn(obj, already_lit)
 		obj->oartifact != ART_ATMA_WEAPON
 	) return;
 	
-	if(obj->oartifact == ART_HOLY_MOONLIGHT_SWORD){
-		turns = 1;
-		radius = 1;
-	} else switch (obj->otyp) {
-	    case MAGIC_LAMP:
-		obj->lamplit = 1;
-		do_timer = FALSE;
-		break;
-	    case CANDLE_OF_INVOCATION:
-		obj->lamplit = 1;
-		do_timer = FALSE;
-		break;
-	    case POT_STARLIGHT:
-		obj->lamplit = 1;
-		do_timer = FALSE;
-		radius = 2;
-		break;
-	    case CHUNK_OF_FOSSIL_DARK:
-		obj->lamplit = 1;
-		do_timer = FALSE;
-		radius = 2;
-		break;
-	    case DOUBLE_LIGHTSABER:
-	    case LIGHTSABER:
-	    case BEAMSWORD:
-	    	if (obj->altmode && obj->age > 1) 
-				obj->age--; /* Double power usage */
-			if(obj->oartifact == ART_ATMA_WEAPON){
-				if(obj->age <= 0){
-					if(Drain_resistance) return;
-					losexp("life force drain",TRUE,TRUE,TRUE);
-					obj->cursed = FALSE;
-					obj->age = 150000;
-				} else if(!Drain_resistance) obj->age++;
+
+	radius = lightsource_radius(obj);
+	turns = lightsource_turns(obj);
+	do_timer = lightsource_timed(obj);
+
+	/* some things need to set lamplit on their own here */
+	if (obj->otyp == MAGIC_LAMP ||
+		obj->otyp == CANDLE_OF_INVOCATION ||
+		artifact_light(obj) ||
+		obj_eternal_light(obj))
+		obj->lamplit = TRUE;
+	/* lightsaber charge and Atma Weapon special */
+	if (obj->otyp == DOUBLE_LIGHTSABER ||
+		obj->otyp == LIGHTSABER ||
+		obj->otyp == BEAMSWORD
+		) {
+		if (obj->altmode && obj->age > 1)
+			obj->age--; /* Double power usage */
+		if (obj->oartifact == ART_ATMA_WEAPON){
+			if (obj->age <= 0){
+				if (Drain_resistance) return;
+				losexp("life force drain", TRUE, TRUE, TRUE);
+				obj->cursed = FALSE;
+				obj->age = 150000;
 			}
-			turns = 1;
-			if(obj->cobj && obj->cobj->oartifact == obj->oartifact && arti_light(obj->cobj)) 
-				radius = (obj->cobj->blessed ? 3 : (obj->cobj->cursed ? 1 : 2));
-    	    else if(obj->cobj && obj->cobj->otyp == JET) /*'mirrored' lightsaber*/ 
-				radius = 0;
-    	    else radius = 1;
-		break;
-
-	    case POT_OIL:
-		turns = obj->age;
-		radius = 1;	/* very dim light */
-		break;
-
-	    case STICK_OF_DYNAMITE:
-		turns = obj->age;
-		radius = 1;     /* very dim light */
-		break;
-		
-		case GNOMISH_POINTY_HAT:
-			turns = obj->age;
-			radius = 2;
-			if (obj->age > 75L)
-				turns = obj->age - 75L;
-			else if (obj->age > 15L)
-				turns = obj->age - 15L;
-		break;
-		
-	    case DWARVISH_HELM:
-	    case LANTERN:
-	    case OIL_LAMP:
-		/* magic times are 150, 100, 50, 25, and 0 */
-		if (obj->age > 150L)
-			turns = obj->age - 150L;
-		else if (obj->age > 100L)
-			turns = obj->age - 100L;
-		else if (obj->age > 50L)
-			turns = obj->age - 50L;
-		else if (obj->age > 25L)
-			turns = obj->age - 25L;
-		else
-			turns = obj->age;
-		break;
-		
-	    case CANDELABRUM_OF_INVOCATION:
-	    case TALLOW_CANDLE:
-	    case WAX_CANDLE:
-		/* magic times are 75, 15, and 0 */
-		if (obj->age > 75L)
-		    turns = obj->age - 75L;
-		else if (obj->age > 15L)
-		    turns = obj->age - 15L;
-		else
-		    turns = obj->age;
-		radius = candle_light_range(obj);
-		break;
-
-	    case SUNROD:
-		/* magic times are 150, 50, and 0 */
-		if (obj->age > 150L){
-		    turns = obj->age - 150L;
-			radius = 5;
-		} else if (obj->age > 50L){
-		    turns = obj->age - 50L;
-			radius = 3;
-		} else {
-		    turns = obj->age;
-			radius = 1;
+			else if (!Drain_resistance) obj->age++;
 		}
-		break;
-	    case TORCH:
-		/* magic times are 150, 50, and 0 */
-		if (obj->age > 150L){
-		    turns = obj->age - 150L;
-			radius = 4;
-		} else if (obj->age > 50L){
-		    turns = obj->age - 50L;
-			radius = 3;
-		} else {
-		    turns = obj->age;
-			radius = 2;
-		}
-		break;
-	    case SHADOWLANDER_S_TORCH:
-		/* magic times are 150, 50, and 0 */
-		if (obj->age > 150L){
-		    turns = obj->age - 150L;
-			radius = 4;
-		} else if (obj->age > 50L){
-		    turns = obj->age - 50L;
-			radius = 3;
-		} else {
-		    turns = obj->age;
-			radius = 2;
-		}
-		break;
-
-	    default:
-                /* [ALI] Support artifact light sources */
-        if (artifact_light(obj) || arti_light(obj)) {
-		    obj->lamplit = 1;
-		    do_timer = FALSE;
-			radius = (obj->blessed ? 3 : (obj->cursed ? 1 : 2));
-		} else {
-		    impossible("begin burn: unexpected %s", xname(obj));
-		    turns = obj->age;
-		}
-		break;
 	}
-
+	
 	if (do_timer) {
 	    if (start_timer(turns, TIMER_OBJECT,
 					BURN_OBJECT, (genericptr_t)obj)) {
@@ -2126,22 +2184,22 @@ begin_burn(obj, already_lit)
 		obj->age -= turns;
 		if (carried(obj) && !already_lit)
 		    update_inventory();
-	    } else {
-		obj->lamplit = 0;
 	    }
 	} else {
 	    if (carried(obj) && !already_lit)
 		update_inventory();
 	}
 
-	if (obj->lamplit && !already_lit) {
+	if (obj->lamplit) {
 	    xchar x, y;
-
-	    if (get_obj_location(obj, &x, &y, CONTAINED_TOO|BURIED_TOO))
-		new_light_source(x, y, radius, LS_OBJECT, (genericptr_t) obj);
+		if (already_lit)
+			del_light_source(LS_OBJECT, (genericptr_t)obj, TRUE);
+		if (get_obj_location(obj, &x, &y, CONTAINED_TOO | BURIED_TOO)) {
+			new_light_source(x, y, radius, LS_OBJECT, (genericptr_t)obj);
+		}
 	    else{
-			impossible("begin_burn: can't get obj position");
-			obj_stop_timers(obj);
+			/* make the new light source at (0,0) since we can't get its position */
+			new_light_source(0, 0, radius, LS_OBJECT, (genericptr_t)obj);
 		}
 	}
 }
@@ -2165,6 +2223,7 @@ end_burn(obj, timer_attached)
 		|| obj->otyp == POT_STARLIGHT
 		|| obj->otyp == CHUNK_OF_FOSSIL_DARK
 		|| artifact_light(obj)
+		|| arti_light(obj)
 	) timer_attached = FALSE;
 
 	if (!timer_attached) {

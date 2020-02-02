@@ -438,16 +438,24 @@ merge_adj_rooms()
 				{
 					// expand the room
 					if (xadj){
-						for (g = t->ly - 1; g <= t->hy + 1; g++)
+						for (g = t->ly - 1; g <= t->hy + 1; g++) {
 							levl[*p + dp*2][g].typ = VWALL;
-						for (g = t->ly; g <= t->hy; g++)
+							levl[*p + dp * 2][g].horizontal = 0;
+						}
+						for (g = t->ly; g <= t->hy; g++) {
 							levl[*p + dp*1][g].typ = ROOM;
+							levl[*p + dp * 1][g].horizontal = 0;
+						}
 					}
 					if (yadj){
-						for (f = t->lx - 1; f <= t->hx + 1; f++)
+						for (f = t->lx - 1; f <= t->hx + 1; f++) {
 							levl[f][*p + dp*2].typ = HWALL;
-						for (f = t->lx; f <= t->hx; f++)
+							levl[f][*p + dp * 2].horizontal = 1;
+						}
+						for (f = t->lx; f <= t->hx; f++) {
 							levl[f][*p + dp*1].typ = ROOM;
+							levl[f][*p + dp * 1].horizontal = 0;
+						}
 					}
 					*p += dp;
 					// attempt to add a door over the shared length
@@ -489,29 +497,26 @@ merge_adj_rooms()
 				smeq[j] = smeq[i];
 			else
 				smeq[i] = smeq[j];
-			// make the lighting consistent between the rooms -- this will fail sometimes when merging already-merged rooms, but this isn't critical
-			if (a->rlit != b->rlit)
-			{
-				int lit = 0;
+			// make the lighting consistent in the rooms 
 				struct rm *lev;
 				struct mkroom *tmp;
-
-				if ((((a->hx - a->lx)*(a->hy - a->ly) > (b->hx - b->lx)*(b->hy - b->ly)) || a->rtype == JOINEDROOM) && b->rtype != JOINEDROOM)
-					tmp = b;
-				else
+				if ((((a->hx - a->lx)*(a->hy - a->ly) > (b->hx - b->lx)*(b->hy - b->ly)) || a->rtype == JOINEDROOM) && b->rtype != JOINEDROOM) {
+						tmp = b;
+					tmp->rlit = a->rlit;
+				}
+				else {
 					tmp = a;
-
-				tmp->rlit = !tmp->rlit;
+					tmp->rlit = b->rlit;
+				}
 
 				for (f = tmp->lx - 1; f <= tmp->hx + 1; f++) {
 					lev = &levl[f][max(tmp->ly - 1, 0)];
 					for (g = tmp->ly - 1; g <= tmp->hy + 1; g++)
 						lev++->lit = tmp->rlit;
 				}
-			}
-			// change the room types
-			a->rtype = JOINEDROOM;
-			b->rtype = JOINEDROOM;
+				// change the room types
+				a->rtype = JOINEDROOM;
+				b->rtype = JOINEDROOM;
 		}
 	}
 	return;

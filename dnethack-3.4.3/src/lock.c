@@ -149,10 +149,16 @@ picklock()	/* try to open/close a lock */
 	} else {
 	    if(xlock.box->otyp == MAGIC_CHEST){
 			xlock.box->olocked = 0;
+			xlock.box->obolted = 1;
+			xlock.box->owt = weight(xlock.box);
 			xlock.box->ovar1 = xlock.mgclcknm;
-		} else xlock.box->olocked = !xlock.box->olocked;
+			pline_The("chest bolts itself to the floor!");
+		}
+		else {
+			xlock.box->olocked = !xlock.box->olocked;
 	    if(xlock.box->otrapped)	
-		(void) chest_trap(xlock.box, FINGER, FALSE);
+			(void) chest_trap(xlock.box, FINGER, FALSE);
+		}
 	}
 	exercise(A_DEX, TRUE);
 	return((xlock.usedtime = 0));
@@ -197,6 +203,7 @@ forcelock()	/* try to force a locked chest */
 
 	if(xlock.picktyp == 3) u.otiaxAttack = moves;
 	if(rn2(100) >= xlock.chance) return(1);		/* still busy */
+	if(xlock.box->otyp == MAGIC_CHEST) return(1); /* you can't force a magic chest's lock, but you can certainly try */
 
 	You("succeed in forcing the lock.");
 	xlock.box->olocked = 0;
@@ -1001,11 +1008,12 @@ register struct obj *obj, *otmp;	/* obj *is* a box */
 	    break;
 	case WAN_OPENING:
 	case SPE_KNOCK:
-	    if (obj->olocked) {		/* unlock; couldn't be broken */
-		pline("Klick!");
-		obj->olocked = 0;
-		res = 1;
-	    } else			/* silently fix if broken */
+		if (obj->olocked && !(obj->otyp == MAGIC_CHEST && !obj->obolted)) {		/* unlock; couldn't be broken */
+			pline("Klick!");
+			obj->olocked = 0;
+			res = 1;
+		}
+		else			/* silently fix if broken */
 		obj->obroken = 0;
 	    break;
 	case WAN_POLYMORPH:

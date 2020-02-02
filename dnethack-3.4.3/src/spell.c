@@ -4195,6 +4195,9 @@ boolean atme;
 		u.uen -= energy;
 		flags.botl = 1;
 		exercise(A_WIS, TRUE);
+		if (uwep && uwep->oartifact == ART_CALLANDOR && !flags.initgend && rn2(20)){
+			change_usanity(-rnd(spellev(spell)));
+		}
 		/* pseudo is a temporary "false" object containing the spell stats */
 		pseudo = mksobj(spellid(spell), FALSE, FALSE);
 		pseudo->blessed = pseudo->cursed = 0;
@@ -4221,37 +4224,31 @@ boolean atme;
 	
 	n = 0;
 	switch(pseudo->otyp)  {
-	/*
-	 * At first spells act as expected.  As the hero increases in skill
-	 * with the appropriate spell type, some spells increase in their
-	 * effects, e.g. more damage, further distance, and so on, without
-	 * additional cost to the spellcaster.
-	 */
 	case SPE_LIGHTNING_STORM:	color = EXPL_MAGICAL;
-								n = rnd(6) + 6;
-								dam = u.ulevel + spell_damage_bonus();
-								rad = 0;
+								n = rnd(6) + 2;
+								dam = rnd(u.ulevel) + d(6,6) + spell_damage_bonus();
+								rad = 1;
 								inacc = 3;
 								goto dothrowspell;
 	case SPE_BLIZZARD:			color = EXPL_FROSTY;
 								n = rnd(3) + 1;
-								dam = u.ulevel + spell_damage_bonus();
+								dam = rnd(u.ulevel) + d(4,6) + spell_damage_bonus();
 								rad = 1;
 								inacc = 1;
 								goto dothrowspell;
 	case SPE_FIRE_STORM:		color = EXPL_FIERY;
 								n = 1;
-								dam = rnd(u.ulevel) + rnd(u.ulevel) + u.ulevel + spell_damage_bonus();
+								dam = u.ulevel + d(12,6) + spell_damage_bonus();
 								rad = 2;
-								inacc = 1;
+								inacc = 0;
 								goto dothrowspell;
 dothrowspell:
 		if (Double_spell_size){
 			n = n * 3 / 2;
-			if (rad)
+			if (pseudo->otyp != SPE_LIGHTNING_STORM)
 				rad += 1;
 			else
-				n += 2;
+				n += 3;
 		}
 
 		if (throwspell()) {
@@ -4267,13 +4264,13 @@ dothrowspell:
 				{
 					boolean once = TRUE;
 					while (once || !isok(u.dx, u.dy) || !cansee(u.dx, u.dy) || IS_STWALL(levl[u.dx][u.dy].typ)) {
-						if (pseudo->otyp == SPE_LIGHTNING_STORM && !rn2(10))
+						if (pseudo->otyp == SPE_LIGHTNING_STORM && !rn2(7))
 							miss = TRUE;	//lightning storm is more accurate out in the open
 						u.dx = cc.x + rnd(1 + inacc * 2) - inacc - 1; u.dy = cc.y + rnd(1 + inacc * 2) - inacc - 1;
 						once = FALSE;
 					}
 				}
-				if (pseudo->otyp == SPE_LIGHTNING_STORM && !miss && !(m_at(u.dx, u.dy) || (u.dx == u.ux && u.dy == u.uy && !(uarmh && uarmh->oartifact == ART_STORMHELM))) && rn2(250))
+				if (pseudo->otyp == SPE_LIGHTNING_STORM && !miss && !(m_at(u.dx, u.dy) || (u.dx == u.ux && u.dy == u.uy && !(uarmh && uarmh->oartifact == ART_STORMHELM) && rn2(7))) && rn2(700))
 				{ //lightning storm prefers to hit creatures (including you)
 					n++;
 				}
@@ -5146,10 +5143,12 @@ int spell;
 	
 	if(Nullmagic && spellid(spell)!=SPE_ANTIMAGIC_SHIELD) return 0;
 	
-	if(
-		((spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE) && 
-			uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM)
-	) return 100;
+	if ((uarmh && uarmh->oartifact == ART_STORMHELM && spellid(spell) == SPE_LIGHTNING_STORM) ||
+		(uwep && uwep->oartifact == ART_ANNULUS && uwep->otyp == CHAKRAM && (
+		(spellid(spell) == SPE_FORCE_BOLT || spellid(spell) == SPE_MAGIC_MISSILE)))
+		) {
+		return 100;
+	}
 	
 	/* Calculate intrinsic ability (splcaster) */
 
@@ -5240,6 +5239,11 @@ int spell;
 			splcaster -= urole.spelarmr * cast_bon / 3;
 		}
 
+		/* if (uwep->otyp == ART_STAFF_OF_NECROMANCY && spellid(spell) == SPE_DRAIN_LIFE) {
+			// Bonus to drain life
+			splcaster -= urole.spelarmr;
+		} The staff is already +4 to all attack spells, a bonus to drain life is probably overkill */
+
 		if (uwep->otyp == SHEPHERD_S_CROOK) {	// a tool for leading and manipulating things
 			cast_bon = 0;
 			if (spell_skilltype(spellid(spell)) == P_ENCHANTMENT_SPELL)
@@ -5256,6 +5260,11 @@ int spell;
 			if (uwep->oartifact && !(uwep->oartifact == ART_PEN_OF_THE_VOID && !(mvitals[PM_ACERERAK].died > 0)))
 				cast_bon *= 2;
 			splcaster -= cast_bon;
+		}
+		
+		if(uwep && uwep->oartifact == ART_CALLANDOR && !flags.initgend){	// sa'angreal
+			cast_bon = 2;
+			splcaster -= urole.spelarmr * cast_bon / 3;
 		}
 		
 		if(Role_if(PM_WIZARD) && uwep->oclass == WAND_CLASS) {	// a tool of spellweaving
@@ -5290,9 +5299,6 @@ int spell;
 	if (uarmh) {
 		if (is_metallic(uarmh) && uarmh->otyp != HELM_OF_BRILLIANCE)
 			splcaster += uarmhbon;
-
-		if (uarmh->oartifact == ART_STORMHELM && spellid(spell) == SPE_LIGHTNING_STORM)
-			splcaster -= urole.spelarmr;
 	}
 
 	if (uarmg) {

@@ -415,6 +415,9 @@ struct obj *obj;
 			attach_fig_transform_timeout(obj);
 		    }
 	}
+	/* relight lightsources that should always be lit */
+	if (obj_eternal_light(obj) && !obj->lamplit)
+		begin_burn(obj, FALSE);
 }
 
 #endif /* OVL1 */
@@ -1208,7 +1211,8 @@ register const char *let,*word;
 			 otmp->oartifact == ART_ITLACHIAYAQUE || 
 			 otmp->oartifact == ART_ROD_OF_SEVEN_PARTS ||
 			 otmp->oartifact == ART_BOW_OF_SKADI ||
-			 otmp->oartifact == ART_PEN_OF_THE_VOID
+			 otmp->oartifact == ART_PEN_OF_THE_VOID ||
+			 otmp->oartifact == ART_STAFF_OF_NECROMANCY
 			) && !strcmp(word, "read")
 		){
 			bp[foo++] = otmp->invlet;
@@ -2451,6 +2455,16 @@ winid *datawin;
 		return;
 	}
 
+	/* type name */
+	if (obj) {
+		Sprintf(buf, "(%s)", obj_descname(obj));
+		OBJPUTSTR(buf);
+	}
+	else {
+		Sprintf(buf, "(%s)", obj_typename(otyp));
+		OBJPUTSTR(buf);
+	}
+
 		/* Object classes currently with no special messages here: amulets. */
 	if (olet == WEAPON_CLASS || (olet == TOOL_CLASS && oc.oc_skill)) {
 		boolean otyp_is_blaster = (otyp == HAND_BLASTER || otyp == ARM_BLASTER || otyp == MASS_SHADOW_PISTOL || otyp == CUTTING_LASER || otyp == RAYGUN);
@@ -2727,7 +2741,7 @@ winid *datawin;
 //				OBJPUTSTR(buf2);
 //			}
 		}
-
+		/* other weapon special effects */
 		if(obj){
 			if(obj->otyp == TORCH){
 				Sprintf(buf2, "Deals 1d6 bonus fire damage when lit.");
@@ -2782,7 +2796,47 @@ winid *datawin;
 				OBJPUTSTR(buf2);
 			}
 		}
+		/* poison */
+		if (obj) {
+			int poisons = obj->opoisoned;
+			//int artipoisons = 0;
+			if (arti_poisoned(obj))
+				poisons |= OPOISON_BASIC;
+			if (oartifact == ART_WEBWEAVER_S_CROOK)
+				poisons |= (OPOISON_SLEEP | OPOISON_BLIND | OPOISON_PARAL);
+			if (oartifact == ART_SUNBEAM)
+				poisons |= OPOISON_FILTH;
+			if (oartifact == ART_MOONBEAM)
+				poisons |= OPOISON_SLEEP;
 
+			if (poisons) {
+				/* special cases */
+				if (poisons == OPOISON_BASIC) {
+					OBJPUTSTR("Coated with poison.");
+				}
+				else if (poisons == OPOISON_ACID) {
+					OBJPUTSTR("Coated in acid.");
+				}
+				else if (poisons == OPOISON_SILVER) {
+					OBJPUTSTR("Coated with silver.");
+				}
+				/* general mash-em-together poison */
+				else {
+					buf[0] = '\0';
+					if (poisons&OPOISON_BASIC)  {Sprintf(buf, "%sharmful "     , buf);}
+					if (poisons&OPOISON_FILTH)  {Sprintf(buf, "%ssickening "   , buf);}
+					if (poisons&OPOISON_SLEEP)  {Sprintf(buf, "%ssleeping "    , buf);}
+					if (poisons&OPOISON_BLIND)  {Sprintf(buf, "%sblinding "    , buf);}
+					if (poisons&OPOISON_PARAL)  {Sprintf(buf, "%sparalytic "   , buf);}
+					if (poisons&OPOISON_AMNES)  {Sprintf(buf, "%samnesiac "    , buf);}
+					if (poisons&OPOISON_ACID)   {Sprintf(buf, "%sacidic "      , buf);}
+					if (poisons&OPOISON_SILVER) {Sprintf(buf, "%ssilver "      , buf);}
+
+					Sprintf(buf2, "Coated with %spoison.", an(buf));
+					OBJPUTSTR(buf2);
+				}
+			}
+		}
 
 		/* to-hit */
 		int hitbon = oc.oc_hitbon - (obj ? (4 * max(0,(obj->objsize - youracedata->msize))) : 0);
@@ -2924,12 +2978,10 @@ winid *datawin;
 		}
 	}
 	if (olet == POTION_CLASS) {
-		/* nothing special */
-		OBJPUTSTR("Potion.");
+		/* nothing special */;
 	}
 	if (olet == SCROLL_CLASS) {
-		/* nothing special */
-		OBJPUTSTR("Scroll.");
+		/* nothing special */;
 	}
 	if (olet == TILE_CLASS) {
 		switch (otyp) {
@@ -3017,7 +3069,8 @@ winid *datawin;
 		OBJPUTSTR(buf);
 	}
 	if (olet == RING_CLASS) {
-		OBJPUTSTR((oc.oc_charged && otyp != RIN_WISHES) ? "Chargeable ring." : "Ring.");
+		if (oc.oc_charged && otyp != RIN_WISHES)
+			OBJPUTSTR("Chargeable.");
 		if (oc.oc_tough) {
 			OBJPUTSTR("Is made of a hard material.");
 		}

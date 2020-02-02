@@ -227,6 +227,35 @@ doread()
 				if (i == MAXSPELL) impossible("Too many spells memorized!");
 				return 1;
 			}
+		
+		} else if(scroll->oartifact == ART_STAFF_OF_NECROMANCY){
+			if (Blind) {
+				You_cant("see the staff!");
+				return 0;
+			} else {
+				int i;
+				You("read the forbidden secrets of time and decay!");
+				for (i = 0; i < MAXSPELL; i++)  {
+					if (spellid(i) == SPE_DRAIN_LIFE)  {
+						if (spellknow(i) <= 1000) {
+							Your("knowledge of Drain Life is keener.");
+							spl_book[i].sp_know = 20000;
+							exercise(A_WIS,TRUE);       /* extra study */
+						} else { /* 1000 < spellknow(i) <= MAX_SPELL_STUDY */
+							You("know Drain Life quite well already.");
+						}
+						break;
+					} else if (spellid(i) == NO_SPELL)  {
+						spl_book[i].sp_id = SPE_DRAIN_LIFE;
+						spl_book[i].sp_lev = objects[SPE_DRAIN_LIFE].oc_level;
+						spl_book[i].sp_know = 20000;
+						You("learn to cast Drain Life!");
+						break;
+					}
+				}
+				if (i == MAXSPELL) impossible("Too many spells memorized!");
+				return 1;
+			}
 		} else if(scroll->otyp == LIGHTSABER){
 			if (Blind) {
 				You_cant("see it!");
@@ -3481,40 +3510,25 @@ createmon:
 	    for (i = 0; i <= (allow_multi ? multi : 0); i++) {
 		if (monclass != MAXMCLASSES && !(ma_require || mg_restrict || gen_restrict))
 			whichpm = mkclass(monclass, G_NOHELL | G_HELL | G_PLANES);
-		if (maketame) {
-		    mtmp = makemon(whichpm, u.ux, u.uy, MM_EDOG);
+
+			int mm_flags = NO_MM_FLAGS;
+			if (maketame)
+				mm_flags |= MM_EDOG;
+
+			if (undeadtype)
+				mtmp = makeundead(whichpm, u.ux, u.uy, mm_flags, undeadtype);
+			else
+				mtmp = makemon(whichpm, u.ux, u.uy, mm_flags);
+
 		    if (mtmp) {
-			initedog(mtmp);
-			set_malign(mtmp);
-		    }
-		} else {
-		    mtmp = makemon(whichpm, u.ux, u.uy, NO_MM_FLAGS);
-		    if ((makepeaceful || makehostile) && mtmp) {
-			mtmp->mtame = 0;	/* sanity precaution */
-			mtmp->mpeaceful = makepeaceful ? 1 : 0;
-			set_malign(mtmp);
-		    }
-		}
-		if (specify_derivation){
-			if (mtmp && !mtmp->mfaction && (
-				undeadtype == ZOMBIFIED ? can_undead_mon(mtmp) :
-				undeadtype == SKELIFIED ? can_undead_mon(mtmp) :
-				undeadtype == VAMPIRIC ? can_undead_mon(mtmp) :
-				undeadtype == CRYSTALFIED ? TRUE :
-				undeadtype == ILLUMINATED ? TRUE :
-				undeadtype == PSEUDONATURAL ? TRUE :
-				undeadtype == TOMB_HERD ? TRUE :
-				undeadtype == YITH ? TRUE :
-				undeadtype == MISTWEAVER ? TRUE :
-				undeadtype == CRANIUM_RAT ? is_rat(mtmp->data) :
-				undeadtype == FRACTURED ? is_kamerel(mtmp->data) : 0
-				))
-			{
-				mtmp->mfaction = undeadtype;
-			}
-		}
-		if (mtmp)
-		{
+				if (maketame)
+					initedog(mtmp);
+				else if (makepeaceful)
+					mtmp->mpeaceful = 1;
+				else if (makehostile)
+					mtmp->mpeaceful = 0;
+				set_malign(mtmp);
+
 			madeany = TRUE;
 			newsym(mtmp->mx, mtmp->my);
 		}

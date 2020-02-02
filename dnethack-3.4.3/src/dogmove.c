@@ -316,6 +316,7 @@ boolean devour;
 	boolean poly = FALSE, grow = FALSE, heal = FALSE;
 	int nutrit;
 	boolean vampiric = is_vampire(mtmp->data);
+	boolean eatonlyone = (obj->oclass == FOOD_CLASS || obj->oclass == CHAIN_CLASS);
 
 #ifdef PET_SATIATION
 	// boolean can_choke = (edog->hungrytime >= monstermoves + DOG_SATIATED && !vampiric);
@@ -366,8 +367,7 @@ boolean devour;
 	if (cansee(x, y) || cansee(mtmp->mx, mtmp->my))
 	    pline("%s %s %s.", mon_visible(mtmp) ? noit_Monnam(mtmp) : "It",
 		  vampiric ? "drains" : devour ? "devours" : "eats",
-		  (obj->oclass == FOOD_CLASS) ?
-			singular(obj, doname) : doname(obj));
+		  eatonlyone ? singular(obj, doname) : doname(obj));
 	/* It's a reward if it's DOGFOOD and the player dropped/threw it. */
 	/* We know the player had it if invlet is set -dlc */
 	if(dogfood(mtmp,obj) == DOGFOOD && obj->invlet)
@@ -413,7 +413,7 @@ boolean devour;
 	    delobj(obj);
 	} else if (obj == uchain)
 	    unpunish();
-	else if (obj->quan > 1L && (obj->oclass == FOOD_CLASS || obj->oclass == CHAIN_CLASS)) {
+	else if (obj->quan > 1L && eatonlyone) {
 	    obj->quan--;
 	    obj->owt = weight(obj);
 	} else

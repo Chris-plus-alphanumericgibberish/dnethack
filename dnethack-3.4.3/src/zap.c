@@ -418,7 +418,9 @@ struct obj *otmp;
 		} else {
 			levlost = 1;
 			dmg = rnd(8);
-			if (uwep && uwep->oartifact == ART_DEATH_SPEAR_OF_VHAERUN){
+			if (uwep && (uwep->oartifact == ART_DEATH_SPEAR_OF_VHAERUN || 
+						uwep->oartifact == ART_STAFF_OF_NECROMANCY)
+			){
 				dmg += d((u.ulevel+1)/3, 4);
 				levlost += (u.ulevel+1)/6;
 			}
@@ -1634,7 +1636,7 @@ poly_obj(obj, id)
 	    otmp->oerodeproof = obj->oerodeproof;
 
 	/* Keep chest/box traps and poisoned ammo if we may */
-	if (obj->otrapped && Is_box(otmp)) otmp->otrapped = TRUE;
+	if (obj->otrapped && Is_box(otmp) && otmp->otyp != MAGIC_CHEST) otmp->otrapped = TRUE;
 
 	if (obj->opoisoned && is_poisonable(otmp))
 		otmp->opoisoned = obj->opoisoned;

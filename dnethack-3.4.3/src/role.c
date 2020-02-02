@@ -717,7 +717,7 @@ struct Role urole =
 const struct Race races[] = {
 {	"human", "human", "humanity", "Hum",
 	{"man", "woman"},
-	PM_HUMAN, NON_PM, PM_HUMAN_MUMMY, PM_ZOMBIE,
+	PM_HUMAN, NON_PM, PM_HUMAN_MUMMY, PM_HUMAN,
 	ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	MA_HUMAN, 0, MA_GNOME|MA_ORC,
@@ -744,7 +744,7 @@ const struct Race races[] = {
 },
 {	"Chiropteran", "Chiropteric", "Chiropteran-hood", "Bat",
 	{0, 0},
-	PM_CHIROPTERAN, NON_PM, PM_CHIROPTERAN_MUMMY, PM_ZOMBIE,
+	PM_CHIROPTERAN, NON_PM, PM_CHIROPTERAN_MUMMY, PM_CHIROPTERAN,
 	ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL|ROLE_CHAOTIC|ROLE_NEUTRAL,
 	MA_ANIMAL, 0, MA_GNOME|MA_DWARF,
 	/*    Str     Int Wis Dex Con Cha */
@@ -757,7 +757,7 @@ const struct Race races[] = {
 },
 {	"dwarf", "dwarven", "dwarvenkind", "Dwa",
 	{0, 0},
-	PM_DWARF, NON_PM, PM_DWARF_MUMMY, PM_ZOMBIE,
+	PM_DWARF, NON_PM, PM_DWARF_MUMMY, PM_DWARF,
 	ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL,
 	MA_DWARF, MA_DWARF|MA_GNOME, MA_ORC,
 	/*    Str     Int Wis Dex Con Cha */
@@ -770,7 +770,7 @@ const struct Race races[] = {
 },
 {	"Drow", "droven", "drovenkind", "Dro",
 	{"hedrow", "drow"},
-	PM_DROW, NON_PM, PM_DROW_MUMMY, PM_ZOMBIE,
+	PM_DROW, NON_PM, PM_DROW_MUMMY, PM_DROW,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
 	MA_ELF, 0, MA_FEY|MA_ELF|MA_ORC,
 	/*  Str    Int Wis Dex Con Cha */
@@ -783,7 +783,7 @@ const struct Race races[] = {
 },
 {	"elf", "elven", "elvenkind", "Elf",
 	{"elf", "elf-maid"},
-	PM_ELF, NON_PM, PM_ELF_MUMMY, PM_ZOMBIE,
+	PM_ELF, NON_PM, PM_ELF_MUMMY, PM_ELF,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
 	MA_ELF, MA_ELF, MA_ORC,
 	/*  Str    Int Wis Dex Con Cha */
@@ -796,7 +796,7 @@ const struct Race races[] = {
 },
 {	"gnome", "gnomish", "gnomehood", "Gno",
 	{0, 0},
-	PM_GNOME, NON_PM, PM_GNOME_MUMMY, PM_ZOMBIE,
+	PM_GNOME, NON_PM, PM_GNOME_MUMMY, PM_GNOME,
 	ROLE_MALE|ROLE_FEMALE | ROLE_NEUTRAL,
 	MA_GNOME, MA_DWARF|MA_GNOME, MA_HUMAN,
 	/*  Str    Int Wis Dex Con Cha */
@@ -809,7 +809,7 @@ const struct Race races[] = {
 },
 {	"Half-dragon", "Half-dragon", "Half-dragonhood", "Hlf",
 	{0, 0},
-	PM_HALF_DRAGON, NON_PM, PM_HALF_DRAGON_MUMMY, PM_ZOMBIE,
+	PM_HALF_DRAGON, NON_PM, PM_HALF_DRAGON_MUMMY, PM_HALF_DRAGON,
 	ROLE_MALE|ROLE_FEMALE | ROLE_LAWFUL|ROLE_CHAOTIC|ROLE_NEUTRAL,
 	MA_DRAGON, 0, MA_ELF|MA_DWARF,
 	/*    Str     Int Wis Dex Con Cha */
@@ -822,7 +822,7 @@ const struct Race races[] = {
 },
 {	"incantifier", "incantifier", "wanterkind", "Inc",
 	{0, 0},
-	PM_INCANTIFIER, NON_PM, PM_HUMAN_MUMMY, PM_ZOMBIE,
+	PM_INCANTIFIER, NON_PM, PM_HUMAN_MUMMY, PM_HUMAN,
 	ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	MA_HUMAN, 0, MA_GNOME|MA_ORC|MA_ELF,
@@ -836,7 +836,7 @@ const struct Race races[] = {
 },
 {	"Inheritor", "human", "humanity", "Inh",
 	{"man", "woman"},
-	PM_INHERITOR, NON_PM, PM_HUMAN_MUMMY, PM_ZOMBIE,
+	PM_INHERITOR, NON_PM, PM_HUMAN_MUMMY, PM_HUMAN,
 	ROLE_MALE|ROLE_FEMALE |
 	  ROLE_LAWFUL|ROLE_NEUTRAL|ROLE_CHAOTIC,
 	/*MA_HUMAN disabled*/ 0, 0, MA_GNOME|MA_ORC|MA_ELF,
@@ -850,7 +850,7 @@ const struct Race races[] = {
 },
 {	"orc", "orcish", "orcdom", "Orc",
 	{0, 0},
-	PM_ORC, NON_PM, PM_ORC_MUMMY, PM_ZOMBIE,
+	PM_ORC, NON_PM, PM_ORC_MUMMY, PM_ORC,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
 	MA_ORC, 0, MA_FEY|MA_HUMAN|MA_ELF|MA_DWARF,
 	/*  Str    Int Wis Dex Con Cha */
@@ -863,7 +863,7 @@ const struct Race races[] = {
 },
 {	"vampire", "vampiric", "vampirehood", "Vam",
 	{"vampire", "vampiress"},
-	PM_VAMPIRE, NON_PM, PM_HUMAN_MUMMY, PM_ZOMBIE,
+	PM_VAMPIRE, NON_PM, PM_HUMAN_MUMMY, PM_HUMAN,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC|ROLE_NEUTRAL,
 	MA_VAMPIRE, 0, MA_FEY|MA_ELF|MA_GNOME|MA_DWARF|MA_ORC,
 	/*    Str     Int Wis Dex Con Cha */
@@ -876,7 +876,7 @@ const struct Race races[] = {
 },
 {	"yuki-onna", "yuki-onnic", "feyhood", "Swn",
 	{0, 0},
-	PM_YUKI_ONNA, NON_PM, PM_HUMAN_MUMMY, PM_ZOMBIE,
+	PM_YUKI_ONNA, NON_PM, PM_HUMAN_MUMMY, PM_YUKI_ONNA,
 	ROLE_FEMALE | ROLE_LAWFUL|ROLE_CHAOTIC|ROLE_NEUTRAL,
 	MA_FEY, 0, MA_ELF,
 	/*    Str     Int Wis Dex Con Cha */
@@ -911,7 +911,7 @@ struct Race urace =
 struct Race myrkalfr = 
 {	"myrkalfr", "myrkalfar", "myrkalfrkind", "Dro",
 	{"myrkalfr", "myrkalfr"},
-	PM_MYRKALFR, NON_PM, PM_DROW_MUMMY, PM_ZOMBIE,
+	PM_MYRKALFR, NON_PM, PM_DROW_MUMMY, PM_DROW,
 	ROLE_MALE|ROLE_FEMALE | ROLE_CHAOTIC,
 	MA_ELF, 0, MA_ELF|MA_ORC|MA_DROW,
 	/*  Str    Int Wis Dex Con Cha */

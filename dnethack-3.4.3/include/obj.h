@@ -96,6 +96,7 @@ struct obj {
 #define ohaluengr obroken	/* engraving on ring isn't a ward */
 #define odebone obroken		/* corpse has been de-boned */
 	Bitfield(otrapped,1);	/* container is trapped */
+#define obolted otrapped	/* magic chest is permanently attached to floor */
 				/* or accidental tripped rolling boulder trap */
 
 	Bitfield(recharged,3);	/* number of times it's been recharged */
@@ -795,14 +796,16 @@ struct weapon_dice {
 				|| (otmp)->otyp == TALLOW_CANDLE\
 				|| (otmp)->otyp == WAX_CANDLE\
 				|| (otmp)->otyp == POT_OIL)
-/* object can be ignited */
-#define ignitable(otmp)	((otmp)->otyp == LANTERN\
-				|| (otmp)->otyp == OIL_LAMP\
- 				|| (otmp)->otyp == DWARVISH_HELM\
+/* object can be ignited -- lightsources that should be inadvertantly lit by fire damage */
+#define ignitable(otmp)	(\
+				   (otmp)->otyp == OIL_LAMP\
+				|| (otmp)->otyp == MAGIC_LAMP\
  				|| (otmp)->otyp == GNOMISH_POINTY_HAT\
 				|| (otmp)->otyp == CANDELABRUM_OF_INVOCATION\
 				|| (otmp)->otyp == TALLOW_CANDLE\
 				|| (otmp)->otyp == WAX_CANDLE\
+				|| (otmp)->otyp == TORCH\
+				|| (otmp)->otyp == SHADOWLANDER_S_TORCH\
 				|| (otmp)->otyp == CANDLE_OF_INVOCATION\
 				|| (otmp)->otyp == POT_OIL)
 

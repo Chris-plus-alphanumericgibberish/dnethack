@@ -3768,7 +3768,7 @@ dountrap()	/* disarm a trap */
 		 makeplural(body_part(HAND)));
 	    return 0;
 	}
-	return untrap(FALSE);
+	return untrap((struct obj *)0);
 }
 #endif /* OVLB */
 #ifdef OVL2
@@ -4311,8 +4311,8 @@ struct trap *ttmp;
 }
 
 int
-untrap(force)
-boolean force;
+untrap(tool)
+struct obj * tool;
 {
 	register struct obj *otmp;
 	register boolean confused = (Confusion > 0 || Hallucination > 0);
@@ -4323,6 +4323,7 @@ boolean force;
 	boolean trap_skipped = FALSE;
 	boolean box_here = FALSE;
 	boolean deal_with_floor_trap = FALSE;
+	boolean force = (tool && tool->oartifact);
 	char the_trap[BUFSZ], qbuf[QBUFSZ];
 	int containercnt = 0;
 
@@ -4500,50 +4501,81 @@ boolean force;
 	}
 
 	if(!u.dx && !u.dy) {
-	    for(otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere)
-		if(Is_box(otmp)) {
-		    Sprintf(qbuf, "There is %s here. Check it for traps?",
-			safe_qbuf("", sizeof("There is  here. Check it for traps?"),
-				doname(otmp), an(simple_typename(otmp->otyp)), "a box"));
-		    switch (ynq(qbuf)) {
-			case 'q': return(0);
-			case 'n': continue;
-		    }
+		for (otmp = level.objects[x][y]; otmp; otmp = otmp->nexthere) {
+			if (otmp->otyp == MAGIC_CHEST && otmp->obolted) {
+				Sprintf(qbuf, "There is %s bolted down here. Unbolt it?",
+					safe_qbuf("", sizeof("There is  bolted down here. Unbolt it?"),
+					doname(otmp), an(simple_typename(otmp->otyp)), "a box"));
+				switch (ynq(qbuf)) {
+				case 'q': return(0);
+				case 'n': continue;
+				}
 #ifdef STEED
-		    if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
-			You("aren't skilled enough to reach from %s.",
-				mon_nam(u.usteed));
-			return(0);
-		    }
+				if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
+					You("aren't skilled enough to reach from %s.",
+						mon_nam(u.usteed));
+					return(0);
+				}
 #endif
-		    if((otmp->otrapped && (force || (!confused
-				&& rn2(MAXULEV + 1 - u.ulevel) < 10)))
-		       || (!force && confused && !rn2(3))) {
-			You("find a trap on %s!", the(xname(otmp)));
-			if (!confused) exercise(A_WIS, TRUE);
-
-			switch (ynq("Disarm it?")) {
-			    case 'q': return(1);
-			    case 'n': trap_skipped = TRUE;  continue;
+				if (!(tool && tool->oartifact == ART_MASTER_KEY_OF_THIEVERY)) {
+					pline("The bolts are seemingly magical and impossible to budge.");
+					return(0);
+				}
+				else {
+					pline("The bolts release, and %s locks itself!", the(xname(otmp)));
+					otmp->olocked = 1;
+					otmp->obolted = 0;
+					otmp->owt = weight(otmp);
+					return(1);
+				}
 			}
+			if (Is_box(otmp)) {
+				Sprintf(qbuf, "There is %s here. Check it for traps?",
+					safe_qbuf("", sizeof("There is  here. Check it for traps?"),
+					doname(otmp), an(simple_typename(otmp->otyp)), "a box"));
+				switch (ynq(qbuf)) {
+				case 'q': return(0);
+				case 'n': continue;
+				}
+#ifdef STEED
+				if (u.usteed && P_SKILL(P_RIDING) < P_BASIC) {
+					You("aren't skilled enough to reach from %s.",
+						mon_nam(u.usteed));
+					return(0);
+				}
+#endif
+				if ((otmp->otrapped && otmp->otyp != MAGIC_CHEST &&
+					(force || (!confused && rn2(MAXULEV + 1 - u.ulevel) < 10)))
+					|| (!force && confused && !rn2(3))) {
+					You("find a trap on %s!", the(xname(otmp)));
+					if (!confused) exercise(A_WIS, TRUE);
 
-			if(otmp->otrapped) {
-			    exercise(A_DEX, TRUE);
-			    ch = ACURR(A_DEX) + u.ulevel;
-			    if (Role_if(PM_ROGUE)) ch *= 2;
-			    if(!force && (confused || Fumbling ||
-				rnd(75+level_difficulty()/2) > ch)) {
-				(void) chest_trap(otmp, FINGER, TRUE);
-			    } else {
-				You("disarm it!");
-				otmp->otrapped = 0;
-			    }
-			} else pline("That %s was not trapped.", xname(otmp));
-			return(1);
-		    } else {
-			You("find no traps on %s.", the(xname(otmp)));
-			return(1);
-		    }
+					switch (ynq("Disarm it?")) {
+					case 'q': return(1);
+					case 'n': trap_skipped = TRUE;  continue;
+					}
+
+					if (otmp->otrapped && otmp->otyp != MAGIC_CHEST) {
+						exercise(A_DEX, TRUE);
+						ch = ACURR(A_DEX) + u.ulevel;
+						if (Role_if(PM_ROGUE)) ch *= 2;
+						if (!force && (confused || Fumbling ||
+							rnd(75 + level_difficulty() / 2) > ch)) {
+							(void)chest_trap(otmp, FINGER, TRUE);
+						}
+						else {
+							You("disarm it!");
+							otmp->otrapped = 0;
+						}
+					}
+					else pline("That %s was not trapped.", xname(otmp));
+					return(1);
+				}
+				else {
+					You("find no traps on %s.", the(xname(otmp)));
+					return(1);
+				}
+			}
 		}
 
 	    You(trap_skipped ? "find no other traps here."

@@ -32,7 +32,7 @@
 #define	resist_pierce(ptr)	((((ptr)->mflagsg & MG_RPIERCE) != 0L))
 #define	resists_all(ptr)	((((ptr)->mflagsg & MG_RALL) == MG_RALL))
 
-#define vulnerable_mask(mask)	((mask) == MG_VPIERCE || (mask) == MG_VSLASH || (mask) == MG_VBLUNT)
+#define vulnerable_mask(mask)	((!((mask)&SLASH)+!((mask)&PIERCE)+!((mask)&WHACK)) == 1)
 
 #define resists_poly(ptr)	(((ptr)->geno&G_UNIQ) || is_weeping(ptr) || is_yochlol(ptr))
 

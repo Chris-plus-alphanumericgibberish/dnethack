@@ -319,6 +319,9 @@ int tary;
 	/* if attacker doesn't exist or is trying to attack something that doesn't exist -- must be checked right away */
 	if (!magr || !mdef)
 		return(MM_MISS);		/* mike@genat */
+	if ((magr != &youmonst && DEADMONSTER(magr)) ||
+		(mdef != &youmonst && DEADMONSTER(mdef)))
+		return MM_MISS;
 
 	int	indexnum = 0,	/* loop counter */
 		tohitmod = 0,	/* flat accuracy modifier for a specific attack */
@@ -426,6 +429,11 @@ int tary;
 		/* if you're invulnerable, you're fine though */
 		if (u.uinvulnerable || u.spiritPColdowns[PWR_PHASE_STEP] >= moves + 20)
 			return MM_MISS; /* stomachs can't hurt you! */
+	}
+	/* While swallowed OR stuck, you can't attack other monsters */
+	if (youagr && u.ustuck) {
+		if (mdef != u.ustuck)
+			return MM_MISS;
 	}
 
 	/* Set up the visibility of action */
@@ -840,6 +848,9 @@ int tary;
 			/* engulfing attacks */
 		case AT_ENGL:
 		case AT_ILUR:	/* deprecated */
+			/* not in range */
+			if (ranged)
+				continue;
 			/* don't make self-fatal attacks */
 			if (be_safe && !safe_attack(magr, mdef, attk, (struct obj *)0, pa, pd))
 				continue;
@@ -1094,7 +1105,7 @@ int tary;
 
 	/* make per-round counterattacks -- note that these cannot use otmp or attk, as those are per-attack */
 	if (dopassive)
-		result = xpassivey(magr, mdef, (struct attack *)0, (struct obj *)0, vis, allres, pd, TRUE);
+		allres = xpassivey(magr, mdef, (struct attack *)0, (struct obj *)0, vis, allres, pd, TRUE);
 	
 	/* reset lillend mask usage */
 	if (!youagr && pa == &mons[PM_LILLEND])
@@ -3249,6 +3260,16 @@ int flat_acc;
 			if (!thrown && weapon->objsize - pa->msize > 0){
 				wepn_acc += -4 * (weapon->objsize - pa->msize);
 			}
+			/* fencing gloves increase weapon accuracy when you have a free off-hand */
+			if (!thrown && !bimanual(weapon, magr->data) && !which_armor(magr, W_ARMS)) {
+				static int fgloves;
+				if (!fgloves)
+					fgloves = find_fgloves();
+				struct obj * otmp = which_armor(magr, W_ARMG);
+				if (otmp && otmp->otyp == fgloves)
+					wepn_acc += 2;
+			}
+			
 			/* ranged attacks also get their launcher's accuracy */
 			if (fired && launcher) {
 				/* enchantment, erosion */
@@ -6685,15 +6706,16 @@ boolean ranged;
 		/* Special case for Migo.
 		 * Migo only scoop out brains some of the time (1/20)
 		 * Otherwise, they do a basic physical attack */
-		if ((pa == &mons[PM_MIGO_PHILOSOPHER] || pa == &mons[PM_MIGO_QUEEN])
-			&& rn2(20)) {
-			/* make physical attack */
-			alt_attk.adtyp = AD_PHYS;
-			return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
-		}
-		else {
-			/* do the AD_DRIN attack, noting that we aren't eating brains */
-			spec = TRUE;
+		if (pa == &mons[PM_MIGO_PHILOSOPHER] || pa == &mons[PM_MIGO_QUEEN]) {
+			if (rn2(20)) {
+				/* make physical attack */
+				alt_attk.adtyp = AD_PHYS;
+				return xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
+			}
+			else {
+				/* do the AD_DRIN attack, noting that we aren't eating brains */
+				spec = TRUE;
+			}
 		}
 
 		/* print a basic hit message */
@@ -7838,6 +7860,16 @@ boolean ranged;
 			/* player-only: abuse CHA */
 			if (youdef)
 				exercise(A_CHA, FALSE);
+			/* you are made to attempt to attack the target, but only in melee (for sanity's sake) */
+			if (dist2(u.ux, u.uy, x(mdef), y(mdef)) <= 2 && !youagr && !youdef) {
+				result = xattacky(&youmonst, mdef, x(mdef), y(mdef));
+				/* possibly return early if def died */
+				if (result&(MM_DEF_DIED | MM_DEF_LSVD))
+				{
+					in_conflict = FALSE;
+					return result;
+				}
+			}
 			/* all monsters on the level attempt to attack the target */
 			for (tmpm = fmon; tmpm; tmpm = nmon){
 				nmon = tmpm->nmon;
@@ -10635,8 +10667,8 @@ int vis;
 		/* MONSTER GENERATING GAZES, MVU ONLY */
 
 	case AD_MIST:  // mi-go mist projector
-		/* 4/5 chance to succeed */
-		if (maybe_not && !rn2(5))
+		/* 1/5 chance to succeed */
+		if (maybe_not && rn2(5))
 			return MM_MISS;
 		else {
 			int i = 0;
@@ -13425,14 +13457,15 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 		}
 		if (!level.flags.noteleport) {
 			coord cc;
-			if (youdef) {
+			if (youagr) {
 				tele();
 			}
 			else {
 				rloc(magr, FALSE);
 			}
-			enexto(&cc, x(mdef), y(mdef), &mons[PM_URANIUM_IMP]);
-			rloc_to(mdef, cc.x, cc.y);
+			if (enexto(&cc, x(magr), y(magr), &mons[PM_URANIUM_IMP])) {
+				rloc_to(mdef, cc.x, cc.y);
+			}
 			
 			return MM_AGR_STOP;
 		}
@@ -13523,6 +13556,10 @@ boolean endofchain;			/* if the attacker has finished their attack chain */
 	/* set permonst pointers */
 	struct permonst * pa = youagr ? youracedata : magr->data;
 
+	/* check that magr is still alive */
+	if (!youagr && DEADMONSTER(magr))
+		return result;
+
 	if (vis == -1)
 		vis = getvis(magr, mdef, 0, 0);
 
@@ -13561,10 +13598,10 @@ boolean endofchain;			/* if the attacker has finished their attack chain */
 		result |= res[0];
 
 	} while (!(
-		res[0] & MM_DEF_DIED ||		/* attacker died */
-		res[0] & MM_DEF_LSVD ||		/* attacker lifesaved */
-		res[0] & MM_AGR_DIED ||		/* defender died */
-		res[0] & MM_AGR_STOP ||		/* defender stopped for some other reason */
+		(res[0] & MM_DEF_DIED) ||	/* attacker died */
+		(res[0] & MM_DEF_LSVD) ||	/* attacker lifesaved */
+		(res[0] & MM_AGR_DIED) ||	/* defender died */
+		(res[0] & MM_AGR_STOP) ||	/* defender stopped for some other reason */
 		is_null_attk(passive)		/* no more attacks */
 		));
 	
@@ -13815,7 +13852,7 @@ boolean endofchain;			/* if the passive is occuring at the end of aggressor's at
 	if (passive->damn)
 		dmg = d(passive->damn, passive->damd);
 	else if (passive->damd)
-		dmg = d(mlev(mdef) + 1, passive->damd);
+		dmg = d(mlev(mdef)/3 + 1, passive->damd);
 	else
 		dmg = 0;
 

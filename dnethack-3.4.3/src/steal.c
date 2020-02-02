@@ -466,32 +466,35 @@ register struct obj *otmp;
 	mtmp->mgold += otmp->quan;
 	obfree(otmp, (struct obj *)0);
 	freed_otmp = 1;
-    } else {
+	}
+	else {
 #endif
-    boolean snuff_otmp = FALSE;
-    /* don't want hidden light source inside the monster; assumes that
-       engulfers won't have external inventories; whirly monsters cause
-       the light to be extinguished rather than letting it shine thru */
-    if (otmp->lamplit &&  /* hack to avoid function calls for most objs */
-      	obj_sheds_light(otmp) &&
-	attacktype(mtmp->data, AT_ENGL)) {
-	/* this is probably a burning object that you dropped or threw */
-	if (u.uswallow && mtmp == u.ustuck && !Blind)
-	    pline("%s out.", Tobjnam(otmp, "go"));
-	snuff_otmp = TRUE;
-    }
-	if (mtmp->data == &mons[PM_MAID]){
-		snuff_otmp = TRUE;
-    }
-    /* Must do carrying effects on object prior to add_to_minv() */
-    carry_obj_effects(otmp);
-    /* add_to_minv() might free otmp [if merged with something else],
-       so we have to call it after doing the object checks */
-    freed_otmp = add_to_minv(mtmp, otmp);
-    /* and we had to defer this until object is in mtmp's inventory */
-    if (snuff_otmp) snuff_light_source(mtmp->mx, mtmp->my);
+		boolean snuff_otmp = FALSE;
+		/* Must do carrying effects on object prior to add_to_minv() */
+		carry_obj_effects(otmp);
+
+		/* don't want hidden light source inside the monster; assumes that
+		engulfers won't have external inventories; whirly monsters cause
+		the light to be extinguished rather than letting it shine thru;
+		must come after carry_obj_effects because that relights always-on
+		lightsources */
+		if (obj_sheds_light(otmp))
+		{
+			if (attacktype(mtmp->data, AT_ENGL)) {
+				/* burning objects should go out; non-burning objects should just be disabled */
+				if (obj_is_burning(otmp) && u.uswallow && mtmp == u.ustuck && !Blind)
+					pline("%s out.", Tobjnam(otmp, "go"));
+				end_burn(otmp, otmp->otyp != MAGIC_LAMP);
+			}
+		}
+
+		/* add_to_minv() might free otmp [if merged with something else],
+		   so we have to call it after doing the object checks */
+		freed_otmp = add_to_minv(mtmp, otmp);
+//		/* and we had to defer this until object is in mtmp's inventory */
+//		if (snuff_otmp) snuff_light_source(mtmp->mx, mtmp->my);
 #ifndef GOLDOBJ
-    }
+	}
 #endif
     return freed_otmp;
 }
