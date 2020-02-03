@@ -636,6 +636,9 @@ boolean while_carried;
 		case AD_MAGM:
 			if (cur_prop == ANTIMAGIC) got_prop = TRUE; 
 			break;
+		case AD_SPEL:
+			if (cur_prop == NULLMAGIC) got_prop = TRUE; 
+			break;
 		case AD_PLYS:
 			if (cur_prop == FREE_ACTION) got_prop = TRUE; 
 			break;
@@ -7477,7 +7480,7 @@ arti_invoke(obj)
                 for(ocur = level.objects[u.ux+u.dx][u.uy+u.dy]; ocur; ocur = onxt) {
                     onxt = ocur->nexthere;
                     if (ocur->otyp != EGG){
-                      revive(ocur);
+                      revive(ocur, FALSE);
                       if((mtmp = m_at(u.ux+u.dx,u.uy+u.dy))){
                         pline("%s resurrects!", Monnam(mtmp));
                         obj->ovar1 = COMMAND_DEATH;
@@ -7584,7 +7587,7 @@ arti_invoke(obj)
 				for(ocur = level.objects[u.ux+u.dx][u.uy+u.dy]; ocur; ocur = onxt) {
 					onxt = ocur->nexthere;
 					if (ocur->otyp == EGG) revive_egg(ocur);
-					else revive(ocur);
+					else revive(ocur, FALSE);
 				}
 				if(!(u.dx || u.dy)) unturn_dead(&youmonst);
 				else if((mtmp = m_at(u.ux+u.dx,u.uy+u.dy)) != 0) unturn_dead(mtmp);
@@ -9977,6 +9980,16 @@ mind_blast_items()
 				// mtmp->mappearance = PM_STONE_GOLEM;
 				newsym(mtmp->mx, mtmp->my);
 			}
+		}
+		else if((obj->otyp == BROKEN_ANDROID || obj->otyp == BROKEN_GYNOID || obj->otyp == LIFELESS_DOLL) && obj->ovar1){
+			xchar x, y;
+			get_obj_location(obj, &x, &y, 0);
+			if(obj->ovar1 <= u.uinsight && !rn2(20)){
+				struct monst *mtmp;
+				mtmp = revive(obj, TRUE);
+				pline("%s wakes up.", Monnam(mtmp));
+			} else if(cansee(x, y) && !rn2(20))
+				pline("%s its finger.", Tobjnam(obj, "tap"));
 		}
 	}
 }

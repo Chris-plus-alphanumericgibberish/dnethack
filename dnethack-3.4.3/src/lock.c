@@ -226,6 +226,8 @@ forcelock()	/* try to force a locked chest */
 			open_coffin(xlock.box, TRUE); //TRUE: use past tense
 		}else if(xlock.box->spe == 5){
 			open_sarcophagus(xlock.box, TRUE); //TRUE: use past tense
+		}else if(xlock.box->spe == 6){
+			open_crazy_box(xlock.box, TRUE); //TRUE: use past tense
 		}
 		while ((otmp = xlock.box->cobj) != 0) {
 		obj_extract_self(otmp);

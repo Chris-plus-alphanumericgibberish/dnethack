@@ -934,7 +934,7 @@ A("The Sansara Mirror",	MIRRORBLADE,					GOLD,		0,
 A("The Prayer-warded Wrappings of Nitocris", MUMMY_WRAPPING, 	0,	0,
 	(SPFX_NOGEN|SPFX_RESTR), 0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
-	NO_ATTK,	DFNS(AD_MAGM),	NO_CARY,
+	NO_ATTK,	DFNS(AD_SPEL),	NO_CARY,
 	0,	A_NONE, NON_PM, NON_PM, 5000L, 
 	0, 0,0),
 

@@ -133,6 +133,35 @@ DOOR:closed,(40,15)
 DOOR:closed,(39,16)
 DOOR:locked,(36,12)
 DOOR:closed,(61,02)
+# Warden's Office
+CONTAINER:'(',"ice box",(44,14)
+OBJECT:'%',"egg",contained
+OBJECT:'%',"egg",contained
+OBJECT:'%',"egg",contained
+OBJECT:'%',"egg",contained
+OBJECT:'%',"apple",contained
+OBJECT:'%',"pear",contained
+OBJECT:'%',"honeycomb",contained
+OBJECT:'%',"honeycomb",contained
+OBJECT:'%',"cream pie",contained
+#Box full of crazy
+CONTAINER:'(',"chest",(37,14),cursed,6
+OBJECT:'(',"trephination kit",contained
+OBJECT:')',"scalpel",contained,uncursed, 2
+OBJECT:'[',"stilettos",contained,blessed,2
+OBJECT:'[',"gentlewoman's dress",contained,blessed,2
+OBJECT:'[',"victorian underwear",contained,blessed,2
+OBJECT:'[',"stilettos",contained,blessed,2
+OBJECT:'[',"gentlewoman's dress",contained,blessed,2
+OBJECT:'[',"victorian underwear",contained,blessed,2
+OBJECT:'[',"low boots",contained,blessed,2
+OBJECT:'[',"ruffled shirt",contained,blessed,2
+OBJECT:'[',"leather armor",contained,blessed,2
+OBJECT:'[',"buckler",contained,blessed,2
+OBJECT:'#',"+2 blessed fencing gloves",contained
+#Note: in some worlds "fencing gloves" will be fumbling.
+#	Fencing tournaments must be real fun to watch in such worlds!
+
 # Police station
 MONSTER: '@',"inmate",(63,08)
 MONSTER: '@',"prisoner",(64,09)
@@ -289,11 +318,13 @@ MONSTER: ''',"iron golem",(04,13),hostile
 OBJECT:'(',"spoon",(31,10),blessed,0,"The Iron Spoon of Liberation"
 # OBJECT:'0',"heavy iron ball",(31,10),blessed,0,"The Iron Ball of Levitation"
 # OBJECT:'0',"heavy iron ball",(31,10),blessed,0,"The Iron Ball of Liberation"
-CONTAINER:'(',"chest",(55,18),blessed,2
-OBJECT:'#',"blessed iron +2 magic-resistant visored helmet named The Mask of Waterdeep",contained
-OBJECT:'#',"blessed +2 ornamental cope named The Masked Lord's Cope",contained
+#Box full of crazy
+CONTAINER:'(',"chest",(55,18),cursed,6
+OBJECT:'#',"blessed iron +2 magic-resistant visored helmet named Mask of Waterdeep",contained
+OBJECT:'#',"blessed +2 ornamental cope named Masked Lord's Cope",contained
 
 OBJECT:'[',"gentleman's suit",contained,blessed,2
+OBJECT:'[',"ruffled shirt",contained,blessed,2
 OBJECT:'[',"high boots",contained,blessed,2
 OBJECT:'[',"gloves",contained,blessed,2
 OBJECT: '%', "corpse", random, "inmate", 0

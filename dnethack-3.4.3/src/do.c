@@ -1712,7 +1712,7 @@ int different;
 		/* container_where is the outermost container's location even if nested */
 		if (container_where == OBJ_MINVENT && mtmp2) mcarry = mtmp2;
     }
-    mtmp = revive(corpse);      /* corpse is gone if successful && quan == 1 */
+    mtmp = revive(corpse, FALSE);      /* corpse is gone if successful && quan == 1 */
 
     if (mtmp) {
 	/*

@@ -48,7 +48,6 @@ STATIC_DCL int FDECL(spellhunger, (int));
 STATIC_DCL int FDECL(isqrt, (int));
 STATIC_DCL boolean FDECL(run_maintained_spell, (int));
 STATIC_DCL boolean FDECL(can_maintain_spell, (int));
-STATIC_DCL void NDECL(update_alternate_spells);
 
 long FDECL(doreadstudy, (const char *));
 

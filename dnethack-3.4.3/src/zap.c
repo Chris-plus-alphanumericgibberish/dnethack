@@ -3,6 +3,7 @@
 /* NetHack may be freely redistributed.  See license for details. */
 
 #include "hack.h"
+#include "edog.h"
 
 /* Disintegration rays have special treatment; corpses are never left.
  * But the routine which calculates the damage is separate from the routine
@@ -686,8 +687,9 @@ int *container_nesting;
  * successful.  Note: this does NOT use up the corpse if it fails.
  */
 struct monst *
-revive(obj)
+revive(obj, dolls)
 register struct obj *obj;
+boolean dolls;
 {
 	register struct monst *mtmp = (struct monst *)0;
 	struct obj *container = (struct obj *)0;
@@ -695,7 +697,9 @@ register struct obj *obj;
 	schar savetame = 0;
 	boolean recorporealization = FALSE;
 	boolean in_container = FALSE;
-	if(obj->otyp == CORPSE || obj->otyp == FOSSIL) {
+	if(obj->otyp == CORPSE || obj->otyp == FOSSIL ||
+		(dolls && (obj->otyp == BROKEN_ANDROID || obj->otyp == BROKEN_GYNOID || obj->otyp == LIFELESS_DOLL))
+	) {
 		int montype = obj->corpsenm;
 		xchar x, y;
 		int wasfossil = (obj->otyp == FOSSIL);
@@ -889,7 +893,7 @@ struct monst *mon;
 	    if (youseeit) Strcpy(corpse, corpse_xname(otmp, TRUE));
 
 	    /* for a merged group, only one is revived; should this be fixed? */
-	    if ((mtmp2 = revive(otmp)) != 0) {
+	    if ((mtmp2 = revive(otmp, FALSE)) != 0) {
 		++res;
 		if (youseeit) {
 		    if (!once++) Strcpy(owner,
@@ -1982,7 +1986,7 @@ struct obj *obj, *otmp;
 		if (obj->otyp == EGG)
 			revive_egg(obj);
 		else
-			res = !!revive(obj);
+			res = !!revive(obj, FALSE);
 		break;
 	case WAN_OPENING:
 	case SPE_KNOCK:
@@ -3564,6 +3568,16 @@ struct obj **ootmp;	/* to return worn armor for caller to disintegrate */
 			makemon(&mons[PM_METROID], mon->mx, mon->my, MM_ADJACENTOK);
 			break;
 		}
+		else if(mon->data==&mons[PM_PARASITIZED_ANDROID]
+			|| mon->data==&mons[PM_PARASITIZED_GYNOID]
+			|| mon->data==&mons[PM_PARASITIZED_COMMANDER]
+			|| mon->data==&mons[PM_PARASITIZED_OPERATOR]
+		){
+			if (canseemon(mon))
+				pline("The parasite is killed!");
+			mon->mfaction = DELOUSED;
+			break;
+		}
 		if (mon->data == &mons[PM_DEATH]) {
 			mon->mhpmax += mon->mhpmax / 2;
 			if (mon->mhpmax >= MAGIC_COOKIE)
@@ -4342,6 +4356,55 @@ int dx, dy, range, flat;
 							monkilled(mon, (char *)0, -AD_RBRE);
 						else
 							xkilled(mon, 2);
+					} else if(adtyp == AD_DEAD && mon->mfaction == DELOUSED) {
+						struct monst *mtmp2;
+						otmp = mksobj_at(CORPSE, mon->mx, mon->my, FALSE, FALSE);
+						otmp->corpsenm = mon->data==&mons[PM_PARASITIZED_COMMANDER] ? PM_PARASITIC_MASTER_MIND_FLAYER : PM_PARASITIC_MIND_FLAYER;
+						fix_object(otmp);
+						mon->mfaction = 0;
+						if(mon->data == &mons[PM_PARASITIZED_ANDROID]){
+							newcham(mon, &mons[PM_ANDROID], FALSE, FALSE);
+							mon->m_lev = 7;
+							mon->mhpmax = d(7,8);
+							mon->mhp = min(mon->mhp, mon->mhpmax);
+						}
+						else if(mon->data == &mons[PM_PARASITIZED_GYNOID]){
+							newcham(mon, &mons[PM_GYNOID], FALSE, FALSE);
+							mon->m_lev = 14;
+							mon->mhpmax = d(14,8);
+							mon->mhp = min(mon->mhp, mon->mhpmax);
+						}
+						else if(mon->data == &mons[PM_PARASITIZED_OPERATOR]){
+							newcham(mon, &mons[PM_OPERATOR], FALSE, FALSE);
+							mon->m_lev = 7;
+							mon->mhpmax = d(7,8);
+							mon->mhp = min(mon->mhp, mon->mhpmax);
+						}
+						else if(mon->data == &mons[PM_PARASITIZED_COMMANDER]){
+							newcham(mon, &mons[PM_COMMANDER], FALSE, FALSE);
+							mon->m_lev = 3;
+							mon->mhpmax = 20+rn2(4);
+							mon->mhp = min(mon->mhp, mon->mhpmax);
+							mon->mfaction = M_GREAT_WEB;
+							otmp = mksobj(SHACKLES, FALSE, FALSE);
+							otmp->obj_material = IRON;
+							otmp->oproperties = OPROP_ELECW;
+							otmp->oeroded = 1;
+							fix_object(otmp);
+							(void) mpickobj(mon, otmp);
+							mon->entangled = SHACKLES;
+							mon->movement = 0;
+						}
+						mon->mtame = 0;
+						mon->mcanmove = 1;
+						mon = tamedog(mon,(struct obj *) 0);
+						if(mon){
+							mon->mtame = 10;
+							mon->mpeaceful = 1;
+							mon->mcrazed = 1;
+							EDOG(mon)->loyal = TRUE;
+							newsym(mon->mx, mon->my);
+						}
 					} else if(mon->mhp < 1) {
 						if(!yours)
 							monkilled(mon, fltxt, AD_RBRE);

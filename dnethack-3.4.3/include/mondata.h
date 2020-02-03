@@ -220,7 +220,7 @@
 #define snakemanoid(ptr)	(((ptr)->mflagsb & MB_BODYTYPEMASK) == (MB_HUMANOID|MB_SLITHY))
 #define leggedserpent(ptr)	(((ptr)->mflagsb & MB_BODYTYPEMASK) == (MB_ANIMAL|MB_SLITHY))
 
-#define noboots(ptr)			(slithy(ptr) || nolimbs(ptr) || nofeet(ptr))
+#define noboots(ptr)			((slithy(ptr) && !humanoid_feet(ptr)) || nolimbs(ptr) || nofeet(ptr))
 
 #define is_animal(ptr)		(((ptr)->mflagst & MT_ANIMAL) != 0L)
 #define is_plant(ptr)		(((ptr)->mflagsa & MA_PLANT) != 0L)
@@ -619,6 +619,20 @@
 				 (ptr) == &mons[PM_LUGRIBOSSK] || \
 				 (ptr) == &mons[PM_MAANZECORIAN] || \
 				 (ptr) == &mons[PM_GREAT_CTHULHU] \
+				)
+
+#define is_android(ptr)	((ptr) == &mons[PM_ANDROID] || \
+				 (ptr) == &mons[PM_GYNOID] || \
+				 (ptr) == &mons[PM_OPERATOR] || \
+				 (ptr) == &mons[PM_COMMANDER] || \
+				 (ptr) == &mons[PM_MUMMIFIED_ANDROID] || \
+				 (ptr) == &mons[PM_MUMMIFIED_GYNOID] || \
+				 (ptr) == &mons[PM_FLAYED_ANDROID] || \
+				 (ptr) == &mons[PM_FLAYED_GYNOID] || \
+				 (ptr) == &mons[PM_PARASITIZED_ANDROID] || \
+				 (ptr) == &mons[PM_PARASITIZED_GYNOID] || \
+				 (ptr) == &mons[PM_PARASITIZED_OPERATOR] || \
+				 (ptr) == &mons[PM_PARASITIZED_COMMANDER] \
 				)
 
 #define nonliving(ptr)	(is_unalive(ptr) || is_undead(ptr) || \

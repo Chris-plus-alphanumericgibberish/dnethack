@@ -29,6 +29,34 @@ STATIC_DCL int NDECL(pick_animal);
 STATIC_DCL void FDECL(kill_eggs, (struct obj *));
 #endif
 
+static const char *nyar_description[] = {
+/* 0*/	"a titanic tri-radial monster crowned with a massive crimson tentacle",
+/* 1*/	"a huge shadowy winged-thing with a burning three-lobed eye",
+/* 2*/	"a bloated, vaguely feminine humanoid",
+/* 3*/	"a winged giant with round glassy eyes and a long trunk",
+/* 4*/	"a towering column of wailing mouths and reaching tentacles",
+/* 5*/	"a colossal sphinx whose face is a starry void",
+/* 6*/	"a small humanoid with four arms and who crawls on four tentacles",
+/* 7*/	"a large skinless man with a burning third eye in his brow",
+/* 8*/	"an enormous mass of translucent lunging tentacles that pull in all directions",
+/* 9*/	"a howling storm, full of flashing lightning and the glimpse of claws",
+/*10*/	"a towering monolith with four arthropoid legs and a high, tri-lobed eye"
+};
+
+static const char *nyar_name[] = {
+/*0*/	"The God of the Bloody Tongue",
+/*1*/	"The Haunter of the Dark",
+/*2*/	"The Bloated Woman",
+/*3*/	"Shugoran",
+/*4*/	"The Wailing Writher",
+/*5*/	"The Faceless God",
+/*6*/	"The Small Crawler",
+/*7*/	"The Skinless One",
+/*8*/	"The Messenger of the Old Ones",
+/*9*/	"The Black Wind",
+/*10*/	"The Minister of the Monoliths"
+};
+
 #ifdef REINCARNATION
 #define LEVEL_SPECIFIC_NOCORPSE(mdat) \
 	 ((Is_rogue_level(&u.uz) || \
@@ -206,6 +234,7 @@ STATIC_VAR int cham_to_pm[] = {
 			 ((mon)->zombify) ||			\
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
+			 ((mon)->data == &mons[PM_LIVING_DOLL]) ||			\
 			 /* normally leader the will be unique, */	\
 			 /* but he might have been polymorphed  */	\
 			 (mon)->m_id == quest_status.leader_m_id ||	\
@@ -639,6 +668,12 @@ register struct monst *mtmp;
 			}
 			mtmp->mnamelth = 0;
 		break;
+	    case PM_LIVING_DOLL:
+		    obj = mkcorpstat(LIFELESS_DOLL, KEEPTRAITS(mtmp) ? mtmp : 0,
+				     mdat, x, y, TRUE);
+			if(obj)
+				obj->ovar1 = mtmp->m_insight_level;
+		break;
 	    case PM_ANDROID:
 		    obj = mkcorpstat(BROKEN_ANDROID, KEEPTRAITS(mtmp) ? mtmp : 0,
 				     mdat, x, y, TRUE);
@@ -656,6 +691,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mfaction = ZOMBIFIED;
+				EDOG(mon)->loyal = TRUE;
 				obj = mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -669,6 +705,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mfaction = ZOMBIFIED;
+				EDOG(mon)->loyal = TRUE;
 				obj = mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -682,6 +719,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mfaction = ZOMBIFIED;
+				EDOG(mon)->loyal = TRUE;
 				obj = mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -695,6 +733,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mcrazed = 1;
+				EDOG(mon)->loyal = TRUE;
 				mkcorpstat(BROKEN_ANDROID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -725,6 +764,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mfaction = ZOMBIFIED;
+				EDOG(mon)->loyal = TRUE;
 				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -738,6 +778,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mfaction = ZOMBIFIED;
+				EDOG(mon)->loyal = TRUE;
 				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -751,6 +792,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mfaction = ZOMBIFIED;
+				EDOG(mon)->loyal = TRUE;
 				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -764,6 +806,7 @@ register struct monst *mtmp;
 				mon->mtame = 10;
 				mon->mpeaceful = 1;
 				mon->mcrazed = 1;
+				EDOG(mon)->loyal = TRUE;
 				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
 				mongone(mon);
 			} else {
@@ -777,6 +820,58 @@ register struct monst *mtmp;
 			obj->corpsenm = PM_PARASITIC_MIND_FLAYER;
 			fix_object(obj);
 		break;
+	    case PM_OPERATOR:
+		    obj = mkcorpstat(BROKEN_GYNOID, mtmp, mdat, x, y, TRUE);
+		break;
+	    case PM_PARASITIZED_OPERATOR:
+			mon = makemon(&mons[PM_OPERATOR], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mcrazed = 1;
+				EDOG(mon)->loyal = TRUE;
+				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			}
+			if((In_hell(&u.uz) || In_endgame(&u.uz)) 
+				&& !is_rider(mtmp->data) 
+			) //u.uevent.invoked || 
+				break;
+			obj = mksobj_at(CORPSE, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_PARASITIC_MIND_FLAYER;
+			fix_object(obj);
+		break;
+	    case PM_COMMANDER:
+		    obj = mkcorpstat(BROKEN_GYNOID, mtmp, mdat, x, y, TRUE);
+		break;
+	    case PM_PARASITIZED_COMMANDER:
+			obj = mksobj_at(SHACKLES, x, y, FALSE, FALSE);
+			set_material(obj, IRON);
+			obj->oproperties = OPROP_ELECW;
+			obj->oeroded = 1;
+			mon = makemon(&mons[PM_COMMANDER], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if (mon){
+				initedog(mon);
+				mon->mtame = 10;
+				mon->mpeaceful = 1;
+				mon->mcrazed = 1;
+				EDOG(mon)->loyal = TRUE;
+				mon->mfaction = M_GREAT_WEB;
+				obj = mkcorpstat(BROKEN_GYNOID, mon, (struct permonst *)0, x, y, FALSE);
+				mongone(mon);
+			} else {
+				obj = mksobj_at(BROKEN_GYNOID, x, y, FALSE, FALSE);
+			}
+			if((In_hell(&u.uz) || In_endgame(&u.uz)) 
+				&& !is_rider(mtmp->data) 
+			) //u.uevent.invoked || 
+				break;
+			obj = mksobj_at(CORPSE, x, y, FALSE, FALSE);
+			obj->corpsenm = PM_PARASITIC_MIND_FLAYER;
+			fix_object(obj);		break;
 	    case PM_DANCING_BLADE:
 			obj = mksobj_at(TWO_HANDED_SWORD, x, y, FALSE, FALSE);
 			obj->blessed = TRUE;
@@ -2051,7 +2146,7 @@ movemon()
 	if(u.specialSealsActive&SEAL_LIVING_CRYSTAL)
 		average_dogs();
 	if(mtmp->m_insight_level > u.uinsight){
-		migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+		insight_vanish(mtmp);
 		continue;
 	}
 	if(mtmp->movement < NORMAL_SPEED)
@@ -3633,15 +3728,17 @@ struct monst *mtmp;
 	struct obj *lifesave = mlifesaver(mtmp);
 	int lifesavers = 0;
 	int i;
-#define LSVD_ANA 0x01	/* anachrononaut quest */
-#define LSVD_UVU 0x02	/* uvuuduam + prayerful thing */
-#define LSVD_OBJ 0x04	/* lifesaving items */
-#define LSVD_ALA 0x08	/* alabaster decay */
-#define LSVD_FRC 0x10	/* fractured kamerel */
-#define LSVD_ILU 0x20	/* illuminated */
-#define LSVD_PLY 0x40	/* polypoids */
-#define LSVD_KAM 0x80	/* kamerel becoming fractured */
-#define LSVDLAST LSVD_KAM	/* last lifesaver */
+#define LSVD_ANA 0x001	/* anachrononaut quest */
+#define LSVD_NBW 0x002	/* nitocris's black wraps */
+#define LSVD_UVU 0x004	/* uvuuduam + prayerful thing */
+#define LSVD_OBJ 0x008	/* lifesaving items */
+#define LSVD_ALA 0x010	/* alabaster decay */
+#define LSVD_FRC 0x020	/* fractured kamerel */
+#define LSVD_ILU 0x040	/* illuminated */
+#define LSVD_PLY 0x080	/* polypoids */
+#define LSVD_KAM 0x100	/* kamerel becoming fractured */
+#define LSVD_NIT 0x200	/* Nitocris becoming a ghoul */
+#define LSVDLAST LSVD_NIT	/* last lifesaver */
 
 	/* set to kill */
 	mtmp->mhp = 0;
@@ -3649,6 +3746,11 @@ struct monst *mtmp;
 	/* get all lifesavers */
 	if (Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !(mtmp->mpeaceful) && !rn2(20))
 		lifesavers |= LSVD_ANA;
+	if(mtmp->data == &mons[PM_NITOCRIS]
+		&& which_armor(mtmp, W_ARMC)
+		&& which_armor(mtmp, W_ARMC)->oartifact == ART_PRAYER_WARDED_WRAPPINGS_OF
+	)
+		lifesavers |= LSVD_NBW;
 	if (mtmp->mspec_used == 0 && (is_uvuudaum(mtmp->data) || mtmp->data == &mons[PM_PRAYERFUL_THING]))
 		lifesavers |= LSVD_UVU;
 	if (lifesave)
@@ -3666,14 +3768,16 @@ struct monst *mtmp;
 		lifesavers |= LSVD_ILU;
 	if (mtmp->zombify && is_kamerel(mtmp->data))
 		lifesavers |= LSVD_KAM;
+	if(mtmp->data == &mons[PM_NITOCRIS])
+		lifesavers |= LSVD_NIT;
 
 	/* some lifesavers do NOT work on stone/gold/glass-ing */
 	if (stoned || golded || glassed)
-		lifesavers &= ~(LSVD_ALA | LSVD_FRC | LSVD_PLY | LSVD_ILU | LSVD_KAM);
+		lifesavers &= ~(LSVD_ALA | LSVD_NBW | LSVD_FRC | LSVD_PLY | LSVD_ILU | LSVD_KAM | LSVD_NIT);
 
 	/* some lifesavers should SILENTLY fail to protect from genocide */
 	if (mvitals[monsndx(mtmp->data)].mvflags & G_GENOD && !In_quest(&u.uz))
-		lifesavers &= ~(LSVD_FRC | LSVD_KAM);
+		lifesavers &= ~(LSVD_FRC | LSVD_NBW | LSVD_KAM);
 
 	/* quick check -- if no lifesavers, let's fail immediately */
 	if (!lifesavers) {
@@ -3689,13 +3793,39 @@ struct monst *mtmp;
 		{
 		case LSVD_ANA:
 			/* message */
-			if (cansee(mtmp->mx, mtmp->my)) {
+			if (canseemon(mtmp)) {
 				pline("But wait...");
 				if (attacktype(mtmp->data, AT_EXPL)
 					|| attacktype(mtmp->data, AT_BOOM))
 					pline("%s reappears, looking much better!", Monnam(mtmp));
 				else
 					pline("%s flickers, then reappears looking much better!", Monnam(mtmp));
+			}
+			break;
+
+		case LSVD_NBW:
+			/* message */
+			if (canseemon(mtmp)) {
+				pline("But wait...");
+				pline("Something vast and terrible writhes beneath %s wrappings!", hisherits(mtmp));
+				pline("It's trying to escape!");
+			}
+			if(!rn2(3)){
+				if(which_armor(mtmp, W_ARMC)->oeroded3){
+					if (cansee(mtmp->mx, mtmp->my))
+						pline("%s wrappings rip to shreds!", s_suffix(Monnam(mtmp)));
+					m_useup(mtmp, which_armor(mtmp, W_ARMC));
+					continue; //didn't life save after all :(
+				} else {
+					which_armor(mtmp, W_ARMC)->oeroded3 = 1;
+					if (canseemon(mtmp))
+						pline("%s wrappings fray, but hold!", s_suffix(Monnam(mtmp)));
+				}
+			} else {
+				if (canseemon(mtmp)){
+					pline("%s wrappings hold!", s_suffix(Monnam(mtmp)));
+					pline("The writhing subsides!");
+				}
 			}
 			break;
 
@@ -3738,7 +3868,7 @@ struct monst *mtmp;
 			break;
 		case LSVD_ALA:
 			/* message */
-			if (cansee(mtmp->mx, mtmp->my)) {
+			if (canseemon(mtmp)) {
 				pline("%s putrefies with impossible speed!",Monnam(mtmp));
 			}
 			/* alabaster-specific effects */
@@ -3806,7 +3936,7 @@ struct monst *mtmp;
 			/* message */
 			if (couldsee(mtmp->mx, mtmp->my)){
 				pline("But wait...");
-				pline("%s's mask breaks!", Monnam(mtmp));
+				pline("%s mask breaks!", s_suffix(Monnam(mtmp)));
 			}
 			/* turn into a polypoid */
 			mtmp->ispolyp = 0;
@@ -3828,6 +3958,23 @@ struct monst *mtmp;
 			/* boost level */
 			mtmp->m_lev += 4;
 			mtmp->mhpmax += d(4, 8);
+			break;
+		case LSVD_NIT:
+			if(lifesavers&LSVD_NBW)
+				pline("%s is boiling and screaming in agony!", Monnam(mtmp));
+			else if(canseemon(mtmp))
+				pline("%s screams in agony, boats, and begins boiling violently!", Monnam(mtmp));
+			else
+				pline("%s screams in agony and begins boiling violently!", Monnam(mtmp));
+			
+			if(cansee(mtmp->mx, mtmp->my)){
+				int nyar_form = rn2(SIZE(nyar_description));
+				pline("The escaping phantasmal mist condenses into %s.", nyar_description[nyar_form]);
+				pline("%s tears off the right half of %s face before rising through the ceiling!", nyar_name[nyar_form], s_suffix(Monnam(mtmp)));
+				change_usanity(u_sanity_loss_nyar());
+			}
+			mtmp->data = &mons[PM_GHOUL_QUEEN_NITOCRIS];
+			//Surprisingly, this is an effective means of life saving!
 			break;
 		}
 		/* perform common lifesaving effects */
@@ -3860,213 +4007,6 @@ struct monst *mtmp;
 	return;
 }
 
-/* maybe kills mtmp, possibly lifesaving it */
-STATIC_OVL void
-lifesaved_monster_legacy(mtmp)
-struct monst *mtmp;
-{
-	struct obj *lifesave = mlifesaver(mtmp);
-
-	if(Role_if(PM_ANACHRONONAUT) && In_quest(&u.uz) && !(mtmp->mpeaceful) && !rn2(20)){
-		if (cansee(mtmp->mx, mtmp->my)) {
-			pline("But wait...");
-			if (attacktype(mtmp->data, AT_EXPL)
-			    || attacktype(mtmp->data, AT_BOOM))
-				pline("%s reappears, looking much better!", Monnam(mtmp));
-			else
-				pline("%s flickers, then reappears looking much better!", Monnam(mtmp));
-		}
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		if (mtmp->mtame && !mtmp->isminion) {
-			wary_dog(mtmp, FALSE);
-		}
-		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
-		mtmp->mhp = mtmp->mhpmax;
-		return;
-	} else if(mtmp->data == &mons[PM_NITOCRIS]
-		&& which_armor(mtmp, W_ARMC)
-		&& which_armor(mtmp, W_ARMC)->oartifact == ART_PRAYER_WARDED_WRAPPINGS_OF
-	){
-		if (cansee(mtmp->mx, mtmp->my)) {
-			pline("But wait...");
-			pline("%s wrappings rip to shreds!", s_suffix(Monnam(mtmp)));
-		}
-		m_useup(mtmp, which_armor(mtmp, W_ARMC));
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
-		mtmp->mhp = mtmp->mhpmax;
-		return;
-	} else if(mtmp->mspec_used == 0 && 
-		(is_uvuudaum(mtmp->data) || mtmp->data==&mons[PM_PRAYERFUL_THING])
-	){
-		if (cansee(mtmp->mx, mtmp->my)) {
-			pline("But wait...");
-			pline("A glowing halo forms over %s!",
-				mon_nam(mtmp));
-			if (attacktype(mtmp->data, AT_EXPL)
-			    || attacktype(mtmp->data, AT_BOOM))
-				pline("%s reconstitutes!", Monnam(mtmp));
-			else
-				pline("%s looks much better!", Monnam(mtmp));
-		}
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		if (mtmp->mtame && !mtmp->isminion) {
-			wary_dog(mtmp, FALSE);
-		}
-		if (mtmp->m_lev < 38) mtmp->m_lev = 38;
-		if (mtmp->mhpmax <= 38*4.5) mtmp->mhpmax = (int)(38*4.5);
-		mtmp->mhp = mtmp->mhpmax;
-		mtmp->mspec_used = mtmp->mhpmax/5;
-		return;
-	} else if (lifesave) {
-		/* not canseemon; amulets are on the head, so you don't want */
-		/* to show this for a long worm with only a tail visible. */
-		/* Nor do you check invisibility, because glowing and disinte- */
-		/* grating amulets are always visible. */
-		if (cansee(mtmp->mx, mtmp->my)) {
-			pline("But wait...");
-			pline("%s medallion begins to glow!",
-				s_suffix(Monnam(mtmp)));
-			makeknown(AMULET_OF_LIFE_SAVING);
-			if (attacktype(mtmp->data, AT_EXPL)
-			    || attacktype(mtmp->data, AT_BOOM))
-				pline("%s reconstitutes!", Monnam(mtmp));
-			else
-				pline("%s looks much better!", Monnam(mtmp));
-			pline_The("medallion crumbles to dust!");
-		}
-		m_useup(mtmp, lifesave);
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		if (mtmp->mtame && !mtmp->isminion) {
-			wary_dog(mtmp, FALSE);
-		}
-		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
-		mtmp->mhp = mtmp->mhpmax;
-		if (mvitals[monsndx(mtmp->data)].mvflags & G_GENOD && !In_quest(&u.uz)) {
-			if (cansee(mtmp->mx, mtmp->my))
-			    pline("Unfortunately %s is still genocided...",
-				mon_nam(mtmp));
-		} else
-			return;
-		/*Under this point, the only resurrection effects should be those affecting undead, or that the monster wouldn't WANT to trigger*/
-	} else if(mtmp->data == &mons[PM_NITOCRIS]){
-		//doesn't resurrect
-		if(canseemon(mtmp)){
-			int nyar_form = rn2(SIZE(nyar_description));
-//			pline("But wait..."); Doesn't stop her dying currently.
-			pline("Nitocris screams in agony, boats, and begins boiling violently.");
-			pline("The escaping phantasmal mist condenses into %s.", nyar_description[nyar_form]);
-			pline("%s tears off the right half of Nitocris's face before rising through the ceiling!", nyar_name[nyar_form]);
-			change_usanity(u_sanity_loss_nyar());
-		}
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		if (mtmp->mhpmax <= 9) mtmp->mhpmax = 10;
-		mtmp->data = &mons[PM_GHOUL_QUEEN_NITOCRIS];
-	} else if(!rn2(20) && (mtmp->data == &mons[PM_ALABASTER_ELF]
-		|| mtmp->data == &mons[PM_ALABASTER_ELF_ELDER]
-		|| is_alabaster_mummy(mtmp->data)
-	)){
-		if (cansee(mtmp->mx, mtmp->my)) {
-			pline("%s putrefies with impossible speed!",Monnam(mtmp));
-			mtmp->mcanmove = 1;
-			mtmp->mfrozen = 0;
-			if (mtmp->mtame && !mtmp->isminion) {
-				wary_dog(mtmp, FALSE);
-			}
-			mtmp->mhp = mtmp->mhpmax;
-			mtmp->mspec_used = 0;
-			if(is_alabaster_mummy(mtmp->data) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
-				mksobj_at(mtmp->mvar1, mtmp->mx, mtmp->my, TRUE, FALSE);
-				if(mtmp->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
-					mtmp->mintrinsics[(DISPLACED-1)/32] &= ~(1 << (DISPLACED-1)%32);
-				mtmp->mvar1 = 0; //Lose the bonus if resurrected
-			}
-			newcham(mtmp, &mons[rn2(4) ? PM_ACID_BLOB : PM_BLACK_PUDDING], FALSE, FALSE);
-			return;
-		}
-	} else if(mtmp->mfaction == FRACTURED && !rn2(2)){
-		if (couldsee(mtmp->mx, mtmp->my)) {
-			pline("But wait...");
-			if(canseemon(mtmp))
-				pline("%s fractures further%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
-			else
-				You_hear("something crack%s!", !is_silent(mtmp->data) ? " with an unearthly scream" : "");
-		}
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		mtmp->mtame = 0;
-		mtmp->mpeaceful = 0;
-		mtmp->m_lev += 4;
-		mtmp->mhpmax = d(mtmp->m_lev, 8);
-		mtmp->mhp = mtmp->mhpmax;
-		return;
-	} else if(mtmp->ispolyp && !stoned && !golded && !glassed){
-		if(mtmp->mfaction == ILLUMINATED && rn2(3)){ /*Don't use up Illuminated status until it's all out of masks!*/
-			if (couldsee(mtmp->mx, mtmp->my)) {
-				pline("But wait...");
-				pline("A glowing halo forms over %s!",
-					mon_nam(mtmp));
-			}
-			mtmp->mcanmove = 1;
-			mtmp->mfrozen = 0;
-			mtmp->mhp = mtmp->mhpmax;
-			return;
-		} else {
-			if (couldsee(mtmp->mx, mtmp->my)){
-				pline("But wait...");
-				pline("%s's mask breaks!", Monnam(mtmp));
-			}
-			mtmp->mcanmove = 1;
-			mtmp->mfrozen = 0;
-			mtmp->mhp = mtmp->mhpmax;
-			mtmp->ispolyp = 0;
-			newcham(mtmp, &mons[PM_POLYPOID_BEING], FALSE, FALSE);
-			mtmp->m_insight_level = 40;
-			return;
-		}
-	} else if(mtmp->mfaction == ILLUMINATED && !stoned && !golded && !glassed){
-		if (couldsee(mtmp->mx, mtmp->my)) {
-			pline("But wait...");
-			pline("A glowing halo forms over %s!",
-				mon_nam(mtmp));
-		}
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		mtmp->mhp = mtmp->mhpmax;
-		if(!rn2(3)){
-			mtmp->mfaction = 0;
-			del_light_source(LS_MONSTER, (genericptr_t)mtmp, FALSE);
-			if (emits_light_mon(mtmp))
-				new_light_source(mtmp->mx, mtmp->my, emits_light_mon(mtmp),
-						 LS_MONSTER, (genericptr_t)mtmp);
-		}
-		return;
-	} else if(mtmp->zombify && is_kamerel(mtmp->data) && !stoned && !golded && !glassed){
-		if (couldsee(mtmp->mx, mtmp->my)) {
-			pline("But wait...");
-			if(canseemon(mtmp))
-				pline("%s fractures%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
-			else
-				You_hear("something crack%s!", !is_silent(mtmp->data) ? " with an unearthly scream" : "");
-		}
-		mtmp->mfaction = FRACTURED;
-		mtmp->mcanmove = 1;
-		mtmp->mfrozen = 0;
-		mtmp->mtame = 0;
-		mtmp->mpeaceful = 0;
-		mtmp->m_lev += 4;
-		mtmp->mhpmax = d(mtmp->m_lev, 8);
-		mtmp->mhp = mtmp->mhpmax;
-		return;
-	}
-	mtmp->mhp = 0;
-}
-
 void
 mondead(mtmp)
 register struct monst *mtmp;
@@ -4084,6 +4024,14 @@ register struct monst *mtmp;
 	}
 	lifesaved_monster(mtmp);
 	if (mtmp->mhp > 0) return;
+	//Special messages (Nyarlathotep)
+	if(canseemon(mtmp) && (mtmp->data == &mons[PM_THE_GOOD_NEIGHBOR] || mtmp->data == &mons[PM_HMNYW_PHARAOH])){
+		int nyar_form = rn2(SIZE(nyar_description));
+		pline("%s twists and morphs into %s.", Monnam(mtmp), nyar_description[nyar_form]);
+		pline("%s rises through the ceiling!", nyar_name[nyar_form]);
+		change_usanity(u_sanity_loss_nyar());
+	}
+	
 
 #ifdef STEED
 	/* Player is thrown from his steed when it dies */
@@ -4824,8 +4772,12 @@ boolean was_swallowed;			/* digestion */
 		   || mdat == &mons[PM_WARRIOR_CHANGED]
 		   || mdat == &mons[PM_TWITCHING_FOUR_ARMED_CHANGED]
 		   || mdat == &mons[PM_CLAIRVOYANT_CHANGED]
+		   || mdat == &mons[PM_NITOCRIS]
+		   || mdat == &mons[PM_GHOUL_QUEEN_NITOCRIS]
 		   || mdat == &mons[PM_ANDROID]
 		   || mdat == &mons[PM_GYNOID]
+		   || mdat == &mons[PM_OPERATOR]
+		   || mdat == &mons[PM_COMMANDER]
 		   || mdat == &mons[PM_MUMMIFIED_ANDROID]
 		   || mdat == &mons[PM_MUMMIFIED_GYNOID]
 		   || mdat == &mons[PM_FLAYED_ANDROID]
@@ -4833,6 +4785,8 @@ boolean was_swallowed;			/* digestion */
 		   || mdat == &mons[PM_PARASITIZED_EMBRACED_ALIDER]
 		   || mdat == &mons[PM_PARASITIZED_ANDROID]
 		   || mdat == &mons[PM_PARASITIZED_GYNOID]
+		   || mdat == &mons[PM_PARASITIZED_OPERATOR]
+		   || mdat == &mons[PM_PARASITIZED_COMMANDER]
 		   || mdat == &mons[PM_CRUCIFIED_ANDROID]
 		   || mdat == &mons[PM_CRUCIFIED_GYNOID]
 //		   || mdat == &mons[PM_PINK_UNICORN]
@@ -6947,6 +6901,18 @@ struct monst *mtmp;
 }
 
 int
+u_sanity_loss_nyar()
+{
+	if((uwep && uwep->oartifact == ART_NODENSFORK)
+	 || (rnd(30) < ACURR(A_WIS))
+	){
+		return -1*rnd(10);
+	} else {
+		return -1*rnd(100);
+	}
+}
+
+int
 u_sanity_gain(mtmp)
 struct monst *mtmp;
 {
@@ -6988,6 +6954,50 @@ long id;
 					mtmp->mspec_used = 10;
 			}
 		}
+}
+
+void
+repair(mech, targ, verbose)
+struct monst *mech, *targ;
+boolean verbose;
+{
+	int * hp, *max;
+	if(verbose){
+		if(mech == targ)
+			pline("%s repairs %sself.", Monnam(mech), himherit(targ));
+		else if(targ == &youmonst)
+			pline("%s repairs you.", Monnam(mech));
+		else
+			pline("%s repairs %s.", Monnam(mech), mon_nam(targ));
+	}
+	if(targ == &youmonst){
+		if(Upolyd){
+			hp = &u.mh;
+			max = &u.mhmax;
+		} else {
+			hp = &u.uhp;
+			max = &u.uhpmax;
+		}
+	} else {
+		hp = &(targ->mhp);
+		max = &(targ->mhpmax);
+	}
+	*hp += mech->m_lev;
+	if(*hp > *max)
+		*hp = *max;
+}
+
+void
+insight_vanish(mtmp)
+struct monst *mtmp;
+{
+	if(DEADMONSTER(mtmp))
+		return;
+	if(mtmp->data == &mons[PM_LIVING_DOLL]){
+		mondied(mtmp);
+	} else {
+		migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+	}
 }
 
 #endif /* OVLB */

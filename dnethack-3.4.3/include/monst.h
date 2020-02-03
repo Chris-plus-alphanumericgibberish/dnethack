@@ -51,8 +51,8 @@ struct monst {
 	uchar m_lev;		/* adjusted difficulty level of monster */
 	aligntyp malign;	/* alignment of this monster, relative to the
 				   player (positive = good to kill) */
-	xchar mx, my;
-	xchar mux, muy;		/* where the monster thinks you are */
+	int mx, my;
+	int mux, muy;		/* where the monster thinks you are */
 #define MTSZ	4
 #define no_upos(mon)	((mon)->mux == 0 && (mon)->muy == 0)
 	coord mtrack[MTSZ];	/* monster track */
@@ -209,6 +209,9 @@ struct monst {
 #define	YITH		FACTION_PADDING+11	/* possessed by the great race of yith */
 #define	CRANIUM_RAT	FACTION_PADDING+12	/* psychic rat */
 #define	MISTWEAVER	FACTION_PADDING+13	/* daughters of shubie */
+#define	DELOUSED	FACTION_PADDING+14	/* android flag: parasite is killed, but not host */
+#define	M_BLACK_WEB	FACTION_PADDING+15	/* Has a shadow blade attack */
+#define	M_GREAT_WEB	FACTION_PADDING+16	/* Has a stronger shadow blade attack */
 //define	HALF_DEMON	FACTION_PADDING+1	/* half-demon */
 //define	HALF_DEVIL	FACTION_PADDING+2	/* half-devil */
 //define	HALF_DRAGON	FACTION_PADDING+3	/* half-dragon */

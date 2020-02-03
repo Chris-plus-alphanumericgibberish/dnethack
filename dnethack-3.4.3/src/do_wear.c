@@ -1649,7 +1649,7 @@ boolean noisy;
 		} else if (noboots(youracedata)) {
 			if (noisy) You("have no feet...");	/* not body_part(FOOT) */
 			err++;
-		} else if (!humanoid(youracedata)) {
+		} else if (!humanoid(youracedata) && !can_wear_boots(youracedata)) {
 			if (noisy) pline("You have too many legs to wear %s.",  c_boots);
 			err++;
 		} else if(youracedata->msize != otmp->objsize){

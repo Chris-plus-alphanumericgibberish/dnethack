@@ -2288,6 +2288,8 @@ static const short command_chain[][2] = {
 
 	{ PM_WATCHMAN, PM_WATCH_CAPTAIN },
 
+	{ PM_ANDROID, PM_GYNOID }, { PM_GYNOID, PM_OPERATOR }, { PM_OPERATOR, PM_COMMANDER }, 
+
 	{ NON_PM, NON_PM }
 
 };

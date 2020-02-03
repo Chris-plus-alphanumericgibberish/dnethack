@@ -26,7 +26,6 @@ STATIC_DCL void FDECL(heal, (struct monst *, int));
 STATIC_DCL int FDECL(xdamagey, (struct monst *, struct monst *, struct attack *, int, boolean));
 STATIC_DCL int FDECL(xstoney, (struct monst *, struct monst *));
 STATIC_DCL int FDECL(do_weapon_multistriking_effects, (struct monst *, struct monst *, struct attack *, struct obj *, int));
-STATIC_DCL int FDECL(xmeleehurty, (struct monst *, struct monst *, struct attack *, struct attack *, struct obj *, boolean, int, int, int, boolean));
 STATIC_DCL int FDECL(xcasty, (struct monst *, struct monst *, struct attack *, int));
 STATIC_DCL int FDECL(xtinkery, (struct monst *, struct monst *, struct attack *, int));
 STATIC_DCL int FDECL(xengulfhity, (struct monst *, struct monst *, struct attack *, int));
@@ -1676,6 +1675,13 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			return &noattack;
 		}
 	}
+	if(!by_the_book && pa == &mons[PM_NITOCRIS]){
+		if (attk->aatyp == AT_MAGC){
+			if (which_armor(magr, W_ARMC) && which_armor(magr, W_ARMC)->oartifact == ART_PRAYER_WARDED_WRAPPINGS_OF){
+				attk->adtyp = AD_CLRC;
+			}
+		}
+	}
 	if(!by_the_book && 
 		(pa == &mons[PM_SMALL_GOAT_SPAWN] || pa == &mons[PM_GOAT_SPAWN] || pa == &mons[PM_GIANT_GOAT_SPAWN])
 	){
@@ -2009,6 +2015,27 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			attk->adtyp = AD_PSON;
 			attk->damn = 0;
 			attk->damd = 15;
+		}
+		/* monsters that have mastered the black web gain shadow blades */
+		if (magr->mfaction == M_BLACK_WEB && (
+			ok_undead_subout)
+			){
+			*subout |= SUBOUT_UNDEAD;
+			fromlist = FALSE;
+			attk->aatyp = AT_SRPR;
+			attk->adtyp = AD_SHDW;
+			attk->damn = 4;
+			attk->damd = 8;
+		}
+		if (magr->mfaction == M_GREAT_WEB && (
+			ok_undead_subout)
+			){
+			*subout |= SUBOUT_UNDEAD;
+			fromlist = FALSE;
+			attk->aatyp = AT_5SQR;
+			attk->adtyp = AD_SHDW;
+			attk->damn = 8;
+			attk->damd = 8;
 		}
 #undef ok_undead_subout
 	}

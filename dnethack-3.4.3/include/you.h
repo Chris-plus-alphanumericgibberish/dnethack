@@ -823,6 +823,7 @@ struct you {
 #define uclockwork ((Race_if(PM_CLOCKWORK_AUTOMATON) && !Upolyd) || (Upolyd && youmonst.data == &mons[PM_CLOCKWORK_AUTOMATON]))
 #define uandroid ((Race_if(PM_ANDROID) && !Upolyd) || (Upolyd && (youmonst.data == &mons[PM_ANDROID] || youmonst.data == &mons[PM_GYNOID])))
 #define umechanoid (uclockwork || uandroid)
+//BAB
 #define BASE_ATTACK_BONUS	((Role_if(PM_BARBARIAN) || Role_if(PM_CONVICT) || Role_if(PM_KNIGHT) || Role_if(PM_ANACHRONONAUT) || \
 								Role_if(PM_PIRATE) || Role_if(PM_SAMURAI) || Role_if(PM_VALKYRIE) || (u.sealsActive&SEAL_BERITH) || \
 								(!uwep && (Role_if(PM_MONK) || (u.sealsActive&SEAL_EURYNOME))) || \

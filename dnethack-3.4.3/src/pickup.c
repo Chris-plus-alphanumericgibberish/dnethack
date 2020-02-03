@@ -2419,16 +2419,20 @@ boolean past;
 		box->ox = ox, box->oy = oy;	/* in case it's being carried */
 
     vampire = makemon(&mons[PM_VAMPIRE], box->ox, box->oy, NO_MM_FLAGS);
-	set_malign(vampire);
-	if (!canspotmon(vampire)){
-	    You("think %s brushed against your %s.", something, body_part(HAND));
+	if(vampire){
+		set_malign(vampire);
+		if (!canspotmon(vampire)){
+		    You("think %s brushed against your %s.", something, body_part(HAND));
+		}
+		else{
+		    if(Hallucination) 
+				pline(past ? "There was a dark knight in the coffin. The dark knight rises!" : "There is a dark knight in the coffin. The dark knight rises!");
+		    else pline(past ? "There was a vampire in the coffin! %s rises." : "There is a vampire in the coffin! %s rises.", Monnam(vampire));
+		}
+//		(void) christen_monst(vampire, sc);
+	} else {
+		pline(past ? "The coffin was empty." : "The coffin is empty.");
 	}
-	else{
-	    if(Hallucination) 
-			pline(past ? "There was a dark knight in the coffin. The dark knight rises!" : "There is a dark knight in the coffin. The dark knight rises!");
-	    else pline(past ? "There was a vampire in the coffin! %s rises." : "There is a vampire in the coffin! %s rises.", Monnam(vampire));
-	}
-//	(void) christen_monst(vampire, sc);
     box->owt = weight(box);
     return;
 }
@@ -2447,14 +2451,112 @@ boolean past;
 		box->ox = ox, box->oy = oy;	/* in case it's being carried */
 
     mummy = makemon(&mons[PM_NITOCRIS], box->ox, box->oy, NO_MM_FLAGS);
-	set_malign(mummy);
-	if (!canspotmon(mummy)){
-	    You("think %s brushed against your %s.", something, body_part(HAND));
+	if(mummy){
+		set_malign(mummy);
+		if (!canspotmon(mummy)){
+		    You("think %s brushed against your %s.", something, body_part(HAND));
+		}
+		else{
+		    if(Hallucination) 
+				pline("You want your mummy. Fortunately, she's right here!");
+		    else pline(past ? "There was a black-wrapped mummy in the sarcophagus! She rises." : "There is a black-wrapped mummy in the sarcophagus! She rises.");
+		}
+	} else {
+		pline(past ? "The sarcophagus was empty." : "The sarcophagus is empty.");
 	}
-	else{
-	    if(Hallucination) 
-			pline("You want your mummy. Fortunately, she's right here!");
-	    else pline(past ? "There was a black-wrapped mummy in the sarcophagus! She rises." : "There is a black-wrapped mummy in the sarcophagus! She rises.");
+    box->owt = weight(box);
+    return;
+}
+
+void
+open_crazy_box(box, past)
+struct obj *box;
+boolean past;
+{
+	struct obj *otmp;
+    struct monst *daughter;
+    xchar ox, oy;
+	int howMany = 0;
+	pline(past ? "That %s was full of crazy!" : "This %s is full of crazy!", simple_typename(box->otyp));
+    box->spe = 0;		/* box->owt will be updated below */
+    if (get_obj_location(box, &ox, &oy, 0))
+		box->ox = ox, box->oy = oy;	/* in case it's being carried */
+	
+	for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+		if(is_suit(otmp))
+			howMany++;
+	}
+	
+	if(!howMany)
+		howMany++;
+	
+	while(howMany){
+		howMany--;
+		daughter = makemon(&mons[PM_DAUGHTER_OF_BEDLAM], box->ox, box->oy, MM_ADJACENTOK);
+		if(!daughter){
+			//empty;
+			break;
+		}
+		set_malign(daughter);
+		daughter->m_lev = 14;
+		daughter->mhpmax = 13*8+4;
+		daughter->mhp = daughter->mhpmax;
+		if (!canspotmon(daughter)){
+			You("think %s brushed against your %s.", something, body_part(HAND));
+		}
+		else{
+			pline("%s climbs out of the %s!", An(daughter->data->mname), past ? "wreckage" : simple_typename(box->otyp));
+		}
+		for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+			if(!is_boots(otmp))
+				continue;
+			obj_extract_self(otmp);
+			mpickobj(daughter, otmp);
+			break; //Found boots.  Also, otmp->nobj should now be 0 anyway.
+		}
+		for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+			if(!is_gloves(otmp))
+				continue;
+			obj_extract_self(otmp);
+			mpickobj(daughter, otmp);
+			break; //Found boots.  Also, otmp->nobj should now be 0 anyway.
+		}
+		for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+			if(!is_shirt(otmp))
+				continue;
+			obj_extract_self(otmp);
+			mpickobj(daughter, otmp);
+			break; //Found boots.  Also, otmp->nobj should now be 0 anyway.
+		}
+		for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+			if(!is_suit(otmp))
+				continue;
+			obj_extract_self(otmp);
+			mpickobj(daughter, otmp);
+			break; //Found boots.  Also, otmp->nobj should now be 0 anyway.
+		}
+		for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+			if(!is_cloak(otmp))
+				continue;
+			obj_extract_self(otmp);
+			mpickobj(daughter, otmp);
+			break; //Found boots.  Also, otmp->nobj should now be 0 anyway.
+		}
+		for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+			if(!is_helmet(otmp))
+				continue;
+			obj_extract_self(otmp);
+			mpickobj(daughter, otmp);
+			break; //Found boots.  Also, otmp->nobj should now be 0 anyway.
+		}
+		for(otmp = box->cobj; otmp; otmp = otmp->nobj){
+			if(!is_shield(otmp))
+				continue;
+			obj_extract_self(otmp);
+			mpickobj(daughter, otmp);
+			break; //Found boots.  Also, otmp->nobj should now be 0 anyway.
+		}
+		m_dowear(daughter, TRUE);
 	}
     box->owt = weight(box);
     return;
@@ -2758,6 +2860,10 @@ register int held;
 		return used;
 	}else if(obj->spe == 5){
 	    open_sarcophagus(obj, FALSE); //FALSE: the box was not destroyed. Use present tense.
+	    used = 1;
+		return used;
+	}else if(obj->spe == 6 && u.uinsight >= 10){
+	    open_crazy_box(obj, FALSE); //FALSE: the box was not destroyed. Use present tense.
 	    used = 1;
 		return used;
 	}

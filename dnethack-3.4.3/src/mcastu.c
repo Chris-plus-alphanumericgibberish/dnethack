@@ -997,23 +997,82 @@ unsigned int type;
 				case 8: return DRAIN_LIFE;
 			}
 	   break;
-       case PM_NITOCRIS:
-			switch(rnd(9)){
+       case PM_THE_GOOD_NEIGHBOR:
+			switch(rnd(12)){
+				case 1: return PSI_BOLT;
+				case 2: return EVIL_EYE;
+				case 3: return CURSE_ITEMS;
+				case 4: return ACID_RAIN;
+				case 5: return SUMMON_DEVIL;
+				case 6: return SUMMON_ALIEN;
+				case 7: return DEATH_TOUCH;
+				case 8: return DRAIN_LIFE;
+				case 9: return VULNERABILITY;
+				case 10: return MASS_CURE_CLOSE;
+				case 11: return RECOVER;
+				case 12: return MON_WARP;
+			}
+	   break;
+       case PM_HMNYW_PHARAOH:
+			switch(rnd(10)){
 				case 1: 
+				return CURSE_ITEMS;
 				case 2: 
-				return GEYSER;
+				//Summon amphibians?
 				case 3: 
 				case 4: 
-				return CURSE_ITEMS;
-				case 5: 
-				case 6: 
-				return FIRE_PILLAR;
-				case 7: 
 				return INSECTS;
-				case 8: 
-				return DARKNESS;
-				case 9: 
+				case 5: 
 				return PLAGUE;
+				case 6: 
+				return OPEN_WOUNDS;
+				case 7: 
+				return rn2(2) ? ICE_STORM : LIGHTNING;
+				case 8: 
+				return INSECTS;
+				case 9: 
+				return DARKNESS;
+				case 10: 
+				return DEATH_TOUCH;
+			}
+       case PM_NITOCRIS:
+       case PM_GHOUL_QUEEN_NITOCRIS:
+			if(type == AD_CLRC){
+				switch(rnd(9)){
+					case 1: 
+					case 2: 
+					return OPEN_WOUNDS;
+					case 3: 
+					case 4: 
+					return CURSE_ITEMS;
+					case 5: 
+					case 6: 
+					return EVIL_EYE;
+					case 7: 
+					return INSECTS;
+					case 8: 
+					return DARKNESS;
+					case 9: 
+					return PLAGUE;
+				}
+			} else {
+				switch(rnd(9)){
+					case 1: 
+					case 2: 
+					return GEYSER;
+					case 3: 
+					case 4: 
+					return CURSE_ITEMS;
+					case 5: 
+					case 6: 
+					return FIRE_PILLAR;
+					case 7: 
+					return INSECTS;
+					case 8: 
+					return DARKNESS;
+					case 9: 
+					return PLAGUE;
+				}
 			}
 	   break;
 	case PM_SHOGGOTH:
@@ -1315,7 +1374,10 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	int dmd, dmn;
 	struct obj *mirror;
 
-	if(mon_resistance(mtmp, NULLMAGIC)) return 0;
+	if(mtmp->data == &mons[PM_NITOCRIS] && !mtmp->mspec_used && which_armor(mtmp, W_ARMC) && which_armor(mtmp, W_ARMC)->oartifact == ART_PRAYER_WARDED_WRAPPINGS_OF){
+		if(canseemon(mtmp)) pline("Dark water churns around Nitocris!");
+	}
+	else if(mon_resistance(mtmp, NULLMAGIC)) return 0;
 
 	if(noactions(mtmp)) return 0;
 	

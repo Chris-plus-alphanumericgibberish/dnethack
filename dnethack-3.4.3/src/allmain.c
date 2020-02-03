@@ -30,7 +30,9 @@ STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
 STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
 STATIC_DCL void NDECL(see_nearby_monsters);
 STATIC_DCL void NDECL(cthulhu_mind_blast);
+STATIC_DCL void FDECL(unseen_actions, (struct monst *));
 STATIC_DCL void FDECL(blessed_spawn, (struct monst *));
+STATIC_DCL void FDECL(good_neighbor, (struct monst *));
 STATIC_DCL void FDECL(dark_pharaoh, (struct monst *));
 
 #ifdef OVL0
@@ -747,7 +749,7 @@ moveloop()
 		for (mtmp = fmon; mtmp; mtmp = nxtmon){
 			nxtmon = mtmp->nmon;
 			if(mtmp->m_insight_level > u.uinsight){
-				migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+				insight_vanish(mtmp);
 				continue;
 			}
 			if (!DEADMONSTER(mtmp)
@@ -814,7 +816,7 @@ moveloop()
 					}
 				}
 				if(mtmp->m_insight_level > u.uinsight){
-					migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+					insight_vanish(mtmp);
 					continue;
 				}
 				if (mtmp->minvis){
@@ -1203,10 +1205,10 @@ karemade:
 						}
 					}
 				} else mtmp->movement += mcalcmove(mtmp);
-				
+
 				if(mtmp->data == &mons[PM_NITOCRIS]){
 					if(which_armor(mtmp, W_ARMC) && which_armor(mtmp, W_ARMC)->oartifact == ART_PRAYER_WARDED_WRAPPINGS_OF)
-						mtmp->entangled = MUMMY_WRAPPING;
+						mtmp->mspec_used = 1;
 				}
 				
 				if(mtmp->moccupation && !occupation){
@@ -1651,8 +1653,7 @@ karemade:
 			dust_storm();
 			/* Unseen monsters may take action */
 			for(mtmp = migrating_mons; mtmp; mtmp = mtmp->nmon){
-				if(mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel && mtmp->data == &mons[PM_BLESSED])
-					blessed_spawn(mtmp);
+				unseen_actions(mtmp);
 			}
 			
 			/* Item attacks */
@@ -2026,7 +2027,7 @@ karemade:
 			}
 		}
 		if(mtmp->m_insight_level > u.uinsight){
-			migrate_to_level(mtmp, ledger_no(&u.uz), MIGR_EXACT_XY, (coord *)0);
+			insight_vanish(mtmp);
 			continue;
 		}
 		if (mtmp->minvis){
@@ -3264,6 +3265,19 @@ see_nearby_monsters()
 	}
 }
 
+STATIC_OVL
+void
+unseen_actions(mon)
+struct monst *mon;
+{
+	if(mon->mux == u.uz.dnum && mon->muy == u.uz.dlevel && mon->data == &mons[PM_BLESSED])
+		blessed_spawn(mon);
+	else if(mon->mux == u.uz.dnum && mon->muy == u.uz.dlevel && mon->data == &mons[PM_THE_GOOD_NEIGHBOR])
+		good_neighbor(mon);
+	else if(mon->mux == u.uz.dnum && mon->muy == u.uz.dlevel && mon->data == &mons[PM_HMNYW_PHARAOH])
+		dark_pharaoh(mon);
+}
+
 static int goatkids[] = {PM_SMALL_GOAT_SPAWN, PM_GOAT_SPAWN, PM_GIANT_GOAT_SPAWN, 
 						 PM_SWIRLING_MIST, PM_DUST_STORM, PM_ICE_STORM, PM_THUNDER_STORM, PM_FIRE_STORM, 
 						 PM_PLAINS_CENTAUR, PM_FOREST_CENTAUR, PM_MOUNTAIN_CENTAUR,
@@ -3287,6 +3301,85 @@ struct monst *mon;
 	}
 }
 
+static int witchspawns[] = {PM_APPRENTICE_WITCH, PM_APPRENTICE_WITCH, PM_APPRENTICE_WITCH, PM_WITCH, 
+						 PM_APPRENTICE_WITCH, PM_APPRENTICE_WITCH, PM_APPRENTICE_WITCH, PM_WITCH, 
+						 PM_BABY_LONG_WORM, PM_BABY_PURPLE_WORM, PM_LONG_WORM, PM_PURPLE_WORM, PM_HUNTING_HORROR, 
+						 PM_LARGE_CAT, PM_PANTHER, PM_TIGER, PM_GIANT_RAT, PM_ENORMOUS_RAT, PM_RODENT_OF_UNUSUAL_SIZE};
+STATIC_OVL
+void
+good_neighbor(mon)
+struct monst *mon;
+{
+	struct monst *mtmp;
+	xchar xlocale, ylocale, xyloc;
+	xyloc	= mon->mtrack[0].x;
+	xlocale = mon->mtrack[1].x;
+	ylocale = mon->mtrack[1].y;
+	if(xyloc == MIGR_EXACT_XY){
+		if(u.ux == xlocale && u.uy == ylocale && !mon->mpeaceful){
+			You_feel("someone walking on your grave!");
+			change_luck(-13);
+		} else if(!mon->mpeaceful && !rn2(140)){
+			mtmp = makemon(&mons[witchspawns[rn2(SIZE(witchspawns))]], xlocale, ylocale, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+			if(mtmp){
+				mtmp->mpeaceful = 0;
+				set_malign(mtmp);
+			}
+		} else if((mtmp = m_at(xlocale, ylocale))){
+			if(mtmp->data == &mons[PM_APPRENTICE_WITCH]
+				|| mtmp->data == &mons[PM_WITCH]
+				|| mtmp->data == &mons[PM_COVEN_LEADER]
+				|| mtmp->data == &mons[PM_WITCH_S_FAMILIAR]
+			){
+				//Heal and fix troubles
+				if(needs_familiar(mtmp)){
+					struct monst *familliar;
+					familliar = makemon(&mons[PM_WITCH_S_FAMILIAR], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+					if(familliar){
+						//Sync new familiar
+						familliar->m_lev = mtmp->m_lev;
+						familliar->mhpmax = mtmp->mhpmax;
+						familliar->mhp = familliar->mhpmax;
+						familliar->mvar1 = (long)mtmp->m_id;
+						familliar->mpeaceful = mtmp->mpeaceful;
+						//Stop running
+						if(mtmp->mflee && mtmp->mhp > mtmp->mhpmax/2){
+							mtmp->mflee = 0;
+							mtmp->mfleetim = 0;
+						}
+					}
+				}
+				mtmp->mhp == mtmp->mhpmax;
+				if(mtmp->mhp > mtmp->mhpmax)
+					mtmp->mhp = mtmp->mhpmax;
+				mtmp->mspec_used = 0;
+				mtmp->mstdy = 0;
+				mtmp->ustdym = 0;
+				mtmp->mcan = 0;
+				
+				mtmp->mflee = 0;
+				mtmp->mfleetim = 0;
+				mtmp->mcansee = 1;
+				mtmp->mblinded = 0;
+				mtmp->mcanhear = 1;
+				mtmp->mdeafened = 0;
+				mtmp->mcanmove = 1;
+				mtmp->mfrozen = 0;
+				mtmp->msleeping = 0;
+				mtmp->mstun = 0;
+				mtmp->mconf = 0;
+				mtmp->mtrapped = 0;
+				mtmp->entangled = 0;
+			}
+		}
+		xlocale += rn2(3) - 1;
+		ylocale += rn2(3) - 1;
+		if(isok(xlocale, ylocale) && !is_pool(xlocale, ylocale, FALSE) && ZAP_POS(levl[xlocale][ylocale].typ)){
+			mon->mtrack[1].x = xlocale;
+			mon->mtrack[1].y = ylocale;
+		}
+	}
+}
 
 static int pharaohspawns[] = {PM_COBRA, PM_COBRA, PM_COBRA, PM_SERPENT_NECKED_LIONESS, PM_HUNTING_HORROR};
 
@@ -3310,116 +3403,21 @@ struct monst *mon;
 			mon->mtrack[1].y = mtmp->my;
 			xlocale = mon->mtrack[1].x;
 			ylocale = mon->mtrack[1].y;
-			if(mtmp->entangled == MUMMY_WRAPPING){
-				mtmp->entangled = 0;//Cast spells on her behalf
+			if(which_armor(mtmp, W_ARMC) && which_armor(mtmp, W_ARMC)->oartifact == ART_PRAYER_WARDED_WRAPPINGS_OF){
+				//Directed to cast spells on her behalf
+				mtmp->mspec_used = 0;
 			} else if(mtmp->data == &mons[PM_NITOCRIS]){
-				if(mtmp->mhp < mtmp->mhpmax/2){
-					mtmp->mhp = mtmp->mhpmax;
-					if(canseemon(mtmp)) pline("A shadow tends to %s's wounds!", mon_nam(mtmp));
-				} else if(!which_armor(mtmp, W_ARM)){
-					otmp = mksobj(SCALE_MAIL, FALSE, FALSE);
-					otmp->spe = 9;
-					otmp->obj_material = GOLD;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					m_dowear(mtmp, TRUE);
-					if(canseemon(mtmp)) pline("A shadow dresses %s in golden armor!", mon_nam(mtmp));
-				} else if(!which_armor(mtmp, W_ARMF)){
-					otmp = mksobj(SHOES, FALSE, FALSE);
-					otmp->spe = 9;
-					otmp->obj_material = GOLD;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					m_dowear(mtmp, TRUE);
-					if(canseemon(mtmp)) pline("A shadow presents golden shoes to %s!", mon_nam(mtmp));
-				} else if(!which_armor(mtmp, W_ARMG)){
-					otmp = mksobj(GLOVES, FALSE, FALSE);
-					otmp->spe = 9;
-					otmp->obj_material = GOLD;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					m_dowear(mtmp, TRUE);
-					if(canseemon(mtmp)) pline("A shadow presents golden gloves to %s!", mon_nam(mtmp));
-				} else if(!MON_WEP(mtmp)){
-					otmp = mksobj(SICKLE, FALSE, FALSE);
-					otmp->spe = 9;
-					otmp->obj_material = GOLD;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					init_mon_wield_item(mtmp);
-					if(canseemon(mtmp)) pline("A shadow presents a golden sickle to %s!", mon_nam(mtmp));
-				} else if(!MON_SWEP(mtmp)){
-					otmp = mksobj(SPEAR, FALSE, FALSE);
-					otmp->spe = 9;
-					otmp->objsize = MZ_SMALL;
-					otmp->obj_material = GOLD;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					init_mon_wield_item(mtmp);
-					if(canseemon(mtmp)) pline("A shadow presents a golden spear to %s!", mon_nam(mtmp));
-				} else if(!which_armor(mtmp, W_ARMH)){
-					otmp = mksobj(find_gcirclet() == HELM_OF_OPPOSITE_ALIGNMENT ? HELM_OF_BRILLIANCE : find_gcirclet(), FALSE, FALSE);
-					otmp->spe = 9;
-					otmp->obj_material = GOLD;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					m_dowear(mtmp, TRUE);
-					if(canseemon(mtmp)) pline("A shadow crowns %s!", mon_nam(mtmp));
-				} else {
-					mtmp->mhp = min(mtmp->mhp+9, mtmp->mhpmax);
-					mtmp->mspec_used = 0;
-					mtmp->mstdy = 0;
-					mtmp->ustdym = 0;
-					mtmp->mcan = 0;
-					
-					mtmp->mflee = 0;
-					mtmp->mfleetim = 0;
-					mtmp->mcansee = 1;
-					mtmp->mblinded = 0;
-					mtmp->mcanhear = 1;
-					mtmp->mdeafened = 0;
-					mtmp->mcanmove = 1;
-					mtmp->mfrozen = 0;
-					mtmp->msleeping = 0;
-					mtmp->mstun = 0;
-					mtmp->mconf = 0;
-					mtmp->mtrapped = 0;
-					mtmp->entangled = 0;
+				//No longer protected, kill her
+				if(canseemon(mtmp)){
+					pline("Dark waters pour into %s's mouth and throat!", mon_nam(mtmp));
+					pline("%s drowns!", Monnam(mtmp));
 				}
+				mtmp->mhp = 0;
+				mondied(mtmp);
 			} else if(mtmp->data == &mons[PM_GHOUL_QUEEN_NITOCRIS]){
 				if(mtmp->mhp < mtmp->mhpmax/2){
 					mtmp->mhp = mtmp->mhpmax;
-					if(canseemon(mtmp)) pline("A shadow sews shut %s's wounds!", mon_nam(mtmp));
-				} else if(!which_armor(mtmp, W_ARM)){
-					otmp = mksobj(SCALE_MAIL, FALSE, FALSE);
-					otmp->spe = 3;
-					otmp->obj_material = METAL;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					m_dowear(mtmp, TRUE);
-					if(canseemon(mtmp)) pline("A shadow dresses %s in metallic armor!", mon_nam(mtmp));
-				} else if(!MON_WEP(mtmp)){
-					otmp = mksobj(QUARTERSTAFF, FALSE, FALSE);
-					otmp->spe = 3;
-					otmp->obj_material = METAL;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					init_mon_wield_item(mtmp);
-					if(canseemon(mtmp)) pline("A shadow presents a metallic quarterstaff to %s!", mon_nam(mtmp));
-				} else if(!which_armor(mtmp, W_ARMH)){
-					otmp = mksobj(find_gcirclet() == HELM_OF_OPPOSITE_ALIGNMENT ? HELM_OF_BRILLIANCE : find_gcirclet(), FALSE, FALSE);
-					otmp->spe = 3;
-					otmp->obj_material = METAL;
-					fix_object(otmp);
-					(void) mpickobj(mtmp,otmp);
-					m_dowear(mtmp, TRUE);
-					if(canseemon(mtmp)) pline("A shadow crowns %s!", mon_nam(mtmp));
-				} else if(!which_armor(mtmp, W_ARMC)){
-					otmp = mksobj(MUMMY_WRAPPING, FALSE, FALSE);
-					otmp->spe = 3;
-					(void) mpickobj(mtmp,otmp);
-					m_dowear(mtmp, TRUE);
-					if(canseemon(mtmp)) pline("A shadow wraps %s in white bandages!", mon_nam(mtmp));
+					if(canseemon(mtmp)) pline("Dark waters seal %s's wounds!", mon_nam(mtmp));
 				} else {
 					mtmp->mhp = min(mtmp->mhp+9, mtmp->mhpmax);
 					mtmp->mspec_used = 0;
@@ -3443,7 +3441,7 @@ struct monst *mon;
 				}
 			}
 		}
-		if(!rn2(70)){
+		if(!rn2(140)){
 			struct permonst *pm;
 			pm = &mons[pharaohspawns[rn2(SIZE(pharaohspawns))]];
 			mtmp = makemon(pm, xlocale, ylocale, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
@@ -3481,8 +3479,18 @@ struct monst *mon;
 			mon->mtrack[1].x = xlocale;
 			mon->mtrack[1].y = ylocale;
 		}
-		if(cansee(xlocale, ylocale)) pline("A shadow ministers to Nitocris!");
+		if(cansee(xlocale, ylocale)) pline("Dark waters lift up Nitocris!");
 		revive(obj, FALSE);
+		return;//No further action.
+	}
+	if(!rn2(70)){
+		struct permonst *pm;
+		pm = &mons[pharaohspawns[rn2(SIZE(pharaohspawns))]];
+		mtmp = makemon(pm, xlocale, ylocale, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+		if(mtmp){
+			mtmp->mpeaceful = 0;
+			set_malign(mtmp);
+		}
 	}
 }
 

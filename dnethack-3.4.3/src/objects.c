@@ -1533,6 +1533,8 @@ OBJECT(OBJ("broken android", (char *)0),      BITS(1,1,0,0,0,0,0,0,  MZ_HUGE,0,W
 		CHAIN_CLASS,    0, 0, 3000,  0,  1,  1, 0, 0,   0, 20, CLR_WHITE),
 OBJECT(OBJ("broken gynoid", (char *)0),       BITS(1,1,0,0,0,0,0,0,  MZ_HUGE,0,WHACK,P_NONE, METAL,0), 0, /*Needs encyc entry*//*Needs tile*/
 		CHAIN_CLASS,    0, 0, 3000,  0,  1,  1, 0, 0,   0, 20, CLR_WHITE),
+OBJECT(OBJ("lifeless doll", (char *)0),       BITS(1,1,0,0,0,0,0,0,  MZ_HUGE,0,WHACK,P_NONE, PLASTIC,0), 0, /*Needs encyc entry*//*Needs tile*/
+		CHAIN_CLASS,    0, 0,  750,  0,  1,  1, 0, 0,   0, 20, CLR_BRIGHT_MAGENTA),
 
 OBJECT(OBJ("rope of entangling", (char *)0),  BITS(1,0,0,0,0,0,0,0,MZ_MEDIUM,0,WHACK,P_NONE, VEGGY,0), 0,
 		CHAIN_CLASS,	0, 0,  120,  0,  4,  4, 0, 0,  0, 200, CLR_BROWN),

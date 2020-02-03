@@ -1284,7 +1284,39 @@ register struct monst *mtmp;
 		else mtmp->mspec_used += max(10 - mtmp->m_lev,2);
 	}
 
-	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID])
+	if(mtmp->data == &mons[PM_OPERATOR] || mtmp->data == &mons[PM_PARASITIZED_OPERATOR]){
+		struct monst *repairee = 0;
+		int i, j, x, y, rot = rn2(3);
+		for(i = -1; i < 2; i++){
+			for(j = -1; j < 2; j++){
+				x = mtmp->mx+(i+rot)%3;
+				y = mtmp->my+(j+rot)%3;
+				if(!isok(x, y))
+					continue;
+				repairee = m_at(x,y);
+				if(!repairee)
+					continue;
+				if(repairee == &youmonst){
+					if(!uandroid)
+						continue;
+					if(mtmp->mpeaceful && ((Upolyd && u.mh < u.mhmax) || (!Upolyd && u.uhp < u.uhpmax))){
+						repair(mtmp, repairee, TRUE);
+						return 0;
+					}
+				}
+				else {
+					if(!is_android(repairee->data))
+						continue;
+					if(repairee->mpeaceful == mtmp->mpeaceful && repairee->mhp < repairee->mhpmax){
+						repair(mtmp, repairee, canseemon(mtmp) || canseemon(repairee));
+						return 0;
+					}
+				}
+			}
+		}
+	}
+	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID] || mtmp->data == &mons[PM_OPERATOR] ||
+		mtmp->data == &mons[PM_PARASITIZED_ANDROID] || mtmp->data == &mons[PM_PARASITIZED_GYNOID] || mtmp->data == &mons[PM_PARASITIZED_OPERATOR])
 		&& MON_WEP(mtmp)
 		&& (is_vibroweapon(MON_WEP(mtmp)) || is_blaster(MON_WEP(mtmp)))
 		&& MON_WEP(mtmp)->ovar1 <= 0
@@ -1309,7 +1341,8 @@ register struct monst *mtmp;
 		return 0;
 	}
 
-	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID])
+	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID] || mtmp->data == &mons[PM_OPERATOR] ||
+		mtmp->data == &mons[PM_PARASITIZED_ANDROID] || mtmp->data == &mons[PM_PARASITIZED_GYNOID] || mtmp->data == &mons[PM_PARASITIZED_OPERATOR])
 		&& MON_WEP(mtmp)
 		&& (is_lightsaber(MON_WEP(mtmp)) && MON_WEP(mtmp)->oartifact != ART_INFINITY_S_MIRRORED_ARC && MON_WEP(mtmp)->otyp != KAMEREL_VAJRA)
 		&& MON_WEP(mtmp)->age <= 0

@@ -12,26 +12,26 @@ MAZE: "Hea-strt",' '
 FLAGS: noteleport,hardfloor
 GEOMETRY:center,center
 MAP
-PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
-PPPPeeeeeeeePPPPeeeeePPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPePeePPPPPeeeeeePPPPPPPP
-PPPeeeeeeeeeePPPPeeePPPPPeeeeeeeeeeeeeeeeeeeeeeeeePPPPeePPPPPeeeeeeeePPPPPPP
-PPeeeeeeeeeeeePPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeeePPPPeeeeeePPPPPPPP
-PeeeeePPPPPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPPPPPPPPPPPPPPPPPPP
-PPPPeeeePPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPePPPPPPPPPPPPPPP
-PPPPeeeeeeeePPPPPeeeeeeeee-----------------------eeeeeeeePPeeePPPPPPPeeeeePP
-PPPeeeeeeeeeeeePPPPPeeee--|.|......S..........S.|--eeeeePPPPePPPPPPPeeeeeeeP
-PPPPeeeeeeeeeePPPPPeeeee|.S.|......-----------|S|.|eeeeeePPPPPPePPPeeeeeeePP
-PPPPPPeeeeeePPPPPPeeeeee|.|.|......|...|......|.|.|eeeeePPPPPPeeePPeeeeeeePP
-PPPPPPPPPPPPPPPPPPPeeeee+.|.|......S.\.S......|.|.+eeeeeePPPPPPePPPPeeeeeeeP
-PPPeeePPPPPeeePPPPeeeeee|.|.|......|...|......|.|.|eeeeeeePPPPPPPPPPPeeeeePP
-PPeeeeePPPeeeeePPPeeeeee|.|S|-----------......|.S.|eeeeeePPPPPPPPPPPPPPPPPPP
-PPPeePPPPPeeePPPPeeeeeee--|.S..........S......|.|--eeeeePPPPPPPPPeeeePPPPPPP
-PPPPPPPPPPPPPPPPeeeeeeeeee-----------------------eeeeeeeeeePPPPPeeeeeeeeeePP
-PPPPPPPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPPeeeeeeeeeeeeP
-PPPeeeeeeeeeeeeePPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeePPPPeeeeeeeeeePP
-PPeeeeeeeeeeeeeeePPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPeeePPPPeeeeeeeePPP
-PPPeeeeeeeeeeeeePPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPeeeePPPPPP
-PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+0PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
+1PPPPeeeeeeeePPPPeeeeePPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPePeePPPPPeeeeeePPPPPPPP
+2PPPeeeeeeeeeePPPPeeePPPPPeeeeeeeeeeeeeeeeeeeeeeeeePPPPeePPPPPeeeeeeeePPPPPPP
+3PPeeeeeeeeeeeePPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeeePPPPeeeeeePPPPPPPP
+4PeeeeePPPPPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPPPPPPPPPPPPPPPPPPP
+5PPPPeeeePPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPePPPPPPPPPPPPPPP
+6PPPPeeeeeeeePPPPPeeeeeeeee-----------------------eeeeeeeePPeeePPPPPPPeeeeePP
+7PPPeeeeeeeeeeeePPPPPeeee--|.|......S..........S.|--eeeeePPPPePPPPPPPeeeeeeeP
+8PPPPeeeeeeeeeePPPPPeeeee|.S.|......-----------|S|.|eeeeeePPPPPPePPPeeeeeeePP
+9PPPPPPeeeeeePPPPPPeeeeee|.|.|......|...|......|.|.|eeeeePPPPPPeeePPeeeeeeePP
+0PPPPPPPPPPPPPPPPPPPeeeee+.|.|......S.\.S......|.|.+eeeeeePPPPPPePPPPeeeeeeeP
+1PPPeeePPPPPeeePPPPeeeeee|.|.|......|...|......|.|.|eeeeeeePPPPPPPPPPPeeeeePP
+2PPeeeeePPPeeeeePPPeeeeee|.|S|-----------......|.S.|eeeeeePPPPPPPPPPPPPPPPPPP
+3PPPeePPPPPeeePPPPeeeeeee--|.S..........S......|.|--eeeeePPPPPPPPPeeeePPPPPPP
+4PPPPPPPPPPPPPPPPeeeeeeeeee-----------------------eeeeeeeeeePPPPPeeeeeeeeeePP
+5PPPPPPPPPPPPPPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPPPeeeeeeeeeeeeP
+6PPPeeeeeeeeeeeeePPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPeePPPPeeeeeeeeeePP
+7PPeeeeeeeeeeeeeeePPPPPeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeePPPPeeePPPPeeeeeeeePPP
+8PPPeeeeeeeeeeeeePPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPeeeePPPPPP
+9PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP
 ENDMAP
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
@@ -62,6 +62,7 @@ OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 OBJECT:'?',"resistance",contained
 # intern guards for the audience chamber
+MONSTER:'@',"nurse",(29,07),peaceful
 MONSTER:'@',"attendant",(29,08)
 MONSTER:'@',"attendant",(29,09)
 MONSTER:'@',"attendant",(29,10)
@@ -69,7 +70,8 @@ MONSTER:'@',"attendant",(29,11)
 MONSTER:'@',"attendant",(40,09)
 MONSTER:'@',"attendant",(40,10)
 MONSTER:'@',"attendant",(40,11)
-MONSTER:'@',"attendant",(40,13)
+MONSTER:'@',"attendant",(40,12)
+MONSTER:'@',"nurse",(40,13),peaceful
 # Non diggable walls
 NON_DIGGABLE:(00,00,75,19)
 # Random traps
@@ -239,6 +241,7 @@ NON_DIGGABLE:(00,00,40,11)
 # Objects
 OBJECT:')',"quarterstaff",(20,06),blessed,0,"The Staff of Aesculapius"
 OBJECT:'/',"lightning",(20,06)
+OBJECT:'(',"trephination kit",random
 OBJECT:random,random,random
 OBJECT:random,random,random
 OBJECT:random,random,random

@@ -122,6 +122,7 @@ STATIC_DCL void FDECL(display_monster,(XCHAR_P,XCHAR_P,struct monst *,int,XCHAR_
 STATIC_DCL int FDECL(swallow_to_glyph, (int, int));
 STATIC_DCL void FDECL(display_warning,(struct monst *));
 STATIC_DCL int FDECL(you_scent_callback,(genericptr_t, int, int));
+STATIC_DCL void FDECL(map_invisible_core,(int, int, boolean));
 
 STATIC_DCL int FDECL(check_pos, (int, int, int));
 #ifdef WA_VERBOSE
@@ -279,6 +280,15 @@ map_object(obj, show)
 void
 map_invisible(x, y)
 register xchar x, y;
+{
+	map_invisible_core(x, y, TRUE);
+}
+
+STATIC_OVL
+void
+map_invisible_core(x, y, new)
+register xchar x, y;
+boolean new;
 {
     if (x != u.ux || y != u.uy) { /* don't display I at hero's location */
 		if (level.flags.hero_memory)
@@ -830,7 +840,7 @@ newsym(x,y)
 	    else if (mon && mon_warning(mon) && !is_worm_tail(mon))
 	        display_warning(mon);
 	    else if (glyph_is_invisible(levl[x][y].glyph))
-		map_invisible(x, y);
+		map_invisible_core(x, y, FALSE);
 	    else
 		_map_location(x,y,1);	/* map the location */
 	}

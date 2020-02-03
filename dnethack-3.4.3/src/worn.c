@@ -610,7 +610,7 @@ boolean on, silently;
 {
 	/* don't bother with dead monsters -- at best nothing will happen, at worst we get bad messages */
 	if (DEADMONSTER(mon))
-		return;
+		silently = TRUE;
 
 	int unseen = !canseemon(mon);
     int which;
@@ -1480,7 +1480,7 @@ boolean polyspot;
 		}
 	}
 	if ((otmp = which_armor(mon, W_ARMF)) != 0) {
-		if(noboots(mon->data) || !humanoid(mon->data) || mon->data->msize != otmp->objsize || is_whirly(mon->data) || noncorporeal(mon->data)){
+		if(((noboots(mon->data) || !humanoid(mon->data)) && !can_wear_boots(mon->data)) || mon->data->msize != otmp->objsize || is_whirly(mon->data) || noncorporeal(mon->data)){
 			if (vis) {
 				if (is_whirly(mon->data) || noncorporeal(mon->data))
 					pline("%s %s falls, unsupported!",

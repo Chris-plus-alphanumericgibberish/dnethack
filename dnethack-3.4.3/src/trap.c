@@ -4463,7 +4463,10 @@ struct obj * tool;
 		if(mtmp->entangled == SHACKLES){
 			mtmp->entangled = 0;
 			You("unlock the shackles imprisoning %s.", mon_nam(mtmp));
-			if(rnd(20) < ACURR(A_CHA) && !(is_animal(mtmp->data) || mindless_mon(mtmp))){
+			if(mtmp->mtame){
+				pline("\"Thank you for rescuing me!\"", Monnam(mtmp));
+			}
+			else if(rnd(20) < ACURR(A_CHA) && !(is_animal(mtmp->data) || mindless_mon(mtmp))){
 				struct monst *newmon;
 				pline("%s is very grateful!", Monnam(mtmp));
 				newmon = tamedog(mtmp, (struct obj *)0);

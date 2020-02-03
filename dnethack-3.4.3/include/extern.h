@@ -1417,8 +1417,11 @@ E boolean FDECL(angry_guards, (BOOLEAN_P));
 E void NDECL(pacify_guards);
 E void FDECL(removeMonster,(int,int));
 E int FDECL(u_sanity_loss,(struct monst *));
+E int NDECL(u_sanity_loss_nyar);
 E int FDECL(u_sanity_gain,(struct monst *));
 E int FDECL(u_insight_gain,(struct monst *));
+E void FDECL(repair,(struct monst *, struct monst *, int));
+E void FDECL(insight_vanish,(struct monst *));
 
 /* ### mondata.c ### */
 
@@ -1868,6 +1871,7 @@ E void NDECL(getlock);
 E void FDECL(observe_quantum_cat, (struct obj *, BOOLEAN_P));
 E void FDECL(open_coffin, (struct obj *, BOOLEAN_P));
 E void FDECL(open_sarcophagus, (struct obj *, BOOLEAN_P));
+E void FDECL(open_crazy_box, (struct obj *, BOOLEAN_P));
 #ifdef GOLDOBJ
 E int FDECL(collect_obj_classes,
 	(char *,struct obj *,BOOLEAN_P,boolean FDECL((*),(OBJ_P)), int *));
@@ -2411,6 +2415,7 @@ E void FDECL(initialward, (struct obj *));
 E void FDECL(set_spirit_powers, (long));
 E int NDECL(reorder_spirit_powers);
 E void NDECL(dopseudonatural);
+E void NDECL(update_alternate_spells);
 
 /* ### steal.c ### */
 
@@ -2908,6 +2913,7 @@ E int FDECL(xattacky, (struct monst *, struct monst *, int, int));
 E int FDECL(xmeleehity, (struct monst *, struct monst *, struct attack *, struct obj *, int, int, boolean));
 E struct attack * FDECL(getattk, (struct monst *, struct monst *, int *, int *, struct attack *, boolean, int *, int *));
 E boolean FDECL(slips_free, (struct monst *, struct monst *, struct attack *, int));
+E int FDECL(xmeleehurty, (struct monst *, struct monst *, struct attack *, struct attack *, struct obj *, boolean, int, int, int, boolean));
 E int FDECL(xgazey, (struct monst *, struct monst *, struct attack *, int));
 E void FDECL(passive_obj2, (struct monst *, struct monst *, struct obj *, struct attack *, struct attack *));
 E int FDECL(hmon2point0, (struct monst *, struct monst *, struct attack *, struct attack *, struct obj *, struct obj *, int, int, int, boolean, int, boolean, int, boolean *, boolean));
@@ -2959,7 +2965,7 @@ E boolean FDECL(get_obj_location, (struct obj *,xchar *,xchar *,int));
 E boolean FDECL(get_mon_location, (struct monst *,xchar *,xchar *,int));
 E struct monst *FDECL(get_container_location, (struct obj *obj, int *, int *));
 E struct monst *FDECL(montraits, (struct obj *,coord *));
-E struct monst *FDECL(revive, (struct obj *));
+E struct monst *FDECL(revive, (struct obj *, boolean));
 E int FDECL(unturn_dead, (struct monst *));
 E void FDECL(cancel_item, (struct obj *));
 E boolean FDECL(drain_item, (struct obj *));

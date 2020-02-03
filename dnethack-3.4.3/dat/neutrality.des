@@ -2054,10 +2054,11 @@ ALTAR:(06,01),noalign,altar
 
 #+5 means that it's Nitocris's sarcophagus.  One only please!
 CONTAINER:'#',"trapped metal box",(74,01), cursed, +5
+MONSTER:'&',"Hmnyw-Pharaoh",(74,01)
 CONTAINER:'`',"statue",(74,01),uncursed,"god",1,"the God of the Bloody Tongue"
 OBJECT:'/',"death",contained
 OBJECT:'/',"undead turning",contained
-MONSTER:'@',"coven leader",(74,02)
+MONSTER:'@',"coven leader",(69,01)
 
 CONTAINER:'`',"statue",(67,15),"god",1,"Mother Hydra"
 OBJECT:'*',"ruby",contained
@@ -2209,6 +2210,8 @@ MONSTER:'@',"apprentice witch",random
 MONSTER:'@',"witch",random
 MONSTER:'@',"witch",random
 MONSTER:'@',"witch",random
+
+MONSTER:'&',"The Good Neighbor",random
 
 #0         1         2         3         4         5         6         7
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
