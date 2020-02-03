@@ -444,9 +444,22 @@ you_regen_hp()
 		if (reglevel < 1)
 			reglevel = 1;
 
-		// healer role bonus
+		// Healer role bonus
 		if (Role_if(PM_HEALER) && !Upolyd)
 			reglevel += 10;
+		// Barbarian role bonus
+		else if (Role_if(PM_BARBARIAN) && !Upolyd)
+			reglevel *= 3;
+		// Melee roles can be slightly less concerned about taking hits
+		else if(!Upolyd && (
+			Role_if(PM_KNIGHT)
+			|| Role_if(PM_PIRATE)
+			|| Role_if(PM_SAMURAI)
+			|| Role_if(PM_VALKYRIE)
+			|| Role_if(PM_MONK)
+			|| (u.sealsActive&SEAL_BERITH)
+		))
+			reglevel *= 2;
 
 		// penalty for being itchy
 		reglevel -= u_healing_penalty();
