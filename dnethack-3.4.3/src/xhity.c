@@ -2456,12 +2456,10 @@ struct attack *attk;
 		case AT_SRPR:
 				if (!verb){
 					verb = "slash";
-					if ((attk->adtyp == AD_SHDW) || (attk->adtyp == AD_STAR) || (attk->adtyp == AD_BLUD)) {
-						ending = (attk->adtyp == AD_SHDW) ? " with bladed shadows!" :
-							(attk->adtyp == AD_STAR) ? " with a starlight rapier!" :
-							(attk->adtyp == AD_MERC) ? " with a blade of mercury!" :
-							(attk->adtyp == AD_BLUD) ? " with a blade of blood!" : "!";
-					}
+					ending = (attk->adtyp == AD_SHDW) ? " with bladed shadows!" :
+						(attk->adtyp == AD_STAR) ? " with a starlight rapier!" :
+						(attk->adtyp == AD_MERC) ? " with a blade of mercury!" :
+						(attk->adtyp == AD_BLUD) ? " with a blade of blood!" : "!";
 					if (youdef)
 						specify_you = TRUE;
 				}
@@ -2479,9 +2477,16 @@ struct attack *attk;
 		case AT_5SQR:
 		case AT_TUCH:
 			if (!verb) {
-				verb = "touch";
-				if (youdef)
-					specify_you = TRUE;
+				if (attk->adtyp == AD_SHDW){
+					verb = "slash";
+					ending = " with bladed shadows!";
+					if (youdef)
+						specify_you = TRUE;
+				} else {
+					verb = "touch";
+					if (youdef)
+						specify_you = TRUE;
+				}
 			}
 			/* print the message */
 			/* weeping angels are present tense "The weeping angel is touching foo" only if you are neither magr nor mdef */
@@ -11163,8 +11168,12 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 			unarmed_punch = TRUE;
 		else if (attk->aatyp == AT_KICK && !thrown)	/* monsdmg == 0 for a player's basic kick, monsdmg == -1 for a player's clumsy kick -- different from a horse's kick! */
 			unarmed_kick = TRUE;
-		else if ((attk->aatyp == AT_SRPR || attk->adtyp == AD_MERC) && !thrown)
+		else if (attk->adtyp == AD_MERC && !thrown)
 			fake_valid_weapon_attack = TRUE;
+		else if(attk->aatyp == AT_SRPR){
+			natural_strike = TRUE;
+			fake_valid_weapon_attack = TRUE;
+		}
 		else
 			natural_strike = TRUE;
 	}
@@ -14044,6 +14053,12 @@ boolean endofchain;			/* if the passive is occuring at the end of aggressor's at
 			case AD_SHDW:
 				if (youagr) {
 					pline("Its bladed shadow falls on you!");
+				}
+				else if (youdef) {
+					pline("Your bladed shadow falls on %s!", mon_nam(magr));
+				}
+				else if (vis) {
+					pline("%s's bladed shadow falls on %s!", Monnam(mdef), mon_nam(magr));
 				}
 				newres = xdamagey(mdef, magr, passive, dmg, FALSE);
 				if (newres&MM_DEF_DIED)
