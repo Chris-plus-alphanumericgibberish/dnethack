@@ -319,6 +319,10 @@ void
 check_caitiff(mtmp)
 struct monst *mtmp;
 {
+	//Animals and mindless creatures are always considered fair game
+	if(mindless_mon(mtmp) || is_animal(mtmp->data))
+		return;
+	
 	if (Role_if(PM_KNIGHT) && u.ualign.type == A_LAWFUL &&
 	    (!mtmp->mcanmove || !mtmp->mnotlaugh || mtmp->msleeping ||
 		(mtmp->mflee && mtmp->data != &mons[PM_BANDERSNATCH] && !mtmp->mavenge))){
