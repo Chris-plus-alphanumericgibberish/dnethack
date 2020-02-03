@@ -1449,12 +1449,13 @@ register struct monst *mtmp;
 					if(rn2(3)){
 						otmp = mksobj(ELVEN_SICKLE, TRUE, FALSE);
 						otmp->obj_material = METAL;
-						otmp->objsize = MZ_LARGE;
+						otmp->objsize = MZ_HUGE;
 						fix_object(otmp);
 						(void) mpickobj(mtmp, otmp);
 					} else if(rn2(3)){
 						otmp = mksobj(ELVEN_DAGGER, TRUE, FALSE);
 						otmp->obj_material = METAL;
+						otmp->objsize = MZ_LARGE;
 						fix_object(otmp);
 						(void) mpickobj(mtmp, otmp);
 						
