@@ -25,6 +25,7 @@ STATIC_DCL void NDECL(do_positionbar);
 STATIC_DCL void NDECL(androidUpkeep);
 STATIC_DCL void NDECL(printMons);
 STATIC_DCL void NDECL(printDPR);
+STATIC_DCL void NDECL(printBodies);
 STATIC_DCL int NDECL(do_inheritor_menu);
 STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
 STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
@@ -725,6 +726,7 @@ moveloop()
 	}
 	printMons();
 	printDPR();
+	printBodies();
     for(;;) {/////////////////////////MAIN LOOP/////////////////////////////////
     hpDiff = u.uhp;
 	get_nh_event();
@@ -2627,6 +2629,27 @@ get_realtime(void)
     return curtime;
 }
 #endif /* REALTIME_ON_BOTL || RECORD_REALTIME */
+
+STATIC_DCL
+void
+printBodies(){
+	FILE *rfile;
+	register int i, j;
+	char pbuf[BUFSZ];
+	struct permonst *ptr;
+	rfile = fopen_datafile("MonBodies.tab", "w", SCOREPREFIX);
+	if (rfile) {
+		Sprintf(pbuf,"Number\tName\tclass\thumanoid\tanimaloid\tserpentine\tcentauroid\tnaganoid\tleggedserpent\thead\thands\tfeet\tboots\teyes\n");
+		fprintf(rfile, pbuf);
+		for(j=0;j<NUMMONS;j++){
+			ptr = &mons[j];
+			pbuf[0] = 0;// n	nm	let	hm	anm	srp	cen	ng	lgs	hd	hn	ft	bt  ey
+			Sprintf(pbuf,"%d	%s	%d	%d	%d	%d	%d	%d	%d	%d	%d	%d	%d	%d\n", 
+					j, mons[j].mname, mons[j].mlet,humanoid(ptr),animaloid(ptr),serpentine(ptr),centauroid(ptr),snakemanoid(ptr),leggedserpent(ptr),has_head(ptr),!nohands(ptr),!noboots(ptr),can_wear_boots(ptr),haseyes(ptr));
+			fprintf(rfile, pbuf);
+		}
+	}
+}
 
 STATIC_DCL
 void
