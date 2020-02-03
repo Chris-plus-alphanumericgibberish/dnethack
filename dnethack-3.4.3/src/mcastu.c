@@ -3216,7 +3216,7 @@ ray:
 	}
 	else{
 		Your("body is covered with deadly wounds!");
-		dmg = max(Upolyd ? u.mh - 5 : u.uhp -5, 0);
+		dmg = max(Upolyd ? (u.mh - 5) : (u.uhp -5), 0);
 	}
 	stop_occupation();
 	break;
