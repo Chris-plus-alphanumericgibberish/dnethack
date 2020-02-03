@@ -3851,7 +3851,11 @@ spiriteffects(power, atme)
 				if(!DEADMONSTER(mon) && mon_can_see_you(mon)) // and mon_can_see_you(mon)?
 					setmangry(mon);
 				ttmp2 = maketrap(mon->mx, mon->my, WEB);
-				if (ttmp2 && !DEADMONSTER(mon)) mintrap(mon);
+				if (ttmp2){
+					ttmp2->tseen = TRUE;
+					if(!DEADMONSTER(mon)) mintrap(mon);
+					else newsym(mon->mx, mon->my);
+				}
 		}break;
 		case PWR_WEAVE_BLACK_WEB:
 		    pline("The poison shadow of the Black Web flows in your wake.");
