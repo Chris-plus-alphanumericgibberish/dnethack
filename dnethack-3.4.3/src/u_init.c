@@ -833,6 +833,7 @@ static const struct def_skill Skill_Ana[] = {
     { P_WHIP, P_SKILLED },		 { P_BOOMERANG, P_SKILLED },
     { P_ATTACK_SPELL, P_SKILLED },	{ P_HEALING_SPELL, P_SKILLED },
     { P_DIVINATION_SPELL, P_SKILLED},	{ P_MATTER_SPELL, P_SKILLED},
+	{ P_ENCHANTMENT_SPELL, P_BASIC },
 #ifdef STEED
     { P_RIDING, P_BASIC },
 #endif
@@ -992,6 +993,7 @@ static const struct def_skill Skill_Elf_Music[] = {
 };
 #endif
 static const struct def_skill Skill_Elf_Ana[] = {
+    { P_ENCHANTMENT_SPELL, P_EXPERT },
     { P_MARTIAL_ARTS, P_GRAND_MASTER },
     { P_NONE, 0 }
 };
