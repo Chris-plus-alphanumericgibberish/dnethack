@@ -854,7 +854,7 @@ const char * haluWard[] =  {
 	"a hand of Eris", /* Discordian */
 	"a butterfly of death and rebirth",
 	"an ichthus",	"a Cross", /* Christian*/
-	"a wheel with eight spokes", /* Budhism */
+	"a wheel with eight spokes", "an endless knot", /* Budhism */
 	"a fish with legs",	"a fat fish",	"a fish with tentacles, legs, and wings",
 		/* ichthus parodies/derivatives: darwin, buddha, and Cthulhu. */
 	"an Eye of Horus", /*...*/
