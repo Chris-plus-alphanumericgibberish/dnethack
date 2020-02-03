@@ -1914,14 +1914,14 @@ get_description_of_damage_type(uchar id)
 	case AD_WET: return "splash with water";
 	case AD_LETHE: return "splash with lethe water";
 	case AD_BIST: return "bisecting beak";
-	case AD_CNCL: return "cancelation";
+	case AD_CNCL: return "cancellation";
 	case AD_DEAD: return "deadly gaze";
 	case AD_SUCK: return "sucks you apart";
 	case AD_MALK: return "immobilize and shock";
 	case AD_UVUU: return "splatters your head";
 	case AD_ABDC: return "abduction teleportation";
 	case AD_KAOS: return "spawn Chaos";
-	case AD_LSEX: return "seduces";
+	case AD_LSEX: return "deadly seduction";
 	case AD_HLBD: return "creates demons";
 	case AD_SPNL: return "spawns Leviathan or Levistus";
 	case AD_MIST: return "migo mist projector";
@@ -1930,8 +1930,8 @@ get_description_of_damage_type(uchar id)
 	case AD_PSON: return "psionic powers";
 	case AD_GROW: return "grows brethren on death";
 	case AD_SOUL: return "strengthens brethren on death";
-	case AD_TENT: return "LarienTelrunya's bane";
-	case AD_JAILER: return "sets Lucifer to apear and drops third key of law when killed";
+	case AD_TENT: return "deadly tentacles (LarienTelrunya's bane)";
+	case AD_JAILER: return "sets Lucifer to appear and drops third key of law when killed";
 	case AD_AXUS: return "fire-shock-drain-cold combo";
 	case AD_UNKNWN: return "Priest of an unknown God";
 	case AD_SOLR: return "silver arrows";
