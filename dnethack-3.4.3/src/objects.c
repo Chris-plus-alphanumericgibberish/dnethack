@@ -1087,7 +1087,7 @@ WEPTOOL_MATSPEC("double lightsaber",  "long grip", /*Needs encyc entry*//*Needs 
 WEPTOOL_MATSPEC("grappling hook", "hook",
 	0, MZ_MEDIUM, 0, 0,  4, 30,  50,  2,  6,  0,   WHACK,        P_FLAIL, IRON, UNIDED, HI_METAL),
 WEPTOOL("shepherd's crook", "bent staff",
-	0,   MZ_HUGE, 0, 0, 1,  30,   5,  6,  4,  0,   WHACK, P_QUARTERSTAFF, WOOD, HI_WOOD),
+	0,   MZ_LARGE, 0, 0, 1,  30,   5,  6,  4,  0,   WHACK, P_QUARTERSTAFF, WOOD, HI_WOOD),
 /* 3.4.1: unicorn horn left classified as "magic" */
 WEPTOOL("unicorn horn", (char *)0,
 	1, MZ_MEDIUM, 1, 0, 0,  20, 100, 12, 12,  0,  PIERCE, P_UNICORN_HORN, BONE, CLR_WHITE),
