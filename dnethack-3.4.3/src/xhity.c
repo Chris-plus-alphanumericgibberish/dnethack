@@ -11398,12 +11398,13 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 			(weapon_type(weapon) != P_NONE) && (P_SKILL(weapon_type(weapon)) >= P_SKILLED) &&	// must be Skilled+
 			(!u.twoweap)	// cannot be twoweaponing
 			) ||
+			// Lightsabers
+			ulightsaberhit ||
 			// Artifacts
 			(weapon && arti_shattering(weapon)) ||
 			// Green Dragon Crescent Blade
 			(weapon && weapon == uwep && weapon->oartifact == ART_GREEN_DRAGON_CRESCENT_BLAD && (dieroll <= 2 + P_SKILL(weapon_type(weapon))))
-			)
-		{
+		){
 			shattering_strike = TRUE;
 		}
 	}
