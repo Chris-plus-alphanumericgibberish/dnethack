@@ -2918,18 +2918,17 @@ struct obj *weapon;
 							if(isok(sx,sy) && m_at(sx,sy)) mcount++;
 						}
 					}
-					if(wep_type != P_SABER) bonus += -20;
 					switch(min(P_SKILL(FFORM_MAKASHI), P_SKILL(wep_type))){
 						case P_BASIC:
 							if(wep_type == P_SABER) bonus += ((ACURR(A_DEX)+3)/3 - 4);
 							if(mcount) bonus -= (mcount-1) * 5;
 						break;
 						case P_SKILLED:
-							if(wep_type == P_SABER) bonus += 2*((ACURR(A_DEX)+3)/3 - 4);
+							if(wep_type == P_SABER) bonus += (2*(ACURR(A_DEX)+3)/3 - 4);
 							if(mcount) bonus -= (mcount-1) * 2;
 						break;
 						case P_EXPERT:
-							if(wep_type == P_SABER) bonus += 3*((ACURR(A_DEX)+3)/3 - 4);
+							if(wep_type == P_SABER) bonus += ACURR(A_DEX) - 1;
 							if(mcount) bonus -= (mcount-1);
 						break;
 					}
