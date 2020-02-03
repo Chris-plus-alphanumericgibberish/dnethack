@@ -1922,6 +1922,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (Invulnerable) you_are("invulnerable");
 	if (Drain_resistance) you_are("level-drain resistant");
 	if (Antimagic) you_are("magic-protected");
+	if (Nullmagic) you_are("shrouded in anti-magic");
 	if (Stone_resistance)
 		you_are("petrification resistant");
 	if (Poison_resistance) you_are("poison resistant");
@@ -1931,16 +1932,165 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (u.uedibility || u.sealsActive&SEAL_BUER) you_can("recognize detrimental food");
 	if ( (ublindf && ublindf->otyp == R_LYEHIAN_FACEPLATE && !ublindf->cursed) || 
 		 (uarmc && uarmc->otyp == OILSKIN_CLOAK && !uarmc->cursed) ||
-		 (u.sealsActive&SEAL_ENKI)
+		 (u.sealsActive&SEAL_ENKI) || (u.ufirst_sky)
 	) you_are("waterproof");
 	Sprintf(buf, "a drunkard score of %d", u.udrunken);
 	if(u.udrunken >= u.ulevel*3) Sprintf(eos(buf), ", the maximum for an adventurer of your level");
 	you_have(buf);
+	
+	/*** Thoughts ***/
+	if (active_glyph(CLOCKWISE_METAMORPHOSIS)){
+		enl_msg("A clockwise gyre ", "increases", "increased", " your HP by 30%");
+	}
+	if (active_glyph(ANTI_CLOCKWISE_METAMORPHOSIS)){
+		enl_msg("An anti-clockwise gyre ", "increases", "increased", " your speed by 25%");
+	}
+	if (active_glyph(ARCANE_BULWARK)){
+		enl_msg("A sparkling lake ", "shields", "shielded", " you from magic");
+	}
+	if (active_glyph(DISSIPATING_BULWARK)){
+		enl_msg("A pure lake ", "shields", "shielded", " you from electricity");
+	}
+	if (active_glyph(SMOLDERING_BULWARK)){
+		enl_msg("A still lake ", "shields", "shielded", " you from fire");
+	}
+	if (active_glyph(FROSTED_BULWARK)){
+		enl_msg("A calm lake ", "shields", "shielded", " you from cold");
+	}
+	if (active_glyph(BLOOD_RAPTURE)){
+		enl_msg("A mist of blood ", "causes", "caused", " sneak attacks to heal you by 30 HP");
+	}
+	if (active_glyph(CLAWMARK)){
+		enl_msg("The clawmarks ", "strengthen", "strengthened", " your sneak attacks by 30%");
+	}
+	if (active_glyph(CLEAR_DEEPS)){
+		enl_msg("The deep blue waters ", "protect", "protected", " you from poison");
+	}
+	if (active_glyph(DEEP_SEA)){
+		enl_msg("The pitch-black waters ", "reduce", "reduced", " physical damage by 3");
+	}
+	if (active_glyph(COMMUNION)){
+		enl_msg("The strange minister's prayer ", "increases", "increased", " your carry capacity by 25%");
+	}
+	if (active_glyph(CORRUPTION)){
+		enl_msg("The tears of blood ", "heal", "healed", " you when below 30% HP");
+	}
+	if (active_glyph(EYE_THOUGHT)){
+		enl_msg("The eyes inside your head ", "doubles", "doubled", " the number of death-drops");
+	}
+	if (active_glyph(FORMLESS_VOICE)){
+		enl_msg("The great voice ", "increases", "increased", " your magic energy by 30%");
+	}
+	if (active_glyph(GUIDANCE)){
+		enl_msg("The dancing sprites ", "lets", "let", " you heal by attacking those who attacked you");
+	}
+	if (active_glyph(IMPURITY)){
+		enl_msg("The impure millipedes ", "reduce", "reduced", " physical damage for your companions by 3");
+	}
+	if (active_glyph(MOON)){
+		enl_msg("The sympathetic moon ", "increases", "increased", " your earned experience by 30%");
+	}
+	if (active_glyph(WRITHE)){
+		enl_msg("The subtle mucus in your brain ", "causes", "caused", " sneak attacks to restore 30 energy");
+	}
+	if (active_glyph(RADIANCE)){
+		enl_msg("The golden pyramid ", "increases", "increased", " magical healing by 30%");
+	}
+	
 	/*** Troubles ***/
 	Sprintf(buf, "%d sanity points", u.usanity);
 	you_have(buf);
 	Sprintf(buf, "%d insight points", u.uinsight);
 	you_have(buf);
+	
+	/*** Madnesses ***/
+	if(u.usanity < 100){
+		if (u.umadness&MAD_DELUSIONS){
+			you_have("a tendency to hallucinate, obscuring some monsters true forms");
+		}
+		if(u.usanity < 80){
+			enl_msg("Some monsters ", "will change", "changed", " forms randomly");
+		}
+		if (u.umadness&MAD_SANCTITY){
+			enl_msg("Sometimes, you ", "will fail", "failed", " to attack female humanoids and centaurs");
+			enl_msg("Sometimes, female humanoids and centaurs ", "will take", "took", " reduced damage from your magic");
+		}
+		if (u.umadness&MAD_GLUTTONY){
+			you_have("increased hunger");
+		}
+		if (u.umadness&MAD_SPORES&& !Race_if(PM_ANDROID) && !Race_if(PM_CLOCKWORK_AUTOMATON)){
+			enl_msg("You ", "will periodically suffer", "periodically suffered", " hallucinations, confusion, stunning, damage, and ability score drain");
+		}
+		if (u.umadness&MAD_FRIGOPHOBIA){
+			enl_msg("Sometimes, you ", "will panic and lose turns", "panicked and lost turns", " after taking cold damage or moving over ice");
+		}
+		if (u.umadness&MAD_CANNIBALISM){
+			enl_msg("Sometimes, you ", "will vomit", "vomited", " after eating vegetarian or vegan food");
+			enl_msg("Sometimes, you ", "will not be", "weren't", " warned before committing cannibalism");
+		}
+		if (u.umadness&MAD_RAGE){
+			you_have("reduced AC, reduced spell success, and increased damage");
+		}
+		if (u.umadness&MAD_ARGENT_SHEEN){
+			enl_msg("Sometimes, monsters ", "will panic and lose turns", "panicked and lost turns", " will gain reflection for a turn");
+			enl_msg("Sometimes, monsters ", "will take", "took", " reduced damage from your magic");
+			enl_msg("Sometimes, you ", "will stop", "stopped", " to admire yourself in mirrors, losing turns");
+			enl_msg("You ", "take", "took", " increased damage from male humanoids and centaurs");
+		}
+		if (u.umadness&MAD_SUICIDAL){
+			enl_msg("Sometimes, you ", "will have", "had", " greatly reduced AC");
+			enl_msg("You ", "take", "took", " increased damage from all attacks");
+		}
+		if (u.umadness&MAD_NUDIST){
+			enl_msg("You ", "suffer", "suffered", " reduced AC, DR, accuracy, healing, power regeneration, and spell success for each piece of equipment.");
+		}
+		if (u.umadness&MAD_OPHIDIOPHOBIA){
+			enl_msg("Sometimes, you ", "will fail", "failed", " to attack serpentine monsters");
+			enl_msg("Sometimes, you ", "will panic and lose turns", "panicked and lost turns", " after being poisoned");
+			enl_msg("You ", "take", "took", " increased damage from serpentine monsters");
+		}
+		if (u.umadness&MAD_ARACHNOPHOBIA){
+			//Note: Arachnophobia == women and spiders because it's the madness Lolth inflicts.
+			enl_msg("Sometimes, female humanoids, centaurs, and spiders ", "will take", "took", " reduced damage from your magic");
+			enl_msg("Sometimes, you ", "will fail", "failed", " to attack female humanoids, centaurs, and spiders");
+			enl_msg("You ", "take", "took", " increased damage from spiders and from female humanoids and centaurs");
+		}
+		if (u.umadness&MAD_ENTOMOPHOBIA){
+			enl_msg("Sometimes, you ", "will fail", "failed", " to attack insects and arachnids");
+			enl_msg("You ", "take", "took", " increased damage from insects and arachnids");
+		}
+		if (u.umadness&MAD_THALASSOPHOBIA){
+			enl_msg("Sometimes, you ", "will fail", "failed", " to cause much harm to aquatic monsters");
+			enl_msg("Sometimes, aquatic monsters ", "will take", "took", " reduced damage from your magic");
+			enl_msg("Sometimes, you ", "will fail", "failed", " to attack aquatic monsters");
+			enl_msg("You ", "take", "took", " increased damage from aquatic monsters");
+			enl_msg("Sometimes, you ", "will panic and lose turns", "panicked and lost turns", " after being attacked by aquatic monsters");
+		}
+		if (u.umadness&MAD_PARANOIA){
+			//Severe because it triggers much more frequently than other madnesses
+			enl_msg("Sometimes, you ", "will attack", "attacked", " monsters' hallucinatory twins instead");
+			you_have("a hard time discerning the location of unseen monsters");
+		}
+		if (u.umadness&MAD_TALONS){
+			enl_msg("Sometimes, you ", "will panic and lose turns", "panicked and lost turns", " losing or releasing an item");
+		}
+		if (u.umadness&MAD_COLD_NIGHT){
+			enl_msg("Sometimes, you ", "slip", "slipped", " nonexistent ice");
+			enl_msg("Sometimes, the air ", "will freeze", "froze", " solid, causing you to suffocate and destroying your potions");
+		}
+		if (u.umadness&MAD_OVERLORD){
+			enl_msg("Sometimes, you ", "feel", "felt", " the burning gaze of the Overlord, weakening you and burning your possessions");
+		}
+		if (u.umadness&MAD_DREAMS){
+			enl_msg("Sometimes, you ", "pass out", "passed out", " and dream of strange cities, suffering damage, stunning, and reduced sanity");
+		}
+		if (u.umadness&MAD_HELMINTHOPHOBIA){
+			enl_msg("Sometimes, you ", "will fail", "failed", " to attack worms and tentacled monsters");
+			enl_msg("You ", "take", "took", " increased damage from worms and tentacles");
+		}
+	}
+	
+	/*** More Troubles ***/
 	if (final) {
 		if (Hallucination) you_are("hallucinating");
 		if (Stunned) you_are("stunned");
@@ -2038,7 +2188,6 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (Clairvoyant) you_are("clairvoyant");
 	if (Infravision) you_have("infravision");
 	if (Detect_monsters) you_are("sensing the presence of monsters");
-	if (u.umconf) you_are("going to confuse monsters");
 
 	/*** Appearance and behavior ***/
 #ifdef WIZARD
@@ -2165,6 +2314,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	if (Lifesaved)
 		enl_msg("Your life ", "will be", "would have been", " saved");
 	if (u.twoweap) you_are("wielding two weapons at once");
+	if (u.umconf) you_are("going to confuse monsters");
 
 	/*** Miscellany ***/
 	if (Spellboost) you_have("augmented spellcasting");
@@ -2577,6 +2727,7 @@ int final;
 	if (Invulnerable) dump(youwere, "invulnerable");
 	if (Drain_resistance) dump(youwere, "level-drain resistant");
 	if (Antimagic) dump(youwere, "magic-protected");
+	if (Nullmagic) dump(youwere, "shrouded in anti-magic");
 	if (Stone_resistance)
 		dump(youwere, "petrification resistant");
 	if (Poison_resistance) dump(youwere, "poison resistant");
@@ -2586,10 +2737,144 @@ int final;
 	if (u.uedibility || u.sealsActive&SEAL_BUER) dump(youcould, "recognize detrimental food");
 	if ( (ublindf && ublindf->otyp == R_LYEHIAN_FACEPLATE && !ublindf->cursed) || 
 		 (uarmc && uarmc->otyp == OILSKIN_CLOAK && !uarmc->cursed) ||
-		 (u.sealsActive&SEAL_ENKI)
+		 (u.sealsActive&SEAL_ENKI) || (u.ufirst_sky)
 	) dump(youwere, "waterproof");
 
+	/*** Thoughts ***/
+	if (active_glyph(CLOCKWISE_METAMORPHOSIS))
+		dump("  ", "A clockwise gyre increased your HP");
+	if (active_glyph(ANTI_CLOCKWISE_METAMORPHOSIS))
+		dump("  ", "An anti-clockwise gyre increased your speed");
+	if (active_glyph(ARCANE_BULWARK))
+		dump("  ", "A sparkling lake shielded you from magic");
+	if (active_glyph(DISSIPATING_BULWARK))
+		dump("  ", "A pure lake shielded you from electricity");
+	if (active_glyph(SMOLDERING_BULWARK))
+		dump("  ", "A still lake shielded you from fire");
+	if (active_glyph(FROSTED_BULWARK))
+		dump("  ", "A calm lake shielded you from cold");
+	if (active_glyph(BLOOD_RAPTURE))
+		dump("  ", "A mist of blood caused sneak attacks to heal you");
+	if (active_glyph(CLAWMARK))
+		dump("  ", "The clawmarks strengthened your sneak attacks");
+	if (active_glyph(CLEAR_DEEPS))
+		dump("  ", "The deep blue waters protected you from poison");
+	if (active_glyph(DEEP_SEA))
+		dump("  ", "The pitch-black waters reduced physical damage");
+	if (active_glyph(COMMUNION))
+		dump("  ", "The strange minister lifted your burdens");
+	if (active_glyph(CORRUPTION))
+		dump("  ", "The tears of blood healed you when you were badly injured");
+	if (active_glyph(EYE_THOUGHT))
+		dump("  ", "The eyes inside your head helped find items inside your foes");
+	if (active_glyph(FORMLESS_VOICE))
+		dump("  ", "The great voice increased your magic energy");
+	if (active_glyph(GUIDANCE))
+		dump("  ", "The dancing sprites let you heal by attacking those who attacked you");
+	if (active_glyph(IMPURITY))
+		dump("  ", "The impure millipedes reduced physical damage for your companions");
+	if (active_glyph(MOON))
+		dump("  ", "The sympathetic moon increased your earned experience");
+	if (active_glyph(WRITHE))
+		dump("  ", "The subtle mucus in your brain caused sneak attacks to restore your energy");
+	if (active_glyph(RADIANCE))
+		dump("  ", "The golden pyramid increased your healing");
+	
 	/*** Troubles ***/
+	if(u.usanity < 100)
+		dump("  ", "You were a little touched in the head");
+	else if(u.usanity < 50)
+		dump("  ", "You sometimes struggled with insanity");
+	else if(u.usanity < 25)
+		dump("  ", "You frequently struggled with insanity");
+	else if(u.usanity < 10)
+		dump("  ", "You constantly struggled with insanity");
+	else if(u.usanity == 0)
+		dump("  ", "You were quite insane");
+	
+	if(u.uinsight > 40)
+		dump("  ", "You frequently saw things you wished you hadn't");
+	else if(u.uinsight > 20)
+		dump("  ", "You often saw things you wished you hadn't");
+	else if(u.uinsight > 1)
+		dump("  ", "You occasionally saw things you wished you hadn't");
+	
+	/*** Madnesses ***/
+	if(u.usanity < 100){
+		if (u.umadness&MAD_DELUSIONS){
+			dump("  ", "You had a tendency to hallucinate");
+		}
+		if(u.usanity < 80){
+			if (u.umadness&MAD_REAL_DELUSIONS){
+				if(u.umadness&MAD_DELUSIONS)
+					dump("  ", "...at least, you THOUGHT you were hallucinating...");
+				else
+					dump("  ", "You had a tendency to hallucinate... you thought");
+			}
+		}
+		if (u.umadness&MAD_SANCTITY){
+			dump("  ", "You had a tendency to treat women as delicate and holy beings who shouldn't be harmed");
+		}
+		if (u.umadness&MAD_GLUTTONY){
+			dump("  ", "You had a mad hunger");
+		}
+		if (u.umadness&MAD_SPORES && !Race_if(PM_ANDROID) && !Race_if(PM_CLOCKWORK_AUTOMATON)){
+			//Note: Race_if is correct because it works on your original brain (because magic)
+			dump("  ", "Her spores ate your brain.");
+		}
+		if (u.umadness&MAD_FRIGOPHOBIA){
+			dump("  ", "You had an irrational fear of the cold");
+		}
+		if (u.umadness&MAD_CANNIBALISM){
+			dump("  ", "You had a mad desire to consume living flesh, even the flesh of your own kind");
+		}
+		if (u.umadness&MAD_RAGE){
+			dump("  ", "You had a burning, irrational rage");
+		}
+		if (u.umadness&MAD_ARGENT_SHEEN){
+			dump("  ", "The world was full of mirrors, and you couldn't help but admire yourself.");
+		}
+		if (u.umadness&MAD_SUICIDAL){
+			dump("  ", "You had a tendency towards suicidal behavior (now satisfied)");
+		}
+		if (u.umadness&MAD_NUDIST){
+			dump("  ", "You had an irrational dislike of clothing");
+		}
+		if (u.umadness&MAD_OPHIDIOPHOBIA){
+			dump("  ", "You had an irrational fear of snakes");
+		}
+		if (u.umadness&MAD_ARACHNOPHOBIA){
+			//Note: Arachnophobia == women and spiders because it's the madness Lolth inflicts.
+			dump("  ", "You had an irrational fear of spiders");
+			dump("  ", "You had an irrational fear of women");
+		}
+		if (u.umadness&MAD_ENTOMOPHOBIA){
+			dump("  ", "You had an irrational fear of insects");
+		}
+		if (u.umadness&MAD_THALASSOPHOBIA){
+			dump("  ", "You had an irrational fear of sea-monsters");
+		}
+		if (u.umadness&MAD_PARANOIA){
+			//Severe because it triggers much more frequently than other madnesses
+			dump("  ", "You had a severe tendency towards paranoia");
+		}
+		if (u.umadness&MAD_TALONS){
+			dump("  ", "You had an irrational fear of loss");
+		}
+		if (u.umadness&MAD_COLD_NIGHT){
+			dump("  ", "It's even colder here");
+		}
+		if (u.umadness&MAD_OVERLORD){
+			dump("  ", "He can see you even clearer here");
+		}
+		if (u.umadness&MAD_DREAMS){
+			dump("  ", "You dreamt of strange cities");
+		}
+		if (u.umadness&MAD_HELMINTHOPHOBIA){
+			dump("  ", "You had an irrational fear of squirming things");
+		}
+	}
+	/*** More Troubles ***/
 	if (Halluc_resistance) 	dump("  ", "You resisted hallucinations");
 	if (Hallucination) dump(youwere, "hallucinating");
 	if (Stunned) dump(youwere, "stunned");
@@ -2665,7 +2950,6 @@ int final;
 	if (Infravision) dump(youhad, "infravision");
 	if (Detect_monsters)
 	  dump(youwere, "sensing the presence of monsters");
-	if (u.umconf) dump(youwere, "going to confuse monsters");
 
 	/*** Appearance and behavior ***/
 	Sprintf(buf, "a carrying capacity of %d remaining", -1*inv_weight());
@@ -2782,6 +3066,7 @@ int final;
 	if (Lifesaved)
 		dump("  ", "Your life would have been saved");
 	if (u.twoweap) dump(youwere, "wielding two weapons at once");
+	if (u.umconf) dump(youwere, "going to confuse monsters");
 
 	/*** Miscellany ***/
 	if (Luck) {
@@ -2885,10 +3170,21 @@ resistances_enlightenment()
 	if (u.uinwater){
 		if(ublindf && ublindf->otyp == R_LYEHIAN_FACEPLATE && !ublindf->cursed)
 			putstr(en_win, 0, "Your faceplate wraps you in a waterproof field.");
+		else if(u.ufirst_sky)
+			putstr(en_win, 0, "The water is separated from you.");
 		else if(uarmc && (uarmc->otyp == OILSKIN_CLOAK || uarmc->greased) && !uarmc->cursed)
 			putstr(en_win, 0, "Your waterproof cloak protects your gear.");
 		else if(u.sealsActive&SEAL_ENKI)
 			putstr(en_win, 0, "YOU'RE soaked, but the water doesn't wet your gear.");
+	}
+	
+	if(Nullmagic){
+		int i;
+		update_alternate_spells();
+		for (i = 0; i < MAXSPELL && spellid(i) != NO_SPELL; i++) {
+			putstr(en_win, 0, "Your magic is blocked.");
+			break;
+		}
 	}
 /*
 	if (Sick_resistance) you_are("immune to sickness");
@@ -2922,14 +3218,16 @@ resistances_enlightenment()
 	if (active_glyph(RADIANCE)) putstr(en_win, 0, "Your mind is impaled on a golden pyramid.");
 	
 	/*** Troubles ***/
-	if(u.usanity < 50)
-		putstr(en_win, 0, "You sometimes hallucinate.");
+	if(u.usanity < 100)
+		putstr(en_win, 0, "You are a little touched in the head.");
+	else if(u.usanity < 50)
+		putstr(en_win, 0, "You sometimes struggle with insanity.");
 	else if(u.usanity < 25)
-		putstr(en_win, 0, "You often hallucinate.");
+		putstr(en_win, 0, "You frequently struggle with insanity.");
 	else if(u.usanity < 10)
-		putstr(en_win, 0, "You hallucinate frequently`.");
+		putstr(en_win, 0, "You constantly struggle with insanity.");
 	else if(u.usanity == 0)
-		putstr(en_win, 0, "You are in a constant delusional state.");
+		putstr(en_win, 0, "You are quite insane.");
 	
 	if(u.uinsight > 40)
 		putstr(en_win, 0, "You frequently see things you wish you hadn't.");
@@ -2938,6 +3236,82 @@ resistances_enlightenment()
 	else if(u.uinsight > 1)
 		putstr(en_win, 0, "You occasionally see things you wish you hadn't.");
 	
+	/*** Madnesses ***/
+	if(u.usanity < 100){
+		if (u.umadness&MAD_DELUSIONS){
+			putstr(en_win, 0, "You have a tendency to hallucinate");
+		}
+		if(u.usanity < 80){
+			if (u.umadness&MAD_REAL_DELUSIONS){
+				if(u.umadness&MAD_DELUSIONS)
+					putstr(en_win, 0, "...at least, you THINK you're hallucinating....");
+				else
+					putstr(en_win, 0, "You have a tendency to hallucinate... you think");
+			}
+		}
+		if (u.umadness&MAD_SANCTITY){
+			putstr(en_win, 0, "You have a tendency to treat women as delicate and holy beings who shouldn't be harmed");
+		}
+		if (u.umadness&MAD_GLUTTONY){
+			putstr(en_win, 0, "You have a mad hunger");
+		}
+		if (u.umadness&MAD_SPORES && !Race_if(PM_ANDROID) && !Race_if(PM_CLOCKWORK_AUTOMATON)){
+			//Note: Race_if is correct because it works on your original brain (because magic)
+			putstr(en_win, 0, "She's eating your brain.");
+		}
+		if (u.umadness&MAD_FRIGOPHOBIA){
+			putstr(en_win, 0, "You have an irrational fear of the cold");
+		}
+		if (u.umadness&MAD_CANNIBALISM){
+			putstr(en_win, 0, "You have a mad desire to consume living flesh, even the flesh of your own kind");
+		}
+		if (u.umadness&MAD_RAGE){
+			putstr(en_win, 0, "You have a burning, irrational rage");
+		}
+		if (u.umadness&MAD_ARGENT_SHEEN){
+			putstr(en_win, 0, "The world is full of mirrors, and you can't help but admire yourself.");
+		}
+		if (u.umadness&MAD_SUICIDAL){
+			putstr(en_win, 0, "You have a tendency towards suicidal behavior");
+		}
+		if (u.umadness&MAD_NUDIST){
+			putstr(en_win, 0, "You have an irrational dislike of clothing.");
+		}
+		if (u.umadness&MAD_OPHIDIOPHOBIA){
+			putstr(en_win, 0, "You have an irrational fear of snakes.");
+		}
+		if (u.umadness&MAD_ARACHNOPHOBIA){
+			//Note: Arachnophobia == women and spiders because it's the madness Lolth inflicts.
+			putstr(en_win, 0, "You have an irrational fear of spiders.");
+			putstr(en_win, 0, "You have an irrational fear of women.");
+		}
+		if (u.umadness&MAD_ENTOMOPHOBIA){
+			putstr(en_win, 0, "You have an irrational fear of insects.");
+		}
+		if (u.umadness&MAD_THALASSOPHOBIA){
+			putstr(en_win, 0, "You have an irrational fear of sea-monsters.");
+		}
+		if (u.umadness&MAD_PARANOIA){
+			//Severe because it triggers much more frequently than other madnesses
+			putstr(en_win, 0, "You have a severe tendency towards paranoia.");
+		}
+		if (u.umadness&MAD_TALONS){
+			putstr(en_win, 0, "You have an irrational fear of loss.");
+		}
+		if (u.umadness&MAD_COLD_NIGHT){
+			putstr(en_win, 0, "It's so cold.");
+		}
+		if (u.umadness&MAD_OVERLORD){
+			putstr(en_win, 0, "He can see you.");
+		}
+		if (u.umadness&MAD_DREAMS){
+			putstr(en_win, 0, "You dream of strange cities.");
+		}
+		if (u.umadness&MAD_HELMINTHOPHOBIA){
+			putstr(en_win, 0, "You have an irrational fear of squirming things.");
+		}
+	}
+	/*** More Troubles ***/
 	if(u_healing_penalty()) putstr(en_win, 0, "You feel itchy.");
 	if (Wounded_legs
 #ifdef STEED
@@ -3362,7 +3736,7 @@ signs_enlightenment()
 	}
 	if(u.sealsActive&SEAL_ORTHOS && !NoBInvis){
 		if(uarmc && uarmc->otyp != MUMMY_WRAPPING){
-			putstr(en_win, 0, "Your cloak blows in a nonexistant wind.");
+			putstr(en_win, 0, "Your cloak blows in a nonexistent wind.");
 			message = TRUE;
 		}
 	}
@@ -3678,7 +4052,7 @@ signs_mirror()
 	}
 	if(u.sealsActive&SEAL_ORTHOS && !NoBInvis){
 		if(uarmc && uarmc->otyp != MUMMY_WRAPPING){
-			putstr(en_win, 0, "Your cloak blows in a nonexistant wind.");
+			putstr(en_win, 0, "Your cloak blows in a nonexistent wind.");
 			message = TRUE;
 		}
 	}
