@@ -3810,7 +3810,7 @@ struct monst *mtmp;
 				pline("Something vast and terrible writhes beneath %s wrappings!", hisherits(mtmp));
 				pline("It's trying to escape!");
 			}
-			if(!rn2(3)){
+			if(rn2(3)){
 				if(which_armor(mtmp, W_ARMC)->oeroded3){
 					if (cansee(mtmp->mx, mtmp->my))
 						pline("%s wrappings rip to shreds!", s_suffix(Monnam(mtmp)));

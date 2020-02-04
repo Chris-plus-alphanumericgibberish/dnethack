@@ -3417,7 +3417,10 @@ struct monst *mon;
 	}
 }
 
-static int pharaohspawns[] = {PM_COBRA, PM_COBRA, PM_COBRA, PM_SERPENT_NECKED_LIONESS, PM_HUNTING_HORROR};
+static int pharaohspawns[] = {PM_COBRA, PM_COBRA, PM_COBRA, PM_SERPENT_NECKED_LIONESS, PM_HUNTING_HORROR,
+							  PM_COBRA, PM_COBRA, PM_COBRA, PM_SERPENT_NECKED_LIONESS, PM_HUNTING_HORROR,
+							  PM_HUMAN_MUMMY, PM_HUMAN_MUMMY, PM_HUMAN_MUMMY, PM_GIANT_MUMMY, PM_PHARAOH,
+							  PM_ENERGY_VORTEX, PM_ENERGY_VORTEX, PM_ENERGY_VORTEX, PM_LIGHTNING_PARAELEMENTAL, PM_BLUE_DRAGON};
 
 STATIC_OVL
 void
@@ -3515,8 +3518,10 @@ struct monst *mon;
 			mon->mtrack[1].x = xlocale;
 			mon->mtrack[1].y = ylocale;
 		}
-		if(cansee(xlocale, ylocale)) pline("Dark waters lift up Nitocris!");
-		revive(obj, FALSE);
+		if(cansee(xlocale, ylocale)) pline("Dark waters swallow Nitocris!");
+		mtmp = revive(obj, FALSE);
+		if(mtmp)
+			rloc(mtmp, FALSE);
 		return;//No further action.
 	}
 	if(!rn2(70)){

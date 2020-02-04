@@ -30,6 +30,7 @@ STATIC_DCL int NDECL(throweffect);
 STATIC_DCL void FDECL(awaken_monsters,(int));
 
 STATIC_DCL void FDECL(do_item_blast, (int));
+STATIC_DCL void FDECL(nitocris_sarcophagous, (struct obj *));
 
 int FDECL(donecromenu, (const char *,struct obj *));
 int FDECL(dopetmenu, (const char *,struct obj *));
@@ -9964,6 +9965,7 @@ mind_blast_items()
 		free(nblast);
 	}
 
+	//Animate objects in the dungeon
 	for (obj = fobj; obj; obj = nobj) {
 		nobj = obj->nobj;
 		if(obj->otyp == STATUE && obj->oattached != OATTACHED_MONST && !(obj->spe) && u.uinsight > rn2(INSIGHT_RATE*70)){
@@ -9990,6 +9992,32 @@ mind_blast_items()
 				pline("%s wakes up.", Monnam(mtmp));
 			} else if(cansee(x, y) && !rn2(20))
 				pline("%s its finger.", Tobjnam(obj, "tap"));
+		}
+		//Nitocris's coffin causes Egyptian spawns
+		else if(Is_container(obj) && obj->spe == 5){
+			nitocris_sarcophagous(obj);
+		}
+	}
+}
+
+
+static int nitocrisspawns[] = {PM_PIT_VIPER, PM_PIT_VIPER, PM_COBRA, PM_COBRA, PM_GHOUL, PM_GHOUL, PM_CROCODILE, PM_CROCODILE, PM_SERPENT_NECKED_LIONESS, PM_AMMIT};
+STATIC_OVL void
+nitocris_sarcophagous(obj)
+struct obj *obj;
+{
+	struct permonst *pm;
+	struct monst *mtmp;
+	xchar xlocale, ylocale;
+	if(get_obj_location(obj, &xlocale, &ylocale, 0)){
+	}
+	if(!rn2(70)){
+		struct permonst *pm;
+		pm = &mons[nitocrisspawns[rn2(SIZE(nitocrisspawns))]];
+		mtmp = makemon(pm, xlocale, ylocale, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+		if(mtmp){
+			mtmp->mpeaceful = 0;
+			set_malign(mtmp);
 		}
 	}
 }
