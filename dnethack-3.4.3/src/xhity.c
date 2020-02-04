@@ -3197,7 +3197,7 @@ int flat_acc;
 			struct obj * gloves;
 			gloves = (youagr ? uarmg : which_armor(magr, W_ARMG));
 			if (gloves){
-				switch (uarmg->otyp) {
+				switch (gloves->otyp) {
 				case ORIHALCYON_GAUNTLETS:    /* metal */
 				case GAUNTLETS_OF_POWER:    /* metal */
 				case GAUNTLETS:
@@ -3217,7 +3217,7 @@ int flat_acc;
 				case HIGH_ELVEN_GAUNTLETS:
 					break;
 				default:
-					impossible("Unknown type of gloves (%d)", uarmg->otyp);
+					impossible("Unknown type of gloves (%d)", gloves->otyp);
 					break;
 				}
 			}
@@ -10442,27 +10442,14 @@ int vis;
 		if (maybe_not && !rn2(5))
 			return MM_MISS;
 		/* no effect on monsters */
+		//Use encouragement code to give monster target a -1
 		if (!youdef)
 			return MM_MISS;
-		/* put on cooldown */
-		if (!youagr) {
-			if (magr->mspec_used)
-				return MM_MISS;
-			else
-				magr->mspec_used = d(2, 6);
-		}
 		/* assumes you are defending */
 		pline("%s glares ominously at you!", Monnam(magr));
 
 		/* misc protections */
-		if (uwep && uwep->otyp == MIRROR && uwep->blessed) {
-			pline("%s sees its own glare in your mirror.",
-				Monnam(magr));
-			pline("%s is cancelled!", Monnam(magr));
-			magr->mcan = 1;
-			monflee(magr, 0, FALSE, TRUE);
-		}
-		else if ((uwep && !uwep->cursed && confers_luck(uwep)) ||
+		if ((uwep && !uwep->cursed && confers_luck(uwep)) ||
 			(stone_luck(TRUE) > 0 && rn2(4))) {
 			pline("Luckily, you are not affected.");
 		}

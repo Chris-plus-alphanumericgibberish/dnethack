@@ -1826,7 +1826,7 @@ u_init()
 			} else {
 				Sprintf1(u.osegen,urace.noun);
 			}
-		} else if(10){
+		} else if(rn2(10)){
 			int rndI = randrace(flags.initrole);
 			if(races[rndI].individual.m){
 				if(flags.female) Sprintf1(u.osegen,races[rndI].individual.m);
@@ -1853,7 +1853,7 @@ u_init()
 			} else {
 				Sprintf1(u.osegen,urace.noun);
 			}
-		} else if(10){
+		} else if(rn2(10)){
 			int rndI = randrace(flags.initrole);
 			if(races[rndI].individual.m){
 				if(flags.female) Sprintf1(u.osegen,races[rndI].individual.f);
