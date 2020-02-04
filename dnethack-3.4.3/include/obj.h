@@ -649,7 +649,22 @@ struct weapon_dice {
 								|| (otmp)->otyp == CRYSTAL_BOOTS\
 								|| (otmp)->otyp == CLOAK_OF_PROTECTION)
 
-#define is_twoweapable_artifact(otmp) ((otmp)->oartifact == ART_STING\
+#define is_twoweapable_artifact(otmp) (always_twoweapable_artifact(otmp)\
+				|| ((otmp)->oartifact == ART_CLARENT && uwep && uwep->oartifact==ART_EXCALIBUR)\
+				|| ((otmp)->oartifact == ART_FROST_BRAND && uwep && uwep->oartifact==ART_FIRE_BRAND)\
+				|| ((otmp)->oartifact == ART_FIRE_BRAND && uwep && uwep->oartifact==ART_FROST_BRAND)\
+				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_BLADE_SINGER_S_SPEAR)\
+				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_SODE_NO_SHIRAYUKI)\
+				|| ((otmp)->oartifact == ART_FRIEDE_S_SCYTHE && uwep && uwep->oartifact==ART_PROFANED_GREATSCYTHE)\
+				|| ((otmp)->oartifact == ART_FRIEDE_S_SCYTHE && uwep && uwep->oartifact==ART_LIFEHUNT_SCYTHE)\
+				|| ((otmp)->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE))\
+				|| ((otmp)->oartifact == ART_CLEAVER && Role_if(PM_BARBARIAN))\
+				|| ((otmp)->oartifact == ART_TECPATL_OF_HUHETOTL && Role_if(PM_ARCHEOLOGIST))\
+				|| ((otmp)->oartifact == ART_KIKU_ICHIMONJI && Role_if(PM_SAMURAI))\
+				|| ((otmp)->oartifact == ART_SNICKERSNEE && (Role_if(PM_SAMURAI) || Role_if(PM_TOURIST) ))\
+				|| ((otmp)->oartifact == ART_MAGICBANE && Role_if(PM_WIZARD)))
+				
+#define always_twoweapable_artifact(otmp) ((otmp)->oartifact == ART_STING\
 				|| (otmp)->oartifact == ART_ORCRIST\
 				|| (otmp)->oartifact == ART_GRIMTOOTH\
 				|| (otmp)->oartifact == ART_CARNWENNAN\
@@ -665,20 +680,7 @@ struct weapon_dice {
 				|| (otmp)->oartifact == ART_PEACE_KEEPER\
 				|| (otmp)->oartifact == ART_OGRESMASHER\
 				|| (otmp)->oartifact == ART_TROLLSBANE\
-				|| (otmp)->oartifact == ART_PEN_OF_THE_VOID\
-				|| ((otmp)->oartifact == ART_CLARENT && uwep && uwep->oartifact==ART_EXCALIBUR)\
-				|| ((otmp)->oartifact == ART_FROST_BRAND && uwep && uwep->oartifact==ART_FIRE_BRAND)\
-				|| ((otmp)->oartifact == ART_FIRE_BRAND && uwep && uwep->oartifact==ART_FROST_BRAND)\
-				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_BLADE_SINGER_S_SPEAR)\
-				|| ((otmp)->oartifact == ART_BLADE_DANCER_S_DAGGER && uwep && uwep->oartifact==ART_SODE_NO_SHIRAYUKI)\
-				|| ((otmp)->oartifact == ART_FRIEDE_S_SCYTHE && uwep && uwep->oartifact==ART_PROFANED_GREATSCYTHE)\
-				|| ((otmp)->oartifact == ART_FRIEDE_S_SCYTHE && uwep && uwep->oartifact==ART_LIFEHUNT_SCYTHE)\
-				|| ((otmp)->oartifact == ART_MJOLLNIR && Role_if(PM_VALKYRIE))\
-				|| ((otmp)->oartifact == ART_CLEAVER && Role_if(PM_BARBARIAN))\
-				|| ((otmp)->oartifact == ART_TECPATL_OF_HUHETOTL && Role_if(PM_ARCHEOLOGIST))\
-				|| ((otmp)->oartifact == ART_KIKU_ICHIMONJI && Role_if(PM_SAMURAI))\
-				|| ((otmp)->oartifact == ART_SNICKERSNEE && (Role_if(PM_SAMURAI) || Role_if(PM_TOURIST) ))\
-				|| ((otmp)->oartifact == ART_MAGICBANE && Role_if(PM_WIZARD)))
+				|| (otmp)->oartifact == ART_PEN_OF_THE_VOID)
 				
 /* Eggs and other food */
 #define MAX_EGG_HATCH_TIME 200	/* longest an egg can remain unhatched */

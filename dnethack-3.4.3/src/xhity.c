@@ -689,7 +689,8 @@ int tary;
 					if ((otmp->oclass == WEAPON_CLASS || is_weptool(otmp)
 						|| (otmp->otyp == CHAIN && pa == &mons[PM_CATHEZAR])
 						)																	// valid weapon
-						//&& !otmp->oartifact												// ~~non-artifact~~
+						&& !(otmp->oartifact && !always_twoweapable_artifact(otmp))			// ok artifact
+						&& !bimanual(otmp, pd)												// not two-handed
 						&& (youagr || (otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)))	// not wielded already (monster)
 						&& (!youagr || (otmp != uwep && (!u.twoweap || otmp != uswapwep)))	// not wielded already (player)
 						&& !(is_ammo(otmp) || is_pole(otmp) || throwing_weapon(otmp))		// not unsuitable for melee (ammo, throwable, polearm)
@@ -1728,10 +1729,6 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			return &noattack;
 		}
 	}
-	// if(magr->mfaction == GOAT_VORTEX){
-		// if(){
-		// }
-	// }
 	if(attk->aatyp == AT_BKGT){
 		switch(rnd(5)){
 			case 1:
