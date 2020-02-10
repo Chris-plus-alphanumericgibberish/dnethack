@@ -9544,7 +9544,6 @@ struct monst *mtmp, *victim;
 	|| ptr == &mons[PM_ARGENACH_RILMANI] || ptr == &mons[PM_AURUMACH_RILMANI]
 	|| ptr == &mons[PM_ANDROID] || ptr == &mons[PM_GYNOID] || ptr == &mons[PM_OPERATOR] || ptr == &mons[PM_COMMANDER]
 	) lev_limit = 30;	/* same as player */
-	else if (mtmp && mtmp->ispolyp) lev_limit = max(lev_limit, 30);
 	else if (ptr == &mons[PM_PLUMACH_RILMANI] || ptr == &mons[PM_FERRUMACH_RILMANI]) lev_limit = 20;
 	else if (is_eladrin(ptr) && ptr->mlevel <= 20) lev_limit = 30;
 	else if (ptr == &mons[PM_OONA]) lev_limit = 60;
@@ -9552,6 +9551,8 @@ struct monst *mtmp, *victim;
 	else if (lev_limit < 5) lev_limit = 5;	/* arbitrary */
 	else if (lev_limit > 49) lev_limit = (ptr->mlevel > 49 ? ptr->mlevel : 49);
 
+	if (mtmp && mtmp->ispolyp) lev_limit = max(lev_limit, 30);
+	
 	if ((int)++mtmp->m_lev >= mons[newtype].mlevel && newtype != oldtype) {
 	    ptr = &mons[newtype];
 	    if (mvitals[newtype].mvflags & G_GENOD && !In_quest(&u.uz)) {	/* allow G_EXTINCT */

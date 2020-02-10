@@ -35,6 +35,7 @@ STATIC_DCL void FDECL(unseen_actions, (struct monst *));
 STATIC_DCL void FDECL(blessed_spawn, (struct monst *));
 STATIC_DCL void FDECL(good_neighbor, (struct monst *));
 STATIC_DCL void FDECL(dark_pharaoh, (struct monst *));
+STATIC_DCL void FDECL(polyp_pickup, (struct monst *));
 
 #ifdef OVL0
 
@@ -1667,8 +1668,9 @@ karemade:
 			/* Environment effects */
 			dust_storm();
 			/* Unseen monsters may take action */
-			for(mtmp = migrating_mons; mtmp; mtmp = mtmp->nmon){
-				unseen_actions(mtmp);
+			for(mtmp = migrating_mons; mtmp; mtmp = nxtmon){
+				nxtmon = mtmp->nmon;
+				unseen_actions(mtmp); //May cause mtmp to be removed from the migrating chain
 			}
 			
 			/* Item attacks */
@@ -3306,12 +3308,15 @@ void
 unseen_actions(mon)
 struct monst *mon;
 {
+	//Note: May cause mon to change its state, including moving to a different monster chain.
 	if(mon->mux == u.uz.dnum && mon->muy == u.uz.dlevel && mon->data == &mons[PM_BLESSED])
 		blessed_spawn(mon);
 	else if(mon->mux == u.uz.dnum && mon->muy == u.uz.dlevel && mon->data == &mons[PM_THE_GOOD_NEIGHBOR])
 		good_neighbor(mon);
 	else if(mon->mux == u.uz.dnum && mon->muy == u.uz.dlevel && mon->data == &mons[PM_HMNYW_PHARAOH])
 		dark_pharaoh(mon);
+	else if(mon->mux == u.uz.dnum && mon->muy == u.uz.dlevel && mon->data == &mons[PM_POLYPOID_BEING])
+		polyp_pickup(mon);
 }
 
 static int goatkids[] = {PM_SMALL_GOAT_SPAWN, PM_GOAT_SPAWN, PM_GIANT_GOAT_SPAWN, 
@@ -3535,7 +3540,68 @@ struct monst *mon;
 	}
 }
 
-
+STATIC_OVL
+void
+polyp_pickup(mon)
+struct monst *mon;
+{
+	struct obj *otmp, *otmp2;
+	register struct monst *mtmp, *mtmp0 = 0, *mtmp2;
+	xchar xlocale, ylocale, xyloc;
+	xyloc	= mon->mtrack[0].x;
+	xlocale = mon->mtrack[1].x;
+	ylocale = mon->mtrack[1].y;
+	if(xyloc == MIGR_EXACT_XY){
+		if(m_at(xlocale, ylocale))
+			return;
+		if(xlocale == u.ux && ylocale == u.uy)
+			return;
+		if(!ZAP_POS(levl[xlocale][ylocale].typ))
+			return;
+		for(otmp = level.objects[xlocale][ylocale]; otmp; otmp = otmp2){
+			otmp2 = otmp->nexthere;
+			if(otmp->otyp == MASK && !otmp->oartifact && !(mons[otmp->corpsenm].geno&G_UNIQ)){
+				obj_extract_self(otmp);
+				/* unblock point after extract, before pickup */
+				if (is_boulder(otmp)) /*Shouldn't be a boulder, but who knows if a huge mask will get invented*/
+					unblock_point(xlocale,ylocale);	/* vision */
+				if(otmp) (void) mpickobj(mon, otmp);	/* may merge and free otmp */
+				newsym(xlocale,ylocale);
+			}
+		}
+		for(otmp = mon->minvent; otmp; otmp = otmp->nobj){
+			if(otmp->otyp == MASK && !otmp->oartifact && !(mons[otmp->corpsenm].geno&G_UNIQ)){
+				for(mtmp = migrating_mons; mtmp; mtmp = mtmp2) {
+					mtmp2 = mtmp->nmon;
+					if (mtmp == mon) {
+						if(mtmp == migrating_mons)
+							migrating_mons = mtmp->nmon;
+						else
+							mtmp0->nmon = mtmp->nmon;
+						mon_arrive(mtmp, FALSE);
+						break;
+					} else
+						mtmp0 = mtmp;
+				}
+				if(mtmp){
+					/*mtmp and mon *should* now be the same.  However, only do the polymorph if we have successfully removed the monster from the migrating chain and placed it!*/
+					int pm = otmp->corpsenm;
+					if(canseemon(mon))
+						pline("%s puts on a mask!", Monnam(mon));
+					m_useup(mon, otmp);
+					mon->ispolyp = TRUE;
+					newcham(mon, &mons[pm], FALSE, FALSE);
+					mon->m_insight_level = 0;
+					m_dowear(mon, TRUE);
+					init_mon_wield_item(mon);
+					
+					/*Break out of loop. Warning Note: otmp is stale*/
+					break;
+				}
+			}
+		}
+	}
+}
 
 #endif /* OVLB */
 
