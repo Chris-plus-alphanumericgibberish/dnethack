@@ -281,7 +281,7 @@ struct obj *cont;
 		long ugold = u.ugold;
 		if (mtmp) mtmp->mgold = ugold;
 		else if (cont) (void) add_to_container(cont, mkgoldobj(ugold));
-		else (void)mkgold(ugold, u.ux, u.uy);
+		else (void)mkgold_core(ugold, u.ux, u.uy, FALSE);
 		u.ugold = ugold;	/* undo mkgoldobj()'s removal */
 	}
 #endif

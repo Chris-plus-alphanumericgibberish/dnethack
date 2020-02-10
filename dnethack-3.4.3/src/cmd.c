@@ -1709,6 +1709,8 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	else you_have("transgressed");
 #ifdef WIZARD
 	if (wizard) {
+		Sprintf(buf, "%ld gold ", u.spawnedGold);
+		enl_msg(buf, "has been", "was", " created");
 		Sprintf(buf, " %d", u.ualign.record);
 		enl_msg("Your alignment ", "is", "was", buf);
 		Sprintf(buf, " %d sins", u.ualign.sins);

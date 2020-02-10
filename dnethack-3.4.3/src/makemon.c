@@ -5446,6 +5446,7 @@ long amount;
 {
     struct obj *gold = mksobj(GOLD_PIECE, FALSE, FALSE);
     gold->quan = amount;
+	u.spawnedGold += gold->quan;
     add_to_minv(mtmp, gold);
 }
 #endif

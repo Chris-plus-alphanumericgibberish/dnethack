@@ -1285,6 +1285,7 @@ E void FDECL(maybe_set_material, (struct obj *, int, boolean));
 E void FDECL(set_material, (struct obj *, int));
 E int FDECL(weight, (struct obj *));
 E struct obj *FDECL(mkgold, (long,int,int));
+E struct obj *FDECL(mkgold_core, (long,int,int,boolean));
 E struct obj *FDECL(mkcorpstat,
 		(int,struct monst *,struct permonst *,int,int,BOOLEAN_P));
 E struct obj *FDECL(obj_attach_mid, (struct obj *, unsigned));

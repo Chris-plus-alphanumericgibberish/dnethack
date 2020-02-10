@@ -515,7 +515,7 @@ boolean with_you;
 		if (mtmp->mgold) {
 		    if (xlocale == 0 && ylocale == 0 && corpse) {
 			(void) get_obj_location(corpse, &xlocale, &ylocale, 0);
-			(void) mkgold(mtmp->mgold, xlocale, ylocale);
+			(void) mkgold_core(mtmp->mgold, xlocale, ylocale, FALSE);
 		    }
 		    mtmp->mgold = 0L;
 		}

@@ -4568,6 +4568,7 @@ struct mkroom *sroom;
 				struct obj *chest, *gold;
 				gold = mksobj(GOLD_PIECE, TRUE, FALSE);
 				gold->quan = (long) rn1(9 * level_difficulty(), level_difficulty()); //1 - 10
+				u.spawnedGold += gold->quan;
 				gold->owt = weight(gold);
 			    chest = mksobj_at((rn2(3)) ? BOX : CHEST,
 					     sx, sy, TRUE, FALSE);
@@ -4656,6 +4657,7 @@ struct mkroom *sroom;
 		  (void) somexy(sroom, &mm);
 		  gold = mksobj(GOLD_PIECE, TRUE, FALSE);
 		  gold->quan = (long) rn1(50 * level_difficulty(), 10);
+		  u.spawnedGold += gold->quan;
 		  gold->owt = weight(gold);
 		  /* the royal coffers */
 		  chest = mksobj_at(CHEST, mm.x, mm.y, TRUE, FALSE);

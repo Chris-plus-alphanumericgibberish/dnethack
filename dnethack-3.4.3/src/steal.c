@@ -736,7 +736,7 @@ boolean is_pet;		/* If true, pet should keep wielded/worn items */
 #ifndef GOLDOBJ
 	if (mtmp->mgold) {
 		register long g = mtmp->mgold;
-		(void) mkgold(g, omx, omy);
+		(void) mkgold_core(g, omx, omy, FALSE);
 		if (is_pet && cansee(omx, omy) && flags.verbose)
 			pline("%s drops %ld gold piece%s.", Monnam(mtmp),
 				g, plur(g));

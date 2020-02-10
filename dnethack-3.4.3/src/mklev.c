@@ -1419,6 +1419,7 @@ mineralize()
 		    if ((otmp = mksobj(GOLD_PIECE, FALSE, FALSE)) != 0) {
 			otmp->ox = x,  otmp->oy = y;
 			otmp->quan = 1L + rnd(goldprob * 3);
+			u.spawnedGold += otmp->quan;
 			otmp->owt = weight(otmp);
 			if (!rn2(3)) add_to_buried(otmp);
 			else place_object(otmp, x, y);

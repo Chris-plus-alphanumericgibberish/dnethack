@@ -532,6 +532,7 @@ struct you {
 	int 	ustdy;		/* to record extra damage to be dealt due to having been studied */
 	int 	uencouraged;/* to record the buff from tame encouragement songs */
 	int		uentangled; /* to record the otyp of an item entangling you */
+	long	spawnedGold; /* to record the total ammount of gold generated in the dungeon, for record keeping */
 	int 	usanity;	/* to record level of sanity */
 	unsigned long long int 	umadness;	/* to afflictions */
 #define	MAD_DELUSIONS		0x00000000000000001L

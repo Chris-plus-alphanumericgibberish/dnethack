@@ -2360,9 +2360,10 @@ int x, y;
 #ifdef OVLB
 
 struct obj *
-mkgold(amount, x, y)
+mkgold_core(amount, x, y, new)
 long amount;
 int x, y;
+boolean new;
 {
     register struct obj *gold = g_at(x,y);
 
@@ -2375,7 +2376,17 @@ int x, y;
 	gold->quan = amount;
     }
     gold->owt = weight(gold);
+	if(new)
+		u.spawnedGold += amount;
     return (gold);
+}
+
+struct obj *
+mkgold(amount, x, y)
+long amount;
+int x, y;
+{
+	return mkgold_core(amount, x, y, TRUE);
 }
 
 #endif /* OVLB */
