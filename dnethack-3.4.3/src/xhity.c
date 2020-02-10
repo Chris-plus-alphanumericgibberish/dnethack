@@ -12563,7 +12563,7 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 	if (resist_attacks(pd) && (unarmed_punch || unarmed_kick || valid_weapon_attack || invalid_weapon_attack)) {
 		if (subtotl > 0) {
 			resisted_weapon_attacks = TRUE;
-			subtotl = 0;
+			subtotl = 1;
 		}
 	}
 	/* other creatures resist specific types of attacks */
@@ -12655,7 +12655,7 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 			(otmp && (valid_weapon_attack || invalid_weapon_attack) && (otmp->oproperties&OPROP_FLAYW))
 			)){
 			/* damage entirely mitigated */
-			subtotl = 0;
+			subtotl = 1;
 			resisted_attack_type = TRUE;
 		}
 		if ((attackmask & ~(resistmask)) == 0L && !(otmp && narrow_spec_applies(otmp, mdef)) && (subtotl > 0)) {
@@ -12684,12 +12684,17 @@ boolean killerset;		/* if TRUE, use the already-set killer if the player dies */
 	if (youagr && is_aquatic(pd) && roll_madness(MAD_THALASSOPHOBIA)){
 		subtotl = (subtotl + 9)/10;
 	}
-	
 	/* Apply DR */
 	if (subtotl > 0){
 		if(pd == &mons[PM_DEEP_DWELLER] && !rn2(10)){
-			//Brain struck.  Ouch.
+			/*Brain struck.  Ouch.*/
+			if(youdef)
+				pline("Your brain-organ is struck!");
+			else if(canseemon(mdef))
+				pline("%s brain-organ struck!", s_suffix(Monnam(mdef)));
 			*hp(mdef) = 1;
+			resisted_weapon_attacks = FALSE;
+			resisted_attack_type = FALSE;
 		}
 		else if (phase_armor){
 			subtotl -= (youdef ? (base_udr() + base_nat_udr()) : (base_mdr(mdef) + base_nat_mdr(mdef)));
