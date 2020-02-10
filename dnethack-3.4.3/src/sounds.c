@@ -2766,6 +2766,7 @@ int dz;
 					}
 					if(!uwep){
 						impossible("Your weapon vanished between the menu and the blessing?");
+						break;
 					}
 #ifndef GOLDOBJ
 					u.ugold -= cost;
