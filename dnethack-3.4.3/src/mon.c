@@ -3963,7 +3963,7 @@ struct monst *mtmp;
 			if(lifesavers&LSVD_NBW)
 				pline("%s is boiling and screaming in agony!", Monnam(mtmp));
 			else if(canseemon(mtmp))
-				pline("%s screams in agony, boats, and begins boiling violently!", Monnam(mtmp));
+				pline("%s screams in agony, bloats, and begins boiling violently!", Monnam(mtmp));
 			else
 				pline("%s screams in agony and begins boiling violently!", Monnam(mtmp));
 			
