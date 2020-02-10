@@ -1031,7 +1031,7 @@ level_tele()
 		    killer_format = NO_KILLER_PREFIX;
 		}
 	}
-	if(newlev<0) newlev++;//Dungeon levels should skip from 1 to -1, 0 should always be nowhere.
+	// if(newlev<0) newlev++;//No dungeon's displayed level crosses 0 anymore //Dungeon levels should skip from 1 to -1, 0 should always be nowhere.
 	
 	if (killer) {	/* the chosen destination was not survivable */
 	    d_level lsav;
