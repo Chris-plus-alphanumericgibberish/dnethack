@@ -1205,10 +1205,10 @@ asGuardian:
 	case MS_DREAD:{
 		struct monst *tmpm;
 		int ix, iy;
-		if(mtmp->mvar1 >= moves && (
+		if(mtmp->mvar_dreadPrayer >= moves && (
 			mtmp->mhp < mtmp->mhpmax/4 || mtmp->mcrazed
 		)){
-			mtmp->mvar1 = moves + rnz(350);
+			mtmp->mvar_dreadPrayer = moves + rnz(350);
 			mtmp->mvar2 = moves + 5;
 		}
 		if(mtmp->mvar2){

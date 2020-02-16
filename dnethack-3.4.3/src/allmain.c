@@ -325,17 +325,15 @@ androidUpkeep()
 			nomul(-1*u.uenmax, "passed out from exhaustion");
 		}
 		if(u.phasengn){
-			u.uen -= 10;
+			losepw(10);
 			if(u.uen <= 0){
-				u.uen = 0;
 				You("can no longer maintain phase!");
 				u.phasengn = 0;
 			}
 		}
 		if(u.ucspeed == HIGH_CLOCKSPEED){
-			u.uen -= 1;
+			losepw(1);
 			if(u.uen <= 0){
-				u.uen = 0;
 				You("can no longer maintain emergency speed!");
 				u.ucspeed = NORM_CLOCKSPEED;
 			}
@@ -357,7 +355,7 @@ androidUpkeep()
 			You_feel("like you're about to pass out.");
 		}
 		if(moves > u.nextsleep+1400 && u.uen > 0){
-			if(!(moves%20)) u.uen -= 1;
+			if(!(moves%20)) losepw(1);
 		}
 	}
 }
@@ -1114,7 +1112,7 @@ moveloop()
 				if(mtmp->data == &mons[PM_SURYA_DEVA]){
 					struct monst *blade;
 					for(blade = fmon; blade; blade = blade->nmon)
-						if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+						if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar_suryaID) break;
 					if(blade){
 						if(mtmp->mtame && !blade->mtame){
 							if(blade == nxtmon) nxtmon = nxtmon->nmon;
@@ -1134,9 +1132,7 @@ moveloop()
 				if(mtmp->data == &mons[PM_ARA_KAMEREL]) flags.goldka_level=1;
 				if(mtmp->data == &mons[PM_ASPECT_OF_THE_SILENCE]){
 					flags.silence_level=1;
-					u.uen -= 3;
-					if(!Race_if(PM_INCANTIFIER))
-						u.uen = max(u.uen, 0);
+					losepw(3);
 				}
 				if(mtmp->data == &mons[PM_ZUGGTMOY]) flags.spore_level=1;
 				if(mtmp->data == &mons[PM_JUIBLEX]) flags.slime_level=1;
@@ -1258,7 +1254,7 @@ karemade:
 				if(mtmp->data == &mons[PM_CLOCKWORK_SOLDIER] || mtmp->data == &mons[PM_CLOCKWORK_DWARF] || 
 				   mtmp->data == &mons[PM_FABERGE_SPHERE] || mtmp->data == &mons[PM_FIREWORK_CART] ||
 				   mtmp->data == &mons[PM_ID_JUGGERNAUT]
-				) if(rn2(2)) mtmp->mvar1 = ((int)mtmp->mvar1 + rn2(3)-1)%8;
+				) if(rn2(2)) mtmp->mvar_vector = ((int)mtmp->mvar_vector + rn2(3)-1)%8;
 				if((mtmp->data == &mons[PM_JUGGERNAUT] || mtmp->data == &mons[PM_ID_JUGGERNAUT]) && !rn2(3)){
 					int mdx=0, mdy=0, i;
 					if(mtmp->mux == 0 && mtmp->muy == 0){
@@ -1272,7 +1268,7 @@ karemade:
 						else if(mtmp->muy - mtmp->my > 0) mdy = +1;
 						for(i=0;i<8;i++) if(xdir[i] == mdx && ydir[i] == mdy) break;
 					}
-					if(mtmp->mvar1 != i){
+					if(mtmp->mvar_vector != i){
 						if(sensemon(mtmp) || (canseemon(mtmp) && !mtmp->mundetected)){
 							pline("%s turns to a new heading.", Monnam(mtmp));
 						} else if(couldsee(mtmp->mx,mtmp->my)){
@@ -1280,7 +1276,7 @@ karemade:
 						} else {
 							You_hear("scraping in the distance.");
 						}
-						mtmp->mvar1 = i;
+						mtmp->mvar_vector = i;
 						mtmp->movement = -12;
 					}
 				}
@@ -3381,7 +3377,7 @@ struct monst *mon;
 						familliar->m_lev = mtmp->m_lev;
 						familliar->mhpmax = mtmp->mhpmax;
 						familliar->mhp = familliar->mhpmax;
-						familliar->mvar1 = (long)mtmp->m_id;
+						familliar->mvar_witchID = (long)mtmp->m_id;
 						familliar->mpeaceful = mtmp->mpeaceful;
 						//Stop running
 						if(mtmp->mflee && mtmp->mhp > mtmp->mhpmax/2){

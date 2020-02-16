@@ -1248,7 +1248,7 @@ register int x, y;
 	    return "maw";
 	else if (IS_AIR(lev->typ) && Weightless)
 	    return "air";
-	else if (is_pool(x,y, TRUE))
+	else if (is_pool(x,y, FALSE))
 	    return (Underwater && !Is_waterlevel(&u.uz)) ? "bottom" : "water";
 	else if (is_ice(x,y))
 	    return "ice";

@@ -492,7 +492,7 @@ nh_timeout()
 	if(Golded) golded_dialogue();
 	if(Slimed) slime_dialogue();
 	if(Vomiting) vomiting_dialogue();
-	if(Strangled) choke_dialogue();
+	if(Strangled && !Breathless) choke_dialogue();
 	if(u.mtimedone && !--u.mtimedone) {
 		if (Unchanging)
 			u.mtimedone = rnd(100*youmonst.data->mlevel + 1);

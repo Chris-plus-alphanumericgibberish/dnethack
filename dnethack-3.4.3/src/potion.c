@@ -457,7 +457,7 @@ peffects(otmp)
 			//Restore sanity if blessed or uncursed
 			if(otmp->blessed)
 				change_usanity(20);
-			else if(u.usanity < 100)
+			else
 				change_usanity(5);
 		}
 	case SPE_RESTORE_ABILITY:

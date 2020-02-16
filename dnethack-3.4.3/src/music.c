@@ -1889,7 +1889,7 @@ struct obj *instr;
 	    You("don't have enough energy to play that song.");
 	    return 0;
 	}
-	u.uen -= a;
+	losepw(a);
 	flags.botl = 1;
 */
 	    if (rnd(100) > song_success(song, instr, 1)) {

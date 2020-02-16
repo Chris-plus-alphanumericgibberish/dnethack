@@ -1240,7 +1240,7 @@ newdogpos:
 		place_monster(mtmp, nix, niy);
 		if(mtmp->data == &mons[PM_SURYA_DEVA]){
 			struct monst *blade;
-			for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+			for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar_suryaID) break;
 			if(blade){
 				int bx = blade->mx, by = blade->my;
 				remove_monster(bx, by);

@@ -689,7 +689,7 @@ struct monst *mon;
 	if(mon->mfaction == CRYSTALFIED) base -= 6;
 	if(mon->mfaction == CRANIUM_RAT) base -= 4;
 	
-	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_GRACE__UUR)
+	if(is_alabaster_mummy(mon->data) && mon->mvar_syllable == SYLLABLE_OF_GRACE__UUR)
 		base -= 10;
 	
 	if(mon->mtame){
@@ -823,7 +823,7 @@ struct monst *mon;
 	if(mon->mfaction == SKELIFIED) base -= 6;
 	if(mon->mfaction == CRYSTALFIED) base -= 16;
 	
-	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_GRACE__UUR)
+	if(is_alabaster_mummy(mon->data) && mon->mvar_syllable == SYLLABLE_OF_GRACE__UUR)
 		base -= 10;
 	
 	if(mon->mtame){
@@ -933,7 +933,7 @@ struct monst *mon;
 	if(mon->mtame){
 		if(active_glyph(IMPURITY)) base += 3;
 	}
-	if(is_alabaster_mummy(mon->data) && mon->mvar1 == SYLLABLE_OF_SPIRIT__VAUL)
+	if(is_alabaster_mummy(mon->data) && mon->mvar_syllable == SYLLABLE_OF_SPIRIT__VAUL)
 		base += 10;
 	
 	return base;

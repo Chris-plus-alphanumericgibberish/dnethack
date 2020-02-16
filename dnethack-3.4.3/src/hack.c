@@ -2536,6 +2536,16 @@ boolean k_format;
 }
 
 void
+losepw(n)
+int n;
+{
+	u.uen -= n;
+	if(u.uen < 0 && !Race_if(PM_INCANTIFIER))
+		u.uen = 0;
+	flags.botl = 1;
+}
+
+void
 mdamageu(mtmp, n)	/* mtmp hits you for n points damage */
 register struct monst *mtmp;
 register int n;

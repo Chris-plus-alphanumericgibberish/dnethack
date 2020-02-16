@@ -3921,7 +3921,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 		if(uwep && (
 			uwep->oartifact == ART_GARNET_ROD || (uwep->oartifact == ART_TENSA_ZANGETSU && !is_undead(youracedata)))
 		){
-			if(Race_if(PM_INCANTIFIER)) u.uen -= 9;
+			if(Race_if(PM_INCANTIFIER)) losepw(9);
 			else u.uhunger -= 9;
 		}
 	}
@@ -3932,7 +3932,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 		&& u.umadness&MAD_GLUTTONY
 	){
 		int delta = 100 - u.usanity;
-		if(Race_if(PM_INCANTIFIER)) u.uen -= delta/25;
+		if(Race_if(PM_INCANTIFIER)) losepw(delta/25);
 		else u.uhunger -= delta/25;
 		//remainder
 		delta = delta%25;
@@ -4000,7 +4000,7 @@ morehungry(num)	/* called after vomiting and after performing feats of magic */
 register int num;
 {
 	if(inediate(youracedata) && !uclockwork && !Race_if(PM_INCANTIFIER)) return;
-	if(Race_if(PM_INCANTIFIER)) u.uen -= num;
+	if(Race_if(PM_INCANTIFIER)) losepw(num);
 	else u.uhunger -= num;
 	newuhs(TRUE);
 }

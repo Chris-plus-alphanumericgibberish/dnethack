@@ -474,7 +474,7 @@
 #define is_thief(ptr)		( dmgtype(ptr, AD_SGLD)  || dmgtype(ptr, AD_SITM) || dmgtype(ptr, AD_SEDU) )
 #define is_magical(ptr)		( attacktype(ptr, AT_MMGC) || attacktype(ptr, AT_MAGC) )
 #define nospellcooldowns(ptr)	(((ptr)->mflagsg & MG_NOSPELLCOOLDOWN) != 0L)
-#define nospellcooldowns_mon(mtmp)	(nospellcooldowns((mtmp)->data) || (is_alabaster_mummy((mtmp)->data) && (mtmp)->mvar1 == SYLLABLE_OF_THOUGHT__NAEN))
+#define nospellcooldowns_mon(mtmp)	(nospellcooldowns((mtmp)->data) || (is_alabaster_mummy((mtmp)->data) && (mtmp)->mvar_syllable == SYLLABLE_OF_THOUGHT__NAEN))
 #define is_lord(ptr)		(((ptr)->mflagsg & MG_LORD) != 0L)
 #define is_prince(ptr)		(((ptr)->mflagsg & MG_PRINCE) != 0L)
 #define is_ndemon(ptr)		(is_demon(ptr) && \

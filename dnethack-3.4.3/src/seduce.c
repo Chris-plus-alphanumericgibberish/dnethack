@@ -1968,7 +1968,7 @@ register struct monst *mon;
 		boolean helpless = TRUE;
 	}
 
-	if(mon->mvar1 == 1){
+	if(mon->mvar_paleWarning == 1){
 		if (Blind) You_feel("cloth against your %s...",body_part(BODY_SKIN));
 		else{
 			pline("The shroud dances as if in the wind. The %s figure beneath is almost exposed!", fem ? "shapely feminine" : "shapely masculine");
@@ -1976,7 +1976,7 @@ register struct monst *mon;
 		}
 	}
 	else{
-		mon->mvar1 = 1;
+		mon->mvar_paleWarning = 1;
 		if (Blind) You_feel("the brush of cloth...");
 		else{
 			You("see a %s form behind the shroud. It beckons you forwards.", fem ? "lithe, feminine," : "toned, masculine,");

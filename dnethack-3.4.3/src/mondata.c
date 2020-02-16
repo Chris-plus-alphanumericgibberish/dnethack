@@ -25,53 +25,53 @@ int flag;
 		mon->mintrinsics[0] |= (ptr->mresists & MR_MASK);
     else
 		mon->mintrinsics[0] = (ptr->mresists & MR_MASK);
-	if(is_half_dragon(ptr) && (mon->mvar1 == 0 || flag != 1)){
+	if(is_half_dragon(ptr) && (mon->mvar_hdBreath == 0 || flag != 1)){
 		/*
-			Store half dragon breath type in mvar1
+			Store half dragon breath type in mvar_hdBreath
 		*/
 		if(is_half_dragon(ptr)){
 			switch(rnd(6)){
 				case 1:
-					mon->mvar1 = AD_COLD;
+					mon->mvar_hdBreath = AD_COLD;
 					mon->mintrinsics[(COLD_RES-1)/32] |= (1 << (COLD_RES-1)%32);
 				break;
 				case 2:
-					mon->mvar1 = AD_FIRE;
+					mon->mvar_hdBreath = AD_FIRE;
 					mon->mintrinsics[(FIRE_RES-1)/32] |= (1 << (FIRE_RES-1)%32);
 				break;
 				case 3:
-					mon->mvar1 = AD_SLEE;
+					mon->mvar_hdBreath = AD_SLEE;
 					mon->mintrinsics[(SLEEP_RES-1)/32] |= (1 << (SLEEP_RES-1)%32);
 				break;
 				case 4:
-					mon->mvar1 = AD_ELEC;
+					mon->mvar_hdBreath = AD_ELEC;
 					mon->mintrinsics[(SHOCK_RES-1)/32] |= (1 << (SHOCK_RES-1)%32);
 				break;
 				case 5:
-					mon->mvar1 = AD_DRST;
+					mon->mvar_hdBreath = AD_DRST;
 					mon->mintrinsics[(POISON_RES-1)/32] |= (1 << (POISON_RES-1)%32);
 				break;
 				case 6:
-					mon->mvar1 = AD_ACID;
+					mon->mvar_hdBreath = AD_ACID;
 					mon->mintrinsics[(ACID_RES-1)/32] |= (1 << (ACID_RES-1)%32);
 				break;
 			}
 		} else if(is_boreal_dragoon(ptr)){
 			switch(rnd(4)){
 				case 1:
-					mon->mvar1 = AD_COLD;
+					mon->mvar_hdBreath = AD_COLD;
 					mon->mintrinsics[(COLD_RES-1)/32] |= (1 << (COLD_RES-1)%32);
 				break;
 				case 2:
-					mon->mvar1 = AD_FIRE;
+					mon->mvar_hdBreath = AD_FIRE;
 					mon->mintrinsics[(FIRE_RES-1)/32] |= (1 << (FIRE_RES-1)%32);
 				break;
 				case 3:
-					mon->mvar1 = AD_MAGM;
+					mon->mvar_hdBreath = AD_MAGM;
 					mon->mintrinsics[(ANTIMAGIC-1)/32] |= (1 << (ANTIMAGIC-1)%32);
 				break;
 				case 4:
-					mon->mvar1 = AD_PHYS;
+					mon->mvar_hdBreath = AD_PHYS;
 				break;
 			}
 		}

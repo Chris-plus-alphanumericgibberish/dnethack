@@ -2989,7 +2989,6 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 	static const char you[] = "you";
 	char hittee[BUFSZ];
 	int basedmg;
-	
 	if(*dmgptr <= 0)
 		*dmgptr = 1; //Round up to 1 now to avoid confusion with artifact-induced misses (would typically round up later)
 	
@@ -3499,7 +3498,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 
 	if(otmp->oartifact == ART_LIMITED_MOON && magr == &youmonst){
 		*dmgptr *= ((double)u.uen/u.uenmax);
-		if(u.uen >= ((int)(.3*u.uenmax + 3))) u.uen -= 3;
+		if(u.uen >= ((int)(.3*u.uenmax + 3))) losepw(3);
 	}
 	
 	if (otmp->oartifact == ART_ICONOCLAST && is_angel(mdef->data) ) *dmgptr += 9;
@@ -3522,7 +3521,7 @@ int dieroll; /* needed for Magicbane and vorpal blades */
 		// }
 	}
 	if(otmp->oartifact == ART_YORSHKA_S_SPEAR){
-		if(youdefend) u.uen = max(0,u.uen - 14);
+		if(youdefend) losepw(14);
 		else mdef->mspec_used = max(mdef->mspec_used+1,1);
 	}
 	if( (spec_ability2(otmp, SPFX2_RAM) && !rn2(4)) || 
@@ -5688,7 +5687,7 @@ arti_invoke(obj)
 					else weffects(pseudo);
 				}
 				update_inventory();	/* spell may modify inventory */
-				u.uen -= energy;
+				losepw(energy);
 			}
 		}
 		obj->age = monstermoves + d(1,100);
@@ -8843,7 +8842,7 @@ read_necro(VOID_ARGS)
 			case SELECT_BYAKHEE:
 				pm = &mons[PM_BYAKHEE];
 				if(u.uen >= 20){
-					u.uen -= 20;
+					losepw(20);
 					for(i=max(1, d(1,20) - 16); i > 0; i--){
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 						mtmp->mvanishes = 100;
@@ -8865,7 +8864,7 @@ read_necro(VOID_ARGS)
 				pm = &mons[PM_NIGHTGAUNT];
 				for(i=d(1,4); i > 0; i--){
 					if(u.uen >= 10){
-						u.uen -= 10;
+						losepw(10);
 						mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 						if(mtmp){
 							initedog(mtmp);
@@ -8886,7 +8885,7 @@ read_necro(VOID_ARGS)
 			break;
 			case SELECT_OOZE:
 				if(u.uen >= 20){
-					u.uen -= 20;
+					losepw(20);
 					for(i=max(1, d(1,10) - 2); i > 0; i--){
 						mtmp = makemon(&mons[oozes[d(1,11)]], u.ux+d(1,5)-3, u.uy+d(1,5)-3, MM_EDOG|MM_ADJACENTOK);
 						if(mtmp){
@@ -8906,7 +8905,7 @@ read_necro(VOID_ARGS)
 			break;
 			case SELECT_DEVIL:
 				if(u.uen >= 60){
-					u.uen -= 60;
+					losepw(60);
 					mtmp = makemon(&mons[devils[d(1,13)]], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 					if(mtmp){
 						initedog(mtmp);
@@ -8923,7 +8922,7 @@ read_necro(VOID_ARGS)
 			break;
 			case SELECT_DEMON:
 				if(u.uen >= 45){
-					u.uen -= 45;
+					losepw(45);
 					mtmp = makemon(&mons[demons[d(1,15)]], u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);
 					if(mtmp){
 						initedog(mtmp);
@@ -9019,7 +9018,7 @@ read_necro(VOID_ARGS)
 				else if(!(P_MAX_SKILL(objects[uwep->otyp].oc_skill) < P_EXPERT)) You("already know how to use your weapon.");
 				else if(u.uen >= 100){
 					You("grasp the basics of your weapon's use.");
-					u.uen -= 100;
+					losepw(100);
 					u.uenbonus -= 20;
 					calc_total_maxen();
 					unrestrict_weapon_skill(objects[uwep->otyp].oc_skill);

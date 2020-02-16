@@ -1482,6 +1482,8 @@ ROCK("chunk of unrefined mithril", "silvery metal",
 							0,  0,   1, 10000,3,3, 3, 0, 0, 10, MITHRIL, HI_MITHRIL),/*Needs tile*/
 ROCK("chunk of fossil dark", "black",
 							0,  0,  25, 	500, 8, 8, 4, 1, 0, 1, MINERAL, CLR_BLACK),/*Needs tile*/
+ROCK("chunk of salt", "white",		
+							0,  0,   1,  1, 3, 3,  0, 0, 10, 2, SALT, CLR_GRAY), /*Needs tile*/
 ROCK("silver slingstone", "silver", 
 							0,  0,   1, 10, 6, 6, 2, 0,  0, 5, SILVER, HI_SILVER),/*Needs tile*/
 ROCK("rock", (char *)0,		1,100,   1,  0, 6, 6, 0, 0, 10, 7, MINERAL, CLR_GRAY),

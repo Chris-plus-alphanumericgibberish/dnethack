@@ -2157,7 +2157,7 @@ dofire()
 		return uthrow(uwep, (struct obj *)0, shotlimit, FALSE);
 	}
 
-	/* Holy Moon Lightlight Sword's magic blast -- mainhand only */
+	/* Holy Moonlight Sword's magic blast -- mainhand only */
 	if (uwep && uwep->oartifact == ART_HOLY_MOONLIGHT_SWORD && uwep->lamplit && u.uen >= 25){
 		int dmg = d(2, 12) + 2 * uwep->spe;
 		int range = (Double_spell_size) ? 6 : 3;
@@ -2166,7 +2166,7 @@ dofire()
 		sx = u.ux;
 		sy = u.uy;
 		if (!getdir((char *)0) || !(u.dx || u.dy)) return 0;
-		u.uen -= 25;
+		losepw(25);
 		/* also swing in the direction chosen */
 		flags.forcefight = 1;
 		domove();
@@ -2707,7 +2707,7 @@ int tary;
 		if (youagr && Race_if(PM_HALF_DRAGON))
 			typ = flags.HDbreath;
 		else if (is_half_dragon(pa))
-			typ = magr->mvar1;
+			typ = magr->mvar_hdBreath;
 		else
 			typ = AD_COLD;
 

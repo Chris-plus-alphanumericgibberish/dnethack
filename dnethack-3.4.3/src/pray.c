@@ -3053,7 +3053,7 @@ doturn()
 	}
 	//Altered turn undead to consume energy if possible, otherwise take full time.
 	if(fast){
-		u.uen -= 30;
+		losepw(30);
 		nomul(-1, "trying to turn the undead");
 	}
 	else

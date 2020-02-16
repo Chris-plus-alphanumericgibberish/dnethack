@@ -225,6 +225,16 @@ struct monst {
 	//utype = PM_HATCHLING_NAME
 	//inventory
 	long mvar1;
+#define	mvar_paleWarning	mvar1
+#define	mvar_witchID	mvar1
+#define	mvar_suryaID	mvar1
+#define	mvar_huskID	mvar1
+#define	mvar_syllable	mvar1
+#define	mvar_vector	mvar1
+#define	mvar_spList_1	mvar1
+#define	mvar_hdBreath	mvar1
+#define	mvar_dreadPrayer	mvar1
+#define	mvar_dracaePreg	mvar1
 	long mvar2;
 	long mvar3;
 	/* in order to prevent alignment problems mextra should

@@ -872,7 +872,7 @@ dobreathe(mdat)
 	    You("don't have enough energy to breathe!");
 	    return(0);
 	}
-	u.uen -= 15;
+	losepw(15);
 	flags.botl = 1;
 
 	if (!getdir((char *)0)) return(0);
@@ -999,7 +999,7 @@ doelementalbreath()
 	    You("don't have enough energy to sing an elemental!");
 	    return(0);
 	}
-	u.uen -= 45;
+	losepw(45);
 	flags.botl = 1;
 
 	type = flags.HDbreath;
@@ -1185,7 +1185,7 @@ dosummon()
 	    You("lack the energy to send forth a call for help!");
 	    return(0);
 	}
-	u.uen -= 10;
+	losepw(10);
 	flags.botl = 1;
 
 	You("call upon your brethren for help!");
@@ -1253,7 +1253,7 @@ dotinker()
 	    You("lack the energy to tinker.");
 	    return(0);
 	}
-	u.uen -= 10;
+	losepw(10);
 	flags.botl = 1;
 	/*Make tinkered friend*/
 	struct monst *mlocal;
@@ -1268,7 +1268,7 @@ dotinker()
 	}
 	
 	if(mlocal){
-		mlocal->mvar1 = rn2(8);
+		mlocal->mvar_vector = rn2(8);
 		initedog(mlocal);
 		mlocal->mtame = 10;
 		mlocal->mpeaceful = 1;
@@ -1296,7 +1296,7 @@ dogaze()
 		return 0;
 	}
 	else {
-		u.uen -= 15;
+		losepw(15);
 		flags.botl = 1;
 
 		if ((mtmp = m_at(u.dx, u.dy)) && canseemon(mtmp)) {
@@ -1378,7 +1378,7 @@ dogaze()
 	    You("lack the energy to use your special gaze!");
 	    return(0);
 	}
-	u.uen -= 15;
+	losepw(15);
 	flags.botl = 1;
 
 	for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
@@ -1600,7 +1600,7 @@ domindblast()
 	    You("concentrate but lack the energy to maintain doing so.");
 	    return(0);
 	}
-	u.uen -= 10;
+	losepw(10);
 	flags.botl = 1;
 
 	You("concentrate.");
@@ -1740,7 +1740,7 @@ doandroid()
 	    }
 	    if(!recharge(otmp, 0))
 			You("recharged %s.", the(xname(otmp)));
-		u.uen -= 10;
+		losepw(10);
 	    update_inventory();
 		return 1;
 	} else if(newspeed == ANDROID_COMBO){

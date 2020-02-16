@@ -783,7 +783,7 @@ dotele()
 #endif
 			return(0);
 	    } else {
-		u.uen -= energy;
+		losepw(energy);
 		flags.botl = 1;
 	    }
 	}

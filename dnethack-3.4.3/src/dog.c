@@ -17,7 +17,7 @@ register struct monst *mtmp;
 {
 	if(mtmp->data == &mons[PM_SURYA_DEVA]){
 		struct monst *blade;
-		for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+		for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar_suryaID) break;
 		if(blade && !blade->mtame) tamedog(blade, (struct obj *) 0);
 	}
 	
@@ -258,7 +258,7 @@ makedog()
 	initedog(mtmp);
 	EDOG(mtmp)->loyal = TRUE;
 	if(is_half_dragon(mtmp->data) && flags.HDbreath){
-		switch(mtmp->mvar1){
+		switch(mtmp->mvar_hdBreath){
 			case AD_COLD:
 				mtmp->mintrinsics[(COLD_RES-1)/32] &= ~(1 << (COLD_RES-1)%32);
 			break;
@@ -280,27 +280,27 @@ makedog()
 		}
 		switch(flags.HDbreath){
 			case AD_COLD:
-				mtmp->mvar1 = AD_COLD;
+				mtmp->mvar_hdBreath = AD_COLD;
 				mtmp->mintrinsics[(COLD_RES-1)/32] |= (1 << (COLD_RES-1)%32);
 			break;
 			case AD_FIRE:
-				mtmp->mvar1 = AD_FIRE;
+				mtmp->mvar_hdBreath = AD_FIRE;
 				mtmp->mintrinsics[(FIRE_RES-1)/32] |= (1 << (FIRE_RES-1)%32);
 			break;
 			case AD_SLEE:
-				mtmp->mvar1 = AD_SLEE;
+				mtmp->mvar_hdBreath = AD_SLEE;
 				mtmp->mintrinsics[(SLEEP_RES-1)/32] |= (1 << (SLEEP_RES-1)%32);
 			break;
 			case AD_ELEC:
-				mtmp->mvar1 = AD_ELEC;
+				mtmp->mvar_hdBreath = AD_ELEC;
 				mtmp->mintrinsics[(SHOCK_RES-1)/32] |= (1 << (SHOCK_RES-1)%32);
 			break;
 			case AD_DRST:
-				mtmp->mvar1 = AD_DRST;
+				mtmp->mvar_hdBreath = AD_DRST;
 				mtmp->mintrinsics[(POISON_RES-1)/32] |= (1 << (POISON_RES-1)%32);
 			break;
 			case AD_ACID:
-				mtmp->mvar1 = AD_ACID;
+				mtmp->mvar_hdBreath = AD_ACID;
 				mtmp->mintrinsics[(ACID_RES-1)/32] |= (1 << (ACID_RES-1)%32);
 			break;
 		}
@@ -783,7 +783,7 @@ boolean pets_only;	/* true for ascension or final escape */
 			mydogs = mtmp;
 			if(mtmp->data == &mons[PM_SURYA_DEVA]){
 				struct monst *blade;
-				for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+				for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar_suryaID) break;
 				if(blade) {
 					if(mtmp2 == blade) mtmp2 = mtmp2->nmon; /*mtmp2 is about to end up on the migrating mons chain*/
 					/* set minvent's obj->no_charge to 0 */
@@ -819,7 +819,7 @@ boolean pets_only;	/* true for ascension or final escape */
 			/* we want to be able to find him when his next resurrection
 			   chance comes up, but have him resume his present location
 			   if player returns to this level before that time */
-			if(mtmp->data == &mons[PM_SURYA_DEVA] && mtmp2 && mtmp2->data == &mons[PM_DANCING_BLADE] && mtmp2->mvar1 == mtmp->m_id)
+			if(mtmp->data == &mons[PM_SURYA_DEVA] && mtmp2 && mtmp2->data == &mons[PM_DANCING_BLADE] && mtmp2->mvar_suryaID == mtmp->m_id)
 				mtmp2 = mtmp2->nmon; /*mtmp2 is about to end up on the migrating mons chain*/
 			if(mtmp->data != &mons[PM_DANCING_BLADE]) migrate_to_level(mtmp, ledger_no(&u.uz),
 					 MIGR_EXACT_XY, (coord *)0);
@@ -887,7 +887,7 @@ migrate_to_level(mtmp, tolev, xyloc, cc)
 	
 	if(mtmp->data == &mons[PM_SURYA_DEVA]){
 		struct monst *blade;
-		for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+		for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar_suryaID) break;
 		if(blade) {
 			/* set minvent's obj->no_charge to 0 */
 			for(obj = blade->minvent; obj; obj = obj->nobj) {

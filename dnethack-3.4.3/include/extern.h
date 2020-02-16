@@ -903,6 +903,7 @@ E void NDECL(maybe_wail);
 E void FDECL(unmul, (const char *));
 E void FDECL(showdmg, (int, BOOLEAN_P));
 E void FDECL(losehp, (int,const char *,BOOLEAN_P));
+E void FDECL(losepw, (int));
 E void FDECL(mdamageu, (struct monst *, int));
 E int NDECL(weight_cap);
 E int NDECL(inv_weight);

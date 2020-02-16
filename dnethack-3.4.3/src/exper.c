@@ -258,9 +258,8 @@ boolean expdrain; /* attack drains exp as well */
 	num = newen();
 	u.uenrolled -= num;
 	calc_total_maxen();
-	u.uen -= num;
-	if (u.uen < 0) u.uen = 0;
-	else if (u.uen > u.uenmax) u.uen = u.uenmax;
+	losepw(num);
+	if(u.uen > u.uenmax) u.uen = u.uenmax;
 
 	if (u.uexp > 0){
 		if(!expdrain) u.uexp = newuexp(u.ulevel) - 1;

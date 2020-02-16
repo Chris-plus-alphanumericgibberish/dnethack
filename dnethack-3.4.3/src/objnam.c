@@ -377,6 +377,7 @@ register int otyp;
 			if(ocl->oc_class == GEM_CLASS)
 				Strcat(buf, (ocl->oc_material == MITHRIL || 
 							 ocl->oc_material == SILVER || 
+							 ocl->oc_material == SALT || 
 							 ocl->oc_material == MINERAL) ?
 						" stone" : " gem");
 			if(un)
@@ -1092,6 +1093,8 @@ boolean adjective;
 		break;
 	case OBSIDIAN_MT:
 		return "obsidian";
+		case SALT:
+		return "salt";
 	case SHADOWSTEEL:
 		return (adjective ? "shadowsteel" : "corporeal darkness");
 	default:
@@ -1546,23 +1549,24 @@ boolean with_price;
 			break;
 		case GEM_CLASS:
 		{
-						  const char *rock =
-							  (ocl->oc_material == MINERAL ||
-							  ocl->oc_material == MITHRIL ||
-							  ocl->oc_material == SILVER
-							  ) ? "stone" : "gem";
-						  if (!obj->dknown) {
-							  Strcat(buf, rock);
-						  }
-						  else if (!nn) {
-							  if (un) Sprintf(eos(buf), "%s called %s", rock, un);
-							  else Sprintf(eos(buf), "%s %s", dn, rock);
-						  }
-						  else {
-							  Strcat(buf, actualn);
-							  if (GemStone(typ)) Strcat(buf, " stone");
-						  }
-						  break;
+		  const char *rock =
+			  (ocl->oc_material == MINERAL ||
+			     ocl->oc_material == SALT ||
+				  ocl->oc_material == MITHRIL ||
+				  ocl->oc_material == SILVER
+				  ) ? "stone" : "gem";
+			  if (!obj->dknown) {
+				  Strcat(buf, rock);
+			  }
+			  else if (!nn) {
+				  if (un) Sprintf(eos(buf), "%s called %s", rock, un);
+				  else Sprintf(eos(buf), "%s %s", dn, rock);
+			  }
+			  else {
+				  Strcat(buf, actualn);
+				  if (GemStone(typ)) Strcat(buf, " stone");
+			  }
+			  break;
 		}
 		default:
 			Sprintf(eos(buf), "glorkum %d %d %d", obj->oclass, typ, obj->spe);
@@ -3613,6 +3617,8 @@ int wishflags;
 			&& strncmpi(bp, "stone to flesh", 14)
 			) {
 			mat = MINERAL;
+		} else if (!strncmpi(bp, "salt ", l=5)) {
+			mat = SALT;
 		} else if (!strncmpi(bp, "obsidian ", l=9)
 			&& strncmpi(bp, "obsidian stone", 14) && strncmpi(bp, "obsidian gem", 12)
 			) {
@@ -4778,6 +4784,17 @@ typfnd:
 	if (isinvisible) otmp->oinvis = 1;
 #endif
 
+	/* set material */
+	if(mat){
+		if (wizwish)
+			set_material(otmp, mat);
+		else if (!otmp->oartifact || is_malleable_artifact(&artilist[otmp->oartifact]))
+			maybe_set_material(otmp, mat, TRUE);	// always limited by allowable random materials, but ignore normal probabilities
+		/* set gemtype, if specified and allowable*/
+			if (mat == GEMSTONE && otmp->oclass != GEM_CLASS && gemtype && !obj_type_uses_ovar1(otmp) && !obj_art_uses_ovar1(otmp))
+				otmp->ovar1 = gemtype;
+	}
+	
 	/* set eroded */
 	if (is_damageable(otmp) || otmp->otyp == CRYSKNIFE) {
 	    if (eroded && (is_flammable(otmp) || is_rustprone(otmp)))
@@ -4819,17 +4836,6 @@ typfnd:
 			otmp->otyp != POT_WATER)
 		otmp->odiluted = 1;
 
-	/* set material */
-	if(mat){
-		if (wizwish)
-			set_material(otmp, mat);
-		else if (!otmp->oartifact || is_malleable_artifact(&artilist[otmp->oartifact]))
-			maybe_set_material(otmp, mat, TRUE);	// always limited by allowable random materials, but ignore normal probabilities
-		/* set gemtype, if specified and allowable*/
-			if (mat == GEMSTONE && otmp->oclass != GEM_CLASS && gemtype && !obj_type_uses_ovar1(otmp) && !obj_art_uses_ovar1(otmp))
-				otmp->ovar1 = gemtype;
-	}
-	
 	/* set object properties */
 	if (oproperties && wizwish) // wishing for object properties is wizard-mode only
 	{

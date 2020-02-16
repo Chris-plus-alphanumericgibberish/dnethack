@@ -2492,7 +2492,7 @@ struct obj	*sobj;
 		if(sobj->cursed){
 			//Cursed: Attacks YOUR magic
 			pline("Shimmering sparks shoot from your body!");
-			u.uen = max(0,u.uen-400);
+			losepw(400);
 	break;
 		}
 		if(confused){

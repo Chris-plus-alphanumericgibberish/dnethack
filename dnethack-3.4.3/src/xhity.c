@@ -409,8 +409,8 @@ int tary;
 		pa == &mons[PM_FABERGE_SPHERE] || pa == &mons[PM_FIREWORK_CART] ||
 		pa == &mons[PM_JUGGERNAUT] || pa == &mons[PM_ID_JUGGERNAUT]))
 	{
-		if (x(magr) + xdir[(int)magr->mvar1] != tarx ||
-			y(magr) + ydir[(int)magr->mvar1] != tary)
+		if (x(magr) + xdir[(int)magr->mvar_vector] != tarx ||
+			y(magr) + ydir[(int)magr->mvar_vector] != tary)
 			return MM_MISS;
 	}
 
@@ -1604,8 +1604,8 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 	 * Physical glyphs result in melee,
 	 * Non-specific glyphs result in random choice
 	 */
-	if (!youagr && *indexnum == 1 && is_alabaster_mummy(pa) && magr->mvar1){
-		switch (magr->mvar1){
+	if (!youagr && *indexnum == 1 && is_alabaster_mummy(pa) && magr->mvar_syllable){
+		switch (magr->mvar_syllable){
 		case SYLLABLE_OF_STRENGTH__AESH:
 		case SYLLABLE_OF_GRACE__UUR:
 			// no changes
@@ -4030,7 +4030,7 @@ boolean ranged;
 					if ((species_resists_fire(mdef))
 						|| (ward_at(x(mdef), y(mdef)) == SIGIL_OF_CTHUGHA)
 						|| (youdef && ((Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_FIRE)))
-						|| (!youdef && is_half_dragon(pd) && mdef->mvar1 == AD_FIRE)
+						|| (!youdef && is_half_dragon(pd) && mdef->mvar_hdBreath == AD_FIRE)
 						|| (youdef && u.sealsActive&SEAL_FAFNIR))
 						dmg = 0;
 				}
@@ -4151,7 +4151,7 @@ boolean ranged;
 					if ((species_resists_cold(mdef))
 						|| (ward_at(x(mdef), y(mdef)) == BRAND_OF_ITHAQUA)
 						|| (youdef && ((Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_COLD)))
-						|| (!youdef && is_half_dragon(pd) && mdef->mvar1 == AD_COLD)
+						|| (!youdef && is_half_dragon(pd) && mdef->mvar_hdBreath == AD_COLD)
 						|| (youdef && u.sealsActive&SEAL_AMON))
 						dmg = 0;
 				}
@@ -4226,7 +4226,7 @@ boolean ranged;
 					if ((species_resists_elec(mdef))
 						|| (ward_at(x(mdef), y(mdef)) == TRACERY_OF_KARAKAL)
 						|| (youdef && ((Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ELEC)))
-						|| (!youdef && is_half_dragon(pd) && mdef->mvar1 == AD_ELEC)
+						|| (!youdef && is_half_dragon(pd) && mdef->mvar_hdBreath == AD_ELEC)
 						|| (youdef && u.sealsActive&SEAL_ASTAROTH))
 						dmg = 0;
 				}
@@ -7386,7 +7386,7 @@ boolean ranged;
 		if (youagr && Race_if(PM_HALF_DRAGON))
 			alt_attk.adtyp = flags.HDbreath;
 		else if (is_half_dragon(pa))
-			alt_attk.adtyp = magr->mvar1;
+			alt_attk.adtyp = magr->mvar_hdBreath;
 		else
 			alt_attk.adtyp = AD_COLD;
 		return xmeleehurty(magr, mdef, &alt_attk, &alt_attk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
@@ -8249,7 +8249,7 @@ int vis;
 			/* set the creation's direction */
 			if (mlocal){
 				for (i = 0; i<8; i++) if (xdir[i] == dx && ydir[i] == dy) break;
-				mlocal->mvar1 = i;
+				mlocal->mvar_vector = i;
 
 				magr->mspec_used = rnd(6);
 				result = MM_HIT;

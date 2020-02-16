@@ -1638,7 +1638,7 @@ register struct monst *mtmp;
 					familliar->m_lev = mtmp->m_lev;
 					familliar->mhp = mtmp->mhp;
 					familliar->mhpmax = mtmp->mhpmax;
-					familliar->mvar1 = (long)mtmp->m_id;
+					familliar->mvar_witchID = (long)mtmp->m_id;
 					familliar->mpeaceful = mtmp->mpeaceful;
 				}
 				mongets(mtmp, HIGH_BOOTS);
@@ -1652,7 +1652,7 @@ register struct monst *mtmp;
 					familliar->m_lev = mtmp->m_lev;
 					familliar->mhp = mtmp->mhp;
 					familliar->mhpmax = mtmp->mhpmax;
-					familliar->mvar1 = (long)mtmp->m_id;
+					familliar->mvar_witchID = (long)mtmp->m_id;
 					familliar->mpeaceful = mtmp->mpeaceful;
 				}
 				mongets(mtmp, HIGH_BOOTS);
@@ -1668,7 +1668,7 @@ register struct monst *mtmp;
 					familliar->m_lev = mtmp->m_lev;
 					familliar->mhp = mtmp->mhp;
 					familliar->mhpmax = mtmp->mhpmax;
-					familliar->mvar1 = (long)mtmp->m_id;
+					familliar->mvar_witchID = (long)mtmp->m_id;
 					familliar->mpeaceful = mtmp->mpeaceful;
 				}
 				mongets(mtmp, HIGH_BOOTS);
@@ -3083,7 +3083,7 @@ register struct monst *mtmp;
 				struct monst *dancer;
 				dancer = makemon(&mons[PM_DANCING_BLADE], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
 				if(dancer){
-					dancer->mvar1 = (long)mtmp->m_id;
+					dancer->mvar_suryaID = (long)mtmp->m_id;
 					dancer->mpeaceful = mtmp->mpeaceful;
 				}
 				
@@ -6352,23 +6352,23 @@ register struct	monst	*mtmp;
 			
 			switch(rnd(6)){
 				case 1:
-					mtmp->mvar1 = SYLLABLE_OF_STRENGTH__AESH;
+					mtmp->mvar_syllable = SYLLABLE_OF_STRENGTH__AESH;
 				break;
 				case 2:
-					mtmp->mvar1 = SYLLABLE_OF_GRACE__UUR;
+					mtmp->mvar_syllable = SYLLABLE_OF_GRACE__UUR;
 				break;
 				case 3:
-					mtmp->mvar1 = SYLLABLE_OF_LIFE__HOON;
+					mtmp->mvar_syllable = SYLLABLE_OF_LIFE__HOON;
 				break;
 				case 4:
-					mtmp->mvar1 = SYLLABLE_OF_SPIRIT__VAUL;
+					mtmp->mvar_syllable = SYLLABLE_OF_SPIRIT__VAUL;
 					mtmp->mintrinsics[(DISPLACED-1)/32] |= (1 << (DISPLACED-1)%32);
 				break;
 				case 5:
-					mtmp->mvar1 = SYLLABLE_OF_POWER__KRAU;
+					mtmp->mvar_syllable = SYLLABLE_OF_POWER__KRAU;
 				break;
 				case 6:
-					mtmp->mvar1 = SYLLABLE_OF_THOUGHT__NAEN;
+					mtmp->mvar_syllable = SYLLABLE_OF_THOUGHT__NAEN;
 				break;
 			}
 		}
@@ -6384,7 +6384,7 @@ register struct	monst	*mtmp;
 				struct monst *blbtmp;
 				if (blbtmp = makemon(&mons[PM_BLOB_OF_PRESERVED_ORGANS], mtmp->mx, mtmp->my, MM_ADJACENTOK | MM_NOCOUNTBIRTH)) {
 					/* blob created, link it */
-					blbtmp->mvar1 = (long)mtmp->m_id;
+					blbtmp->mvar_huskID = (long)mtmp->m_id;
 				}
 				else {
 					/* blob creation failed; dramatically weaken this hungry dead to compensate */
@@ -7976,7 +7976,7 @@ register int	mmflags;
 			if(mndx == PM_CLOCKWORK_SOLDIER || mndx == PM_CLOCKWORK_DWARF || 
 			   mndx == PM_FABERGE_SPHERE || mndx == PM_FIREWORK_CART || 
 			   mndx == PM_JUGGERNAUT || mndx == PM_ID_JUGGERNAUT
-			) mtmp->mvar1 = rn2(8);
+			) mtmp->mvar_vector = rn2(8);
 			
 			if(mndx == PM_ID_JUGGERNAUT) {
 				mtmp->perminvis = TRUE;
@@ -8312,7 +8312,7 @@ register int	mmflags;
 				mtmp->mhp = mtmp->mhpmax;
 			}
 			else if(mndx == PM_PALE_NIGHT){
-				mtmp->mvar1 = 0;
+				mtmp->mvar_paleWarning = 0;
 			}
 			if(mndx == PM_INCUBUS){
 				if(Is_grazzt_level(&u.uz)){

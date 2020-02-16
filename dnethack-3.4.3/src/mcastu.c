@@ -873,8 +873,8 @@ unsigned int type;
 	case PM_GREAT_HIGH_SHAMAN_OF_KURTULMAK:
 		return SUMMON_DEVIL; 
 	case PM_LICH__THE_FIEND_OF_EARTH:
-		if(mtmp->mvar1 > 3) mtmp->mvar1 = 0;
-		switch(mtmp->mvar1++){
+		if(mtmp->mvar_spList_1 > 3) mtmp->mvar_spList_1 = 0;
+		switch(mtmp->mvar_spList_1++){
 			case 0: return MON_FLARE;
 			case 1: return PARALYZE;
 			case 2: return MON_WARP;
@@ -882,8 +882,8 @@ unsigned int type;
 		}
 	break;
 	case PM_KARY__THE_FIEND_OF_FIRE:
-		if(mtmp->mvar1 > 7) mtmp->mvar1 = 0;
-		switch(mtmp->mvar1++){
+		if(mtmp->mvar_spList_1 > 7) mtmp->mvar_spList_1 = 0;
+		switch(mtmp->mvar_spList_1++){
 			case 0: return MON_FIRAGA;
 			case 1: return BLIND_YOU;
 			case 2: return MON_FIRAGA;
@@ -900,15 +900,15 @@ unsigned int type;
 	break;
 	case PM_TIAMAT__THE_FIEND_OF_WIND:
 		if(rn2(3)){
-			if(mtmp->mvar1 > 3) mtmp->mvar1 = 0;
-			switch(mtmp->mvar1++){
+			if(mtmp->mvar_spList_1 > 3) mtmp->mvar_spList_1 = 0;
+			switch(mtmp->mvar_spList_1++){
 				case 0: return PLAGUE;
 				case 1: return MON_BLIZZARA;
 				case 2: return MON_THUNDARA;
 				case 3: return MON_FIRA;
 			}
 		} else {
-			if(mtmp->mvar2 > 3) mtmp->mvar1 = 0;
+			if(mtmp->mvar2 > 3) mtmp->mvar2 = 0;
 			switch(mtmp->mvar2++){
 				case 0: return LIGHTNING_BOLT;
 				case 1: return MON_POISON_GAS;
@@ -919,8 +919,8 @@ unsigned int type;
 	break;
 	case PM_CHAOS:
 		if(rn2(2)){
-			if(mtmp->mvar1 > 7) mtmp->mvar1 = 0;
-			switch(mtmp->mvar1++){
+			if(mtmp->mvar_spList_1 > 7) mtmp->mvar_spList_1 = 0;
+			switch(mtmp->mvar_spList_1++){
 				case 0: return MON_BLIZZAGA;
 				case 1: return WEAKEN_STATS;
 				case 2: return MON_THUNDAGA;
@@ -931,7 +931,7 @@ unsigned int type;
 				case 7: return MON_FLARE;
 			}
 		} else {
-			if(mtmp->mvar2 > 3) mtmp->mvar1 = 0;
+			if(mtmp->mvar2 > 3) mtmp->mvar2 = 0;
 			switch(mtmp->mvar2++){
 				case 0: return FIRE_PILLAR;
 				case 1: return GEYSER;
@@ -1459,7 +1459,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 	}
 	
 	if(!is_kamerel(mtmp->data) || !mirror){
-		chance = (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_THOUGHT__NAEN) ? 0 : 2;
+		chance = (is_alabaster_mummy(mtmp->data) && mtmp->mvar_syllable == SYLLABLE_OF_THOUGHT__NAEN) ? 0 : 2;
 		if(mtmp->mconf) chance += 8;
 		if(u.uz.dnum == neutral_dnum && u.uz.dlevel <= sum_of_all_level.dlevel){
 			if(u.uz.dlevel == sum_of_all_level.dlevel) chance -= 1;
@@ -1499,7 +1499,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 			dmd = 6;
 			dmn = min(MAX_BONUS_DICE, ml/3+1);
 			if (mattk->damd) dmd = (int)(mattk->damd);
-			if (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_POWER__KRAU)
+			if (is_alabaster_mummy(mtmp->data) && mtmp->mvar_syllable == SYLLABLE_OF_POWER__KRAU)
 				dmd *= 1.5;
 			
 			if (mattk->damn) dmn+= (int)(mattk->damn);
@@ -1522,7 +1522,7 @@ castmu(mtmp, mattk, thinks_it_foundyou, foundyou)
 		if (dmn > 15) dmn = 15;
 		
 		if (mattk->damd) dmd = (int)(mattk->damd);
-		if (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_POWER__KRAU)
+		if (is_alabaster_mummy(mtmp->data) && mtmp->mvar_syllable == SYLLABLE_OF_POWER__KRAU)
 			dmd *= 1.5;
 		
 		if (mattk->damn) dmn+= (int)(mattk->damn);
@@ -3592,7 +3592,7 @@ castmm(mtmp, mdef, mattk)
 		if(dmn > 15) dmn = 15;
 		
 		if (mattk->damd) dmd = (int)(mattk->damd);
-		if (is_alabaster_mummy(mtmp->data) && mtmp->mvar1 == SYLLABLE_OF_POWER__KRAU)
+		if (is_alabaster_mummy(mtmp->data) && mtmp->mvar_syllable == SYLLABLE_OF_POWER__KRAU)
 			dmd *= 1.5;
 		
 		if (mattk->damn) dmn+= (int)(mattk->damn);
@@ -4021,7 +4021,7 @@ castum(mtmp, mattk)
 	}
 
 	if (mattk->adtyp == AD_SPEL || mattk->adtyp == AD_CLRC) {
-	    u.uen -= ml;
+	    losepw(ml);
 	}
 
 	if(rn2(ml*20) < (Confusion ? 100 : 20)) {	/* fumbled attack */
@@ -5288,7 +5288,7 @@ struct monst *mon;
 	if(!is_witch_mon(mon))
 		return FALSE;
 	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon)
-		if(mtmp->data == &mons[PM_WITCH_S_FAMILIAR] && mtmp->mvar1 == (long)mon->m_id)
+		if(mtmp->data == &mons[PM_WITCH_S_FAMILIAR] && mtmp->mvar_witchID == (long)mon->m_id)
 			return FALSE;
 	return TRUE;
 }

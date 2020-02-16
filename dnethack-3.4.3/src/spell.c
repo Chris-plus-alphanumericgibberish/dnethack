@@ -1886,8 +1886,7 @@ stargate()
 	}
 	if(!Blind) You("are surrounded by a shimmering sphere!");
 	else You_feel("weightless for a moment.");
-	u.uen -= 125;
-	if(u.uen < 0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
+	losepw(125);
 	goto_level(&newlev, FALSE, FALSE, FALSE);
 	}
 	return 0;
@@ -4190,12 +4189,12 @@ boolean atme;
 		chance = percent_success(spell);
 		if (confused || (rnd(100) > chance)) {
 			You("fail to cast the spell correctly.");
-			u.uen -= energy / 2;
+			losepw(energy / 2);
 			flags.botl = 1;
 			return(1);
 		}
 
-		u.uen -= energy;
+		losepw(energy);
 		flags.botl = 1;
 		exercise(A_WIS, TRUE);
 		if (uwep && uwep->oartifact == ART_CALLANDOR && !flags.initgend && rn2(20)){

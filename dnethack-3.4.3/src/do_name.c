@@ -909,8 +909,8 @@ boolean called;
 					}
 			}
 		}
-		if(is_alabaster_mummy(mdat) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
-			Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar1]));
+		if(is_alabaster_mummy(mdat) && mtmp->mvar_syllable >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar_syllable <= SYLLABLE_OF_SPIRIT__VAUL){
+			Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar_syllable]));
 			name_at_start = FALSE;
 		}
 	    Strcat(buf, mdat->mname);
@@ -989,8 +989,8 @@ boolean called;
 						}
 				}
 			}
-			if(is_alabaster_mummy(mdat) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
-				Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar1]));
+			if(is_alabaster_mummy(mdat) && mtmp->mvar_syllable >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar_syllable <= SYLLABLE_OF_SPIRIT__VAUL){
+				Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar_syllable]));
 				name_at_start = FALSE;
 			}
 			
@@ -1089,8 +1089,8 @@ boolean called;
 					}
 			}
 		}
-		if(is_alabaster_mummy(mdat) && mtmp->mvar1 >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar1 <= SYLLABLE_OF_SPIRIT__VAUL){
-			Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar1]));
+		if(is_alabaster_mummy(mdat) && mtmp->mvar_syllable >= SYLLABLE_OF_STRENGTH__AESH && mtmp->mvar_syllable <= SYLLABLE_OF_SPIRIT__VAUL){
+			Sprintf(eos(buf), "%sed ", OBJ_DESCR(objects[mtmp->mvar_syllable]));
 			name_at_start = FALSE;
 		}
 	    Strcat(buf, mdat->mname);

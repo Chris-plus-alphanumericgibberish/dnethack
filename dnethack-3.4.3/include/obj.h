@@ -124,28 +124,8 @@ struct obj {
 	Bitfield(yours,1);	/* obj is yours (eg. thrown by you) */
 	Bitfield(masters,1);	/* obj is given by a monster's master, it will not drop it */
 	Bitfield(objsize,3);	/* 0-7 */
-	Bitfield(obj_material,5);
-//define LIQUID		1	/* currently only for venom */
-//define WAX			2
-//define VEGGY		3	/* foodstuffs */
-//define FLESH		4	/*   ditto    */
-//define PAPER		5
-//define CLOTH		6
-//define LEATHER		7
-//define WOOD		8
-//define BONE		9
-//define DRAGON_HIDE	10	/* not leather! */
-//define IRON		11	/* Fe - includes steel */
-//define METAL		12	/* Sn, &c. */
-//define COPPER		13	/* Cu - includes brass and bronze*/
-//define SILVER		14	/* Ag */
-//define GOLD		15	/* Au */
-//define PLATINUM	16	/* Pt */
-//define MITHRIL		17
-//define PLASTIC		18
-//define GLASS		19
-//define GEMSTONE	20
-//define MINERAL		21
+	Bitfield(obj_material,5); /*Max 31*/
+	//See objclass for values
 	/* 19 free bits in this field, I think -CM */
 	
 	long bodytypeflag;	/* MB tag(s) this item goes with. */

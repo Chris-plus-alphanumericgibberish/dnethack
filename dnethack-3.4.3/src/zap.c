@@ -1365,6 +1365,7 @@ create_polymon(obj, okind)
 	case PLATINUM:
 	case GEMSTONE:
 	case MINERAL:
+	case SALT:
 	    pm_index = rn2(2) ? PM_STONE_GOLEM : PM_CLAY_GOLEM;
 	    material = "lithic ";
 	    break;
@@ -2010,6 +2011,7 @@ struct obj *obj, *otmp;
 	case SPE_STONE_TO_FLESH:
 		refresh_x = obj->ox; refresh_y = obj->oy;
 		if ((obj->obj_material != MINERAL &&
+			 obj->obj_material != SALT &&
 			 obj->obj_material != GEMSTONE) ||
 			obj->oartifact
 		) {
@@ -2798,12 +2800,11 @@ int gaze_cancel;
 		else
 		    rehumanize();
 	    }
-		u.uen -= d(10,10);
+		losepw(d(10,10));
 		if(!Race_if(PM_INCANTIFIER)){
 			u.uenbonus -= 10;
 			calc_total_maxen();
 		}
-		if(u.uen<0 && !Race_if(PM_INCANTIFIER)) u.uen = 0;
 	} else {
 	    mdef->mcan = TRUE;
 
