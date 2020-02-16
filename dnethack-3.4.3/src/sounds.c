@@ -16,11 +16,35 @@
 #define 	UNSTERILIZE		5
 #define 	SANCTIFY_WEP	4
 
+#define		NURSE_FULL_HEAL			1
+#define		NURSE_TRANQUIZIZERS		2
+#define		NURSE_RESTORE_ABILITY	3
+#define		NURSE_FIX_MORGUL		4
+#define		NURSE_FIX_SICKNESS		5
+#define		NURSE_FIX_SLIME			6
+#define		NURSE_FIX_STERILE		7
+#define		NURSE_BRAIN_SURGERY		8
+
+//Match order of constants
+const int nurseprices[] = {
+	0,	 //0 (invalid)
+	2000,//1 10x full healing
+	1000,//2 10x sleeping
+	1000,//3 10x restore ability
+	4000,//4 20x full healing
+	2000,//5 same as healing
+	2000,//6 same as healing
+	1000,//7 restore ability
+	6000,//8 20x trephination kit cost
+};
+
 #ifdef OVLB
 
 static const char *FDECL(DantalionRace,(int));
 int FDECL(dobinding,(int, int));
 static int NDECL(doblessmenu);
+static int NDECL(donursemenu);
+static boolean FDECL(nurse_services,(struct monst *));
 
 static const char tools[] = { TOOL_CLASS, 0 };
 
@@ -2180,17 +2204,19 @@ humanoid_sound:
 			start_clockwinding(key, mtmp, turns);
 			break;
 		}
+		if(mtmp->mpeaceful && !nonliving(youracedata)){
+			if(nurse_services(mtmp))
+				break;
+		}
 	    if (uwep && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)))
 			verbl_msg = "Put that weapon away before you hurt someone!";
+	    else if (uarmc || uarm || uarmh || uarms || uarmg || uarmf)
+			verbl_msg = Role_if(PM_HEALER) ?
+			  "Doc, I can't help you unless you cooperate." :
+			  "Please undress so I can examine you.";
+	    else if (uarmu)
+			verbl_msg = "Take off your shirt, please.";
 	    else verbl_msg = "Relax, this won't hurt a bit.";
-	    // else if (uarmc || uarm || uarmh || uarms || uarmg || uarmf)
-		// verbl_msg = Role_if(PM_HEALER) ?
-			  // "Doc, I can't help you unless you cooperate." :
-			  // "Please undress so I can examine you.";
-// #ifdef TOURIST
-	    // else if (uarmu)
-		// verbl_msg = "Take off your shirt, please.";
-// #endif
 	    break;
 	case MS_GUARD:
 #ifndef GOLDOBJ
@@ -6034,6 +6060,252 @@ doblessmenu()
 	n = select_menu(tmpwin, how, &selected);
 	destroy_nhwindow(tmpwin);
 	return (n > 0) ? (int)selected[0].item.a_int : 0;
+}
+
+int
+donursemenu()
+{
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Ask for treatment?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	incntlet = 'a';
+	
+	Sprintf(buf, "Fortify my health ($%d)", nurseprices[NURSE_FULL_HEAL]);
+	any.a_int = NURSE_FULL_HEAL;	/* must be non-zero */
+	add_menu(tmpwin, NO_GLYPH, &any,
+		incntlet, 0, ATR_NONE, buf,
+		MENU_UNSELECTED);
+	incntlet++;
+	if(u.usanity < 100){
+		Sprintf(buf, "Something for my nerves ($%d)", nurseprices[NURSE_TRANQUIZIZERS]);
+		any.a_int = NURSE_TRANQUIZIZERS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	
+	if(ABASE(A_STR) < (AMAX(A_STR) - (u.uhs >= 3 ? 1 : 0))
+	|| ABASE(A_DEX) < AMAX(A_DEX)
+	|| ABASE(A_CON) < AMAX(A_CON)
+	|| ABASE(A_INT) < AMAX(A_INT)
+	|| ABASE(A_WIS) < AMAX(A_WIS)
+	|| ABASE(A_CHA) < AMAX(A_CHA)
+	){
+		Sprintf(buf, "Steroids ($%d)", nurseprices[NURSE_RESTORE_ABILITY]); /*Note: to accelerate natural healing*/
+		any.a_int = NURSE_RESTORE_ABILITY;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	if(u.umorgul > 0){
+		Sprintf(buf, "Extract morgul shards ($%d)", nurseprices[NURSE_FIX_MORGUL]);
+		any.a_int = NURSE_FIX_MORGUL;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	if(Sick){
+		Sprintf(buf, "Antibiotics ($%d)", nurseprices[NURSE_FIX_SICKNESS]);
+		any.a_int = NURSE_FIX_SICKNESS;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	if(Slimed){
+		Sprintf(buf, "Remove slimy green growths ($%d)", nurseprices[NURSE_FIX_SLIME]);
+		any.a_int = NURSE_FIX_SLIME;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	if(Sterile){
+		Sprintf(buf, "Fertility treatment ($%d)", nurseprices[NURSE_FIX_STERILE]);
+		any.a_int = NURSE_FIX_STERILE;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	if(u.thoughts && !uarmh){
+		Sprintf(buf, "Brain surgery ($%d)", nurseprices[NURSE_BRAIN_SURGERY]);
+		any.a_int = NURSE_BRAIN_SURGERY;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	
+	end_menu(tmpwin, "Select treatment");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? (int)selected[0].item.a_int : 0;
+}
+
+boolean
+nurse_services(nurse)
+struct monst *nurse;
+{
+	int service, gold, count = 1, cost;
+	
+	if((uarm || uarmu) && (!u.thoughts || uarmh))
+		return FALSE;
+	
+	service = donursemenu();
+	if(!service)
+		return FALSE;
+	
+#ifndef GOLDOBJ
+		gold = u.ugold;
+#else
+		gold = money_cnt(invent);
+#endif
+	if(service == NURSE_FULL_HEAL || service == NURSE_TRANQUIZIZERS){
+		char inbuf[BUFSZ];
+		getlin("How many courses?", inbuf);
+		if (*inbuf == '\033') count = 1;
+		else count = atoi(inbuf);
+		if(count < 0)
+			count = 1;
+	}
+	cost = nurseprices[service]*count;
+	if(!nurse->mtame)
+		cost += cost/10; //10% surcharge
+	
+	if(gold < cost){
+		pline("You don't have enough gold!");
+		return FALSE;
+	} else {
+		pline("That will be $%d.", cost);
+		if(yn("Pay?") != 'y')
+			return FALSE;
+	}
+	switch(service){
+		case NURSE_FULL_HEAL:
+			pline("%s doses you with healing medicine.", Monnam(nurse));
+			healup(400*count, 8*count, FALSE, TRUE);
+		break;
+		case NURSE_TRANQUIZIZERS:
+			pline("%s doses you with tranquilizers.", Monnam(nurse));
+			if(Sleep_resistance || Free_action)
+				You("yawn.");
+			else {
+				You("suddenly fall asleep!");
+				fall_asleep(-13*count, TRUE);
+			}
+			//Sedative
+			change_usanity(15*count);
+		break;
+		case NURSE_RESTORE_ABILITY:{
+			int i, lim;
+			pline("%s doses you with ability restoring medicine.", Monnam(nurse));
+		    pline("Wow!  You feel %s!",
+			  unfixable_trouble_count(FALSE) ? "better" : "great"
+			 );
+		    for (i = 0; i < A_MAX; i++) {
+				lim = AMAX(i);
+				if (i == A_STR && u.uhs >= 3) --lim;	/* WEAK */
+				if (ABASE(i) < lim){
+					ABASE(i) = lim;
+					flags.botl = 1;
+				}
+		    }
+		}break;
+		case NURSE_FIX_MORGUL:{
+			int i = u.umorgul;
+			struct obj *frags;
+			u.umorgul = 0;
+			frags = mksobj(SHURIKEN, FALSE, FALSE);
+			pline("%s performs surgery, removing %d metallic shard%s from your body.", Monnam(nurse), i, (i>1) ? "s" : "");
+			if(frags){
+				frags->quan = i;
+				frags->oproperties = OPROP_MORGW|OPROP_LESSW;
+				frags->obj_material = METAL;
+				curse(frags);
+				fix_object(frags);
+				frags = hold_another_object(frags, "You drop %s!",
+							  doname(frags), (const char *)0); /*shouldn't merge, but may drop*/
+			}
+		}break;
+		case NURSE_FIX_SICKNESS:
+			pline("%s doses you with antibiotics.", Monnam(nurse));
+			healup(0, 0, TRUE, FALSE);
+		break;
+		case NURSE_FIX_SLIME:
+			pline("%s burns away the slimy growths.", Monnam(nurse));
+			Slimed = 0L;
+		break;
+		case NURSE_FIX_STERILE:
+			pline("%s doses you with fertility medicine.", Monnam(nurse));
+			HSterile = 0L;
+		break;
+		case NURSE_BRAIN_SURGERY:{
+			int otyp;
+			struct obj *glyph;
+			otyp = dotrephination_menu();
+			if(!otyp)
+				break;
+			
+			glyph = mksobj(otyp, FALSE, FALSE);
+			
+			if(glyph){
+				remove_thought(otyp);
+				if(Race_if(PM_ANDROID)){
+					glyph->obj_material = PLASTIC;
+					fix_object(glyph);
+				}
+				if(Race_if(PM_CLOCKWORK_AUTOMATON)){
+					glyph->obj_material = COPPER;
+					fix_object(glyph);
+				}
+				if(Race_if(PM_WORM_THAT_WALKS)){
+					glyph->obj_material = SHELL;
+					fix_object(glyph);
+				}
+				hold_another_object(glyph, "You drop %s!", doname(glyph), (const char *)0);
+				if(ACURR(A_WIS)>ATTRMIN(A_WIS)){
+					adjattrib(A_WIS, -1, FALSE);
+				}
+				if(ACURR(A_INT)>ATTRMIN(A_INT)){
+					adjattrib(A_INT, -1, FALSE);
+				}
+				if(ACURR(A_CON)>ATTRMIN(A_CON)){
+					adjattrib(A_CON, -1, FALSE);
+				}
+				change_usanity(-10);
+				//Note: this is always the player's HP, not their polyform HP.
+				u.uhp -= u.uhp/2; //Note: chopped, so 0 to 1/2 max-HP lost.
+			} else {
+				impossible("Shard creation failed during nurse brain surgery??");
+			}
+		}break;
+	}
+#ifndef GOLDOBJ
+	u.ugold -= cost;
+	if(!nurse->mtame)
+		nurse->mgold += nurseprices[service]*count/10;
+#else
+	money2none(nurseprices[service]*count);
+	if(!nurse->mtame)
+		(void) money2mon(nurse, nurseprices[service]*count/10);
+#endif
 }
 
 #endif /* OVLB */

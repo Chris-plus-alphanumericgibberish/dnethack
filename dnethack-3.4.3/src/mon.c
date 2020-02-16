@@ -3500,10 +3500,6 @@ struct monst *magr,	/* monster that is currently deciding where to move */
 	if(ma == &mons[PM_RAVEN] && md == &mons[PM_FLOATING_EYE])
 		return ALLOW_M|ALLOW_TM;
 
-	/* nurses heal adjacent alied monsters */
-	if(ma == &mons[PM_NURSE] && mdef->mhp < mdef->mhpmax && magr->mpeaceful == mdef->mpeaceful)
-		return ALLOW_M|ALLOW_TM;
-
 	/* dungeon fern spores hate everything */
 	if(is_fern_spore(ma) && !is_vegetation(md))
 		return ALLOW_M|ALLOW_TM;
@@ -6983,6 +6979,45 @@ boolean verbose;
 		max = &(targ->mhpmax);
 	}
 	*hp += mech->m_lev;
+	if(*hp > *max)
+		*hp = *max;
+}
+
+void
+nurse_heal(nurse, targ, verbose)
+struct monst *nurse, *targ;
+boolean verbose;
+{
+	int *hp, *max;
+	int healing;
+	if(verbose){
+		if(nurse == targ)
+			pline("%s heals %sself.", Monnam(nurse), himherit(targ));
+		else if(targ == &youmonst)
+			pline("%s heals you.", Monnam(nurse));
+		else
+			pline("%s heals %s.", Monnam(nurse), mon_nam(targ));
+	}
+	if(targ == &youmonst){
+		if(Upolyd){
+			hp = &u.mh;
+			max = &u.mhmax;
+		} else {
+			hp = &u.uhp;
+			max = &u.uhpmax;
+		}
+	} else {
+		hp = &(targ->mhp);
+		max = &(targ->mhpmax);
+	}
+	healing += d(2+max(0, nurse->m_lev - 9)/3,6); //Note, nurses start at 11th level, healers 10th.
+	if(targ == &youmonst){
+		healing -= roll_udr(nurse);
+	} else {
+		healing -= roll_mdr(targ, nurse);
+	}
+	if(healing < 1)
+		healing = 1;
 	if(*hp > *max)
 		*hp = *max;
 }

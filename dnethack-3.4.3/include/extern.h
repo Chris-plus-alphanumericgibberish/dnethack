@@ -57,6 +57,8 @@ E boolean FDECL(use_ring_of_wishes, (struct obj *));
 E boolean FDECL(use_candle_of_invocation, (struct obj *));
 E void FDECL(use_magic_whistle, (struct obj *));
 E int FDECL(unfixable_trouble_count,(BOOLEAN_P));
+E void FDECL(remove_thought, (int));
+E int NDECL(dotrephination_menu);
 E int NDECL(partial_action);
 
 /* ### artifact.c ### */
@@ -1422,6 +1424,7 @@ E int NDECL(u_sanity_loss_nyar);
 E int FDECL(u_sanity_gain,(struct monst *));
 E int FDECL(u_insight_gain,(struct monst *));
 E void FDECL(repair,(struct monst *, struct monst *, int));
+E void FDECL(nurse_heal,(struct monst *, struct monst *, int));
 E void FDECL(insight_vanish,(struct monst *));
 
 /* ### mondata.c ### */

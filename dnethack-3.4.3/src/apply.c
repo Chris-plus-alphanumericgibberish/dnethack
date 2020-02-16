@@ -32,7 +32,6 @@ STATIC_DCL int FDECL(use_rakuyo, (struct obj *));
 STATIC_DCL int FDECL(use_force_blade, (struct obj *));
 STATIC_DCL void FDECL(light_cocktail, (struct obj *));
 STATIC_DCL void FDECL(light_torch, (struct obj *));
-STATIC_DCL void FDECL(remove_thought, (int));
 STATIC_DCL void FDECL(use_trephination_kit, (struct obj *));
 STATIC_DCL void FDECL(use_tinning_kit, (struct obj *));
 STATIC_DCL void FDECL(use_figurine, (struct obj **));
@@ -59,7 +58,6 @@ STATIC_DCL int FDECL(do_carve_obj, (struct obj *));
 STATIC_PTR int FDECL(pick_rune, (BOOLEAN_P));
 STATIC_DCL void FDECL(describe_rune, (int));
 STATIC_PTR char NDECL(pick_carvee);
-STATIC_DCL int NDECL(dotrephination_menu);
 
 
 #ifdef	AMIGA
@@ -2064,7 +2062,7 @@ struct obj *corpse;
 }
 
 
-STATIC_OVL void
+void
 remove_thought(otyp)
 int otyp;
 {
@@ -2177,6 +2175,7 @@ register struct obj *obj;
 			adjattrib(A_CON, -1, FALSE);
 		}
 		change_usanity(-10);
+		//Note: this is always the player's HP, not their polyform HP.
 		u.uhp -= u.uhp/2; //Note: chopped, so 0 to 1/2 max-HP lost.
 	} else {
 		impossible("Shard creation failed in use_trephination_kit??");
@@ -6318,7 +6317,7 @@ unfixable_trouble_count(is_horn)
 	return unfixable_trbl;
 }
 
-STATIC_OVL int
+int
 dotrephination_menu()
 {
 	winid tmpwin;

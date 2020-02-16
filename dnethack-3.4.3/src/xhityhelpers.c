@@ -591,7 +591,8 @@ fightm(mtmp)		/* have monsters fight each other */
 		     * to allow monsters that resist conflict to respond.
 		     */
 		    if ((result & MM_HIT) && !(result & MM_DEF_DIED) &&
-			rn2(4) && mon->movement >= NORMAL_SPEED && mtmp->data != &mons[PM_NURSE]) {
+				rn2(4) && mon->movement >= NORMAL_SPEED
+			) {
 				mon->movement -= NORMAL_SPEED;
 				notonhead = 0;
 				(void) mattackm(mon, mtmp);	/* return attack */

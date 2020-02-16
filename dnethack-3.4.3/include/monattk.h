@@ -82,7 +82,7 @@
 #define AD_RUST		24	/* rusts armour (Rust Monster)*/
 #define AD_CONF		25	/* confuses (Umber Hulk) */
 #define AD_DGST		26	/* digests opponent (trapper, etc.) */
-#define AD_HEAL		27	/* heals opponent's wounds (nurse) */
+#define AD_HEAL		27	/* DEPRICATED heals opponent's wounds (nurse) */
 #define AD_WRAP		28	/* special "stick" for eels */
 #define AD_WERE		29	/* confers lycanthropy */
 #define AD_DRDX		30	/* drains dexterity (quasit) */

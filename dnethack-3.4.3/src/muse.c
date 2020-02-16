@@ -1043,16 +1043,9 @@ struct monst *mtmp;
 	if (is_animal(mtmp->data) || mindless_mon(mtmp) ||
 	    nohands(mtmp->data))
 		return FALSE;
-	if (target == &youmonst)
-	{
-	if (u.uswallow) return FALSE;
-	if (in_your_sanctuary(mtmp, 0, 0)) return FALSE;
-	if (dmgtype(mtmp->data, AD_HEAL) && !uwep
-#ifdef TOURIST
-	    && !uarmu
-#endif
-	    && !uarm && !uarmh && !uarms && !uarmg && !uarmc && !uarmf)
-		return FALSE;
+	if (target == &youmonst){
+		if (u.uswallow) return FALSE;
+		if (in_your_sanctuary(mtmp, 0, 0)) return FALSE;
 	}
 
 	if (!ranged_stuff) return FALSE;
