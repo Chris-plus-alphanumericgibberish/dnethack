@@ -94,7 +94,15 @@
 #define WELDPROOF					1 + CARCAP
 #define NULLMAGIC					1 + WELDPROOF
 #define STERILE						1 + NULLMAGIC
-#define LAST_PROP		(STERILE)
+#define CHASTITY					1 + STERILE
+#define CLEAVING					1 + CHASTITY
+#define GOOD_HEALTH					1 + CLEAVING
+#define RAPID_HEALING				1 + GOOD_HEALTH
+#define DESTRUCTION					1 + RAPID_HEALING
+#define PRESERVATION				1 + DESTRUCTION
+#define QUICK_DRAW					1 + PRESERVATION
+#define CLEAR_THOUGHTS				1 + QUICK_DRAW
+#define LAST_PROP		(CLEAR_THOUGHTS)
 
 /*** Where the properties come from ***/
 /* Definitions were moved here from obj.h and you.h */

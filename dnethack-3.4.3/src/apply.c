@@ -48,6 +48,7 @@ STATIC_DCL int FDECL(use_pole, (struct obj *));
 STATIC_DCL int FDECL(use_cream_pie, (struct obj *));
 STATIC_DCL int FDECL(use_grapple, (struct obj *));
 STATIC_DCL int FDECL(use_crook, (struct obj *));
+STATIC_DCL int FDECL(use_doll, (struct obj *));
 STATIC_DCL int FDECL(do_break_wand, (struct obj *));
 STATIC_DCL int FDECL(do_flip_coin, (struct obj *));
 STATIC_DCL boolean FDECL(figurine_location_checks,
@@ -4207,6 +4208,77 @@ use_crook (obj)
 	return (1);
 }
 
+STATIC_OVL int
+use_doll(obj)
+	struct obj *obj;
+{
+	int res = 0;
+	struct monst *mtmp;
+	switch(obj->otyp){
+		case DOLL_OF_JUMPING:
+			if (jump(4)){
+				res = 1;
+				if((HJumping&TIMEOUT) + 100L < TIMEOUT){
+					long timer = (HJumping&TIMEOUT) + 100L;
+					HJumping &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+					HJumping |= timer; //set new timer
+				}
+				else{
+					HJumping |= TIMEOUT; //set timer to max value
+				}
+				useup(obj);
+			}
+		break;
+		case DOLL_OF_FRIENDSHIP:
+			getdir((char *)0);
+			if(u.dx || u.dy){
+				if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
+				mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+				if(mtmp){
+					res = 1;
+					// if(!mtmp->mtame){
+						// maybe_tame(mtmp, sobj);
+					// } else if(EDOG(mtmp)->friend){
+						// mtmp->mtame += ACURR(A_CHA)*10;
+						// if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
+					// } else if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
+					useup(obj);
+				}
+			}
+		break;
+		case DOLL_OF_CHASTITY:
+		break;
+		case DOLL_OF_CLEAVING:
+		break;
+		case DOLL_OF_SATIATION:
+		break;
+		case DOLL_OF_GOOD_HEALTH:
+		break;
+		case DOLL_OF_FULL_HEALING:
+		break;
+		case DOLL_OF_DESTRUCTION:
+		break;
+		case DOLL_OF_MEMORY:
+		break;
+		case DOLL_OF_BINDING:
+		break;
+		case DOLL_OF_PRESERVATION:
+		break;
+		case DOLL_OF_QUICK_DRAWING:
+		break;
+		case DOLL_OF_WAND_CHARGING:
+		break;
+		case DOLL_OF_STEALING:
+		break;
+		case DOLL_OF_MOLLIFICATION:
+		break;
+		case DOLL_OF_CLEAR_THINKING:
+		break;
+		default:
+		break;
+	}
+}
+
 boolean
 use_ring_of_wishes(obj)
 struct obj *obj;
@@ -6123,6 +6195,24 @@ doapply()
 		}
 		update_inventory();
 	} break;
+	case DOLL_OF_JUMPING:
+		case DOLL_OF_FRIENDSHIP:
+		case DOLL_OF_CHASTITY:
+		case DOLL_OF_CLEAVING:
+		case DOLL_OF_SATIATION:
+		case DOLL_OF_GOOD_HEALTH:
+		case DOLL_OF_FULL_HEALING:
+		case DOLL_OF_DESTRUCTION:
+		case DOLL_OF_MEMORY:
+		case DOLL_OF_BINDING:
+		case DOLL_OF_PRESERVATION:
+		case DOLL_OF_QUICK_DRAWING:
+		case DOLL_OF_WAND_CHARGING:
+		case DOLL_OF_STEALING:
+		case DOLL_OF_MOLLIFICATION:
+		case DOLL_OF_CLEAR_THINKING:
+			res = use_doll(obj);
+		break;
 	case UNICORN_HORN:
 		use_unicorn_horn(obj);
 	break;

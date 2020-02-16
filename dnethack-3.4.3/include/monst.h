@@ -235,6 +235,24 @@ struct monst {
 #define	mvar_hdBreath	mvar1
 #define	mvar_dreadPrayer	mvar1
 #define	mvar_dracaePreg	mvar1
+#define	mvar_dollTypes	mvar1
+#define	DOLLMAKER_EFFIGY		0x00001L
+#define	DOLLMAKER_JUMPING		0x00002L
+#define	DOLLMAKER_FRIENDSHIP	0x00004L
+#define	DOLLMAKER_CHASTITY		0x00008L
+#define	DOLLMAKER_CLEAVING		0x00010L
+#define	DOLLMAKER_SATIATION		0x00020L
+#define	DOLLMAKER_HEALTH		0x00040L
+#define	DOLLMAKER_HEALING		0x00080L
+#define	DOLLMAKER_DESTRUCTION	0x00100L
+#define	DOLLMAKER_MEMORY		0x00200L
+#define	DOLLMAKER_BINDING		0x00400L
+#define	DOLLMAKER_PRESERVATION	0x00800L
+#define	DOLLMAKER_QUICK_DRAW	0x01000L
+#define	DOLLMAKER_WAND_CHARGE	0x02000L
+#define	DOLLMAKER_STEALING		0x04000L
+#define	DOLLMAKER_MOLLIFICATION	0x08000L
+#define	DOLLMAKER_CLEAR_THOUGHT	0x10000L
 	long mvar2;
 	long mvar3;
 	/* in order to prevent alignment problems mextra should

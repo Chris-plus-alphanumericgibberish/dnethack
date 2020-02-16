@@ -1073,6 +1073,11 @@ register const char *let,*word;
 			(otmp->oclass == CHAIN_CLASS && otmp->otyp != CHAIN)))
 		|| (!strcmp(word, "eat") && !is_edible(otmp))
 		|| (!strcmp(word, "inject") && !(otmp->otyp == HYPOSPRAY_AMPULE && otmp->spe > 0))
+		|| (!strcmp(word, "transfer essence to") && 
+			!(otmp->otyp == BROKEN_ANDROID && otmp->ovar1 == 0) &&
+			!(otmp->otyp == BROKEN_GYNOID && otmp->ovar1 == 0) &&
+			!(otmp->otyp == LIFELESS_DOLL && otmp->ovar1 == 0)
+		)
 		|| (!strcmp(word, "wind with") && ((otmp->oclass == TOOL_CLASS &&
 		     otyp != SKELETON_KEY) ||
 			(otmp->oclass == CHAIN_CLASS)))

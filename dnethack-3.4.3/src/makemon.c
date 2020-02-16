@@ -7528,8 +7528,38 @@ register int	mmflags;
 		mtmp->m_insight_level = 20+rn2(21);
 	else if(mtmp->data == &mons[PM_BLASPHEMOUS_LURKER])
 		mtmp->m_insight_level = 40;
-	else if(mtmp->data == &mons[PM_LIVING_DOLL])
+	else if(mtmp->data == &mons[PM_LIVING_DOLL]){
+		int i, j;
+		long tmp;
+		long dolltypes[] = {
+			DOLLMAKER_EFFIGY,
+			DOLLMAKER_JUMPING,
+			DOLLMAKER_FRIENDSHIP,
+			DOLLMAKER_CHASTITY,
+			DOLLMAKER_CLEAVING,
+			DOLLMAKER_SATIATION,
+			DOLLMAKER_HEALTH,
+			DOLLMAKER_HEALING,
+			DOLLMAKER_DESTRUCTION,
+			DOLLMAKER_MEMORY,
+			DOLLMAKER_BINDING,
+			DOLLMAKER_PRESERVATION,
+			DOLLMAKER_QUICK_DRAW,
+			DOLLMAKER_WAND_CHARGE,
+			DOLLMAKER_STEALING,
+			DOLLMAKER_MOLLIFICATION,
+			DOLLMAKER_CLEAR_THOUGHT
+		};
+		for(i = 0; i < SIZE(dolltypes); i++){
+			j = rn2(SIZE(dolltypes));
+			tmp = dolltypes[i];
+			dolltypes[i] = dolltypes[j];
+			dolltypes[j] = tmp;
+		}
 		mtmp->m_insight_level = rnd(20);
+		for(i = rn1(3, SIZE(dolltypes)-2); i > 0; i--)
+			mtmp->mvar_dollTypes |= dolltypes[i];
+	}
 	
 	else if(mtmp->data == &mons[PM_BESTIAL_DERVISH])
 		mtmp->m_insight_level = 20+rn2(10);
