@@ -3679,7 +3679,7 @@ struct permonst _mons2[] = {
  * Keter Sephiroth
  */
     MON("malkuth sephirah", S_KETER,//7
-	LVL(5, 24, 5, 5, 5), (G_LGROUP|G_NOCORPSE|G_NOGEN),
+	LVL(5, 24, 5, 5, 5), (G_SGROUP|G_NOCORPSE|G_NOGEN),
 	A(ATTK(AT_WHIP, AD_MALK, 1, 4),
 	  NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK, NO_ATTK),
 	SIZ(WT_LARGE, 0, 0, MS_ARREST, MZ_HUMAN), MR_ELEC|MR_STONE, 0, 
