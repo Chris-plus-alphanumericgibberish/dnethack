@@ -409,6 +409,15 @@ register struct monst *mtmp;
 				s_suffix(Monnam(mtmp)));
 		}
 		goto default_1;
+	    case PM_DIRE_SHEEP:
+		if (!mtmp->mrevived && find_pcloth() > 0 && !rn2(20)) {
+			obj = mksobj_at(find_pcloth(), x, y, FALSE, FALSE);
+		    obj->spe = 0;
+		    obj->cursed = obj->blessed = FALSE;
+			obj->oproperties |= OPROP_WOOL;
+		}
+		goto default_1;
+
 	    case PM_WHITE_UNICORN:
 	    case PM_GRAY_UNICORN:
 	    case PM_BLACK_UNICORN:
