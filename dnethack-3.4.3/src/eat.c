@@ -274,6 +274,23 @@ reset_uhunger()
 	}
 }
 
+boolean
+satiate_uhunger()
+{
+	if(Race_if(PM_INCANTIFIER)){
+		if(u.uen > min(u.uen+400, u.uenmax*.55))
+			return FALSE;
+		u.uen = min(u.uen+400, u.uenmax*.55);
+		newuhs(TRUE);
+	} else {
+		if(u.uhunger > min(u.uhunger+400, u.uhungermax*.55))
+			return FALSE;
+		u.uhunger = u.uhungermax*.55;
+		u.uhs = NOT_HUNGRY;
+	}
+	return TRUE;
+}
+
 static const struct { const char *txt; int nut; } tintxts[] = {
 	{"deep fried",	 60},
 	{"pickled",	 40},
@@ -734,8 +751,10 @@ BOOLEAN_P bld, nobadeffects;
 		break;
 	    case PM_GREEN_SLIME:
 	    case PM_FLUX_SLIME:
-		if (!nobadeffects && !Slimed && !Unchanging && !flaming(youracedata) &&
-			youracedata != &mons[PM_GREEN_SLIME]) {
+		if (!nobadeffects && !Slimed && !Unchanging 
+			&& !GoodHealth && !flaming(youracedata) 
+			&& youracedata != &mons[PM_GREEN_SLIME]
+		) {
 		    You("don't feel very well.");
 		    Slimed = 10L;
 		    flags.botl = 1;
@@ -803,7 +822,8 @@ struct monst *mon;
 
 	case PM_GREEN_SLIME:
 	case PM_FLUX_SLIME:
-	    if (!Unchanging && youracedata != &mons[PM_FIRE_VORTEX] &&
+	    if (!Unchanging && !GoodHealth &&
+				youracedata != &mons[PM_FIRE_VORTEX] &&
 			    youracedata != &mons[PM_FIRE_ELEMENTAL] &&
 			    youracedata != &mons[PM_GREEN_SLIME]) {
 		You("don't feel very well.");

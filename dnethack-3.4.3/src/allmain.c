@@ -385,12 +385,20 @@ you_regen_hp()
 	if (Upolyd && (*hp < 1))
 		rehumanize();
 
-	//Androids regenerate from active Hoon, but not from other sources unless dormant
+	//Androids regenerate from active Hoon and healing doll, 
+	////but not from other sources unless dormant
 	if(u.uhoon_duration && (*hp) < (*hpmax)){
 		flags.botl = 1;
 		
 		(*hp) += 10;
 
+		if ((*hp) > (*hpmax))
+			(*hp) = (*hpmax);
+	}
+	if(RapidHealing && (*hp) < (*hpmax)){
+		//1/5th max hp
+		(*hp) += (*hpmax)/5+1;
+		
 		if ((*hp) > (*hpmax))
 			(*hp) = (*hpmax);
 	}

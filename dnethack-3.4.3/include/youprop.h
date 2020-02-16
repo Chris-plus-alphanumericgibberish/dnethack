@@ -61,7 +61,7 @@
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
-#define Poison_resistance	(HPoison_resistance || EPoison_resistance || \
+#define Poison_resistance	(HPoison_resistance || EPoison_resistance || GoodHealth || \
 				 species_resists_poison(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_DRST) ||\
 				 (ward_at(u.ux,u.uy) == WINGS_OF_GARUDA && num_wards_at(u.ux, u.uy) > rn2(7))\
 				 || u.sealsActive&SEAL_YMIR || active_glyph(CLEAR_DEEPS))
@@ -74,7 +74,7 @@
 
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
-#define Drain_resistance	(HDrain_resistance || EDrain_resistance || \
+#define Drain_resistance	(HDrain_resistance || EDrain_resistance || GoodHealth || \
 				 species_resists_drain(&youmonst) || is_undead(youracedata) || is_demon(youracedata) || is_were(youracedata) ||\
 				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) >= 4 && \
 					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \
@@ -100,12 +100,12 @@
 
 #define HStone_resistance	u.uprops[STONE_RES].intrinsic
 #define EStone_resistance	u.uprops[STONE_RES].extrinsic
-#define Stone_resistance	(HStone_resistance || EStone_resistance ||\
+#define Stone_resistance	(HStone_resistance || EStone_resistance || GoodHealth ||\
 							u.sealsActive&SEAL_MARIONETTE || species_resists_ston(&youmonst))
 
 #define HSick_resistance	u.uprops[SICK_RES].intrinsic
 #define ESick_resistance	u.uprops[SICK_RES].extrinsic
-#define Sick_resistance		(HSick_resistance || ESick_resistance || \
+#define Sick_resistance		(HSick_resistance || ESick_resistance || GoodHealth || \
 				 (ward_at(u.ux,u.uy) == CARTOUCHE_OF_THE_CAT_LORD && num_wards_at(u.ux, u.uy) == 7 && \
 					!( 	(mvitals[PM_KITTEN].mvflags & G_GENOD || mvitals[PM_KITTEN].died >= 120) && \
 						(mvitals[PM_HOUSECAT].mvflags & G_GENOD || mvitals[PM_HOUSECAT].died >= 120) && \
@@ -117,8 +117,22 @@
 #define EStrangled		u.uprops[STRANGLED].extrinsic
 #define Strangled		(HStrangled || EStrangled)
 
+#define HChastity		u.uprops[CHASTITY].intrinsic
+#define EChastity		u.uprops[CHASTITY].extrinsic
+#define Chastity		(HChastity || EChastity)
+
+#define HCleaving		u.uprops[CLEAVING].intrinsic
+#define ECleaving		u.uprops[CLEAVING].extrinsic
+#define Cleaving		(HCleaving || ECleaving)
+
+#define HGoodHealth		u.uprops[GOOD_HEALTH].intrinsic
+#define EGoodHealth		u.uprops[GOOD_HEALTH].extrinsic
+#define GoodHealth		(HGoodHealth || EGoodHealth)
+
 /* Intrinsics only */
 #define Invulnerable		u.uprops[INVULNERABLE].intrinsic    /* [Tom] */
+
+#define RapidHealing		u.uprops[RAPID_HEALING].intrinsic
 
 /* Extrinsics only */
 //None
@@ -489,7 +503,7 @@
 
 #define HUnchanging		u.uprops[UNCHANGING].intrinsic
 #define EUnchanging		u.uprops[UNCHANGING].extrinsic
-#define Unchanging		(HUnchanging || EUnchanging)	/* KMH */
+#define Unchanging		(HUnchanging || EUnchanging || (!Upolyd && GoodHealth))	/* KMH */
 
 #define HSpellboost		u.uprops[SPELLBOOST].intrinsic
 #define ESpellboost		u.uprops[SPELLBOOST].extrinsic
@@ -497,7 +511,7 @@
 
 #define HSterile	u.uprops[STERILE].intrinsic
 #define ESterile	u.uprops[STERILE].extrinsic
-#define Sterile		(HSterile || ESterile)
+#define Sterile		((HSterile || ESterile) && !GoodHealth)
 
 
 #define HFast			u.uprops[FAST].intrinsic

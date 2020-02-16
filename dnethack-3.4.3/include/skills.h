@@ -73,6 +73,18 @@
 #define P_LAST_SPELL		P_WAND_POWER
 #endif
 
+/* musicalize indices */
+#define SNG_FEAR		1
+#define SNG_SLEEP		2
+#define SNG_HEAL		3
+#define SNG_RLLY	    4
+#define SNG_CONFUSION	5
+#define SNG_HASTE		6
+#define SNG_CNCL		7
+#define SNG_SLOW		8
+#define SNG_TAME		9
+#define SNG_COURAGE	   10
+
 /* Other types of combat */
 #define P_BARE_HANDED_COMBAT	(P_LAST_SPELL + 1)
 #define P_MARTIAL_ARTS		P_BARE_HANDED_COMBAT	/* Role distinguishes */

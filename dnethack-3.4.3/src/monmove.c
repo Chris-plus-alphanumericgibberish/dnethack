@@ -624,7 +624,7 @@ boolean digest_meal;
 		mon->mhp++;
 		
 	if(is_alabaster_mummy(mon->data) 
-		&& mon->mvar1 == SYLLABLE_OF_LIFE__HOON
+		&& mon->mvar_syllable == SYLLABLE_OF_LIFE__HOON
 	){
 		mon->mhp += 10;
 	}
@@ -941,7 +941,7 @@ register struct monst *mtmp;
 				familliar->m_lev = mtmp->m_lev;
 				familliar->mhp = mtmp->mhp;
 				familliar->mhpmax = mtmp->mhpmax;
-				familliar->mvar1 = (long)mtmp->m_id;
+				familliar->mvar_witchID = (long)mtmp->m_id;
 				familliar->mpeaceful = mtmp->mpeaceful;
 				//Stop running
 				if(mtmp->mflee && mtmp->mhp > mtmp->mhpmax/2){
@@ -1065,10 +1065,10 @@ register struct monst *mtmp;
 	}
 	
 	if(mtmp->data == &mons[PM_DRACAE_ELADRIN]){
-		if(!mtmp->mvar1){
+		if(!mtmp->mvar_dracaePreg){
 			struct permonst *ptr = mkclass(S_CHA_ANGEL, G_PLANES);
 			if(ptr)
-				mtmp->mvar1 = monsndx(ptr);
+				mtmp->mvar_dracaePreg = monsndx(ptr);
 		}
 		else if(mtmp->mvar2 < 6){
 			mtmp->mvar2 += rnd(3);
@@ -1076,8 +1076,8 @@ register struct monst *mtmp;
 			int ox = mtmp->mx, oy = mtmp->my;
 			rloc(mtmp, FALSE);
 			if(mtmp->mx != ox || mtmp->my != oy){
-				int type = mtmp->mvar1;
-				mtmp->mvar1 = 0;
+				int type = mtmp->mvar_dracaePreg;
+				mtmp->mvar_dracaePreg = 0;
 				mtmp->mvar2 = 0;
 				mtmp = makemon(&mons[type], ox, oy, NO_MINVENT);
 				if(mtmp){
@@ -1110,19 +1110,19 @@ register struct monst *mtmp;
 		}
 	}
 	if(mtmp->data == &mons[PM_MOTHERING_MASS]){
-		if(!mtmp->mvar1){
+		if(!mtmp->mvar_dracaePreg){
 			struct permonst *ptr = mkclass(S_CHA_ANGEL, G_PLANES);
 			if(ptr)
-				mtmp->mvar1 = monsndx(ptr);
+				mtmp->mvar_dracaePreg = monsndx(ptr);
 		}
 		else if(mtmp->mvar2 < 6){
 			mtmp->mvar2 += rnd(3);
 		} else if(!mtmp->mpeaceful){
 			int i;
 			int ox = mtmp->mx, oy = mtmp->my;
-			int type = mtmp->mvar1;
+			int type = mtmp->mvar_dracaePreg;
 			int etyp = counter_were(type);
-			mtmp->mvar1 = 0;
+			mtmp->mvar_dracaePreg = 0;
 			mtmp->mvar2 = 0;
 			for(i = rnd(4); i; i--){
 				if(etyp)
@@ -1285,6 +1285,43 @@ register struct monst *mtmp;
 		else mtmp->mspec_used += max(10 - mtmp->m_lev,2);
 	}
 
+	if (mtmp->data == &mons[PM_NURSE] || mtmp->data == &mons[PM_HEALER]){
+	    // && !uarmu && !uarm && !uarmh && !uarms && !uarmg && !uarmc && !uarmf){
+		struct monst *patient = 0;
+		int i, j, x, y, rot = rn2(3);
+		for(i = -1; i < 2; i++){
+			for(j = -1; j < 2; j++){
+				x = mtmp->mx+(i+rot)%3;
+				y = mtmp->my+(j+rot)%3;
+				if(mtmp->mx == x && mtmp->my == y)
+					continue;
+				if(!isok(x, y))
+					continue;
+				patient = m_at(x,y);
+				if(!patient)
+					continue;
+				if(patient == &youmonst){
+					//Note: body armor blocks healing, healing is also reduced by the rolled DR
+					if(!mtmp->mpeaceful || nonliving(youracedata) || uarm)
+						continue;
+					if((Upolyd && u.mh < u.mhmax) || (!Upolyd && u.uhp < u.uhpmax)){
+						nurse_heal(mtmp, patient, TRUE);
+						return 0;
+					}
+				}
+				else {
+					//Note: body armor blocks healing, healing is also reduced by the rolled DR
+					if(nonliving_mon(patient) || patient->mpeaceful != mtmp->mpeaceful || which_armor(patient, W_ARM))
+						continue;
+					if(patient->mhp < patient->mhpmax){
+						nurse_heal(mtmp, patient, canseemon(mtmp) || canseemon(patient));
+						return 0;
+					}
+				}
+			}
+		}
+	}
+	
 	if(mtmp->data == &mons[PM_OPERATOR] || mtmp->data == &mons[PM_PARASITIZED_OPERATOR]){
 		struct monst *repairee = 0;
 		int i, j, x, y, rot = rn2(3);
@@ -1316,6 +1353,7 @@ register struct monst *mtmp;
 			}
 		}
 	}
+	
 	if((mtmp->data == &mons[PM_ANDROID] || mtmp->data == &mons[PM_GYNOID] || mtmp->data == &mons[PM_OPERATOR] ||
 		mtmp->data == &mons[PM_PARASITIZED_ANDROID] || mtmp->data == &mons[PM_PARASITIZED_GYNOID] || mtmp->data == &mons[PM_PARASITIZED_OPERATOR])
 		&& MON_WEP(mtmp)
@@ -1581,7 +1619,7 @@ toofar:
 	/* If monster is nearby you, and has to wield a weapon, do so.   This
 	 * costs the monster a move, of course.
 	 */
-	if((!mtmp->mpeaceful || mdat == &mons[PM_NURSE] || Conflict) && inrange &&
+	if((!mtmp->mpeaceful || Conflict) && inrange &&
 	   dist2(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy) <= 8
 	   && !no_upos(mtmp)
 	   && attacktype(mdat, AT_WEAP)) {
@@ -1673,7 +1711,7 @@ toofar:
 	   (mdat->mlet == S_LEPRECHAUN && !ygold && (lepgold || rn2(2))) ||
 #endif
 	   (is_wanderer(mdat) && !rn2(4)) || (Conflict && !mtmp->iswiz) ||
-	   (is_blind(mtmp) && !rn2(4)) || (mtmp->mpeaceful && mdat != &mons[PM_NURSE])
+	   (is_blind(mtmp) && !rn2(4)) || mtmp->mpeaceful
 	) {
 		/* Possibly cast an undirected spell if not attacking you */
 		/* note that most of the time castmu() will pick a directed
@@ -1746,7 +1784,7 @@ toofar:
 	}
 /*	Now, attack the player if possible - one attack set per monst	*/
 
-	if (!mtmp->mpeaceful || mdat == &mons[PM_NURSE] ||
+	if (!mtmp->mpeaceful ||
 	    (Conflict && !resist(mtmp, RING_CLASS, 0, 0))) {
 	    if(inrange && !noattacks(mdat) && u.uhp > 0 && !scared && tmp != 3)
 			if((mattacku(mtmp)&MM_AGR_DIED)) return(1); /* monster died (e.g. exploded) */
@@ -2008,7 +2046,7 @@ not_special:
 	/* cut down the search radius if it thinks character is closer. */
 	if(distmin(mtmp->mux, mtmp->muy, omx, omy) < SQSRCHRADIUS &&
 		!no_upos(mtmp) &&
-	    (!mtmp->mpeaceful || mtmp->data == &mons[PM_NURSE])) minr--;
+	    !mtmp->mpeaceful) minr--;
 	/* guards shouldn't get too distracted */
 	if(!mtmp->mpeaceful && is_mercenary(ptr)) minr = 1;
 
@@ -2137,7 +2175,7 @@ not_special:
 	    chi = -1;
 	    nidist = dist2(nix,niy,gx,gy);
 	    /* allow monsters be shortsighted on some levels for balance */
-	    if((!mtmp->mpeaceful || mtmp->data == &mons[PM_NURSE]) && level.flags.shortsighted &&
+	    if(!mtmp->mpeaceful && level.flags.shortsighted &&
 	       nidist > (couldsee(nix,niy) ? 144 : 36) && appr == 1) appr = 0;
 	    if (notonline(ptr)){
 			int curappr = appr;
@@ -2351,8 +2389,8 @@ not_special:
 		    return 2;
 
 		if ((mstatus & MM_HIT) && !(mstatus & MM_DEF_DIED)  &&
-		    rn2(4) && mtmp2->movement >= NORMAL_SPEED /*don't counter allied nurses*/
-			&& (mtmp->data != &mons[PM_NURSE] || mtmp->mpeaceful != mtmp2->mpeaceful)) {
+		    rn2(4) && mtmp2->movement >= NORMAL_SPEED
+		){
 			mtmp2->movement -= NORMAL_SPEED;
 		    notonhead = 0;
 		    mstatus = mattackm(mtmp2, mtmp);	/* return attack */
@@ -2392,7 +2430,7 @@ not_special:
 		
 		if(mtmp->data == &mons[PM_SURYA_DEVA]){
 			struct monst *blade;
-			for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar1) break;
+			for(blade = fmon; blade; blade = blade->nmon) if(blade->data == &mons[PM_DANCING_BLADE] && mtmp->m_id == blade->mvar_suryaID) break;
 			if(blade){
 				int bx = blade->mx, by = blade->my;
 				remove_monster(bx, by);

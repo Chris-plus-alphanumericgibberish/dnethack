@@ -26,6 +26,8 @@ struct attack *mattk;
 	boolean agrinvis, defperc;
 	xchar genagr, gendef;
 
+	if(Chastity) return 0;
+	
 	static int engagering3 = 0;
 	if (!engagering3) engagering3 = find_engagement_ring();
 	if ( (uleft && uleft->otyp == engagering3) || (uright && uright->otyp == engagering3)) return 0;

@@ -1698,6 +1698,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 					|| dmgtype(pd, AD_LSEX)
 					|| magr->mcan 
 					|| engring
+					|| Chastity
 					|| !(uarm || uarmu || uarmh || uarmg || uarmf || uarmc || uwep || uswapwep)
 				))){
 					*subout |= SUBOUT_GOATSPWN;
@@ -5177,6 +5178,7 @@ boolean ranged;
 				|| pd == &mons[PM_GREEN_SLIME]
 				|| pd == &mons[PM_FLUX_SLIME]
 				|| is_rider(pd)
+				|| (youdef && GoodHealth)
 				|| resists_poly(pd)) {
 				/* only message for the player defending */
 				if (youdef) {
@@ -6159,7 +6161,7 @@ boolean ranged;
 					if (!tele_restrict(magr)) (void)rloc(magr, FALSE);
 					return MM_AGR_STOP;
 				}
-				else if (magr->mcan || engring) {
+				else if (magr->mcan || engring || Chastity) {
 					if (!Blind) {
 						pline("%s tries to %s you, but you seem %s.",
 							Adjmonnam(magr, "plain"),
@@ -6193,6 +6195,8 @@ boolean ranged;
 
 #ifdef SEDUCE
 			case AD_SSEX:
+				if(Chastity)
+					break;
 				if (!engagering1) engagering1 = find_engagement_ring();
 				if ((uleft && uleft->otyp == engagering1) || (uright && uright->otyp == engagering1))
 					break;
@@ -8561,7 +8565,7 @@ int vis;
 					if (pd == &mons[PM_GREEN_SLIME] || pd == &mons[PM_FLUX_SLIME]) {
 						Sprintf(buf, "%s isn't sitting well with you.",
 							The(pd->mname));
-						if (!Unchanging) {
+						if (!Unchanging && !GoodHealth) {
 							Slimed = 5L;
 							flags.botl = 1;
 						}
@@ -10601,7 +10605,7 @@ int vis;
 				if (!tele_restrict(magr)) (void)rloc(magr, FALSE);
 				return MM_AGR_STOP;
 			}
-			else if (magr->mcan || engring) {
+			else if (magr->mcan || engring || Chastity) {
 				if (!Blind) {
 					pline("%s tries to %s you, but you seem %s.",
 						Adjmonnam(magr, "plain"),
@@ -10642,6 +10646,8 @@ int vis;
 		/* STRAIGHT COPY-PASTE FROM ORIGINAL */
 		else {
 			static int engagering2 = 0;
+			if(Chastity)
+				break;
 			if (!engagering2) engagering2 = find_engagement_ring();
 			if ((uleft && uleft->otyp == engagering2) || (uright && uright->otyp == engagering2))
 				break;

@@ -4232,29 +4232,90 @@ use_doll(obj)
 		case DOLL_OF_FRIENDSHIP:
 			getdir((char *)0);
 			if(u.dx || u.dy){
-				if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
-				mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+				if(u.uswallow)
+					mtmp = u.ustuck;
+				else if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
+				else mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+				pline("The doll sings sweetly.");
+				if(mtmp && resist_song(mtmp, SNG_TAME, obj) >= 0){
+					if (mtmp->mtame){
+						if(mtmp->isminion || (EDOG(mtmp)->friend))
+							break;
+						if(mtmp->mtame < 16) mtmp->mtame++;
+					} else {
+						xchar waspeaceful = mtmp->mpeaceful;
+						mtmp = tamedog(mtmp, obj);
 				if(mtmp){
+							if (canseemon(mtmp) && flags.verbose && !mtmp->msleeping)
+								pline("%s seems to like the doll's song.", Monnam(mtmp));
+							mtmp->mtame = 9;
+							EDOG(mtmp)->waspeaceful = TRUE;
+							if(!waspeaceful || mtmp->mpeacetime){ /*Should it become untame, remain tame peaceful for a short period of time*/
+								mtmp->mpeacetime = max(mtmp->mpeacetime, 90);
+							}
+						}
+					}
 					res = 1;
-					// if(!mtmp->mtame){
-						// maybe_tame(mtmp, sobj);
-					// } else if(EDOG(mtmp)->friend){
-						// mtmp->mtame += ACURR(A_CHA)*10;
-						// if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
-					// } else if(mtmp->mpeacetime) mtmp->mpeacetime += ACURR(A_CHA);
 					useup(obj);
 				}
 			}
 		break;
 		case DOLL_OF_CHASTITY:
+			res = 1;
+			pline("You feel chaste.");
+			if((HChastity&TIMEOUT) + 100L < TIMEOUT){
+				long timer = (HChastity&TIMEOUT) + 100L;
+				HChastity &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HChastity |= timer; //set new timer
+			}
+			else{
+				HChastity |= TIMEOUT; //set timer to max value
+			}
+			useup(obj);
 		break;
 		case DOLL_OF_CLEAVING:
 		break;
 		case DOLL_OF_SATIATION:
+			if(satiate_uhunger()){
+				res = 1;
+				useup(obj);
+			}
 		break;
 		case DOLL_OF_GOOD_HEALTH:
+			if(Slimed){
+				Slimed = 0L;
+				flags.botl = 1;
+			}
+			healup(0, 0, TRUE, FALSE);
+			if (Stoned) fix_petrification();
+			if (Golded) fix_petrification();
+			res = 1;
+			pline("You feel very healthy.");
+			if((HGoodHealth&TIMEOUT) + 100L < TIMEOUT){
+				long timer = (HGoodHealth&TIMEOUT) + 100L;
+				HGoodHealth &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HGoodHealth |= timer; //set new timer
+			}
+			else{
+				HGoodHealth |= TIMEOUT; //set timer to max value
+			}
+			useup(obj);
 		break;
 		case DOLL_OF_FULL_HEALING:
+			res = 1;
+			if((!Upolyd && u.uhp < u.uhpmax) ||
+				(Upolyd && u.mh < u.mhmax)
+			)
+				pline("Your wounds begin rapidly knitting shut.");
+			if((RapidHealing&TIMEOUT) + 5L < TIMEOUT){
+				long timer = (RapidHealing&TIMEOUT) + 5L;
+				RapidHealing &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				RapidHealing |= timer; //set new timer
+			}
+			else{
+				RapidHealing |= TIMEOUT; //set timer to max value
+			}
+			useup(obj);
 		break;
 		case DOLL_OF_DESTRUCTION:
 		break;

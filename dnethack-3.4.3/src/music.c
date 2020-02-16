@@ -94,16 +94,16 @@ struct songspell {
 #define SNG_PASSTUNE        97
 #ifdef BARD
 /* same order and indices as below */
-#define SNG_FEAR		1
-#define SNG_SLEEP		2
-#define SNG_HEAL		3
-#define SNG_RLLY	    4
-#define SNG_CONFUSION	5
-#define SNG_HASTE		6
-#define SNG_CNCL		7
-#define SNG_SLOW		8
-#define SNG_TAME		9
-#define SNG_COURAGE	   10
+//define SNG_FEAR		1
+//define SNG_SLEEP		2
+//define SNG_HEAL		3
+//define SNG_RLLY	    4
+//define SNG_CONFUSION	5
+//define SNG_HASTE		6
+//define SNG_CNCL		7
+//define SNG_SLOW		8
+//define SNG_TAME		9
+//define SNG_COURAGE	   10
 #define SNG_FIRST		SNG_FEAR
 #define SNG_LAST		SNG_COURAGE
 #define SNG_IMPROVISE_CHAR	'x'
@@ -588,8 +588,12 @@ struct obj * instr;
 
 	/* Attack level */
 	//alev = min(P_SKILL(P_MUSICALIZE) - songs[song].level + 1, 0);
-	alev = P_SKILL(P_MUSICALIZE) - P_UNSKILLED + 1;
-	alev = ( (alev * ACURR(A_CHA)) + ACURR(A_DEX) ) / 3;
+	if(instr->otyp == DOLL_OF_FRIENDSHIP)
+		alev = ((P_EXPERT*18)+15)/3;
+	else {
+		alev = P_SKILL(P_MUSICALIZE) - P_UNSKILLED + 1;
+		alev = ( (alev * ACURR(A_CHA)) + ACURR(A_DEX) ) / 3;
+	}
 	// blessed/cursed instruments make it a little easier/harder to 'cast' the song
 	alev += bcsign(instr)*5;
 	// account for pets that can sing with the bard's song
@@ -600,7 +604,8 @@ struct obj * instr;
 		alev = 0;
 	}
 	// polymorphed into something that can't sing
-	if (is_silent(youracedata)) alev /= 2;
+	if (is_silent(youracedata) && instr->otyp != DOLL_OF_FRIENDSHIP)
+		alev /= 2;
 	
 	
 	/* Defense level */
@@ -1378,9 +1383,9 @@ int distance;
 			if (u.ustuck->moccupation
 				&& resist_song(u.ustuck, SNG_TAME, song_instr) >= 0
 			) {
+				waspeaceful = u.ustuck->mpeaceful;
 				mtmp = tamedog(u.ustuck, (struct obj *) 0);
 				if(mtmp){
-					waspeaceful = mtmp->mpeaceful;
 					mtmp->mtame = min(max(1, P_SKILL(P_MUSICALIZE)-P_UNSKILLED)*2, 255);
 					EDOG(mtmp)->waspeaceful = waspeaceful;
 					if(!waspeaceful || mtmp->mpeacetime){ /*Should it become untame, remain tame peaceful for a short period of time*/
