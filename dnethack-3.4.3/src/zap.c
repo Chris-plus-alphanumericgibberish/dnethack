@@ -2338,6 +2338,7 @@ dozap()
 	    useup(obj);
 	}
 	update_inventory();	/* maybe used a charge */
+	if(QuickDraw) return partial_action();
 	return(1);
 }
 
@@ -5471,6 +5472,20 @@ retry:
 	    u.ublesscnt += rn1(100,50);  /* the gods take notice */
 	}
 	return TRUE;
+}
+
+boolean
+dowand_refresh()
+{
+	struct obj *obj;
+	const char wands[] = { WAND_CLASS, 0 };
+	obj = getobj(wands, "charge");
+	if(obj && obj->oclass == WAND_CLASS){
+		obj->recharged = 0;
+		obj->spe = (objects[obj->otyp].oc_dir != NODIR) ? 8 : 15;
+		return TRUE;
+	}
+	return FALSE;
 }
 
 #endif /*OVL2*/

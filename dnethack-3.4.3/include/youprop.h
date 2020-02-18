@@ -31,7 +31,7 @@
 #define Fire_resistance		(HFire_resistance || EFire_resistance || \
 				 species_resists_fire(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_FIRE) ||\
 				 ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA || active_glyph(SMOLDERING_BULWARK) || u.sealsActive&SEAL_FAFNIR)
-#define InvFire_resistance	(EFire_resistance || ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA)
+#define InvFire_resistance	(EFire_resistance || Preservation || ward_at(u.ux,u.uy) == SIGIL_OF_CTHUGHA)
 
 #define HCold_resistance	u.uprops[COLD_RES].intrinsic
 #define ECold_resistance	u.uprops[COLD_RES].extrinsic
@@ -39,7 +39,7 @@
 				 species_resists_cold(&youmonst) || active_glyph(FROSTED_BULWARK) || \
 				 ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA || u.sealsActive&SEAL_AMON)
 #define Cold_resistance		(HCold_resistance || ECold_resistance || NCold_resistance)
-#define InvCold_resistance	(ECold_resistance || ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA)
+#define InvCold_resistance	(ECold_resistance || Preservation || ward_at(u.ux,u.uy) == BRAND_OF_ITHAQUA)
 
 #define HSleep_resistance	u.uprops[SLEEP_RES].intrinsic
 #define ESleep_resistance	u.uprops[SLEEP_RES].extrinsic
@@ -57,7 +57,7 @@
 #define Shock_resistance	(HShock_resistance || EShock_resistance || \
 				 species_resists_elec(&youmonst) || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ELEC) ||\
 				 ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || active_glyph(DISSIPATING_BULWARK) || u.sealsActive&SEAL_ASTAROTH)
-#define InvShock_resistance	(EShock_resistance || ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || (HShock_resistance&FROMRACE && Race_if(PM_ANDROID)))
+#define InvShock_resistance	(EShock_resistance || Preservation || ward_at(u.ux,u.uy) == TRACERY_OF_KARAKAL || (HShock_resistance&FROMRACE && Race_if(PM_ANDROID)))
 
 #define HPoison_resistance	u.uprops[POISON_RES].intrinsic
 #define EPoison_resistance	u.uprops[POISON_RES].extrinsic
@@ -70,7 +70,7 @@
 #define EAcid_resistance	u.uprops[ACID_RES].extrinsic
 #define Acid_resistance		(HAcid_resistance || EAcid_resistance || (Race_if(PM_HALF_DRAGON) && flags.HDbreath == AD_ACID) ||\
 							 species_resists_acid(&youmonst) || u.sealsActive&SEAL_ECHIDNA)
-#define InvAcid_resistance	(EAcid_resistance)
+#define InvAcid_resistance	(EAcid_resistance || Preservation)
 
 #define HDrain_resistance	u.uprops[DRAIN_RES].intrinsic
 #define EDrain_resistance	u.uprops[DRAIN_RES].extrinsic
@@ -128,6 +128,22 @@
 #define HGoodHealth		u.uprops[GOOD_HEALTH].intrinsic
 #define EGoodHealth		u.uprops[GOOD_HEALTH].extrinsic
 #define GoodHealth		(HGoodHealth || EGoodHealth)
+
+#define HDestruction		u.uprops[DESTRUCTION].intrinsic
+#define EDestruction		u.uprops[DESTRUCTION].extrinsic
+#define Destruction		(HDestruction || EDestruction)
+
+#define HPreservation		u.uprops[PRESERVATION].intrinsic
+#define EPreservation		u.uprops[PRESERVATION].extrinsic
+#define Preservation		(HPreservation || EPreservation)
+
+#define HQuickDraw		u.uprops[QUICK_DRAW].intrinsic
+#define EQuickDraw		u.uprops[QUICK_DRAW].extrinsic
+#define QuickDraw		(HQuickDraw || EQuickDraw)
+
+#define HClearThoughts		u.uprops[CLEAR_THOUGHTS].intrinsic
+#define EClearThoughts		u.uprops[CLEAR_THOUGHTS].extrinsic
+#define ClearThoughts		(HClearThoughts || EClearThoughts)
 
 /* Intrinsics only */
 #define Invulnerable		u.uprops[INVULNERABLE].intrinsic    /* [Tom] */

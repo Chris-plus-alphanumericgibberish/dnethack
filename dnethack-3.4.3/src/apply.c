@@ -4226,6 +4226,9 @@ use_doll(obj)
 				else{
 					HJumping |= TIMEOUT; //set timer to max value
 				}
+				if(!Blind)
+					pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+				else pline("The little doll vanishes.");
 				useup(obj);
 			}
 		break;
@@ -4256,6 +4259,9 @@ use_doll(obj)
 						}
 					}
 					res = 1;
+					if(!Blind)
+						pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+					else pline("The little doll vanishes.");
 					useup(obj);
 				}
 			}
@@ -4271,6 +4277,9 @@ use_doll(obj)
 			else{
 				HChastity |= TIMEOUT; //set timer to max value
 			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
 			useup(obj);
 		break;
 		case DOLL_OF_CLEAVING:
@@ -4278,6 +4287,9 @@ use_doll(obj)
 		case DOLL_OF_SATIATION:
 			if(satiate_uhunger()){
 				res = 1;
+				if(!Blind)
+					pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+				else pline("The little doll vanishes.");
 				useup(obj);
 			}
 		break;
@@ -4299,6 +4311,9 @@ use_doll(obj)
 			else{
 				HGoodHealth |= TIMEOUT; //set timer to max value
 			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
 			useup(obj);
 		break;
 		case DOLL_OF_FULL_HEALING:
@@ -4315,19 +4330,92 @@ use_doll(obj)
 			else{
 				RapidHealing |= TIMEOUT; //set timer to max value
 			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
 			useup(obj);
 		break;
 		case DOLL_OF_DESTRUCTION:
+			res = 1;
+			if(!Blind)
+				pline("The many-armed doll begins dancing!");
+			if((HDestruction&TIMEOUT) + 8L < TIMEOUT){
+				long timer = (HDestruction&TIMEOUT) + 8L;
+				if(!Destruction)
+					You("begin radiating waves of destruction!");
+				HDestruction &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HDestruction |= timer; //set new timer
+			}
+			else{
+				You("begin radiating waves of destruction!");
+				if(!Destruction)
+					HDestruction |= TIMEOUT; //set timer to max value
+			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
+			useup(obj);
 		break;
 		case DOLL_OF_MEMORY:
+			if(doreinforce_spell()){
+				res = 1;
+				if(!Blind)
+					pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+				else pline("The little doll vanishes.");
+				useup(obj);
+			}
 		break;
 		case DOLL_OF_BINDING:
+			if(doreinforce_binding()){
+				res = 1;
+				if(!Blind)
+					pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+				else pline("The little doll vanishes.");
+				useup(obj);
+			}
 		break;
 		case DOLL_OF_PRESERVATION:
+			res = 1;
+			if(!Blind)
+				pline("The doll opens its umbrella, and a rubbery film forms around your body!");
+			if((HPreservation&TIMEOUT) + 1000L < TIMEOUT){
+				long timer = (HPreservation&TIMEOUT) + 1000L;
+				HPreservation &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HPreservation |= timer; //set new timer
+			}
+			else{
+				HPreservation |= TIMEOUT; //set timer to max value
+			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
+			useup(obj);
 		break;
 		case DOLL_OF_QUICK_DRAWING:
+			res = 1;
+			if(!Blind)
+				pline("The doll draws a wand with blinding speed!");
+			if((HQuickDraw&TIMEOUT) + 100L < TIMEOUT){
+				long timer = (HQuickDraw&TIMEOUT) + 100L;
+				HQuickDraw &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HQuickDraw |= timer; //set new timer
+			}
+			else{
+				HQuickDraw |= TIMEOUT; //set timer to max value
+			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
+			useup(obj);
 		break;
 		case DOLL_OF_WAND_CHARGING:
+			if(dowand_refresh()){
+				res = 1;
+				if(!Blind)
+					pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+				else pline("The little doll vanishes.");
+				useup(obj);
+			}
 		break;
 		case DOLL_OF_STEALING:
 		break;

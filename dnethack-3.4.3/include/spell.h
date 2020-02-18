@@ -6,6 +6,7 @@
 #define SPELL_H
 
 /* spellmenu arguments; 0 thru n-1 used as spl_book[] index when swapping */
+#define SPELLMENU_PICK (-5)
 #define SPELLMENU_MAINTAIN (-4)
 #define SPELLMENU_DESCRIBE (-3)
 #define SPELLMENU_CAST (-2)

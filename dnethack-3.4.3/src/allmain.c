@@ -1684,6 +1684,8 @@ karemade:
 			) dosymbiotic();
 			if(u.spiritPColdowns[PWR_PSEUDONATURAL_SURGE] >= moves+20)
 				dopseudonatural();
+			if(Destruction)
+				dodestruction();
 			/* Clouds on Lolth's level deal damage */
 			if(Is_lolth_level(&u.uz) && levl[u.ux][u.uy].typ == CLOUD){
 				if (!(nonliving(youracedata) || Breathless)){

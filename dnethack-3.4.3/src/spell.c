@@ -4588,7 +4588,7 @@ int respect_timeout;
 
 STATIC_OVL boolean
 dospellmenu(splaction, spell_no)
-int splaction;	/* SPELLMENU_CAST, SPELLMENU_VIEW, SPELLMENU_DESCRIBE, SPELLMENU_MAINTAIN, or spl_book[] index */
+int splaction;	/* SPELLMENU_CAST, SPELLMENU_VIEW, SPELLMENU_DESCRIBE, SPELLMENU_MAINTAIN, SPELLMENU_PICK, or spl_book[] index */
 int *spell_no;
 {
 	winid tmpwin;
@@ -4646,14 +4646,14 @@ int *spell_no;
 			 (i == splaction) ? MENU_SELECTED : MENU_UNSELECTED);
 	}
 	//Other menu options
-	if (splaction != SPELLMENU_CAST && splaction < 0) {
+	if (splaction != SPELLMENU_CAST && splaction != SPELLMENU_PICK && splaction < 0) {
 		Sprintf(buf, "Cast a spell instead");
 		any.a_int = SPELLMENU_CAST;
 		add_menu(tmpwin, NO_GLYPH, &any,
 			'!', 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 	}
-	if (splaction != SPELLMENU_MAINTAIN && splaction < 0 && maintainable){
+	if (splaction != SPELLMENU_MAINTAIN && splaction != SPELLMENU_PICK && splaction < 0 && maintainable){
 		// Maintain a spell
 		Sprintf(buf, "Maintain a spell instead");
 		any.a_int = SPELLMENU_MAINTAIN;
@@ -4661,7 +4661,7 @@ int *spell_no;
 			'#', 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 	}
-	if (splaction != SPELLMENU_DESCRIBE && splaction < 0){
+	if (splaction != SPELLMENU_DESCRIBE && splaction != SPELLMENU_PICK && splaction < 0){
 		// Describe a spell
 		Sprintf(buf, "Describe a spell instead");
 		any.a_int = SPELLMENU_DESCRIBE;
@@ -4669,7 +4669,7 @@ int *spell_no;
 			'?', 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 	}
-	if (splaction != SPELLMENU_VIEW && splaction < 0 && spellid(1) != NO_SPELL){
+	if (splaction != SPELLMENU_VIEW && splaction != SPELLMENU_PICK && splaction < 0 && spellid(1) != NO_SPELL){
 		// Describe a spell
 		Sprintf(buf, "Rearrange spells instead");
 		any.a_int = SPELLMENU_VIEW;
@@ -4679,6 +4679,9 @@ int *spell_no;
 	}
 	switch (splaction)
 	{
+	case SPELLMENU_PICK:
+		Sprintf(buf, "Choose which spell");
+		break;
 	case SPELLMENU_VIEW:
 		Sprintf(buf, "Choose which spell to reorder");
 		break;
@@ -4715,6 +4718,7 @@ int *spell_no;
 				*spell_no = s_no;
 				return dospellmenu(s_no, spell_no);
 
+			case SPELLMENU_PICK:
 			case SPELLMENU_CAST:
 				*spell_no = s_no;
 				return TRUE;
@@ -5685,6 +5689,191 @@ dopseudonatural()
 			xmeleehity(&youmonst, mon, &symbiote, (struct obj *)0, -1, 0, FALSE);
 		}
 	}
+}
+
+void
+dodestruction()
+{
+	struct monst *mon, *nmon;
+	int tmp, weptmp, tchtmp;
+	int clockwisex[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
+	int clockwisey[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
+	int i = rnd(8),j, lim=0;
+	struct attack destruction = { AT_NONE, AD_FIRE, 6, 6 };
+	if(!rn2(3))
+		destruction.adtyp = AD_COLD;
+	else if(!rn2(4))
+		destruction.adtyp = AD_ELEC;
+	You("radiate %s destruction!", destruction.adtyp == AD_FIRE ? "fiery" : destruction.adtyp == AD_COLD ? "freezing" : "crackling");
+	for(j=8;j>=1;j--){
+		if(u.ustuck && u.uswallow)
+			mon = u.ustuck;
+		else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
+		
+		if(!mon || mon->mpeaceful)
+			continue;
+		
+		xmeleehurty(&youmonst, mon, &destruction, &destruction, (struct obj *)0, TRUE, d(6,6), 10, sensemon(mon), TRUE);
+	}
+	for(mon = fmon;mon;mon = nmon){
+		nmon = mon->nmon;
+		if(!mon || mon->mpeaceful || !rn2(4))
+			continue;
+		if(distmin(u.ux, u.uy, mon->mx, mon->my) != 2 || !couldsee(mon->mx, mon->my))
+			continue;
+		
+		xmeleehurty(&youmonst, mon, &destruction, &destruction, (struct obj *)0, TRUE, d(4,4), 10, sensemon(mon), TRUE);
+	}
+}
+
+boolean
+doreinforce_spell()
+{
+	int spell_no;
+	if (getspell(&spell_no, SPELLMENU_PICK)){
+		Your("knowledge is keener.");
+		incrnknow(spell_no);
+		return TRUE;
+	}
+	return FALSE;
+}
+
+boolean
+doreinforce_binding()
+{
+	int i, j;
+	winid tmpwin;
+	int n, how;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Choose binding to refresh:");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	for(i=0;i<QUEST_SPIRIT;i++){
+		if(u.spirit[i]) for(j=0;j<32;j++){
+			if((u.spirit[i] >> j) == 1){
+				Sprintf(buf, "%s, %d", sealNames[j], u.spiritT[i] - monstermoves);
+				any.a_int = i+1;	/* must be non-zero */
+				add_menu(tmpwin, NO_GLYPH, &any,
+					incntlet, 0, ATR_NONE, buf,
+					MENU_UNSELECTED);
+				incntlet++;
+				break; //break for j loop
+			}
+		}
+	}
+	i = QUEST_SPIRIT;
+	if(u.spirit[i] == SEAL_DAHLVER_NAR){
+		Sprintf(buf, "%s, %d", sealNames[(DAHLVER_NAR) - (FIRST_SEAL)], u.spiritT[i] - monstermoves);
+		any.a_int = i+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_ACERERAK){
+		Sprintf(buf, "%s, %d", sealNames[(ACERERAK) - (FIRST_SEAL)], u.spiritT[i] - monstermoves);
+		any.a_int = i+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_BLACK_WEB){
+		Sprintf(buf, "%s, %d", sealNames[(BLACK_WEB) - (FIRST_SEAL)], u.spiritT[i] - monstermoves);
+		any.a_int = i+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	i = ALIGN_SPIRIT;
+	if(u.spirit[i] == SEAL_COSMOS){
+		Sprintf(buf, "%s, %d", sealNames[(COSMOS) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
+		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_LIVING_CRYSTAL){
+		Sprintf(buf, "%s, %d", sealNames[(LIVING_CRYSTAL) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
+		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_TWO_TREES){
+		Sprintf(buf, "%s, %d", sealNames[(TWO_TREES) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
+		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_MISKA){
+		Sprintf(buf, "%s, %d", sealNames[(MISKA) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
+		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_NUDZIRATH){
+		Sprintf(buf, "%s, %d", sealNames[(NUDZIRATH) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
+		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_ALIGNMENT_THING){
+		Sprintf(buf, "%s, %d", sealNames[(ALIGNMENT_THING) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
+		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	if(u.spirit[i] == SEAL_UNKNOWN_GOD){
+		Sprintf(buf, "%s, %d", sealNames[(UNKNOWN_GOD) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
+		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
+	}
+	end_menu(tmpwin, "Select blessing");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	
+	if(n > 0){
+		i = (int)selected[0].item.a_int - 1;
+		if(i < QUEST_SPIRIT){
+			long sID = u.spirit[i];
+			while(u.spirit[i+1] && i+1 < QUEST_SPIRIT){
+				u.spirit[i] = u.spirit[i+1];
+				u.spiritT[i] = u.spiritT[i+1];
+				i++;
+			}
+			u.spirit[i] = sID;
+		}
+		u.spiritT[i] = monstermoves + 5000;
+		
+		return TRUE;
+	}
+	//else
+	return FALSE;
 }
 
 /*spell.c*/
