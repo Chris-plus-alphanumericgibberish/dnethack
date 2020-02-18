@@ -2117,8 +2117,11 @@ movemon()
 				  !rn2(4)
 		){
 			struct monst *sprout = (struct monst *) 0;
-			sprout = makemon(mtmp->data,(mtmp->mx-1)+rn2(3),(mtmp->my-1)+rn2(3),MM_CHECK_GOODPOS|MM_NOCOUNTBIRTH|NO_MINVENT);
-			if(sprout) sprout->mhp = In_hell(&u.uz) ? sprout->mhp*3/4 : sprout->mhp/2;
+			int newx = (mtmp->mx-1)+rn2(3), newy = (mtmp->my-1)+rn2(3);
+			if(isok(newx,newy)){
+				sprout = makemon(mtmp->data, newx, newy, MM_CHECK_GOODPOS|MM_NOCOUNTBIRTH|NO_MINVENT);
+				if(sprout) sprout->mhp = In_hell(&u.uz) ? sprout->mhp*3/4 : sprout->mhp/2;
+			}
 		}
 	}
 	
@@ -2342,7 +2345,7 @@ meatmetal(mtmp)
 						otmp; otmp = otmp->nexthere) {
 	    if (mtmp->data == &mons[PM_RUST_MONSTER] && !is_rustprone(otmp))
 		continue;
-	    if (is_metallic(otmp) && !obj_resists(otmp, 5, 95) &&
+	    if (is_metallic(otmp) && !obj_resists(otmp, 0, 95) &&
 		touch_artifact(otmp, mtmp, FALSE)) {
 		if (mtmp->data == &mons[PM_RUST_MONSTER] && otmp->oerodeproof) {
 		    if (canseemon(mtmp) && flags.verbose) {
@@ -2432,7 +2435,7 @@ meatobj(mtmp)		/* for gelatinous cubes */
 	/* Engulfs others, except huge rocks and metal attached to player */
 	for (otmp = level.objects[mtmp->mx][mtmp->my]; otmp; otmp = otmp2) {
 	    otmp2 = otmp->nexthere;
-	    if (is_organic(otmp) && !obj_resists(otmp, 5, 95) &&
+	    if (is_organic(otmp) && !obj_resists(otmp, 0, 95) &&
 		    touch_artifact(otmp, mtmp, FALSE)) {
 		if (otmp->otyp == CORPSE && touch_petrifies(&mons[otmp->corpsenm]) &&
 			!resists_ston(mtmp))

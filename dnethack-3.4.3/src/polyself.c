@@ -214,8 +214,8 @@ newman()
 	/* 
 	 * Kludge up a reroll of all dice
 	 */
-	u.uhprolled = d(u.ulevel, maxhp(0)/u.ulevel);
-	u.uenrolled = d(u.ulevel, maxen()/u.ulevel);
+	u.uhprolled = d(2*u.ulevel, u.uhprolled/u.ulevel);
+	u.uenrolled = d(2*u.ulevel, u.uenrolled/u.ulevel);
 
 	redist_attr();
 

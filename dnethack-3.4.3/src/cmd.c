@@ -2511,6 +2511,9 @@ int final;
 		}
 	}
 	
+	Sprintf(buf, "%ld pieces of gold created in the game", u.spawnedGold);
+	dump("  There were ", buf);
+	
 	/* note: piousness 20 matches MIN_QUEST_ALIGN (quest.h) */
 	if (u.ualign.record >= 20)
 		dump(youwere, "piously aligned");

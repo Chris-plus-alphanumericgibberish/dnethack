@@ -4694,7 +4694,8 @@ boolean disarm;
 		case 24:
 		case 23:
 		case 22:
-		case 21: {
+		case 21: 
+			if(!obj->oartifact){
 			  struct monst *shkp = 0;
 			  long loss = 0L;
 			  boolean costly, insider;
