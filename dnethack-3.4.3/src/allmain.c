@@ -3396,9 +3396,7 @@ struct monst *mon;
 						}
 					}
 				}
-				mtmp->mhp == mtmp->mhpmax;
-				if(mtmp->mhp > mtmp->mhpmax)
-					mtmp->mhp = mtmp->mhpmax;
+				mtmp->mhp = mtmp->mhpmax;
 				mtmp->mspec_used = 0;
 				mtmp->mstdy = 0;
 				mtmp->ustdym = 0;
