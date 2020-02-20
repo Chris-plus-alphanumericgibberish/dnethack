@@ -473,7 +473,7 @@ struct attack *mattk;
 						   doname(otmp), "You steal: ");
 		}
 	    /* more take-away handling, after theft message */
-	    if (unwornmask & W_WEP) {		/* stole wielded weapon */
+	    if (unwornmask & W_WEP || unwornmask & W_SWAPWEP) {		/* stole wielded weapon */
 		possibly_unwield(mdef, FALSE);
 	    } else if (unwornmask & W_ARMG) {	/* stole worn gloves */
 		mselftouch(mdef, (const char *)0, TRUE);
