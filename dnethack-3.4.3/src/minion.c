@@ -60,7 +60,7 @@ struct monst *mon;
 	    cnt = 1;
 	} else if (is_lminion(mon)) {
 		if(is_keter(mon->data)){
-			if(mon->data == &mons[PM_MALKUTH_SEPHIRAH] && !rn2(8)) return;
+			if(mon->data == &mons[PM_MALKUTH_SEPHIRAH] && rn2(8)) return;
 			dtype = PM_MALKUTH_SEPHIRAH;
 			cnt = (!rn2(4) && !is_lord(&mons[dtype])) ? 2 : 1;
 		} else if(In_endgame(&u.uz)){
