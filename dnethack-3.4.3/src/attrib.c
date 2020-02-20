@@ -1434,6 +1434,9 @@ roll_madness(madness)
 long int madness;
 {
 	int sanlevel;
+	if(ClearThoughts)
+		return 0;
+	
 	if(!(u.umadness&madness))
 		return 0;
 	
@@ -1450,6 +1453,9 @@ long int madness;
 {
 	int sanlevel;
 	unsigned long hashed = hash((unsigned long) (moves + hash((unsigned long)madness))); //Offset the different madnesses before hashing
+	if(ClearThoughts)
+		return 0;
+	
 	if(!(u.umadness&madness))
 		return 0;
 	

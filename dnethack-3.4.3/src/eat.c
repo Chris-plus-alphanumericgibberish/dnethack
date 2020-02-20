@@ -3949,6 +3949,7 @@ gethungry()	/* as time goes by - called by moveloop() and domove() */
 	if ((!inediate(youracedata) || Race_if(PM_INCANTIFIER))
 		&& !uclockwork
 		&& u.usanity < 100
+		&& !ClearThoughts
 		&& u.umadness&MAD_GLUTTONY
 	){
 		int delta = 100 - u.usanity;

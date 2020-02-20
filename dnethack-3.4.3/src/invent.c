@@ -4880,7 +4880,7 @@ u_healing_penalty()
 	if(is_demon(youracedata) || is_undead(youracedata)){
 		penalty += (4*u_bcu_next_to_skin(1)+1)/2;
 	}
-	if(u.umadness&MAD_NUDIST && u.usanity < 100){
+	if(u.umadness&MAD_NUDIST && !ClearThoughts && u.usanity < 100){
 		int delta = 100 - u.usanity;
 		penalty += (u_clothing_discomfort() * delta)/10;
 	}

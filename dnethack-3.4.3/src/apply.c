@@ -4418,10 +4418,104 @@ use_doll(obj)
 			}
 		break;
 		case DOLL_OF_STEALING:
+			getdir((char *)0);
+			if(u.dx || u.dy){
+				if(u.uswallow)
+					mtmp = u.ustuck;
+				else if (!isok(u.ux + u.dx, u.uy + u.dy)) break;
+				else mtmp = m_at(u.ux + u.dx, u.uy + u.dy);
+				if(mtmp){
+					struct obj *otmp;
+					long unwornmask;
+					//Note: unlike normal theft, you are never petrified by a stolen item because the doll is doing it.
+					if(!Blind) pline("The black-clad doll steals %s possessions.", s_suffix(mon_nam(mtmp)));
+					while ((otmp = mtmp->minvent) != 0) {
+						/* take the object away from the monster */
+						obj_extract_self(otmp);
+						if ((unwornmask = otmp->owornmask) != 0L) {
+							mtmp->misc_worn_check &= ~unwornmask;
+							if (otmp->owornmask & W_WEP) {
+								setmnotwielded(mtmp,otmp);
+								MON_NOWEP(mtmp);
+							}
+							if (otmp->owornmask & W_SWAPWEP){
+								setmnotwielded(mtmp,otmp);
+								MON_NOSWEP(mtmp);
+							}
+							otmp->owornmask = 0L;
+						}
+						update_mon_intrinsics(mtmp, otmp, FALSE, FALSE);
+						if(!Blind) pline("The doll steals %s %s and drops it to the %s.",
+							  s_suffix(mon_nam(mtmp)), xname(otmp), surface(u.ux, u.uy));
+						dropy(otmp);
+						/* more take-away handling, after theft message */
+						if (unwornmask & W_WEP || unwornmask & W_SWAPWEP) {		/* stole wielded weapon */
+							possibly_unwield(mtmp, FALSE);
+						} else if (unwornmask & W_ARMG) {	/* stole worn gloves */
+							mselftouch(mtmp, (const char *)0, TRUE);
+							if (mtmp->mhp <= 0)	/* it's now a statue */
+								break;		/* can't continue stealing */
+						}
+					}
+#ifndef GOLDOBJ
+					if (mtmp->mgold){
+						struct obj *mongold = mksobj(GOLD_PIECE, FALSE, FALSE);
+						mongold->quan = mtmp->mgold;
+						mongold->owt = weight(mongold);
+						mtmp->mgold = 0;
+						if(!Blind) pline("The doll steals %s gold and drops it to the %s.", s_suffix(mon_nam(mtmp)), surface(u.ux, u.uy));
+						dropy(mongold);
+					}
+#else
+					{
+						struct obj *mongold = findgold(mtmp->minvent);
+						if (mongold) {
+							obj_extract_self(mongold);
+							if(!Blind) pline("The doll steals %s gold and drops it to the %s.", s_suffix(mon_nam(mtmp)), surface(u.ux, u.uy));
+							dropy(mongold);
+						}
+					}
+#endif
+					res = 1;
+					if(!Blind)
+						pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+					else pline("The little doll vanishes.");
+					useup(obj);
+					setmangry(mtmp);
+				}
+			}
 		break;
 		case DOLL_OF_MOLLIFICATION:
+			if(u.ugangr[Align2gangr(u.ualign.type)]) {
+				if(!Blind)
+					pline("The %s says a prayer.", OBJ_DESCR(objects[obj->otyp]));
+				pline("%s seems %s.", u_gname(),
+				  Hallucination ? "groovy" : "slightly mollified");
+				u.ugangr[Align2gangr(u.ualign.type)] = 0;
+				if ((int)u.uluck < 0) u.uluck = 0;
+				u.reconciled = REC_MOL;
+				res = 1;
+				if(!Blind)
+					pline("The little doll vanishes in a flash of moonlight.");
+				else pline("The little doll vanishes.");
+				useup(obj);
+			}
 		break;
 		case DOLL_OF_CLEAR_THINKING:
+			res = 1;
+			pline("The doll takes up your mental burdens!");
+			if((HClearThoughts&TIMEOUT) + 100L < TIMEOUT){
+				long timer = (HClearThoughts&TIMEOUT) + 100L;
+				HClearThoughts &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HClearThoughts |= timer; //set new timer
+			}
+			else{
+				HClearThoughts |= TIMEOUT; //set timer to max value
+			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
+			useup(obj);
 		break;
 		default:
 		break;

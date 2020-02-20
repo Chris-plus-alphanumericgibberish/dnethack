@@ -2031,7 +2031,7 @@ struct monst *mtmp;
 	if (mtmp->cham && !rn2(6))
 	    (void) newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 	were_change(mtmp);
-	if(u.umadness&MAD_REAL_DELUSIONS && u.usanity < mtmp->m_san_level*0.8){
+	if(u.umadness&MAD_REAL_DELUSIONS && !ClearThoughts && u.usanity < mtmp->m_san_level*0.8){
 		if(!(mtmp->data->geno&(G_UNIQ|G_NOGEN))){
 			newcham(mtmp, (struct permonst *)0, FALSE, FALSE);
 		}

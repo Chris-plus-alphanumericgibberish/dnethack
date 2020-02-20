@@ -754,6 +754,8 @@ E int FDECL(num_wards_at, (XCHAR_P,XCHAR_P));
 E void FDECL(u_wipe_engr, (int));
 E int FDECL(decode_wardID, (int));
 E int FDECL(get_wardID, (int));
+E int FDECL(decode_sealID, (long));
+E long FDECL(get_sealID, (int));
 E void FDECL(wipe_engr_at, (XCHAR_P,XCHAR_P,XCHAR_P));
 E void FDECL(read_engr_at, (int,int));
 E void FDECL(make_engr_at, (int,int,const char *,long,XCHAR_P));

@@ -257,7 +257,7 @@ struct monst * mon;
 		return TRUE;
 	}
 
-	if (u.umadness&MAD_PARANOIA && u.usanity < rnd(100)){
+	if (u.umadness&MAD_PARANOIA && !ClearThoughts && u.usanity < rnd(100)){
 		You("attack %s's hallucinatory twin!", mon_nam(mon));
 		return TRUE;
 	}

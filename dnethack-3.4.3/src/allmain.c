@@ -1565,7 +1565,7 @@ karemade:
 			default: break;
 		    }
 			
-			if(u.umadness&MAD_NUDIST && u.usanity < 100){
+			if(u.umadness&MAD_NUDIST && !ClearThoughts && u.usanity < 100){
 				int delta = 100 - u.usanity;
 				int discomfort = u_clothing_discomfort();
 				discomfort = (discomfort * delta)/100;

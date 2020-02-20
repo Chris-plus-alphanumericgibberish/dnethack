@@ -2006,7 +2006,7 @@ int final;	/* 0 => still in progress; 1 => over, survived; 2 => dead */
 	you_have(buf);
 	
 	/*** Madnesses ***/
-	if(u.usanity < 100){
+	if(u.usanity < 100 && !ClearThoughts){
 		if (u.umadness&MAD_DELUSIONS){
 			you_have("a tendency to hallucinate, obscuring some monsters true forms");
 		}
@@ -2805,7 +2805,7 @@ int final;
 		dump("  ", "You occasionally saw things you wished you hadn't");
 	
 	/*** Madnesses ***/
-	if(u.usanity < 100){
+	if(u.usanity < 100 && !ClearThoughts){
 		if (u.umadness&MAD_DELUSIONS){
 			dump("  ", "You had a tendency to hallucinate");
 		}
@@ -3242,7 +3242,7 @@ resistances_enlightenment()
 		putstr(en_win, 0, "You occasionally see things you wish you hadn't.");
 	
 	/*** Madnesses ***/
-	if(u.usanity < 100){
+	if(u.usanity < 100 && !ClearThoughts){
 		if (u.umadness&MAD_DELUSIONS){
 			putstr(en_win, 0, "You have a tendency to hallucinate");
 		}

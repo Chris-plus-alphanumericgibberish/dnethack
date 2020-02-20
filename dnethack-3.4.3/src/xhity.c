@@ -3357,7 +3357,7 @@ int flat_acc;
 			}
 		}
 		/* nudist accuracy bonus/penalty (player-only) (melee) */
-		if (youagr && u.umadness&MAD_NUDIST && u.usanity < 100){
+		if (youagr && u.umadness&MAD_NUDIST && !ClearThoughts && u.usanity < 100){
 			int delta = 100 - u.usanity;
 			int discomfort = u_clothing_discomfort();
 			static boolean clothmessage = TRUE;
@@ -3751,7 +3751,7 @@ boolean ranged;
 	}
 	/* madness can make the player take more damage */
 	if (youdef) {
-		if (u.umadness&MAD_SUICIDAL){
+		if (u.umadness&MAD_SUICIDAL && !ClearThoughts){
 			dmg += ((100 - u.usanity)*u.ulevel) / 200;
 		}
 
@@ -3770,25 +3770,25 @@ boolean ranged;
 			|| pa == &mons[PM_SALAMANDER]
 			|| pa == &mons[PM_KARY__THE_FIEND_OF_FIRE]
 			|| pa == &mons[PM_CATHEZAR]
-			) && u.umadness&MAD_OPHIDIOPHOBIA && u.usanity < 100){
+			) && u.umadness&MAD_OPHIDIOPHOBIA && !ClearThoughts && u.usanity < 100){
 			dmg += (100 - u.usanity) / 5;
 		}
 
 		if ((pa->mlet == S_WORM
 			|| attacktype(pa, AT_TENT)
-			) && u.umadness&MAD_HELMINTHOPHOBIA && u.usanity < 100){
+			) && u.umadness&MAD_HELMINTHOPHOBIA && !ClearThoughts && u.usanity < 100){
 			dmg += (100 - u.usanity) / 5;
 		}
 
-		if (!magr->female && humanoid_upperbody(pa) && u.umadness&MAD_ARGENT_SHEEN && u.usanity < 100){
+		if (!magr->female && humanoid_upperbody(pa) && u.umadness&MAD_ARGENT_SHEEN && !ClearThoughts && u.usanity < 100){
 			dmg += (100 - u.usanity) / 5;
 		}
 
-		if ((is_insectoid(pa) || is_arachnid(pa)) && u.umadness&MAD_ENTOMOPHOBIA && u.usanity < 100){
+		if ((is_insectoid(pa) || is_arachnid(pa)) && u.umadness&MAD_ENTOMOPHOBIA && !ClearThoughts && u.usanity < 100){
 			dmg += (100 - u.usanity) / 5;
 		}
 
-		if (is_aquatic(pa) && u.umadness&MAD_THALASSOPHOBIA && u.usanity < 100){
+		if (is_aquatic(pa) && u.umadness&MAD_THALASSOPHOBIA && !ClearThoughts && u.usanity < 100){
 			dmg += (100 - u.usanity) / 5;
 		}
 
@@ -3797,11 +3797,11 @@ boolean ranged;
 			|| pa == &mons[PM_DRIDER]
 			|| pa == &mons[PM_PRIESTESS_OF_GHAUNADAUR]
 			|| pa == &mons[PM_AVATAR_OF_LOLTH]
-			) && u.umadness&MAD_ARACHNOPHOBIA && u.usanity < 100){
+			) && u.umadness&MAD_ARACHNOPHOBIA && !ClearThoughts && u.usanity < 100){
 			dmg += (100 - u.usanity) / 5;
 		}
 
-		if (magr->female && humanoid_upperbody(pa) && u.umadness&MAD_ARACHNOPHOBIA && u.usanity < 100){
+		if (magr->female && humanoid_upperbody(pa) && u.umadness&MAD_ARACHNOPHOBIA && !ClearThoughts && u.usanity < 100){
 			dmg += (100 - u.usanity) / 5;
 		}
 	}

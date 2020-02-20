@@ -2298,10 +2298,10 @@ int base_uac()
 		dexbonus = -5;
 	} else {
 		dexbonus += (int)( (ACURR(A_DEX)-11)/2 ); /*ranges from -5 to +7 (1 to 25) */
-		if(u.umadness&MAD_RAGE){
+		if(u.umadness&MAD_RAGE && !ClearThoughts){
 			dexbonus -= (100 - u.usanity)/10;
 		}
-		if(u.umadness&MAD_NUDIST && u.usanity < 100){
+		if(u.umadness&MAD_NUDIST && !ClearThoughts && u.usanity < 100){
 			int delta = 100 - u.usanity;
 			int discomfort = u_clothing_discomfort();
 			if (discomfort) {
@@ -2442,7 +2442,7 @@ int base_udr()
 	if (HProtection & INTRINSIC) udr += (u.ublessed)/2;
 	if(u.edenshield > moves) udr += 7;
 
-	if(u.umadness&MAD_NUDIST && u.usanity < 100){
+	if(u.umadness&MAD_NUDIST && !ClearThoughts && u.usanity < 100){
 		int delta = 100 - u.usanity;
 		int discomfort = u_clothing_discomfort();
 		if (discomfort) {

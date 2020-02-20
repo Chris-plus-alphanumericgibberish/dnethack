@@ -5399,11 +5399,11 @@ int spell;
 	 */
 	chance = chance * (20-splcaster) / 15 - splcaster;
 	
-	if(u.umadness&MAD_RAGE){
+	if(u.umadness&MAD_RAGE && !ClearThoughts){
 		int delta = 100 - u.usanity;
 		chance -= delta;
 	}
-	if(u.umadness&MAD_NUDIST && u.usanity < 100){
+	if(u.umadness&MAD_NUDIST && !ClearThoughts && u.usanity < 100){
 		int delta = 100 - u.usanity;
 		int discomfort = u_clothing_discomfort();
 		if (discomfort) {
@@ -5756,38 +5756,19 @@ doreinforce_binding()
 	Sprintf(buf, "Choose binding to refresh:");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
 	
-	for(i=0;i<QUEST_SPIRIT;i++){
-		if(u.spirit[i]) for(j=0;j<32;j++){
-			if((u.spirit[i] >> j) == 1){
-				Sprintf(buf, "%s, %d", sealNames[j], u.spiritT[i] - monstermoves);
-				any.a_int = i+1;	/* must be non-zero */
-				add_menu(tmpwin, NO_GLYPH, &any,
-					incntlet, 0, ATR_NONE, buf,
-					MENU_UNSELECTED);
-				incntlet++;
-				break; //break for j loop
-			}
-		}
+	for(i=0;i<QUEST_SPIRIT && u.spirit[i];i++){
+		j = decode_sealID(u.spirit[i]) - FIRST_SEAL;
+		Sprintf(buf, "%s, %d", sealNames[j], u.spiritT[i] - monstermoves);
+		any.a_int = i+1;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+		incntlet++;
 	}
 	i = QUEST_SPIRIT;
-	if(u.spirit[i] == SEAL_DAHLVER_NAR){
-		Sprintf(buf, "%s, %d", sealNames[(DAHLVER_NAR) - (FIRST_SEAL)], u.spiritT[i] - monstermoves);
-		any.a_int = i+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	if(u.spirit[i] == SEAL_ACERERAK){
-		Sprintf(buf, "%s, %d", sealNames[(ACERERAK) - (FIRST_SEAL)], u.spiritT[i] - monstermoves);
-		any.a_int = i+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	if(u.spirit[i] == SEAL_BLACK_WEB){
-		Sprintf(buf, "%s, %d", sealNames[(BLACK_WEB) - (FIRST_SEAL)], u.spiritT[i] - monstermoves);
+	if(u.spirit[i]){
+		j = decode_sealID(u.spirit[i]) - FIRST_SEAL;
+		Sprintf(buf, "%s, %d", sealNames[j], u.spiritT[i] - monstermoves);
 		any.a_int = i+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
@@ -5795,63 +5776,15 @@ doreinforce_binding()
 		incntlet++;
 	}
 	i = ALIGN_SPIRIT;
-	if(u.spirit[i] == SEAL_COSMOS){
-		Sprintf(buf, "%s, %d", sealNames[(COSMOS) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
-		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
+	if(u.spirit[i]){
+		j = decode_sealID(u.spirit[i]) - FIRST_SEAL;
+		Sprintf(buf, "%s, %d", sealNames[j], u.spiritT[i] - monstermoves);
+		any.a_int = i+1;	/* must be non-zero */
 		add_menu(tmpwin, NO_GLYPH, &any,
 			incntlet, 0, ATR_NONE, buf,
 			MENU_UNSELECTED);
 		incntlet++;
 	}
-	if(u.spirit[i] == SEAL_LIVING_CRYSTAL){
-		Sprintf(buf, "%s, %d", sealNames[(LIVING_CRYSTAL) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
-		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	if(u.spirit[i] == SEAL_TWO_TREES){
-		Sprintf(buf, "%s, %d", sealNames[(TWO_TREES) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
-		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	if(u.spirit[i] == SEAL_MISKA){
-		Sprintf(buf, "%s, %d", sealNames[(MISKA) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
-		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	if(u.spirit[i] == SEAL_NUDZIRATH){
-		Sprintf(buf, "%s, %d", sealNames[(NUDZIRATH) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
-		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	if(u.spirit[i] == SEAL_ALIGNMENT_THING){
-		Sprintf(buf, "%s, %d", sealNames[(ALIGNMENT_THING) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
-		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	if(u.spirit[i] == SEAL_UNKNOWN_GOD){
-		Sprintf(buf, "%s, %d", sealNames[(UNKNOWN_GOD) - (FIRST_SEAL)], u.spiritT[ALIGN_SPIRIT] - monstermoves);
-		any.a_int = ALIGN_SPIRIT+1;	/* must be non-zero */
-		add_menu(tmpwin, NO_GLYPH, &any,
-			incntlet, 0, ATR_NONE, buf,
-			MENU_UNSELECTED);
-		incntlet++;
-	}
-	end_menu(tmpwin, "Select blessing");
 
 	how = PICK_ONE;
 	n = select_menu(tmpwin, how, &selected);
@@ -5869,6 +5802,7 @@ doreinforce_binding()
 			u.spirit[i] = sID;
 		}
 		u.spiritT[i] = monstermoves + 5000;
+		u.sealTimeout[decode_sealID(u.spirit[i]) - FIRST_SEAL] = moves + 5000;
 		
 		return TRUE;
 	}
