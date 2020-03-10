@@ -3393,6 +3393,10 @@ claws_destroy_marm(mtmp, otmp)
 register struct monst *mtmp;
 register struct obj *otmp;
 {
+	/* call the player's version if need be */
+	if (mtmp == &youmonst)
+		return claws_destroy_arm(otmp);
+
 	long unwornmask;
 	if(!otmp || !mtmp)
 		return 0;
@@ -3732,7 +3736,7 @@ dosymbiotic()
 		 || mon->data == &mons[PM_PALE_NIGHT]
 		) continue;
 		
-		if(mon && !mon->mtame){
+		if (mon && !mon->mtame && magr_can_attack_mdef(&youmonst, mon, u.ux + clockwisex[(i + j) % 8], u.uy + clockwisey[(i + j) % 8], FALSE)){
 			xmeleehity(&youmonst, mon, &symbiote, (struct obj *)0, -1, 0, FALSE);
 			morehungry(1);
 			lim++;

@@ -736,11 +736,6 @@ boolean artif;
 		else if (otmp->otyp == ROCK) otmp->quan = (long) rn1(6,6);
 		else if (otmp->otyp != LUCKSTONE && !rn2(6)) otmp->quan = 2L;
 		else otmp->quan = 1L;
-		if (otmp->otyp == CHUNK_OF_FOSSIL_DARK){
-			place_object(otmp, u.ux, u.uy);  /* make it viable light source */
-			begin_burn(otmp, FALSE);
-			obj_extract_self(otmp);	 /* now release it for caller's use */
-		}
 		if (artif && !rn2(Role_if(PM_PIRATE) ? 5 : 20))
 		    otmp = mk_artifact(otmp, (aligntyp)A_NONE);
 	break;
@@ -983,11 +978,6 @@ boolean artif;
 		}
 		if (otmp->otyp == POT_OIL)
 		    otmp->age = MAX_OIL_IN_FLASK;	/* amount of oil */
-		if (otmp->otyp == POT_STARLIGHT){
-			place_object(otmp, u.ux, u.uy);  /* make it viable light source */
-			begin_burn(otmp, FALSE);
-			obj_extract_self(otmp);	 /* now release it for caller's use */
-		}
 		/* fall through */
 	case SCROLL_CLASS:
 #ifdef MAIL
@@ -1297,6 +1287,8 @@ boolean artif;
 	}
 
 	/* Some things must get done (timers) even if init = 0 */
+	if (obj_eternal_light(otmp))
+		begin_burn(otmp);
 	switch (otmp->otyp) {
 	    case CORPSE:
 		start_corpse_timeout(otmp);
@@ -1524,7 +1516,7 @@ register struct obj *otmp;
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
 	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit)
-		begin_burn(otmp, TRUE);
+		begin_burn(otmp);
 	else if (otmp->otyp == FIGURINE && otmp->timed)
 		(void) stop_timer(FIG_TRANSFORM, (genericptr_t) otmp);
 	return;
@@ -1540,7 +1532,7 @@ register struct obj *otmp;
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
 	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit)
-		begin_burn(otmp, TRUE);
+		begin_burn(otmp);
 
 }
 
@@ -1575,7 +1567,7 @@ register struct obj *otmp;
 	else if (otmp->otyp == BAG_OF_HOLDING)
 	    otmp->owt = weight(otmp);
 	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit) 
-		begin_burn(otmp, TRUE);
+		begin_burn(otmp);
 	else if (otmp->otyp == FIGURINE) {
 		if (otmp->corpsenm != NON_PM
 		    && !dead_species(otmp->corpsenm,TRUE)
@@ -1597,7 +1589,7 @@ register struct obj *otmp;
 	else if (otmp->otyp == FIGURINE && otmp->timed)
 	    (void) stop_timer(FIG_TRANSFORM, (genericptr_t) otmp);
 	else if ((artifact_light(otmp)||arti_light(otmp)) && otmp->lamplit)
-		begin_burn(otmp, TRUE);
+		begin_burn(otmp);
 
 	return;
 }
@@ -2637,7 +2629,7 @@ int x, y;
     if (otmp->timed) obj_timer_checks(otmp, x, y, 0);
 	/* relight lightsources that should always be lit */
 	if (obj_eternal_light(otmp) && !otmp->lamplit)
-		begin_burn(otmp, FALSE);
+		begin_burn(otmp);
 }
 
 #define ON_ICE(a) ((a)->recharged)
@@ -2838,6 +2830,13 @@ obj_extract_self(obj)
 	case OBJ_MAGIC_CHEST:
 	    extract_magic_chest_nobj(obj);
 	    break;
+	case OBJ_INTRAP:
+		/* The only place that we should be trying to extract an object inside a
+		* trap is from within the trap code, where we have a pointer to the
+		* trap that contains the object. We should never be trying to extract
+		* an object inside a trap without that context. */
+		panic("trying to extract object from trap with no trap info");
+		break;
 	default:
 	    panic("obj_extract_self");
 	    break;
@@ -2866,6 +2865,7 @@ extract_nobj(obj, head_ptr)
 		panic("extract_nobj: object lost");
 	}
     obj->where = OBJ_FREE;
+	obj->nobj = (struct obj *)0;
 }
 
 

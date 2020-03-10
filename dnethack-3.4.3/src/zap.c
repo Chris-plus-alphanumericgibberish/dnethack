@@ -1898,7 +1898,7 @@ struct obj *obj, *otmp;
 					bill_dummy_object(obj);
 				}
 			}
-			begin_burn(obj, FALSE);
+			begin_burn(obj);
 		}
 		res = 0;
 		break;
@@ -3961,7 +3961,7 @@ xchar sx, sy;
 			/* "Poisoned by a poisoned ___" is redundant */
 			done(POISONING);
 		} else {
-			poisoned("blast", A_DEX, "poisoned blast", 15, 0);
+			poisoned("blast", A_DEX, "poisoned blast", 15);
 		}
 	    break;
 	case AD_ACID:

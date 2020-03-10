@@ -1098,7 +1098,7 @@ int spec;
 	if(is_farm(otmp) && ptr->mlet == S_PLANT){
 		tmp *= 2;
 		tmp += rnd(20);
-			}
+	}
 	/* Eve slays plants too */
 	if(u.sealsActive&SEAL_EVE && !youdefend && ptr->mlet == S_PLANT)
 		tmp *= 2;
@@ -1956,7 +1956,7 @@ long slot;
 		}
 	}
 	if (artifact_light(obj) && !obj->lamplit) {
-		begin_burn(obj, FALSE);
+		begin_burn(obj);
 		if (canseemon(mon))
 			pline("%s %s%s in %s %s!",
 			Tobjnam(obj, (obj->blessed ? "shine" : "glow")),
@@ -2033,7 +2033,7 @@ register struct monst *mon;
 		setmnotwielded(mon, mw_tmp);
 		mon->weapon_check = NEED_WEAPON;
 		if (artifact_light(obj) && !obj->lamplit) {
-		    begin_burn(obj, FALSE);
+		    begin_burn(obj);
 		}
 		obj->owornmask = W_WEP;
 		update_mon_intrinsics(mon, obj, TRUE, FALSE);
@@ -2049,7 +2049,7 @@ register struct monst *mon;
 			setmnotwielded(mon, msw_tmp);
 			mon->weapon_check = NEED_WEAPON;
 			if (artifact_light(sobj) && !sobj->lamplit) {
-				begin_burn(sobj, FALSE);
+				begin_burn(sobj);
 			}
 			sobj->owornmask = W_SWAPWEP;
 			update_mon_intrinsics(mon, sobj, TRUE, FALSE);
@@ -2084,7 +2084,7 @@ struct monst * mon;
 			pline("%s ignites %s.", Monnam(mon),
 				an(xname(obj)));
 		}	    	
-		begin_burn(obj, FALSE);
+		begin_burn(obj);
 	    }
 	} else {
 		/* Double Lightsaber in single mode? Ignite second blade */

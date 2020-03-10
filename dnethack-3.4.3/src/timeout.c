@@ -527,14 +527,14 @@ nh_timeout()
 				uwep->ovar1 = 0;
 				uwep->ovar1 |= u.spiritTineA;
 				uwep->ovar1 |= u.spiritTineB;
-				if(artifact_light(uwep) && !uwep->lamplit) begin_burn(uwep, FALSE);
+				if(artifact_light(uwep) && !uwep->lamplit) begin_burn(uwep);
 				else if(!artifact_light(uwep) && uwep->lamplit) end_burn(uwep, TRUE);
 			}
 			else if(uswapwep && uswapwep->oartifact==ART_PEN_OF_THE_VOID){
 				uswapwep->ovar1 = 0;
 				uswapwep->ovar1 |= u.spiritTineA;
 				uswapwep->ovar1 |= u.spiritTineB;
-				// if(artifact_light(uswapwep) && !uswapwep->lamplit) begin_burn(uswapwep, FALSE);
+				// if(artifact_light(uswapwep) && !uswapwep->lamplit) begin_burn(uswapwep);
 				// else if(!artifact_light(uswapwep) && uswapwep->lamplit) end_burn(uswapwep, TRUE);
 			}
 		}
@@ -1419,7 +1419,7 @@ long timeout;
 			}
 		} else {
 			obj->age -= how_long;
-		    begin_burn(obj, TRUE);
+		    begin_burn(obj);
 	    }
 	    return;
 	}
@@ -1444,7 +1444,7 @@ long timeout;
 		    	 (!u.twoweap || !uswapwep || obj != uswapwep))))
 	            lightsaber_deactivate(obj, FALSE);
 			if (obj && obj->age && obj->lamplit) /* might be deactivated */
-				begin_burn(obj, TRUE);
+				begin_burn(obj);
 	} else switch (obj->otyp) {
 	    case POT_OIL:
 		    /* this should only be called when we run out */
@@ -1550,7 +1550,7 @@ long timeout;
 		}
 
 		if (obj->age)
-		    begin_burn(obj, TRUE);
+		    begin_burn(obj);
 
 		break;
 
@@ -1676,7 +1676,7 @@ long timeout;
 		}
 		
 		if (obj && obj->age)
-		    begin_burn(obj, TRUE);
+		    begin_burn(obj);
 
 		break;
 
@@ -1744,7 +1744,7 @@ long timeout;
 				obj->age = (long) rn1(150,150);
 			}
 			end_burn(obj, FALSE);
-		    begin_burn(obj, FALSE);
+		    begin_burn(obj);
 		}
 		break;
 		case SUNROD:
@@ -1806,7 +1806,7 @@ long timeout;
 		
 		if (obj && obj->age){
 			end_burn(obj, FALSE);
-		    begin_burn(obj, FALSE);
+		    begin_burn(obj);
 		}
 		break;
 		case SHADOWLANDER_S_TORCH:
@@ -1873,7 +1873,7 @@ long timeout;
 				obj->age = (long) rn1(150,150);
 			}
 			end_burn(obj, FALSE);
-		    begin_burn(obj, FALSE);
+		    begin_burn(obj);
 		}
 		break;
 
@@ -1901,7 +1901,7 @@ long timeout;
 				lightsaber_deactivate(obj, FALSE);
 			}
 			if (obj && obj->age && obj->lamplit) /* might be deactivated */
-				begin_burn(obj, TRUE);
+				begin_burn(obj);
 		break;
 //#ifdef FIREARMS
 	    case STICK_OF_DYNAMITE:
@@ -2154,14 +2154,13 @@ struct obj * obj;
  * This is a "silent" routine - it should not print anything out.
  */
 void
-begin_burn(obj, already_lit)
+begin_burn(obj)
 	struct obj *obj;
-	boolean already_lit;
 {
 	int radius;
 	long turns = 0;
 	boolean do_timer = TRUE;
-	
+	boolean already_lit = obj->lamplit;
 	radius = 3;
 
 	/* othere than these, lightsources don't work when age==0 */
@@ -2835,6 +2834,7 @@ obj_is_local(obj)
 	case OBJ_MAGIC_CHEST:
 	case OBJ_MIGRATING:	return FALSE;
 	case OBJ_FLOOR:
+	case OBJ_INTRAP:
 	case OBJ_BURIED:	return TRUE;
 	case OBJ_CONTAINED:	return obj_is_local(obj->ocontainer);
 	case OBJ_MINVENT:	return mon_is_local(obj->ocarry);

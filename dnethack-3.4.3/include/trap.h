@@ -7,19 +7,9 @@
 #ifndef TRAP_H
 #define TRAP_H
 
-struct trap_loaded_obj {
-	unsigned short o_pois : 8;		/* poison type(s) */
-	unsigned short o_mat : 5;		/* object material */
-	unsigned short o_blessed : 1;	/* blessed */
-	unsigned short o_cursed : 1;	/* cursed */
-	unsigned short o_pm_one : 1;	/* +1 if non-cursed, -1 if cursed */
-	// no remaining bits -- if more are needed, cannibalize o_pois and assume only 1 poison type?
-};
-
 union vlaunchinfo {
-	/* 16 bits */
-	/* arrow/dart */
-	struct trap_loaded_obj v_loaded_obj;	/* bitfield struct to make projectiles consistent from launcher traps */
+	/* ??? bits - max(<sizeof(pointer)>, 16bits). */
+	struct obj* v_ammo;	/* quivered object associated with this trap - rocks/darts/arrows/beartraps/landmines. */
 	/* rolling boulder */
 	short v_launch_otyp;	/* type of object to be triggered */
 	coord v_launch2;	/* secondary launch point (for boulders) */
@@ -43,11 +33,7 @@ struct trap {
 				 easy to make a monster peaceful if you could
 				 set a trap for it and then untrap it. */
 	union vlaunchinfo vl;
-#define launch_pois    vl.v_loaded_obj.o_pois
-#define launch_mat     vl.v_loaded_obj.o_mat
-#define launch_blessed vl.v_loaded_obj.o_blessed
-#define launch_cursed  vl.v_loaded_obj.o_cursed
-#define launch_enchant vl.v_loaded_obj.o_pm_one
+#define launch_ammo    vl.v_ammo
 #define launch_otyp	vl.v_launch_otyp
 #define launch2		vl.v_launch2
 #define statueid       vl.v_statue_oid
@@ -56,6 +42,12 @@ struct trap {
 extern struct trap *ftrap;
 #define newtrap()	(struct trap *) alloc(sizeof(struct trap))
 #define dealloc_trap(trap) free((genericptr_t) (trap))
+
+/* what vl to use */
+#define trapv_ammo(ttyp)	((ttyp) == DART_TRAP || (ttyp) == ARROW_TRAP || (ttyp) == ROCKTRAP ||\
+								(ttyp) == BEAR_TRAP || (ttyp) == LANDMINE || (ttyp) == FIRE_TRAP)
+#define trapv_launch(ttyp)	((ttyp) == ROLLING_BOULDER_TRAP)
+#define trapv_statue(ttyp)	((ttyp) == STATUE_TRAP)
 
 /* reasons for statue animation */
 #define ANIMATE_NORMAL	0

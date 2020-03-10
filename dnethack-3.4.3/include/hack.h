@@ -126,6 +126,13 @@ NEARDATA extern coord bhitpos;	/* place where throw or zap hits or stops */
 #define FLASHED_LIGHT	3
 #define INVIS_BEAM	4
 
+/* types of calls to hmon */
+#define HMON_WHACK		0x01	/* regular melee attack */
+#define HMON_THRUST		0x02	/* polearm thrust */
+#define HMON_MISTHROWN	0x04	/* improper[ly launched] projectile, should NOT use weapon dice */
+#define HMON_FIRED		0x08	/* projectile that should use damage dice */
+#define HMON_TRAP		0x10	/* trap-owned attack, either projectile or melee depending on ttyp */
+
 #define MATCH_WARN_OF_MON(mon)	( MATCH_WARN_OF_MON_STRICT(mon) || \
 					(u.sealsActive&SEAL_PAIMON && is_magical((mon)->data)) || \
 					(u.sealsActive&SEAL_ANDROMALIUS && is_thief((mon)->data)) || \

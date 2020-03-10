@@ -107,7 +107,7 @@ dochugw(mtmp)
 	     * which the weapon does extra damage, as there is no "monster
 	     * which the weapon warns against" field.
 	     */
-	    if (spec_ability(uwep, SPFX_WARN) && spec_dbon(uwep, mtmp, 1))
+	    if (spec_ability(uwep, SPFX_WARN) && spec_dbon(uwep, mtmp, 1, (int *)0, (int *)0))
 		warnlevel = 100;
 	    else if ((int) (mtmp->m_lev / 4) > warnlevel)
 		warnlevel = (mtmp->m_lev / 4);
@@ -2258,7 +2258,7 @@ not_special:
 								breacher->age = rn1(10,10);
 								fix_object(breacher);
 								place_object(breacher, mtmp->mx+i, mtmp->my+j);
-								begin_burn(breacher, FALSE);
+								begin_burn(breacher);
 								if(canseemon(mtmp))
 									pline("%s plants a breaching charge!", Monnam(mtmp));
 							}

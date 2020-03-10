@@ -510,7 +510,7 @@ xchar x, y;
 		if (isgold)
 			gone = ghitm(mon, kickobj);
 		else
-			(void)hmon2point0(&youmonst, mon, (struct attack *)0, (struct attack *)0, kickobj, (struct obj *)0, 2, 0, 0, TRUE, rn1(18, 2), FALSE, TRUE, &gone, FALSE);
+			(void)hmon2point0(&youmonst, mon, (struct attack *)0, (struct attack *)0, kickobj, (struct obj *)0, HMON_MISTHROWN, 0, 0, TRUE, rn1(18, 2), FALSE, TRUE, &gone);
 		if (gone)
 		return(1);
 	}

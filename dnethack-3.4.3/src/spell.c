@@ -2086,7 +2086,7 @@ spiriteffects(power, atme)
 				otmp = mksobj(SHURIKEN, FALSE, FALSE);
 			    otmp->blessed = 0;
 			    otmp->cursed = 0;
-				projectile(&youmonst, otmp, (struct obj *)0, FALSE, u.ux+xadj, u.uy+yadj, u.dx, u.dy, 0, rn1(5,5), TRUE, FALSE, FALSE);
+				projectile(&youmonst, otmp, (void *)0, HMON_FIRED, u.ux+xadj, u.uy+yadj, u.dx, u.dy, 0, rn1(5,5), TRUE, FALSE, FALSE);
 				nomul(0, NULL);
 			}
 			losehp(dsize, "little shards of metal ripping out of your body", KILLED_BY);
@@ -2190,7 +2190,7 @@ spiriteffects(power, atme)
 					return 0;
 				}
 				struct attack basictouch = { AT_TUCH, AD_PHYS, 0, 0 };
-				if (tohitval(&youmonst, mon, &basictouch, (struct obj *)0, (struct obj *)0, 0, 0) <= rnd(20)){
+				if (tohitval(&youmonst, mon, &basictouch, (struct obj *)0, (void *)0, HMON_WHACK, 0) <= rnd(20)){
 					You("miss.");
 					break;
 				}
@@ -2398,7 +2398,7 @@ spiriteffects(power, atme)
 				otmp->cursed = 0;
 				otmp->spe = 1; /* to indicate it's yours */
 				otmp->ovar1 = 1 + u.ulevel/10;
-				projectile(&youmonst, otmp, (struct obj *)0, FALSE, u.ux, u.uy, u.dx, u.dy, 0, rn1(5,5), TRUE, TRUE, FALSE);
+				projectile(&youmonst, otmp, (void *)0, HMON_FIRED, u.ux, u.uy, u.dx, u.dy, 0, rn1(5,5), TRUE, TRUE, FALSE);
 				nomul(0, NULL);
 			} else return 0;
 		break;
@@ -2442,7 +2442,7 @@ spiriteffects(power, atme)
 				You("ask the earth to open.");
 				digfarhole(TRUE, u.ux+u.dx, u.uy+u.dy);
 				otmp = mksobj(BOULDER, FALSE, FALSE);
-				projectile(&youmonst, otmp, (struct obj *)0, FALSE, u.ux, u.uy, u.dx, u.dy, 0, 1, FALSE, FALSE, FALSE);
+				projectile(&youmonst, otmp, (void *)0, HMON_FIRED, u.ux, u.uy, u.dx, u.dy, 0, 1, FALSE, FALSE, FALSE);
 				nomul(0, NULL);
 			} else break;
 		}break;
@@ -2453,7 +2453,7 @@ spiriteffects(power, atme)
 			otmp->spe = 1; /* to indicate it's yours */
 			otmp->ovar1 = d(5,dsize); /* save the damge this should do */
 			You("spit venom.");
-			projectile(&youmonst, otmp, (struct obj *)0, FALSE, u.ux, u.uy, u.dx, u.dy, 0, 10, TRUE, FALSE, FALSE);
+			projectile(&youmonst, otmp, (void *)0, HMON_FIRED, u.ux, u.uy, u.dx, u.dy, 0, 10, TRUE, FALSE, FALSE);
 		}break;
 		case PWR_SUCKLE_MONSTER:{
 			struct monst *mon;
@@ -2536,7 +2536,7 @@ spiriteffects(power, atme)
 					struct obj* boots;
 					boots = which_armor(mon, W_ARMF);
 					struct attack basichit = { AT_CLAW, AD_PHYS, 0, 0 };
-					if (tohitval(&youmonst, mon, &basichit, (struct obj *)0, (struct obj *)0, 0, 0) <= rnd(20)){
+					if (tohitval(&youmonst, mon, &basichit, (struct obj *)0, (void *)0, HMON_WHACK, 0) <= rnd(20)){
 						if(boots && boots->otyp == WATER_WALKING_BOOTS){
 							pline("A sudden geyser from the abzu washes under %s's feet!", mon_nam(mon));
 							if(canseemon(mon)) makeknown(boots->otyp);
@@ -2839,7 +2839,7 @@ spiriteffects(power, atme)
 				You("refill %s.",the(xname(uwep)));
 				if(uwep->lamplit){
 					end_burn(uwep, TRUE);
-					begin_burn(uwep, FALSE);
+					begin_burn(uwep);
 				}
 			} else return 0;
 		break;
@@ -2850,7 +2850,7 @@ spiriteffects(power, atme)
 					else uwep->age -= 500;
 					explode(u.dx, u.dy, AD_FIRE, WAND_CLASS, d(rnd(5), dsize)* (Double_spell_size ? 3 : 2) / 2, EXPL_FIERY, 1 + !!Double_spell_size);
 					end_burn(uwep, TRUE);
-					begin_burn(uwep, FALSE);
+					begin_burn(uwep);
 				} else return 0;
 			} else{
 				if(uwep && uwep->otyp == LANTERN) pline("You need an oil lamp. These modern lamps just aren't the same!");
@@ -3280,7 +3280,7 @@ spiriteffects(power, atme)
 					((uarmg && arti_shining(uarmg)) || u.sealsActive&SEAL_CHUPOCLOPS) ? AT_TUCH : AT_CLAW,
 					AD_PHYS, 0, 0 };
 				
-				if (tohitval(&youmonst, mon, &basicattack, (struct obj *)0, (struct obj *)0, 0, 0) <= rnd(20)){
+				if (tohitval(&youmonst, mon, &basicattack, (struct obj *)0, (void *)0, HMON_WHACK, 0) <= rnd(20)){
 					You("miss.");
 					break;
 				} else if(unsolid(mon->data)){
@@ -3435,7 +3435,7 @@ spiriteffects(power, atme)
 				return 0;
 			}
 			struct attack basictouch = { AT_TUCH, AD_PHYS, 0, 0 };
-			if (tohitval(&youmonst, mon, &basictouch, (struct obj *)0, (struct obj *)0, 0, 0) <= rnd(20)){
+			if (tohitval(&youmonst, mon, &basictouch, (struct obj *)0, (void *)0, HMON_WHACK, 0) <= rnd(20)){
 				You("miss.");
 				break;
 			}
@@ -3846,7 +3846,7 @@ spiriteffects(power, atme)
 			qvr->obj_material = SHADOWSTEEL;
 			qvr->opoisoned = (OPOISON_BASIC|OPOISON_BLIND);
 			qvr->oproperties = OPROP_PHSEW;
-			projectile(&youmonst, qvr, (struct obj *)0, FALSE, mon->mx, mon->my, 0, 0, 0, 0, TRUE, FALSE, FALSE);
+			projectile(&youmonst, qvr, (void *)0, HMON_FIRED, mon->mx, mon->my, 0, 0, 0, 0, TRUE, FALSE, FALSE);
 				if(!DEADMONSTER(mon) && mon_can_see_you(mon)) // and mon_can_see_you(mon)?
 					setmangry(mon);
 				ttmp2 = maketrap(mon->mx, mon->my, WEB);
@@ -5678,7 +5678,8 @@ dopseudonatural()
 		nmon = mon->nmon;
 		if(!mon || mon->mtame || !rn2(5))
 			continue;
-		if(distmin(u.ux, u.uy, mon->mx, mon->my) > 2 || !couldsee(mon->mx, mon->my))
+		if(distmin(u.ux, u.uy, mon->mx, mon->my) > 2 || !couldsee(mon->mx, mon->my) ||
+			!(magr_can_attack_mdef(&youmonst, mon, mon->mx, mon->my, FALSE)))
 			continue;
 		if((!Stone_resistance && (touch_petrifies(mon->data)
 		 || mon->data == &mons[PM_MEDUSA]))

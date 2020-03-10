@@ -3734,6 +3734,7 @@ lifesaved_monster(mtmp)
 struct monst *mtmp;
 {
 	struct obj *lifesave = mlifesaver(mtmp);
+	boolean messaged = FALSE;
 	int lifesavers = 0;
 	int i;
 #define LSVD_ANA 0x001	/* anachrononaut quest */
@@ -3802,6 +3803,7 @@ struct monst *mtmp;
 		case LSVD_ANA:
 			/* message */
 			if (canseemon(mtmp)) {
+				messaged = TRUE;
 				pline("But wait...");
 				if (attacktype(mtmp->data, AT_EXPL)
 					|| attacktype(mtmp->data, AT_BOOM))
@@ -3814,6 +3816,7 @@ struct monst *mtmp;
 		case LSVD_NBW:
 			/* message */
 			if (canseemon(mtmp)) {
+				messaged = TRUE;
 				pline("But wait...");
 				pline("Something vast and terrible writhes beneath %s wrappings!", hisherits(mtmp));
 				pline("It's trying to escape!");
@@ -3839,7 +3842,8 @@ struct monst *mtmp;
 
 		case LSVD_UVU:
 			/* message */
-			if (cansee(mtmp->mx, mtmp->my)) {
+			if (couldsee(mtmp->mx, mtmp->my)) {
+				messaged = TRUE;
 				pline("But wait...");
 				pline("A glowing halo forms over %s!",
 					mon_nam(mtmp));
@@ -3859,7 +3863,8 @@ struct monst *mtmp;
 			break;
 		case LSVD_OBJ:
 			/* message */
-			if (cansee(mtmp->mx, mtmp->my)) {
+			if (couldsee(mtmp->mx, mtmp->my)) {
+				messaged = TRUE;
 				pline("But wait...");
 				pline("%s medallion begins to glow!",
 					s_suffix(Monnam(mtmp)));
@@ -3877,6 +3882,7 @@ struct monst *mtmp;
 		case LSVD_ALA:
 			/* message */
 			if (canseemon(mtmp)) {
+				messaged = TRUE;
 				pline("%s putrefies with impossible speed!",Monnam(mtmp));
 			}
 			/* alabaster-specific effects */
@@ -3892,6 +3898,7 @@ struct monst *mtmp;
 		case LSVD_FRC:
 			/* message */
 			if (couldsee(mtmp->mx, mtmp->my)) {
+				messaged = TRUE;
 				pline("But wait...");
 				if(canseemon(mtmp))
 					pline("%s fractures further%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
@@ -3927,6 +3934,7 @@ struct monst *mtmp;
 			}
 			/* message */
 			if (couldsee(mtmp->mx, mtmp->my)) {
+				messaged = TRUE;
 				pline("But wait...");
 				pline("A glowing halo forms over %s!",
 					mon_nam(mtmp));
@@ -3942,7 +3950,8 @@ struct monst *mtmp;
 			break;
 		case LSVD_PLY:
 			/* message */
-			if (couldsee(mtmp->mx, mtmp->my)){
+			if (canseemon(mtmp)){
+				messaged = TRUE;
 				pline("But wait...");
 				pline("%s mask breaks!", s_suffix(Monnam(mtmp)));
 			}
@@ -3953,6 +3962,7 @@ struct monst *mtmp;
 			break;
 		case LSVD_KAM:
 			if (couldsee(mtmp->mx, mtmp->my)) {
+				messaged = TRUE;
 				pline("But wait...");
 				if(canseemon(mtmp))
 					pline("%s fractures%s, but now looks uninjured!", Monnam(mtmp), !is_silent(mtmp->data) ? " with an unearthly scream" : "");
@@ -3974,7 +3984,7 @@ struct monst *mtmp;
 				pline("%s screams in agony, bloats, and begins boiling violently!", Monnam(mtmp));
 			else
 				pline("%s screams in agony and begins boiling violently!", Monnam(mtmp));
-			
+			messaged = TRUE;
 			if(cansee(mtmp->mx, mtmp->my)){
 				int nyar_form = rn2(SIZE(nyar_description));
 				pline("The escaping phantasmal mist condenses into %s.", nyar_description[nyar_form]);
@@ -3996,7 +4006,7 @@ struct monst *mtmp;
 		mtmp->mhp = mtmp->mhpmax;
 		/* genocided creatures get re-killed */
 		if (mvitals[monsndx(mtmp->data)].mvflags & G_GENOD && !In_quest(&u.uz)) {
-			if (cansee(mtmp->mx, mtmp->my)) {
+			if (messaged) {
 				pline("Unfortunately %s is still genocided...",
 					mon_nam(mtmp));
 			}
@@ -5798,175 +5808,77 @@ poisontell(typ)
 	pline("You%s.", poiseff[typ]);
 }
 
+/* poisoned()
+ * the player is poisoned by something other than an object's poison coating (which is done via hmon in xhity)
+ * 
+ */
 void
-poisoned(string, typ, pname, fatal, opoistype)
-const char *string, *pname;
-int  typ, fatal, opoistype;
+poisoned(string, attrib, pname, fatal)
+const char *string;	/* base string of poison message (The killer bee's sting) */
+int attrib;			/* attribute to target */
+const char *pname;	/* name of poisoner (for killer) */
+int fatal;			/* 1 in X chance of significant debilitation */
 {
-	int i, plural, kprefix = KILLED_BY_AN;
-	boolean thrown_weapon = (fatal < 0);
+	int i, kprefix = KILLED_BY_AN;
+	boolean plural = strcmp(string, makesingular(string));
+	boolean blast = !strcmp(string, "blast");
 
-	if (thrown_weapon) fatal = -fatal;
-	if(strcmp(string, "blast") && !thrown_weapon) {
-	    /* 'blast' has already given a 'poison gas' message */
-	    /* so have "poison arrow", "poison dart", etc... */
-	    plural = (string[strlen(string) - 1] == 's')? 1 : 0;
+	if(!blast) {
 	    /* avoid "The" Orcus's sting was poisoned... */
 	    pline("%s%s %s poisoned!", isupper(*string) ? "" : "The ",
 			string, plural ? "were" : "was");
 	}
-	
-	if(!opoistype || (opoistype & OPOISON_BASIC)){
 		if(Poison_resistance) {
-			if(!strcmp(string, "blast")) shieldeff(u.ux, u.uy);
-			pline_The("poison doesn't seem to affect you.");
+		if (!blast)
+			shieldeff(u.ux, u.uy);
+		pline_The("poison doesn't seem to affect you.");
+		/* fear of snakes (and so poison) */
 			if(roll_madness(MAD_OPHIDIOPHOBIA)){
 				You("panic anyway!");
 				nomul(-1*rnd(3), "panicking");
 			}
-		} else {
+	}
+	else {
 			/* suppress killer prefix if it already has one */
 			if ((i = name_to_mon(pname)) >= LOW_PM && mons[i].geno & G_UNIQ) {
 				kprefix = KILLED_BY;
 				if (!type_is_pname(&mons[i])) pname = the(pname);
-			} else if (!strncmpi(pname, "the ", 4) ||
+		}
+		else if (!strncmpi(pname, "the ", 4) ||
 				!strncmpi(pname, "an ", 3) ||
 				!strncmpi(pname, "a ", 2)) {
 				/*[ does this need a plural check too? ]*/
 				kprefix = KILLED_BY;
 			}
-			i = rn2(fatal + 20*thrown_weapon);
-			if(i == 0 && typ != A_CHA) {
-				if (adjattrib(A_CON, typ==A_CON ? -2 : -rn1(3,3), 1))
-					pline_The("poison was quite debilitating...");
-			} else if(i <= 5) {
+			i = rn2(fatal);
+			if (i == 0 && attrib != A_CHA) {
+				if (adjattrib(A_CON, attrib == A_CON ? -2 : -rn1(3, 3), 1))
+						pline_The("poison was quite debilitating...");
+			}
+			else if (i <= 5) {
 				/* Check that a stat change was made */
-				if (adjattrib(typ, thrown_weapon ? -1 : -rn1(3,3), 1))
-					pline("You%s!", poiseff[typ]);
-			} else {
-				i = thrown_weapon ? rnd(6) : rn1(10,6);
+			if (adjattrib(attrib, -rn1(3, 3), 1))
+				pline("You%s!", poiseff[attrib]);
+		}
+		else {
+			i = rn1(10, 6);
 				if(Half_physical_damage) i = (i+1) / 2;
 				if(u.uvaul_duration) i = (i + 1) / 2;
 				losehp(i, pname, kprefix);
-			}
-			if(u.uhp < 1) {
-				killer_format = kprefix;
-				killer = pname;
-				/* "Poisoned by a poisoned ___" is redundant */
-				done(strstri(pname, "poison") ? DIED : POISONING);
-			}
-			if(roll_madness(MAD_OPHIDIOPHOBIA)){
-				You("panic!");
-				nomul(-1*rnd(6), "panicking");
-			}
-			(void) encumber_msg();
 		}
-	}
-	if(opoistype & OPOISON_FILTH){
-		if(Sick_resistance) {
-			pline_The("tainted filth doesn't seem to affect you.");
-		} else {
-			long sick_time;
-
-			sick_time = (long)rn1(ACURR(A_CON), 20);
-			/* make sure new ill doesn't result in improvement */
-			if (Sick && (sick_time > Sick))
-				sick_time = (Sick > 2L) ? Sick/2L : 1L;
-			make_sick(sick_time, string, TRUE, SICK_NONVOMITABLE);
+		if(u.uhp < 1) {
+			killer_format = kprefix;
+			killer = pname;
+			/* "Poisoned by a poisoned ___" is redundant */
+			done(strstri(pname, "poison") ? DIED : POISONING);
 		}
-	}
-	if(opoistype & OPOISON_SLEEP){
-		if(Sleep_resistance) {
-			pline_The("drug doesn't seem to affect you.");
-		} else if(!rn2((fatal/3) + 20*thrown_weapon)){
-			You("suddenly fall asleep!");
-			fall_asleep(-rn1(2, 6), TRUE);
+		if(roll_madness(MAD_OPHIDIOPHOBIA)){
+			You("panic!");
+			nomul(-1*rnd(6), "panicking");
 		}
+		(void) encumber_msg();
 	}
-	if(opoistype & OPOISON_BLIND){
-		if(Poison_resistance) {
-			pline_The("poison doesn't seem to affect you.");
-			if(roll_madness(MAD_OPHIDIOPHOBIA)){
-				You("panic anyway!");
-				nomul(-1*rnd(3), "panicking");
-			}
-		} else if(!rn2((fatal/3) + 20*thrown_weapon)){
-			i = thrown_weapon ? 3 : 8;
-			if(Half_physical_damage) i = (i+1) / 2;
-			if(u.uvaul_duration) i = (i + 1) / 2;
-			losehp(i, pname, kprefix);
-			make_blinded(rn1(20, 25),
-					 (boolean)!Blind);
-			if(roll_madness(MAD_OPHIDIOPHOBIA)){
-				You("panic!");
-				nomul(-1*rnd(6), "panicking");
-			}
-		} else{
-			i = thrown_weapon ? rnd(3) : rn1(5,3);
-			if(Half_physical_damage) i = (i+1) / 2;
-			if(u.uvaul_duration) i = (i + 1) / 2;
-			losehp(i, pname, kprefix);
-			if(roll_madness(MAD_OPHIDIOPHOBIA)){
-				You("panic!");
-				nomul(-1*rnd(6), "panicking");
-			}
-		}
-	}
-	if(opoistype & OPOISON_PARAL){
-		if(Free_action) {
-			pline_The("poison doesn't seem to affect you.");
-			if(roll_madness(MAD_OPHIDIOPHOBIA)){
-				You("panic anyway!");
-				nomul(-1*rnd(3), "panicking");
-			}
-		} else if(!rn2((fatal) + 20*thrown_weapon)){
-			i = thrown_weapon ? 6 : 16;
-			if(Half_physical_damage) i = (i+1) / 2;
-			if(u.uvaul_duration) i = (i + 1) / 2;
-			losehp(i, pname, kprefix);
-			nomul(-(rn1(5, 12 - 6)), "immobilized by paralysis venom");
-		} else{
-			i = thrown_weapon ? rnd(6) : rn1(10,6);
-			if(Half_physical_damage) i = (i+1) / 2;
-			if(u.uvaul_duration) i = (i + 1) / 2;
-			losehp(i, pname, kprefix);
-			if(roll_madness(MAD_OPHIDIOPHOBIA)){
-				You("panic!");
-				nomul(-1*rnd(6), "panicking");
-			}
-		}
-	}
-	if(opoistype & OPOISON_AMNES){
-		if(u.sealsActive&SEAL_HUGINN_MUNINN){
-			unbind(SEAL_HUGINN_MUNINN,TRUE);
-		} else {
-			forget(1);	/* lose 1% of memory per point lost*/
-			forget_traps();		/* lose memory of all traps*/
-		}
-	}
-	if(opoistype & OPOISON_ACID){
-		if(Acid_resistance) {
-			pline_The("acidic coating doesn't seem to affect you.");
-		} else {
-			/* suppress killer prefix if it already has one */
-			if ((i = name_to_mon(pname)) >= LOW_PM && mons[i].geno & G_UNIQ) {
-				kprefix = KILLED_BY;
-				if (!type_is_pname(&mons[i])) pname = the(pname);
-			} else if (!strncmpi(pname, "the ", 4) ||
-				!strncmpi(pname, "an ", 3) ||
-				!strncmpi(pname, "a ", 2)) {
-				/*[ does this need a plural check too? ]*/
-				kprefix = KILLED_BY;
-			}
-			i = thrown_weapon ? rnd(10) : rn1(10,10);
-			losehp(i, pname, kprefix);
-			if(u.uhp < 1) {
-				killer_format = kprefix;
-				killer = pname;
-				done(DIED);
-			}
-		}
-	}
+	return;
 }
 
 /* monster responds to player action; not the same as a passive attack */

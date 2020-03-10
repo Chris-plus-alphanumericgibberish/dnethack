@@ -747,7 +747,7 @@ register struct monst *mtmp;
 			    otmp = mksobj(TORCH, FALSE, FALSE);
 				otmp->age = (long) rn1(500,1000);
 			    (void) mpickobj(mtmp, otmp);
-				begin_burn(otmp, FALSE);
+				begin_burn(otmp);
 				(void)mongets(mtmp, WHITE_FACELESS_ROBE);
 				(void)mongets(mtmp, LOW_BOOTS);
 			}
@@ -755,7 +755,7 @@ register struct monst *mtmp;
 			    otmp = mksobj(SHADOWLANDER_S_TORCH, FALSE, FALSE);
 			    (void) mpickobj(mtmp, otmp);
 				otmp->age = (long) rn1(500,1000);
-				begin_burn(otmp, FALSE);
+				begin_burn(otmp);
 				(void)mongets(mtmp, HELMET);
 				(void)mongets(mtmp, BLACK_FACELESS_ROBE);
 				(void)mongets(mtmp, CHAIN_MAIL);
@@ -767,7 +767,7 @@ register struct monst *mtmp;
 				otmp->spe = rnd(3);
 				otmp->age = (long) rn1(1000,2000);
 			    (void) mpickobj(mtmp, otmp);
-				begin_burn(otmp, FALSE);
+				begin_burn(otmp);
 				(void)mongets(mtmp, LEATHER_HELM);
 				(void)mongets(mtmp, SMOKY_VIOLET_FACELESS_ROBE);
 				(void)mongets(mtmp, LEATHER_ARMOR);
@@ -778,7 +778,7 @@ register struct monst *mtmp;
 			    otmp = mksobj(TORCH, FALSE, FALSE);
 				otmp->age = (long) rn1(500,1000);
 			    (void) mpickobj(mtmp, otmp);
-				begin_burn(otmp, FALSE);
+				begin_burn(otmp);
 				
 				(void)mongets(mtmp, MACUAHUITL);
 				(void)mongets(mtmp, STUDDED_LEATHER_ARMOR);
@@ -792,7 +792,7 @@ register struct monst *mtmp;
 			    otmp = mksobj(TORCH, FALSE, FALSE);
 				otmp->age = (long) rn1(500,1000);
 			    (void) mpickobj(mtmp, otmp);
-				begin_burn(otmp, FALSE);
+				begin_burn(otmp);
 				
 				(void)mongets(mtmp, ATLATL);	
 				m_initthrow(mtmp, JAVELIN, rnd(10));
@@ -808,7 +808,7 @@ register struct monst *mtmp;
 				otmp->spe = rnd(3);
 				otmp->age = (long) rn1(1000,2000);
 			    (void) mpickobj(mtmp, otmp);
-				begin_burn(otmp, FALSE);
+				begin_burn(otmp);
 				
 				(void)mongets(mtmp, TECPATL);
 				(void)mongets(mtmp, LEATHER_ARMOR);
@@ -2217,7 +2217,7 @@ register struct monst *mtmp;
 				(void)mongets(mtmp, PICK_AXE);
 				otmp = mksobj(LANTERN, TRUE, FALSE);
 				(void) mpickobj(mtmp, otmp);
-				begin_burn(otmp, FALSE);
+				begin_burn(otmp);
 // #endif /* CONVICT */
 			} else if (mm == PM_ASHIKAGA_TAKAUJI) {
 					otmp = mksobj(HELMET, FALSE, FALSE);
@@ -3438,7 +3438,7 @@ register struct monst *mtmp;
 				    otmp = mksobj(GNOMISH_POINTY_HAT, TRUE, FALSE);
 				    (void) mpickobj(mtmp, otmp);
 					if (!levl[mtmp->mx][mtmp->my].lit) {
-						begin_burn(otmp, FALSE);
+						begin_burn(otmp);
 				    }	
 			}
 			else//Outside the mines, only one in 6 gnomes have hats.
@@ -4215,7 +4215,7 @@ register struct monst *mtmp;
 			    otmp = mksobj(DWARVISH_HELM, TRUE, FALSE);
 			    (void) mpickobj(mtmp, otmp);
 				    if (!levl[mtmp->mx][mtmp->my].lit) {
-					begin_burn(otmp, FALSE);
+					begin_burn(otmp);
 			    }
 			}
 			else {

@@ -694,9 +694,11 @@ struct monst *mon;
 	
 	if(mon->mtame){
 		base -= rnd(def_beastmastery());
+		if (uarm && uarm->oartifact == ART_BEASTMASTER_S_DUSTER && is_animal(mon->data))
+			base -= rnd(def_beastmastery()); // the duster doubles for tame animals
+		
 		if(u.usteed && mon==u.usteed) base -= rnd(def_mountedCombat());
 	}
-	
 	if(helpless(mon))
 		base -= 5;
 	else if(which_armor(mon, W_ARM)){
@@ -756,6 +758,7 @@ struct monst *mon;
 	if(mon->mtame){
 		if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
 	}
+	
 	
 	//armor AC
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
@@ -830,6 +833,9 @@ struct monst *mon;
 		base -= def_beastmastery();
 		if(u.specialSealsActive&SEAL_COSMOS) base -= spiritDsize();
 		if(u.usteed && mon==u.usteed) base -= def_mountedCombat();
+		
+		if (uarm && uarm->oartifact == ART_BEASTMASTER_S_DUSTER && is_animal(mon->data))
+			base -= def_beastmastery(); // the duster doubles for tame animals
 	}
 	
 	if(mon->data == &mons[PM_HOD_SEPHIRAH]){
@@ -1691,7 +1697,8 @@ long timeout;
 	struct obj *obj = (struct obj *) arg;;
  	xchar x = 0, y = 0;
 	boolean on_floor = obj->where == OBJ_FLOOR,
-		in_invent = obj->where == OBJ_INVENT;
+		in_invent = obj->where == OBJ_INVENT,
+		in_trap = obj->where == OBJ_INTRAP;
 	
 	if(obj->shopOwned){
 		start_timer(1, TIMER_OBJECT,
@@ -1727,7 +1734,52 @@ long timeout;
 				obfree(obj, (struct obj *)0);
 			}
 		}
-	} else if (in_invent) {
+	}
+	else if (in_trap) {
+		x = obj->otrap->tx;
+		y = obj->otrap->ty;
+		/* if dark, continue timer and possibly restore durability */
+		if ((levl[x][y].lit == 0 &&
+			!(viz_array[y][x] & TEMP_LIT1 && !(viz_array[y][x] & TEMP_DRK1)))
+			|| (levl[x][y].lit &&
+			(viz_array[y][x] & TEMP_DRK1 && !(viz_array[y][x] & TEMP_LIT1)))
+			/* only some traps are visible to light */
+			|| !(obj->otrap->ttyp == BEAR_TRAP)
+			){
+			if (obj->oeroded && obj->oerodeproof) obj->oeroded--;
+			start_timer(1, TIMER_OBJECT,
+				LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+		/* otherwise, damage and eventually destroy it */
+		if (obj->oeroded < 2){
+			obj->oeroded++;
+			start_timer(1, TIMER_OBJECT,
+				LIGHT_DAMAGE, (genericptr_t)obj);
+			return;
+		}
+		else {
+			struct monst *mtmp;
+			/* destroy trap as well */
+			if (x == u.ux && y == u.uy) {
+				/* message */
+				if (u.utrap) {
+					pline("The %s holding you evaporates.", xname(obj));
+				}
+				u.utrap = 0;
+				u.utraptype = 0;
+			}
+			else if ((mtmp = m_at(x, y)) != 0) {
+				if (mtmp->mtrapped) {
+					if (cansee(x, y) && canseemon(mtmp))
+						pline("The %s holding %s evaporates.", xname(obj), mon_nam(mtmp));
+					mtmp->mtrapped = 0;
+				}
+			}
+			deltrap(obj->otrap);	/* deltrap deletes contained objects as well */
+		}
+	}
+	else if (in_invent) {
 //		pline("object in invent");
 		int armpro = 0;
 		boolean isarmor = obj == uarm || obj == uarmc || obj == uarms || obj == uarmh || 

@@ -1651,7 +1651,7 @@ struct monst *mtmp;
 						singular(otmp, doname));
 		}
 		
-		projectile(mtmp, otmp, (struct obj *)0, FALSE, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby), 0, distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy), FALSE, FALSE, FALSE);
+		projectile(mtmp, otmp, (void *)0, HMON_FIRED, mtmp->mx, mtmp->my, sgn(tbx), sgn(tby), 0, distmin(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy), FALSE, FALSE, FALSE);
 
 		if(u.ux != mtmp->mux || u.uy != mtmp->muy){
 			mtmp->mux = mtmp->muy = 0;
@@ -1939,7 +1939,8 @@ struct monst *mtmp;
 		nomore(MUSE_BULLWHIP);
 		if((obj->otyp == BULLWHIP || obj->otyp == VIPERWHIP || obj->otyp == FORCE_WHIP) 
 			&& (MON_WEP(mtmp) == obj || MON_SWEP(mtmp) == obj) &&
-			distu(mtmp->mx,mtmp->my)==1 && uwep && !mtmp->mpeaceful
+			distu(mtmp->mx,mtmp->my)==1 && uwep && !mtmp->mpeaceful &&
+			magr_can_attack_mdef(mtmp, &youmonst, u.ux, u.uy, TRUE)
 		) {
 			m.misc = obj;
 			m.has_misc = MUSE_BULLWHIP;
@@ -2274,42 +2275,53 @@ museamnesia:
 		    hand = body_part(HAND);
 		    if (bimanual(obj,youracedata)) hand = makeplural(hand);
 
-		    if (vismon)
-			pline("%s flicks a whip towards your %s!",
-			      Monnam(mtmp), hand);
+		    if (vismon){
+				pline("%s flicks a whip towards your %s!", Monnam(mtmp), hand);
+			}
 		    if (obj->otyp == HEAVY_IRON_BALL) {
-			pline("%s fails to wrap around %s.",
-			      The_whip, the_weapon);
+				pline("%s fails to wrap around %s.", The_whip, the_weapon);
 			return 1;
 		    }
-		    pline("%s wraps around %s you're wielding!",
-			  The_whip, the_weapon);
+		    
+		    if (obj->oartifact)
+		   		pline("%s wraps around your wielded %s!", The_whip, the_weapon);
+		    else
+		    	pline("%s wraps around %s you're wielding!", The_whip, the_weapon);
+		    
 		    if (welded(obj)) {
-			pline("%s welded to your %s%c",
-			      !is_plural(obj) ? "It is" : "They are",
+				pline("%s welded to your %s%c", !is_plural(obj) ? "It is" : "They are",
 			      hand, !obj->bknown ? '!' : '.');
 			/* obj->bknown = 1; */ /* welded() takes care of this */
 			where_to = 0;
 		    }
+		    
+		    if (obj->oartifact && obj->oartifact == ART_GLAMDRING){
+		    	pline("Glamdring resists being ripped out of your hands!");
+		    	where_to = 0;
+		    }
+		    
 		    if (!where_to) {
 			pline_The("whip slips free.");  /* not `The_whip' */
 			return 1;
-		    } else if (where_to == 3 && hates_silver(mtmp->data) &&
-			    (obj->obj_material == SILVER || arti_silvered(obj))) {
+		    } else if (where_to == 3 && hates_silver(mtmp->data) && (obj->obj_material == SILVER || arti_silvered(obj))) {
 			/* this monster won't want to catch a silver
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;
-		    } else if (where_to == 3 && hates_iron(mtmp->data) &&
-			    obj->obj_material == IRON) {
+		    } else if (where_to == 3 && hates_iron(mtmp->data) && obj->obj_material == IRON) {
 			/* this monster won't want to catch an iron
 			   weapon; drop it at hero's feet instead */
 			where_to = 2;
-		    } else if (where_to == 3 && hates_unholy_mon(mtmp) &&
-			    is_unholy(obj)) {
-			/* this monster won't want to catch a cursed
-			   weapon; drop it at hero's feet instead */
-			where_to = 2;
+		    } else if (where_to == 3 && hates_unholy_mon(mtmp) && is_unholy(obj)) {
+				/* this monster won't want to catch a cursed
+				   weapon; drop it at hero's feet instead */
+				where_to = 2;
+		    } else if (where_to == 3 && hates_holy_mon(mtmp) && obj->blessed) {
+				/* this monster won't want to catch a blessed
+				   weapon; drop it at hero's feet instead */
+				where_to = 2;
 		    }
+		    
+		    
 		    freeinv(obj);
 		    uwepgone();
 		    switch (where_to) {

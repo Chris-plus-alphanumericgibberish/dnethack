@@ -417,7 +417,7 @@ struct obj *obj;
 	}
 	/* relight lightsources that should always be lit */
 	if (obj_eternal_light(obj) && !obj->lamplit)
-		begin_burn(obj, FALSE);
+		begin_burn(obj);
 }
 
 #endif /* OVL1 */

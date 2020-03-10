@@ -20,6 +20,7 @@ union vptrs {
 	    struct obj *v_nexthere;	/* floor location lists */
 	    struct obj *v_ocontainer;	/* point back to container */
 	    struct monst *v_ocarry;	/* point back to carrying monst */
+		struct trap *v_otrap;	/* point back to trap */
 };
 
 struct obj {
@@ -28,6 +29,7 @@ struct obj {
 #define nexthere	v.v_nexthere
 #define ocontainer	v.v_ocontainer
 #define ocarry		v.v_ocarry
+#define otrap		v.v_otrap
 
 	struct obj *cobj;	/* contents list for containers */
 	unsigned o_id;
@@ -68,7 +70,8 @@ struct obj {
 #define OBJ_BURIED	6		/* object buried */
 #define OBJ_ONBILL	7		/* object on shk bill */
 #define OBJ_MAGIC_CHEST	8		/* object in shared magic chest */
-#define NOBJ_STATES	9
+#define OBJ_INTRAP 9    /* object is trap ammo */
+#define NOBJ_STATES	10
 	xchar timed;		/* # of fuses (timers) attached to this obj */
 
 	Bitfield(cursed,1);

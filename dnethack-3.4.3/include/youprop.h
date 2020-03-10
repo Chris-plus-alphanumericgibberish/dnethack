@@ -525,6 +525,10 @@
 #define ESpellboost		u.uprops[SPELLBOOST].extrinsic
 #define Spellboost		(HSpellboost || ESpellboost || u.specialSealsActive&SEAL_NUDZIRATH)
 
+#define HXray_vision	u.uprops[XRAY_VISION].intrinsic
+#define EXray_vision	u.uprops[XRAY_VISION].extrinsic
+#define Xray_vision		(HXray_vision || EXray_vision)
+
 #define HSterile	u.uprops[STERILE].intrinsic
 #define ESterile	u.uprops[STERILE].extrinsic
 #define Sterile		((HSterile || ESterile) && !GoodHealth)

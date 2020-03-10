@@ -151,7 +151,7 @@ A("Claideamh",			LONG_SWORD, 		0,			0,/* "Sword" */
 /*//////////The Banes//////////*/
 /*banes can be twoweaponed, look in obj.h*/
 
-A("Dragonlance",			LANCE,			0,			0,
+A("Dragonlance",			LANCE,			DRAGON_HIDE,			0,
 	(SPFX_RESTR|SPFX_CON_OR|SPFX_REFLECT), SPFX_WARN, /* also makes a handy weapon for knights, since it can't break */
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, MA_DRAGON|MA_REPTILIAN /*MA*/, 0 /*MV*/,
 	PHYS(10,20),	NO_DFNS,	NO_CARY,				/* plus, reflection */
@@ -641,7 +641,7 @@ A("The Cloak of the Unheld One",	OILSKIN_CLOAK, 		0,			0,/*Needs encyc entry*/
 	TELEPORT_SHOES, A_NEUTRAL, NON_PM, NON_PM, 4500L, 
 	0,0,(WSFX_PLUSSEV|WSFX_FREEACT)),
 
-A("The Beastmaster's Duster", JACKET, 			0,			0,/*Needs encyc entry*/
+A("The Beastmaster's Duster", JACKET, 			DRAGON_HIDE,			0,/*Needs encyc entry*/
 	(SPFX_RESTR),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	NO_ATTK,	NO_DFNS,	NO_CARY,
@@ -1904,7 +1904,7 @@ A("The Seal of the Spirits", SCR_BLANK_PAPER,		0,			0,
 /* Caveman/Cavewoman */
 /* TODO use club skill */
 A("The Torch of Origins", WAN_FIRE,					0,			0,
-	(SPFX_NOGEN|SPFX_RESTR),0,
+	(SPFX_NOGEN|SPFX_RESTR|SPFX_BEHEAD),0,
 	0 /*Monster Symbol*/, 0 /*MM*/, 0 /*MT*/, 0 /*MB*/, 0 /*MG*/, 0 /*MA*/, 0 /*MV*/,
 	FIRE(0,5),	DFNS(AD_FIRE),	NO_CARY,
 	0, A_NONE, PM_CAVEMAN, NON_PM, 0L,

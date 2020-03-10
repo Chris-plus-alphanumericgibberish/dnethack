@@ -4147,12 +4147,12 @@ int tx,ty;
 					if(!u.spiritTineA){ 
 						u.spiritTineA = SEAL_JACK;
 						u.spiritTineTA= moves + bindingPeriod;
-						if(!uwep->lamplit) begin_burn(uwep, FALSE);
+						if(!uwep->lamplit) begin_burn(uwep);
 					}
 					else{
 						u.spiritTineB = SEAL_JACK;
 						u.spiritTineTB= moves + bindingPeriod;
-						if(!uwep->lamplit) begin_burn(uwep, FALSE);
+						if(!uwep->lamplit) begin_burn(uwep);
 					}
 					u.sealTimeout[JACK-FIRST_SEAL] = moves + bindingPeriod;
 				}

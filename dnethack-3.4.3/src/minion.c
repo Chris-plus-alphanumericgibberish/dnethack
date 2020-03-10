@@ -26,7 +26,7 @@ struct monst *mon;
 		pline("%s looks puzzled for a moment.",Monnam(mon));
 		return;
 	}
-
+	//Minor demons should have their summon rate reduced
 	if (mon) {
 	    ptr = mon->data;
 	    atyp = (ptr->maligntyp==A_NONE) ? A_NONE : sgn(ptr->maligntyp);

@@ -140,10 +140,10 @@ boolean quietly;	/* hide the basic message saying what you are now wielding */
 	
 	if (!wep) {
 	    /* No weapon */
-	    if (uwep) {
+		if (uwep) {
 			if (!quietly) You("are empty %s.", body_part(HANDED));
 			setuwep((struct obj *) 0);
-		if(!stealthy && Stealth) pline("Now you can move stealthily.");
+			if (!stealthy && Stealth) pline("Now you can move stealthily.");
 			res++;
 		}
 		else
@@ -191,7 +191,7 @@ boolean quietly;	/* hide the basic message saying what you are now wielding */
 				wep->owornmask |= W_WEP;
 				prinv((char *)0, wep, 0L);
 				wep->owornmask = dummy;
-		    }
+			}
 	    }
 	    setuwep(wep);
 
@@ -199,7 +199,7 @@ boolean quietly;	/* hide the basic message saying what you are now wielding */
 		if (!quietly) arti_speak(wep);
 
 	    if (artifact_light(wep) && !wep->lamplit) {
-			begin_burn(wep, FALSE);
+			begin_burn(wep);
 		if (!Blind)
 			pline("%s to %s%s!", Tobjnam(wep, "begin"),
 				(wep->blessed ? "shine very" : "glow"), (wep->cursed ? "" : " brilliantly"));

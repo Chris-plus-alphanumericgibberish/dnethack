@@ -1255,7 +1255,7 @@ register struct obj *obj;
 		}
 		obj->known = 1;
 	}
-	begin_burn(obj, FALSE);
+	begin_burn(obj);
 }
 
 STATIC_OVL void
@@ -1410,7 +1410,7 @@ struct obj *obj;
 				Yname2(obj), obj->quan == 1 ? "itself" : "themselves");
 		bill_dummy_object(obj);
 	    }
-	    begin_burn(obj, FALSE);
+	    begin_burn(obj);
 	    return TRUE;
 	}
 	return FALSE;
@@ -1666,7 +1666,7 @@ struct obj *obj;
 			bill_dummy_object(obj);
 		    }
 		}
-		begin_burn(obj, FALSE);
+		begin_burn(obj);
 	}
 }
 
@@ -1739,14 +1739,14 @@ light_cocktail(obj)
 
 	if (obj->quan > 1L) {
 	    obj = splitobj(obj, 1L);
-	    begin_burn(obj, FALSE);	/* burn before free to get position */
+	    begin_burn(obj);	/* burn before free to get position */
 	    obj_extract_self(obj);	/* free from inv */
 
 	    /* shouldn't merge */
 	    obj = hold_another_object(obj, "You drop %s!",
 				      doname(obj), (const char *)0);
 	} else
-	    begin_burn(obj, FALSE);
+	    begin_burn(obj);
 }
 
 STATIC_OVL void
@@ -1808,14 +1808,14 @@ light_torch(obj)
 
 	if (obj->quan > 1L) {
 	    obj = splitobj(obj, 1L);
-	    begin_burn(obj, FALSE);	/* burn before free to get position */
+	    begin_burn(obj);	/* burn before free to get position */
 	    obj_extract_self(obj);	/* free from inv */
 
 	    /* shouldn't merge */
 	    obj = hold_another_object(obj, "You drop %s!",
 				      doname(obj), (const char *)0);
 	} else
-	    begin_burn(obj, FALSE);
+	    begin_burn(obj);
 }
 
 static NEARDATA const char cuddly[] = { TOOL_CLASS, GEM_CLASS, 0 };
@@ -1846,7 +1846,7 @@ dorub()
 		uwep->otyp = OIL_LAMP;
 		uwep->spe = 0; /* for safety */
 		uwep->age = rn1(500,1000);
-		if (uwep->lamplit) begin_burn(uwep, TRUE);
+		if (uwep->lamplit) begin_burn(uwep);
 		update_inventory();
 	    } else if (rn2(2) && !Blind)
 		You("see a puff of smoke.");
@@ -3421,6 +3421,7 @@ set_trap()
 	struct obj *otmp = trapinfo.tobj;
 	struct trap *ttmp;
 	int ttyp;
+	boolean obj_cursed = otmp->cursed;
 
 	if (!otmp || !carried(otmp) ||
 		u.ux != trapinfo.tx || u.uy != trapinfo.ty) {
@@ -3437,20 +3438,27 @@ set_trap()
 	    ttmp->tseen = 1;
 	    ttmp->madeby_u = 1;
 	    newsym(u.ux, u.uy); /* if our hero happens to be invisible */
+
+		/* Our object becomes the new ammo of the trap. */
+		if (otmp->quan > 1) {
+			otmp = splitobj(otmp, 1);
+		}
+		freeinv(otmp);
+		set_trap_ammo(ttmp, otmp);
+
 	    if (*in_rooms(u.ux,u.uy,SHOPBASE)) {
 		add_damage(u.ux, u.uy, 0L);		/* schedule removal */
 	    }
 	    if (!trapinfo.force_bungle)
 		You("finish arming %s.",
 			the(defsyms[trap_to_defsym(what_trap(ttyp))].explanation));
-	    if (((otmp->cursed || Fumbling) && (rnl(100) > 50)) || trapinfo.force_bungle)
+		if (((obj_cursed || Fumbling) && (rnl(100) > 50)) || trapinfo.force_bungle)
 		dotrap(ttmp,
 			(unsigned)(trapinfo.force_bungle ? FORCEBUNGLE : 0));
 	} else {
 	    /* this shouldn't happen */
 	    Your("trap setting attempt fails.");
 	}
-	useup(otmp);
 	reset_trapset();
 	return 0;
 }
@@ -3754,11 +3762,11 @@ struct obj *obj;
 				   so proficient at catching weapons */
 				int hitu, hitvalu;
 				int dieroll;
-				hitvalu = tohitval((struct monst *)0, &youmonst, (struct attack *)0, otmp, (struct obj *)0, TRUE, 8);
+				hitvalu = tohitval((struct monst *)0, &youmonst, (struct attack *)0, otmp, (void *)0, HMON_MISTHROWN, 8);
 				if(hitvalu > (dieroll = rnd(20))) {
 					boolean wepgone = FALSE;
 					pline_The("%s hits you as you try to snatch it!" the(onambuf));
-					hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, otmp, (struct obj *)0, TRUE,
+					hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, otmp, (void *)0, HMON_MISTHROWN,
 						0, 0, FALSE, dieroll, FALSE, -1, &wepgone);
 				}
 				else {
