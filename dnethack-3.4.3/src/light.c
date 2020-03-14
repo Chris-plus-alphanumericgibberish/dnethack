@@ -121,7 +121,7 @@ del_light_source(type, id, silent)
 			break;
     }
 
-	for (prev = 0, curr = light_base; curr; curr = next) {
+	for (prev = 0, curr = light_base; curr; prev = curr, curr = next) {
 		next = curr->next;
 		if (curr->type != type) continue;
 		if (curr->id == ((curr->flags & LSF_NEEDS_FIXUP) ? tmp_id : id)) {
@@ -131,12 +131,12 @@ del_light_source(type, id, silent)
 			light_base = curr->next;
 	
 		    free((genericptr_t)curr);
+			curr = prev;	/* retain prev for next loop */
 		    vision_full_recalc = 1;
-				if (found_it && !silent)
-					impossible("multiple ls attached to type %d", type);
-				found_it = TRUE;
+			if (found_it)
+				impossible("multiple ls attached to type %d", type);
+			found_it = TRUE;
 		}
-		prev = curr;
     }
     if(!found_it && !silent) impossible("del_light_source: not found type=%d, id=0x%lx", type, (long)id);
 }

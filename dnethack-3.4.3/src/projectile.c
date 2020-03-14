@@ -1166,7 +1166,7 @@ boolean * wepgone;				/* pointer to: TRUE if projectile has been destroyed */
 		if (mdef->mcanmove &&
 			(!is_animal(mdef->data)) &&
 			(!mindless_mon(mdef) || (mdef->data == &mons[PM_CROW_WINGED_HALF_DRAGON] && thrownobj->oartifact == ART_YORSHKA_S_SPEAR)) &&
-			!fired
+			!launcher
 			) {
 			if (vis) {
 				pline("%s catches %s.", Monnam(mdef), the(xname(thrownobj)));

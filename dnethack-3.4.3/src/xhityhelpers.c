@@ -45,6 +45,10 @@ boolean active;
 	if (cantmove(magr))
 		return FALSE;
 
+	/* agr has no line of sight to def */
+	if (!clear_path(x(magr), y(magr), tarx, tary))
+		return FALSE;
+
 	/* madness only prevents your active attempts to hit things */
 	if (youagr && active && madness_cant_attack(mdef))
 		return FALSE;

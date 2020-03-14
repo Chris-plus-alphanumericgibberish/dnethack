@@ -3476,7 +3476,7 @@ boolean * messaged;
 	}
 	if((attacks(AD_COLD, otmp) || (oproperties&OPROP_COLDW)) && !(
 		/* exceptions */
-		(get_artifact(otmp)->inv_prop == ICE_SHIKAI && u.SnSd3duration < monstermoves)
+		(oartifact && get_artifact(otmp)->inv_prop == ICE_SHIKAI && u.SnSd3duration < monstermoves)
 		)
 		){
 		if(oartifact && (vis&VIS_MAGR)) {

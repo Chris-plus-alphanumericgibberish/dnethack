@@ -8,8 +8,6 @@
 #define TRAP_H
 
 union vlaunchinfo {
-	/* ??? bits - max(<sizeof(pointer)>, 16bits). */
-	struct obj* v_ammo;	/* quivered object associated with this trap - rocks/darts/arrows/beartraps/landmines. */
 	/* rolling boulder */
 	short v_launch_otyp;	/* type of object to be triggered */
 	coord v_launch2;	/* secondary launch point (for boulders) */
@@ -33,7 +31,7 @@ struct trap {
 				 easy to make a monster peaceful if you could
 				 set a trap for it and then untrap it. */
 	union vlaunchinfo vl;
-#define launch_ammo    vl.v_ammo
+	struct obj* ammo;
 #define launch_otyp	vl.v_launch_otyp
 #define launch2		vl.v_launch2
 #define statueid       vl.v_statue_oid
@@ -44,8 +42,6 @@ extern struct trap *ftrap;
 #define dealloc_trap(trap) free((genericptr_t) (trap))
 
 /* what vl to use */
-#define trapv_ammo(ttyp)	((ttyp) == DART_TRAP || (ttyp) == ARROW_TRAP || (ttyp) == ROCKTRAP ||\
-								(ttyp) == BEAR_TRAP || (ttyp) == LANDMINE || (ttyp) == FIRE_TRAP)
 #define trapv_launch(ttyp)	((ttyp) == ROLLING_BOULDER_TRAP)
 #define trapv_statue(ttyp)	((ttyp) == STATUE_TRAP)
 

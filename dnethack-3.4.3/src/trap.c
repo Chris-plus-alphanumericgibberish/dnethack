@@ -259,7 +259,8 @@ register int x, y, typ;
 	    ttmp->ty = y;
 	    ttmp->launch.x = -1;	/* force error if used before set */
 	    ttmp->launch.y = -1;
-		ttmp->vl.v_ammo = 0;	/* any one is all of them */
+		memset(&ttmp->vl, 0, sizeof(union vlaunchinfo));
+		ttmp->ammo = (struct obj *)0;
 	}
 	ttmp->ttyp = typ;
 	switch(typ) {
@@ -420,11 +421,9 @@ set_trap_ammo(trap, obj)
 struct trap *trap;
 struct obj *obj;
 {
-	if (!trapv_ammo(trap->ttyp))
-		panic("putting ammo into non-ammo trap");
-	while (trap->launch_ammo) {
-		struct obj* oldobj = trap->launch_ammo;
-		extract_nobj(oldobj, &trap->launch_ammo);
+	while (trap->ammo) {
+		struct obj* oldobj = trap->ammo;
+		extract_nobj(oldobj, &trap->ammo);
 		obfree(oldobj, (struct obj *) 0);
 	}
 	if (obj->where != OBJ_FREE) {
@@ -433,7 +432,7 @@ struct obj *obj;
 	obj->where = OBJ_INTRAP;
 	obj->nobj = 0;
 	obj->otrap = trap;
-	trap->launch_ammo = obj;
+	trap->ammo = obj;
 	return;
 }
 
@@ -812,17 +811,17 @@ unsigned trflags;
 	switch(ttype) {
 	    case ARROW_TRAP:
 		case DART_TRAP:
-		if (!trap->launch_ammo) {
+		if (!trap->ammo) {
 		    You_hear("a loud click!");
 		    deltrap(trap);
 		    newsym(u.ux,u.uy);
 		    break;
 		}
-		otmp = trap->launch_ammo;
-		if (trap->launch_ammo->quan > 1) {
-			otmp = splitobj(trap->launch_ammo, 1);
+		otmp = trap->ammo;
+		if (trap->ammo->quan > 1) {
+			otmp = splitobj(trap->ammo, 1);
 		}
-		extract_nobj(otmp, &trap->launch_ammo);
+		extract_nobj(otmp, &trap->ammo);
 		seetrap(trap);
 		pline("%s shoots out at you!", An(xname(otmp)));
 
@@ -830,18 +829,18 @@ unsigned trflags;
 		break;
 
 	    case ROCKTRAP:
-		if (!(otmp = trap->launch_ammo)) {
+		if (!(otmp = trap->ammo)) {
 		    pline("A trap door in %s opens, but nothing falls out!",
 			  the(ceiling(u.ux,u.uy)));
 		    deltrap(trap);
 		    newsym(u.ux,u.uy);
 			break;
 	    }
-		otmp = trap->launch_ammo;
-		if (trap->launch_ammo->quan > 1) {
-			otmp = splitobj(trap->launch_ammo, 1);
+		otmp = trap->ammo;
+		if (trap->ammo->quan > 1) {
+			otmp = splitobj(trap->ammo, 1);
 		}
-		extract_nobj(otmp, &trap->launch_ammo);
+		extract_nobj(otmp, &trap->ammo);
 		seetrap(trap);
 		pline("A trap door in %s opens and %s falls!",
 			the(ceiling(u.ux, u.uy)),
@@ -920,7 +919,7 @@ unsigned trflags;
 			A_Your[trap->madeby_u], s_suffix(mon_nam(u.usteed)),
 			mbodypart(u.usteed, FOOT));
 
-			hmon2point0((struct monst *)0, u.usteed, (struct attack *)0, (struct attack *)0, trap->launch_ammo, trap,
+			hmon2point0((struct monst *)0, u.usteed, (struct attack *)0, (struct attack *)0, trap->ammo, trap,
 				HMON_WHACK|HMON_TRAP, 0, 0, FALSE, 0, FALSE, -1, (boolean *)0);
 		}
 		else
@@ -932,7 +931,7 @@ unsigned trflags;
 		    pline("%s bear trap closes on your %s!",
 			    A_Your[trap->madeby_u], body_part(FOOT));
 
-			hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, (struct attack *)0, trap->launch_ammo, trap,
+			hmon2point0((struct monst *)0, &youmonst, (struct attack *)0, (struct attack *)0, trap->ammo, trap,
 				HMON_WHACK|HMON_TRAP, 0, 0, FALSE, 0, FALSE, -1, (boolean *)0);
 
 		    if(u.umonnum == PM_OWLBEAR || u.umonnum == PM_BUGBEAR)
@@ -1032,7 +1031,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 		break;
 
 	    case FIRE_TRAP:
-		if (!(otmp = trap->launch_ammo)) {
+		if (!(otmp = trap->ammo)) {
 			You_hear("a soft click!");
 			deltrap(trap);
 			newsym(u.ux, u.uy);
@@ -1044,7 +1043,7 @@ glovecheck:		(void) rust_dmg(uarmg, "gauntlets", 1, TRUE, &youmonst);
 			if (otmp->quan > 1)
 				otmp->quan--;
 			else {
-				extract_nobj(otmp, &(trap->launch_ammo));
+				extract_nobj(otmp, &(trap->ammo));
 				delobj(otmp);
 			}
 		}
@@ -1997,7 +1996,7 @@ struct monst *mtmp;
 	    switch (tt) {
 		case ARROW_TRAP:
 		case DART_TRAP:
-			if (!trap->launch_ammo) {
+			if (!trap->ammo) {
 			    if (in_sight && see_it)
 				pline("%s triggers a trap but nothing happens.",
 				      Monnam(mtmp));
@@ -2005,18 +2004,18 @@ struct monst *mtmp;
 			    newsym(mtmp->mx, mtmp->my);
 			    break;
 			}
-			otmp = trap->launch_ammo;
-			if (trap->launch_ammo->quan > 1) {
-				otmp = splitobj(trap->launch_ammo, 1);
+			otmp = trap->ammo;
+			if (trap->ammo->quan > 1) {
+				otmp = splitobj(trap->ammo, 1);
 			}
-			extract_nobj(otmp, &trap->launch_ammo);
+			extract_nobj(otmp, &trap->ammo);
 			if (in_sight)
 				seetrap(trap);
 			if (projectile((struct monst *)0, otmp, trap, HMON_FIRED|HMON_TRAP, trap->tx, trap->ty, 0, 0, 0, 0, FALSE, FALSE, FALSE) == MM_DEF_DIED)
 				trapkilled = TRUE;
 			break;
 		case ROCKTRAP:
-			if (!(otmp = trap->launch_ammo)) {
+			if (!(otmp = trap->ammo)) {
 			    if (in_sight && see_it)
 				pline("A trap door above %s opens, but nothing falls out!",
 				      mon_nam(mtmp));
@@ -2024,10 +2023,10 @@ struct monst *mtmp;
 			    newsym(mtmp->mx, mtmp->my);
 			    break;
 			}
-			if (trap->launch_ammo->quan > 1) {
-				otmp = splitobj(trap->launch_ammo, 1);
+			if (trap->ammo->quan > 1) {
+				otmp = splitobj(trap->ammo, 1);
 			}
-			extract_nobj(otmp, &trap->launch_ammo);
+			extract_nobj(otmp, &trap->ammo);
 			if (in_sight) seetrap(trap);
 
 			if (projectile((struct monst *)0, otmp, trap, HMON_FIRED|HMON_TRAP, trap->tx, trap->ty, 0, 0, 0, 0, FALSE, FALSE, FALSE) == MM_DEF_DIED)
@@ -2062,7 +2061,7 @@ struct monst *mtmp;
 				    You_hear("the roaring of an angry bear!");
 			    }
 
-				if (hmon2point0((struct monst *)0, mtmp, (struct attack *)0, (struct attack *)0, trap->launch_ammo, trap,
+				if (hmon2point0((struct monst *)0, mtmp, (struct attack *)0, (struct attack *)0, trap->ammo, trap,
 					HMON_WHACK|HMON_TRAP, 0, 0, FALSE, 0, FALSE, -1, (boolean *)0) == MM_DEF_DIED)
 					trapkilled = TRUE;
 			}
@@ -2157,7 +2156,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 			break;
 		    }
 		case FIRE_TRAP:
-			if (!(otmp = trap->launch_ammo)) {
+			if (!(otmp = trap->ammo)) {
 				if (in_sight && see_it)
 					pline("%s triggers a trap but nothing happens.", Monnam(mtmp));
 				deltrap(trap);
@@ -2170,7 +2169,7 @@ glovecheck:		    target = which_armor(mtmp, W_ARMG);
 				if (otmp->quan > 1)
 					otmp->quan--;
 				else {
-					extract_nobj(otmp, &(trap->launch_ammo));
+					extract_nobj(otmp, &(trap->ammo));
 					delobj(otmp);
 				}
 			}
@@ -3768,18 +3767,15 @@ remove_trap_ammo(ttmp)
 struct trap *ttmp;
 {
 	struct obj *otmp;
-
-	if (trapv_ammo(ttmp->ttyp)) {
-		while (ttmp->launch_ammo) {
-			otmp = ttmp->launch_ammo;
-			extract_nobj(otmp, &ttmp->launch_ammo);
-			otmp->otrap = 0;
-			place_object(otmp, ttmp->tx, ttmp->ty);
-			/* Sell your own traps only... */
-			if (ttmp->madeby_u)
-				sellobj(otmp, ttmp->tx, ttmp->ty);
-			stackobj(otmp);
-		}
+	while (ttmp->ammo) {
+		otmp = ttmp->ammo;
+		extract_nobj(otmp, &ttmp->ammo);
+		otmp->otrap = 0;
+		place_object(otmp, ttmp->tx, ttmp->ty);
+		/* Sell your own traps only... */
+		if (ttmp->madeby_u)
+			sellobj(otmp, ttmp->tx, ttmp->ty);
+		stackobj(otmp);
 	}
 	newsym(ttmp->tx, ttmp->ty);
 	deltrap(ttmp);
@@ -4827,9 +4823,9 @@ register struct trap *trap;
 		if (!ttmp) return;
 		ttmp->ntrap = trap->ntrap;
 	}
-	while (trapv_ammo(trap->ttyp) && trap->launch_ammo) {
-		struct obj* otmp = trap->launch_ammo;
-		extract_nobj(otmp, &trap->launch_ammo);
+	while (trap->ammo) {
+		struct obj* otmp = trap->ammo;
+		extract_nobj(otmp, &trap->ammo);
 		obfree(otmp, (struct obj *) 0);
 	}
 	if (cansee(trap->tx, trap->ty))
