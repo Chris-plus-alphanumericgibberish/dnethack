@@ -677,6 +677,17 @@ register struct monst *mtmp;
 			}
 			mtmp->mnamelth = 0;
 		break;
+	    case PM_PARASITIZED_DOLL:
+			num = d(2,4);
+			while (num--){
+				obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
+				obj->corpsenm = PM_PARASITIZED_DOLL;
+			}
+		    obj = mkcorpstat(LIFELESS_DOLL, 0,
+				     &mons[PM_LIVING_DOLL], x, y, TRUE);
+			if(obj)
+				obj->ovar1 = mtmp->m_insight_level;
+		break;
 	    case PM_LIVING_DOLL:
 		    obj = mkcorpstat(LIFELESS_DOLL, KEEPTRAITS(mtmp) ? mtmp : 0,
 				     mdat, x, y, TRUE);
@@ -3747,7 +3758,8 @@ struct monst *mtmp;
 #define LSVD_PLY 0x080	/* polypoids */
 #define LSVD_KAM 0x100	/* kamerel becoming fractured */
 #define LSVD_NIT 0x200	/* Nitocris becoming a ghoul */
-#define LSVDLAST LSVD_NIT	/* last lifesaver */
+#define LSVD_HLO 0x400	/* Halo (Blessed) */
+#define LSVDLAST LSVD_HLO	/* last lifesaver */
 
 	/* set to kill */
 	mtmp->mhp = 0;
@@ -3779,10 +3791,12 @@ struct monst *mtmp;
 		lifesavers |= LSVD_KAM;
 	if(mtmp->data == &mons[PM_NITOCRIS])
 		lifesavers |= LSVD_NIT;
+	if (mtmp->data == &mons[PM_BLESSED] && rn2(3))
+		lifesavers |= LSVD_HLO;
 
 	/* some lifesavers do NOT work on stone/gold/glass-ing */
 	if (stoned || golded || glassed)
-		lifesavers &= ~(LSVD_ALA | LSVD_NBW | LSVD_FRC | LSVD_PLY | LSVD_ILU | LSVD_KAM | LSVD_NIT);
+		lifesavers &= ~(LSVD_ALA | LSVD_NBW | LSVD_FRC | LSVD_PLY | LSVD_ILU | LSVD_KAM | LSVD_NIT | LSVD_HLO);
 
 	/* some lifesavers should SILENTLY fail to protect from genocide */
 	if (mvitals[monsndx(mtmp->data)].mvflags & G_GENOD && !In_quest(&u.uz))
@@ -3913,6 +3927,15 @@ struct monst *mtmp;
 			mtmp->mhpmax += d(4, 8);
 			break;
 
+		case LSVD_HLO:
+			/* message */
+			if (couldsee(mtmp->mx, mtmp->my)) {
+				messaged = TRUE;
+				pline("But wait...");
+				pline("A glowing halo forms over %s!",
+					mon_nam(mtmp));
+			}
+			break;
 		case LSVD_ILU:
 			/* normally has only a 1/3 chance of losing its lifesaving ability */
 			if (rn2(3) && !(
@@ -4021,6 +4044,7 @@ struct monst *mtmp;
 #undef LSVD_ILU
 #undef LSVD_PLY
 #undef LSVD_KAM
+#undef LSVD_HLO
 #undef LSVDLAST
 	return;
 }
@@ -4103,6 +4127,12 @@ register struct monst *mtmp;
 			level.flags.goldkamcount_peace++;
 		else
 			level.flags.goldkamcount_hostile++;
+	}
+	if(tmp == PM_FATHER_DAGON){
+		u.uevent.ukilled_dagon = 1;
+	}
+	if(tmp == PM_MOTHER_HYDRA){
+		u.uevent.ukilled_hydra = 1;
 	}
 	/* if it's a (possibly polymorphed) quest leader, mark him as dead */
 	if (mtmp->m_id == quest_status.leader_m_id)
@@ -4711,12 +4741,14 @@ boolean was_swallowed;			/* digestion */
 				hpgain = 2;
 			} else if(mdat==&mons[PM_DEEPER_ONE]){
 				hpgain = 4;
-			} else if(mdat==&mons[PM_DEEPEST_ONE]){
+			} else if(mdat==&mons[PM_DEEPEST_ONE] || mdat==&mons[PM_FATHER_DAGON] || mdat==&mons[PM_MOTHER_HYDRA]){
 				hpgain = 8;
 			} else { //arcadian avenger
 				lvlgain = 1;
 			}
-			if(mdat==&mons[PM_DEEP_ONE] || mdat==&mons[PM_DEEPER_ONE] || mdat==&mons[PM_DEEPEST_ONE]){
+			if(mdat==&mons[PM_DEEP_ONE] || mdat==&mons[PM_DEEPER_ONE] || mdat==&mons[PM_DEEPEST_ONE]
+			 || mdat==&mons[PM_FATHER_DAGON] || mdat==&mons[PM_MOTHER_HYDRA]
+			){
 				for (mtmp = fmon; mtmp; mtmp = mtmp->nmon) {
 					mdat1 = mtmp->data;
 					if( mdat1==&mons[PM_DEEP_ONE] || 

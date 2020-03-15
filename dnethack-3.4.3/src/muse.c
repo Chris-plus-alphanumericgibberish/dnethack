@@ -2221,6 +2221,7 @@ museamnesia:
 			}
 			mtmp->mcrazed = 0;
 			mtmp->mberserk = 0;
+			mtmp->mdisrobe = 0;
 		} else {
 			if (vismon) pline("%s looks angry and confused!", Monnam(mtmp));
 			mtmp->mcrazed = 1;

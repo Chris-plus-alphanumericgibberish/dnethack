@@ -337,48 +337,49 @@
 #define RAISE_DEAD             INSECTS+1
 #define SUMMON_ANGEL           RAISE_DEAD+1
 #define SUMMON_ALIEN           SUMMON_ANGEL+1
-#define PLAGUE                 SUMMON_ALIEN+1
-#define PUNISH                 PLAGUE+1
+#define SUMMON_YOUNG           SUMMON_ALIEN+1
+#define PLAGUE                 SUMMON_YOUNG+1
 //40
+#define PUNISH                 PLAGUE+1
 #define AGGRAVATION			   PUNISH+1
        /* escape spells */
 #define DISAPPEAR              AGGRAVATION+1 /* invisibility */
        /* matter spells */
 #define DARKNESS               DISAPPEAR+1
 #define SUMMON_SPHERE          DARKNESS+1 /* flame sphere */
-#define MAKE_WEB               SUMMON_SPHERE+1
 //45
+#define MAKE_WEB               SUMMON_SPHERE+1
 #define DROP_BOULDER           MAKE_WEB+1
 #define EARTHQUAKE             DROP_BOULDER+1
 #define TURN_TO_STONE          EARTHQUAKE+1
        /* unique monster spells */
 #define NIGHTMARE              TURN_TO_STONE+1
-#define FILTH                  NIGHTMARE+1
 //50
+#define FILTH                  NIGHTMARE+1
 #define CLONE_WIZ              FILTH+1
 #define STRANGLE               CLONE_WIZ+1
 #define MON_FIRA               STRANGLE+1
 #define MON_FIRAGA             MON_FIRA+1
-#define MON_BLIZZARA           MON_FIRAGA+1
 //55
+#define MON_BLIZZARA           MON_FIRAGA+1
 #define MON_BLIZZAGA           MON_BLIZZARA+1
 #define MON_THUNDARA           MON_BLIZZAGA+1
 #define MON_THUNDAGA           MON_THUNDARA+1
 #define MON_FLARE              MON_THUNDAGA+1
-#define MON_WARP               MON_FLARE+1
 //60
+#define MON_WARP               MON_FLARE+1
 #define MON_POISON_GAS         MON_WARP+1
 #define MON_PROTECTION         MON_POISON_GAS+1
 #define SOLID_FOG      	       MON_PROTECTION+1
 #define ACID_BLAST       	   SOLID_FOG+1
-#define PRISMATIC_SPRAY        ACID_BLAST+1
 //65
+#define PRISMATIC_SPRAY        ACID_BLAST+1
 #define SILVER_RAYS            PRISMATIC_SPRAY+1
 #define GOLDEN_WAVE            SILVER_RAYS+1
 #define VULNERABILITY          GOLDEN_WAVE+1
 #define MASS_HASTE             VULNERABILITY+1
-#define MON_TIME_STOP          MASS_HASTE+1
 //70
+#define MON_TIME_STOP          MASS_HASTE+1
 #define TIME_DUPLICATE         MON_TIME_STOP+1
 #define NAIL_TO_THE_SKY        TIME_DUPLICATE+1
 #define STERILITY_CURSE        NAIL_TO_THE_SKY+1

@@ -54,6 +54,8 @@ struct u_event {
 	Bitfield(udemigod,1);		/* killed the wiz */
 	Bitfield(ukilled_apollyon,1);		/* killed the angel of the pit.  Lucifer should spawn on Astral */
 	Bitfield(ukilled_illurien,1);		/* Harassment */
+	Bitfield(ukilled_dagon,1);		/* Returns */
+	Bitfield(ukilled_hydra,1);		/* Returns */
 	Bitfield(sum_entered,1);		/* entered Sum-of-All */
 	Bitfield(uaxus_foe,1);		/* enemy of the modrons */
 	Bitfield(utook_castle, 2);	/* sat on the castle throne, used artifact wish */
@@ -503,6 +505,7 @@ struct you {
 	int ugangr[GA_NUM];			/* if the gods are angry at you */
 	int ugifts;			/* number of artifacts bestowed */
 	int ublessed, ublesscnt;	/* blessing/duration from #pray */
+	int ugoatblesscnt;
 	long lastprayed;
 	long lastslept;
 	long nextsleep;
@@ -556,6 +559,7 @@ struct you {
 #define	MAD_OVERLORD		0x00000000000040000L
 #define	MAD_DREAMS			0x00000000000080000L
 #define	MAD_HELMINTHOPHOBIA	0x00000000000100000L
+#define	MAD_GOAT_RIDDEN		0x00000000000200000L
 	int 	uinsight;	/* to record level of insight */
 	/*Insight rate calculation: 40: "high insight" 300: "Approximate per-turn WoYendor intervention rate" 5: "total number of harmful effects" */
 #define INSIGHT_RATE (40*300*5)
@@ -800,6 +804,8 @@ struct you {
 	long ufirst_sky_timeout;
 	boolean ufirst_life;
 	long ufirst_life_timeout;
+	boolean ufirst_know;
+	long ufirst_know_timeout;
 	long thoughts;
 #define	ANTI_CLOCKWISE_METAMORPHOSIS	0x00000000000000001L
 #define	CLOCKWISE_METAMORPHOSIS			0x00000000000000002L

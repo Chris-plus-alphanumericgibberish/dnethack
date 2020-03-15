@@ -1163,6 +1163,8 @@ int x;
 		tmp++;
 	if(u.ufirst_life)
 		tmp++;
+	if(u.ufirst_know && (x == A_INT || x == A_WIS || x == A_CHA))
+		tmp+=2;
 	if((uright && uright->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN) || (uleft && uleft->oartifact == ART_SHARD_FROM_MORGOTH_S_CROWN)){
 		tmp += 6;
 	}

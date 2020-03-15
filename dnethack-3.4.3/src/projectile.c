@@ -13,7 +13,6 @@ STATIC_DCL int FDECL(calc_multishot, (struct monst *, struct obj *, struct obj *
 STATIC_DCL int FDECL(calc_range, (struct monst *, struct obj *, struct obj *, int *));
 STATIC_DCL boolean FDECL(uthrow, (struct obj *, struct obj *, int, boolean));
 STATIC_DCL boolean FDECL(misthrow, (struct monst *, struct obj *, struct obj *, boolean, int *, int *, int *));
-STATIC_DCL int FDECL(mthrow, (struct monst *, struct obj *, struct obj *, int, int, boolean));
 STATIC_DCL struct obj * FDECL(blaster_ammo, (struct obj *));
 
 /* grab some functions from dothrow.c */

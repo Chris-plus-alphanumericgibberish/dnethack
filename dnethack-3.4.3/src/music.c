@@ -1064,6 +1064,7 @@ int distance;
 				mtmp->mcan = 0;
 				mtmp->mspec_used = 0;
 				mtmp->mcrazed = 0;
+				mtmp->mdisrobe = 0;
 				if(!mtmp->isminion && EDOG(mtmp)->apport < 10) EDOG(mtmp)->apport++;
 				if(mtmp->permspeed == 0) mon_adjust_speed(mtmp, 1, (struct obj *) 0);
 			case P_SKILLED:

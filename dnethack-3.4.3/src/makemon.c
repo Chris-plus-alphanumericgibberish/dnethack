@@ -240,6 +240,10 @@ register struct monst *mtmp;
 #ifdef REINCARNATION
 	if (Is_rogue_level(&u.uz)) return;
 #endif
+	if(mtmp->data == &mons[PM_BLESSED]){
+		//The blessed don't start with weapons.
+		return;
+	}
 /*
  *	first a few special cases:
  *
@@ -5766,8 +5770,9 @@ register struct	monst	*mtmp;
 					}
 				}
 			}
-			if(mtmp->data == &mons[PM_BLESSED])
+			if(mtmp->data == &mons[PM_BLESSED]){
 				mongets(mtmp, ROBE);
+			}
 		break;
 		case S_RODENT:
 			//6) There is obviously no "underground kingdom beneath London, inhabited by huge, intelligent rodents."
@@ -7528,6 +7533,8 @@ register int	mmflags;
 		mtmp->m_insight_level = 20+rn2(21);
 	else if(mtmp->data == &mons[PM_BLASPHEMOUS_LURKER])
 		mtmp->m_insight_level = 40;
+	else if(mtmp->data == &mons[PM_PARASITIZED_DOLL])
+		mtmp->m_insight_level = rnd(20);
 	else if(mtmp->data == &mons[PM_LIVING_DOLL]){
 		int i, j;
 		long tmp;
@@ -7608,6 +7615,9 @@ register int	mmflags;
 	
 	else if(mtmp->data == &mons[PM_BLESSED])
 		mtmp->m_insight_level = 40;
+
+	else if(mtmp->data == &mons[PM_MOUTH_OF_THE_GOAT])
+		mtmp->m_insight_level = 60;
 	else if(mtmp->data == &mons[PM_THE_GOOD_NEIGHBOR])
 		mtmp->m_insight_level = 40;
 	else if(mtmp->data == &mons[PM_HMNYW_PHARAOH])
@@ -9742,6 +9752,7 @@ int type;
 		case PM_ARSENAL: return 88;
 		case PM_RETRIEVER: return 120;
 		case PM_LIVING_DOLL: return 45+d(5,8);
+		case PM_PARASITIZED_DOLL: return 45+d(20,8);
 		case PM_FORD_GUARDIAN: return 135;//Max HP
 //		case PM_HEAD_OF_THE_UNKNOWN_GOD: return 65;
 //		case PM_BODY_OF_THE_UNKNOWN_GOD: return 65;

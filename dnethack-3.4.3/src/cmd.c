@@ -480,7 +480,7 @@ domonability()
 	
 	Sprintf(buf, "Attacks");
 	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
-	if(u.ufirst_light || u.ufirst_sky || u.ufirst_life){
+	if(u.ufirst_light || u.ufirst_sky || u.ufirst_life || u.ufirst_know){
 		Sprintf(buf, "Speak a Word of Power");
 		any.a_int = MATTK_WORD;	/* must be non-zero */
 		incntlet = 'p';

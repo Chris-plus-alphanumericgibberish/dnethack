@@ -1783,6 +1783,8 @@ u_init()
 	u.ufirst_sky_timeout = 0;
 	u.ufirst_life = FALSE;
 	u.ufirst_life_timeout = 0;
+	u.ufirst_know = FALSE;
+	u.ufirst_know_timeout = 0;
 	
 	/*Randomize spirit order*/{
 		int i,j,tmp;

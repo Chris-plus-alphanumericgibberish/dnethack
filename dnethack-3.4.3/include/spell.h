@@ -25,6 +25,7 @@ struct spell {
 #define FIRST_LIGHT	MAXSPELL+1
 #define PART_WATER	MAXSPELL+2
 #define OVERGROW	MAXSPELL+3
+#define APPLE_WORD		MAXSPELL+4
 
 #define MAX_BONUS_DICE	10
 

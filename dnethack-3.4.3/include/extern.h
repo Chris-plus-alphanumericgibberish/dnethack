@@ -28,6 +28,7 @@ E void FDECL(welcome, (BOOLEAN_P));
 #if defined(RECORD_REALTIME) || defined(REALTIME_ON_BOTL)
 E time_t NDECL(get_realtime);
 #endif
+E void NDECL(dogoat);
 
 /* ### apply.c ### */
 
@@ -545,6 +546,7 @@ E void FDECL(abuse_dog, (struct monst *));
 E void FDECL(wary_dog, (struct monst *, BOOLEAN_P));
 E void FDECL(enough_dogs, (int));
 E void NDECL(vanish_dogs);
+E int NDECL(dog_limit);
 E void NDECL(average_dogs);
 
 /* ### dogmove.c ### */
@@ -1034,6 +1036,7 @@ E void NDECL(free_invbuf);
 E void NDECL(reassign);
 E int NDECL(doorganize);
 E int FDECL(count_unpaid, (struct obj *));
+E boolean FDECL(has_object_type, (struct obj *, int));
 E int FDECL(count_buc, (struct obj *,int));
 E void FDECL(carry_obj_effects, (struct obj *));
 E const char *FDECL(currency, (long));
@@ -2010,6 +2013,8 @@ E const char *FDECL(halu_gname, (ALIGNTYP_P));
 E const char *FDECL(align_gtitle, (ALIGNTYP_P));
 E void FDECL(altar_wrath, (int,int));
 E int FDECL(candle_on_altar, (struct obj *));
+E void FDECL(goat_eat, (struct obj *));
+E boolean FDECL(goat_mouth_at, (int, int));
 
 /* ### priest.c ### */
 
@@ -2048,6 +2053,7 @@ E boolean FDECL(umetgaze, (struct monst *));
 E boolean FDECL(mmetgaze, (struct monst *, struct monst *));
 E int NDECL(dothrow);
 E int NDECL(dofire);
+E int FDECL(mthrow, (struct monst *, struct obj *, struct obj *, int, int, boolean));
 
 /* ### quest.c ### */
 
@@ -2906,6 +2912,7 @@ E int FDECL(base_nat_mdr, (struct monst *));
 E int FDECL(base_mdr, (struct monst *));
 E int FDECL(roll_mdr, (struct monst *, struct monst *));
 E void FDECL(m_dowear, (struct monst *,BOOLEAN_P));
+E boolean FDECL(mon_remove_armor, (struct monst *));
 E struct obj *FDECL(which_armor, (struct monst *,long));
 E void FDECL(mon_break_armor, (struct monst *,BOOLEAN_P));
 E int FDECL(extra_pref, (struct monst *, struct obj *));

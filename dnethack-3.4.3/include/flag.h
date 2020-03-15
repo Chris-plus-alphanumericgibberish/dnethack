@@ -143,6 +143,7 @@ struct flag {
 	boolean made_first;			/* the first word slab has been created */
 	boolean made_divide;		/* the dividing word slab has been created */
 	boolean made_life;			/* the nurturing word slab has been created */
+	boolean made_know;			/* the word of knowledge slab has been created */
 	
 	/* KMH, role patch -- Variables used during startup.
 	 *

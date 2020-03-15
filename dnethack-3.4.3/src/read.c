@@ -917,6 +917,11 @@ learn_word()
 			u.ufirst_life = TRUE;
 			u.ufirst_life_timeout = 0;
 		break;
+		case WORD_OF_KNOWLEDGE:
+			You("learn the Red Word of Knowledge!");
+			u.ufirst_know = TRUE;
+			u.ufirst_know_timeout = 0;
+		break;
 	}
 	if(Role_if(PM_EXILE) && u.ufirst_life && u.ufirst_sky && u.ufirst_light && (u.sealsUsed&SEAL_TENEBROUS) && !(u.specialSealsKnown&SEAL_LIVING_CRYSTAL)){
 		pline("As you learn the Word, you also realize how the Words can be used in the drawing of a seal!");

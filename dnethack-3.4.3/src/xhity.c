@@ -1671,7 +1671,7 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			return &noattack;
 		}
 	}
-	if(attk->aatyp == AT_BKGT){
+	if(!by_the_book && attk->aatyp == AT_BKGT){
 		switch(rnd(5)){
 			case 1:
 				attk->aatyp = AT_TUCH;
@@ -1692,6 +1692,26 @@ int * tohitmod;					/* some attacks are made with decreased accuracy */
 			case 5:
 				attk->aatyp = AT_GAZE;
 				attk->adtyp = AD_STDY;
+			break;
+		}
+	}
+	if(!by_the_book && attk->aatyp == AT_BKG2){
+		switch(rnd(4)){
+			case 1:
+				attk->aatyp = AT_TENT;
+				attk->adtyp = AD_DRST;
+			break;
+			case 2:
+				attk->aatyp = AT_BUTT;
+				attk->adtyp = AD_STUN;
+			break;
+			case 3:
+				attk->aatyp = AT_GAZE;
+				attk->adtyp = AD_STDY;
+			break;
+			case 4:
+				attk->aatyp = AT_CLAW;
+				attk->adtyp = AD_SEDU;
 			break;
 		}
 	}
@@ -6091,7 +6111,7 @@ boolean ranged;
 	case AD_SSEX:
 #endif
 	{
-		boolean goatspawn = (pa == &mons[PM_SMALL_GOAT_SPAWN] || pa == &mons[PM_GOAT_SPAWN] || pa == &mons[PM_GIANT_GOAT_SPAWN]);
+		boolean goatspawn = (pa == &mons[PM_SMALL_GOAT_SPAWN] || pa == &mons[PM_GOAT_SPAWN] || pa == &mons[PM_GIANT_GOAT_SPAWN] || pa == &mons[PM_BLESSED]);
 		/* make physical attack */
 		alt_attk.adtyp = AD_PHYS;
 		result = xmeleehurty(magr, mdef, &alt_attk, originalattk, weapon, dohitmsg, dmg, dieroll, vis, ranged);
@@ -6252,8 +6272,8 @@ boolean ranged;
 			if (notmcan) {
 				/* select item from defender's inventory */
 				for (otmp = mdef->minvent; otmp; otmp = otmp->nobj)
-				if (!magr->mtame || !otmp->cursed)
-					break;
+					if (!magr->mtame || !otmp->cursed)
+						break;
 
 				if (otmp) {
 					char onambuf[BUFSZ], mdefnambuf[BUFSZ];
@@ -9565,7 +9585,7 @@ int vis;
 	if (adtyp == AD_STON) {
 		needs_magr_eyes = needs_mdef_eyes = maybe_not = needs_uncancelled = FALSE;
 	}
-	if (is_angel(pa) && adtyp == AD_BLND) {				// Angels' blinding radiance
+	if ((is_angel(pa) || pa == &mons[PM_BLESSED]) && adtyp == AD_BLND) {				// Angels' blinding radiance
 		needs_magr_eyes = FALSE;
 		maybe_not = FALSE;
 	}
@@ -10248,7 +10268,7 @@ int vis;
 			return MM_MISS;
 
 		/* assumes that angels with AD_BLND have a blinding radiance, which is limited range and stunning */
-		if (is_angel(pa)) {
+		if (is_angel(pa) || pa == &mons[PM_BLESSED]) {
 			if (dist2(x(magr), y(magr), x(mdef), y(mdef)) > BOLT_LIM*BOLT_LIM)
 				return MM_MISS;
 			if (youdef) {

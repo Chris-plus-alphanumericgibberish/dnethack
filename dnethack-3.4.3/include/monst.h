@@ -151,6 +151,7 @@ struct monst {
 	Bitfield(notame,1);/* can't be tamed */ /*87*/
 	Bitfield(zombify,1);/* should rise as zombie */ /*88*/
 	Bitfield(ispolyp,1);/* is a polypoid being */ /*89*/
+	Bitfield(mdisrobe,1);/* disrobing */ /*91*/
 	long mwait;/* if tame, won't follow between levels (turn last ordered to wait on) */
 	int encouraged;	/* affected by Encourage song */
 #define BASE_DOG_ENCOURAGED_MAX		7

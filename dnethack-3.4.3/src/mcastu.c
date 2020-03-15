@@ -1075,6 +1075,18 @@ unsigned int type;
 				}
 			}
 	   break;
+    case PM_BLESSED:
+		switch(rnd(8)){
+			case 1: return OPEN_WOUNDS;
+			case 2: return PSI_BOLT;
+			case 3: return ICE_STORM;
+			case 4: return ACID_RAIN;
+			case 5: return GEYSER;
+			case 6: return SUMMON_YOUNG;
+			case 7: return MASS_CURE_CLOSE;
+			case 8: return LIGHTNING;
+		}
+	break;
 	case PM_SHOGGOTH:
 		if(!rn2(20)) return SUMMON_MONS; 
 		else return 0;
@@ -2407,6 +2419,38 @@ summon_alien:
 	   stop_occupation();
        break;
     }
+    case SUMMON_YOUNG: /* special only */
+    {
+       struct monst *mtmp2;
+	   int tries = 0;
+	   static struct permonst *young[] = {&mons[PM_GIANT_GOAT_SPAWN],
+									&mons[PM_SWIRLING_MIST],
+									&mons[PM_ICE_STORM],
+									&mons[PM_THUNDER_STORM],
+									&mons[PM_FIRE_STORM],
+									&mons[PM_DEMINYMPH],
+									&mons[PM_DARK_YOUNG],
+									&mons[PM_DARK_YOUNG],
+									&mons[PM_DARK_YOUNG],
+									&mons[PM_DARK_YOUNG],
+									&mons[PM_BLESSED]};
+	   if(!mtmp) goto psibolt;
+	   do {
+		if(clear_path(mtmp->mx, mtmp->my, mtmp->mux, mtmp->muy))
+	       mtmp2 = makemon(young[rn2(SIZE(young))], mtmp->mux, mtmp->muy, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+		else
+	       mtmp2 = makemon(young[rn2(SIZE(young))], mtmp->mx, mtmp->my, MM_ADJACENTOK|MM_NOCOUNTBIRTH);
+	   } while (!mtmp2 && tries++ < 10);
+       if (mtmp2) {
+           if (canspotmon(mtmp2))
+               pline("A monster appears in a swirl of mist!");
+           else
+               You("sense the arrival of a monster!");
+       } else goto psibolt;
+       dmg = 0;
+	   stop_occupation();
+       break;
+    }
     case SUMMON_DEVIL: /* cleric only */
     {
        struct monst *mtmp2;
@@ -3186,6 +3230,7 @@ ray:
 		if(mtmp->permspeed == MSLOW) mtmp->permspeed = 0;
 		mtmp->mcan = 0;
 		mtmp->mcrazed = 0; 
+		mtmp->mdisrobe = 0; 
 		mtmp->mcansee = 1;
 		mtmp->mblinded = 0;
 		mtmp->mcanmove = 1;

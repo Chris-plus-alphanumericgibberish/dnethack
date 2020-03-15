@@ -1002,6 +1002,118 @@ as_extra_healing:
 		exercise(A_STR, TRUE);
 		exercise(A_CON, TRUE);
 		break;
+	case POT_GOAT_S_MILK:
+		You_feel("completely healed.");
+        enhanced = uarm && uarm->oartifact == ART_GAUNTLETS_OF_THE_HEALING_H;
+		if(otmp->cursed){
+			pline("Yecch! That was vile!");
+			losehp(40, "spoiled milk", KILLED_BY);
+			make_sick(Sick ? Sick / 3L + 1L : (long)rn1(ACURR(A_CON), 20),
+				"spoiled milk", TRUE, SICK_VOMITABLE);
+			break;
+		} else {
+			healup(enhanced ? 800 : 400, (enhanced ? 2 : 1) * (4+4*bcsign(otmp)), TRUE, TRUE);
+		}
+		/* Restore lost levels */
+		if (u.ulevel < u.ulevelmax) {
+			if(otmp->blessed){
+				while(u.ulevel < u.ulevelmax)
+					pluslvl(FALSE);
+			} else {
+				pluslvl(FALSE);
+			}
+		}
+		/* Dissolve one morgul blade shard if blessed*/
+		if(u.umorgul>0){
+			u.umorgul = 0;
+			You_feel("the chill of death fade away.");
+		}
+		for (int i = 0; i < A_MAX; i++) {
+			lim = AMAX(i);
+			if (i == A_STR && u.uhs >= 3) --lim;	/* WEAK */
+			if (ABASE(i) < lim) {
+				ABASE(i) = lim;
+				flags.botl = 1;
+				/* only first found if not blessed */
+				if (!otmp->blessed) break;
+			}
+		}
+		(void) make_hallucinated(0L,TRUE,0L);
+		exercise(A_STR, TRUE);
+		exercise(A_CON, TRUE);
+		//Makes you crazy
+		change_usanity(-1*rnd(20));
+		u.umadness |= MAD_GOAT_RIDDEN;
+		break;
+	case POT_SPACE_MEAD:
+		unkn++;
+		if(uclockwork){ /* Note: Does not include Androids */
+			pline("It would seem you just drank a bottle of industrial solvent.");
+			if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax){
+				pline("The fruits of civilization give you strength!");
+				u.uhp += u.ulevel*10;
+				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+				if(u.udrunken < u.ulevel*3) u.udrunken++; //Enki allows clockworks to benefit from booze quaffing
+			}
+		} else { /* Note: Androids can get drunk */
+			pline("Ooph!  This tastes like %s%s!",
+				  otmp->odiluted ? "watered down " : "",
+				  Hallucination ? "dandelion wine" : "liquid fire");
+			if(u.sealsActive&SEAL_ENKI && u.uhp < u.uhpmax){
+				pline("The fruits of civilization give you strength!");
+				u.uhp += u.ulevel*10;
+				if (u.uhp > u.uhpmax) u.uhp = u.uhpmax;
+			}
+			if(u.udrunken < u.ulevel*3){
+				u.udrunken++;
+				change_usanity(5);
+			} else {
+				if(u.usanity < 50){
+					change_usanity(min(5, 50 - u.usanity));
+				}
+			}
+			if (!otmp->blessed)
+				make_confused(itimeout_incr(HConfusion, d(3,8)), FALSE);
+			/* the whiskey makes us feel better */
+			if (!otmp->odiluted) healup(u.ulevel, 0, FALSE, FALSE);
+			if(!Race_if(PM_INCANTIFIER) && !umechanoid) u.uhunger += 130 + 10 * (2 + bcsign(otmp));
+			newuhs(FALSE);
+		}
+		if (!umechanoid){
+			if(u.uhunger > u.uhungermax){
+				u.uhunger = u.uhungermax - d(2,20);
+				vomit();
+				exercise(A_WIS, FALSE);
+			}
+			exercise(A_WIS, FALSE);
+			if(otmp->cursed) {
+				You("pass out.");
+				multi = -rnd(15);
+				nomovemsg = "You awake with a headache.";
+				if (!umechanoid){
+					make_vomiting(Vomiting+15+d(5,4), TRUE);
+				}
+			}
+		}
+		if((HSlow_digestion&TIMEOUT) + 5000L < TIMEOUT){
+			long timer = (HSlow_digestion&TIMEOUT) + 5000L;
+			HSlow_digestion &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HSlow_digestion |= timer; //set new timer
+		}
+		else{
+			HSlow_digestion |= TIMEOUT; //set timer to max value
+		}
+		if(!Breathless)
+			You("no longer feel the need to breathe!");
+		if((HMagical_breathing&TIMEOUT) + 5000L < TIMEOUT){
+			long timer = (HMagical_breathing&TIMEOUT) + 5000L;
+			HMagical_breathing &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+			HMagical_breathing |= timer; //set new timer
+		}
+		else{
+			HMagical_breathing |= TIMEOUT; //set timer to max value
+		}
+		break;
 	case POT_LEVITATION:
 	case SPE_LEVITATION:
 		if (otmp->cursed) HLevitation &= ~I_SPECIAL;
@@ -1353,6 +1465,7 @@ boolean your_fault;
 	case POT_FULL_HEALING:
 		if (mon->data == &mons[PM_PESTILENCE]) goto do_illness;
 		/*FALLTHRU*/
+	case POT_GOAT_S_MILK:
 	case POT_RESTORE_ABILITY:
 	case POT_GAIN_ABILITY:
  do_healing:
@@ -1645,6 +1758,7 @@ boolean your_fault;
 /*
 	case POT_GAIN_LEVEL:
 	case POT_LEVITATION:
+	case POT_SPACE_MEAD:
 	case POT_FRUIT_JUICE:
 	case POT_MONSTER_DETECTION:
 	case POT_OBJECT_DETECTION:
@@ -1830,10 +1944,12 @@ register struct obj *obj;
 /*
 	case POT_GAIN_LEVEL:
 	case POT_LEVITATION:
+	case POT_SPACE_MEAD:
 	case POT_FRUIT_JUICE:
 	case POT_MONSTER_DETECTION:
 	case POT_OBJECT_DETECTION:
 	case POT_OIL:
+	case POT_GOAT_S_MILK:
 		break;
 */
 	}

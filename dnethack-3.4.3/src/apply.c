@@ -3087,6 +3087,7 @@ struct obj *hypo;
 						mtarg->mpeaceful = 1;
 					}
 					mtarg->mcrazed = 0;
+					mtarg->mdisrobe = 0;
 					mtarg->mberserk = 0;
 				} else {
 					if (canseemon(mtarg))
@@ -4355,9 +4356,7 @@ use_doll(obj)
 				HDestruction |= timer; //set new timer
 			}
 			else{
-				You("begin radiating waves of destruction!");
-				if(!Destruction)
-					HDestruction |= TIMEOUT; //set timer to max value
+				HDestruction |= TIMEOUT; //set timer to max value
 			}
 			if(!Blind)
 				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));

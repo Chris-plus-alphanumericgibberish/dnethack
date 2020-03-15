@@ -436,6 +436,31 @@
 #define is_female(ptr)		(((ptr)->mflagsb & MB_FEMALE) != 0L)
 #define is_neuter(ptr)		(((ptr)->mflagsb & MB_NEUTER) != 0L)
 #define is_wanderer(ptr)	(((ptr)->mflagst & MT_WANDER) != 0L)
+#define goat_monster(pm) (\
+									pm == &mons[PM_SMALL_GOAT_SPAWN]\
+									|| pm == &mons[PM_GOAT_SPAWN]\
+									|| pm == &mons[PM_GIANT_GOAT_SPAWN]\
+									|| pm == &mons[PM_PLAINS_CENTAUR]\
+									|| pm == &mons[PM_FOREST_CENTAUR]\
+									|| pm == &mons[PM_MOUNTAIN_CENTAUR]\
+									|| pm == &mons[PM_QUICKLING]\
+									|| pm == &mons[PM_NAIAD]\
+									|| pm == &mons[PM_DRYAD]\
+									|| pm == &mons[PM_OREAD]\
+									|| pm == &mons[PM_YUKI_ONNA]\
+									|| pm == &mons[PM_DEMINYMPH]\
+									|| pm == &mons[PM_WHITE_UNICORN]\
+									|| pm == &mons[PM_GRAY_UNICORN]\
+									|| pm == &mons[PM_BLACK_UNICORN]\
+									|| pm == &mons[PM_NIGHTMARE]\
+									|| pm == &mons[PM_MIGO_WORKER]\
+									|| pm == &mons[PM_MIGO_SOLDIER]\
+									|| pm == &mons[PM_MIGO_PHILOSOPHER]\
+									|| pm == &mons[PM_MIGO_QUEEN]\
+									|| pm == &mons[PM_DARK_YOUNG]\
+									|| pm == &mons[PM_BLESSED]\
+									|| pm == &mons[PM_MOUTH_OF_THE_GOAT]\
+								  )
 #define always_hostile(ptr)	(((ptr)->mflagst & MT_HOSTILE) != 0L)
 #define always_hostile_mon(mon)	(always_hostile((mon)->data) || is_derived_undead_mon(mon))
 #define always_peaceful(ptr)	(((ptr)->mflagst & MT_PEACEFUL) != 0L)
@@ -558,12 +583,14 @@
 				  (ptr) == &mons[PM_DARK_WORM] || \
 				  (ptr) == &mons[PM_FIRE_VORTEX]) ? 1 : \
 				 ((ptr) == &mons[PM_FIRE_ELEMENTAL] ||\
-				  (ptr) == &mons[PM_GRAHA_DEVA] ||\
 				  (ptr) == &mons[PM_DANCING_FLAME] ||\
 				  (ptr) == &mons[PM_COTERIE_OF_MOTES] ||\
 				  (ptr) == &mons[PM_BALL_OF_RADIANCE]) ? 2 : \
-				 ((ptr) == &mons[PM_ASPECT_OF_THE_SILENCE]) ? 3 : \
+				 ((ptr) == &mons[PM_THRONE_ARCHON] ||\
+				 (ptr) == &mons[PM_ASPECT_OF_THE_SILENCE]) ? 3 : \
+				 ((ptr) == &mons[PM_BLESSED]) ? 4 : \
 				 ((ptr) == &mons[PM_LIGHT_ARCHON]|| \
+				  (ptr) == &mons[PM_GOD] ||\
 				  (ptr) == &mons[PM_LUCIFER]) ? 7 : \
 				 ((ptr) == &mons[PM_EDDERKOP]) ? 8 : \
 				 ((ptr) == &mons[PM_SURYA_DEVA]) ? 9 : \

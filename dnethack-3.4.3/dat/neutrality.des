@@ -542,7 +542,9 @@ ENDMAP
 #0123456789012345678901234567890123456789012345678901234567890123456789012345
 #0         1         2         3         4         5         6         7     
 #The altar of the unknown god
-MONSTER:'&',"priest of an unknown god",(36,10)
+MONSTER:'&',"priest of an unknown god",(38,10)
+
+#Altar to Nodens
 ALTAR:(35,10),noalign,altar
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
@@ -723,7 +725,9 @@ MAP
                                                                             
 ENDMAP
 #The altar of the unknown god
-MONSTER:'&',"priest of an unknown god",(36,10)
+MONSTER:'&',"priest of an unknown god",(38,10)
+
+#Altar to Nodens
 ALTAR:(35,10),noalign,altar
 # Dungeon Description
 REGION:(00,00,75,19),lit,"ordinary"
@@ -2050,6 +2054,7 @@ OBJECT:'#',"blessed +3 bone viperwhip",contained
 OBJECT:'#',"blessed +3 bone viperwhip",contained
 OBJECT:'#',"blessed +3 bone viperwhip",contained
 REGION:(04,01,08,02),lit,"temple"
+MONSTER:'t',"mouth of the goat",(06,01)
 ALTAR:(06,01),noalign,altar
 
 #+5 means that it's Nitocris's sarcophagus.  One only please!
@@ -2984,28 +2989,32 @@ MONSTER[75%]:'p',"radiant pyramid",random
 MAZE: "nkai-b",' '
 FLAGS: lethe
 GEOMETRY:center,center
+#0          1        2         3         4         5         6         7
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
 MAP
-                                 }}}}                                       
- ..  ..   .     .. ....  .... ....}}}}.....  ...       .......     ....     
-  .. .   ...   .  ......... ... .}}}}.}  .....      ....  .. ..   .   .   . 
-   .... ..  . .     ....        }.}}}}.}           ..  ..    ......      .. 
- ...  ...    ...             ... }.}}}. }  ....  ...    ... ...   ...  ..   
-  .    ....  .  ...    .........}.} }.}}} ........        ...       ...     
- ..  ...  ....   .   .... .....} }.} }...}... ...  ...     ..      ... .    
- ......  ..  .........      ... } }.}.....}.   ..... ..   ....     ..   ... 
-  ... ....    ........ ...  .....}}}...  }..   ..     ...... ..  ...     .  
-  ..    ...  .....   ... .......}.} }.  }.} ......      ...   ....  ...  .. 
-   ..  .  .... ...   .    .. . } }.}.} }.}  ...  ...    ..    .....    ...  
-    ...    ..  ..  ..  }}     ..}...}.}.} }.....   ... ..    .   ... ...    
-   ....   ..   ....  .}}}}}    }.... }.}...}  ...   .....   ..  .. ... .    
- .... ..  .   ...   .}}---}}  } }.. }.}...}.   ...  ..  ..     ...     ..   
- ....  .. ......   .}}}|.|}}}} } } }.} }.}.   .......    ..   ......    .   
- ...    ... ...   . }---.---}}    }.} }.}      ......     .....    ..  ..   
-   ......    ..    .}|.....|}..    }}..}}  ...  ..  ..     ...  ..  ....    
-  ...   .......  .. }---.---}}.. ...}}}}  .......    ...  ..   ......  .. . 
-   .       ...   .. }|.S.|}}} .... }}}}    ....        ....   .....     ... 
-                    }-----}}       }}}}                                     
+0                                 }}}}                                       
+1 ..  ..   .     .. ....  .... ....}}}}.....  ...       .......     ....     
+2  .. .   ...   .  ......... ... .}}}}.}  .....      ....  .. ..   .   .   . 
+3   .... ..  . .     ....        }.}}}}.}           ..  ..    ......      .. 
+4 ...  ...    ...             ... }.}}}. }  ....  ...    ... ...   ...  ..   
+5  .    ....  .  ...    .........}.} }.}}} ........        ...       ...     
+6 ..  ...  ....   .   .... .....} }.} }...}... ...  ...     ..      ... .    
+7 ......  ..  .........      ... } }.}.....}.   ..... ..   ....     ..   ... 
+8  ... ....    ........ ...  .....}}}...  }..   ..     ...... ..  ...     .  
+9  ..    ...  .....   ... .......}.} }.  }.} ......      ...   ....  ...  .. 
+0   ..  .  .... ...   .    .. . } }.}.} }.}  ...  ...    ..    .....    ...  
+1    ...    ..  ..  ..  }}     ..}...}.}.} }.....   ... ..    .   ... ...    
+2   ....   ..   ....  .}}}}}    }.... }.}...}  ...   .....   ..  .. ... .    
+3 .... ..  .   ...   .}}---}}  } }.. }.}...}.   ...  ..  ..     ...     ..   
+4 ....  .. ......   .}}}|.|}}}} } } }.} }.}.   .......    ..   ......    .   
+5 ...    ... ...   . }---.---}}    }.} }.}      ......     .....    ..  ..   
+6   ......    ..    .}|.....|}..    }}..}}  ...  ..  ..     ...  ..  ....    
+7  ...   .......  .. }---.---}}.. ...}}}}  .......    ...  ..   ......  .. . 
+8   .       ...   .. }|.S.|}}} .... }}}}    ....        ....   .....     ... 
+9                    }-----}}       }}}}                                     
 ENDMAP
+#0123456789012345678901234567890123456789012345678901234567890123456789012345
+#0          1        2         3         4         5         6         7
 # Regions
 # The whole gulf is dark and quiet
 REGION:(01,01,75,19),unlit,"morgue",unfilled
@@ -3023,9 +3032,12 @@ DRAWBRIDGE:(28,16),west,closed
 DOOR:locked,(23,18)
 #MONSTER:'?',"???",(22,18),asleep,hostile
 MONSTER:'L',"alhoon",(22,18),asleep,hostile
+#Dolls
+MONSTER:'\'',"parasitized doll",(24,16)
+
 #ENGRAVING:(22,18),burn,"This space for rent."
 # One sneaky trap
-TRAP:"magic",(24,16)
+#TRAP:"magic",(24,16)
 # The ??? has some guards
 MONSTER:''',"iron golem",(22,16),hostile
 MONSTER:'d',"hell hound",(24,14),hostile,asleep
@@ -3192,9 +3204,6 @@ REGION:(01,01,75,19),unlit,"morgue",unfilled
 #The altar of the unknown god
 MONSTER:'&',"priest of an unknown god",(35,10)
 ALTAR:(35,10),noalign,altar
-
-#Dolls
-MONSTER:'\'',"living doll",(35,10)
 
 # Stairs and Branch
 #STAIR:(05,17),down
@@ -3623,10 +3632,10 @@ MONSTER:'g',"nightgaunt",(56,18),asleep,hostile
 MONSTER:'g',"nightgaunt",(55,17),asleep,hostile
 
 # Landing Guards
-MONSTER:'H',"deepest one",(56,08),asleep,hostile, "Father Dagon"
+MONSTER:'H',"Father Dagon",(56,08),asleep,hostile
 MONSTER:'h',"deeper one",(61,06),asleep,hostile
 MONSTER:'h',"deeper one",(64,07),asleep,hostile
-MONSTER:'H',"deepest one",(56,11),asleep,hostile, "Mother Hydra"
+MONSTER:'H',"Mother Hydra",(56,11),asleep,hostile
 MONSTER:'h',"deeper one",(61,13),asleep,hostile
 MONSTER:'h',"deeper one",(64,12),asleep,hostile
 
@@ -3693,17 +3702,29 @@ OBJECT:'/',"cold",(49,10), blessed,+3
 
 # Priests, in the chambers before the temple
 MONSTER:'h',"mind flayer",(35,06),asleep,hostile
+OBJECT[10%]:'!',"space mead",(35,05),blessed,0
 MONSTER:'h',"mind flayer",(37,06),asleep,hostile
+OBJECT[10%]:'!',"space mead",(37,05),blessed,0
 MONSTER:'h',"star spawn",(39,06),asleep,hostile
+OBJECT[10%]:'!',"space mead",(39,06),blessed,0
 MONSTER:'h',"mind flayer",(42,06),asleep,hostile
+OBJECT[10%]:'!',"space mead",(42,06),blessed,0
 MONSTER:'h',"mind flayer",(44,05),asleep,hostile
+OBJECT[10%]:'!',"space mead",(44,05),blessed,0
 MONSTER:'h',"mind flayer",(46,05),asleep,hostile
+OBJECT[10%]:'!',"space mead",(46,05),blessed,0
 MONSTER:'h',"mind flayer",(37,13),asleep,hostile
+OBJECT[10%]:'!',"space mead",(37,14),blessed,0
 MONSTER:'h',"mind flayer",(39,12),asleep,hostile
+OBJECT[10%]:'!',"space mead",(39,14),blessed,0
 MONSTER:'h',"mind flayer",(41,12),asleep,hostile
+OBJECT[10%]:'!',"space mead",(41,13),blessed,0
 MONSTER:'h',"mind flayer",(44,13),asleep,hostile
+OBJECT[10%]:'!',"space mead",(44,13),blessed,0
 MONSTER:'h',"mind flayer",(46,12),asleep,hostile
+OBJECT[10%]:'!',"space mead",(46,14),blessed,0
 MONSTER:'h',"mind flayer",(47,13),asleep,hostile
+OBJECT[10%]:'!',"space mead",(47,14),blessed,0
 
 # Door bell for the inner temple
 TRAP:"board",(35,09)

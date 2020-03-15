@@ -1091,7 +1091,7 @@ int numdogs;
 			}
 		}
 
-	if(weakdog && numdogs > (ACURR(A_CHA)/3)) EDOG(weakdog)->friend = 1;
+	if(weakdog && numdogs > dog_limit()) EDOG(weakdog)->friend = 1;
 }
 
 void
@@ -1114,8 +1114,17 @@ vanish_dogs()
 				else if(weakdog->mtame > curmon->mtame) weakdog = curmon;
 			}
 		}
-		if(weakdog && numdogs > (ACURR(A_CHA)/3) ) weakdog->mvanishes = 5;
-	} while(weakdog && numdogs > (ACURR(A_CHA)/3));
+		if(weakdog && numdogs > dog_limit() ) weakdog->mvanishes = 5;
+	} while(weakdog && numdogs > dog_limit());
+}
+
+int
+dog_limit()
+{
+	int n = dog_limit();
+	if(u.ufirst_know)
+		n += 3;
+	return n;
 }
 
 void
@@ -1293,8 +1302,6 @@ int enhanced;
 	if (mtmp->mnamelth) Strcpy(NAME(mtmp2), NAME(mtmp));
 	initedog(mtmp2);
 	if(obj && obj->otyp == SPE_CHARM_MONSTER){
-		// EDOG(mtmp2)->friend = TRUE;
-		// EDOG(mtmp2)->mtame = ACURR(A_CHA)*2;
 		mtmp2->mpeacetime = 1;
 	}
 	replmon(mtmp, mtmp2);

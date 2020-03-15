@@ -143,7 +143,7 @@ but that's really hard.
  */
 
 #define ugod_is_angry() (u.ualign.record < 0)
-#define on_altar()	IS_ALTAR(levl[u.ux][u.uy].typ)
+#define on_altar()	(IS_ALTAR(levl[u.ux][u.uy].typ) || goat_mouth_at(u.ux, u.uy))
 #define on_shrine()	((levl[u.ux][u.uy].altarmask & AM_SHRINE) != 0)
 
 STATIC_OVL int
@@ -679,6 +679,18 @@ aligntyp resp_god;
 		((Luck > 0 || u.ualign.record >= STRIDENT) ? -Luck/3 : -Luck);
 	if (maxanger < 1) maxanger = 1; /* possible if bad align & good luck */
 	else if (maxanger > 15) maxanger = 15;	/* be reasonable */
+	
+	if(Align2gangr(resp_god) == GA_MOTHER){
+		struct monst *mtmp;
+		for(mtmp = migrating_mons; mtmp; mtmp = mtmp->nmon){
+			if(mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel && (mtmp->data == &mons[PM_BLESSED] || mtmp->data == &mons[PM_MOUTH_OF_THE_GOAT])){
+				mtmp->mpeaceful = 0;
+				mtmp->mtame = 0;
+				set_malign(mtmp);
+			}
+		}
+		u.ugoatblesscnt = rnz(300);
+	}
 	
 	switch (rn2(maxanger)) {
 	    case 0:
@@ -2080,7 +2092,7 @@ aligntyp alignment;
 	mlev = level_difficulty();
 	
 	for (first = 0; minions[first] != NON_PM; first++)
-	    if (!(mvitals[minions[first]].mvflags & G_GONE && !In_quest(&u.uz)) && monstr[minions[first]] > mlev/2) break;
+	    if (!(mvitals[minions[first]].mvflags & G_GONE && !In_quest(&u.uz)) && monstr[minions[first]] > mlev-5) break;
 	if(minions[first] == NON_PM){ //All minions too weak, or no minions
 		if(first == 0) return;
 		else mnum = minions[first-1];
@@ -2088,7 +2100,7 @@ aligntyp alignment;
 	else for (last = first; minions[last] != NON_PM; last++)
 	    if (!(mvitals[minions[last]].mvflags & G_GONE && !In_quest(&u.uz))) {
 			/* consider it */
-			if(monstr[minions[last]] > mlev+5) break;
+			if(monstr[minions[last]] > mlev*2) break;
 			num += min(1,mons[minions[last]].geno & G_FREQ);
 	    }
 
@@ -2188,6 +2200,11 @@ dosacrifice()
       toughness.  Human and pet sacrifice, as well as sacrificing unicorns
       of your alignment, is strongly discouraged.
      */
+	
+	if(goat_mouth_at(u.ux, u.uy)){
+		goat_eat(otmp);
+		return 1;
+	}
 	
 	if(Role_if(PM_ANACHRONONAUT) && otmp->otyp != AMULET_OF_YENDOR && flags.questprogress!=2){
 		You("do not give offerings to the God of the future.");
@@ -3256,7 +3273,7 @@ aligntyp alignment;
 				gnam = Nodens;
 			else if(on_level(&lethe_temples,&u.uz))
 				gnam = BlackMother;
-			else gnam = Nodens;
+			else gnam = Other;
 		}
 		else if(In_outlands(&u.uz)){
 			gnam = DreadFracture;
@@ -3320,7 +3337,7 @@ aligntyp alignment;
 				gnam = Nodens;
 			else if(on_level(&lethe_temples,&u.uz))
 				gnam = BlackMother;
-			else gnam = Nodens;
+			else gnam = Other;
 		}
 		else gnam = Moloch;
 	 break;
@@ -3530,4 +3547,306 @@ aligntyp alignment;
 		}
 	}
 }
+
+STATIC_OVL int
+goat_resurrect(otmp, yours)
+struct obj *otmp;
+boolean yours;
+{
+	struct monst *revived = 0;
+	if(goat_monster(&mons[otmp->corpsenm])){
+		pline("%s twitches.", The(xname(otmp)));
+		revived = revive(otmp, FALSE);
+		if(yours)
+			angrygods(A_NONE);
+	}
+	if(revived)
+		return TRUE;
+	return FALSE;
+}
+
+STATIC_OVL int
+goat_rider(otmp, yours)
+struct obj *otmp;
+boolean yours;
+{
+	int cn = otmp->corpsenm;
+	struct monst *revived = 0;
+	if(is_rider(&mons[otmp->corpsenm])){
+		pline("A pulse of darkness radiates %s!", The(xname(otmp)));
+		revived = revive(otmp, FALSE);
+		if(yours)
+			angrygods(A_NONE);
+	}
+	if(revived)
+		return TRUE;
+	return FALSE;
+}
+
+STATIC_OVL void
+goat_gives_benefit()
+{
+	struct obj *optr;
+	if (rnl((30 + u.ulevel)*10) < 10) god_gives_pet(align_gname_full(A_NONE),A_NONE);
+	else switch(rnd(7)){
+		case 1:
+			if (Hallucination)
+				You_feel("in touch with the Universal Oneness.");
+			else
+				You_feel("like someone is helping you.");
+			for (optr = invent; optr; optr = optr->nobj) {
+				uncurse(optr);
+			}
+			if(Punished) unpunish();
+		break;
+		case 2:
+			change_luck(2*LUCKMAX);
+		break;
+		case 3:
+			if(uwep && !uwep->oartifact && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_ACIDW)){
+				if(!Blind) pline("Acid drips from your weapon!");
+				uwep->oproperties |= OPROP_ACIDW;
+				uwep->oeroded = 0;
+				uwep->oeroded2 = 0;
+				uwep->oerodeproof = 1;
+			}
+		break;
+		case 4:
+			if(HSterile){
+				You_feel("fertile.");
+				HSterile = 0L;
+			}
+		break;
+		case 5:
+		case 6:
+		case 7:
+			optr = mksobj(POT_GOAT_S_MILK, FALSE, FALSE);
+			optr->quan = rnd(8);
+			optr->owt = weight(optr);
+			dropy(optr);
+			optr->quan > 1 ? at_your_feet("Some objects") : at_your_feet("An object");
+		break;
+	}
+	return;
+}
+
+boolean
+goat_mouth_at(x, y)
+int x, y;
+{
+	struct monst *mtmp;
+	for(mtmp = migrating_mons; mtmp; mtmp = mtmp->nmon){
+		if(mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel && mtmp->data == &mons[PM_MOUTH_OF_THE_GOAT]){
+			xchar xlocale, ylocale, xyloc;
+			xyloc	= mtmp->mtrack[0].x;
+			xlocale = mtmp->mtrack[1].x;
+			ylocale = mtmp->mtrack[1].y;
+			if(xyloc == MIGR_EXACT_XY && xlocale == x && ylocale == y)
+				return TRUE;
+		}
+	}
+	for(mtmp = fmon; mtmp; mtmp = mtmp->nmon){
+		if(mtmp->data == &mons[PM_MOUTH_OF_THE_GOAT] && distu(mtmp->mx,mtmp->my) == 1){
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+void
+goat_eat(otmp)
+struct obj *otmp;
+{
+    int value = 0;
+    aligntyp altaralign = a_align(u.ux,u.uy);
+	register struct permonst *ptr = &mons[otmp->corpsenm];
+	struct monst *mtmp;
+	extern const int monstr[];
+	boolean yourinvent = FALSE;
+	
+	yourinvent = carried(otmp);
+	
+	if(goat_resurrect(otmp, yourinvent)){
+		//otmp is now gone, and resurrect may have printed messages
+		return;
+	}
+	
+	if(goat_rider(otmp, yourinvent)){
+		//otmp is now gone, and rider may have printed messages
+		return;
+	}
+	
+
+	if ((otmp->corpsenm == PM_ACID_BLOB
+		|| (monstermoves <= peek_at_iced_corpse_age(otmp) + 50)
+		) && mons[otmp->corpsenm].mlet != S_PLANT
+	) {
+		value = monstr[otmp->corpsenm] + 1;
+		if (otmp->oeaten)
+		value = eaten_stat(value, otmp);
+	} else {
+		//minimum, but still eat.
+		value = 1;
+	}
+
+	if (yourinvent && your_race(ptr) && !is_animal(ptr) && !mindless(ptr) && u.ualign.type != A_VOID && !Role_if(PM_ANACHRONONAUT)) {
+	//No demon summoning.  Your god just smites you, and sac continues.
+		if (u.ualign.type != A_CHAOTIC) {
+			adjalign(-5);
+			u.ugangr[Align2gangr(u.ualign.type)] += 3;
+			(void) adjattrib(A_WIS, -1, TRUE);
+			if (!Inhell) angrygods(u.ualign.type);
+			change_luck(-5);
+		} else adjalign(5);
+		if (carried(otmp)) useup(otmp);
+		else useupf(otmp, 1L);
+	//Pets are just eaten like anything else.  Your god doesn't know you did it, and the goat doesn't care.
+	} else if (is_undead(ptr)) { /* Not demons--no demon corpses */
+		if (u.ualign.type != A_CHAOTIC)
+			value += 1;
+	//Unicorns are resurrected.
+	}
+    /* corpse */
+	//Value can't be 0
+	//Value can't be -1
+    {
+	int saved_anger = u.ugangr[GA_MOTHER];
+	int saved_cnt = u.ugoatblesscnt;
+	int saved_luck = u.uluck;
+
+	/* Sacrificing at an altar of a different alignment */
+	/* Never a conversion */
+	/* never an altar conversion*/
+	
+	/* Rider handled */
+	consume_offering(otmp);
+	if(yourinvent && u.ualign.type != A_CHAOTIC && u.ualign.type != A_VOID && !Role_if(PM_ANACHRONONAUT)) {
+		adjalign(-value);
+		u.ugangr[Align2gangr(u.ualign.type)] += 1;
+		(void) adjattrib(A_WIS, -1, TRUE);
+		if (!Inhell) angrygods(u.ualign.type);
+		change_luck(-1);
+	}
+	/*if(altaralign == A_UNKNOWN) return;*/
+	/* OK, you get brownie points. */
+	if(u.ugangr[GA_MOTHER]) {
+	    u.ugangr[GA_MOTHER] -=
+		((value * (u.ualign.type == A_CHAOTIC ? 2 : 3)) / MAXVALUE);
+	    if(u.ugangr[GA_MOTHER] < 0) u.ugangr[GA_MOTHER] = 0;
+	    if(u.ugangr[GA_MOTHER] != saved_anger) {
+		if (u.ugangr[GA_MOTHER]) {
+		    pline("%s seems %s.", u_gname(),
+			  Hallucination ? "groovy" : "slightly mollified");
+
+		    if ((int)u.uluck < 0) change_luck(1);
+		} else {
+		    pline("%s seems %s.", u_gname(), Hallucination ?
+			  "cosmic (not a new fact)" : "mollified");
+
+		    if ((int)u.uluck < 0) u.uluck = 0;
+		    u.reconciled = REC_MOL;
+		}
+	    } else { /* not satisfied yet */
+		if (Hallucination)
+		    pline_The("gods seem tall.");
+		else You("have a feeling of inadequacy.");
+	    }
+	//No alignment record for the goat
+	} else if (u.ugoatblesscnt > 0) {
+	    u.ugoatblesscnt -=
+		((value * (u.ualign.type == A_CHAOTIC ? 500 : 300)) / MAXVALUE);
+	    if(u.ugoatblesscnt < 0) u.ugoatblesscnt = 0;
+	    if(u.ugoatblesscnt != saved_cnt) {
+		if (u.ugoatblesscnt) {
+		    if (Hallucination)
+			You("realize that the gods are not like you and I.");
+		    else
+			You("have a hopeful feeling.");
+		    if ((int)u.uluck < 0) change_luck(1);
+		} else {
+		    if (Hallucination)
+			pline("Overall, there is a smell of fried onions.");
+		    else
+			You("have a feeling of reconciliation.");
+		    if ((int)u.uluck < 0) u.uluck = 0;
+			
+			u.reconciled = REC_REC;
+		}
+	    }
+	} else if(yourinvent){
+	    int nartifacts = (int)(u.uconduct.wisharti + u.ugifts);
+		//The Black Goat is pleased
+		struct monst *mtmp;
+		for(mtmp = migrating_mons; mtmp; mtmp = mtmp->nmon){
+			if(mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel && (mtmp->data == &mons[PM_BLESSED] || mtmp->data == &mons[PM_MOUTH_OF_THE_GOAT])){
+				mtmp->mpeaceful = 1;
+				set_malign(mtmp);
+			}
+		}
+		for(mtmp = migrating_mons; mtmp; mtmp = mtmp->nmon){
+			if(mtmp->mux == u.uz.dnum && mtmp->muy == u.uz.dlevel && goat_monster(mtmp->data)){
+				mtmp->mpeaceful = 1;
+				set_malign(mtmp);
+			}
+		}
+		//Character needs a holy symbol
+		if(!has_object_type(invent, HOLY_SYMBOL_OF_THE_BLACK_MOTHE)){
+			struct obj *otmp;
+			if(!rn2(10+u.ugifts)){
+				otmp = mksobj(HOLY_SYMBOL_OF_THE_BLACK_MOTHE, FALSE, FALSE);
+				dropy(otmp);
+				at_your_feet("An object");
+				u.ugifts++;
+			}
+			return;
+		}
+		// pline("looking into goat gift.  %d currently exist. %d gifts have been given, on level %d, and your luck %d.", nartifacts, (int)u.ugifts, u.ulevel, (int)u.uluck);
+	    /* you were already in pretty good standing */
+	    /* The player can gain an artifact */
+	    /* The chance goes down as the number of artifacts goes up */
+		/* Priests now only count gifts in this calculation, found artifacts are excluded */
+	    if(u.ulevel > 2 && u.uluck >= 0 
+		    && (!flags.made_know || 
+			 (uwep && (uwep->oartifact || uwep->oproperties) && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_ACIDW))
+		    ) && (
+			 Role_if(PM_PRIEST) ? !rn2(10 + (2 * u.ugifts * u.ugifts)) : !rn2(10 + (2 * u.ugifts * nartifacts)) 
+			)
+		){
+			if(uwep && (uwep->oartifact || uwep->oproperties) && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_ACIDW)){
+				if(!Blind) pline("Acid drips from your weapon!");
+				uwep->oproperties |= OPROP_ACIDW;
+				uwep->oeroded = 0;
+				uwep->oeroded2 = 0;
+				uwep->oerodeproof = 1;
+			}
+			else if(!flags.made_know){
+				struct obj *otmp;
+				otmp = mksobj(WORD_OF_KNOWLEDGE, FALSE, FALSE);
+				dropy(otmp);
+				at_your_feet("An object");
+			}
+			u.ugifts++;
+			return;
+	    } else if (rnl((30 + u.ulevel)*10) < 10) {
+			/* no artifact, but maybe a helpful pet? */
+			/* WAC is now some generic benefit (includes pets) */
+			goat_gives_benefit();
+		    return;
+	    }
+	    change_luck((value * LUCKMAX) / (MAXVALUE * 2));
+	    if ((int)u.uluck < 0) u.uluck = 0;
+	    if (u.uluck != saved_luck) {
+		if (Blind)
+		    You("think %s brushed your %s.",something, body_part(FOOT));
+		else You(Hallucination ?
+		    "see crabgrass at your %s.  A funny thing in a dungeon." :
+		    "glimpse a four-leaf clover at your %s.",
+		    makeplural(body_part(FOOT)));
+	    }
+		u.reconciled = REC_REC;
+	}
+    }
+}
+
+
 /*pray.c*/

@@ -43,6 +43,7 @@
 #define AT_REND		33	/* hits if the previous two attacks hit, otherwise does nothing */
 #define AT_VINE		34	/* Lashing vines */
 #define AT_BKGT		35	/* Black-goat, resolves as a bite, kick, butt, tuch, or gaze */
+#define AT_BKG2		36	/* Black-goat 2, resolves as a butt, tentacle suck, or gaze */
 
 #define AT_WEAP		252	/* uses weapon */
 #define AT_XWEP		253	/* uses offhanded weapon */

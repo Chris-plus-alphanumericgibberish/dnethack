@@ -5917,7 +5917,7 @@ arti_invoke(obj)
 		case WIND_PETS:
 			pline("You call upon the minions of Quetzalcoatl!");
 			int n = u.ulevel/5 + 1;
-			if(ACURR(A_CHA)/3 < n) n = ACURR(A_CHA)/3;
+			if(dog_limit() < n) n = dog_limit();
 			while(n--) {
 				pm = &mons[windpets[d(1,8)]];
 				mtmp = makemon(pm, u.ux, u.uy, MM_EDOG|MM_ADJACENTOK);

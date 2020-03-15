@@ -1186,7 +1186,7 @@ boolean racialexception;
 	Strcpy(nambuf, See_invisible(mon->mx,mon->my) ? Monnam(mon) : mon_nam(mon));
 
 	old = which_armor(mon, flag);
-	if (old && old->cursed) return;
+	if (old && old->cursed && !is_weldproof_mon(mon)) return;
 	if (old && flag == W_AMUL) return; /* no such thing as better amulets */
 	best = old;
 
@@ -1253,9 +1253,7 @@ outer_break:
 	/* if wearing a cloak, account for the time spent removing
 	   and re-wearing it when putting on a suit or shirt */
 	if ((flag == W_ARM
-#ifdef TOURIST
 	  || flag == W_ARMU
-#endif
 			  ) && (mon->misc_worn_check & W_ARMC))
 	    m_delay += 2;
 	/* when upgrading a piece of armor, account for time spent
@@ -1294,6 +1292,65 @@ outer_break:
 	}
 }
 #undef RACE_EXCEPTION
+
+boolean
+mon_remove_armor(mon)
+struct monst *mon;
+{
+	struct obj *old;
+	long flag;
+	int m_delay = 0;
+	int unseen = !canseemon(mon);
+	int tarx, tary;
+	
+	if (mon->mfrozen) return FALSE;
+	
+	switch(rnd(7)){
+		case 1:
+			flag = W_ARM;
+		break;
+		case 2:
+			flag = W_ARMC;
+		break;
+		case 3:
+			flag = W_ARMH;
+		break;
+		case 4:
+			flag = W_ARMG;
+		break;
+		case 5:
+			flag = W_ARMF;
+		break;
+		case 6:
+			flag = W_ARMU;
+		break;
+		case 7:
+			flag = W_AMUL;
+		break;
+	}
+	
+	old = which_armor(mon, flag);
+	
+	if(!old) return FALSE;
+	
+	if ((flag == W_ARM
+	  || flag == W_ARMU
+	) && (mon->misc_worn_check & W_ARMC))
+	    m_delay += 2;
+	m_delay += objects[old->otyp].oc_delay;
+	old->owornmask = 0L;
+	mon->mfrozen = m_delay;
+	if(mon->mfrozen) mon->mcanmove = 0;
+	update_mon_intrinsics(mon, old, FALSE, FALSE);
+	mon->misc_worn_check &= ~flag;
+	pline("%s removes %s.", Monnam(mon), distant_name(old, doname));
+	do{
+		tarx = rn2(17)-8+mon->mx;
+		tary = rn2(17)-8+mon->my;
+	} while((tarx == mon->mx && tary == mon->my) || !isok(tarx, tary));
+	mthrow(mon, old, 0, tarx, tary, FALSE);
+	return TRUE;
+}
 
 struct obj *
 which_armor(mon, flag)

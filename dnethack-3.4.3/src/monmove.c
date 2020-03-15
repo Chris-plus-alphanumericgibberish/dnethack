@@ -1020,6 +1020,7 @@ register struct monst *mtmp;
 
 	/* berserk monsters calm down with small probability */
 	if (mtmp->mberserk && !rn2(50)) mtmp->mberserk = 0;
+	if (mtmp->mdisrobe && !rn2(50)) mtmp->mdisrobe = 0;
 
 	if (mtmp->mcrazed){
 		if(!rn2(4))mtmp->mconf = 1;
@@ -1030,6 +1031,11 @@ register struct monst *mtmp;
 			mtmp->mnotlaugh=0;
 			mtmp->mlaughing=rnd(5);
 		}
+	}
+	
+	if(mtmp->mdisrobe){
+		if(mon_remove_armor(mtmp))
+			return 0;
 	}
 	
 	if(mtmp->data == &mons[PM_MAD_SEER]){
