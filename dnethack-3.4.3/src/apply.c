@@ -4524,6 +4524,23 @@ use_doll(obj)
 			else pline("The little doll vanishes.");
 			useup(obj);
 		break;
+		case DOLL_OF_MIND_BLASTING:
+			res = 1;
+			if((HMindblasting&TIMEOUT) + 8L < TIMEOUT){
+				long timer = (HMindblasting&TIMEOUT) + 8L;
+				if(!Mindblasting)
+					You("begin radiating waves of mental energy!");
+				HMindblasting &= ~TIMEOUT; //wipe old timer, leaving higher bits in place
+				HMindblasting |= timer; //set new timer
+			}
+			else{
+				HMindblasting |= TIMEOUT; //set timer to max value
+			}
+			if(!Blind)
+				pline("The %s vanishes in a flash of moonlight.", OBJ_DESCR(objects[obj->otyp]));
+			else pline("The little doll vanishes.");
+			useup(obj);
+		break;
 		default:
 		break;
 	}
@@ -6461,6 +6478,7 @@ doapply()
 		case DOLL_OF_STEALING:
 		case DOLL_OF_MOLLIFICATION:
 		case DOLL_OF_CLEAR_THINKING:
+		case DOLL_OF_MIND_BLASTING:
 			res = use_doll(obj);
 		break;
 	case UNICORN_HORN:

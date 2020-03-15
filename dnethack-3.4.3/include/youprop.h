@@ -133,6 +133,10 @@
 #define EDestruction		u.uprops[DESTRUCTION].extrinsic
 #define Destruction		(HDestruction || EDestruction)
 
+#define HMindblasting		u.uprops[MIND_BLASTS].intrinsic
+#define EMindblasting		u.uprops[MIND_BLASTS].extrinsic
+#define Mindblasting		(HMindblasting || EMindblasting)
+
 #define HPreservation		u.uprops[PRESERVATION].intrinsic
 #define EPreservation		u.uprops[PRESERVATION].extrinsic
 #define Preservation		(HPreservation || EPreservation)

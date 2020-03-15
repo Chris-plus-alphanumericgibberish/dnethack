@@ -254,6 +254,8 @@ struct monst {
 #define	DOLLMAKER_STEALING		0x04000L
 #define	DOLLMAKER_MOLLIFICATION	0x08000L
 #define	DOLLMAKER_CLEAR_THOUGHT	0x10000L
+#define	DOLLMAKER_MIND_BLASTS	0x20000L
+#define	MAX_DOLL_MASK	DOLLMAKER_MIND_BLASTS
 	long mvar2;
 	long mvar3;
 	/* in order to prevent alignment problems mextra should

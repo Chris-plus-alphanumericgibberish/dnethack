@@ -634,7 +634,7 @@ int tary;
 						|| (otmp->otyp == CHAIN && pa == &mons[PM_CATHEZAR])
 						)																	// valid weapon
 						&& !(otmp->oartifact && !always_twoweapable_artifact(otmp))			// ok artifact
-						&& !bimanual(otmp, pd)												// not two-handed
+						&& (!bimanual(otmp, pa) || pa == &mons[PM_GYNOID] || pa == &mons[PM_PARASITIZED_GYNOID])// not two-handed
 						&& (youagr || (otmp != MON_WEP(magr) && otmp != MON_SWEP(magr)))	// not wielded already (monster)
 						&& (!youagr || (otmp != uwep && (!u.twoweap || otmp != uswapwep)))	// not wielded already (player)
 						&& !(is_ammo(otmp) || is_pole(otmp) || throwing_weapon(otmp))		// not unsuitable for melee (ammo, throwable, polearm)

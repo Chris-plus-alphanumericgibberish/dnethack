@@ -662,6 +662,13 @@
 				 (ptr) == &mons[PM_PARASITIZED_COMMANDER] \
 				)
 
+#define is_dollable(ptr)	((ptr) == &mons[PM_ANDROID] || \
+				 (ptr) == &mons[PM_GYNOID] || \
+				 (ptr) == &mons[PM_OPERATOR] || \
+				 (ptr) == &mons[PM_COMMANDER] || \
+				 (ptr) == &mons[PM_LIVING_DOLL] \
+				)
+
 #define nonliving(ptr)	(is_unalive(ptr) || is_undead(ptr) || \
 				 (ptr) == &mons[PM_MANES] \
 				)

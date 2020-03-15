@@ -44,7 +44,9 @@ static const char *FDECL(DantalionRace,(int));
 int FDECL(dobinding,(int, int));
 static int NDECL(doblessmenu);
 static int NDECL(donursemenu);
+static int FDECL(dodollmenu, (struct monst *));
 static boolean FDECL(nurse_services,(struct monst *));
+static boolean FDECL(buy_dolls,(struct monst *));
 
 static const char tools[] = { TOOL_CLASS, 0 };
 
@@ -960,6 +962,7 @@ boolean chatting;
 	switch (
 		(mtmp->mfaction == SKELIFIED && ptr != &mons[PM_ECHO]) ? MS_BONES : 
 		is_silent_mon(mtmp) ? MS_SILENT : 
+		(is_dollable(mtmp->data) && mtmp->m_insight_level) ? MS_STATS : 
 		mtmp->ispriest ? MS_PRIEST : 
 		mtmp->isshk ? MS_SELL : 
 		(mtmp->data == &mons[PM_RHYMER] && !mtmp->mspec_used) ? MS_SONG : 
@@ -1218,7 +1221,7 @@ asGuardian:
 				mtmp->mspec_used = 0;
 				mtmp->mcan = 0;
 				mtmp->mflee = 0; mtmp->mfleetim = 0;
-				mtmp->mcrazed = 0; mtmp->mberserk = 0;
+				mtmp->mcrazed = 0; mtmp->mberserk = 0; mtmp->mdisrobe = 0;
 				mtmp->mcansee = 1; mtmp->mblinded = 0;
 				mtmp->mcanmove = 1; mtmp->mfrozen = 0;
 				mtmp->mnotlaugh = 1; mtmp->mlaughing = 0;
@@ -2184,6 +2187,33 @@ humanoid_sound:
 	    /* deliberately vague, since it's not actually casting any spell */
 	    pline_msg = "seems to mutter a cantrip.";
 	    break;
+	case MS_STATS:
+	    if (mtmp->mpeaceful && uclockwork && !mtmp->mtame && !nohands(ptr) && !is_animal(ptr) && yn("(Ask for help winding your clockwork?)") == 'y'){
+			struct obj *key;
+			int turns = 0;
+			
+			Strcpy(class_list, tools);
+			key = getobj(class_list, "wind with");
+			if (!key){
+				pline1(Never_mind);
+				break;
+			}
+			if(!mtmp->mtame) turns = ask_turns(mtmp, 0, u.ulevel/15+1);
+			else turns = ask_turns(mtmp, 0, 0);
+			if(!turns){
+				pline1(Never_mind);
+				break;
+			}
+			start_clockwinding(key, mtmp, turns);
+			break;
+		}
+		if(mtmp->mpeaceful){
+			if(buy_dolls(mtmp)){
+				return TRUE; //mtmp may now be dead
+			}
+		}
+		if (chatting) pline_msg = "does not respond.";
+	break;
 	case MS_NURSE:
 	    if (mtmp->mpeaceful && uclockwork && !mtmp->mtame && !nohands(ptr) && !is_animal(ptr) && yn("(Ask for help winding your clockwork?)") == 'y'){
 			struct obj *key;
@@ -6306,6 +6336,118 @@ struct monst *nurse;
 	if(!nurse->mtame)
 		(void) money2mon(nurse, nurseprices[service]*count/10);
 #endif
+	return TRUE;
+}
+
+int
+dodollmenu(dollmaker)
+struct monst *dollmaker;
+{
+	winid tmpwin;
+	int n, how;
+	long l;
+	char buf[BUFSZ];
+	char incntlet = 'a';
+	menu_item *selected;
+	anything any;
+
+	tmpwin = create_nhwindow(NHW_MENU);
+	start_menu(tmpwin);
+	any.a_void = 0;		/* zero out all bits */
+
+	Sprintf(buf, "Buy a doll?");
+	add_menu(tmpwin, NO_GLYPH, &any, 0, 0, ATR_BOLD, buf, MENU_UNSELECTED);
+	
+	incntlet = 'a';
+	
+	for(l = 0x1L, n = EFFIGY; l <= MAX_DOLL_MASK; l=(l<<1), n++){
+		if(dollmaker->mvar_dollTypes&l){
+			if(objects[n].oc_name_known)
+				Sprintf(buf, "%s ($%d)", OBJ_NAME(objects[n]), 8000);
+			else
+				Sprintf(buf, "%s ($%d)", OBJ_DESCR(objects[n]), 8000);
+			any.a_int = n;	/* must be non-zero */
+			add_menu(tmpwin, NO_GLYPH, &any,
+				incntlet, 0, ATR_NONE, buf,
+				MENU_UNSELECTED);
+		}
+		incntlet++; //Advance anyway
+	}
+	
+	if(is_dollable(dollmaker->data)){
+		Sprintf(buf, "doll tear ($%d)", 8000);
+		any.a_int = DOLL_S_TEAR;	/* must be non-zero */
+		add_menu(tmpwin, NO_GLYPH, &any,
+			incntlet, 0, ATR_NONE, buf,
+			MENU_UNSELECTED);
+	}
+	incntlet++; //Advance anyway
+	
+	end_menu(tmpwin, "Select doll type");
+
+	how = PICK_ONE;
+	n = select_menu(tmpwin, how, &selected);
+	destroy_nhwindow(tmpwin);
+	return (n > 0) ? (int)selected[0].item.a_int : 0;
+}
+
+boolean
+buy_dolls(dollmaker)
+struct monst *dollmaker;
+{
+	int dollnum, gold, count = 1, cost;
+	struct obj *doll;
+	
+	dollnum = dodollmenu(dollmaker);
+	if(!dollnum)
+		return FALSE;
+	
+#ifndef GOLDOBJ
+		gold = u.ugold;
+#else
+		gold = money_cnt(invent);
+#endif
+	if(dollnum != DOLL_S_TEAR){
+		char inbuf[BUFSZ];
+		getlin("How many?", inbuf);
+		if (*inbuf == '\033') count = 1;
+		else count = atoi(inbuf);
+		if(count < 0)
+			count = 1;
+	}
+	cost = 8000*count;
+	
+	if(gold < cost){
+		pline("You don't have enough gold!");
+		return FALSE;
+	} else {
+		pline("That will be $%d.", cost);
+		if(yn("Pay?") != 'y')
+			return FALSE;
+	}
+	
+	doll = mksobj(dollnum,FALSE,FALSE);
+	if(!doll){
+		impossible("doll creation failed?");
+		return FALSE;
+	}
+	if(dollnum == DOLL_S_TEAR){
+		doll->ovar1 = dollmaker->mvar_dollTypes;
+		doll->spe = dollmaker->m_insight_level;
+		dollmaker->m_insight_level = 0;
+		mondied(dollmaker);
+	}
+	doll->quan = count;
+	doll->owt = weight(doll);
+	hold_another_object(doll, "You drop %s!",
+				doname(doll), (const char *)0);
+	
+#ifndef GOLDOBJ
+	u.ugold -= cost;
+#else
+	money2none(cost);
+#endif
+	return TRUE;
 }
 
 #endif /* OVLB */

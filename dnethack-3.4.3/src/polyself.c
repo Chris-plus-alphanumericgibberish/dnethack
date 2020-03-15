@@ -1631,6 +1631,38 @@ domindblast()
 	return 1;
 }
 
+void
+domindblast_strong()
+{
+	struct monst *mtmp, *nmon;
+	int mfdmg;
+	
+	pline("A wave of psychic energy pours out from you.");
+	for(mtmp=fmon; mtmp; mtmp = nmon) {
+		int u_sen;
+
+		nmon = mtmp->nmon;
+		if (DEADMONSTER(mtmp))
+			continue;
+		if(mtmp->mpeaceful)
+			continue;
+		if(mindless_mon(mtmp))
+			continue;
+		u_sen = mon_resistance(mtmp,TELEPAT) && is_blind(mtmp);
+		if (u_sen || (mon_resistance(mtmp,TELEPAT) && rn2(2)) || !rn2(10)) {
+			You("lock in on %s %s.", s_suffix(mon_nam(mtmp)),
+				u_sen ? "telepathy" :
+				mon_resistance(mtmp,TELEPAT) ? "latent telepathy" :
+				"mind");
+			mfdmg = d(3,15);
+			mtmp->mhp -= mfdmg;
+			mtmp->mstdy = max(mfdmg, mtmp->mstdy);
+			if (mtmp->mhp <= 0)
+				killed(mtmp);
+		}
+	}
+}
+
 int
 dodarken()
 {

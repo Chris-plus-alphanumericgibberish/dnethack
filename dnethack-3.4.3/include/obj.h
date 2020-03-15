@@ -262,6 +262,7 @@ struct obj {
 	/* Hilt engraving for lightsabers */
 	/* Ampule type for hypospray ampules */
 	/* Engraving for rings */
+	/* doll's tear */
 #define obj_type_uses_ovar1(otmp) (\
 	   (otmp)->otyp == VIPERWHIP \
 	|| (otmp)->otyp == MOON_AXE \
@@ -276,6 +277,7 @@ struct obj {
 	|| (otmp)->otyp == DOUBLE_LIGHTSABER \
 	|| (otmp)->otyp == HYPOSPRAY_AMPULE \
 	|| (otmp)->oclass == RING_CLASS \
+	|| (otmp)->otyp == DOLL_S_TEAR \
 	)
 #define ECLIPSE_MOON	0
 #define CRESCENT_MOON	1

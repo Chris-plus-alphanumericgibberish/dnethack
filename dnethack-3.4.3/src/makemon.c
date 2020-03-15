@@ -7555,7 +7555,8 @@ register int	mmflags;
 			DOLLMAKER_WAND_CHARGE,
 			DOLLMAKER_STEALING,
 			DOLLMAKER_MOLLIFICATION,
-			DOLLMAKER_CLEAR_THOUGHT
+			DOLLMAKER_CLEAR_THOUGHT,
+			DOLLMAKER_MIND_BLASTS
 		};
 		for(i = 0; i < SIZE(dolltypes); i++){
 			j = rn2(SIZE(dolltypes));
@@ -7563,9 +7564,9 @@ register int	mmflags;
 			dolltypes[i] = dolltypes[j];
 			dolltypes[j] = tmp;
 		}
-		mtmp->m_insight_level = rnd(20);
 		for(i = rn1(3, SIZE(dolltypes)-2); i > 0; i--)
 			mtmp->mvar_dollTypes |= dolltypes[i];
+		mtmp->m_insight_level = rnd(20);
 	}
 	
 	else if(mtmp->data == &mons[PM_BESTIAL_DERVISH])
