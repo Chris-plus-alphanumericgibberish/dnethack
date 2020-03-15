@@ -26,6 +26,7 @@ STATIC_DCL void NDECL(androidUpkeep);
 STATIC_DCL void NDECL(printMons);
 STATIC_DCL void NDECL(printDPR);
 STATIC_DCL void NDECL(printBodies);
+STATIC_DCL void NDECL(printSanAndInsight);
 STATIC_DCL int NDECL(do_inheritor_menu);
 STATIC_DCL void FDECL(printAttacks, (char *,struct permonst *));
 STATIC_DCL void FDECL(resFlags, (char *,unsigned int));
@@ -735,6 +736,7 @@ moveloop()
 	printMons();
 	printDPR();
 	printBodies();
+	printSanAndInsight();
     for(;;) {/////////////////////////MAIN LOOP/////////////////////////////////
     hpDiff = u.uhp;
 	get_nh_event();
@@ -2678,6 +2680,31 @@ printBodies(){
 
 STATIC_DCL
 void
+printSanAndInsight(){
+	FILE *rfile;
+	register int i, j;
+	char pbuf[BUFSZ];
+	struct permonst *ptr;
+	rfile = fopen_datafile("MonSanAndInsight.tab", "w", SCOREPREFIX);
+	if (rfile) {
+		Sprintf(pbuf,"Number\tName\tclass\tinsight\tsanity\n");
+		fprintf(rfile, pbuf);
+		for(j=0;j<NUMMONS;j++){
+			ptr = &mons[j];
+			pbuf[0] = 0;
+			if(!taxes_sanity(&mons[j]) && !yields_insight(&mons[j]))
+				continue;
+			Sprintf(pbuf,"%d	%s	%d	%d	%d\n", 
+					j, mons[j].mname, mons[j].mlet,
+						yields_insight(&mons[j]) ? max(1, monstr[j]/10) : 0, 
+						taxes_sanity(&mons[j]) ? monstr[j] : 0);
+			fprintf(rfile, pbuf);
+		}
+	}
+}
+
+STATIC_DCL
+void
 printDPR(){
 	FILE *rfile;
 	register int i, j, avdm, mdm;
@@ -3317,7 +3344,7 @@ see_nearby_monsters()
 							change_usanity(u_sanity_loss(mtmp));
 						}
 						if(yields_insight(mtmp->data)){
-							change_uinsight(1);
+							change_uinsight(u_visible_insight(mtmp));
 						}
 					}
 				}

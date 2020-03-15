@@ -6884,8 +6884,25 @@ u_insight_gain(mtmp)
 struct monst *mtmp;
 {
 	int mndx = monsndx(mtmp->data);
+	int insight = monstr[mndx]/10;
 	
-	return max(1, monstr[mndx]/10);
+	//One point given for seeing it
+	if(insight > 2)
+		insight--;
+	
+	return max(1, insight);
+}
+
+int
+u_visible_insight(mtmp)
+struct monst *mtmp;
+{
+	int mndx = monsndx(mtmp->data);
+	int insight = monstr[mndx]/10;
+	
+	if(insight > 2)
+		return 1;
+	return 0;
 }
 
 STATIC_OVL void
