@@ -376,11 +376,23 @@ boolean incr;	/* true iff via incremental experience growth */
 	u.uhprolled += num;
 	calc_total_maxhp();
 	u.uhp += num + conplus(ACURR(A_CON));
+	if((int)(conplus(ACURR(A_CON))) != conplus(ACURR(A_CON))){
+		/* .5 remainder (just give an extra HP)*/
+		u.uhp++;
+		if(u.uhp > u.uhpmax)
+			u.uhp = u.uhpmax;
+	}
 	if (Upolyd) {
 	    num = rnd(8);
 	    u.mhrolled += num;
 		calc_total_maxhp();
 	    u.mh += num + conplus(ACURR(A_CON));
+		if((int)(conplus(ACURR(A_CON))) != conplus(ACURR(A_CON))){
+			/* .5 remainder (just give an extra HP)*/
+			u.mh++;
+			if(u.mh > u.mhmax)
+				u.mh = u.mhmax;
+		}
 	}
 	num = newen();
 	u.uenrolled += num;

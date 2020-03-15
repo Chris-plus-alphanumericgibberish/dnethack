@@ -1037,23 +1037,17 @@ maxen()
 	return((en <= u.ulevel) ? u.ulevel : en);
 }
 
-int
+double
 conplus(con)
 	int con;
 {
-	int conplus;
+	double conplus;
 	
 	if (con <= 3) conplus = -2;
+	else if (con <= 4) conplus = -1.5;
 	else if (con <= 6) conplus = -1;
-	else if (con <= 14) conplus = 0;
-	else if (con <= 16) conplus = 1;
-	else if (con == 17) conplus = 2;
-	else if (con == 18) conplus = 3;
-	else if (con == 19) conplus = 4;
-	else if (con <= 21) conplus = 5;
-	else if (con <= 24) conplus = 6;
-	else if (con == 25) conplus = 7;
-	else conplus = 4;
+	else if (con < 13) conplus = 0;
+	else conplus = (con-11)/2.0;
 	
 	return conplus;
 }
@@ -1338,7 +1332,7 @@ long int thought;
 		case RADIANCE:
 		break;
 		default:
-			impossible("bad glyph %s in active_glyph!", thought);
+			impossible("bad glyph %ld in active_glyph!", thought);
 			return 0;
 		break;
 	}
@@ -1409,7 +1403,7 @@ long int thought;
 			insightlevel = 12;
 		break;
 		default:
-			impossible("bad glyph %s in active_glyph!", thought);
+			impossible("bad glyph %ld in active_glyph!", thought);
 			return 0;
 		break;
 	}

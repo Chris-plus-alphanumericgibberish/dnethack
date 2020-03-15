@@ -155,7 +155,7 @@ E int NDECL(newhp);
 E int NDECL(newen);
 E int FDECL(maxhp, (int));
 E int NDECL(maxen);
-E int FDECL(conplus, (int));
+E double FDECL(conplus, (int));
 E void FDECL(change_usanity, (int));
 E void FDECL(change_uinsight, (int));
 E int FDECL(glyph_sanity, (long int));
@@ -560,6 +560,7 @@ E int FDECL(dog_move, (struct monst *,int));
 #ifdef USE_TRAMPOLI
 E void FDECL(wantdoor, (int,int,genericptr_t));
 #endif
+E struct obj *FDECL(DROPPABLES, (struct monst *));
 
 /* ### dokick.c ### */
 

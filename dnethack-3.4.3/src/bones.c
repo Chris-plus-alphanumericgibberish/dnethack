@@ -418,11 +418,8 @@ struct obj *corpse;
 		mask->mp->mskhpmax = u.uhpmax;
 		mask->mp->msken = u.uen;
 		mask->mp->mskenmax = u.uenmax;
-		mask->mp->mskgangr[0] = u.ugangr[0];
-		mask->mp->mskgangr[1] = u.ugangr[1];
-		mask->mp->mskgangr[2] = u.ugangr[2];
-		mask->mp->mskgangr[3] = u.ugangr[3];
-		mask->mp->mskgangr[4] = u.ugangr[4];
+		for(int i = 0; i < GA_NUM; i++)
+			mask->mp->mskgangr[i] = u.ugangr[i];
 		mask->mp->mskexp = u.uexp;
 		mask->mp->mskrexp = u.urexp;
 		mask->mp->mskweapon_slots = u.weapon_slots;

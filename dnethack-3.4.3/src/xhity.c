@@ -10846,16 +10846,16 @@ boolean * hittxt;
 	if (otmp->oartifact || otmp->oproperties) {		// artifact and oproperties
 		tmpplusdmg = tmptruedmg = 0;
 		result = special_weapon_hit(magr, mdef, otmp, basedmg, &tmpplusdmg, &tmptruedmg, dieroll, hittxt);
-		*plusdmgptr = tmpplusdmg;
-		*truedmgptr = tmptruedmg;
+		*plusdmgptr += tmpplusdmg;
+		*truedmgptr += tmptruedmg;
 		if ((result & (MM_DEF_DIED | MM_DEF_LSVD)) || (result == MM_MISS))
 			return result;
 	}
 	if (spec_prop_otyp(otmp)) {	// otyp
 		tmpplusdmg = tmptruedmg = 0;
 		otyp_hit(magr, mdef, otmp, basedmg, &tmpplusdmg, &tmptruedmg, dieroll);
-		*plusdmgptr = tmpplusdmg;
-		*truedmgptr = tmptruedmg;
+		*plusdmgptr += tmpplusdmg;
+		*truedmgptr += tmptruedmg;
 	}
 	return result;
 }
@@ -14835,7 +14835,8 @@ android_combo()
 		else {
 			vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 			xmeleehity(&youmonst, mdef, &weaponhit, (struct obj *)0, vis, 0, FALSE);
-			xmeleehity(&youmonst, mdef, &weaponhit, (struct obj *)0, vis, 0, FALSE);
+			if(!DEADMONSTER(mdef))
+				xmeleehity(&youmonst, mdef, &weaponhit, (struct obj *)0, vis, 0, FALSE);
 		}
 		u.uen--;
 		if (P_SKILL(P_BARE_HANDED_COMBAT) >= P_SKILLED && u.uen > 0){
@@ -14862,14 +14863,17 @@ android_combo()
 					mdef = u.ustuck;
 				else
 					mdef = m_at(u.ux + u.dx, u.uy + u.dy);
-				if (!mdef)
+				if (!mdef || DEADMONSTER(mdef))
 					You("swing wildly!");
 				else {
 					vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 					xmeleehity(&youmonst, mdef, &weaponhit,  (struct obj *)0, vis, 0, FALSE);
-					xmeleehity(&youmonst, mdef, &weaponhit,  (struct obj *)0, vis, 0, FALSE);
-					xmeleehity(&youmonst, mdef, &kickattack, (struct obj *)0, vis, 0, FALSE);
-					xmeleehity(&youmonst, mdef, &kickattack, (struct obj *)0, vis, 0, FALSE);
+					if(!DEADMONSTER(mdef))
+						xmeleehity(&youmonst, mdef, &weaponhit,  (struct obj *)0, vis, 0, FALSE);
+					if(!DEADMONSTER(mdef))
+						xmeleehity(&youmonst, mdef, &kickattack, (struct obj *)0, vis, 0, FALSE);
+					if(!DEADMONSTER(mdef))
+						xmeleehity(&youmonst, mdef, &kickattack, (struct obj *)0, vis, 0, FALSE);
 				}
 			}
 		}
@@ -14880,7 +14884,7 @@ android_combo()
 				mdef = u.ustuck;
 			else
 				mdef = m_at(u.ux + u.dx, u.uy + u.dy);
-			if (!mdef)
+			if (!mdef || DEADMONSTER(mdef))
 				You("swing wildly!");
 			else {
 				xmeleehity(&youmonst, mdef, &finisher,   (struct obj *)0, vis, 0, FALSE);
@@ -14908,7 +14912,8 @@ android_combo()
 		else {
 			vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 			xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
-			xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
+			if(!DEADMONSTER(mdef))
+				xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
 		}
 		u.uen--;
 		if (uwep && P_SKILL(objects[uwep->otyp].oc_skill) >= P_SKILLED && u.uen > 0){
@@ -14956,7 +14961,8 @@ android_combo()
 				else {
 					vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 					xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
-					xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
+					if(!DEADMONSTER(mdef))
+						xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
 				}
 			}
 		}
@@ -14991,7 +14997,8 @@ android_combo()
 			else {
 				vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 				xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
-				xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
+				if(!DEADMONSTER(mdef))
+					xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
 			}
 			n--;
 			u.uen--;
@@ -15017,7 +15024,8 @@ android_combo()
 		else {
 			vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 			xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
-			xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
+			if(!DEADMONSTER(mdef))
+				xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
 		}
 		u.uen--;
 
@@ -15059,7 +15067,8 @@ android_combo()
 				else {
 					vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 					xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
-					xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
+					if(!DEADMONSTER(mdef))
+						xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
 				}
 			}
 			else {
@@ -15098,7 +15107,8 @@ android_combo()
 		else {
 			vis = (VIS_MAGR | VIS_NONE) | (canseemon(mdef) ? VIS_MDEF : 0);
 			xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
-			xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
+			if(!DEADMONSTER(mdef))
+				xmeleehity(&youmonst, mdef, &weaponhit, uwep, vis, 0, FALSE);
 		}
 		u.uen--;
 

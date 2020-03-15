@@ -64,7 +64,7 @@ mkcavepos(x, y, dist, waslit, rockit)
 	if(IS_ROCK(lev->typ)) return;
 	if(t_at(x, y)) return; /* don't cover the portal */
 	if ((mtmp = m_at(x, y)) != 0)	/* make sure crucial monsters survive */
-	    if(!mon_resistance(mtmp,PASSES_WALLS)) (void) rloc(mtmp, FALSE);
+	    if(!mon_resistance(mtmp,PASSES_WALLS)) return;
     } else if(lev->typ == ROOM) return;
 
     unblock_point(x,y);	/* make sure vision knows this location is open */

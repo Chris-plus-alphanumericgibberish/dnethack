@@ -662,75 +662,22 @@ register int show;
 boolean is_pet;		/* If true, pet should keep wielded/worn items */
 {
 	register struct obj *otmp;
-	register struct obj *nobj;
 	register int omx = mtmp->mx, omy = mtmp->my;
-	boolean keepobj = FALSE;
-	struct obj *wep = MON_WEP(mtmp),
-	           *hwep = attacktype(mtmp->data, AT_WEAP)
-		           ? select_hwep(mtmp) : (struct obj *)0,
-		   *proj = attacktype(mtmp->data, AT_WEAP)
-		           ? select_rwep(mtmp) : (struct obj *)0,
-		   *rwep;
-	boolean item1 = FALSE, item2 = FALSE;
-	boolean intelligent = TRUE;
 
-	rwep = attacktype(mtmp->data, AT_WEAP) ? propellor : &zeroobj;
-	
-
-	if (!is_pet || mindless_mon(mtmp) || is_animal(mtmp->data))
-	{
-		intelligent = FALSE;
-		item1 = item2 = TRUE;
-	}
-	if (!tunnels(mtmp->data) || !needspick(mtmp->data))
-		item1 = TRUE;
-
-	for (otmp = mtmp->minvent; otmp; otmp = nobj) {
-		keepobj = FALSE;
-		/* since otmp might be freed, we need to get nobj before it is unlinked */
-		nobj = otmp->nobj;
-		/* special case: pick-axe and unicorn horn are non-worn */
-		/* items that we also want pets to keep 1 of */
-		/* (It is a coincidence that these can also be wielded.) */
-		// pline("worn %d, weapon %d, intelligent %d, hwep %d, rwep %d, proj %d, would_prefer_hwep %d, would_prefer_rwep %d, could_use_item %d",
-			// (int)otmp->owornmask, 
-			// (int)otmp == wep, 
-			// (int)intelligent, 
-			// (int)otmp == hwep, 
-			// (int)otmp == rwep, 
-			// (int)otmp == proj, 
-			// (int)would_prefer_hwep(mtmp, otmp),
-			// (int)would_prefer_rwep(mtmp, otmp), 
-			// (int)(0 || could_use_item(mtmp, otmp, TRUE))
-		// );
-		if (otmp->owornmask || otmp == wep ||
-		    (intelligent && 
-				(otmp == hwep || otmp == rwep || otmp == proj ||
-				would_prefer_hwep(mtmp, otmp) || /*cursed item in hand?*/
-				would_prefer_rwep(mtmp, otmp) ||
-				could_use_item(mtmp, otmp, TRUE) ||
-				((!rwep || rwep == &zeroobj) &&
-					(is_ammo(otmp) || is_launcher(otmp))) ||
-				(rwep && rwep != &zeroobj &&
-				 ammo_and_launcher(otmp, rwep))
-				)
-			) ||
-		    ((!item1 && otmp->otyp == PICK_AXE) ||
-		     (!item2 && otmp->otyp == UNICORN_HORN && !otmp->cursed))
-		) {
-			if (is_pet) { /* dont drop worn/wielded item */
-				if (otmp->otyp == PICK_AXE)
-					item1 = TRUE;
-				if (otmp->otyp == UNICORN_HORN && !otmp->cursed)
-					item2 = TRUE;
-				keepobj = TRUE;
-			}
-		}
-		/* only extract the object if it is being dropped */
-		if (!keepobj) {
+	if(is_pet){
+		//THIS IS VERY EFFICIENT!!1!
+		//(It starts over from the beginning of the inventory every time it drops an object)
+		//(Because it's a linked list and it starts dropping from the head, it's still O(n))
+		while((otmp = DROPPABLES(mtmp))){
 			obj_extract_self(otmp);
-		mdrop_obj(mtmp, otmp, is_pet && flags.verbose);
-	}
+			mdrop_obj(mtmp, otmp, is_pet && flags.verbose);
+		}
+	} else {
+		//Drop everything, I'm dying :(
+		while(otmp = mtmp->minvent){
+			obj_extract_self(otmp);
+			mdrop_obj(mtmp, otmp, is_pet && flags.verbose);
+		}
 	}
 
 #ifndef GOLDOBJ
