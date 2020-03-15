@@ -3807,25 +3807,28 @@ struct obj *otmp;
 		/* Priests now only count gifts in this calculation, found artifacts are excluded */
 	    if(u.ulevel > 2 && u.uluck >= 0 
 		    && (!flags.made_know || 
-			 (uwep && (uwep->oartifact || uwep->oproperties) && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_ACIDW))
+			 (uwep && (uwep->oartifact || uwep->oproperties || spec_prop_otyp(uwep)) && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_ACIDW))
 		    ) && (
 			 Role_if(PM_PRIEST) ? !rn2(10 + (2 * u.ugifts * u.ugifts)) : !rn2(10 + (2 * u.ugifts * nartifacts)) 
 			)
 		){
-			if(uwep && (uwep->oartifact || uwep->oproperties) && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_ACIDW)){
+			if(uwep && (uwep->oartifact || uwep->oproperties || spec_prop_otyp(uwep)) && (uwep->oclass == WEAPON_CLASS || is_weptool(uwep)) && !(uwep->oproperties&OPROP_ACIDW)){
 				if(!Blind) pline("Acid drips from your weapon!");
 				uwep->oproperties |= OPROP_ACIDW;
 				uwep->oeroded = 0;
 				uwep->oeroded2 = 0;
 				uwep->oerodeproof = 1;
+				u.ugifts++;
 			}
 			else if(!flags.made_know){
 				struct obj *otmp;
 				otmp = mksobj(WORD_OF_KNOWLEDGE, FALSE, FALSE);
 				dropy(otmp);
 				at_your_feet("An object");
+				u.ugifts++;
 			}
-			u.ugifts++;
+			//Note: bugs in the above blocks were making ugifts go up without giving a benefit.
+			//  I think the bugs are squashed, but keep the increment tightly associated with actual gifts.
 			return;
 	    } else if (rnl((30 + u.ulevel)*10) < 10) {
 			/* no artifact, but maybe a helpful pet? */
