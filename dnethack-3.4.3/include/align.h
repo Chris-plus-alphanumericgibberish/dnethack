@@ -108,12 +108,16 @@ typedef struct	align {		/* alignment & record */
 									  (x)==GA_CHAOTIC ? A_CHAOTIC :\
 									  (x)==GA_NEUTRAL ? A_NEUTRAL :\
 									  (x)==GA_LAWFUL ? A_LAWFUL :\
+									  (x)==GA_SOPHIA ? A_CHAOTIC :\
+									  (x)==GA_DEMIURGE ? A_LAWFUL :\
 									  (x)==GA_VOID ? A_VOID : A_NONE\
 									))
 #define Gangr2amask(x)	( (x)==GA_NONE ? AM_NONE : \
 						  (x)==GA_CHAOTIC ? AM_CHAOTIC :\
 						  (x)==GA_NEUTRAL ? AM_NEUTRAL :\
 						  (x)==GA_LAWFUL ? AM_LAWFUL :\
+						  (x)==GA_SOPHIA ? AM_CHAOTIC :\
+						  (x)==GA_DEMIURGE ? AM_LAWFUL :\
 						  (x)==GA_VOID ? AM_VOID : AM_NONE\
 						)
 #endif /* ALIGN_H */

@@ -6481,6 +6481,9 @@ doapply()
 		case DOLL_OF_MIND_BLASTING:
 			res = use_doll(obj);
 		break;
+		case HOLY_SYMBOL_OF_THE_BLACK_MOTHE:
+			res = pray_goat();
+		break;
 	case UNICORN_HORN:
 		use_unicorn_horn(obj);
 	break;

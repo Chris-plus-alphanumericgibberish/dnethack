@@ -2669,7 +2669,7 @@ int dz;
 				do_earthquake(u.ux, u.uy, 10, 2, FALSE, (struct monst *)0);
 				optr = uwep;
 				uwepgone();
-				if(optr->gifted != A_NONE && !Role_if(PM_EXILE)){
+				if(optr->gifted != GA_NONE && optr->gifted != GA_VOID){
 					gods_angry(optr->gifted);
 					gods_upset(optr->gifted);
 				}
@@ -2712,7 +2712,7 @@ int dz;
 					return 1;
 				optr = uwep;
 				uwepgone();
-				if(optr->gifted != A_NONE && !Role_if(PM_EXILE)){
+				if(optr->gifted != GA_NONE && !Role_if(PM_EXILE)){
 					gods_angry(optr->gifted);
 					gods_upset(optr->gifted);
 				}

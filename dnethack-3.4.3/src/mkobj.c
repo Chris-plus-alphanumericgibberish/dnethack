@@ -557,7 +557,7 @@ boolean artif;
 	otmp->ovar1 = 0;
 	otmp->oward = 0;
 	otmp->oproperties = 0;
-	otmp->gifted = A_NONE;
+	otmp->gifted = GA_NONE;
 	otmp->lifted = 0;
 	otmp->shopOwned = 0;
 	otmp->sknown = 0;

@@ -690,6 +690,8 @@ const char * haluWard[] =  {
 	
 	/* Footprint */
 	"a footprint",
+	/* Hoofprint */
+	"a hoofprint",
 	
 	/* Planar Symbols */
 	"a circle enclosing two curved colliding arrows",			/*44*/

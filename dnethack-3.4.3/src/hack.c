@@ -2545,6 +2545,18 @@ int n;
 	flags.botl = 1;
 }
 
+boolean
+adjacent_mon()
+{
+	int i, j;
+	for(i = -1; i < 2; i++)
+		for(j = -1; j < 2; j++)
+			if(i != 0 || j != 0)
+				if(isok(u.ux+i, u.uy+j) && m_at(u.ux+i, u.uy+j) && !(m_at(u.ux+i, u.uy+j)->mpeaceful))
+					return TRUE;
+	return FALSE;
+}
+
 void
 mdamageu(mtmp, n)	/* mtmp hits you for n points damage */
 register struct monst *mtmp;

@@ -1999,9 +1999,9 @@ E const char * NDECL(getAnachrononautLgodEnd);
 #ifdef USE_TRAMPOLI
 E int NDECL(prayer_done);
 #endif
-E void FDECL(gods_angry,(ALIGNTYP_P));
-E void FDECL(gods_upset,(ALIGNTYP_P));
-E void FDECL(angrygods,(ALIGNTYP_P));
+E void FDECL(gods_angry,(int));
+E void FDECL(gods_upset,(int));
+E void FDECL(angrygods,(int));
 E int NDECL(dosacrifice);
 E boolean FDECL(can_pray, (BOOLEAN_P));
 E int NDECL(dopray);
@@ -2011,6 +2011,8 @@ E const char *NDECL(a_gname);
 E const char *FDECL(a_gname_at, (XCHAR_P x,XCHAR_P y));
 E const char *FDECL(align_gname, (ALIGNTYP_P));
 E const char *FDECL(align_gname_full, (ALIGNTYP_P));
+E const char *FDECL(ga_gname, (int));
+E const char *FDECL(ga_gname_full, (int));
 E const char *FDECL(halu_gname, (ALIGNTYP_P));
 E const char *FDECL(align_gtitle, (ALIGNTYP_P));
 E void FDECL(altar_wrath, (int,int));

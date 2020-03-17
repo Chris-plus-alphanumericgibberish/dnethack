@@ -1695,10 +1695,12 @@ karemade:
 			) dosymbiotic();
 			if(u.spiritPColdowns[PWR_PSEUDONATURAL_SURGE] >= moves+20)
 				dopseudonatural();
-			if(roll_madness(MAD_GOAT_RIDDEN)){
+			if(roll_madness(MAD_GOAT_RIDDEN) && adjacent_mon()){
 				pline("Lashing tentacles erupt from your brain!");
-				losehp(d(4,4), "the black mother's touch", KILLED_BY);
-				morehungry(d(4,4)*100);
+				losehp(max(1,(Upolyd ? ((d(4,4)*u.mh)/u.mhmax) : ((d(4,4)*u.uhp)/u.uhpmax))), "the black mother's touch", KILLED_BY);
+				morehungry(d(4,4)*4);
+				if(!roll_madness(MAD_GOAT_RIDDEN) && !roll_madness(MAD_GOAT_RIDDEN))
+					change_usanity(-1*d(4,4));
 				dogoat();
 			}
 			if(Destruction)
@@ -1771,6 +1773,8 @@ karemade:
 			move_gliders();
 
 		    if (u.ublesscnt)  u.ublesscnt--;
+		    if (u.ugoatblesscnt && u.uevent.shubbie_atten && !u.ugangr[GA_MOTHER])
+				u.ugoatblesscnt--;
 		    if(flags.time && !flags.run)
 			flags.botl = 1;
 			
@@ -3676,7 +3680,6 @@ struct monst *mon;
 	}
 }
 
-
 void
 dogoat()
 {
@@ -3689,8 +3692,10 @@ dogoat()
 	for(j=8;j>=1;j--){
 		if(u.ustuck && u.uswallow)
 			mon = u.ustuck;
+		else if(!isok(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]))
+			continue;
 		else mon = m_at(u.ux+clockwisex[(i+j)%8], u.uy+clockwisey[(i+j)%8]);
-		if(!mon || mon->mpeaceful || !rn2(4))
+		if(!mon || mon->mpeaceful)
 			continue;
 		if(touch_petrifies(mon->data)
 		 || mon->data == &mons[PM_MEDUSA]
