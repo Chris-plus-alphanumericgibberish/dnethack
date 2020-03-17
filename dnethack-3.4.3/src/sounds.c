@@ -1561,7 +1561,7 @@ asGuardian:
 					}
 					if(mtmp->mtame && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && !u.uinvulnerable){
 						if(u.uencouraged < BASE_DOG_ENCOURAGED_MAX) 
-						u.uencouraged = min_ints(BASE_DOG_ENCOURAGED_MAX, u.uencouraged + rnd(mtmp->m_lev/3+1));
+							u.uencouraged = min_ints(BASE_DOG_ENCOURAGED_MAX, u.uencouraged + rnd(mtmp->m_lev/3+1));
 						You_feel("%s!", u.uencouraged >= BASE_DOG_ENCOURAGED_MAX ? "berserk" : "wild");
 					}
 					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 5 && uwep && uwep->oartifact == ART_SINGING_SWORD){
@@ -1814,7 +1814,7 @@ asGuardian:
 					}
 					if(!mtmp->mpeaceful && distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && !u.uinvulnerable){
 						if(u.uencouraged > -1*BASE_DOG_ENCOURAGED_MAX) 
-						u.uencouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, u.uencouraged - rnd(mtmp->m_lev/3+1));
+							u.uencouraged = max_ints(-1*BASE_DOG_ENCOURAGED_MAX, u.uencouraged - rnd(mtmp->m_lev/3+1));
 						You_feel("%s!", u.uencouraged <= -1*BASE_DOG_ENCOURAGED_MAX ? "inconsolable" : "depressed");
 					}
 					if(distmin(mtmp->mx,mtmp->my,u.ux,u.uy) < 4 && uwep && uwep->oartifact == ART_SINGING_SWORD){
@@ -2402,9 +2402,54 @@ struct monst * commander;
 	struct monst * mtmp;
 	struct monst * nxtmon;
 	int tmp = 0;
+	int utmp = 0;
 	int affected = 0;
 	int inrange = 0;
+	int nd=1, sd=1;
 
+	switch (monsndx(commander->data))
+	{
+	case PM_RAZIEL:
+		nd=3;
+		sd=7;
+		break;
+	case PM_BAEL:
+		nd=2;
+		sd=9;
+		break;
+	case PM_ASMODEUS:
+		nd=9;
+		sd=1;
+		break;
+	case PM_NECROMANCER:
+		nd=2;
+		sd=6;
+		break;
+	case PM_SERGEANT:
+	case PM_MYRMIDON_LOCHIAS:
+		nd=1;
+		sd=3;
+		break;
+	case PM_PIT_FIEND:
+	case PM_NESSIAN_PIT_FIEND:
+	case PM_GREEN_PIT_FIEND:
+		nd=1;
+		sd=9;
+		break;
+	case PM_MARILITH:
+		nd=1;
+		sd=6;
+		break;
+	case PM_SHAKTARI:
+		nd=6;
+		sd=1;
+		break;
+	default:
+		nd=1;
+		sd=5 + min(30, commander->m_lev)/6;
+		break;
+	}
+	
 	for (mtmp = fmon; mtmp; mtmp = nxtmon){
 		nxtmon = mtmp->nmon;
 		if (!clear_path(mtmp->mx, mtmp->my, commander->mx, commander->my)
@@ -2413,40 +2458,8 @@ struct monst * commander;
 			|| !(mtmp->mpeaceful == commander->mpeaceful && mtmp->mtame == commander->mtame))
 			continue;
 
-		switch (monsndx(commander->data))
-		{
-		case PM_RAZIEL:
-			tmp = d(3, 7);
-			break;
-		case PM_BAEL:
-			tmp = d(2, 9);
-			break;
-		case PM_ASMODEUS:
-			tmp = 9;
-			break;
-		case PM_NECROMANCER:
-			tmp = d(2, 6);
-			break;
-		case PM_SERGEANT:
-		case PM_MYRMIDON_LOCHIAS:
-			tmp = rnd(3);
-			break;
-		case PM_PIT_FIEND:
-		case PM_NESSIAN_PIT_FIEND:
-		case PM_GREEN_PIT_FIEND:
-			tmp = d(1, 9);
-			break;
-		case PM_MARILITH:
-			tmp = d(1, 6);
-			break;
-		case PM_SHAKTARI:
-			tmp = 6;
-			break;
-		default:
-			tmp = rnd(5 + min(30, commander->m_lev) / 6);
-			break;
-		}
-
+		tmp = d(nd, sd);
+		
 		inrange += 1;
 		if (tmp > mtmp->encouraged || mtmp->mflee){
 			mtmp->encouraged = max(tmp, mtmp->encouraged);
@@ -2455,7 +2468,13 @@ struct monst * commander;
 			affected += 1;
 		}
 	}
-
+	if(commander->mtame && clear_path(u.ux, u.uy, commander->mx, commander->my) && permon_in_command_chain(monsndx(youracedata), monsndx(commander->data))){
+		inrange += 1;
+		utmp = d(nd, sd);
+		if(utmp > u.uencouraged)
+			affected += 1;
+		else utmp = 0;
+	}
 	if (affected && !(is_silent_mon(commander))) {
 		if (canseemon(commander)) {
 			switch (monsndx(commander->data))
@@ -2533,6 +2552,10 @@ struct monst * commander;
 				break;
 			}
 		}
+	}
+	if(utmp){
+		You("feel inspired!");
+		u.uencouraged = utmp;
 	}
 	return;
 }
@@ -2852,10 +2875,10 @@ int dz;
 	
 	if(mtmp && noactions(mtmp)){
 		if(mtmp->mtrapped && t_at(mtmp->mx, mtmp->my) && t_at(mtmp->mx, mtmp->my)->ttyp == VIVI_TRAP){
-		if(canspotmon(mtmp))
-			pline("%s is sleeping peacefully; presumably the doing of the delicate equipment that displays %s vivisected form.", 
-				Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : hisherits(mtmp))
-			);
+			if(canspotmon(mtmp))
+				pline("%s is sleeping peacefully; presumably the doing of the delicate equipment that displays %s vivisected form.", 
+					Monnam(mtmp), (is_animal(mtmp->data) || mindless_mon(mtmp) ? "its" : hisherits(mtmp))
+				);
 		}
 		else if(mtmp->entangled == SHACKLES){
 			if(canspotmon(mtmp))
@@ -4703,7 +4726,7 @@ int tx,ty;
 					if(!Blind)  pline("Gradually, the lighting returns to normal.");
 					// u.sealTimeout[TENEBROUS-FIRST_SEAL] = moves + bindingPeriod/10;
 				}
-			} else{
+			} else {
 				You("think briefly of the dying of the light.");
 				// u.sealTimeout[TENEBROUS-FIRST_SEAL] = moves + bindingPeriod/10;
 			}
