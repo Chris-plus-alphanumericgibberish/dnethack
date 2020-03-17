@@ -3292,7 +3292,7 @@ ray:
 	break;
     }
 
-    if (dmg) mtmp ? mdamageu(mtmp, dmg) : losehp(dmg, "malevolent spell", KILLED_BY_AN);;
+    if (dmg) mtmp ? mdamageu(mtmp, dmg) : losehp(dmg, "malevolent spell", KILLED_BY_AN);
 }
 
 STATIC_DCL
