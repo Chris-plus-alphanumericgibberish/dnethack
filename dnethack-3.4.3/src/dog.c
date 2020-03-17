@@ -1121,7 +1121,7 @@ vanish_dogs()
 int
 dog_limit()
 {
-	int n = dog_limit();
+	int n = ACURR(A_CHA)/3;
 	if(u.ufirst_know)
 		n += 3;
 	return n;
