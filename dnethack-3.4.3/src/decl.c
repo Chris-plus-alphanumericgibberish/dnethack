@@ -206,6 +206,7 @@ NEARDATA struct spell spl_book[MAXSPELL + 1] = {DUMMY};
 
 NEARDATA long moves = 1L, monstermoves = 1L;
 	 /* These diverge when player is Fast */
+NEARDATA long nonce = 0L;
 NEARDATA long wailmsg = 0L;
 
 /* objects that are moving to another dungeon level */

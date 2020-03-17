@@ -1448,7 +1448,7 @@ mad_turn(madness)
 long int madness;
 {
 	int sanlevel;
-	unsigned long hashed = hash((unsigned long) (moves + hash((unsigned long)madness))); //Offset the different madnesses before hashing
+	unsigned long hashed = hash((unsigned long) (moves + nonce + hash((unsigned long)madness))); //Offset the different madnesses before hashing
 	if(ClearThoughts)
 		return 0;
 	

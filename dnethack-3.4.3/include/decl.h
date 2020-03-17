@@ -432,6 +432,7 @@ E NEARDATA struct dig_info {		/* apply.c, hack.c */
 } digging;
 
 E NEARDATA long moves, monstermoves;
+E NEARDATA long nonce;
 E NEARDATA long wailmsg;
 
 E NEARDATA boolean in_mklev;
