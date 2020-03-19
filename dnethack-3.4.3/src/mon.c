@@ -235,6 +235,10 @@ STATIC_VAR int cham_to_pm[] = {
 			 ((mon)->data == &mons[PM_UNDEAD_KNIGHT]) ||			\
 			 ((mon)->data == &mons[PM_WARRIOR_OF_SUNLIGHT]) ||			\
 			 ((mon)->data == &mons[PM_LIVING_DOLL]) ||			\
+			 ((mon)->data == &mons[PM_ANDROID]) ||			\
+			 ((mon)->data == &mons[PM_GYNOID]) ||			\
+			 ((mon)->data == &mons[PM_COMMANDER]) ||			\
+			 ((mon)->data == &mons[PM_OPERATOR]) ||			\
 			 /* normally leader the will be unique, */	\
 			 /* but he might have been polymorphed  */	\
 			 (mon)->m_id == quest_status.leader_m_id ||	\
@@ -683,10 +687,16 @@ register struct monst *mtmp;
 				obj = mksobj_at(EYEBALL, x, y, FALSE, FALSE);
 				obj->corpsenm = PM_PARASITIZED_DOLL;
 			}
-		    obj = mkcorpstat(LIFELESS_DOLL, 0,
-				     &mons[PM_LIVING_DOLL], x, y, TRUE);
-			if(obj)
-				obj->ovar1 = mtmp->m_insight_level;
+			
+			mon = makemon(&mons[PM_LIVING_DOLL], x, y, MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
+			if(mon){
+				if(mtmp->m_insight_level)
+					mon->m_insight_level = mtmp->m_insight_level;
+				obj = mkcorpstat(LIFELESS_DOLL, mon, (struct permonst *)0, x, y, FALSE);
+				if(obj)
+					obj->ovar1 = mon->m_insight_level;
+				mongone(mon);
+			}
 		break;
 	    case PM_LIVING_DOLL:
 		    obj = mkcorpstat(LIFELESS_DOLL, KEEPTRAITS(mtmp) ? mtmp : 0,
@@ -697,6 +707,8 @@ register struct monst *mtmp;
 	    case PM_ANDROID:
 		    obj = mkcorpstat(BROKEN_ANDROID, KEEPTRAITS(mtmp) ? mtmp : 0,
 				     mdat, x, y, TRUE);
+			if(obj)
+				obj->ovar1 = mtmp->m_insight_level;
 		break;
 	    case PM_CRUCIFIED_ANDROID:
 			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
@@ -770,6 +782,8 @@ register struct monst *mtmp;
 	    case PM_GYNOID:
 		    obj = mkcorpstat(BROKEN_GYNOID, KEEPTRAITS(mtmp) ? mtmp : 0,
 				     mdat, x, y, TRUE);
+			if(obj)
+				obj->ovar1 = mtmp->m_insight_level;
 		break;
 	    case PM_CRUCIFIED_GYNOID:
 			obj = mksobj_at(BAR, x, y, FALSE, FALSE);
@@ -842,6 +856,8 @@ register struct monst *mtmp;
 		break;
 	    case PM_OPERATOR:
 		    obj = mkcorpstat(BROKEN_GYNOID, mtmp, mdat, x, y, TRUE);
+			if(obj)
+				obj->ovar1 = mtmp->m_insight_level;
 		break;
 	    case PM_PARASITIZED_OPERATOR:
 			mon = makemon(&mons[PM_OPERATOR], x, y, MM_EDOG | MM_ADJACENTOK | NO_MINVENT | MM_NOCOUNTBIRTH);
@@ -866,6 +882,8 @@ register struct monst *mtmp;
 		break;
 	    case PM_COMMANDER:
 		    obj = mkcorpstat(BROKEN_GYNOID, mtmp, mdat, x, y, TRUE);
+			if(obj)
+				obj->ovar1 = mtmp->m_insight_level;
 		break;
 	    case PM_PARASITIZED_COMMANDER:
 			obj = mksobj_at(SHACKLES, x, y, FALSE, FALSE);

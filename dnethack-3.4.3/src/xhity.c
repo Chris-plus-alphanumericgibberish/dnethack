@@ -697,7 +697,32 @@ int tary;
 							struct monst *mdef2 = m_at(tarx + dx, tary + dy);
 							if (mdef2 && (mdef2 != mdef)) {
 								int vis2 = (VIS_MAGR | VIS_NONE) | (canseemon(mdef2) ? VIS_MDEF : 0);
-								bhitpos.x = tarx; bhitpos.y = tary;
+								bhitpos.x = tarx + dx; bhitpos.y = tary + dy;
+								(void)xmeleehity(magr, mdef2, attk, otmp, vis2, tohitmod, TRUE);
+								/* we aren't handling MM_AGR_DIED or MM_AGR_STOP; hopefully the attacker being a player covers those cases well enough */
+							}
+						}
+					}
+					if (youagr && !ranged && Cleaving)
+					{
+						/* try to find direction (u.dx and u.dy may be incorrect) */
+						int dx = sgn(tarx - x(magr));
+						int dy = sgn(tary - y(magr));
+						if((monstermoves+indexnum)&1){//Odd
+							//45 degree rotation
+							dx = sgn(dx+dy);
+							dy = sgn(dy-dx);
+						} else {
+							//-45 degree rotation
+							dx = sgn(dx-dy);
+							dy = sgn(dx+dy);
+						}
+						if (isok(x(magr) + dx, y(magr) + dy))
+						{
+							struct monst *mdef2 = m_at(x(magr) + dx, y(magr) + dy);
+							if (mdef2 && (mdef2 != mdef)) {
+								int vis2 = (VIS_MAGR | VIS_NONE) | (canseemon(mdef2) ? VIS_MDEF : 0);
+								bhitpos.x = x(magr) + dx; bhitpos.y = y(magr) + dy;
 								(void)xmeleehity(magr, mdef2, attk, otmp, vis2, tohitmod, TRUE);
 								/* we aren't handling MM_AGR_DIED or MM_AGR_STOP; hopefully the attacker being a player covers those cases well enough */
 							}

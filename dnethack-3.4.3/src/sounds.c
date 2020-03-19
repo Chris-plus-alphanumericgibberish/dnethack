@@ -6456,7 +6456,7 @@ struct monst *dollmaker;
 	}
 	if(dollnum == DOLL_S_TEAR){
 		doll->ovar1 = dollmaker->mvar_dollTypes;
-		doll->spe = dollmaker->m_insight_level;
+		doll->spe = (char)dollmaker->m_insight_level;
 		dollmaker->m_insight_level = 0;
 		mondied(dollmaker);
 	}

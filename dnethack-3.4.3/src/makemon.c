@@ -7564,7 +7564,7 @@ register int	mmflags;
 			dolltypes[i] = dolltypes[j];
 			dolltypes[j] = tmp;
 		}
-		for(i = rn1(3, SIZE(dolltypes)-2); i > 0; i--)
+		for(i = rn1(3, SIZE(dolltypes)/2); i > 0; i--)
 			mtmp->mvar_dollTypes |= dolltypes[i];
 		mtmp->m_insight_level = rnd(20);
 	}
