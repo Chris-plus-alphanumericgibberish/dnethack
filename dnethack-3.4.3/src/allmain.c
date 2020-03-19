@@ -1700,7 +1700,9 @@ karemade:
 				pline("Lashing tentacles erupt from your brain!");
 				losehp(max(1,(Upolyd ? ((d(4,4)*u.mh)/u.mhmax) : ((d(4,4)*u.uhp)/u.uhpmax))), "the black mother's touch", KILLED_BY);
 				morehungry(d(4,4)*4);
-				if(!roll_madness(MAD_GOAT_RIDDEN) && !roll_madness(MAD_GOAT_RIDDEN))
+				if(u.usanity < 50)
+					change_usanity(-1);
+				else
 					change_usanity(-1*d(4,4));
 				dogoat();
 			}
@@ -3676,6 +3678,75 @@ struct monst *mon;
 				goat_eat(otmp); //No matter what, the this function should remove this corpse.  Either via resurrection or destruction
 				//Warning note: otmp is now stale
 				return;
+			}
+		}
+		if(!isok(xlocale, ylocale))
+			return;
+		//else
+		if(xlocale == u.ux && ylocale == u.uy){
+			if(!rn2(20)) switch(rnd(3)){
+				case 1:
+					pline("The shadowy mist forms briefly into a yawning maw!");
+				break;
+				case 2:
+					pline("The dark forms into hooves and writhing tendrils!");
+				break;
+				case 3:
+					if(uarmh && uarmh->otyp == SEDGE_HAT){
+						pline("A few drops of liquid hit your wide straw hat.");
+					} else if(uarmh && uarmh->otyp == WAR_HAT) {
+						pline("A few drops of liquid hit your wide helm.");
+					} else if(uarmh && uarmh->otyp == WITCH_HAT) {
+						pline("A few drops of liquid hit your wide conical hat.");
+					} else if(magic_negation(&youmonst)){
+						pline("A few drops of liquid drip onto your clothes.");
+					} else {
+						int dmg = d(1, 3);
+						pline("A few drops of spittle drip onto you.");
+						if (!Acid_resistance) {
+							pline("It burns!");
+							losehp(dmg, "hungry goat", KILLED_BY_AN);
+						}
+					}
+				break;
+			}
+		} else if(m_at(xlocale, ylocale)){
+			struct monst *mtmp = m_at(xlocale, ylocale);
+			if(!rn2(60)){
+				if(which_armor(mtmp, W_ARMH) && which_armor(mtmp, W_ARMH)->otyp == SEDGE_HAT){
+					if(canseemon(mtmp))
+						pline("A few drops of viscous liquid hit %s wide straw hat.", s_suffix(mon_nam(mtmp)));
+				} else if(which_armor(mtmp, W_ARMH) && which_armor(mtmp, W_ARMH)->otyp == WAR_HAT) {
+					if(canseemon(mtmp))
+						pline("A few drops of viscous liquid hit %s wide helm.", s_suffix(mon_nam(mtmp)));
+				} else if(which_armor(mtmp, W_ARMH) && which_armor(mtmp, W_ARMH)->otyp == WITCH_HAT) {
+					if(canseemon(mtmp))
+						pline("A few drops of viscous liquid hit %s wide conical hat.", s_suffix(mon_nam(mtmp)));
+				} else if(magic_negation(mtmp)){
+					if(canseemon(mtmp))
+						pline("A few drops of viscous liquid hit %s clothes.", s_suffix(mon_nam(mtmp)));
+				} else {
+					int dmg = d(1, 3);
+					if(canseemon(mtmp))
+						pline("A few drops of viscous liquid hit %s.", mon_nam(mtmp));
+					if (!resists_acid(mtmp)){
+						if(mtmp->data->mmove) //Not naturally inactive
+							pline("%s winces!");
+						mtmp->mhp -= dmg;
+						if(mtmp->mhp <= 0)
+							mondied(mtmp);
+					}
+				}
+			}
+		} else {
+			if(!rn2(60)){
+				if(cansee(xlocale, ylocale)){
+					You("see a viscous liquid dripping onto %s.", the(surface(xlocale, ylocale)));
+					map_invisible(xlocale, ylocale);
+				}
+				else {
+					You_hear("a viscous liquid dripping onto %s.", the(surface(xlocale, ylocale)));
+				}
 			}
 		}
 	}

@@ -1943,7 +1943,6 @@ pleased(g_align)
 int
 pray_goat()
 {
-	int g_trouble = in_trouble();
 	boolean fail = FALSE;
 	
     if (flags.prayconfirm)
@@ -1966,9 +1965,7 @@ pray_goat()
 	
 	if((int)Luck < 0 || u.ugangr[GA_MOTHER])
 		fail = TRUE;
-    else if ((g_trouble > 0) ? (u.ugoatblesscnt > 200) : /* big trouble */
-	(g_trouble < 0) ? (u.ugoatblesscnt > 100) : /* minor difficulties */
-	(u.ugoatblesscnt > 0))			/* not in trouble */
+    else if (u.ugoatblesscnt > 0)			/* not in trouble */
 		fail = TRUE;		/* too soon... */
 	
 	if(fail){
@@ -2338,6 +2335,8 @@ STATIC_OVL void
 eat_offering(otmp)
 register struct obj *otmp;
 {
+	xchar x, y;
+	get_obj_location(otmp, &x, &y, BURIED_TOO);
     if (Hallucination)
 	switch (rn2(25)) {
 	    case 0:
@@ -2417,8 +2416,10 @@ register struct obj *otmp;
 		Your("sacrifice is consumed by trout!");
 		break;
 	}
-    else if (Blind && u.ualign.type == A_LAWFUL)
+    else if(Blind || (!carried(otmp) && !cansee(x,y)))
 	You_hear("crunching noises.");
+    else if(!carried(otmp) && cansee(x,y))
+		pline("A mouth forms from the mist and eats %s!", an(corpse_xname(otmp, TRUE)));
     else pline("A mouth forms from the mist and eats your sacrifice!");
     if (carried(otmp)){
 		if(u.sealsActive&SEAL_BALAM){

@@ -2467,6 +2467,8 @@ MONSTER:'F',"migo soldier",(67,18),asleep
 MONSTER:'F',"migo soldier",(67,18),asleep
 MONSTER:'F',"migo soldier",(67,18),asleep
 
+MONSTER:'t',"mouth of the goat",(73,18)
+
 # A little incentive for the last hive 22,16 48,7 63,18
 OBJECT:'!',"full healing",(73,17)
 OBJECT:'!',"full healing",(73,17)

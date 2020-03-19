@@ -4772,6 +4772,16 @@ struct mkroom *croom; /* NULL == choose random room */
 	level.flags.has_garden = 1;
 
 	tried = 0;
+	if(!rn2(20)){
+		i = 1;
+		while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
+			struct permonst *pmon;
+			if (!MON_AT(pos.x, pos.y)) {
+				struct monst *mtmp = makemon(&mons[PM_MOUTH_OF_THE_GOAT], pos.x,pos.y, NO_MM_FLAGS);
+				i--;
+			}
+		}
+	}
 	if(rn2(2)){
 		i = 1;
 		while ((tried++ < 50) && (i > 0) && somexy(sroom, &pos)) {
