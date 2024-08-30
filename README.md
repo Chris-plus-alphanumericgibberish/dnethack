@@ -1,3 +1,9 @@
+## This repository has been moved.
+
+For future updates, please see the [dNAO](https://github.com/Chris-plus-alphanumericgibberish/dNAO) repository - that is a merge of the dNetHack sources onto the NAO 3.4.3 sources, and the currently maintained version of the game. dNetHack the variant is not abandoned (currently working on 3.23.1 in Aug 2024!), but this repository itself will not be updated.
+
+-----------
+
 dNetHack
 ========
 A variant of nethack 3.4.3
